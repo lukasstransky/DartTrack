@@ -46,6 +46,8 @@ dependencies:
   tuple: ^2.0.0
   scroll_to_index: ^2.1.1
   sizer: ^2.0.15
+  flutter_feather_icons: ^2.0.0+1
+  material_design_icons_flutter: ^5.0.6595
 
 dev_dependencies:
   flutter_test:

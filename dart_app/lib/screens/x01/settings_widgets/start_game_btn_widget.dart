@@ -72,7 +72,17 @@ class StartGameBtn extends StatelessWidget {
             child: const Text("Cancel"),
           ),
           TextButton(
-            onPressed: () => Navigator.of(context).pushNamed("/gameX01"),
+            onPressed: () => {
+              if (gameSettingsX01.getSingleOrTeam == SingleOrTeam.Single)
+                {
+                  gameSettingsX01.setBeginnerPlayer(selectedPlayer),
+                }
+              else
+                {
+                  gameSettingsX01.setBeginnerTeam(selectedTeam),
+                },
+              Navigator.of(context).pushNamed("/gameX01"),
+            },
             child: const Text("Start Game"),
           ),
         ],

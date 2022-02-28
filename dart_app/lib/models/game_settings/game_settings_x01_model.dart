@@ -5,27 +5,26 @@ import 'package:flutter/material.dart';
 import './game_settings_model.dart';
 import 'dart:developer';
 
-class GameSettingsX01 extends GameSettings with ChangeNotifier {
+class GameSettingsX01 extends GameSettings {
   SingleOrTeam _singleOrTeam;
   List<Team> _teams = [];
   List<Player> _players = [];
   BestOfOrFirstTo _mode;
   int _points;
-  int _customPoints;
+  int _customPoints; //-1 if not set
   int _legs;
   int _sets;
   bool _setsEnabled;
   SingleOrDouble _modeIn;
   SingleOrDouble _modeOut;
   bool _winByTwoLegsDifference;
-  bool? _suddenDeath;
+  bool _suddenDeath;
   int? _maxExtraLegs;
   bool _enableCheckoutCounting;
   bool _showAverage;
   bool _showFinishWays;
   bool _showThrownDartsPerLeg;
   bool _showLastThrow;
-  bool _showBestLeg;
 
   get getSingleOrTeam => this._singleOrTeam;
   set setSingleOrTeam(SingleOrTeam _singleOrTeam) =>
@@ -77,7 +76,7 @@ class GameSettingsX01 extends GameSettings with ChangeNotifier {
       this._winByTwoLegsDifference = winByTwoLegsDifference;
 
   get getSuddenDeath => this._suddenDeath;
-  set setSuddenDeath(bool? suddenDeath) => {
+  set setSuddenDeath(bool suddenDeath) => {
         this._suddenDeath = suddenDeath,
         notifyListeners(),
       };
@@ -118,12 +117,6 @@ class GameSettingsX01 extends GameSettings with ChangeNotifier {
         notifyListeners(),
       };
 
-  get getShowBestLeg => this._showBestLeg;
-  set setShowBestLeg(bool showBestLeg) => {
-        this._showBestLeg = showBestLeg,
-        notifyListeners(),
-      };
-
   GameSettingsX01({
     SingleOrTeam singleOrTeam = SingleOrTeam.Single,
     BestOfOrFirstTo mode = BestOfOrFirstTo.BestOf,
@@ -134,13 +127,13 @@ class GameSettingsX01 extends GameSettings with ChangeNotifier {
     SingleOrDouble modeIn = SingleOrDouble.SingleField,
     SingleOrDouble modeOut = SingleOrDouble.DoubleField,
     bool winByTwoLegsDifference = false,
+    bool suddenDeath = false,
     bool enableCheckoutCounting = false,
     int customPoints = -1,
     bool showAverage = true,
     bool showFinishWays = true,
     bool showThrownDartsPerLeg = false,
     bool showLastThrow = true,
-    bool showBestLeg = false,
   })  : _singleOrTeam = singleOrTeam,
         _mode = mode,
         _points = points,
@@ -150,13 +143,13 @@ class GameSettingsX01 extends GameSettings with ChangeNotifier {
         _modeIn = modeIn,
         _modeOut = modeOut,
         _winByTwoLegsDifference = winByTwoLegsDifference,
+        _suddenDeath = suddenDeath,
         _enableCheckoutCounting = enableCheckoutCounting,
         _customPoints = customPoints,
         _showAverage = showAverage,
         _showFinishWays = showFinishWays,
         _showThrownDartsPerLeg = showThrownDartsPerLeg,
-        _showLastThrow = showLastThrow,
-        _showBestLeg = showBestLeg;
+        _showLastThrow = showLastThrow;
 
   void switchSingleOrTeamMode() {
     setSingleOrTeam = _singleOrTeam == SingleOrTeam.Single
@@ -187,7 +180,7 @@ class GameSettingsX01 extends GameSettings with ChangeNotifier {
     if (_mode == BestOfOrFirstTo.BestOf) {
       setMode = BestOfOrFirstTo.FirstTo;
       if (_setsEnabled) {
-        setLegs = 3;
+        setLegs = 2;
         setSets = 3;
       } else {
         setLegs = 5;
@@ -206,26 +199,17 @@ class GameSettingsX01 extends GameSettings with ChangeNotifier {
   }
 
   void setsClicked() {
+    if (_mode == BestOfOrFirstTo.FirstTo) {
+      setSets = 3;
+      setLegs = 2;
+    } else {
+      setSets = 5;
+      setLegs = 3;
+    }
     if (_setsEnabled == false) {
       setSetsEnabled = true;
-      setLegs = 3;
-      if (_mode == BestOfOrFirstTo.FirstTo) {
-        setSets = 3;
-      } else {
-        setSets = 5;
-      }
-    }
-    notifyListeners();
-  }
-
-  void legsClicked() {
-    if (_setsEnabled) {
+    } else {
       setSetsEnabled = false;
-      if (_mode == BestOfOrFirstTo.BestOf) {
-        setLegs = 11;
-      } else {
-        setLegs = 5;
-      }
     }
     notifyListeners();
   }
@@ -443,5 +427,37 @@ class GameSettingsX01 extends GameSettings with ChangeNotifier {
 
   void notify() {
     notifyListeners();
+  }
+
+  void setBeginnerPlayer(Player? playerToSet) {
+    int index = 0;
+    for (int i = 0; i < _players.length; i++) {
+      if (_players[i] == playerToSet) {
+        index = i;
+      }
+    }
+
+    //otherwise player is already first in list
+    if (index != 0) {
+      Player temp = _players[0];
+      _players[0] = playerToSet as Player;
+      _players[index] = temp;
+    }
+  }
+
+  void setBeginnerTeam(Team? teamToSet) {
+    int index = 0;
+    for (int i = 0; i < _teams.length; i++) {
+      if (_teams[i] == teamToSet) {
+        index = i;
+      }
+    }
+
+    //otherwise team is already first in list
+    if (index != 0) {
+      Team temp = _teams[0];
+      _teams[0] = teamToSet as Team;
+      _teams[index] = temp;
+    }
   }
 }

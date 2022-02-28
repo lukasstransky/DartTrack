@@ -1,20 +1,28 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  final bool _showBackBtn;
+  final String _leadingIcon;
   final String _title;
 
-  const CustomAppBar(this._showBackBtn, this._title);
+  const CustomAppBar(this._leadingIcon, this._title);
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       title: Text(_title),
-      leading: _showBackBtn == true
-          ? IconButton(
+      leading: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (_leadingIcon == "back")
+            IconButton(
               onPressed: () => Navigator.of(context).pop(),
-              icon: Icon(Icons.arrow_back))
-          : Container(),
+              icon: Icon(Icons.arrow_back),
+            )
+          else
+            Container(),
+        ],
+      ),
+      actions: [],
     );
   }
 

@@ -54,15 +54,6 @@ class AdvancedSettings extends StatelessWidget {
                   },
                   title: const Text("Thrown Darts per Leg"),
                 ),
-                SwitchListTile(
-                  value: gameSettingsX01.getShowBestLeg,
-                  onChanged: (value) {
-                    setState(() {
-                      gameSettingsX01.setShowBestLeg = value;
-                    });
-                  },
-                  title: const Text("Best Leg"),
-                ),
               ],
             );
           }),

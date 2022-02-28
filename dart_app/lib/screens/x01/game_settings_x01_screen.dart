@@ -1,15 +1,15 @@
-import 'package:dart_app/screens/x01/widgets/advanced_settigs_widget.dart';
-import 'package:dart_app/screens/x01/widgets/bestof_or_firstto_widget.dart';
-import 'package:dart_app/screens/x01/widgets/checkout_counting_widget.dart';
-import 'package:dart_app/screens/x01/widgets/custom_points_widget.dart';
-import 'package:dart_app/screens/x01/widgets/players_teams_widget.dart';
-import 'package:dart_app/screens/x01/widgets/points_widget.dart';
-import 'package:dart_app/screens/x01/widgets/single_or_double_in_widget.dart';
-import 'package:dart_app/screens/x01/widgets/single_or_double_out_widget.dart';
-import 'package:dart_app/screens/x01/widgets/sets_or_legs_widget.dart';
-import 'package:dart_app/screens/x01/widgets/single_or_team_widget.dart';
-import 'package:dart_app/screens/x01/widgets/start_game_btn_widget.dart';
-import 'package:dart_app/screens/x01/widgets/win_by_legs_diff_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/advanced_settigs_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/bestof_or_firstto_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/checkout_counting_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/custom_points_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/players_teams_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/points_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/single_or_double_in_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/single_or_double_out_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/sets_or_legs_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/single_or_team_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/start_game_btn_widget.dart';
+import 'package:dart_app/screens/x01/settings_widgets/win_by_legs_diff_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:dart_app/models/bot_model.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
@@ -462,7 +462,7 @@ class _GameSettingsX01ScreenState extends State<GameSettingsX01Screen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(true, "Game Settings"),
+      appBar: CustomAppBar("back", "Game Settings"),
       body: SafeArea(
         child: Column(
           children: [

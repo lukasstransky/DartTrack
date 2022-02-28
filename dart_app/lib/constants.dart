@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 const Color primary = Color(0xff130536);
 
@@ -32,3 +33,21 @@ const int POINTS_MIN_NUMBER = 100;
 const int WIDTH_GAMESETTINGS = 80;
 const int HEIGHT_GAMESETTINGS_WIDGETS = 4;
 const double MARGIN_GAMESETTINGS = 1.0;
+
+//Game Page
+const double POINTS_BUTTON_MARGIN = 2.0;
+const double POINTS_BUTTON_TEXT_SIZE = 30;
+
+const List<int> noScoresPossible = [
+  179,
+  178,
+  176,
+  175,
+  173,
+  172,
+  169,
+  166,
+  163
+];
+const List<int> bogeyNumbers = [169, 168, 166, 165, 163, 162, 159];
+const List<int> startPointsPossibilities = [301, 501, 701];

@@ -1,4 +1,5 @@
 import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
+import 'package:dart_app/models/games/game_x01_model.dart';
 import 'package:dart_app/screens/x01/game_x01_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +42,9 @@ class MyApp extends StatelessWidget {
             initialData: null),
         ChangeNotifierProvider(
           create: (_) => GameSettingsX01(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => GameX01(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
