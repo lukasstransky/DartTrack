@@ -1,4 +1,7 @@
+import 'package:dart_app/constants.dart';
+
 import 'player_game_statistics_model.dart';
+import 'dart:developer';
 
 class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int? _currentPoints;
@@ -8,18 +11,37 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _setsWon = 0;
   int _bestLeg = 0;
   int _worstLeg = 0;
-  int _highestFinish = 0;
-  int _highestScore = 0;
   int _thrownDartsPerLeg = 0;
   double _checkoutQuote = 0.0;
+  int _checkoutCount =
+      0; //counts the checkout possibilities -> for calculating checkout quote
   List<int> _checkouts = [];
-  Map<String, int> _roundedScores = {}; //e.g. 140+ : 5
+  Map<int, int> _roundedScores = {
+    10: 0,
+    20: 0,
+    30: 0,
+    40: 0,
+    50: 0,
+    60: 0,
+    70: 0,
+    80: 0,
+    90: 0,
+    100: 0,
+    110: 0,
+    120: 0,
+    130: 0,
+    140: 0,
+    150: 0,
+    160: 0,
+    170: 0,
+    180: 0
+  }; //e.g. 140+ : 5
   Map<int, int> _preciseScores = {}; //e.g. 140 : 3
   List<int> _allScores = [];
   List<int> _allRemainingPoints =
       []; //all remainging points after each throw -> for reverting
   List<int> _legsCount =
-      []; //only relevant for set mode -> if player finished set, save current legs count of each player in this array -> in order to revert a set
+      []; //only relevant for set mode -> if player finished set, save current legs count of each player in this list -> in order to revert a set
 
   get getCurrentPoints => this._currentPoints;
   set setCurrentPoints(int currentPoints) =>
@@ -44,13 +66,6 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   get getWorstLeg => this._worstLeg;
   set setWorstLeg(int worstLeg) => this._worstLeg = worstLeg;
 
-  get getHighestFinish => this._highestFinish;
-  set setHighestFinish(int highestFinish) =>
-      this._highestFinish = highestFinish;
-
-  get getHighestScore => this._highestScore;
-  set setHighestScore(int highestScore) => this._highestScore = highestScore;
-
   get getThrownDartsPerLeg => this._thrownDartsPerLeg;
   set setThrownDartsPerLeg(int thrownDartsPerLeg) =>
       this._thrownDartsPerLeg = thrownDartsPerLeg;
@@ -59,11 +74,15 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setCheckoutQuote(double checkoutQuote) =>
       this._checkoutQuote = checkoutQuote;
 
+  get getCheckoutCount => this._checkoutCount;
+  set setCheckoutCount(int checkoutCount) =>
+      this._checkoutCount = checkoutCount;
+
   get getCheckouts => this._checkouts;
   set setCheckouts(List<int> checkouts) => this._checkouts = checkouts;
 
   get getRoundedScores => this._roundedScores;
-  set setRoundedScores(Map<String, int> roundedScores) =>
+  set setRoundedScores(Map<int, int> roundedScores) =>
       this._roundedScores = roundedScores;
 
   get getPreciseScores => this._preciseScores;
@@ -100,5 +119,53 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       return "-";
     }
     return getAllScores[getAllScores.length - 1].toString();
+  }
+
+  int getHighestScore() {
+    int result = 0;
+    for (int score in getAllScores) {
+      if (score > result) {
+        result = score;
+      }
+    }
+    return result;
+  }
+
+  int getHighestCheckout() {
+    int result = 0;
+    for (int checkOut in getCheckouts) {
+      if (checkOut > result) {
+        result = checkOut;
+      }
+    }
+    return result;
+  }
+
+  //returns only those rounded scores (140+: 4) that are included in the list
+  Map<int, int> getSpecificRoundedScores(List<int> specificRoundedScores) {
+    Map<int, int> result = {};
+    for (int score in specificRoundedScores) {
+      int value = getRoundedScores[score];
+      result[score] = value;
+    }
+    return result;
+  }
+
+  String getFinishWay() {
+    return finishWays[getCurrentPoints]![0];
+  }
+
+  bool checkoutPossible() {
+    if (getCurrentPoints <= 170 && !bogeyNumbers.contains(getCurrentPoints)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool isBogeyNumber() {
+    if (bogeyNumbers.contains(getCurrentPoints)) {
+      return true;
+    }
+    return false;
   }
 }

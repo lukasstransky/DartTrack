@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01_model.dart';
 import 'package:dart_app/other/utils.dart';
 import 'package:dart_app/screens/x01/game_widgets/point_btn_widget.dart';
+import 'package:dart_app/screens/x01/game_x01_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,11 @@ import 'package:sizer/sizer.dart';
 import 'dart:developer';
 
 class PointsBtnsWidget extends StatelessWidget {
-  const PointsBtnsWidget({Key? key}) : super(key: key);
+  PointsBtnsWidget({Key? key, required this.showDialogCallBack})
+      : super(key: key);
+
+  final ShowDialogCallBack
+      showDialogCallBack; //in order to get the dialog function from the other widget
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +236,19 @@ class PointsBtnsWidget extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            gameX01.bust();
+                            if (gameX01.getGameSettings
+                                    .getEnableCheckoutCounting &&
+                                gameX01.checkoutPossible()) {
+                              int count =
+                                  gameX01.getAmountOfCheckoutPossibilities("0");
+                              if (count != -1) {
+                                showDialogCallBack(gameX01, count, "0");
+                              } else {
+                                gameX01.bust();
+                              }
+                            } else {
+                              gameX01.bust();
+                            }
                           }),
                     ),
                   ),
@@ -244,3 +261,6 @@ class PointsBtnsWidget extends StatelessWidget {
     );
   }
 }
+
+typedef ShowDialogCallBack = void Function(
+    GameX01 gameX01, int count, String points);

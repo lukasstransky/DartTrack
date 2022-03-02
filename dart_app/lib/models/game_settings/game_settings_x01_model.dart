@@ -7,7 +7,7 @@ import 'dart:developer';
 
 class GameSettingsX01 extends GameSettings {
   SingleOrTeam _singleOrTeam;
-  List<Team> _teams = [];
+  List<Team> _teams = []; //todo
   List<Player> _players = [];
   BestOfOrFirstTo _mode;
   int _points;
@@ -17,9 +17,9 @@ class GameSettingsX01 extends GameSettings {
   bool _setsEnabled;
   SingleOrDouble _modeIn;
   SingleOrDouble _modeOut;
-  bool _winByTwoLegsDifference;
-  bool _suddenDeath;
-  int? _maxExtraLegs;
+  bool _winByTwoLegsDifference; //todo
+  bool _suddenDeath; //todo
+  int? _maxExtraLegs; //todo
   bool _enableCheckoutCounting;
   bool _showAverage;
   bool _showFinishWays;
@@ -459,5 +459,12 @@ class GameSettingsX01 extends GameSettings {
       _teams[0] = teamToSet as Team;
       _teams[index] = temp;
     }
+  }
+
+  int getPointsOrCustom() {
+    if (getCustomPoints != -1) {
+      return getCustomPoints;
+    }
+    return getPoints;
   }
 }

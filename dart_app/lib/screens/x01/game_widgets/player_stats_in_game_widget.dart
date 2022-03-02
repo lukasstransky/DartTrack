@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
 import 'package:dart_app/models/games/game_model.dart';
 import 'package:dart_app/models/games/game_x01_model.dart';
@@ -32,6 +33,23 @@ class PlayerStatsInGame extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            if (gameSettingsX01.getShowFinishWays)
+              if (playerGameStatisticsX01!.checkoutPossible()) ...[
+                Text(playerGameStatisticsX01!.getFinishWay(),
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 15.sp)),
+              ] else if (gameX01.onePlayerInFinishArea())
+                if (playerGameStatisticsX01!.isBogeyNumber())
+                  Text("No Finish possible!",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 12.sp))
+                else
+                  Text("",
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 15.sp)),
             Text(
               playerGameStatisticsX01!.getCurrentPoints.toString(),
               style: TextStyle(fontSize: 50.sp),
