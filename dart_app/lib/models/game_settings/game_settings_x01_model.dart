@@ -21,10 +21,19 @@ class GameSettingsX01 extends GameSettings {
   bool _suddenDeath; //todo
   int? _maxExtraLegs; //todo
   bool _enableCheckoutCounting;
+  bool _checkoutCountingFinallyDisabled =
+      false; //if user disables checkout counting in the in game settings -> cant be reversed (cause of inconsistent stats then)
   bool _showAverage;
   bool _showFinishWays;
   bool _showThrownDartsPerLeg;
   bool _showLastThrow;
+
+  bool _callerEnabled = false;
+  bool _vibrationFeedbackEnabled = false;
+  bool _automaticallySubmitPoints = false;
+  bool _showMostScoredPoints = false;
+  InputMethod _inputMethod = InputMethod.Round;
+  bool _showInputMethodInGameScreen = false;
 
   get getSingleOrTeam => this._singleOrTeam;
   set setSingleOrTeam(SingleOrTeam _singleOrTeam) =>
@@ -93,6 +102,15 @@ class GameSettingsX01 extends GameSettings {
         notifyListeners(),
       };
 
+  get getCheckoutCountingFinallyDisabled =>
+      this._checkoutCountingFinallyDisabled;
+  set setCheckoutCountingFinallyDisabled(
+          bool checkoutCountingFinallyDisabled) =>
+      {
+        this._checkoutCountingFinallyDisabled = checkoutCountingFinallyDisabled,
+        notifyListeners(),
+      };
+
   get getShowAverage => this._showAverage;
   set setShowAverage(bool showAverage) => {
         this._showAverage = showAverage,
@@ -116,6 +134,40 @@ class GameSettingsX01 extends GameSettings {
         this._showLastThrow = showLastThrow,
         notifyListeners(),
       };
+
+  get getCallerEnabled => this._callerEnabled;
+  set setCallerEnabled(bool callerEnabled) => {
+        this._callerEnabled = callerEnabled,
+        notifyListeners(),
+      };
+
+  get getVibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
+  set setVibrationFeedbackEnabled(bool vibrationFeedbackEnabled) => {
+        this._vibrationFeedbackEnabled = vibrationFeedbackEnabled,
+        notifyListeners(),
+      };
+
+  get getAutomaticallySubmitPoints => this._automaticallySubmitPoints;
+  set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) => {
+        this._automaticallySubmitPoints = automaticallySubmitPoints,
+        notifyListeners(),
+      };
+
+  get getShowMostScoredPoints => this._showMostScoredPoints;
+  set setShowMostScoredPoints(bool showMostScoredPoints) => {
+        this._showMostScoredPoints = showMostScoredPoints,
+        notifyListeners(),
+      };
+
+  get getInputMethod => this._inputMethod;
+  set setInputMethod(InputMethod inputMethod) =>
+      this._inputMethod = inputMethod;
+
+  get getShowInputMethodInGameScreen => this._showInputMethodInGameScreen;
+  set setShowInputMethodInGameScreen(bool showInputMethodInGameScreen) {
+    this._showInputMethodInGameScreen = showInputMethodInGameScreen;
+    notifyListeners();
+  }
 
   GameSettingsX01({
     SingleOrTeam singleOrTeam = SingleOrTeam.Single,
@@ -466,5 +518,13 @@ class GameSettingsX01 extends GameSettings {
       return getCustomPoints;
     }
     return getPoints;
+  }
+
+  void switchInputMethod() {
+    if (getInputMethod == InputMethod.Round)
+      setInputMethod = InputMethod.ThreeDarts;
+    else
+      setInputMethod = InputMethod.Round;
+    notifyListeners();
   }
 }

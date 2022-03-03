@@ -462,7 +462,7 @@ class _GameSettingsX01ScreenState extends State<GameSettingsX01Screen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar("back", "Game Settings"),
+      appBar: CustomAppBar(true, "Game Settings"),
       body: SafeArea(
         child: Column(
           children: [

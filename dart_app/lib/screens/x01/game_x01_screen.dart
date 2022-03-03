@@ -50,7 +50,10 @@ class GameX01ScreenState extends State<GameX01Screen> {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                if (gameX01.getGameSettings.getEnableCheckoutCounting)
+                if (gameX01.getGameSettings.getEnableCheckoutCounting &&
+                    gameX01.getGameSettings
+                            .getCheckoutCountingFinallyDisabled ==
+                        false)
                   Align(
                       alignment: Alignment.centerLeft,
                       child: Text("Darts on Double:")),
@@ -58,7 +61,10 @@ class GameX01ScreenState extends State<GameX01Screen> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (gameX01.getGameSettings.getEnableCheckoutCounting) ...[
+                    if (gameX01.getGameSettings.getEnableCheckoutCounting &&
+                        gameX01.getGameSettings
+                                .getCheckoutCountingFinallyDisabled ==
+                            false) ...[
                       if (!gameX01.finishedLegSetOrGame(currentPointsSelected))
                         Expanded(
                           child: Container(
@@ -440,7 +446,10 @@ class GameX01ScreenState extends State<GameX01Screen> {
                                                 currentPointsSelected);
                                           } else {
                                             if (gameX01.getGameSettings
-                                                .getEnableCheckoutCounting) {
+                                                    .getEnableCheckoutCounting &&
+                                                gameX01.getGameSettings
+                                                        .getCheckoutCountingFinallyDisabled ==
+                                                    false) {
                                               int count = gameX01
                                                   .getAmountOfCheckoutPossibilities(
                                                       currentPointsSelected);

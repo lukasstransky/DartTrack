@@ -34,10 +34,15 @@ const int WIDTH_GAMESETTINGS = 80;
 const int HEIGHT_GAMESETTINGS_WIDGETS = 4;
 const double MARGIN_GAMESETTINGS = 1.0;
 
+//In Game Settings
+const int HEIGHT_IN_GAME_SETTINGS_WIDGETS = 4;
+const int FONTSIZE_IN_GAME_SETTINGS = 13;
+const int FONTSIZE_HEADINGS_IN_GAME_SETTINGS = 18;
+enum InputMethod { Round, ThreeDarts }
+
 //Game Page
 const double POINTS_BUTTON_MARGIN = 2.0;
 const double POINTS_BUTTON_TEXT_SIZE = 30;
-
 const List<int> noScoresPossible = [
   179,
   178,

@@ -80,7 +80,8 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
           icon: Icon(Icons.bar_chart_rounded),
         ),
         IconButton(
-          onPressed: () => null,
+          onPressed: () =>
+              Navigator.of(context).pushNamed("/inGameSettingsX01"),
           icon: Icon(Icons.settings),
         )
       ],

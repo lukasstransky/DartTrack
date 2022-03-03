@@ -21,9 +21,9 @@ class PlayerStatsInGame extends StatelessWidget {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
 
-    return Consumer<GameX01>(
+    return Consumer2<GameX01, GameSettingsX01>(
       //todo -> add selector
-      builder: (_, gameX01, __) => Container(
+      builder: (_, gameX01, gameSettingsX01, __) => Container(
         color: gameX01.getCurrentPlayerToThrow ==
                 playerGameStatisticsX01!.getPlayer
             ? Colors.grey

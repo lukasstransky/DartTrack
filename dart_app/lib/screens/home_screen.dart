@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar("back", "Dart App"),
+      appBar: CustomAppBar(false, "Dart App"),
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         onTap: onTabTapped,

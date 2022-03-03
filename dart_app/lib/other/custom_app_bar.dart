@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  final String _leadingIcon;
+  final bool _showBackBtn;
   final String _title;
 
-  const CustomAppBar(this._leadingIcon, this._title);
+  const CustomAppBar(this._showBackBtn, this._title);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (_leadingIcon == "back")
+          if (_showBackBtn)
             IconButton(
               onPressed: () => Navigator.of(context).pop(),
               icon: Icon(Icons.arrow_back),
