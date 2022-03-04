@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'dart:developer';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool _showBackBtn;
@@ -15,7 +17,16 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         children: [
           if (_showBackBtn)
             IconButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                var route = ModalRoute.of(context);
+                if (route != null) {
+                  if (route.settings.name == "/settingsX01") {
+                    Navigator.of(context).pushNamed("/home");
+                  } else {
+                    Navigator.of(context).pop();
+                  }
+                }
+              },
               icon: Icon(Icons.arrow_back),
             )
           else

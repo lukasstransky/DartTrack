@@ -40,6 +40,13 @@ const int FONTSIZE_IN_GAME_SETTINGS = 13;
 const int FONTSIZE_HEADINGS_IN_GAME_SETTINGS = 18;
 enum InputMethod { Round, ThreeDarts }
 
+//Statistics
+const int FONTSIZE_HEADING_STATISTICS = 18;
+const int FONTSIZE_STATISTICS = 13;
+const int WIDTH_HEADINGS_STATISTICS = 40;
+const int WIDTH_DATA_STATISTICS = 30;
+const double PADDING_TOP_STATISTICS = 10.0;
+
 //Game Page
 const double POINTS_BUTTON_MARGIN = 2.0;
 const double POINTS_BUTTON_TEXT_SIZE = 30;

@@ -1,9 +1,11 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
+import 'package:dart_app/models/games/game_x01_model.dart';
 import 'package:dart_app/other/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'dart:developer';
 
 class InGameSettingsX01Screen extends StatelessWidget {
   const InGameSettingsX01Screen({Key? key}) : super(key: key);
@@ -12,6 +14,8 @@ class InGameSettingsX01Screen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gameX01 = Provider.of<GameX01>(context, listen: false);
+
     return Scaffold(
       appBar: CustomAppBar(true, "Game Settings"),
       body: Center(
@@ -476,7 +480,9 @@ class InGameSettingsX01Screen extends StatelessWidget {
                   ),
                 ),
                 if (gameSettingsX01.getEnableCheckoutCounting &&
-                    gameSettingsX01.getCheckoutCountingFinallyDisabled == false)
+                    gameSettingsX01.getCheckoutCountingFinallyDisabled ==
+                        false &&
+                    gameX01.getInit)
                   SizedBox(
                     height: 12.h,
                     child: Padding(
@@ -514,7 +520,7 @@ class InGameSettingsX01Screen extends StatelessWidget {
                                       ElevatedButton(
                                         onPressed: () => gameSettingsX01
                                                 .setCheckoutCountingFinallyDisabled =
-                                            false,
+                                            true,
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
                                           child: const Text("Disable"),

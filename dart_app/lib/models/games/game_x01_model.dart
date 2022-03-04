@@ -14,6 +14,7 @@ class GameX01 extends Game {
   int _playerLegStartIndex =
       0; //to determine which player should begin next leg
   bool _revertPossible = false;
+  bool _init = false;
 
   get getCurrentPointsSelected => this._currentPointsSelected;
   set setCurrentPointsSelected(String currentPointsSelected) =>
@@ -27,9 +28,13 @@ class GameX01 extends Game {
   set setRevertPossible(bool revertPossible) =>
       this._revertPossible = revertPossible;
 
+  get getInit => this._init;
+  set setInit(bool init) => this._init = init;
+
   //todo add support for teams
   void init(GameSettingsX01 gameSettingsX01) {
     this.setGameSettings = gameSettingsX01;
+    this.setInit = true;
     int points = gameSettingsX01.getCustomPoints == -1
         ? gameSettingsX01.getPoints
         : gameSettingsX01.getCustomPoints;
@@ -40,6 +45,15 @@ class GameX01 extends Game {
     }
 
     this.setCurrentPlayerToThrow = gameSettingsX01.getPlayers[0];
+  }
+
+  //gets called when user goes back to settings from game screen
+  void reset() {
+    setCurrentPointsSelected = "Points";
+    setPlayerLegStartIndex = 0;
+    setRevertPossible = false;
+    setPlayerGameStatistics = [];
+    setInit = false;
   }
 
   //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
@@ -121,7 +135,7 @@ class GameX01 extends Game {
         getCurrentPlayerGameStatistics();
 
     //set points
-    int parsedPoints = int.parse(points);
+    num parsedPoints = int.parse(points);
     currentPlayerStats.setCurrentPoints =
         currentPlayerStats.getCurrentPoints - parsedPoints;
 
@@ -130,14 +144,17 @@ class GameX01 extends Game {
         currentPlayerStats.getThrownDartsPerLeg + 3;
 
     //set first nine avg
-    if (currentPlayerStats.getThrownDartsPerLeg <= 9)
+    if (currentPlayerStats.getThrownDartsPerLeg <= 9) {
       currentPlayerStats.setFirstNineAverage =
           currentPlayerStats.getFirstNineAverage + parsedPoints;
+      currentPlayerStats.setFirstNineAverageCount =
+          currentPlayerStats.getFirstNineAverageCount + 1;
+    }
 
     //add throw
     currentPlayerStats.setAllScores = [
       ...currentPlayerStats.getAllScores,
-      parsedPoints
+      parsedPoints.toInt()
     ];
 
     //add to total Points
@@ -152,7 +169,7 @@ class GameX01 extends Game {
 
     //set rounded score
     List<int> keys = currentPlayerStats.getRoundedScores.keys.toList();
-    if (parsedPoints >= 170) {
+    if (parsedPoints == 180) {
       currentPlayerStats.getRoundedScores[keys[keys.length - 1]] += 1;
     }
     for (int i = 0; i < keys.length - 1; i++) {
@@ -208,7 +225,8 @@ class GameX01 extends Game {
 
       //set best/worst leg
       if (currentPlayerStats.getThrownDartsPerLeg <
-          currentPlayerStats.getBestLeg) {
+              currentPlayerStats.getBestLeg ||
+          currentPlayerStats.getBestLeg == 0) {
         currentPlayerStats.setBestLeg = currentPlayerStats.getThrownDartsPerLeg;
       }
       if (currentPlayerStats.getThrownDartsPerLeg >
@@ -220,7 +238,7 @@ class GameX01 extends Game {
       //add checkout to list
       currentPlayerStats.setCheckouts = [
         ...currentPlayerStats.getCheckouts,
-        parsedPoints
+        parsedPoints.toInt()
       ];
 
       //reset points & thrown darts per leg
@@ -229,7 +247,7 @@ class GameX01 extends Game {
         if (stats == currentPlayerStats) {
           currentPlayerStats.setAllRemainingPoints = [
             ...currentPlayerStats.getAllRemainingPoints,
-            parsedPoints
+            parsedPoints.toInt()
           ];
         } else {
           stats.setAllRemainingPoints = [

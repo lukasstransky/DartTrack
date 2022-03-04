@@ -87,6 +87,7 @@ class _AuthScreenState extends State<AuthScreen> {
       }
 
       Fluttertoast.showToast(msg: msg);
+      await context.read<AuthService>().createPlayerOfCurrentUser();
       Navigator.of(context).pushNamed('/home');
     } on FirebaseAuthException catch (error) {
       var errorMessage = 'Authentication failed';

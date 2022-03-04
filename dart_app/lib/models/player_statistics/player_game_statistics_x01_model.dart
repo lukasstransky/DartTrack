@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:dart_app/constants.dart';
 
 import 'player_game_statistics_model.dart';
@@ -6,7 +8,8 @@ import 'dart:developer';
 class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int? _currentPoints;
   int _totalPoints = 0; //for average
-  double _firstNineAverage = 0.0;
+  num _firstNineAverage = 0.0;
+  num _firstNineAverageCount = 0;
   int _legsWon = 0;
   int _setsWon = 0;
   int _bestLeg = 0;
@@ -16,24 +19,16 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
   List<int> _checkouts = [];
+  //0 -> for < 40
   Map<int, int> _roundedScores = {
-    10: 0,
-    20: 0,
-    30: 0,
+    0: 0,
     40: 0,
-    50: 0,
     60: 0,
-    70: 0,
     80: 0,
-    90: 0,
     100: 0,
-    110: 0,
     120: 0,
-    130: 0,
     140: 0,
-    150: 0,
     160: 0,
-    170: 0,
     180: 0
   }; //e.g. 140+ : 5
   Map<int, int> _preciseScores = {}; //e.g. 140 : 3
@@ -50,9 +45,19 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   get getTotalPoints => this._totalPoints;
   set setTotalPoints(int totalPoints) => this._totalPoints = totalPoints;
 
-  get getFirstNineAverage => this._firstNineAverage;
-  set setFirstNineAverage(double firstNineAverage) =>
+  get getFirstNineAverage {
+    if (this._firstNineAverageCount == 0) {
+      return 0;
+    }
+    return this._firstNineAverage;
+  }
+
+  set setFirstNineAverage(num firstNineAverage) =>
       this._firstNineAverage = firstNineAverage;
+
+  get getFirstNineAverageCount => this._firstNineAverageCount;
+  set setFirstNineAverageCount(num firstNineAverageCount) =>
+      this._firstNineAverageCount = firstNineAverageCount;
 
   get getLegsWon => this._legsWon;
   set setLegsWon(int legsWon) => this._legsWon = legsWon;
@@ -167,5 +172,15 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       return true;
     }
     return false;
+  }
+
+  String getFirstNinveAvg() {
+    if (getFirstNineAverage == 0.0) return "-";
+    return (getFirstNineAverage / getFirstNineAverageCount).toStringAsFixed(2);
+  }
+
+  Map<int, int> getPreciseScoresSorted() {
+    return new SplayTreeMap<int, int>.from(getPreciseScores,
+        (a, b) => getPreciseScores[b] > getPreciseScores[a] ? 1 : -1);
   }
 }

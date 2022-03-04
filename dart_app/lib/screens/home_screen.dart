@@ -37,12 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    _createPlayerOfCurrentUser();
     super.initState();
-  }
-
-  void _createPlayerOfCurrentUser() async {
-    await context.read<AuthService>().createPlayerOfCurrentUser();
   }
 
   @override

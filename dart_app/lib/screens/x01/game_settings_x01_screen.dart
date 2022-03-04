@@ -1,4 +1,3 @@
-import 'package:dart_app/screens/x01/settings_widgets/advanced_settigs_widget.dart';
 import 'package:dart_app/screens/x01/settings_widgets/bestof_or_firstto_widget.dart';
 import 'package:dart_app/screens/x01/settings_widgets/checkout_counting_widget.dart';
 import 'package:dart_app/screens/x01/settings_widgets/custom_points_widget.dart';
@@ -47,8 +46,9 @@ class _GameSettingsX01ScreenState extends State<GameSettingsX01Screen> {
 
   @override
   void initState() {
-    addCurrentUserToPlayers();
     super.initState();
+    addCurrentUserToPlayers();
+    addPlayersForTesting();
   }
 
   @override
@@ -56,6 +56,16 @@ class _GameSettingsX01ScreenState extends State<GameSettingsX01Screen> {
     _newPlayerController.dispose();
     _newTeamController.dispose();
     super.dispose();
+  }
+
+  //just for testing -> to automatically have 2 players inserted
+  void addPlayersForTesting() {
+    final gameSettingsX01 =
+        Provider.of<GameSettingsX01>(context, listen: false);
+    if (gameSettingsX01.getPlayers.length < 2) {
+      gameSettingsX01.addPlayer(new Player(name: "Luki"));
+      gameSettingsX01.addPlayer(new Player(name: "GG"));
+    }
   }
 
   //adds the current logged in user to the players listview
@@ -531,7 +541,31 @@ class _GameSettingsX01ScreenState extends State<GameSettingsX01Screen> {
                       return SizedBox.shrink();
                     }),
                 EnableCheckoutCounting(),
-                AdvancedSettings(),
+                Padding(
+                  padding: EdgeInsets.only(left: 7.w),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: TextButton.icon(
+                      onPressed: () {
+                        Navigator.of(context).pushNamed("/inGameSettingsX01");
+                      },
+                      icon: Icon(
+                        Icons.settings,
+                      ),
+                      label: const Text(
+                        "Advanced Setttings",
+                      ),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
             StartGameBtn(),
