@@ -28,7 +28,7 @@ class PlayerStatsInGame extends StatelessWidget {
                 playerGameStatisticsX01!.getPlayer
             ? Colors.grey
             : Colors.transparent,
-        width: gameSettingsX01.getPlayers.length <= 2 ? 50.w : 33.33.w,
+        width: 50.w,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,14 +135,21 @@ class PlayerStatsInGame extends StatelessWidget {
                     ),
                   ),
                 if (gameSettingsX01.getShowThrownDartsPerLeg)
-                  Text(
-                    "Thrown Darts: " +
-                        playerGameStatisticsX01!.getThrownDartsPerLeg
-                            .toString(),
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                    ),
-                  ),
+                  playerGameStatisticsX01!.getThrownDartsPerLeg != 0
+                      ? Text(
+                          "Thrown Darts: " +
+                              playerGameStatisticsX01!.getThrownDartsPerLeg
+                                  .toString(),
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                          ),
+                        )
+                      : Text(
+                          "Thrown Darts: -",
+                          style: TextStyle(
+                            fontSize: 13.sp,
+                          ),
+                        ),
               ],
             )
           ],

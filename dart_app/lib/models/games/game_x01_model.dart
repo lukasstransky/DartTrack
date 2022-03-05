@@ -2,10 +2,13 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
 import 'package:dart_app/models/games/game_model.dart';
 import 'package:dart_app/models/player_model.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_model.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01_model.dart';
 import 'dart:developer';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GameX01 extends Game {
   GameX01({dateTime}) : super(dateTime: dateTime, name: "X01");
@@ -34,17 +37,20 @@ class GameX01 extends Game {
   //todo add support for teams
   void init(GameSettingsX01 gameSettingsX01) {
     this.setGameSettings = gameSettingsX01;
-    this.setInit = true;
-    int points = gameSettingsX01.getCustomPoints == -1
-        ? gameSettingsX01.getPoints
-        : gameSettingsX01.getCustomPoints;
+    //if game is finished -> undo last throw -> will call init again
+    if (getGameSettings.getPlayers.length != getPlayerGameStatistics.length) {
+      this.setInit = true;
+      int points = gameSettingsX01.getCustomPoints == -1
+          ? gameSettingsX01.getPoints
+          : gameSettingsX01.getCustomPoints;
 
-    for (Player player in gameSettingsX01.getPlayers) {
-      this.getPlayerGameStatistics.add(new PlayerGameStatisticsX01(
-          mode: "X01", player: player, currentPoints: points));
+      for (Player player in gameSettingsX01.getPlayers) {
+        this.getPlayerGameStatistics.add(new PlayerGameStatisticsX01(
+            mode: "X01", player: player, currentPoints: points));
+      }
+
+      this.setCurrentPlayerToThrow = gameSettingsX01.getPlayers[0];
     }
-
-    this.setCurrentPlayerToThrow = gameSettingsX01.getPlayers[0];
   }
 
   //gets called when user goes back to settings from game screen
@@ -126,7 +132,7 @@ class GameX01 extends Game {
         .firstWhere((stats) => stats.getPlayer == getCurrentPlayerToThrow);
   }
 
-  void submitPoints(String points) {
+  void submitPoints(String points, BuildContext context) {
     setCurrentPointsSelected = "Points";
     setRevertPossible = true;
 
@@ -178,9 +184,20 @@ class GameX01 extends Game {
       }
     }
 
+    //set all scores per leg
+    String key = getKeyForAllScoresPerLeg();
+    if (currentPlayerStats.getAllScoresPerLeg.containsKey(key)) {
+      //add to value list
+      currentPlayerStats.getAllScoresPerLeg[key].add(parsedPoints);
+    } else {
+      //create new pair in map
+      currentPlayerStats.getAllScoresPerLeg[key] = [parsedPoints];
+    }
+
     //leg/set finished -> check also if game is finished
     if (currentPlayerStats.getCurrentPoints == 0) {
       currentPlayerStats.setLegsWon = currentPlayerStats.getLegsWon + 1;
+
       //update checkout quote
       currentPlayerStats.setCheckoutQuote =
           currentPlayerStats.getLegsWon / currentPlayerStats.getCheckoutCount;
@@ -194,25 +211,15 @@ class GameX01 extends Game {
 
           currentPlayerStats.setSetsWon = currentPlayerStats.getSetsWon + 1;
 
-          if (getGameSettings.getMode == BestOfOrFirstTo.FirstTo &&
-              getGameSettings.getSets == currentPlayerStats.getSetsWon) {
-            //player won the game - set mode & first to
-
-          } else if (getGameSettings.getMode == BestOfOrFirstTo.BestOf &&
-              getGameSettings.getSets ==
-                  ((currentPlayerStats.getSetsWon * 2) - 1)) {
-            //player won the game - set mode & best of
+          if (isGameWon(currentPlayerStats)) {
+            sortPlayerStats();
+            Navigator.of(context).pushNamed("/finishX01");
           }
         }
       } else {
-        if (getGameSettings.getMode == BestOfOrFirstTo.FirstTo &&
-            getGameSettings.getLegs == currentPlayerStats.getLegsWon) {
-          //player won the game - leg mode & first to
-
-        } else if (getGameSettings.getMode == BestOfOrFirstTo.BestOf &&
-            getGameSettings.getLegs ==
-                ((currentPlayerStats.getLegsWon * 2) - 1)) {
-          //player won the game - leg mode & best of
+        if (isGameWon(currentPlayerStats)) {
+          sortPlayerStats();
+          Navigator.of(context).pushNamed("/finishX01");
         }
       }
 
@@ -221,18 +228,6 @@ class GameX01 extends Game {
         setPlayerLegStartIndex = 0;
       } else {
         setPlayerLegStartIndex = getPlayerLegStartIndex + 1;
-      }
-
-      //set best/worst leg
-      if (currentPlayerStats.getThrownDartsPerLeg <
-              currentPlayerStats.getBestLeg ||
-          currentPlayerStats.getBestLeg == 0) {
-        currentPlayerStats.setBestLeg = currentPlayerStats.getThrownDartsPerLeg;
-      }
-      if (currentPlayerStats.getThrownDartsPerLeg >
-          currentPlayerStats.getWorstLeg) {
-        currentPlayerStats.setWorstLeg =
-            currentPlayerStats.getThrownDartsPerLeg;
       }
 
       //add checkout to list
@@ -260,7 +255,9 @@ class GameX01 extends Game {
             ? getGameSettings.getPoints
             : getGameSettings.getCustomPoints;
 
-        stats.setThrownDartsPerLeg = 0;
+        if (!isGameWon(currentPlayerStats)) {
+          stats.setThrownDartsPerLeg = 0;
+        }
       }
     }
 
@@ -278,8 +275,8 @@ class GameX01 extends Game {
     notifyListeners();
   }
 
-  void bust() {
-    submitPoints("0");
+  void bust(BuildContext context) {
+    submitPoints("0", context);
   }
 
   void revertPoints() {
@@ -335,7 +332,7 @@ class GameX01 extends Game {
             }
             //revert only player that is currently selected
             int lastPoints1 = stats.getAllScores.last;
-            revertStats(stats, lastPoints1);
+            revertStats(stats, lastPoints1, true);
             alreadyReverted = true;
           }
         }
@@ -345,7 +342,7 @@ class GameX01 extends Game {
       }
 
       if (alreadyReverted == false) {
-        revertStats(currentPlayerStats, lastPoitns);
+        revertStats(currentPlayerStats, lastPoitns, false);
       }
       setCurrentPointsSelected = "Points";
       checkIfRevertPossible(); //if 1 score is left -> enters this if & removes last score -> without this call the revert btn is still highlighted
@@ -366,16 +363,33 @@ class GameX01 extends Game {
     return result;
   }
 
-  void revertStats(PlayerGameStatisticsX01 stats, int points) {
+  void revertStats(
+      PlayerGameStatisticsX01 stats, int points, bool legOrSetReverted) {
+    //all scores
     if (stats.getAllScores.isNotEmpty) {
       stats.getAllScores.removeLast();
     }
 
+    //total points
     stats.setTotalPoints = stats.getTotalPoints - points;
+
+    //precise scores
     if (stats.getPreciseScores.containsKey(points)) {
       stats.getPreciseScores[points] -= 1;
+      //if amount of precise scores is 0 -> remove it from map
+      stats.getPreciseScores.removeWhere((key, value) => key == points);
     }
+
+    //first nine avg
+    if (stats.getThrownDartsPerLeg <= 9) {
+      stats.setFirstNineAverage = stats.getFirstNineAverage - points;
+      stats.setFirstNineAverageCount = stats.getFirstNineAverageCount - 1;
+    }
+
+    //thrown darts per leg
     stats.setThrownDartsPerLeg = stats.getThrownDartsPerLeg - 3;
+
+    //rounded scores
     List<int> keys = stats.getRoundedScores.keys.toList();
     if (points >= 170) {
       stats.getRoundedScores[keys[keys.length - 1]] -= 1;
@@ -385,6 +399,16 @@ class GameX01 extends Game {
         stats.getRoundedScores[keys[i]] -= 1;
       }
     }
+
+    //leg or set reverted
+    if (legOrSetReverted) {
+      //checkout
+      stats.getCheckouts.removeLast();
+    }
+
+    //all scores per leg
+    String key = getKeyForAllScoresPerLeg();
+    stats.getAllScoresPerLeg[key].removeLast();
   }
 
   bool checkoutPossible() {
@@ -506,5 +530,78 @@ class GameX01 extends Game {
       }
     }
     return false;
+  }
+
+  String getFormattedDateTime() {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm');
+    return formatter.format(getDateTime);
+  }
+
+  bool isGameWon(PlayerGameStatisticsX01 stats) {
+    if (getGameSettings.getMode == BestOfOrFirstTo.FirstTo &&
+        getGameSettings.getSets == stats.getSetsWon) {
+      //player won the game - set mode & first to
+      return true;
+    } else if (getGameSettings.getMode == BestOfOrFirstTo.BestOf &&
+        getGameSettings.getSets == ((stats.getSetsWon * 2) - 1)) {
+      //player won the game - set mode & best of
+      return true;
+    } else if (getGameSettings.getMode == BestOfOrFirstTo.FirstTo &&
+        getGameSettings.getLegs == stats.getLegsWon) {
+      //player won the game - leg mode & first to
+      return true;
+    } else if (getGameSettings.getMode == BestOfOrFirstTo.BestOf &&
+        getGameSettings.getLegs == ((stats.getLegsWon * 2) - 1)) {
+      //player won the game - leg mode & best of
+      return true;
+    }
+    return false;
+  }
+
+  //in order to show the right order in the finish screen
+  void sortPlayerStats() {
+    //convert playerGameStatistics to playerGameStatisticsX01 -> otherwise cant sort
+    List<PlayerGameStatisticsX01> temp = [];
+    for (PlayerGameStatistics playerGameStatistics in getPlayerGameStatistics) {
+      temp.add(playerGameStatistics as PlayerGameStatisticsX01);
+    }
+    //if sets are enabled -> sort after sets, otherwise after legs
+    if (getGameSettings.getSetsEnabled)
+      temp.sort((a, b) => b.getSetsWon.compareTo(a.getSetsWon));
+    else
+      temp.sort((a, b) => b.getLegsWon.compareTo(a.getLegsWon));
+
+    setPlayerGameStatistics = temp;
+  }
+
+  //needed to set all scores per leg
+  num getCurrentLeg() {
+    num result = 0;
+    for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics)
+      result += stats.getLegsWon;
+
+    return result;
+  }
+
+  //needed to set all scores per leg
+  num getCurrentSet() {
+    num result = 0;
+    for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics)
+      result += stats.getSetsWon;
+
+    return result;
+  }
+
+  String getKeyForAllScoresPerLeg() {
+    num currentLeg = getCurrentLeg();
+    num currentSet = -1;
+    //create string for key
+    String key = "";
+    if (getGameSettings.getSetsEnabled) {
+      currentSet = getCurrentSet();
+      key += "Set" + currentSet.toString() + " ";
+    }
+    key += "Leg" + currentLeg.toString();
+    return key;
   }
 }

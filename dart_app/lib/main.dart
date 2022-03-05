@@ -1,6 +1,7 @@
 import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
 import 'package:dart_app/models/games/game_x01_model.dart';
 import 'package:dart_app/screens/statistics_screen.dart';
+import 'package:dart_app/screens/x01/finish_x01_screen.dart';
 import 'package:dart_app/screens/x01/game_x01_screen.dart';
 import 'package:dart_app/screens/x01/ingame_settings_x01_screen.dart';
 import 'package:dart_app/screens/x01/statistics_x01_screen.dart';
@@ -66,6 +67,7 @@ class MyApp extends StatelessWidget {
             InGameSettingsX01Screen.routeName: (ctx) =>
                 InGameSettingsX01Screen(),
             StatisticsX01Screen.routeName: (ctx) => StatisticsX01Screen(),
+            FinishX01Screen.routeName: (ctx) => FinishX01Screen(),
           },
           home: AuthWrapper(),
         );

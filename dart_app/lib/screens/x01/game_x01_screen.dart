@@ -292,9 +292,9 @@ class GameX01ScreenState extends State<GameX01Screen> {
           ),
           TextButton(
             onPressed: () {
-              gameX01.addToCheckoutCount(selectedCheckoutCount);
-              gameX01.submitPoints(currentPointsSelected);
               Navigator.of(context).pop();
+              gameX01.addToCheckoutCount(selectedCheckoutCount);
+              gameX01.submitPoints(currentPointsSelected, context);
             },
             child: const Text("Submit"),
           ),
@@ -311,7 +311,7 @@ class GameX01ScreenState extends State<GameX01Screen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBarGameX01(gameSettingsX01),
+      appBar: CustomAppBarGameX01(),
       body: Column(
         children: [
           Container(
@@ -443,7 +443,7 @@ class GameX01ScreenState extends State<GameX01Screen> {
                                           if (gameX01.finishedWithThreeDarts(
                                               currentPointsSelected)) {
                                             gameX01.submitPoints(
-                                                currentPointsSelected);
+                                                currentPointsSelected, context);
                                           } else {
                                             if (gameX01.getGameSettings
                                                     .getEnableCheckoutCounting &&
@@ -460,7 +460,8 @@ class GameX01ScreenState extends State<GameX01Screen> {
                                                     currentPointsSelected);
                                               } else {
                                                 gameX01.submitPoints(
-                                                    currentPointsSelected);
+                                                    currentPointsSelected,
+                                                    context);
                                               }
                                             } else if (gameX01
                                                 .finishedLegSetOrGame(
@@ -469,12 +470,13 @@ class GameX01ScreenState extends State<GameX01Screen> {
                                                   currentPointsSelected);
                                             } else {
                                               gameX01.submitPoints(
-                                                  currentPointsSelected);
+                                                  currentPointsSelected,
+                                                  context);
                                             }
                                           }
                                         } else {
                                           gameX01.submitPoints(
-                                              currentPointsSelected);
+                                              currentPointsSelected, context);
                                         }
                                       }
                                     }

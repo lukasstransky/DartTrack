@@ -49,6 +49,7 @@ dependencies:
   flutter_feather_icons: ^2.0.0+1
   material_design_icons_flutter: ^5.0.6595
   get: ^4.6.1
+  intl: ^0.17.0
 
 dev_dependencies:
   flutter_test:

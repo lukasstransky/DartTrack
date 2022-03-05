@@ -244,10 +244,10 @@ class PointsBtnsWidget extends StatelessWidget {
                               if (count != -1) {
                                 showDialogCallBack(gameX01, count, "0");
                               } else {
-                                gameX01.bust();
+                                gameX01.bust(context);
                               }
                             } else {
-                              gameX01.bust();
+                              gameX01.bust(context);
                             }
                           }),
                     ),

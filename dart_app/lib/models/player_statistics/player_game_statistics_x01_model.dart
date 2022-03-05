@@ -12,12 +12,12 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   num _firstNineAverageCount = 0;
   int _legsWon = 0;
   int _setsWon = 0;
-  int _bestLeg = 0;
-  int _worstLeg = 0;
   int _thrownDartsPerLeg = 0;
   double _checkoutQuote = 0.0;
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
+  Map<String, List<num>> _allScoresPerLeg =
+      {}; //"Leg 1" : 120, 140, 100 -> to calc best, worst leg & avg. darts per leg
   List<int> _checkouts = [];
   //0 -> for < 40
   Map<int, int> _roundedScores = {
@@ -65,11 +65,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   get getSetsWon => this._setsWon;
   set setSetsWon(int setsWon) => this._setsWon = setsWon;
 
-  get getBestLeg => this._bestLeg;
-  set setBestLeg(int bestLeg) => this._bestLeg = bestLeg;
-
-  get getWorstLeg => this._worstLeg;
-  set setWorstLeg(int worstLeg) => this._worstLeg = worstLeg;
+  get getPreciseScores => this._preciseScores;
+  set setPreciesScores(Map<int, int> preciseScores) =>
+      this._preciseScores = preciseScores;
 
   get getThrownDartsPerLeg => this._thrownDartsPerLeg;
   set setThrownDartsPerLeg(int thrownDartsPerLeg) =>
@@ -90,9 +88,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setRoundedScores(Map<int, int> roundedScores) =>
       this._roundedScores = roundedScores;
 
-  get getPreciseScores => this._preciseScores;
-  set setPreciesScores(Map<int, int> preciseScores) =>
-      this._preciseScores = preciseScores;
+  get getAllScoresPerLeg => this._allScoresPerLeg;
+  set setAllScoresPerLeg(Map<String, List<num>> allScoresPerLeg) =>
+      this._allScoresPerLeg = allScoresPerLeg;
 
   get getAllScores => this._allScores;
   set setAllScores(List<int> allScores) => this._allScores = allScores;
@@ -182,5 +180,87 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   Map<int, int> getPreciseScoresSorted() {
     return new SplayTreeMap<int, int>.from(getPreciseScores,
         (a, b) => getPreciseScores[b] > getPreciseScores[a] ? 1 : -1);
+  }
+
+  String getCheckoutQuoteInPercent() {
+    return (getCheckoutQuote * 100).toStringAsFixed(2);
+  }
+
+  String getBestLeg(num pointsToWinLeg) {
+    num bestLeg = 0;
+    num currentPoints = 0;
+    num countOfDarts = 0;
+    getAllScoresPerLeg.values.forEach((scores) => {
+          scores.forEach((score) => {
+                currentPoints += score,
+                countOfDarts += 3,
+              }),
+          //if leg is won by player -> otherwise best leg or worst leg should not be set
+          if (currentPoints == pointsToWinLeg)
+            {
+              if (countOfDarts < bestLeg || bestLeg == 0)
+                {
+                  bestLeg = countOfDarts,
+                }
+            },
+          currentPoints = 0,
+          countOfDarts = 0,
+        });
+
+    if (bestLeg == 0) {
+      return "-";
+    }
+    return bestLeg.toString();
+  }
+
+  String getWorstLeg(num pointsToWinLeg) {
+    num worstLeg = 0;
+    num currentPoints = 0;
+    num countOfDarts = 0;
+    getAllScoresPerLeg.values.forEach((scores) => {
+          scores.forEach((score) => {
+                currentPoints += score,
+                countOfDarts += 3,
+              }),
+          //if leg is won by player -> otherwise best leg or worst leg should not be set
+          if (currentPoints == pointsToWinLeg)
+            {
+              if (countOfDarts > worstLeg)
+                {
+                  worstLeg = countOfDarts,
+                }
+            },
+          currentPoints = 0,
+          countOfDarts = 0,
+        });
+    if (worstLeg == 0) {
+      return "-";
+    }
+    return worstLeg.toString();
+  }
+
+  String getDartsPerLeg(num pointsToWinLeg) {
+    num totalCountOfDarts = 0;
+    num wonLegs = 0;
+    num currentPoints = 0;
+    num currentCountOfDarts = 0;
+
+    getAllScoresPerLeg.values.forEach((scores) => {
+          scores.forEach((score) => {
+                currentPoints += score,
+                currentCountOfDarts += 3,
+              }),
+          if (currentPoints == pointsToWinLeg)
+            {
+              totalCountOfDarts += currentCountOfDarts,
+              wonLegs += 1,
+            },
+          currentPoints = 0,
+          currentCountOfDarts = 0,
+        });
+    if (wonLegs == 0) {
+      return "-";
+    }
+    return (totalCountOfDarts / wonLegs).toString();
   }
 }

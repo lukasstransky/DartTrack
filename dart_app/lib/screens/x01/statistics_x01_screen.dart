@@ -19,6 +19,9 @@ class StatisticsX01Screen extends StatelessWidget {
     final gameX01 = Provider.of<GameX01>(context, listen: false);
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
+    final points = gameSettingsX01.getCustomPoints != -1
+        ? gameSettingsX01.getCustomPoints
+        : gameSettingsX01.getPoints;
 
     return Scaffold(
         appBar: CustomAppBar(true, "Statistics"),
@@ -263,9 +266,7 @@ class StatisticsX01Screen extends StatelessWidget {
                               width: WIDTH_DATA_STATISTICS.w,
                               child: stats.getCheckoutQuote != 0.0
                                   ? Text(
-                                      stats.getCheckoutQuote
-                                              .toStringAsFixed(2) +
-                                          "%",
+                                      stats.getCheckoutQuoteInPercent() + "%",
                                       style: TextStyle(
                                           fontSize: FONTSIZE_STATISTICS.sp),
                                     )
@@ -366,10 +367,7 @@ class StatisticsX01Screen extends StatelessWidget {
                             in gameX01.getPlayerGameStatistics)
                           Container(
                             width: WIDTH_DATA_STATISTICS.w,
-                            child: Text(
-                                stats.getBestLeg != 0
-                                    ? stats.getBestLeg.toString()
-                                    : "-",
+                            child: Text(stats.getBestLeg(points as num),
                                 style: TextStyle(
                                     fontSize: FONTSIZE_STATISTICS.sp)),
                           ),
@@ -397,9 +395,7 @@ class StatisticsX01Screen extends StatelessWidget {
                           Container(
                             width: WIDTH_DATA_STATISTICS.w,
                             child: Text(
-                              stats.getWorstLeg != 0
-                                  ? stats.getWorstLeg.toString()
-                                  : "-",
+                              stats.getWorstLeg(points as num),
                               style:
                                   TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                             ),
@@ -439,7 +435,10 @@ class StatisticsX01Screen extends StatelessWidget {
                           Container(
                             width: WIDTH_DATA_STATISTICS.w,
                             child: Text(
-                              "-",
+                              stats.getDartsPerLeg(points as num),
+                              style: new TextStyle(
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                              ),
                             ),
                           ),
                       ],
@@ -469,8 +468,7 @@ class StatisticsX01Screen extends StatelessWidget {
                                 stats.getCheckouts.isNotEmpty
                                     ? stats.getCheckouts.toString()
                                     : "-",
-                                style: TextStyle(
-                                    fontSize: FONTSIZE_STATISTICS.sp)),
+                                style: TextStyle(fontSize: 12.sp)),
                           ),
                       ],
                     ),

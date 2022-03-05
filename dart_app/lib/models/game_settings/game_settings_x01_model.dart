@@ -527,4 +527,51 @@ class GameSettingsX01 extends GameSettings {
       setInputMethod = InputMethod.Round;
     notifyListeners();
   }
+
+  String getGameMode() {
+    String result = "";
+    if (getMode == BestOfOrFirstTo.BestOf)
+      result += "Best Of ";
+    else
+      result += "First To ";
+
+    if (getSetsEnabled) {
+      if (getSets > 1)
+        result += getSets.toString() + " Sets - ";
+      else
+        result += getSets.toString() + " Set - ";
+    }
+    if (getLegs > 1)
+      result += getLegs.toString() + " Legs";
+    else
+      result += getLegs.toString() + " Leg";
+
+    return result;
+  }
+
+  String getGameModeDetails(bool showPoints) {
+    String result = "";
+
+    if (showPoints) {
+      if (getCustomPoints != -1)
+        result += getCustomPoints.toString() + " / ";
+      else
+        result += getPoints.toString() + " / ";
+    }
+
+    if (getModeIn == SingleOrDouble.SingleField)
+      result += "Single In / ";
+    else
+      result += "Double In / ";
+
+    if (getModeOut == SingleOrDouble.SingleField)
+      result += "Single Out";
+    else
+      result += "Double Out";
+
+    if (getSuddenDeath)
+      result += " / SD - after " + getMaxExtraLegs.toString() + " Legs";
+
+    return result;
+  }
 }
