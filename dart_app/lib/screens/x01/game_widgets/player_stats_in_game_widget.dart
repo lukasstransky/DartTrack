@@ -4,6 +4,7 @@ import 'package:dart_app/models/games/game_model.dart';
 import 'package:dart_app/models/games/game_x01_model.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_model.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01_model.dart';
+import 'package:dart_app/other/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +18,6 @@ class PlayerStatsInGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
     return Consumer2<GameX01, GameSettingsX01>(
       //todo -> add selector
       builder: (_, gameX01, gameSettingsX01, __) => Container(
@@ -151,7 +148,7 @@ class PlayerStatsInGame extends StatelessWidget {
                           ),
                         ),
               ],
-            )
+            ),
           ],
         ),
       ),

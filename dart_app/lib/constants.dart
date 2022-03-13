@@ -48,8 +48,12 @@ const int WIDTH_DATA_STATISTICS = 30;
 const double PADDING_TOP_STATISTICS = 10.0;
 
 //Game Page
-const double POINTS_BUTTON_MARGIN = 2.0;
-const double POINTS_BUTTON_TEXT_SIZE = 30;
+const double POINTS_BUTTON_MARGIN = 1.0;
+const double ROUND_BUTTON_TEXT_SIZE = 30;
+const double THREE_DARTS_BUTTON_TEXT_SIZE = 18;
+
+enum PointType { Single, Double, Tripple }
+
 const List<int> noScoresPossible = [
   179,
   178,
@@ -66,7 +70,6 @@ const List<int> startPointsPossibilities = [301, 501, 701];
 //needed for checkout counting -> if player finishes with an only three dart finish -> dont show dialog
 //these checkouts are possible with 3 darts & additionally with 2 darts (cause of bull)
 const List<int> threeDartFinishesWithBull = [110, 107, 104, 101];
-
 const Map<int, List<String>> finishWays = {
   170: ["T20 T20 BULL"],
   167: ["T20 T19 BULL"],

@@ -13,7 +13,6 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _legsWon = 0;
   int _setsWon = 0;
   int _thrownDartsPerLeg = 0;
-  double _checkoutQuote = 0.0;
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
   Map<String, List<num>> _allScoresPerLeg =
@@ -33,6 +32,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }; //e.g. 140+ : 5
   Map<int, int> _preciseScores = {}; //e.g. 140 : 3
   List<int> _allScores = [];
+  List<int> _allScoresPerDart =
+      []; //for input method three darts -> to keep track of each thrown dart
   List<int> _allRemainingPoints =
       []; //all remainging points after each throw -> for reverting
   List<int> _legsCount =
@@ -73,10 +74,6 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setThrownDartsPerLeg(int thrownDartsPerLeg) =>
       this._thrownDartsPerLeg = thrownDartsPerLeg;
 
-  get getCheckoutQuote => this._checkoutQuote;
-  set setCheckoutQuote(double checkoutQuote) =>
-      this._checkoutQuote = checkoutQuote;
-
   get getCheckoutCount => this._checkoutCount;
   set setCheckoutCount(int checkoutCount) =>
       this._checkoutCount = checkoutCount;
@@ -95,6 +92,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   get getAllScores => this._allScores;
   set setAllScores(List<int> allScores) => this._allScores = allScores;
 
+  get getAllScoresPerDart => this._allScoresPerDart;
+  set setAllScoresPerDart(List<int> allScoresPerDart) =>
+      this._allScoresPerDart = allScoresPerDart;
+
   get getAllRemainingPoints => this._allRemainingPoints;
   set setAllRemainingPoints(List<int> allRemainingPoints) =>
       this._allRemainingPoints = allRemainingPoints;
@@ -111,7 +112,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   //calc average based on total points and all scores length
   String getAverage() {
-    if (getTotalPoints == 0 || getAllScores.length == 0) {
+    if (getTotalPoints == 0 && getAllScores.length == 0) {
       return "-";
     }
     return (getTotalPoints / getAllScores.length).toStringAsFixed(2);
@@ -155,7 +156,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }
 
   String getFinishWay() {
-    return finishWays[getCurrentPoints]![0];
+    if (getCurrentPoints != 0) {
+      return finishWays[getCurrentPoints]![0];
+    }
+    return "";
   }
 
   bool checkoutPossible() {
@@ -173,7 +177,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }
 
   String getFirstNinveAvg() {
-    if (getFirstNineAverage == 0.0) return "-";
+    if (getAllScores.length == 0) return "-";
     return (getFirstNineAverage / getFirstNineAverageCount).toStringAsFixed(2);
   }
 
@@ -183,7 +187,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }
 
   String getCheckoutQuoteInPercent() {
-    return (getCheckoutQuote * 100).toStringAsFixed(2);
+    if (getCheckoutCount == 0) {
+      return "-";
+    }
+    return ((getLegsWon / getCheckoutCount) * 100).toStringAsFixed(2) + "%";
   }
 
   String getBestLeg(num pointsToWinLeg) {

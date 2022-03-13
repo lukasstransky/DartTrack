@@ -8,7 +8,7 @@ class Game with ChangeNotifier {
   String? _name; //e.g. X01 or Cricket
   DateTime _dateTime; //when game was played
   GameSettings? _gameSettings; //there are different settings for each game
-  List<PlayerGameStatistics>? _playerGameStatistics = [];
+  List<PlayerGameStatistics> _playerGameStatistics = [];
   Player? _currentPlayerToThrow; //player whose turn it is
 
   get getName => this._name;
@@ -23,7 +23,7 @@ class Game with ChangeNotifier {
 
   get getPlayerGameStatistics => this._playerGameStatistics;
   set setPlayerGameStatistics(
-          List<PlayerGameStatistics>? playerGameStatistics) =>
+          List<PlayerGameStatistics> playerGameStatistics) =>
       this._playerGameStatistics = playerGameStatistics;
 
   get getCurrentPlayerToThrow => this._currentPlayerToThrow;

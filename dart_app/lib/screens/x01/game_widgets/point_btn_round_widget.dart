@@ -1,12 +1,14 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
 import 'package:dart_app/models/games/game_x01_model.dart';
 import 'package:dart_app/other/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class PointBtn extends StatelessWidget {
-  const PointBtn({Key? key, this.point, this.activeBtn}) : super(key: key);
+class PointBtnRoundWidget extends StatelessWidget {
+  const PointBtnRoundWidget({Key? key, this.point, this.activeBtn})
+      : super(key: key);
 
   final String? point;
   final bool? activeBtn;
@@ -33,11 +35,13 @@ class PointBtn extends StatelessWidget {
               )
             : MaterialStateProperty.all(Colors.transparent),
       ),
-      child: Text(
-        point as String,
-        style: TextStyle(
-          fontSize: POINTS_BUTTON_TEXT_SIZE.sp,
-          color: Colors.black,
+      child: FittedBox(
+        child: Text(
+          point as String,
+          style: TextStyle(
+            fontSize: ROUND_BUTTON_TEXT_SIZE.sp,
+            color: Colors.black,
+          ),
         ),
       ),
       onPressed: () {

@@ -1,5 +1,7 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game_x01_model.dart';
 import 'package:dart_app/models/player_model.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01_model.dart';
 import 'package:dart_app/models/team_model.dart';
 import 'package:flutter/material.dart';
 import './game_settings_model.dart';
@@ -17,9 +19,9 @@ class GameSettingsX01 extends GameSettings {
   bool _setsEnabled;
   SingleOrDouble _modeIn;
   SingleOrDouble _modeOut;
-  bool _winByTwoLegsDifference; //todo
-  bool _suddenDeath; //todo
-  int? _maxExtraLegs; //todo
+  bool _winByTwoLegsDifference;
+  bool _suddenDeath;
+  int? _maxExtraLegs;
   bool _enableCheckoutCounting;
   bool _checkoutCountingFinallyDisabled =
       false; //if user disables checkout counting in the in game settings -> cant be reversed (cause of inconsistent stats then)
@@ -27,12 +29,11 @@ class GameSettingsX01 extends GameSettings {
   bool _showFinishWays;
   bool _showThrownDartsPerLeg;
   bool _showLastThrow;
-
   bool _callerEnabled = false;
   bool _vibrationFeedbackEnabled = false;
-  bool _automaticallySubmitPoints = false;
+  bool _automaticallySubmitPoints = true;
   bool _showMostScoredPoints = false;
-  InputMethod _inputMethod = InputMethod.Round;
+  InputMethod _inputMethod = InputMethod.ThreeDarts;
   bool _showInputMethodInGameScreen = false;
 
   get getSingleOrTeam => this._singleOrTeam;
@@ -520,11 +521,23 @@ class GameSettingsX01 extends GameSettings {
     return getPoints;
   }
 
-  void switchInputMethod() {
-    if (getInputMethod == InputMethod.Round)
+  void switchInputMethod(GameX01 gameX01) {
+    if (getInputMethod == InputMethod.Round) {
       setInputMethod = InputMethod.ThreeDarts;
-    else
+    } else {
       setInputMethod = InputMethod.Round;
+
+      //in case user enters e.g. 1 or 2 darts in three dart mode -> switches to round mode
+      if (gameX01.getInit) {
+        PlayerGameStatisticsX01 stats =
+            gameX01.getCurrentPlayerGameStatistics();
+        int currentPointsEntered =
+            int.parse(gameX01.getCurrentThreeDartsCalculated());
+        stats.setCurrentPoints = stats.getCurrentPoints + currentPointsEntered;
+        gameX01.resetCurrentThreeDarts();
+      }
+    }
+
     notifyListeners();
   }
 

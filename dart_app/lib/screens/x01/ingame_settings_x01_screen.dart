@@ -184,7 +184,7 @@ class InGameSettingsX01Screen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: 19.h,
+                  height: 15.h,
                   child: Padding(
                     padding: EdgeInsets.only(top: 1.0.h),
                     child: Card(
@@ -260,41 +260,15 @@ class InGameSettingsX01Screen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Flexible(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 2.5.w),
-                              child: SizedBox(
-                                height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Automatically Submit Points",
-                                      style: TextStyle(
-                                          fontSize:
-                                              FONTSIZE_IN_GAME_SETTINGS.sp),
-                                    ),
-                                    Spacer(),
-                                    Switch(
-                                      value: gameSettingsX01
-                                          .getAutomaticallySubmitPoints,
-                                      onChanged: (value) {
-                                        gameSettingsX01
-                                                .setAutomaticallySubmitPoints =
-                                            value;
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
                   ),
                 ),
                 SizedBox(
-                  height: 21.h,
+                  height: gameSettingsX01.getInputMethod == InputMethod.Round
+                      ? 21.h
+                      : 25.h,
                   child: Padding(
                     padding: EdgeInsets.only(top: 1.0.h),
                     child: Card(
@@ -357,7 +331,7 @@ class InGameSettingsX01Screen extends StatelessWidget {
                                             gameSettingsX01.getInputMethod ==
                                                     InputMethod.ThreeDarts
                                                 ? gameSettingsX01
-                                                    .switchInputMethod()
+                                                    .switchInputMethod(gameX01)
                                                 : null,
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
@@ -394,7 +368,7 @@ class InGameSettingsX01Screen extends StatelessWidget {
                                             gameSettingsX01.getInputMethod ==
                                                     InputMethod.Round
                                                 ? gameSettingsX01
-                                                    .switchInputMethod()
+                                                    .switchInputMethod(gameX01)
                                                 : null,
                                         child: FittedBox(
                                           fit: BoxFit.fitWidth,
@@ -473,7 +447,37 @@ class InGameSettingsX01Screen extends StatelessWidget {
                                           ],
                                         ),
                                       )),
-                          )
+                          ),
+                          if (gameSettingsX01.getInputMethod ==
+                              InputMethod.ThreeDarts)
+                            Flexible(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 2.5.w),
+                                child: SizedBox(
+                                  height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Automatically Submit Points",
+                                        style: TextStyle(
+                                            fontSize:
+                                                FONTSIZE_IN_GAME_SETTINGS.sp),
+                                      ),
+                                      Spacer(),
+                                      Switch(
+                                        value: gameSettingsX01
+                                            .getAutomaticallySubmitPoints,
+                                        onChanged: (value) {
+                                          gameSettingsX01
+                                                  .setAutomaticallySubmitPoints =
+                                              value;
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                         ],
                       ),
                     ),

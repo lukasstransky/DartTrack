@@ -263,19 +263,12 @@ class StatisticsX01Screen extends StatelessWidget {
                           for (PlayerGameStatisticsX01 stats
                               in gameX01.getPlayerGameStatistics)
                             Container(
-                              width: WIDTH_DATA_STATISTICS.w,
-                              child: stats.getCheckoutQuote != 0.0
-                                  ? Text(
-                                      stats.getCheckoutQuoteInPercent() + "%",
-                                      style: TextStyle(
-                                          fontSize: FONTSIZE_STATISTICS.sp),
-                                    )
-                                  : Text(
-                                      "-",
-                                      style: TextStyle(
-                                          fontSize: FONTSIZE_STATISTICS.sp),
-                                    ),
-                            ),
+                                width: WIDTH_DATA_STATISTICS.w,
+                                child: Text(
+                                  stats.getCheckoutQuoteInPercent(),
+                                  style: TextStyle(
+                                      fontSize: FONTSIZE_STATISTICS.sp),
+                                )),
                         ],
                       ),
                     ),

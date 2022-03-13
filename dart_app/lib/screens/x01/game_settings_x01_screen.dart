@@ -530,14 +530,19 @@ class _GameSettingsX01ScreenState extends State<GameSettingsX01Screen> {
                     ),
                   ),
                 ),
-                Selector<GameSettingsX01, Tuple2<bool, BestOfOrFirstTo>>(
-                    selector: (_, gameSettingsX01) => Tuple2(
+                Selector<GameSettingsX01, Tuple3<bool, BestOfOrFirstTo, int>>(
+                    selector: (_, gameSettingsX01) => Tuple3(
                         gameSettingsX01.getSetsEnabled,
-                        gameSettingsX01.getMode),
+                        gameSettingsX01.getMode,
+                        gameSettingsX01.getLegs),
                     builder: (_, tuple, __) {
                       if (tuple.item1 == false &&
-                          tuple.item2 == BestOfOrFirstTo.FirstTo)
+                          tuple.item2 ==
+                              BestOfOrFirstTo
+                                  .FirstTo) if (gameSettingsX01.getLegs > 1) {
                         return WinByTwoLegsDifferenceWidget();
+                      }
+
                       return SizedBox.shrink();
                     }),
                 EnableCheckoutCounting(),
