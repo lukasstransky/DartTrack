@@ -25,7 +25,7 @@ class InGameSettingsX01Screen extends StatelessWidget {
             builder: (_, gameSettingsX01, __) => Column(
               children: [
                 SizedBox(
-                  height: 28.h,
+                  height: 24.h,
                   child: Padding(
                     padding: EdgeInsets.only(top: 1.5.h),
                     child: Card(
@@ -151,33 +151,6 @@ class InGameSettingsX01Screen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Flexible(
-                            child: Padding(
-                              padding: EdgeInsets.only(left: 2.5.w),
-                              child: SizedBox(
-                                height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Most Scored Points",
-                                      style: TextStyle(
-                                          fontSize:
-                                              FONTSIZE_IN_GAME_SETTINGS.sp),
-                                    ),
-                                    Spacer(),
-                                    Switch(
-                                      value: gameSettingsX01
-                                          .getShowMostScoredPoints,
-                                      onChanged: (value) {
-                                        gameSettingsX01
-                                            .setShowMostScoredPoints = value;
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
                         ],
                       ),
                     ),
@@ -266,9 +239,7 @@ class InGameSettingsX01Screen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  height: gameSettingsX01.getInputMethod == InputMethod.Round
-                      ? 21.h
-                      : 25.h,
+                  height: 25.h,
                   child: Padding(
                     padding: EdgeInsets.only(top: 1.0.h),
                     child: Card(
@@ -448,6 +419,35 @@ class InGameSettingsX01Screen extends StatelessWidget {
                                         ),
                                       )),
                           ),
+                          if (gameSettingsX01.getInputMethod ==
+                              InputMethod.Round)
+                            Flexible(
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 2.5.w),
+                                child: SizedBox(
+                                  height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        "Most Scored Points",
+                                        style: TextStyle(
+                                            fontSize:
+                                                FONTSIZE_IN_GAME_SETTINGS.sp),
+                                      ),
+                                      Spacer(),
+                                      Switch(
+                                        value: gameSettingsX01
+                                            .getShowMostScoredPoints,
+                                        onChanged: (value) {
+                                          gameSettingsX01
+                                              .setShowMostScoredPoints = value;
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                           if (gameSettingsX01.getInputMethod ==
                               InputMethod.ThreeDarts)
                             Flexible(

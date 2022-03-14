@@ -59,16 +59,12 @@ class PointBtnThreeDartwWidget extends StatelessWidget {
       onPressed: () {
         if (activeBtn as bool) {
           gameX01.updateCurrentThreeDarts(text);
-          //add some delay to show last dart entered
           if (gameX01.getCurrentThreeDarts[2] != "Dart 3" &&
               gameX01.getGameSettings.getAutomaticallySubmitPoints) {
             gameX01.setCanBePressed = false;
-
-            Future.delayed(const Duration(milliseconds: 800), () {
-              submitPointsForInputMethodThreeDarts(
-                  gameX01, point as String, context);
-              gameX01.setCanBePressed = true;
-            });
+            submitPointsForInputMethodThreeDarts(
+                gameX01, point as String, context);
+            gameX01.setCanBePressed = true;
           } else {
             submitPointsForInputMethodThreeDarts(
                 gameX01, point as String, context);

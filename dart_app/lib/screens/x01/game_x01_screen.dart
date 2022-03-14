@@ -65,10 +65,13 @@ class GameX01ScreenState extends State<GameX01Screen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: gameSettingsX01.getPlayers.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return PlayerStatsInGame(
-                      playerGameStatisticsX01:
-                          gameX01.getPlayerGameStatistics[index],
-                    );
+                    if (gameX01.getPlayerGameStatistics.length > 0) {
+                      return PlayerStatsInGame(
+                        playerGameStatisticsX01:
+                            gameX01.getPlayerGameStatistics[index],
+                      );
+                    }
+                    return SizedBox.shrink();
                   },
                 ),
               ),

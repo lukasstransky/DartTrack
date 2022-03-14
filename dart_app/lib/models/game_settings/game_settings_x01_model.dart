@@ -529,7 +529,7 @@ class GameSettingsX01 extends GameSettings {
 
       //in case user enters e.g. 1 or 2 darts in three dart mode -> switches to round mode
       if (gameX01.getInit) {
-        PlayerGameStatisticsX01 stats =
+        PlayerGameStatisticsX01? stats =
             gameX01.getCurrentPlayerGameStatistics();
         int currentPointsEntered =
             int.parse(gameX01.getCurrentThreeDartsCalculated());

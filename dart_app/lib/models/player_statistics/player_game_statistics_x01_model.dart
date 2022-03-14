@@ -8,6 +8,9 @@ import 'dart:developer';
 class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int? _currentPoints;
   int _totalPoints = 0; //for average
+  int _startingPoints = 0; //for input method -> three darts
+  int _pointsSelectedCount =
+      0; //for input method -> three darts (to prevent user from entering more than 3 darts when spaming the keyboard)
   num _firstNineAverage = 0.0;
   num _firstNineAverageCount = 0;
   int _legsWon = 0;
@@ -45,6 +48,14 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   get getTotalPoints => this._totalPoints;
   set setTotalPoints(int totalPoints) => this._totalPoints = totalPoints;
+
+  get getStartingPoints => this._startingPoints;
+  set setStartingPoints(int startingPoints) =>
+      this._startingPoints = startingPoints;
+
+  get getPointsSelectedCount => this._pointsSelectedCount;
+  set setPointsSelectedCount(int pointsSelectedCount) =>
+      this._pointsSelectedCount = pointsSelectedCount;
 
   get getFirstNineAverage {
     if (this._firstNineAverageCount == 0) {

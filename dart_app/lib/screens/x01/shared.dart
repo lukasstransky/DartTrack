@@ -1,5 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01_model.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01_model.dart';
+import 'package:dart_app/other/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'dart:developer';
@@ -11,16 +13,23 @@ import 'dart:developer';
 //finishCount is only transfered when the input method is three darts (there I know the finish count)
 showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
     String currentPointsSelected, BuildContext context) {
-  int selectedCheckoutCount =
-      gameX01.finishedLegSetOrGame(currentPointsSelected) ? 1 : 0;
+  String threeDartsCalculated = "";
+  int selectedCheckoutCount = 0;
   int selectedFinishCount = 0;
-  if (gameX01.getGameSettings.getInputMethod == InputMethod.Round) {
-    selectedFinishCount = gameX01.isDoubleField(currentPointsSelected)
-        ? 1
-        : 2; //how many darts a player needed for finising
-  } else {
+
+  if (gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+    threeDartsCalculated = gameX01.getCurrentThreeDartsCalculated();
     selectedFinishCount = gameX01.getAmountOfDartsThrown();
+  } else {
+    selectedFinishCount = gameX01.isDoubleField(currentPointsSelected) ? 1 : 2;
   }
+
+  selectedCheckoutCount = gameX01.finishedLegSetOrGame(
+          gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts
+              ? threeDartsCalculated
+              : currentPointsSelected)
+      ? 1
+      : 0;
 
   showDialog(
     barrierDismissible: false,
@@ -48,7 +57,11 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                       gameX01.getGameSettings
                               .getCheckoutCountingFinallyDisabled ==
                           false) ...[
-                    if (!gameX01.finishedLegSetOrGame(currentPointsSelected))
+                    if (!gameX01.finishedLegSetOrGame(
+                        gameX01.getGameSettings.getInputMethod ==
+                                InputMethod.ThreeDarts
+                            ? threeDartsCalculated
+                            : currentPointsSelected))
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.all(5),
@@ -73,6 +86,13 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                                       Theme.of(context).colorScheme.primary)
                                   : MaterialStateProperty.all<Color>(
                                       Colors.grey),
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor: selectedCheckoutCount == 0
+                                  ? MaterialStateProperty.all(
+                                      Colors.transparent)
+                                  : MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
                             ),
                           ),
                         ),
@@ -100,6 +120,12 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                                 ? MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.primary)
                                 : MaterialStateProperty.all<Color>(Colors.grey),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor: selectedCheckoutCount == 1
+                                ? MaterialStateProperty.all(Colors.transparent)
+                                : MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
                           ),
                         ),
                       ),
@@ -111,6 +137,9 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                           child: ElevatedButton(
                             onPressed: () {
                               setState(() => selectedCheckoutCount = 2);
+                              if (selectedFinishCount < 2) {
+                                selectedFinishCount = 2;
+                              }
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
@@ -129,6 +158,13 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                                       Theme.of(context).colorScheme.primary)
                                   : MaterialStateProperty.all<Color>(
                                       Colors.grey),
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor: selectedCheckoutCount == 2
+                                  ? MaterialStateProperty.all(
+                                      Colors.transparent)
+                                  : MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
                             ),
                           ),
                         ),
@@ -140,6 +176,9 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                           child: ElevatedButton(
                             onPressed: () {
                               setState(() => selectedCheckoutCount = 3);
+                              if (selectedFinishCount < 3) {
+                                selectedFinishCount = 3;
+                              }
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
@@ -158,6 +197,13 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                                       Theme.of(context).colorScheme.primary)
                                   : MaterialStateProperty.all<Color>(
                                       Colors.grey),
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor: selectedCheckoutCount == 3
+                                  ? MaterialStateProperty.all(
+                                      Colors.transparent)
+                                  : MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
                             ),
                           ),
                         ),
@@ -178,7 +224,8 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                           margin: EdgeInsets.all(5),
                           child: ElevatedButton(
                             onPressed: () {
-                              setState(() => selectedFinishCount = 1);
+                              if (selectedCheckoutCount <= 1)
+                                setState(() => selectedFinishCount = 1);
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
@@ -192,11 +239,22 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                                   ),
                                 ),
                               ),
-                              backgroundColor: selectedFinishCount == 1
+                              backgroundColor: selectedCheckoutCount > 1
                                   ? MaterialStateProperty.all(
-                                      Theme.of(context).colorScheme.primary)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.grey),
+                                      Utils.darken(Colors.grey, 25))
+                                  : selectedFinishCount == 1
+                                      ? MaterialStateProperty.all(
+                                          Theme.of(context).colorScheme.primary)
+                                      : MaterialStateProperty.all<Color>(
+                                          Colors.grey),
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor: selectedFinishCount == 1 ||
+                                      selectedCheckoutCount > 1
+                                  ? MaterialStateProperty.all(
+                                      Colors.transparent)
+                                  : MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
                             ),
                           ),
                         ),
@@ -206,7 +264,8 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                         margin: EdgeInsets.all(5),
                         child: ElevatedButton(
                           onPressed: () {
-                            setState(() => selectedFinishCount = 2);
+                            if (selectedCheckoutCount <= 2)
+                              setState(() => selectedFinishCount = 2);
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
@@ -220,10 +279,21 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                                 ),
                               ),
                             ),
-                            backgroundColor: selectedFinishCount == 2
+                            backgroundColor: selectedCheckoutCount > 2
                                 ? MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary)
-                                : MaterialStateProperty.all<Color>(Colors.grey),
+                                    Utils.darken(Colors.grey, 25))
+                                : selectedFinishCount == 2
+                                    ? MaterialStateProperty.all(
+                                        Theme.of(context).colorScheme.primary)
+                                    : MaterialStateProperty.all<Color>(
+                                        Colors.grey),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor: selectedFinishCount == 2 ||
+                                    selectedCheckoutCount > 2
+                                ? MaterialStateProperty.all(Colors.transparent)
+                                : MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
                           ),
                         ),
                       ),
@@ -251,6 +321,12 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                                 ? MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.primary)
                                 : MaterialStateProperty.all<Color>(Colors.grey),
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor: selectedFinishCount == 3
+                                ? MaterialStateProperty.all(Colors.transparent)
+                                : MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
                           ),
                         ),
                       ),
@@ -266,7 +342,16 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            gameX01.setCurrentPointsSelected = "Points";
+            log(gameX01.getCurrentThreeDarts.toString());
+            if (gameX01.getGameSettings.getInputMethod ==
+                InputMethod.ThreeDarts) {
+              int amount = gameX01.getAmountOfDartsThrown();
+              gameX01.getCurrentThreeDarts[amount - 1] =
+                  "Dart " + amount.toString();
+            } else {
+              gameX01.setCurrentPointsSelected = "Points";
+            }
+
             gameX01.notify();
           },
           child: const Text("Cancel"),
@@ -325,63 +410,74 @@ submitPointsForInputMethodRound(
 
 submitPointsForInputMethodThreeDarts(
     GameX01 gameX01, String scoredPoint, BuildContext context) {
-  //calculate points based on single, double, tripple
+  PlayerGameStatisticsX01 stats = gameX01.getCurrentPlayerGameStatistics();
+  if (stats.getPointsSelectedCount < 3) {
+    stats.setPointsSelectedCount = stats.getPointsSelectedCount + 1;
 
-  int parsedPoints;
-  if (scoredPoint == "Bull") {
-    parsedPoints = 50;
-  } else {
-    parsedPoints = int.parse(scoredPoint);
-    if (gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-      if (gameX01.getCurrentPointType == PointType.Double)
-        parsedPoints = parsedPoints * 2;
-      else if (gameX01.getCurrentPointType == PointType.Tripple)
-        parsedPoints = parsedPoints * 3;
-    }
-  }
-
-  scoredPoint = parsedPoints.toString();
-  bool submitAlreadyCalled = false;
-
-  String currentThreeDarts = gameX01.getCurrentThreeDartsCalculated();
-  if (gameX01.getAmountOfDartsThrown() != 3) {
-    gameX01.submitOnlyPoints(parsedPoints);
-  }
-
-  if (gameX01.checkoutPossible()) {
-    //finished with 3 darts (only high finish) -> show no dialog
-    if (gameX01.getCurrentThreeDarts[2] != "Dart 3" &&
-        gameX01.finishedWithThreeDarts(currentThreeDarts)) {
-      gameX01.submitPoints(scoredPoint, context);
-      submitAlreadyCalled = true;
-      //finished with first dart -> show no dialog
-    } else if (gameX01.getAmountOfDartsThrown() == 1 &&
-        gameX01.finishedLegSetOrGame(currentThreeDarts)) {
-      gameX01.submitPoints(scoredPoint, context, 1);
-      if (gameX01.isCheckoutCountingEnabled()) {
-        gameX01.addToCheckoutCount(1);
-      }
-      submitAlreadyCalled = true;
+    //calculate points based on single, double, tripple
+    int parsedPoints;
+    if (scoredPoint == "Bull") {
+      parsedPoints = 50;
     } else {
-      if (gameX01.isCheckoutCountingEnabled()) {
-        //only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
-        if (gameX01.finishedLegSetOrGame(currentThreeDarts)) {
-          submitAlreadyCalled = true;
-          showDialogForCheckout(gameX01, -1, scoredPoint, context);
-        } else if (gameX01.getAmountOfDartsThrown() == 3) {
-          //if not finished -> get checkout possibilities
+      parsedPoints = int.parse(scoredPoint);
+      if (gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+        if (gameX01.getCurrentPointType == PointType.Double)
+          parsedPoints = parsedPoints * 2;
+        else if (gameX01.getCurrentPointType == PointType.Tripple)
+          parsedPoints = parsedPoints * 3;
+      }
+    }
+
+    scoredPoint = parsedPoints.toString();
+    bool submitAlreadyCalled = false;
+    bool finished = false;
+    String currentThreeDarts = gameX01.getCurrentThreeDartsCalculated();
+
+    if (gameX01.finishedLegSetOrGame(currentThreeDarts)) {
+      finished = true;
+    }
+
+    if (!finished && gameX01.getAmountOfDartsThrown() != 3) {
+      gameX01.submitOnlyPoints(parsedPoints);
+    }
+
+    if (gameX01.checkoutPossible()) {
+      //finished with 3 darts (only high finish) -> show no dialog
+      if (gameX01.getAmountOfDartsThrown() == 3 &&
+          gameX01.finishedWithThreeDarts(currentThreeDarts)) {
+        gameX01.submitPoints(scoredPoint, context);
+
+        submitAlreadyCalled = true;
+
+        //finished with first dart -> show no dialog
+      } else if (gameX01.getAmountOfDartsThrown() == 1 && finished) {
+        if (gameX01.isCheckoutCountingEnabled()) {
+          gameX01.addToCheckoutCount(1);
+        }
+        gameX01.submitPoints(scoredPoint, context, 1);
+
+        submitAlreadyCalled = true;
+      } else {
+        if (gameX01.isCheckoutCountingEnabled()) {
           int count = gameX01.getAmountOfCheckoutPossibilities(scoredPoint);
-          log(count.toString());
-          if (count != -1) {
+          //only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
+          if (finished) {
             submitAlreadyCalled = true;
+
             showDialogForCheckout(gameX01, count, scoredPoint, context);
+          } else if (gameX01.getAmountOfDartsThrown() == 3) {
+            if (count != -1) {
+              submitAlreadyCalled = true;
+
+              showDialogForCheckout(gameX01, count, scoredPoint, context);
+            }
           }
         }
       }
     }
-  }
-  //needed because in the dialog the submit method is called (otherwise submit would get called 2x)
-  if (!submitAlreadyCalled) {
-    gameX01.submitPoints(scoredPoint, context, 1);
+    //needed because in the dialog the submit method is called (otherwise submit would get called 2x)
+    if (!submitAlreadyCalled) {
+      gameX01.submitPoints(scoredPoint, context, 1);
+    }
   }
 }
