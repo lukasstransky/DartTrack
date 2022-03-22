@@ -57,17 +57,18 @@ class PointBtnThreeDartwWidget extends StatelessWidget {
         ),
       ),
       onPressed: () {
-        if (activeBtn as bool) {
+        if (activeBtn as bool && gameX01.getCanBePressed) {
           gameX01.updateCurrentThreeDarts(text);
+
           if (gameX01.getCurrentThreeDarts[2] != "Dart 3" &&
               gameX01.getGameSettings.getAutomaticallySubmitPoints) {
             gameX01.setCanBePressed = false;
             submitPointsForInputMethodThreeDarts(
-                gameX01, point as String, context);
+                gameX01, point as String, text, context);
             gameX01.setCanBePressed = true;
           } else {
             submitPointsForInputMethodThreeDarts(
-                gameX01, point as String, context);
+                gameX01, point as String, text, context);
           }
         }
       },

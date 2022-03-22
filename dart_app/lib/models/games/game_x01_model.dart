@@ -5,6 +5,7 @@ import 'package:dart_app/models/player_model.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_model.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01_model.dart';
 import 'dart:developer';
+import 'package:tuple/tuple.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
@@ -105,107 +106,110 @@ class GameX01 extends Game {
     resetCurrentThreeDarts();
   }
 
-  //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
-  bool checkIfPointBtnShouldBeDisabled(String btnValueToCheck) {
-    PlayerGameStatisticsX01 playerGameStatisticsX01 =
-        getCurrentPlayerGameStatistics();
-
-    //for INPUT METHOD = ROUND
-    if (getGameSettings.getInputMethod == InputMethod.Round) {
-      //double in
-      if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
-          playerGameStatisticsX01.getCurrentPoints ==
-              getGameSettings.getPointsOrCustom()) {
-        if (btnValueToCheck == "delete") {
-          return true;
-        }
-        if (getCurrentPointsSelected == "Points" ||
-            getCurrentPointsSelected.isEmpty) {
-          if (btnValueToCheck == "7" ||
-              btnValueToCheck == "9" ||
-              btnValueToCheck == "0") {
-            return false;
-          }
-        } else {
-          int result = int.parse(getCurrentPointsSelected + btnValueToCheck);
-
-          return isDoubleField(result.toString());
-        }
+  bool checkIfPointBtnShouldBeDisabledRound(
+      String btnValueToCheck, PlayerGameStatisticsX01 stats) {
+    //double in
+    if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
+        stats.getCurrentPoints == getGameSettings.getPointsOrCustom()) {
+      if (btnValueToCheck == "delete") {
+        return true;
       }
-
       if (getCurrentPointsSelected == "Points" ||
           getCurrentPointsSelected.isEmpty) {
-        if (btnValueToCheck == "0" ||
-            btnValueToCheck == "delete" ||
-            int.parse(btnValueToCheck) >
-                playerGameStatisticsX01.getCurrentPoints) {
+        if (btnValueToCheck == "7" ||
+            btnValueToCheck == "9" ||
+            btnValueToCheck == "0") {
           return false;
         }
       } else {
-        if (btnValueToCheck != "delete") {
-          int result = int.parse(getCurrentPointsSelected + btnValueToCheck);
-          if (result > 180 ||
-              result > playerGameStatisticsX01.getCurrentPoints ||
-              noScoresPossible.contains(result) ||
-              playerGameStatisticsX01.getCurrentPoints - result == 1) {
-            return false;
-          }
-        }
-      }
-    } else {
-      //for INPUT METHOD = THREE DARTS
+        int result = int.parse(getCurrentPointsSelected + btnValueToCheck);
 
-      //disable 25 in double & tripple mode
-      if (btnValueToCheck == "25" &&
-          (getCurrentPointType == PointType.Tripple ||
-              getCurrentPointType == PointType.Double)) {
+        return isDoubleField(result.toString());
+      }
+    }
+
+    if (getCurrentPointsSelected == "Points" ||
+        getCurrentPointsSelected.isEmpty) {
+      if (btnValueToCheck == "0" ||
+          btnValueToCheck == "delete" ||
+          int.parse(btnValueToCheck) > stats.getCurrentPoints) {
         return false;
       }
-
-      //calculate points based on single, double or tripple
-      int result = 0;
-      if (btnValueToCheck == "Bull") {
-        result += 50;
-      } else {
-        int points = int.parse(btnValueToCheck);
-        if (getCurrentPointType == PointType.Double) {
-          points = points * 2;
-        } else if (getCurrentPointType == PointType.Tripple) {
-          points = points * 3;
-        }
-        result += points;
-      }
-
-      //if double in -> only enable fields with D
-      if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
-          playerGameStatisticsX01.getCurrentPoints ==
-              getGameSettings.getPointsOrCustom()) {
-        if (getCurrentPointType == PointType.Double) {
-          return true;
-        } else {
+    } else {
+      if (btnValueToCheck != "delete") {
+        int result = int.parse(getCurrentPointsSelected + btnValueToCheck);
+        if (result > 180 ||
+            result > stats.getCurrentPoints ||
+            noScoresPossible.contains(result) ||
+            stats.getCurrentPoints - result == 1) {
           return false;
         }
       }
+    }
+    return true;
+  }
 
-      //if double out -> only enable finsihes with D (e.g. 20 -> enable D10 but disable single 20)
-      if (getGameSettings.getModeOut == SingleOrDouble.DoubleField) {
-        if (playerGameStatisticsX01.getCurrentPoints - result == 0) {
-          if (getCurrentPointType == PointType.Double) {
-            return true;
-          } else {
-            return false;
-          }
-        }
+  bool checkIfPointBtnShouldBeDisabledThreeDarts(
+      String btnValueToCheck, PlayerGameStatisticsX01 stats) {
+    //disable 25 in double & tripple mode
+    if (btnValueToCheck == "25" &&
+        (getCurrentPointType == PointType.Tripple ||
+            getCurrentPointType == PointType.Double)) {
+      return false;
+    }
+
+    //calculate points based on single, double or tripple
+    int result = 0;
+    if (btnValueToCheck == "Bull") {
+      result += 50;
+    } else {
+      int points = int.parse(btnValueToCheck);
+      if (getCurrentPointType == PointType.Double) {
+        points = points * 2;
+      } else if (getCurrentPointType == PointType.Tripple) {
+        points = points * 3;
       }
+      result += points;
+    }
 
-      if (result > playerGameStatisticsX01.getCurrentPoints ||
-          noScoresPossible.contains(result) ||
-          playerGameStatisticsX01.getCurrentPoints - result == 1) {
+    //if double in -> only enable fields with D
+    if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
+        stats.getCurrentPoints == getGameSettings.getPointsOrCustom()) {
+      if (getCurrentPointType == PointType.Double) {
+        return true;
+      } else {
         return false;
       }
     }
 
+    //if double out -> only enable finsihes with D (e.g. 20 -> enable D10 but disable single 20)
+    if (getGameSettings.getModeOut == SingleOrDouble.DoubleField) {
+      if (stats.getCurrentPoints - result == 0) {
+        if (getCurrentPointType == PointType.Double) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    }
+
+    if (result > stats.getCurrentPoints ||
+        noScoresPossible.contains(result) ||
+        stats.getCurrentPoints - result == 1) {
+      return false;
+    }
     return true;
+  }
+
+  //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
+  bool checkIfPointBtnShouldBeDisabled(String btnValueToCheck) {
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
+
+    if (getGameSettings.getInputMethod == InputMethod.Round) {
+      return checkIfPointBtnShouldBeDisabledRound(btnValueToCheck, stats);
+    } else {
+      return checkIfPointBtnShouldBeDisabledThreeDarts(btnValueToCheck, stats);
+    }
   }
 
   void updateCurrentPointsSelected(String newPoints) {
@@ -240,210 +244,153 @@ class GameX01 extends Game {
         .firstWhere((stats) => stats.getPlayer == getCurrentPlayerToThrow);
   }
 
-  //only for input method -> three darts
-  void submitOnlyPoints(int points) {
-    setRevertPossible = true;
+  //only for cancel button in add checkout count dialog
+  void revertSomeStats(int points) {
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
 
-    PlayerGameStatisticsX01 currentPlayerStats =
-        getCurrentPlayerGameStatistics();
+    //total Points
+    stats.setTotalPoints = stats.getTotalPoints - points;
 
-    //set points
-    currentPlayerStats.setCurrentPoints =
-        currentPlayerStats.getCurrentPoints - points;
+    //thrown darts
+    stats.setCurrentThrownDartsInLeg = stats.getCurrentThrownDartsInLeg - 1;
 
-    //set all scores per dart
-    currentPlayerStats.getAllScoresPerDart.add(points);
+    //first nine avg
+    if (stats.getCurrentThrownDartsInLeg <= 9) {
+      stats.setFirstNineAverage = stats.getFirstNineAverage - points;
+      stats.setFirstNineAverageCount = stats.getFirstNineAverageCount - 1;
+    }
+
+    //all scores per dart as string + count
+    String point = stats.getAllScoresPerDartAsString.last;
+    stats.getAllScoresPerDartAsString.removeLast();
+    if (stats.getAllScoresPerDartAsStringCount.containsKey(point)) {
+      stats.getAllScoresPerDartAsStringCount[point] -= 1;
+      //if amount of precise scores is 0 -> remove it from map
+      if (stats.getAllScoresPerDartAsStringCount[point] == 0) {
+        stats.getAllScoresPerDartAsStringCount
+            .removeWhere((key, value) => key == point);
+      }
+    }
+
+    //points selected count
+    stats.setPointsSelectedCount = stats.getPointsSelectedCount - 1;
   }
 
-  bool shouldSubmit(String thrownPoints) {
-    if (thrownPoints == "Bust" ||
-        getGameSettings.getInputMethod == InputMethod.Round ||
-        (getGameSettings.getInputMethod == InputMethod.ThreeDarts &&
-            getAmountOfDartsThrown() == 3) ||
-        finishedLegSetOrGame(getCurrentThreeDartsCalculated())) {
-      return true;
+  //these stats need to be submitted immediately after input of dart -> to show avg e.g. (only for input method three darts)
+  void submitSomeStats(int points, String pointsAsString) {
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
+
+    //add to total Points -> to calc avg.
+    stats.setTotalPoints = stats.getTotalPoints + points;
+
+    //set thrown darts
+    stats.setCurrentThrownDartsInLeg = stats.getCurrentThrownDartsInLeg + 1;
+
+    //set first nine avg
+    if (stats.getCurrentThrownDartsInLeg <= 9) {
+      stats.setFirstNineAverage = stats.getFirstNineAverage + points;
+      stats.setFirstNineAverageCount = stats.getFirstNineAverageCount + 1;
     }
-    return false;
+
+    //all scores per dart as string + count
+    if (stats.getAllScoresPerDartAsStringCount.containsKey(pointsAsString))
+      stats.getAllScoresPerDartAsStringCount[pointsAsString] += 1;
+    else
+      stats.getAllScoresPerDartAsStringCount[pointsAsString] = 1;
+
+    stats.setAllScoresPerDartAsString = [
+      ...stats.getAllScoresPerDartAsString,
+      pointsAsString
+    ];
+  }
+
+  //to show the thrown dart immediately in ui (only for input method -> three darts)
+  void submitOnlyPoints(int points, String pointsAsString) {
+    setRevertPossible = true;
+
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
+
+    //set points
+    stats.setCurrentPoints = stats.getCurrentPoints - points;
+
+    //set all scores per dart
+    stats.setAllScoresPerDart = [...stats.getAllScoresPerDart, points];
+
+    submitSomeStats(points, pointsAsString);
   }
 
   //thrownDarts -> selected from checkout dialog (only for input method -> round)
+  //checkout count needed in order to revert checkout count
   void submitPoints(String thrownPointsString, BuildContext context,
-      [thrownDarts = 3]) {
+      [thrownDarts = 3, checkoutCount = 0]) {
     if (shouldSubmit(thrownPointsString)) {
       setRevertPossible = true;
-
-      PlayerGameStatisticsX01 currentPlayerStats =
-          getCurrentPlayerGameStatistics();
-
+      PlayerGameStatisticsX01 currentStats = getCurrentPlayerGameStatistics();
       num thrownPoints =
           thrownPointsString == "Bust" ? 0 : num.parse(thrownPointsString);
 
-      currentPlayerStats.setCurrentPoints =
-          currentPlayerStats.getCurrentPoints - thrownPoints;
+      if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+        if (thrownPointsString == "Bust") {
+          submitBusted(currentStats);
+        }
+
+        //set score per dart
+        currentStats.getAllScoresPerDart.add(thrownPoints);
+
+        setAllRemainingScoresPerDart(currentStats);
+      } else {
+        //set total points
+        currentStats.setTotalPoints =
+            currentStats.getTotalPoints + thrownPoints;
+      }
+
+      //set current points
+      currentStats.setCurrentPoints =
+          currentStats.getCurrentPoints - thrownPoints;
 
       //add delay for last dart for three darts input method
       int milliseconds =
           getGameSettings.getInputMethod == InputMethod.ThreeDarts ? 800 : 0;
       Future.delayed(Duration(milliseconds: milliseconds), () {
         //set current amount of points selected
-        currentPlayerStats.setPointsSelectedCount = 0;
+        currentStats.setPointsSelectedCount = 0;
 
         //set starting points
-        currentPlayerStats.setStartingPoints =
-            currentPlayerStats.getCurrentPoints;
+        currentStats.setStartingPoints = currentStats.getCurrentPoints;
 
         setCurrentPointsSelected = "Points";
 
-        //set thrown darts
-        currentPlayerStats.setThrownDartsPerLeg =
-            currentPlayerStats.getThrownDartsPerLeg + thrownDarts;
-
         if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
           setCurrentPointType = PointType.Single;
-          thrownPoints = int.parse(getCurrentThreeDartsCalculated());
+        } else {
+          //set thrown darts
+          currentStats.setCurrentThrownDartsInLeg =
+              currentStats.getCurrentThrownDartsInLeg + thrownDarts;
+
+          //set first nine avg
+          if (currentStats.getCurrentThrownDartsInLeg <= 9) {
+            currentStats.setFirstNineAverage =
+                currentStats.getFirstNineAverage + thrownPoints;
+            currentStats.setFirstNineAverageCount =
+                currentStats.getFirstNineAverageCount + 1;
+          }
         }
 
-        //add to total Points -> to calc avg.
-        currentPlayerStats.setTotalPoints =
-            currentPlayerStats.getTotalPoints + thrownPoints;
-
-        //set first nine avg
-        if (currentPlayerStats.getThrownDartsPerLeg <= 9) {
-          currentPlayerStats.setFirstNineAverage =
-              currentPlayerStats.getFirstNineAverage + thrownPoints;
-          currentPlayerStats.setFirstNineAverageCount =
-              currentPlayerStats.getFirstNineAverageCount + 1;
-        }
-
-        if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-          //set score per dart
-          currentPlayerStats.getAllScoresPerDart.add(thrownPoints);
-        }
+        setCheckoutCountAtThrownDarts(currentStats, checkoutCount);
 
         num totalPoints = getGameSettings.getInputMethod == InputMethod.Round
             ? thrownPoints
             : num.parse(getCurrentThreeDartsCalculated());
 
         //set total score
-        currentPlayerStats.setAllScores = [
-          ...currentPlayerStats.getAllScores,
+        currentStats.setAllScores = [
+          ...currentStats.getAllScores,
           totalPoints.toInt()
         ];
 
-        //set precise scores
-        if (currentPlayerStats.getPreciseScores.containsKey(totalPoints))
-          currentPlayerStats.getPreciseScores[totalPoints] += 1;
-        else
-          currentPlayerStats.getPreciseScores[totalPoints] = 1;
-
-        //set rounded score
-        List<int> keys = currentPlayerStats.getRoundedScores.keys.toList();
-        if (totalPoints == 180) {
-          currentPlayerStats.getRoundedScores[keys[keys.length - 1]] += 1;
-        }
-        for (int i = 0; i < keys.length - 1; i++) {
-          if (totalPoints >= keys[i] && totalPoints < keys[i + 1]) {
-            currentPlayerStats.getRoundedScores[keys[i]] += 1;
-          }
-        }
-
-        //set all scores per leg
-        String key = getKeyForAllScoresPerLeg();
-        if (currentPlayerStats.getAllScoresPerLeg.containsKey(key)) {
-          //add to value list
-          currentPlayerStats.getAllScoresPerLeg[key].add(totalPoints);
-        } else {
-          //create new pair in map
-          currentPlayerStats.getAllScoresPerLeg[key] = [totalPoints];
-        }
-
-        //leg/set finished -> check also if game is finished
-        if (currentPlayerStats.getCurrentPoints == 0) {
-          //update won legs
-          currentPlayerStats.setLegsWon = currentPlayerStats.getLegsWon + 1;
-
-          if (getGameSettings.getSetsEnabled) {
-            if (getGameSettings.getLegs == currentPlayerStats.getLegsWon) {
-              //save leg count of each player -> in case a user wants to revert a set
-              for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
-                stats.setLegsCount = [...stats.getLegsCount, stats.getLegsWon];
-                stats.setLegsWon = 0;
-              }
-
-              //update won sets
-              currentPlayerStats.setSetsWon = currentPlayerStats.getSetsWon + 1;
-
-              if (isGameWon(currentPlayerStats)) {
-                sortPlayerStats();
-                Navigator.of(context).pushNamed("/finishX01");
-              }
-            }
-          } else {
-            if (isGameWon(currentPlayerStats)) {
-              sortPlayerStats();
-              Navigator.of(context).pushNamed("/finishX01");
-            }
-          }
-
-          //set player who will begin next leg
-          if (getPlayerLegStartIndex == getGameSettings.getPlayers.length) {
-            setPlayerLegStartIndex = 0;
-          } else {
-            setPlayerLegStartIndex = getPlayerLegStartIndex + 1;
-          }
-
-          //add checkout to list
-          currentPlayerStats.setCheckouts = [
-            ...currentPlayerStats.getCheckouts,
-            thrownPoints.toInt()
-          ];
-
-          //reset points & thrown darts per leg
-          for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
-            //set remaining points  -> in order to revert points
-            if (stats == currentPlayerStats) {
-              currentPlayerStats.setAllRemainingPoints = [
-                ...currentPlayerStats.getAllRemainingPoints,
-                thrownPoints.toInt()
-              ];
-            } else {
-              stats.setAllRemainingPoints = [
-                ...stats.getAllRemainingPoints,
-                stats.getCurrentPoints
-              ];
-            }
-
-            stats.setCurrentPoints = getGameSettings.getPointsOrCustom();
-            stats.setStartingPoints = stats.getCurrentPoints;
-
-            if (!isGameWon(currentPlayerStats)) {
-              stats.setThrownDartsPerLeg = 0;
-            }
-          }
-          if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-            resetCurrentThreeDarts();
-          }
-        }
-
-        //SET NEXT PLAYER
-        //case 1 -> input method is round
-        //case 2 -> input method is three darts -> 3 darts entered
-        //case 3 -> input method is three darts -> 1 or 2 darts entered & finished leg/set/game
-        if ((getGameSettings.getInputMethod == InputMethod.Round) ||
-            (getGameSettings.getInputMethod == InputMethod.ThreeDarts &&
-                (getCurrentThreeDarts[2] != "Dart 3" ||
-                    currentPlayerStats.getCurrentPoints ==
-                        getGameSettings.getPointsOrCustom()))) {
-          int indexOfCurrentPlayer =
-              getGameSettings.getPlayers.indexOf(getCurrentPlayerToThrow);
-          if (indexOfCurrentPlayer + 1 == getGameSettings.getPlayers.length) {
-            //round of all players finished -> restart from beginning
-            setCurrentPlayerToThrow = getGameSettings.getPlayers[0];
-          } else {
-            setCurrentPlayerToThrow =
-                getGameSettings.getPlayers[indexOfCurrentPlayer + 1];
-          }
-        }
+        setScores(currentStats, totalPoints);
+        legSetOrGameFinished(currentStats, context, totalPoints);
+        setNextPlayer(currentStats);
 
         if (getCurrentThreeDarts[2] != "Dart 3") {
           resetCurrentThreeDarts();
@@ -454,75 +401,348 @@ class GameX01 extends Game {
     }
   }
 
+  bool shouldSubmit(String thrownPoints) {
+    if (thrownPoints == "Bust" ||
+        getGameSettings.getInputMethod == InputMethod.Round ||
+        (getGameSettings.getInputMethod == InputMethod.ThreeDarts &&
+                (getAmountOfDartsThrown() == 3) ||
+            finishedLegSetOrGame(getCurrentThreeDartsCalculated()))) {
+      return true;
+    }
+    return false;
+  }
+
+  //if player clicks on bust in three darts mode
+  void submitBusted(PlayerGameStatisticsX01 currentStats) {
+    int amountOfThrownDarts = getAmountOfDartsThrown();
+    //set all completed throws in this round to 0
+    for (int i = currentStats.getAllScoresPerDart.length - 1;
+        i > currentStats.getAllScoresPerDart.length - 1 - amountOfThrownDarts;
+        i--) {
+      int points = currentStats.getAllScoresPerDart[i];
+      //also reset total points, first nine, current points
+      currentStats.setCurrentPoints = currentStats.getCurrentPoints + points;
+      currentStats.setTotalPoints = currentStats.getTotalPoints - points;
+      if (currentStats.getCurrentThrownDartsInLeg <= 9) {
+        currentStats.setFirstNineAverage =
+            currentStats.getFirstNineAverage - points;
+      }
+      currentStats.getAllScoresPerDart[i] = 0;
+      currentStats.getAllScoresPerDartAsString[i] = "0";
+
+      String pointsAsString = points.toString();
+      if (currentStats.getAllScoresPerDartAsStringCount
+          .containsKey(pointsAsString)) {
+        currentStats.getAllScoresPerDartAsStringCount[pointsAsString] -= 1;
+        //if amount of precise scores is 0 -> remove it from map
+        if (currentStats.getAllScoresPerDartAsStringCount[pointsAsString] ==
+            0) {
+          currentStats.getAllScoresPerDartAsStringCount
+              .removeWhere((key, value) => key == pointsAsString);
+        }
+      }
+    }
+
+    int diffTo3 = 3 - amountOfThrownDarts;
+    //set remaining throws to 0 (e.g. 20 left -> with first dart T20 -> set 2nd & 3rd throw also to 0)
+    for (int i = 0; i < diffTo3 - 1; i++) {
+      currentStats.setAllScoresPerDart = [
+        ...currentStats.getAllScoresPerDart,
+        0
+      ];
+      currentStats.setAllScoresPerDartAsString = [
+        ...currentStats.getAllScoresPerDartAsString,
+        "0"
+      ];
+    }
+
+    //reset amount of thrown darts
+    currentStats.setCurrentThrownDartsInLeg =
+        currentStats.getCurrentThrownDartsInLeg + diffTo3;
+
+    currentStats.setFirstNineAverageCount =
+        currentStats.getFirstNineAverageCount + diffTo3;
+
+    getCurrentThreeDarts[0] = "0";
+    getCurrentThreeDarts[1] = "0";
+    getCurrentThreeDarts[2] = "0";
+  }
+
+  void setAllRemainingScoresPerDart(PlayerGameStatisticsX01 currentStats) {
+    List<String> temp = [];
+    if (getCurrentThreeDarts[0] != "Dart 1") {
+      temp.add(getCurrentThreeDarts[0]);
+    }
+    if (getCurrentThreeDarts[1] != "Dart 2") {
+      temp.add(getCurrentThreeDarts[1]);
+    }
+    if (getCurrentThreeDarts[2] != "Dart 3") {
+      temp.add(getCurrentThreeDarts[2]);
+    }
+    currentStats.setAllRemainingScoresPerDart = [
+      ...currentStats.getAllRemainingScoresPerDart,
+      temp
+    ];
+  }
+
+  void setCheckoutCountAtThrownDarts(
+      PlayerGameStatisticsX01 currentStats, int checkoutCount) {
+    if (checkoutCount != 0) {
+      currentStats.setCheckoutCount =
+          currentStats.getCheckoutCount + checkoutCount;
+
+      currentStats.setCheckoutCountAtThrownDarts = [
+        ...currentStats.getCheckoutCountAtThrownDarts,
+        Tuple3<String, num, num>(getCurrentLegSetAsString(),
+            currentStats.getCurrentThrownDartsInLeg, checkoutCount),
+      ];
+    }
+  }
+
+  void setScores(PlayerGameStatisticsX01 currentStats, num totalPoints) {
+    //set precise scores
+    if (currentStats.getPreciseScores.containsKey(totalPoints))
+      currentStats.getPreciseScores[totalPoints] += 1;
+    else
+      currentStats.getPreciseScores[totalPoints] = 1;
+
+    //set rounded score
+    List<int> keys = currentStats.getRoundedScores.keys.toList();
+    if (totalPoints == 180) {
+      currentStats.getRoundedScores[keys[keys.length - 1]] += 1;
+    }
+    for (int i = 0; i < keys.length - 1; i++) {
+      if (totalPoints >= keys[i] && totalPoints < keys[i + 1]) {
+        currentStats.getRoundedScores[keys[i]] += 1;
+      }
+    }
+
+    //set all scores per leg
+    String key = getCurrentLegSetAsString();
+    if (currentStats.getAllScoresPerLeg.containsKey(key)) {
+      //add to value list
+      currentStats.getAllScoresPerLeg[key].add(totalPoints);
+    } else {
+      //create new pair in map
+      currentStats.getAllScoresPerLeg[key] = [totalPoints];
+    }
+  }
+
+  void legSetOrGameFinished(PlayerGameStatisticsX01 currentStats,
+      BuildContext context, num totalPoints) {
+    if (currentStats.getCurrentPoints == 0) {
+      //update won legs
+      currentStats.setLegsWon = currentStats.getLegsWon + 1;
+
+      //thrown darts per leg
+      currentStats.setThrownDartsPerLeg = [
+        ...currentStats.getThrownDartsPerLeg,
+        currentStats.getCurrentThrownDartsInLeg
+      ];
+
+      if (getGameSettings.getSetsEnabled) {
+        if (getGameSettings.getLegs == currentStats.getLegsWon) {
+          //save leg count of each player -> in case a user wants to revert a set
+          for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
+            stats.setLegsCount = [...stats.getLegsCount, stats.getLegsWon];
+            stats.setLegsWon = 0;
+          }
+
+          //update won sets
+          currentStats.setSetsWon = currentStats.getSetsWon + 1;
+
+          if (isGameWon(currentStats)) {
+            sortPlayerStats();
+            Navigator.of(context).pushNamed("/finishX01");
+          }
+        }
+      } else {
+        if (isGameWon(currentStats)) {
+          sortPlayerStats();
+          Navigator.of(context).pushNamed("/finishX01");
+        }
+      }
+
+      //set player who will begin next leg
+      if (getPlayerLegStartIndex == getGameSettings.getPlayers.length) {
+        setPlayerLegStartIndex = 0;
+      } else {
+        setPlayerLegStartIndex = getPlayerLegStartIndex + 1;
+      }
+
+      //add checkout to list
+      currentStats.setCheckouts = [
+        ...currentStats.getCheckouts,
+        totalPoints.toInt()
+      ];
+
+      //reset points & thrown darts per leg
+      for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
+        //set remaining points  -> in order to revert points
+        if (currentStats == stats) {
+          stats.setAllRemainingPoints = [
+            ...stats.getAllRemainingPoints,
+            totalPoints.toInt()
+          ];
+        } else {
+          stats.setAllRemainingPoints = [
+            ...stats.getAllRemainingPoints,
+            stats.getCurrentPoints
+          ];
+        }
+
+        stats.setCurrentPoints = getGameSettings.getPointsOrCustom();
+        stats.setStartingPoints = stats.getCurrentPoints;
+
+        if (!isGameWon(stats)) {
+          stats.setCurrentThrownDartsInLeg = 0;
+        }
+      }
+      if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+        resetCurrentThreeDarts();
+      }
+    }
+  }
+
+  setNextPlayer(PlayerGameStatisticsX01 currentStats) {
+    //case 1 -> input method is round
+    //case 2 -> input method is three darts -> 3 darts entered
+    //case 3 -> input method is three darts -> 1 or 2 darts entered & finished leg/set/game
+    if ((getGameSettings.getInputMethod == InputMethod.Round) ||
+        (getGameSettings.getInputMethod == InputMethod.ThreeDarts &&
+            (getCurrentThreeDarts[2] != "Dart 3" ||
+                currentStats.getCurrentPoints ==
+                    getGameSettings.getPointsOrCustom()))) {
+      int indexOfCurrentPlayer =
+          getGameSettings.getPlayers.indexOf(getCurrentPlayerToThrow);
+      if (indexOfCurrentPlayer + 1 == getGameSettings.getPlayers.length) {
+        //round of all players finished -> restart from beginning
+        setCurrentPlayerToThrow = getGameSettings.getPlayers[0];
+      } else {
+        setCurrentPlayerToThrow =
+            getGameSettings.getPlayers[indexOfCurrentPlayer + 1];
+      }
+    }
+  }
+
   void bust(BuildContext context) {
     submitPoints("Bust", context);
   }
 
   void revertPoints() {
     if (checkIfRevertPossible()) {
-      //set previous player
-      int indexOfCurrentPlayer =
-          getGameSettings.getPlayers.indexOf(getCurrentPlayerToThrow);
+      PlayerGameStatisticsX01 currentStats = getCurrentPlayerGameStatistics();
+      bool alreadyReverted = false;
+      int lastPoints = 0;
+      bool legOrSetReverted = false;
+      bool roundCompleted =
+          false; //in order to revert only 1 dart or full round
 
-      if (indexOfCurrentPlayer - 1 < 0) {
-        setCurrentPlayerToThrow = getGameSettings.getPlayers.last;
-      } else {
-        setCurrentPlayerToThrow =
-            getGameSettings.getPlayers[indexOfCurrentPlayer - 1];
+      if (getGameSettings.getInputMethod == InputMethod.Round ||
+          (getGameSettings.getInputMethod == InputMethod.ThreeDarts &&
+              getAmountOfDartsThrown() == 0)) {
+        roundCompleted = true;
+
+        //set previous player
+        int indexOfCurrentPlayer =
+            getGameSettings.getPlayers.indexOf(getCurrentPlayerToThrow);
+
+        if (indexOfCurrentPlayer - 1 < 0) {
+          setCurrentPlayerToThrow = getGameSettings.getPlayers.last;
+        } else {
+          setCurrentPlayerToThrow =
+              getGameSettings.getPlayers[indexOfCurrentPlayer - 1];
+        }
+
+        currentStats = getCurrentPlayerGameStatistics();
+
+        //get last points
+        if (getGameSettings.getInputMethod == InputMethod.Round) {
+          lastPoints = currentStats.getAllScores.last;
+        } else {
+          lastPoints = currentStats.getAllScoresPerDart.last;
+        }
+
+        //leg (or + set) reverted
+        if ((startPointsPossibilities.contains(currentStats.getCurrentPoints) ||
+                getGameSettings.getCustomPoints ==
+                    currentStats.getCurrentPoints) &&
+            lastPoints != 0) {
+          legOrSetReverted = true;
+          bool setReverted = false;
+          if (currentStats.getLegsCount.isNotEmpty &&
+              currentStats.getLegsCount.last == getGameSettings.getLegs) {
+            setReverted = true;
+          }
+
+          for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
+            if (stats.getAllRemainingPoints.isNotEmpty) {
+              stats.setCurrentPoints = stats.getAllRemainingPoints.last;
+              stats.getAllRemainingPoints.removeLast();
+            }
+
+            if (setReverted) {
+              stats.setLegsWon = stats.getLegsCount.last;
+              if (stats == currentStats) {
+                stats.setSetsWon = stats.getSetsWon - 1;
+                stats.setLegsWon = stats.getLegsCount.last - 1;
+              }
+              stats.getLegsCount.removeLast();
+            }
+
+            if (stats == currentStats) {
+              //for input method three darts
+              if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+                setLastThrownDarts(stats.getAllRemainingScoresPerDart.last);
+                int amountOfThrownDarts = getAmountOfDartsThrown();
+                stats.setCurrentPoints = getValueOfSpecificDart(
+                    getCurrentThreeDarts[amountOfThrownDarts - 1]);
+                getCurrentThreeDarts[amountOfThrownDarts - 1] =
+                    "Dart " + amountOfThrownDarts.toString();
+              }
+              if (!setReverted) {
+                stats.setLegsWon = stats.getLegsWon - 1;
+              }
+              //revert only player that is currently selected
+              int lastPoints1;
+              if (getGameSettings.getInputMethod == InputMethod.Round) {
+                lastPoints1 = stats.getAllScores.last;
+              } else {
+                lastPoints1 = stats.getAllScoresPerDart.last;
+              }
+              revertStats(stats, lastPoints1, true, roundCompleted);
+              alreadyReverted = true;
+            }
+          }
+        }
       }
 
-      PlayerGameStatisticsX01 currentPlayerStats =
-          getCurrentPlayerGameStatistics();
-
-      //get last points
-      int lastPoitns = currentPlayerStats.getAllScores.last;
-
-      //leg (or + set) reverted
-      bool alreadyReverted = false;
-      if ((startPointsPossibilities
-                  .contains(currentPlayerStats.getCurrentPoints) ||
-              getGameSettings.getCustomPoints ==
-                  currentPlayerStats.getCurrentPoints) &&
-          lastPoitns != 0) {
-        bool setReverted = false;
-        if (currentPlayerStats.getLegsCount.isNotEmpty &&
-            currentPlayerStats.getLegsCount.last == getGameSettings.getLegs) {
-          setReverted = true;
+      if (!legOrSetReverted) {
+        //get last points
+        if (getGameSettings.getInputMethod == InputMethod.Round) {
+          lastPoints = currentStats.getAllScores.last;
+        } else {
+          lastPoints = currentStats.getAllScoresPerDart.last;
         }
 
-        for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
-          if (stats.getAllRemainingPoints.isNotEmpty) {
-            stats.setCurrentPoints = stats.getAllRemainingPoints.last;
-            stats.getAllRemainingPoints.removeLast();
-          }
-
-          if (setReverted) {
-            stats.setLegsWon = stats.getLegsCount.last;
-            if (currentPlayerStats == stats) {
-              stats.setSetsWon = stats.getSetsWon - 1;
-              stats.setLegsWon = stats.getLegsCount.last - 1;
-            }
-            stats.getLegsCount.removeLast();
-          }
-
-          if (stats == currentPlayerStats) {
-            if (!setReverted) {
-              stats.setLegsWon = stats.getLegsWon - 1;
-            }
-            //revert only player that is currently selected
-            int lastPoints1 = stats.getAllScores.last;
-            revertStats(stats, lastPoints1, true);
-            alreadyReverted = true;
+        if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+          int amountOfThrownDarts = getAmountOfDartsThrown();
+          if (amountOfThrownDarts == 0) {
+            setLastThrownDarts(currentStats.getAllRemainingScoresPerDart.last);
+            getCurrentThreeDarts[2] = "Dart 3";
+          } else {
+            getCurrentThreeDarts[amountOfThrownDarts - 1] =
+                "Dart " + amountOfThrownDarts.toString();
           }
         }
-      } else {
-        currentPlayerStats.setCurrentPoints =
-            currentPlayerStats.getCurrentPoints + lastPoitns;
+        currentStats.setCurrentPoints =
+            currentStats.getCurrentPoints + lastPoints;
       }
 
       if (alreadyReverted == false) {
-        revertStats(currentPlayerStats, lastPoitns, false);
+        revertStats(currentStats, lastPoints, false, roundCompleted);
       }
+
       setCurrentPointsSelected = "Points";
       checkIfRevertPossible(); //if 1 score is left -> enters this if & removes last score -> without this call the revert btn is still highlighted
     }
@@ -532,69 +752,143 @@ class GameX01 extends Game {
   bool checkIfRevertPossible() {
     bool result = false;
     for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
-      if (stats.getAllScores.length > 0) {
-        result = true;
+      if (getGameSettings.getInputMethod == InputMethod.Round) {
+        if (stats.getAllScores.length > 0) {
+          result = true;
+        }
+      } else {
+        if (stats.getAllScoresPerDart.length > 0) {
+          result = true;
+        }
       }
     }
+
     setRevertPossible = result;
     notifyListeners();
 
     return result;
   }
 
-  void revertStats(
-      PlayerGameStatisticsX01 stats, int points, bool legOrSetReverted) {
-    //all scores
-    if (stats.getAllScores.isNotEmpty) {
-      stats.getAllScores.removeLast();
+  void revertStats(PlayerGameStatisticsX01 stats, int points,
+      bool legOrSetReverted, bool roundCompleted) {
+    //LEG OR SET REVERTED
+    if (legOrSetReverted) {
+      //checkout
+      if (stats.getCheckouts.isNotEmpty) {
+        stats.getCheckouts.removeLast();
+      }
+
+      //starting points
+      if (stats.getAllScoresPerDart.isNotEmpty) {
+        int lastScore = stats.getAllScoresPerDart.last;
+        stats.setStartingPoints =
+            int.parse(getCurrentThreeDartsCalculated()) + lastScore;
+      }
+
+      //thrown darts per leg
+      if (stats.getThrownDartsPerLeg.isNotEmpty) {
+        stats.setCurrentThrownDartsInLeg = stats.getThrownDartsPerLeg.last;
+        stats.getThrownDartsPerLeg.removeLast();
+      }
+    }
+
+    //all scores per dart
+    if (stats.getAllScoresPerDart.isNotEmpty) {
+      stats.getAllScoresPerDart.removeLast();
+    }
+
+    //set points selected count
+    if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+      stats.setPointsSelectedCount = getAmountOfDartsThrown();
     }
 
     //total points
     stats.setTotalPoints = stats.getTotalPoints - points;
 
-    //precise scores
-    if (stats.getPreciseScores.containsKey(points)) {
-      stats.getPreciseScores[points] -= 1;
-      //if amount of precise scores is 0 -> remove it from map
-      stats.getPreciseScores.removeWhere((key, value) => key == points);
-    }
-
     //first nine avg
-    if (stats.getThrownDartsPerLeg <= 9) {
+    if (stats.getCurrentThrownDartsInLeg <= 9) {
       stats.setFirstNineAverage = stats.getFirstNineAverage - points;
       stats.setFirstNineAverageCount = stats.getFirstNineAverageCount - 1;
     }
 
-    //thrown darts per leg
-    stats.setThrownDartsPerLeg = stats.getThrownDartsPerLeg - 3;
-
-    //rounded scores
-    List<int> keys = stats.getRoundedScores.keys.toList();
-    if (points >= 170) {
-      stats.getRoundedScores[keys[keys.length - 1]] -= 1;
-    }
-    for (int i = 0; i < keys.length - 1; i++) {
-      if (points >= keys[i] && points < keys[i + 1]) {
-        stats.getRoundedScores[keys[i]] -= 1;
+    //all scores per dart as string count
+    String point = stats.getAllScoresPerDartAsString.last;
+    stats.getAllScoresPerDartAsString.removeLast();
+    if (stats.getAllScoresPerDartAsStringCount.containsKey(point)) {
+      stats.getAllScoresPerDartAsStringCount[point] -= 1;
+      //if amount of precise scores is 0 -> remove it from map
+      if (stats.getAllScoresPerDartAsStringCount[point] == 0) {
+        stats.getAllScoresPerDartAsStringCount
+            .removeWhere((key, value) => key == point);
       }
     }
 
-    //leg or set reverted
-    if (legOrSetReverted) {
-      //checkout
-      stats.getCheckouts.removeLast();
+    //ROUND COMPLETED
+    if (roundCompleted) {
+      if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+        points += int.parse(getCurrentThreeDartsCalculated());
+      }
+
+      //starting points
+      if (!legOrSetReverted) {
+        stats.setStartingPoints = stats.getStartingPoints + points;
+      }
+
+      //all scores
+      if (stats.getAllScores.isNotEmpty) {
+        stats.getAllScores.removeLast();
+      }
+
+      //precise scores
+      if (stats.getPreciseScores.containsKey(points)) {
+        stats.getPreciseScores[points] -= 1;
+        //if amount of precise scores is 0 -> remove it from map
+        if (stats.getPreciseScores[points] == 0) {
+          stats.getPreciseScores.removeWhere((key, value) => key == points);
+        }
+      }
+
+      //rounded scores
+      List<int> keys = stats.getRoundedScores.keys.toList();
+      if (points >= 170) {
+        stats.getRoundedScores[keys[keys.length - 1]] -= 1;
+      }
+      for (int i = 0; i < keys.length - 1; i++) {
+        if (points >= keys[i] && points < keys[i + 1]) {
+          stats.getRoundedScores[keys[i]] -= 1;
+        }
+      }
+
+      //all scores per leg
+      stats.getAllScoresPerLeg.remove(stats.getAllScoresPerLeg.lastKey());
+
+      //all remaining scores per dart
+      if (stats.getAllRemainingScoresPerDart.isNotEmpty) {
+        stats.getAllRemainingScoresPerDart.removeLast();
+      }
     }
 
-    //all scores per leg
-    String key = getKeyForAllScoresPerLeg();
-    stats.getAllScoresPerLeg[key].removeLast();
+    if (roundCompleted || legOrSetReverted) {
+      //checkout count
+      if (stats.getCheckoutCountAtThrownDarts.isNotEmpty) {
+        Tuple3<String, num, num> tuple =
+            stats.getCheckoutCountAtThrownDarts.last;
+        if (tuple.item1 == getCurrentLegSetAsString() &&
+            tuple.item2 == stats.getCurrentThrownDartsInLeg) {
+          stats.setCheckoutCount = stats.getCheckoutCount - tuple.item3;
+          stats.getCheckoutCountAtThrownDarts.removeLast();
+        }
+      }
+    }
+
+    //thrown darts
+    stats.setCurrentThrownDartsInLeg = stats.getCurrentThrownDartsInLeg - 1;
   }
 
   bool checkoutPossible() {
-    PlayerGameStatisticsX01 currentPlayerStats =
-        getCurrentPlayerGameStatistics();
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
 
-    int points = currentPlayerStats.getCurrentPoints;
+    int points = stats.getCurrentPoints;
     if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
       points += int.parse(getCurrentThreeDartsCalculated());
     }
@@ -621,10 +915,9 @@ class GameX01 extends Game {
   //e.g. 60 points remaining -> S20, D20 -> only 1 dart on double possible -> dont show 2 as with round mode
   int getAmountOfCheckoutPossibilitiesForInputMethodThreeDarts(
       int thrownPoints) {
-    PlayerGameStatisticsX01 currentPlayerStats =
-        getCurrentPlayerGameStatistics();
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
 
-    int currentPoints = currentPlayerStats.getStartingPoints;
+    int currentPoints = stats.getStartingPoints;
     int doubleCount = 0;
 
     //check at which dart currentPoints were on a double field -> increment counter
@@ -642,10 +935,9 @@ class GameX01 extends Game {
   }
 
   int getAmountOfCheckoutPossibilitiesForInputMethodRound(int thrownPoints) {
-    PlayerGameStatisticsX01 currentPlayerStats =
-        getCurrentPlayerGameStatistics();
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
 
-    int currentPoints = currentPlayerStats.getCurrentPoints;
+    int currentPoints = stats.getCurrentPoints;
     //current points = double field
     if (isDoubleField(currentPoints.toString())) {
       return 3;
@@ -679,10 +971,8 @@ class GameX01 extends Game {
   }
 
   void addToCheckoutCount(int checkoutCount) {
-    PlayerGameStatisticsX01 currentPlayerStats =
-        getCurrentPlayerGameStatistics();
-    currentPlayerStats.setCheckoutCount =
-        currentPlayerStats.getCheckoutCount + checkoutCount;
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
+    stats.setCheckoutCount = stats.getCheckoutCount + checkoutCount;
   }
 
   void notify() {
@@ -691,12 +981,11 @@ class GameX01 extends Game {
 
   //for checkout counting dialog -> to show the amount of darts for finising the leg, set or game -> in order to calc average correctly
   bool finishedLegSetOrGame(String points) {
-    PlayerGameStatisticsX01 currentPlayerStats =
-        getCurrentPlayerGameStatistics();
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
 
-    int currentPoints = currentPlayerStats.getCurrentPoints;
+    int currentPoints = stats.getCurrentPoints;
     if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-      currentPoints = currentPlayerStats.getStartingPoints;
+      currentPoints = stats.getStartingPoints;
     }
 
     if ((currentPoints - int.parse(points)) == 0) {
@@ -725,7 +1014,7 @@ class GameX01 extends Game {
         (currentPoints - thrownPoints == 0)) {
       if (getGameSettings.getEnableCheckoutCounting &&
           getGameSettings.getCheckoutCountingFinallyDisabled == false) {
-        addToCheckoutCount(1);
+        //addToCheckoutCount(1);
       }
 
       return true;
@@ -754,12 +1043,10 @@ class GameX01 extends Game {
 
   //checks if 1,3 or 5 is submitted -> invalid for double in (cant disable e.g. 1 because 10 is valid -> D5)
   bool checkIfInvalidDoubleInPointsSubmitted(String pointsSelected) {
-    PlayerGameStatisticsX01 currentPlayerStats =
-        getCurrentPlayerGameStatistics();
+    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
 
     if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
-        currentPlayerStats.getCurrentPoints ==
-            getGameSettings.getPointsOrCustom()) {
+        stats.getCurrentPoints == getGameSettings.getPointsOrCustom()) {
       if (pointsSelected == "1" ||
           pointsSelected == "3" ||
           pointsSelected == "5") {
@@ -868,9 +1155,9 @@ class GameX01 extends Game {
     return result;
   }
 
-  //needed for allScoresPerLeg
-  //e.g. Leg 1 or Set 1 Leg 2
-  String getKeyForAllScoresPerLeg() {
+  //needed for allScoresPerLeg + CheckoutCountAtThrownDarts
+  //returns e.g. 'Leg 1' or 'Set 1 Leg 2'
+  String getCurrentLegSetAsString() {
     num currentLeg = getCurrentLeg();
     num currentSet = -1;
     String key = "";
@@ -943,5 +1230,11 @@ class GameX01 extends Game {
       return true;
     }
     return false;
+  }
+
+  void setLastThrownDarts(List<String> points) {
+    for (int i = 0; i < points.length; i++) {
+      getCurrentThreeDarts[i] = points[i];
+    }
   }
 }

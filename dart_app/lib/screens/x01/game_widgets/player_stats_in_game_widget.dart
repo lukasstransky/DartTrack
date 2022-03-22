@@ -119,7 +119,9 @@ class PlayerStatsInGame extends StatelessWidget {
               children: [
                 if (gameSettingsX01.getShowAverage)
                   Text(
-                    "Average: " + playerGameStatisticsX01!.getAverage(),
+                    "Average: " +
+                        playerGameStatisticsX01!
+                            .getAverage(gameX01, playerGameStatisticsX01!),
                     style: TextStyle(
                       fontSize: 13.sp,
                     ),
@@ -132,10 +134,11 @@ class PlayerStatsInGame extends StatelessWidget {
                     ),
                   ),
                 if (gameSettingsX01.getShowThrownDartsPerLeg)
-                  playerGameStatisticsX01!.getThrownDartsPerLeg != 0
+                  playerGameStatisticsX01!.getCurrentThrownDartsInLeg != 0
                       ? Text(
                           "Thrown Darts: " +
-                              playerGameStatisticsX01!.getThrownDartsPerLeg
+                              playerGameStatisticsX01!
+                                  .getCurrentThrownDartsInLeg
                                   .toString(),
                           style: TextStyle(
                             fontSize: 13.sp,

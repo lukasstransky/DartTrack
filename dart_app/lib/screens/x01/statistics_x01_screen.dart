@@ -163,7 +163,7 @@ class StatisticsX01Screen extends StatelessWidget {
                           Container(
                             width: WIDTH_DATA_STATISTICS.w,
                             child: Text(
-                              stats.getAverage(),
+                              stats.getAverage(gameX01, stats),
                               style:
                                   TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                             ),
@@ -820,7 +820,7 @@ class StatisticsX01Screen extends StatelessWidget {
                                 padding: EdgeInsets.only(top: 5),
                                 child: Container(
                                   width: WIDTH_DATA_STATISTICS.w,
-                                  child: stats.getPreciseScores.length > 0
+                                  child: stats.getPreciseScores.keys.length > 0
                                       ? Text(
                                           stats
                                                   .getPreciseScoresSorted()
@@ -846,7 +846,7 @@ class StatisticsX01Screen extends StatelessWidget {
                                 padding: EdgeInsets.only(top: 5),
                                 child: Container(
                                   width: WIDTH_DATA_STATISTICS.w,
-                                  child: stats.getPreciseScores.length > 1
+                                  child: stats.getPreciseScores.keys.length > 1
                                       ? Text(
                                           stats
                                                   .getPreciseScoresSorted()
@@ -872,7 +872,7 @@ class StatisticsX01Screen extends StatelessWidget {
                                 padding: EdgeInsets.only(top: 5),
                                 child: Container(
                                   width: WIDTH_DATA_STATISTICS.w,
-                                  child: stats.getPreciseScores.length > 2
+                                  child: stats.getPreciseScores.keys.length > 2
                                       ? Text(
                                           stats
                                                   .getPreciseScoresSorted()
@@ -898,7 +898,7 @@ class StatisticsX01Screen extends StatelessWidget {
                                 padding: EdgeInsets.only(top: 5),
                                 child: Container(
                                   width: WIDTH_DATA_STATISTICS.w,
-                                  child: stats.getPreciseScores.length > 3
+                                  child: stats.getPreciseScores.keys.length > 3
                                       ? Text(
                                           stats
                                                   .getPreciseScoresSorted()
@@ -924,7 +924,7 @@ class StatisticsX01Screen extends StatelessWidget {
                                 padding: EdgeInsets.only(top: 5),
                                 child: Container(
                                   width: WIDTH_DATA_STATISTICS.w,
-                                  child: stats.getPreciseScores.length > 4
+                                  child: stats.getPreciseScores.keys.length > 4
                                       ? Text(
                                           stats
                                                   .getPreciseScoresSorted()
@@ -951,6 +951,273 @@ class StatisticsX01Screen extends StatelessWidget {
                       ],
                     ),
                   ),
+                  if (gameSettingsX01.getInputMethod ==
+                      InputMethod.ThreeDarts) ...[
+                    Padding(
+                      padding: EdgeInsets.only(top: 10),
+                      child: Container(
+                        transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+                        child: Text(
+                          "Most Frequent Scores Per Dart",
+                          style: TextStyle(
+                              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                      child: Row(
+                        children: [
+                          Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Container(
+                                  width: WIDTH_HEADINGS_STATISTICS.w,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text("1.",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  FONTSIZE_STATISTICS.sp)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Container(
+                                  width: WIDTH_HEADINGS_STATISTICS.w,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text("2.",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  FONTSIZE_STATISTICS.sp)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Container(
+                                  width: WIDTH_HEADINGS_STATISTICS.w,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text("3.",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  FONTSIZE_STATISTICS.sp)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Container(
+                                  width: WIDTH_HEADINGS_STATISTICS.w,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text("4.",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  FONTSIZE_STATISTICS.sp)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 5),
+                                child: Container(
+                                  width: WIDTH_HEADINGS_STATISTICS.w,
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text("5.",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  FONTSIZE_STATISTICS.sp)),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          for (PlayerGameStatisticsX01 stats
+                              in gameX01.getPlayerGameStatistics)
+                            Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Container(
+                                    width: WIDTH_DATA_STATISTICS.w,
+                                    child: stats
+                                                .getAllScoresPerDartAsStringCountSorted()
+                                                .keys
+                                                .length >
+                                            0
+                                        ? Text(
+                                            stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .keys
+                                                    .elementAt(0)
+                                                    .toString() +
+                                                " (" +
+                                                stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .values
+                                                    .elementAt(0)
+                                                    .toString() +
+                                                "x)",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp))
+                                        : Text("-",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Container(
+                                    width: WIDTH_DATA_STATISTICS.w,
+                                    child: stats
+                                                .getAllScoresPerDartAsStringCountSorted()
+                                                .keys
+                                                .length >
+                                            1
+                                        ? Text(
+                                            stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .keys
+                                                    .elementAt(1)
+                                                    .toString() +
+                                                " (" +
+                                                stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .values
+                                                    .elementAt(1)
+                                                    .toString() +
+                                                "x)",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp))
+                                        : Text("-",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Container(
+                                    width: WIDTH_DATA_STATISTICS.w,
+                                    child: stats
+                                                .getAllScoresPerDartAsStringCountSorted()
+                                                .keys
+                                                .length >
+                                            2
+                                        ? Text(
+                                            stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .keys
+                                                    .elementAt(2)
+                                                    .toString() +
+                                                " (" +
+                                                stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .values
+                                                    .elementAt(2)
+                                                    .toString() +
+                                                "x)",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp))
+                                        : Text("-",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Container(
+                                    width: WIDTH_DATA_STATISTICS.w,
+                                    child: stats
+                                                .getAllScoresPerDartAsStringCountSorted()
+                                                .keys
+                                                .length >
+                                            3
+                                        ? Text(
+                                            stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .keys
+                                                    .elementAt(3)
+                                                    .toString() +
+                                                " (" +
+                                                stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .values
+                                                    .elementAt(3)
+                                                    .toString() +
+                                                "x)",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp))
+                                        : Text("-",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp)),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 5),
+                                  child: Container(
+                                    width: WIDTH_DATA_STATISTICS.w,
+                                    child: stats
+                                                .getAllScoresPerDartAsStringCountSorted()
+                                                .keys
+                                                .length >
+                                            4
+                                        ? Text(
+                                            stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .keys
+                                                    .elementAt(4)
+                                                    .toString() +
+                                                " (" +
+                                                stats
+                                                    .getAllScoresPerDartAsStringCountSorted()
+                                                    .values
+                                                    .elementAt(4)
+                                                    .toString() +
+                                                "x)",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp))
+                                        : Text("-",
+                                            style: TextStyle(
+                                                fontSize:
+                                                    FONTSIZE_STATISTICS.sp)),
+                                  ),
+                                ),
+                              ],
+                            )
+                        ],
+                      ),
+                    ),
+                  ]
                 ],
               ),
             ),

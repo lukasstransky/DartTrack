@@ -189,12 +189,8 @@ class PointsBtnsThreeDartsWidget extends StatelessWidget {
                             borderRadius: BorderRadius.zero,
                           ),
                         ),
-                        backgroundColor: gameX01.getCurrentThreeDarts[0] !=
-                                "Dart 1"
-                            ? MaterialStateProperty.all(Utils.darken(
-                                Theme.of(context).colorScheme.primary, 25))
-                            : MaterialStateProperty.all(
-                                Theme.of(context).colorScheme.primary),
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
                         overlayColor:
                             MaterialStateProperty.all(Colors.transparent),
                       ),
@@ -208,9 +204,7 @@ class PointsBtnsThreeDartsWidget extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        if (gameX01.getCurrentThreeDarts[0] == "Dart 1") {
-                          gameX01.bust(context);
-                        }
+                        gameX01.bust(context);
                       },
                     ),
                   ),
