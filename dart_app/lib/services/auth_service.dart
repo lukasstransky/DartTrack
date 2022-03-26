@@ -1,9 +1,10 @@
-import 'package:dart_app/models/player_model.dart';
+import 'package:dart_app/models/player.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:developer';
 
-import '../models/user_model.dart';
+import '../models/user.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth;

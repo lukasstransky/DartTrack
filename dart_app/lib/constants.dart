@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 const Color primary = Color(0xff130536);
 
@@ -7,10 +6,10 @@ const Color primary = Color(0xff130536);
 enum AuthMode { Signup, Login }
 
 //Game Settings Page
-enum SingleOrTeam { Single, Team }
+enum SingleOrTeamEnum { Single, Team }
 enum SingleOrDouble { SingleField, DoubleField }
-enum BestOfOrFirstTo { BestOf, FirstTo }
-enum SetsOrLegs { Sets, Legs }
+enum BestOfOrFirstToEnum { BestOf, FirstTo }
+enum SetsOrLegsEnum { Sets, Legs }
 enum NewPlayer { Bot, Guest }
 
 const String SUDDEN_DEATH_INFO =

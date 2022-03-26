@@ -1,23 +1,20 @@
-import 'package:dart_app/models/game_settings/game_settings_x01_model.dart';
-import 'package:dart_app/models/games/game_x01_model.dart';
-import 'package:dart_app/screens/statistics_screen.dart';
-import 'package:dart_app/screens/x01/finish_x01_screen.dart';
-import 'package:dart_app/screens/x01/game_x01_screen.dart';
-import 'package:dart_app/screens/x01/ingame_settings_x01_screen.dart';
-import 'package:dart_app/screens/x01/statistics_x01_screen.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/screens/auth/auth.dart';
+import 'package:dart_app/screens/auth/forgot_password.dart';
+import 'package:dart_app/screens/game_modes/x01/finish.dart';
+import 'package:dart_app/screens/game_modes/x01/game/game.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings.dart';
+import 'package:dart_app/screens/game_modes/x01/ingame_settings.dart';
+import 'package:dart_app/screens/home/home.dart';
+import 'package:dart_app/services/auth_service.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-
-import './services/auth_service.dart';
-import './screens/home_screen.dart';
-import 'screens/auth/auth_screen.dart';
-import 'screens/auth/forgot_password_screen.dart';
-import 'screens/x01/game_settings_x01_screen.dart';
 import 'package:sizer/sizer.dart';
 
 void main() async {
@@ -59,15 +56,13 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)),
           routes: {
-            AuthScreen.routeName: (ctx) => AuthScreen(),
-            HomeScreen.routeName: (ctx) => HomeScreen(),
-            ForgotPasswordScreen.routeName: (ctx) => ForgotPasswordScreen(),
-            GameSettingsX01Screen.routeName: (ctx) => GameSettingsX01Screen(),
-            GameX01Screen.routeName: (ctx) => GameX01Screen(),
-            InGameSettingsX01Screen.routeName: (ctx) =>
-                InGameSettingsX01Screen(),
-            StatisticsX01Screen.routeName: (ctx) => StatisticsX01Screen(),
-            FinishX01Screen.routeName: (ctx) => FinishX01Screen(),
+            Auth.routeName: (ctx) => Auth(),
+            Home.routeName: (ctx) => Home(),
+            ForgotPassword.routeName: (ctx) => ForgotPassword(),
+            GameSettings.routeName: (ctx) => GameSettings(),
+            Game.routeName: (ctx) => Game(),
+            InGameSettings.routeName: (ctx) => InGameSettings(),
+            Finish.routeName: (ctx) => Finish(),
           },
           home: AuthWrapper(),
         );
@@ -84,8 +79,8 @@ class AuthWrapper extends StatelessWidget {
     final firebaseUser = context.watch<User?>();
 
     if (firebaseUser != null) {
-      return HomeScreen();
+      return Home();
     }
-    return AuthScreen();
+    return Auth();
   }
 }
