@@ -49,7 +49,7 @@ class _GameSettingsState extends State<GameSettings> {
   void initState() {
     super.initState();
     addCurrentUserToPlayers();
-    //addPlayersForTesting();
+    addPlayersForTesting();
   }
 
   @override

@@ -2,10 +2,11 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/auth/auth.dart';
 import 'package:dart_app/screens/auth/forgot_password.dart';
-import 'package:dart_app/screens/game_modes/x01/finish.dart';
+import 'package:dart_app/screens/game_modes/x01/finish/finish.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings.dart';
-import 'package:dart_app/screens/game_modes/x01/ingame_settings.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/game_statistics.dart';
+import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings.dart';
 import 'package:dart_app/screens/home/home.dart';
 import 'package:dart_app/services/auth_service.dart';
 
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
             Game.routeName: (ctx) => Game(),
             InGameSettings.routeName: (ctx) => InGameSettings(),
             Finish.routeName: (ctx) => Finish(),
+            GameStatistics.routeName: (ctx) => GameStatistics(),
           },
           home: AuthWrapper(),
         );

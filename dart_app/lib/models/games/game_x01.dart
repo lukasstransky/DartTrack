@@ -104,6 +104,7 @@ class GameX01 extends Game {
     setPlayerGameStatistics = [];
     setInit = false;
     setReachedSuddenDeath = false;
+    setCurrentPlayerToThrow = null;
     resetCurrentThreeDarts();
   }
 
@@ -258,7 +259,13 @@ class GameX01 extends Game {
     //first nine avg
     if (stats.getCurrentThrownDartsInLeg <= 9) {
       stats.setFirstNineAverage = stats.getFirstNineAverage - points;
-      stats.setFirstNineAverageCount = stats.getFirstNineAverageCount - 1;
+      if (getGameSettings.getInputMethod == InputMethod.Round) {
+        stats.setFirstNineAverageCountRound =
+            stats.getFirstNineAverageCountRound - 1;
+      } else {
+        stats.setFirstNineAverageCountThreeDarts =
+            stats.getFirstNineAverageCountThreeDarts - 1;
+      }
     }
 
     //all scores per dart as string + count
@@ -290,7 +297,13 @@ class GameX01 extends Game {
     //set first nine avg
     if (stats.getCurrentThrownDartsInLeg <= 9) {
       stats.setFirstNineAverage = stats.getFirstNineAverage + points;
-      stats.setFirstNineAverageCount = stats.getFirstNineAverageCount + 1;
+      if (getGameSettings.getInputMethod == InputMethod.Round) {
+        stats.setFirstNineAverageCountRound =
+            stats.getFirstNineAverageCountRound + 1;
+      } else {
+        stats.setFirstNineAverageCountThreeDarts =
+            stats.getFirstNineAverageCountThreeDarts + 1;
+      }
     }
 
     //all scores per dart as string + count
@@ -372,8 +385,13 @@ class GameX01 extends Game {
           if (currentStats.getCurrentThrownDartsInLeg <= 9) {
             currentStats.setFirstNineAverage =
                 currentStats.getFirstNineAverage + thrownPoints;
-            currentStats.setFirstNineAverageCount =
-                currentStats.getFirstNineAverageCount + 1;
+            if (getGameSettings.getInputMethod == InputMethod.Round) {
+              currentStats.setFirstNineAverageCountRound =
+                  currentStats.getFirstNineAverageCountRound + 1;
+            } else {
+              currentStats.setFirstNineAverageCountThreeDarts =
+                  currentStats.getFirstNineAverageCountThreeDarts + 1;
+            }
           }
         }
 
@@ -388,6 +406,10 @@ class GameX01 extends Game {
           ...currentStats.getAllScores,
           totalPoints.toInt()
         ];
+        if (getGameSettings.getInputMethod == InputMethod.Round) {
+          currentStats.setAllScoresCountForRound =
+              currentStats.getAllScoresCountForRound + 1;
+        }
 
         setScores(currentStats, totalPoints);
         legSetOrGameFinished(currentStats, context, totalPoints);
@@ -461,8 +483,13 @@ class GameX01 extends Game {
     currentStats.setCurrentThrownDartsInLeg =
         currentStats.getCurrentThrownDartsInLeg + diffTo3;
 
-    currentStats.setFirstNineAverageCount =
-        currentStats.getFirstNineAverageCount + diffTo3;
+    if (getGameSettings.getInputMethod == InputMethod.Round) {
+      currentStats.setFirstNineAverageCountRound =
+          currentStats.getFirstNineAverageCountRound + diffTo3;
+    } else {
+      currentStats.setFirstNineAverageCountThreeDarts =
+          currentStats.getFirstNineAverageCountThreeDarts + diffTo3;
+    }
 
     getCurrentThreeDarts[0] = "0";
     getCurrentThreeDarts[1] = "0";
@@ -809,18 +836,27 @@ class GameX01 extends Game {
     //first nine avg
     if (stats.getCurrentThrownDartsInLeg <= 9) {
       stats.setFirstNineAverage = stats.getFirstNineAverage - points;
-      stats.setFirstNineAverageCount = stats.getFirstNineAverageCount - 1;
+      if (getGameSettings.getInputMethod == InputMethod.Round) {
+        stats.setFirstNineAverageCountRound =
+            stats.getFirstNineAverageCountRound - 1;
+      } else {
+        stats.setFirstNineAverageCountThreeDarts =
+            stats.getFirstNineAverageCountThreeDarts - 1;
+      }
     }
 
     //all scores per dart as string count
-    String point = stats.getAllScoresPerDartAsString.last;
-    stats.getAllScoresPerDartAsString.removeLast();
-    if (stats.getAllScoresPerDartAsStringCount.containsKey(point)) {
-      stats.getAllScoresPerDartAsStringCount[point] -= 1;
-      //if amount of precise scores is 0 -> remove it from map
-      if (stats.getAllScoresPerDartAsStringCount[point] == 0) {
-        stats.getAllScoresPerDartAsStringCount
-            .removeWhere((key, value) => key == point);
+    if (stats.getAllScoresPerDartAsString.isNotEmpty) {
+      String point = stats.getAllScoresPerDartAsString.last;
+
+      stats.getAllScoresPerDartAsString.removeLast();
+      if (stats.getAllScoresPerDartAsStringCount.containsKey(point)) {
+        stats.getAllScoresPerDartAsStringCount[point] -= 1;
+        //if amount of precise scores is 0 -> remove it from map
+        if (stats.getAllScoresPerDartAsStringCount[point] == 0) {
+          stats.getAllScoresPerDartAsStringCount
+              .removeWhere((key, value) => key == point);
+        }
       }
     }
 
@@ -1058,7 +1094,7 @@ class GameX01 extends Game {
   }
 
   String getFormattedDateTime() {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd hh:mm');
+    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
     return formatter.format(getDateTime);
   }
 

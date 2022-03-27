@@ -14,7 +14,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       0; //for input method -> three darts (to prevent user from entering more than 3 darts when spaming the keyboard)
 
   num _firstNineAverage = 0.0;
-  num _firstNineAverageCount = 0;
+  num _firstNineAverageCountRound = 0;
+  num _firstNineAverageCountThreeDarts = 0;
 
   int _currentThrownDartsInLeg = 0;
   List<int> _thrownDartsPerLeg = [];
@@ -45,6 +46,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }; //e.g. 140+ : 5 (0 -> for < 40)
   Map<int, int> _preciseScores = {}; //e.g. 140 : 3
   List<int> _allScores = []; //for input method round
+  num _allScoresCountForRound =
+      0; //for average (when switching between round & three darts)
   List<int> _allScoresPerDart =
       []; //for input method three darts -> to keep track of each thrown dart
   Map<String, int> _allScoresPerDartAsStringCount =
@@ -73,7 +76,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._pointsSelectedCount = pointsSelectedCount;
 
   get getFirstNineAverage {
-    if (this._firstNineAverageCount == 0) {
+    if (this._firstNineAverageCountRound == 0 &&
+        this._firstNineAverageCountThreeDarts == 0) {
       return 0;
     }
     return this._firstNineAverage;
@@ -82,9 +86,14 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setFirstNineAverage(num firstNineAverage) =>
       this._firstNineAverage = firstNineAverage;
 
-  get getFirstNineAverageCount => this._firstNineAverageCount;
-  set setFirstNineAverageCount(num firstNineAverageCount) =>
-      this._firstNineAverageCount = firstNineAverageCount;
+  get getFirstNineAverageCountRound => this._firstNineAverageCountRound;
+  set setFirstNineAverageCountRound(num firstNineAverageCountRound) =>
+      this._firstNineAverageCountRound = firstNineAverageCountRound;
+
+  get getFirstNineAverageCountThreeDarts =>
+      this._firstNineAverageCountThreeDarts;
+  set setFirstNineAverageCountThreeDarts(num firstNineAverageCountThreeDarts) =>
+      this._firstNineAverageCountThreeDarts = firstNineAverageCountThreeDarts;
 
   get getLegsWon => this._legsWon;
   set setLegsWon(int legsWon) => this._legsWon = legsWon;
@@ -127,6 +136,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   get getAllScores => this._allScores;
   set setAllScores(List<int> allScores) => this._allScores = allScores;
 
+  get getAllScoresCountForRound => this._allScoresCountForRound;
+  set setAllScoresCountForRound(num allScoresCountForRound) =>
+      this._allScoresCountForRound = allScoresCountForRound;
+
   get getAllScoresPerDart => this._allScoresPerDart;
   set setAllScoresPerDart(List<int> allScoresPerDart) =>
       this._allScoresPerDart = allScoresPerDart;
@@ -161,16 +174,32 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   //calc average based on total points and all scores length
   String getAverage(GameX01 gameX01, PlayerGameStatisticsX01 stats) {
-    int length =
-        gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts
-            ? stats.getAllScoresPerDart.length
-            : stats.getAllScores.length;
-
-    if (getTotalPoints == 0 && length == 0) {
+    if (getTotalPoints == 0) {
       return "-";
     }
 
-    return ((getTotalPoints / length) * 3).toStringAsFixed(2);
+    num length, multiplicator;
+    if (gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+      length = stats.getAllScoresPerDart.length;
+      if (getAllScoresCountForRound > 0) {
+        length += getAllScoresCountForRound * 3;
+      }
+      multiplicator = 3;
+    } else {
+      if (getAllScoresCountForRound == 0 &&
+          stats.getAllScoresPerDart.length == 0) {
+        length = 1;
+      } else {
+        length = getAllScoresCountForRound;
+      }
+      if (stats.getAllScoresPerDart.length > 0) {
+        length += stats.getAllScoresPerDart.length / 3;
+      }
+
+      multiplicator = 1;
+    }
+
+    return ((getTotalPoints / length) * multiplicator).toStringAsFixed(2);
   }
 
   String getLastThrow() {
@@ -231,9 +260,29 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     return false;
   }
 
-  String getFirstNinveAvg() {
-    if (getAllScoresPerDart.length == 0) return "-";
-    return ((getFirstNineAverage / getFirstNineAverageCount) * 3)
+  String getFirstNinveAvg(GameX01 gameX01) {
+    if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) {
+      return "-";
+    }
+
+    num multiplicator, totalCount;
+    num countRound = getFirstNineAverageCountRound;
+    num countThreeDarts = getFirstNineAverageCountThreeDarts;
+    if (gameX01.getGameSettings.getInputMethod == InputMethod.Round) {
+      multiplicator = 1;
+      totalCount = countRound;
+      if (countThreeDarts >= 3) {
+        totalCount += countThreeDarts / 3;
+      }
+    } else {
+      multiplicator = 3;
+      totalCount = countThreeDarts;
+      if (countRound >= 1) {
+        totalCount += countRound * 3;
+      }
+    }
+
+    return ((getFirstNineAverage / totalCount) * multiplicator)
         .toStringAsFixed(2);
   }
 

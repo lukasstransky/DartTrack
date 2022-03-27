@@ -1,6 +1,7 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/utils/dart_icons.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -22,59 +23,105 @@ class PlayerStatsInGame extends StatelessWidget {
             ? Colors.grey
             : Colors.transparent,
         width: 50.w,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (gameSettingsX01.getShowFinishWays)
-              if (playerGameStatisticsX01!.checkoutPossible()) ...[
-                Text(playerGameStatisticsX01!.getFinishWay(),
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.primary,
-                        fontSize: 15.sp)),
-              ] else if (gameX01.onePlayerInFinishArea())
-                if (playerGameStatisticsX01!.isBogeyNumber())
-                  Text("No Finish possible!",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 12.sp))
-                else
-                  Text("",
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 15.sp)),
-            Text(
-              playerGameStatisticsX01!.getCurrentPoints.toString(),
-              style: TextStyle(fontSize: 50.sp),
-            ),
-            Text(
-              playerGameStatisticsX01!.getPlayer.getName,
-              style: TextStyle(fontSize: 18.sp),
-            ),
-            if (gameSettingsX01.getSetsEnabled)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (gameSettingsX01.getPlayers.length == 2)
-                    Row(
-                      children: [
-                        Chip(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.primary,
-                          label: Text(
-                            'Sets: ' +
-                                playerGameStatisticsX01!.getSetsWon.toString(),
-                            style: TextStyle(color: Colors.white),
+        child: Center(
+          child: Container(
+            transform: Matrix4.translationValues(0.0, -15.0, 0.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (gameX01.getPlayerLegStartIndex ==
+                    gameX01.getPlayerGameStatistics
+                        .indexOf(playerGameStatisticsX01)) ...[
+                  Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Align(
+                      alignment: Alignment.topLeft,
+                      child: Container(
+                        transform: Matrix4.translationValues(0.0, 10.0, 0.0),
+                        child: SizedBox(
+                          height: 6.h,
+                          child: Image.asset(
+                            'assets/dart_arrow.png',
                           ),
                         ),
-                        Container(
-                          padding: const EdgeInsets.only(left: 5),
+                      ),
+                    ),
+                  ),
+                ] else
+                  SizedBox(
+                    height: 6.h,
+                  ),
+                if (gameSettingsX01.getShowFinishWays)
+                  if (playerGameStatisticsX01!.checkoutPossible()) ...[
+                    Text(playerGameStatisticsX01!.getFinishWay(),
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 15.sp)),
+                  ] else if (gameX01.onePlayerInFinishArea())
+                    if (playerGameStatisticsX01!.isBogeyNumber())
+                      Text("No Finish possible!",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 12.sp))
+                    else
+                      Text("",
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 15.sp)),
+                Text(
+                  playerGameStatisticsX01!.getCurrentPoints.toString(),
+                  style: TextStyle(fontSize: 50.sp),
+                ),
+                Text(
+                  playerGameStatisticsX01!.getPlayer.getName,
+                  style: TextStyle(fontSize: 18.sp),
+                ),
+                if (gameSettingsX01.getSetsEnabled)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (gameSettingsX01.getPlayers.length == 2)
+                        Row(
+                          children: [
+                            Chip(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.primary,
+                              label: Text(
+                                'Sets: ' +
+                                    playerGameStatisticsX01!.getSetsWon
+                                        .toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.only(left: 5),
+                              child: Chip(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                label: FittedBox(
+                                  child: Text(
+                                    'Legs: ' +
+                                        playerGameStatisticsX01!.getLegsWon
+                                            .toString(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        SizedBox(
+                          width: 28.w,
                           child: Chip(
                             backgroundColor:
                                 Theme.of(context).colorScheme.primary,
                             label: FittedBox(
                               child: Text(
-                                'Legs: ' +
+                                'Sets: ' +
+                                    playerGameStatisticsX01!.getSetsWon
+                                        .toString() +
+                                    ' Legs: ' +
                                     playerGameStatisticsX01!.getLegsWon
                                         .toString(),
                                 style: TextStyle(color: Colors.white),
@@ -82,73 +129,58 @@ class PlayerStatsInGame extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ],
-                    )
-                  else
-                    SizedBox(
-                      width: 28.w,
-                      child: Chip(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        label: FittedBox(
-                          child: Text(
-                            'Sets: ' +
-                                playerGameStatisticsX01!.getSetsWon.toString() +
-                                ' Legs: ' +
-                                playerGameStatisticsX01!.getLegsWon.toString(),
-                            style: TextStyle(color: Colors.white),
-                          ),
+                    ],
+                  )
+                else
+                  Chip(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    label: Text(
+                      'Legs: ' + playerGameStatisticsX01!.getLegsWon.toString(),
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (gameSettingsX01.getShowAverage)
+                      Text(
+                        "Average: " +
+                            playerGameStatisticsX01!
+                                .getAverage(gameX01, playerGameStatisticsX01!),
+                        style: TextStyle(
+                          fontSize: 13.sp,
                         ),
                       ),
-                    ),
-                ],
-              )
-            else
-              Chip(
-                backgroundColor: Theme.of(context).colorScheme.primary,
-                label: Text(
-                  'Legs: ' + playerGameStatisticsX01!.getLegsWon.toString(),
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (gameSettingsX01.getShowAverage)
-                  Text(
-                    "Average: " +
-                        playerGameStatisticsX01!
-                            .getAverage(gameX01, playerGameStatisticsX01!),
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                if (gameSettingsX01.getShowLastThrow)
-                  Text(
-                    "Last Throw: " + playerGameStatisticsX01!.getLastThrow(),
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                if (gameSettingsX01.getShowThrownDartsPerLeg)
-                  playerGameStatisticsX01!.getCurrentThrownDartsInLeg != 0
-                      ? Text(
-                          "Thrown Darts: " +
-                              playerGameStatisticsX01!
-                                  .getCurrentThrownDartsInLeg
-                                  .toString(),
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                          ),
-                        )
-                      : Text(
-                          "Thrown Darts: -",
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                          ),
+                    if (gameSettingsX01.getShowLastThrow)
+                      Text(
+                        "Last Throw: " +
+                            playerGameStatisticsX01!.getLastThrow(),
+                        style: TextStyle(
+                          fontSize: 13.sp,
                         ),
+                      ),
+                    if (gameSettingsX01.getShowThrownDartsPerLeg)
+                      playerGameStatisticsX01!.getCurrentThrownDartsInLeg != 0
+                          ? Text(
+                              "Thrown Darts: " +
+                                  playerGameStatisticsX01!
+                                      .getCurrentThrownDartsInLeg
+                                      .toString(),
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                              ),
+                            )
+                          : Text(
+                              "Thrown Darts: -",
+                              style: TextStyle(
+                                fontSize: 13.sp,
+                              ),
+                            ),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
