@@ -33,7 +33,7 @@ class GameSettingsX01 extends GameSettings {
   bool _vibrationFeedbackEnabled = false;
   bool _automaticallySubmitPoints = true;
   bool _showMostScoredPoints = false;
-  InputMethod _inputMethod = InputMethod.ThreeDarts;
+  InputMethod _inputMethod = InputMethod.Round;
   bool _showInputMethodInGameScreen = false;
 
   get getSingleOrTeam => this._singleOrTeam;

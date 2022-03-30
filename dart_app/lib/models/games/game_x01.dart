@@ -4,6 +4,9 @@ import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/utils/globals.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:developer';
 import 'package:tuple/tuple.dart';
@@ -154,7 +157,7 @@ class GameX01 extends Game {
   bool checkIfPointBtnShouldBeDisabledThreeDarts(
       String btnValueToCheck, PlayerGameStatisticsX01 stats) {
     //disable 25 in double & tripple mode
-    if (btnValueToCheck == "25" &&
+    if ((btnValueToCheck == "25" || btnValueToCheck == "Bull") &&
         (getCurrentPointType == PointType.Tripple ||
             getCurrentPointType == PointType.Double)) {
       return false;
@@ -643,12 +646,18 @@ class GameX01 extends Game {
                     getGameSettings.getPointsOrCustom()))) {
       int indexOfCurrentPlayer =
           getGameSettings.getPlayers.indexOf(getCurrentPlayerToThrow);
+
       if (indexOfCurrentPlayer + 1 == getGameSettings.getPlayers.length) {
         //round of all players finished -> restart from beginning
+
         setCurrentPlayerToThrow = getGameSettings.getPlayers[0];
+        if (scrollController.isAttached) scrollController.jumpTo(index: 0);
       } else {
         setCurrentPlayerToThrow =
             getGameSettings.getPlayers[indexOfCurrentPlayer + 1];
+
+        if (scrollController.isAttached)
+          scrollController.jumpTo(index: indexOfCurrentPlayer + 1);
       }
     }
   }

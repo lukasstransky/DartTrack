@@ -5,10 +5,12 @@ import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/points_btns_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/points_btns_threeDarts.dart';
 import 'package:dart_app/utils/custom_app_bar_game_x01.dart';
+import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'dart:developer';
 
 class Game extends StatefulWidget {
@@ -60,7 +62,8 @@ class GameState extends State<Game> {
               height: 35.h,
               child: Container(
                 height: 34.h,
-                child: ListView.builder(
+                child: ScrollablePositionedList.builder(
+                  itemScrollController: scrollController,
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: gameSettingsX01.getPlayers.length,

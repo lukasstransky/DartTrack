@@ -1,10 +1,23 @@
+import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:provider/provider.dart';
+import 'dart:developer';
 
 class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
   CustomAppBarX01Finished(this.title);
 
   final String title;
+
+  saveDataToFirestore(BuildContext context) async {
+    String gameId = "";
+    gameId = await context
+        .read<FirestoreService>()
+        .postGame(Provider.of<GameX01>(context, listen: false));
+    await context.read<FirestoreService>().postPlayerGameStatistics(
+        Provider.of<GameX01>(context, listen: false), gameId);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +31,10 @@ class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
           icon: Icon(MdiIcons.heartOutline),
         ),
         IconButton(
-            onPressed: () => Navigator.of(context).pushNamed("/home"),
+            onPressed: () => {
+                  Navigator.of(context).pushNamed("/home"),
+                  saveDataToFirestore(context),
+                },
             icon: Icon(
               Icons.home,
             )),

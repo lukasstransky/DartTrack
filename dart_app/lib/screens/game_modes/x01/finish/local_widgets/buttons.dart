@@ -1,11 +1,26 @@
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/services/firestore_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class Buttons extends StatelessWidget {
-  const Buttons({Key? key}) : super(key: key);
+  Buttons({Key? key}) : super(key: key);
+
+  saveGameX01ToFirestore(BuildContext context) async {
+    gameId = await context
+        .read<FirestoreService>()
+        .postGame(Provider.of<GameX01>(context, listen: false));
+  }
+
+  savePlayerGameStatisticsX01ToFirestore(BuildContext context) async {
+    await context.read<FirestoreService>().postPlayerGameStatistics(
+        Provider.of<GameX01>(context, listen: false), gameId);
+  }
+
+  String gameId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +64,8 @@ class Buttons extends StatelessWidget {
             height: 6.h,
             child: ElevatedButton(
               onPressed: () => {
+                saveGameX01ToFirestore(context),
+                savePlayerGameStatisticsX01ToFirestore(context),
                 gameX01.reset(),
                 Navigator.of(context).pushNamed("/gameX01"),
               },

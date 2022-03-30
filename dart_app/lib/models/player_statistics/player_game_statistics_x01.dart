@@ -174,7 +174,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   //calc average based on total points and all scores length
   String getAverage(GameX01 gameX01, PlayerGameStatisticsX01 stats) {
-    if (getTotalPoints == 0) {
+    if (getTotalPoints == 0 && getAllScores.length == 0) {
       return "-";
     }
 
@@ -383,5 +383,21 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       return "-";
     }
     return (totalCountOfDarts / wonLegs).toString();
+  }
+
+  Map<String, int> getPreciseScoresWithStringKey() {
+    Map<String, int> result = {};
+    for (var entry in getPreciseScores.entries) {
+      result[entry.key.toString()] = entry.value;
+    }
+    return result;
+  }
+
+  Map<String, int> getRoundedScoresWithStringKey() {
+    Map<String, int> result = {};
+    for (var entry in getRoundedScores.entries) {
+      result[entry.key.toString()] = entry.value;
+    }
+    return result;
   }
 }

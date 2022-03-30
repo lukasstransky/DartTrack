@@ -1,7 +1,6 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
-import 'package:dart_app/utils/dart_icons.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
