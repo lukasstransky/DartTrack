@@ -16,7 +16,7 @@ class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
         .read<FirestoreService>()
         .postGame(Provider.of<GameX01>(context, listen: false));
     await context.read<FirestoreService>().postPlayerGameStatistics(
-        Provider.of<GameX01>(context, listen: false), gameId);
+        Provider.of<GameX01>(context, listen: false), gameId, context);
   }
 
   @override

@@ -1,6 +1,5 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/custom_app_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,6 +15,7 @@ class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBar(false, "Settings"),
       body: Center(
         child: TextButton(
           child: Text(

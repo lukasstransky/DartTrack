@@ -1,11 +1,11 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/local_widgets/finishing_stats.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/local_widgets/game_stats.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/local_widgets/most_frequent_scores.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/local_widgets/most_frequent_scores_per.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/local_widgets/rounded_scores.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/local_widgets/scoring_stats.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/most_frequent_scores.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/most_frequent_scores_per.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/rounded_scores.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats.dart';
 import 'package:dart_app/utils/custom_app_bar.dart';
 
 import 'package:flutter/material.dart';

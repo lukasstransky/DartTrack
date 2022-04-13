@@ -1,4 +1,3 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
 
@@ -17,7 +16,7 @@ class Buttons extends StatelessWidget {
 
   savePlayerGameStatisticsX01ToFirestore(BuildContext context) async {
     await context.read<FirestoreService>().postPlayerGameStatistics(
-        Provider.of<GameX01>(context, listen: false), gameId);
+        Provider.of<GameX01>(context, listen: false), gameId, context);
   }
 
   String gameId = "";
@@ -25,7 +24,6 @@ class Buttons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameX01 = Provider.of<GameX01>(context, listen: false);
-
     return Column(
       children: [
         Padding(

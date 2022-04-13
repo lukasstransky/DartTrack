@@ -1,17 +1,16 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/statistics_firestore.dart';
 import 'package:dart_app/screens/auth/auth.dart';
 import 'package:dart_app/screens/auth/forgot_password.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/finish.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics.dart/game_statistics.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings.dart';
 import 'package:dart_app/screens/home/home.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore_service.dart';
-import 'package:dart_app/utils/globals.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -55,6 +54,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => GameX01(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StatisticsFirestore(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

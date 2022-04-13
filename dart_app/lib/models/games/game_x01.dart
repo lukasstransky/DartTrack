@@ -4,9 +4,7 @@ import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
-import 'package:dart_app/services/firestore_service.dart';
 import 'package:dart_app/utils/globals.dart';
-import 'package:provider/provider.dart';
 
 import 'dart:developer';
 import 'package:tuple/tuple.dart';
@@ -87,7 +85,10 @@ class GameX01 extends Game {
 
       for (Player player in gameSettingsX01.getPlayers) {
         this.getPlayerGameStatistics.add(new PlayerGameStatisticsX01(
-            mode: "X01", player: player, currentPoints: points));
+            mode: "X01",
+            player: player,
+            currentPoints: points,
+            dateTime: getDateTime));
       }
 
       if (getGameSettings.getInputMethod == InputMethod.ThreeDarts)
@@ -565,12 +566,6 @@ class GameX01 extends Game {
       //update won legs
       currentStats.setLegsWon = currentStats.getLegsWon + 1;
 
-      //thrown darts per leg
-      currentStats.setThrownDartsPerLeg = [
-        ...currentStats.getThrownDartsPerLeg,
-        currentStats.getCurrentThrownDartsInLeg
-      ];
-
       if (getGameSettings.getSetsEnabled) {
         if (getGameSettings.getLegs == currentStats.getLegsWon) {
           //save leg count of each player -> in case a user wants to revert a set
@@ -584,12 +579,14 @@ class GameX01 extends Game {
 
           if (isGameWon(currentStats)) {
             sortPlayerStats();
+            currentStats.setGameWon = true;
             Navigator.of(context).pushNamed("/finishX01");
           }
         }
       } else {
         if (isGameWon(currentStats)) {
           sortPlayerStats();
+          currentStats.setGameWon = true;
           Navigator.of(context).pushNamed("/finishX01");
         }
       }
@@ -609,6 +606,12 @@ class GameX01 extends Game {
 
       //reset points & thrown darts per leg
       for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
+        //thrown darts per leg
+        stats.setThrownDartsPerLeg = [
+          ...stats.getThrownDartsPerLeg,
+          stats.getCurrentThrownDartsInLeg
+        ];
+
         //set remaining points  -> in order to revert points
         if (currentStats == stats) {
           stats.setAllRemainingPoints = [

@@ -233,3 +233,6 @@ const Map<int, List<String>> finishWays = {
   3: ["S1 D1"],
   2: ["D1"]
 };
+
+//Statistics Page
+enum FilterValue { Overall, Month, Year, Custom }

@@ -20,6 +20,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _currentThrownDartsInLeg = 0;
   List<int> _thrownDartsPerLeg = [];
 
+  bool _gameWon = false;
   int _legsWon = 0;
   int _setsWon = 0;
   SplayTreeMap<String, List<num>> _allScoresPerLeg = new SplayTreeMap();
@@ -95,6 +96,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setFirstNineAverageCountThreeDarts(num firstNineAverageCountThreeDarts) =>
       this._firstNineAverageCountThreeDarts = firstNineAverageCountThreeDarts;
 
+  get getGameWon => this._gameWon;
+  set setGameWon(bool gameWon) => this._gameWon = gameWon;
+
   get getLegsWon => this._legsWon;
   set setLegsWon(int legsWon) => this._legsWon = legsWon;
 
@@ -165,12 +169,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   get getLegsCount => this._legsCount;
   set setLegsCount(List<int> legsCount) => this._legsCount = legsCount;
 
-  PlayerGameStatisticsX01({
-    player,
-    mode,
-    int? currentPoints,
-  })  : this._currentPoints = currentPoints,
-        super(player: player, mode: mode);
+  PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
+      : this._currentPoints = currentPoints,
+        super(player: player, mode: mode, dateTime: dateTime);
 
   //calc average based on total points and all scores length
   String getAverage(GameX01 gameX01, PlayerGameStatisticsX01 stats) {

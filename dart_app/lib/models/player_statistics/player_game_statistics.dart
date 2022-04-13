@@ -6,17 +6,25 @@ class PlayerGameStatistics {
   final Player _player;
   String? _gameId; //to reference the corresponding game -> calc stats
   final String _mode; //e.g. X01, Cricket.. -> calc stats
+  final DateTime _dateTime;
 
-  PlayerGameStatistics({required Player player, required String mode})
+  PlayerGameStatistics(
+      {required Player player,
+      required String mode,
+      required DateTime dateTime})
       : _player = player,
-        _mode = mode;
+        _mode = mode,
+        _dateTime = dateTime;
 
   Map<String, dynamic> toMapX01(PlayerGameStatisticsX01 playerGameStatisticsX01,
       GameX01 gameX01, String gameId) {
+    String checkoutQuote = playerGameStatisticsX01.getCheckoutQuoteInPercent();
     return {
       "player": _player.getName,
       "mode": _mode,
       "legsWon": playerGameStatisticsX01.getLegsWon,
+      "gameId": gameId,
+      "dateTime": _dateTime,
       if (gameX01.getGameSettings.getSetsEnabled)
         "setsWon": playerGameStatisticsX01.getSetsWon,
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
@@ -30,7 +38,7 @@ class PlayerGameStatistics {
       if (gameX01.getGameSettings.getEnableCheckoutCounting &&
           playerGameStatisticsX01.getCheckouts.isNotEmpty)
         "checkoutInPercent":
-            playerGameStatisticsX01.getCheckoutQuoteInPercent(),
+            double.parse(checkoutQuote.substring(0, checkoutQuote.length - 1)),
       if (playerGameStatisticsX01.getCheckoutCount > 0)
         "checkoutDarts": playerGameStatisticsX01.getCheckoutCount,
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
@@ -56,7 +64,9 @@ class PlayerGameStatistics {
       if (playerGameStatisticsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
         "allScoresPerDartWithCount":
             playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
-      "gameId": gameId,
+      if (playerGameStatisticsX01.getThrownDartsPerLeg.isNotEmpty)
+        "thrownDartsPerLeg": playerGameStatisticsX01.getThrownDartsPerLeg,
+      "gameWon": playerGameStatisticsX01.getGameWon,
     };
   }
 
@@ -65,4 +75,6 @@ class PlayerGameStatistics {
   get getGameId => this._gameId;
 
   get getMode => this._mode;
+
+  get getDateTime => this._dateTime;
 }

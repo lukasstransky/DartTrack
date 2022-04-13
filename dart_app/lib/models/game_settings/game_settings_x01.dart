@@ -11,10 +11,10 @@ class GameSettingsX01 extends GameSettings {
   SingleOrTeamEnum _singleOrTeam = SingleOrTeamEnum.Single;
   List<Team> _teams = []; //todo
   List<Player> _players = [];
-  BestOfOrFirstToEnum _mode = BestOfOrFirstToEnum.BestOf;
-  int _points = 501;
+  BestOfOrFirstToEnum _mode = BestOfOrFirstToEnum.FirstTo;
+  int _points = 301;
   int _customPoints = -1;
-  int _legs = 11;
+  int _legs = 1;
   int _sets = 3;
   bool _setsEnabled = false;
   SingleOrDouble _modeIn = SingleOrDouble.SingleField;

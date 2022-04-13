@@ -16,12 +16,10 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/star
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/win_by_two_legs_diff.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/custom_app_bar.dart';
-import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'dart:developer';
 import 'package:tuple/tuple.dart';
 import 'package:sizer/sizer.dart';
@@ -51,7 +49,7 @@ class _GameSettingsState extends State<GameSettings> {
   void initState() {
     super.initState();
     addCurrentUserToPlayers();
-    addPlayersForTesting();
+    //addPlayersForTesting();
   }
 
   @override
