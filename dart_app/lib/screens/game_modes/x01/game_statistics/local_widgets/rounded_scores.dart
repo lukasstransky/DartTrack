@@ -53,6 +53,21 @@ class RoundedScores extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
+                          child: Text("20+",
+                              style:
+                                  TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 5),
+                    child: Container(
+                      width: WIDTH_HEADINGS_STATISTICS.w,
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
                           child: Text("40+",
                               style:
                                   TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
@@ -176,6 +191,14 @@ class RoundedScores extends StatelessWidget {
                       child: Container(
                         width: WIDTH_DATA_STATISTICS.w,
                         child: Text(stats.getRoundedScores[0].toString(),
+                            style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Container(
+                        width: WIDTH_DATA_STATISTICS.w,
+                        child: Text(stats.getRoundedScores[20].toString(),
                             style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                       ),
                     ),

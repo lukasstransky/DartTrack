@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 
 class Utils {
@@ -19,5 +21,15 @@ class Utils {
     var f = 1 - percent / 100;
     return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
         (c.blue * f).round());
+  }
+
+  static Map<int, int> sortMapIntInt(Map<dynamic, dynamic> mapToSort) {
+    return new SplayTreeMap<int, int>.from(
+        mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
+  }
+
+  static Map<String, int> sortMapStringInt(Map<dynamic, dynamic> mapToSort) {
+    return new SplayTreeMap<String, int>.from(
+        mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
   }
 }

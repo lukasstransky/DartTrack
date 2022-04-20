@@ -23,9 +23,9 @@ class PointBtnThreeDart extends StatelessWidget {
     String text = "";
     if (point != "Bull" && point != "25" && point != "0") {
       if (gameX01.getCurrentPointType == PointType.Double) {
-        text = "D ";
+        text = "D";
       } else if (gameX01.getCurrentPointType == PointType.Tripple) {
-        text = "T ";
+        text = "T";
       }
     }
     text += point as String;

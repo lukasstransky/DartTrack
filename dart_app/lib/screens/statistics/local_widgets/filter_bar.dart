@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/statistics_firestore.dart';
+import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -7,9 +8,7 @@ import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class FilterBar extends StatefulWidget {
-  const FilterBar({Key? key, required this.notifyParent}) : super(key: key);
-
-  final Function() notifyParent;
+  const FilterBar({Key? key}) : super(key: key);
 
   @override
   State<FilterBar> createState() => _FilterBarState();
@@ -18,14 +17,26 @@ class FilterBar extends StatefulWidget {
 class _FilterBarState extends State<FilterBar> {
   bool _showDatePicker = false;
   String _range = "";
+  String _customBtnDateRange = "";
+  bool _showCustomBtnDateRange = false;
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
         _range = '${DateFormat('dd-MM-yyyy').format(args.value.startDate)};'
             '${DateFormat('dd-MM-yyyy').format(args.value.endDate ?? args.value.startDate)}';
+        _customBtnDateRange =
+            '${DateFormat('dd-MM-yy').format(args.value.startDate)}' +
+                "\n" +
+                '${DateFormat('dd-MM-yy').format(args.value.endDate ?? args.value.startDate)}';
       }
     });
+  }
+
+  @override
+  void initState() {
+    context.read<FirestoreService>().getStatistics(context);
+    super.initState();
   }
 
   @override
@@ -43,9 +54,10 @@ class _FilterBarState extends State<FilterBar> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () => {
-                    statisticsFirestore
-                        .changeCurrentFilterValue(FilterValue.Overall),
-                    widget.notifyParent(),
+                    _showDatePicker = false,
+                    _showCustomBtnDateRange = false,
+                    statisticsFirestore.loadStatistics(
+                        context, FilterValue.Overall),
                   },
                   child: FittedBox(
                     fit: BoxFit.fitWidth,
@@ -70,9 +82,10 @@ class _FilterBarState extends State<FilterBar> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () => {
-                    statisticsFirestore
-                        .changeCurrentFilterValue(FilterValue.Month),
-                    widget.notifyParent(),
+                    _showDatePicker = false,
+                    _showCustomBtnDateRange = false,
+                    statisticsFirestore.loadStatistics(
+                        context, FilterValue.Month),
                   },
                   child: FittedBox(
                     fit: BoxFit.fitWidth,
@@ -96,9 +109,10 @@ class _FilterBarState extends State<FilterBar> {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () => {
-                    statisticsFirestore
-                        .changeCurrentFilterValue(FilterValue.Year),
-                    widget.notifyParent(),
+                    _showDatePicker = false,
+                    _showCustomBtnDateRange = false,
+                    statisticsFirestore.loadStatistics(
+                        context, FilterValue.Year),
                   },
                   child: FittedBox(
                     fit: BoxFit.fitWidth,
@@ -125,12 +139,21 @@ class _FilterBarState extends State<FilterBar> {
                     setState(
                       () {
                         _showDatePicker = true;
+                        statisticsFirestore.currentFilterValue =
+                            FilterValue.Custom;
                       },
                     ),
                   },
                   child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: const Text("Custom"),
+                    fit: BoxFit.fitHeight,
+                    child: Padding(
+                      padding: _customBtnDateRange != ""
+                          ? EdgeInsets.all(5)
+                          : EdgeInsets.all(0),
+                      child: Text(_showCustomBtnDateRange
+                          ? _customBtnDateRange
+                          : "Custom"),
+                    ),
                   ),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all(
@@ -159,14 +182,14 @@ class _FilterBarState extends State<FilterBar> {
               showActionButtons: true,
               onSubmit: (p0) {
                 statisticsFirestore.customDateFilterRange = _range;
-                statisticsFirestore
-                    .changeCurrentFilterValue(FilterValue.Custom);
-                widget.notifyParent();
+                _showDatePicker = false;
+                _showCustomBtnDateRange = true;
+                statisticsFirestore.loadStatistics(context, FilterValue.Custom);
               },
               onCancel: () {
-                statisticsFirestore
-                    .changeCurrentFilterValue(FilterValue.Overall);
-                widget.notifyParent();
+                _showDatePicker = false;
+                statisticsFirestore.loadStatistics(
+                    context, FilterValue.Overall);
               },
               showTodayButton: true,
             ),

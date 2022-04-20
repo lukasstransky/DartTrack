@@ -7,6 +7,7 @@ import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/models/statistics_firestore.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:developer';
 
@@ -161,8 +162,11 @@ class FirestoreService {
     num worstLeg = -1;
 
     num countOf180 = 0;
-
     num countOfGamesWon = 0;
+
+    Map<String, dynamic> _roundedScores = {};
+    Map<String, dynamic> _preciseScores = {};
+    Map<String, dynamic> _allScoresPerDartWithCount = {};
 
     CollectionReference collectionReference = _firestore.collection(
         "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
@@ -181,7 +185,7 @@ class FirestoreService {
       query = query.where("dateTime",
           isLessThanOrEqualTo: firestoreStats.getCustomEndDate());
     }
-    
+
     await query.get().then(
           (value) => {
             value.docs.forEach(
@@ -271,6 +275,53 @@ class FirestoreService {
 
                 //180
                 countOf180 += element.get("roundedScores")["180"],
+
+                //rounded scores
+                _roundedScores = element.get("roundedScores"),
+                for (String key in _roundedScores.keys)
+                  {
+                    firestoreStats.roundedScores[int.parse(key)] +=
+                        _roundedScores[key]
+                  },
+
+                //precise scores
+                _preciseScores = element.get("preciseScores"),
+                for (String key in _preciseScores.keys)
+                  {
+                    if (firestoreStats.preciseScores
+                        .containsKey(int.parse(key)))
+                      {
+                        firestoreStats.preciseScores[int.parse(key)] +=
+                            _preciseScores[key],
+                      }
+                    else
+                      {
+                        firestoreStats.preciseScores[int.parse(key)] =
+                            _preciseScores[key],
+                      }
+                  },
+
+                //all scores per dart with count
+                if ((element.data() as Map<String, dynamic>)
+                    .containsKey("allScoresPerDartWithCount"))
+                  {
+                    _allScoresPerDartWithCount =
+                        element.get("allScoresPerDartWithCount"),
+                    for (String key in _allScoresPerDartWithCount.keys)
+                      {
+                        if (firestoreStats.allScoresPerDartAsStringCount
+                            .containsKey(key))
+                          {
+                            firestoreStats.allScoresPerDartAsStringCount[key] +=
+                                _allScoresPerDartWithCount[key],
+                          }
+                        else
+                          {
+                            firestoreStats.allScoresPerDartAsStringCount[key] =
+                                _allScoresPerDartWithCount[key],
+                          }
+                      }
+                  }
               },
             ),
 
@@ -317,8 +368,16 @@ class FirestoreService {
             firestoreStats.worstLeg = worstLeg,
             firestoreStats.countOf180 = countOf180,
             firestoreStats.countOfGamesWon = countOfGamesWon,
+            firestoreStats.preciseScores =
+                Utils.sortMapIntInt(firestoreStats.preciseScores),
+            firestoreStats.allScoresPerDartAsStringCount =
+                Utils.sortMapStringInt(
+                    firestoreStats.allScoresPerDartAsStringCount),
+            firestoreStats.setMostRoundedScores(),
           },
         );
+    firestoreStats.notify();
+
     return firestoreStats;
   }
 }

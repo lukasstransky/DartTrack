@@ -1238,10 +1238,10 @@ class GameX01 extends Game {
       if (dart == "Bull") {
         result += 50;
       } else if (dart[0] == "D") {
-        temp = dart.substring(2);
+        temp = dart.substring(1);
         result += (int.parse(temp) * 2);
       } else if (dart[0] == "T") {
-        temp = dart.substring(2);
+        temp = dart.substring(1);
         result += (int.parse(temp) * 3);
       } else {
         result += int.parse(dart);

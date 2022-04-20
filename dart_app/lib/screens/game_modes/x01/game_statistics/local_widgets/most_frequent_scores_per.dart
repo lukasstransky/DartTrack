@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,20 +62,20 @@ class MostFrequentScoresPerDart extends StatelessWidget {
                         padding: EdgeInsets.only(top: 5),
                         child: Container(
                           width: WIDTH_DATA_STATISTICS.w,
-                          child: stats
-                                      .getAllScoresPerDartAsStringCountSorted()
+                          child: Utils.sortMapStringInt(stats
+                                          .getAllScoresPerDartAsStringCount)
                                       .keys
                                       .length >
                                   i
                               ? Text(
-                                  stats
-                                          .getAllScoresPerDartAsStringCountSorted()
+                                  Utils.sortMapStringInt(stats
+                                              .getAllScoresPerDartAsStringCount)
                                           .keys
                                           .elementAt(i)
                                           .toString() +
                                       " (" +
-                                      stats
-                                          .getAllScoresPerDartAsStringCountSorted()
+                                      Utils.sortMapStringInt(stats
+                                              .getAllScoresPerDartAsStringCount)
                                           .values
                                           .elementAt(i)
                                           .toString() +

@@ -36,6 +36,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   Map<int, int> _roundedScores = {
     0: 0,
+    20: 0,
     40: 0,
     60: 0,
     80: 0,
