@@ -1,4 +1,5 @@
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 
 import 'dart:collection';
@@ -61,6 +62,43 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       []; //all remainging points after each throw -> for reverting
   List<List<String>> _allRemainingScoresPerDart =
       []; //for reverting -> input method three darts (e.g. 20 D15, 20 10 D20, D10)
+
+  PlayerGameStatisticsX01.firestore(
+      {required DateTime dateTime,
+      required String mode,
+      required Player player,
+      required num firstNineAvg,
+      required int legsWon,
+      required int setsWon,
+      required bool gameWon,
+      required List<int> checkouts,
+      required int checkoutCount,
+      required Map<String, int> roundedScores,
+      required Map<String, int> preciseScores,
+      required List<int> allScores,
+      required List<int> allScoresPerDart,
+      required Map<String, int> allScoresPerDartAsStringCount,
+      required List<int> thrownDartsPerLeg})
+      : super(dateTime: dateTime, mode: mode, player: player) {
+    this._firstNineAverage = firstNineAvg;
+    this._legsWon = legsWon;
+    this._setsWon = setsWon;
+    this._gameWon = gameWon;
+    this._checkouts = checkouts;
+    this._checkoutCount = checkoutCount;
+    this._roundedScores =
+        roundedScores.map((key, value) => MapEntry(int.parse(key), value));
+    this._preciseScores =
+        preciseScores.map((key, value) => MapEntry(int.parse(key), value));
+    this._allScores = allScores;
+    this._allScoresPerDart = allScoresPerDart;
+    this._allScoresPerDartAsStringCount = allScoresPerDartAsStringCount;
+    this._thrownDartsPerLeg = thrownDartsPerLeg;
+  }
+
+  PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
+      : this._currentPoints = currentPoints,
+        super(player: player, mode: mode, dateTime: dateTime);
 
   get getCurrentPoints => this._currentPoints;
   set setCurrentPoints(int currentPoints) =>
@@ -169,10 +207,6 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   get getLegsCount => this._legsCount;
   set setLegsCount(List<int> legsCount) => this._legsCount = legsCount;
-
-  PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
-      : this._currentPoints = currentPoints,
-        super(player: player, mode: mode, dateTime: dateTime);
 
   //calc average based on total points and all scores length
   String getAverage(GameX01 gameX01, PlayerGameStatisticsX01 stats) {

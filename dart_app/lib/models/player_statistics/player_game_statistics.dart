@@ -16,6 +16,37 @@ class PlayerGameStatistics {
         _mode = mode,
         _dateTime = dateTime;
 
+  factory PlayerGameStatistics.fromMapX01(map) {
+    return PlayerGameStatisticsX01.firestore(
+      mode: map['mode'],
+      dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
+      player: new Player(name: map['player']),
+      firstNineAvg: map['firstNineAvg'] == null ? 0 : map['firstNineAvg'],
+      legsWon: map['legsWon'],
+      setsWon: map['setsWon'] == null ? 0 : map['setsWon'],
+      gameWon: map['gameWon'],
+      checkouts: map['checkouts'] == null ? [] : map['checkouts'].cast<int>(),
+      checkoutCount: map['checkoutCount'] == null ? 0 : map['checkoutCount'],
+      roundedScores: map['roundedScores'] == null
+          ? {}
+          : Map<String, int>.from(map['roundedScores']),
+      preciseScores: map['preciseScores'] == null
+          ? {}
+          : Map<String, int>.from(map['preciseScores']),
+      allScores: map['allScores'] == null ? [] : map['allScores'].cast<int>(),
+      allScoresPerDart: map['allScoresPerDart'] == null
+          ? []
+          : map['allScoresPerDart'].cast<int>(),
+      allScoresPerDartAsStringCount:
+          map['allScoresPerDartAsStringCount'] == null
+              ? {}
+              : Map<String, int>.from(map['allScoresPerDartAsStringCount']),
+      thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
+          ? []
+          : map['thrownDartsPerLeg'].cast<int>(),
+    );
+  }
+
   Map<String, dynamic> toMapX01(PlayerGameStatisticsX01 playerGameStatisticsX01,
       GameX01 gameX01, String gameId) {
     String checkoutQuote = playerGameStatisticsX01.getCheckoutQuoteInPercent();

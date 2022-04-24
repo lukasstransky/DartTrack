@@ -11,8 +11,6 @@ class StatsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameX01 = Provider.of<GameX01>(context, listen: false);
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
 
     return Padding(
       padding: EdgeInsets.only(top: 100),
@@ -26,7 +24,7 @@ class StatsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    gameSettingsX01.getGameMode(),
+                    gameX01.getGameSettings.getGameMode(),
                     style:
                         TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                   ),
@@ -41,7 +39,9 @@ class StatsCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 10, bottom: 10),
               child: Text(
-                  "X01 (" + gameSettingsX01.getGameModeDetails(true) + ")",
+                  "X01 (" +
+                      gameX01.getGameSettings.getGameModeDetails(true) +
+                      ")",
                   style: TextStyle(fontSize: 14.sp)),
             ),
             for (int i = 0; i < gameX01.getPlayerGameStatistics.length; i++)
@@ -77,7 +77,7 @@ class StatsCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    gameSettingsX01.getSetsEnabled
+                                    gameX01.getGameSettings.getSetsEnabled
                                         ? "Sets: " +
                                             gameX01.getPlayerGameStatistics[i]
                                                 .getSetsWon
@@ -95,7 +95,8 @@ class StatsCard extends StatelessWidget {
                                                 gameX01.getPlayerGameStatistics[
                                                     i]),
                                     style: TextStyle(fontSize: 14.sp)),
-                                if (gameSettingsX01.getEnableCheckoutCounting)
+                                if (gameX01
+                                    .getGameSettings.getEnableCheckoutCounting)
                                   Text(
                                       "Checkout %: " +
                                           gameX01.getPlayerGameStatistics[i]

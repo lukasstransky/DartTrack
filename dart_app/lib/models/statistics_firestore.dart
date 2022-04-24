@@ -22,6 +22,10 @@ class StatisticsFirestore with ChangeNotifier {
   num _bestCheckoutQuote = -1;
   num _worstCheckoutQuote = -1;
 
+  num _checkoutScoreAvg = 0;
+  num _bestCheckoutScore = -1;
+  num _worstCheckoutScore = -1;
+
   num _dartsPerLegAvg = 0;
   num _bestLeg = -1;
   num _worstLeg = -1;
@@ -91,6 +95,18 @@ class StatisticsFirestore with ChangeNotifier {
   get worstCheckoutQuote => this._worstCheckoutQuote;
 
   set worstCheckoutQuote(value) => this._worstCheckoutQuote = value;
+
+  get bestCheckoutScore => this._bestCheckoutScore;
+
+  set bestCheckoutScore(value) => this._bestCheckoutScore = value;
+
+  get checkoutScoreAvg => this._checkoutScoreAvg;
+
+  set checkoutScoreAvg(value) => this._checkoutScoreAvg = value;
+
+  get worstCheckoutScore => this._worstCheckoutScore;
+
+  set worstCheckoutScore(value) => this._worstCheckoutScore = value;
 
   get dartsPerLegAvg => this._dartsPerLegAvg;
 

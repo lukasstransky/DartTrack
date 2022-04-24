@@ -38,7 +38,9 @@ class _FullStatsState extends State<FullStats> {
               Expanded(
                 child: Center(
                   child: Text(
-                    "Precise Scores",
+                    _showAllScoesPerDartWithCount
+                        ? "All Scores per Dart"
+                        : "Precise Scores",
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.bold,

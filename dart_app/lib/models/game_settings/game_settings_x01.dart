@@ -36,6 +36,27 @@ class GameSettingsX01 extends GameSettings {
   InputMethod _inputMethod = InputMethod.Round;
   bool _showInputMethodInGameScreen = false;
 
+  GameSettingsX01() {}
+
+  GameSettingsX01.firestore(
+      {required bool checkoutCounting,
+      required int legs,
+      required int sets,
+      required SingleOrDouble modeIn,
+      required SingleOrDouble modeOut,
+      required int points,
+      required SingleOrTeamEnum singleOrTeam,
+      required bool winByTwoLegsDifference}) {
+    this._enableCheckoutCounting = checkoutCounting;
+    this._legs = legs;
+    this._sets = sets;
+    this._modeIn = modeIn;
+    this._modeOut = modeOut;
+    this._points = points;
+    this._singleOrTeam = singleOrTeam;
+    this._winByTwoLegsDifference = winByTwoLegsDifference;
+  }
+
   get getSingleOrTeam => this._singleOrTeam;
   set setSingleOrTeam(SingleOrTeamEnum _singleOrTeam) =>
       this._singleOrTeam = _singleOrTeam;

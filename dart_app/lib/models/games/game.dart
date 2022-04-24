@@ -58,10 +58,9 @@ class Game with ChangeNotifier {
 
   factory Game.fromMap(map) {
     return Game.firestore(
-      name: map['name'],
-      dateTime: map['dateTime'],
-      gameSettings: map['gameSettings'],
-    );
+        name: map['name'],
+        dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
+        gameSettings: GameSettings.fromMapX01(map['gameSettings']));
   }
 
   get getName => this._name;

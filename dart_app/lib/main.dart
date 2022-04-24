@@ -9,6 +9,7 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings.dart
 import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings.dart';
 import 'package:dart_app/screens/home/home.dart';
+import 'package:dart_app/screens/statistics/local_widgets/stats_per_game.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +76,7 @@ class MyApp extends StatelessWidget {
             InGameSettings.routeName: (ctx) => InGameSettings(),
             Finish.routeName: (ctx) => Finish(),
             GameStatistics.routeName: (ctx) => GameStatistics(),
+            StatsPerGame.routeName: (ctx) => StatsPerGame(),
           },
           home: AuthWrapper(),
         );
