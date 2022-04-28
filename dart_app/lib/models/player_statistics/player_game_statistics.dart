@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
@@ -21,7 +23,8 @@ class PlayerGameStatistics {
       mode: map['mode'],
       dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
       player: new Player(name: map['player']),
-      firstNineAvg: map['firstNineAvg'] == null ? 0 : map['firstNineAvg'],
+      firstNineAvg:
+          map['firstNineAverage'] == null ? 0 : map['firstNineAverage'],
       legsWon: map['legsWon'],
       setsWon: map['setsWon'] == null ? 0 : map['setsWon'],
       gameWon: map['gameWon'],
@@ -44,6 +47,13 @@ class PlayerGameStatistics {
       thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
           ? []
           : map['thrownDartsPerLeg'].cast<int>(),
+      allScoresCountForRound: map['allScoresCountForRound'],
+      totalPoints: map['totalPoints'],
+      allScoresPerLeg: map['allScoresPerLeg'] == null
+          ? new SplayTreeMap()
+          : SplayTreeMap<String, List<dynamic>>.from(
+              map['allScoresPerLeg'],
+            ),
     );
   }
 
@@ -98,6 +108,11 @@ class PlayerGameStatistics {
       if (playerGameStatisticsX01.getThrownDartsPerLeg.isNotEmpty)
         "thrownDartsPerLeg": playerGameStatisticsX01.getThrownDartsPerLeg,
       "gameWon": playerGameStatisticsX01.getGameWon,
+      "allScoresCountForRound":
+          playerGameStatisticsX01.getAllScoresCountForRound,
+      "totalPoints": playerGameStatisticsX01.getTotalPoints,
+      if (playerGameStatisticsX01.getAllScoresPerLeg.isNotEmpty)
+        "allScoresPerLeg": playerGameStatisticsX01.getAllScoresPerLeg,
     };
   }
 

@@ -42,7 +42,9 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () => {
-            Navigator.of(context).pushNamed("/statisticsX01"),
+            Navigator.of(context).pushNamed("/statisticsX01", arguments: {
+              'game': Provider.of<GameX01>(context, listen: false),
+            }),
           },
           icon: Icon(Icons.bar_chart_rounded),
         ),

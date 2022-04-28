@@ -131,7 +131,7 @@ class FirestoreService {
         .update({"playerGameStatisticsIds": playerGameStatsIds});
   }
 
-  Future<StatisticsFirestore> getStatistics(BuildContext context) async {
+  Future<void> getStatistics(BuildContext context) async {
     final String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
         "Strainski";
@@ -412,8 +412,6 @@ class FirestoreService {
           },
         );
     firestoreStats.notify();
-
-    return firestoreStats;
   }
 
   Future<PlayerGameStatistics?> getPlayerGameStatistic(
@@ -421,33 +419,41 @@ class FirestoreService {
     PlayerGameStatistics? result;
     CollectionReference collectionReference = _firestore.collection(
         "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
+
     await collectionReference.doc(playerGameStatsId).get().then((value) => {
           result = PlayerGameStatistics.fromMapX01(value.data()),
         });
     return result;
   }
 
-  Future<List<Game>> getGames(String mode) async {
-    List<Game> result = [];
+  Future<void> getGames(String mode, BuildContext context) async {
+    final firestoreStats =
+        Provider.of<StatisticsFirestore>(context, listen: false);
+
     CollectionReference collectionReference = _firestore
         .collection("users/" + _firebaseAuth.currentUser!.uid + "/games");
-    Query query = collectionReference.where("name", isEqualTo: mode);
+    Query query = collectionReference
+        .where("name", isEqualTo: mode)
+        .orderBy("dateTime", descending: true);
 
     await query.get().then(
-          (value) => value.docs.forEach(
-            (element) async {
-              Game game = Game.fromMap(element.data());
+          (value) => {
+            value.docs.forEach(
+              (element) async {
+                Game game = Game.fromMap(element.data());
 
-              for (String playerGameStatsId
-                  in element.get("playerGameStatisticsIds")) {
-                PlayerGameStatistics? playerGameStatistics =
-                    await getPlayerGameStatistic(playerGameStatsId);
-                game.getPlayerGameStatistics.add(playerGameStatistics);
-              }
-            },
-          ),
+                for (String playerGameStatsId
+                    in element.get("playerGameStatisticsIds")) {
+                  PlayerGameStatistics? playerGameStatistics =
+                      await getPlayerGameStatistic(playerGameStatsId);
+                  game.getPlayerGameStatistics.add(playerGameStatistics);
+                }
+
+                firestoreStats.games.add(game);
+                firestoreStats.notify();
+              },
+            ),
+          },
         );
-
-    return result;
   }
 }

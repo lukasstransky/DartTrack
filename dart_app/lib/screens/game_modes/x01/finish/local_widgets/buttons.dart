@@ -32,8 +32,10 @@ class Buttons extends StatelessWidget {
             width: 40.w,
             height: 6.h,
             child: ElevatedButton(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed("/statisticsX01"),
+              onPressed: () => Navigator.of(context).pushNamed("/statisticsX01",
+                  arguments: {
+                    'game': Provider.of<GameX01>(context, listen: false)
+                  }),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(

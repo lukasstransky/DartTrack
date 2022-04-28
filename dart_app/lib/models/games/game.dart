@@ -4,6 +4,7 @@ import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 
 class Game with ChangeNotifier {
   String? _name; //e.g. X01 or Cricket
@@ -81,4 +82,9 @@ class Game with ChangeNotifier {
   get getCurrentPlayerToThrow => this._currentPlayerToThrow;
   set setCurrentPlayerToThrow(Player? currentPlayerToThrow) =>
       this._currentPlayerToThrow = currentPlayerToThrow;
+
+  String getFormattedDateTime() {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+    return formatter.format(getDateTime);
+  }
 }

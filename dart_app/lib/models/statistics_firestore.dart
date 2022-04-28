@@ -2,6 +2,7 @@
 //overall stats saved, instead of query that has to iterate over each player stats
 //gets updated after each game
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -51,6 +52,7 @@ class StatisticsFirestore with ChangeNotifier {
   num _mostRoundedScoresKey = 0;
   Map<int, int> _preciseScores = {};
   Map<String, int> _allScoresPerDartAsStringCount = {};
+  List<Game> _games = [];
 
   get countOfGamesWon => this._countOfGamesWon;
 
@@ -153,6 +155,10 @@ class StatisticsFirestore with ChangeNotifier {
   set allScoresPerDartAsStringCount(value) =>
       this._allScoresPerDartAsStringCount = value;
 
+  get games => this._games;
+
+  set games(value) => this._games = value;
+
   loadStatistics(BuildContext context, FilterValue newFilterValue) {
     currentFilterValue = newFilterValue;
     context.read<FirestoreService>().getStatistics(context);
@@ -224,6 +230,7 @@ class StatisticsFirestore with ChangeNotifier {
     };
     _preciseScores = {};
     _allScoresPerDartAsStringCount = {};
+    _games = [];
   }
 
   notify() {

@@ -23,7 +23,7 @@ class StatsPerGameBtns extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => {
               Navigator.of(context)
-                  .pushNamed("/statsPerGame", arguments: {"mode": "X01"}),
+                  .pushNamed("/statsPerGameList", arguments: {"mode": "X01"}),
             },
             child: FittedBox(
               fit: BoxFit.fitWidth,
@@ -46,8 +46,8 @@ class StatsPerGameBtns extends StatelessWidget {
           width: 40.w,
           child: ElevatedButton(
             onPressed: () => {
-              Navigator.of(context)
-                  .pushNamed("/statsPerGame", arguments: {"mode": "Cricket"}),
+              Navigator.of(context).pushNamed("/statsPerGameList",
+                  arguments: {"mode": "Cricket"}),
             },
             child: FittedBox(
               fit: BoxFit.fitWidth,
@@ -70,7 +70,7 @@ class StatsPerGameBtns extends StatelessWidget {
           width: 40.w,
           child: ElevatedButton(
             onPressed: () => {
-              Navigator.of(context).pushNamed("/statsPerGame",
+              Navigator.of(context).pushNamed("/statsPerGameList",
                   arguments: {"mode": "Singles Training"}),
             },
             child: FittedBox(
@@ -94,7 +94,7 @@ class StatsPerGameBtns extends StatelessWidget {
           width: 40.w,
           child: ElevatedButton(
             onPressed: () => {
-              Navigator.of(context).pushNamed("/statsPerGame",
+              Navigator.of(context).pushNamed("/statsPerGameList",
                   arguments: {"mode": "Doubles Training"}),
             },
             child: FittedBox(

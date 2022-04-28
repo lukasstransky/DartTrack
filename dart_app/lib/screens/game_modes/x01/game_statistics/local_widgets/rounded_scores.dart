@@ -1,18 +1,17 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class RoundedScores extends StatelessWidget {
-  const RoundedScores({Key? key}) : super(key: key);
+  const RoundedScores({Key? key, required this.game}) : super(key: key);
+
+  final Game? game;
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -183,7 +182,7 @@ class RoundedScores extends StatelessWidget {
                 ],
               ),
               for (PlayerGameStatisticsX01 stats
-                  in gameX01.getPlayerGameStatistics)
+                  in game!.getPlayerGameStatistics)
                 Column(
                   children: [
                     Padding(

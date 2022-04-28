@@ -1105,11 +1105,6 @@ class GameX01 extends Game {
     return false;
   }
 
-  String getFormattedDateTime() {
-    final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
-    return formatter.format(getDateTime);
-  }
-
   bool isGameWon(PlayerGameStatisticsX01 stats) {
     if (!getReachedSuddenDeath) {
       if (getGameSettings.getMode == BestOfOrFirstToEnum.FirstTo &&

@@ -1,23 +1,20 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class FinishingStats extends StatelessWidget {
-  const FinishingStats({Key? key}) : super(key: key);
+  const FinishingStats({Key? key, required this.game}) : super(key: key);
+
+  final Game? game;
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-    final points = gameSettingsX01.getCustomPoints != -1
-        ? gameSettingsX01.getCustomPoints
-        : gameSettingsX01.getPoints;
+    final points = game!.getGameSettings.getCustomPoints != -1
+        ? game!.getGameSettings.getCustomPoints
+        : game!.getGameSettings.getPoints;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,7 +31,7 @@ class FinishingStats extends StatelessWidget {
             ),
           ),
         ),
-        if (gameSettingsX01.getEnableCheckoutCounting) ...[
+        if (game!.getGameSettings.getEnableCheckoutCounting) ...[
           Padding(
             padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
             child: Row(
@@ -51,7 +48,7 @@ class FinishingStats extends StatelessWidget {
                   ),
                 ),
                 for (PlayerGameStatisticsX01 stats
-                    in gameX01.getPlayerGameStatistics)
+                    in game!.getPlayerGameStatistics)
                   Container(
                       width: WIDTH_DATA_STATISTICS.w,
                       child: Text(
@@ -77,7 +74,7 @@ class FinishingStats extends StatelessWidget {
                   ),
                 ),
                 for (PlayerGameStatisticsX01 stats
-                    in gameX01.getPlayerGameStatistics)
+                    in game!.getPlayerGameStatistics)
                   Container(
                     width: WIDTH_DATA_STATISTICS.w,
                     child: stats.getCheckoutCount != 0
@@ -111,7 +108,7 @@ class FinishingStats extends StatelessWidget {
                 ),
               ),
               for (PlayerGameStatisticsX01 stats
-                  in gameX01.getPlayerGameStatistics)
+                  in game!.getPlayerGameStatistics)
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
@@ -140,7 +137,7 @@ class FinishingStats extends StatelessWidget {
                 ),
               ),
               for (PlayerGameStatisticsX01 stats
-                  in gameX01.getPlayerGameStatistics)
+                  in game!.getPlayerGameStatistics)
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(stats.getBestLeg(points as num),
@@ -165,7 +162,7 @@ class FinishingStats extends StatelessWidget {
                 ),
               ),
               for (PlayerGameStatisticsX01 stats
-                  in gameX01.getPlayerGameStatistics)
+                  in game!.getPlayerGameStatistics)
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
@@ -204,7 +201,7 @@ class FinishingStats extends StatelessWidget {
                 ),
               ),
               for (PlayerGameStatisticsX01 stats
-                  in gameX01.getPlayerGameStatistics)
+                  in game!.getPlayerGameStatistics)
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
@@ -233,7 +230,7 @@ class FinishingStats extends StatelessWidget {
                 ),
               ),
               for (PlayerGameStatisticsX01 stats
-                  in gameX01.getPlayerGameStatistics)
+                  in game!.getPlayerGameStatistics)
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(

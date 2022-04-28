@@ -1,3 +1,4 @@
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
@@ -63,23 +64,26 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   List<List<String>> _allRemainingScoresPerDart =
       []; //for reverting -> input method three darts (e.g. 20 D15, 20 10 D20, D10)
 
-  PlayerGameStatisticsX01.firestore(
-      {required DateTime dateTime,
-      required String mode,
-      required Player player,
-      required num firstNineAvg,
-      required int legsWon,
-      required int setsWon,
-      required bool gameWon,
-      required List<int> checkouts,
-      required int checkoutCount,
-      required Map<String, int> roundedScores,
-      required Map<String, int> preciseScores,
-      required List<int> allScores,
-      required List<int> allScoresPerDart,
-      required Map<String, int> allScoresPerDartAsStringCount,
-      required List<int> thrownDartsPerLeg})
-      : super(dateTime: dateTime, mode: mode, player: player) {
+  PlayerGameStatisticsX01.firestore({
+    required DateTime dateTime,
+    required String mode,
+    required Player player,
+    required num firstNineAvg,
+    required int legsWon,
+    required int setsWon,
+    required bool gameWon,
+    required List<int> checkouts,
+    required int checkoutCount,
+    required Map<String, int> roundedScores,
+    required Map<String, int> preciseScores,
+    required List<int> allScores,
+    required List<int> allScoresPerDart,
+    required Map<String, int> allScoresPerDartAsStringCount,
+    required List<int> thrownDartsPerLeg,
+    required int allScoresCountForRound,
+    required int totalPoints,
+    required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
+  }) : super(dateTime: dateTime, mode: mode, player: player) {
     this._firstNineAverage = firstNineAvg;
     this._legsWon = legsWon;
     this._setsWon = setsWon;
@@ -94,6 +98,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._allScoresPerDart = allScoresPerDart;
     this._allScoresPerDartAsStringCount = allScoresPerDartAsStringCount;
     this._thrownDartsPerLeg = thrownDartsPerLeg;
+    this._allScoresCountForRound = allScoresCountForRound;
+    this._totalPoints = totalPoints;
+    this._allScoresPerLeg = SplayTreeMap.from(
+        allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<num>())));
   }
 
   PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
@@ -115,13 +123,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setPointsSelectedCount(int pointsSelectedCount) =>
       this._pointsSelectedCount = pointsSelectedCount;
 
-  get getFirstNineAverage {
-    if (this._firstNineAverageCountRound == 0 &&
-        this._firstNineAverageCountThreeDarts == 0) {
-      return 0;
-    }
-    return this._firstNineAverage;
-  }
+  get getFirstNineAverage => this._firstNineAverage;
 
   set setFirstNineAverage(num firstNineAverage) =>
       this._firstNineAverage = firstNineAverage;
@@ -209,13 +211,13 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setLegsCount(List<int> legsCount) => this._legsCount = legsCount;
 
   //calc average based on total points and all scores length
-  String getAverage(GameX01 gameX01, PlayerGameStatisticsX01 stats) {
+  String getAverage(Game game, PlayerGameStatisticsX01 stats) {
     if (getTotalPoints == 0 && getAllScores.length == 0) {
       return "-";
     }
 
     num length, multiplicator;
-    if (gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+    if (game.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
       length = stats.getAllScoresPerDart.length;
       if (getAllScoresCountForRound > 0) {
         length += getAllScoresCountForRound * 3;
@@ -296,7 +298,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     return false;
   }
 
-  String getFirstNinveAvg(GameX01 gameX01) {
+  String getFirstNinveAvg(Game? gameX01) {
     if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) {
       return "-";
     }
@@ -304,7 +306,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     num multiplicator, totalCount;
     num countRound = getFirstNineAverageCountRound;
     num countThreeDarts = getFirstNineAverageCountThreeDarts;
-    if (gameX01.getGameSettings.getInputMethod == InputMethod.Round) {
+    if (gameX01!.getGameSettings.getInputMethod == InputMethod.Round) {
       multiplicator = 1;
       totalCount = countRound;
       if (countThreeDarts >= 3) {

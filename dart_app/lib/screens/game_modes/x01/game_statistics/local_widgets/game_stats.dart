@@ -1,21 +1,17 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class GameStats extends StatelessWidget {
-  const GameStats({Key? key}) : super(key: key);
+  const GameStats({Key? key, required this.game}) : super(key: key);
+
+  final Game? game;
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       Padding(
         padding: EdgeInsets.only(top: 10),
@@ -25,8 +21,7 @@ class GameStats extends StatelessWidget {
               width: WIDTH_HEADINGS_STATISTICS.w,
               child: Text(""),
             ),
-            for (PlayerGameStatisticsX01 stats
-                in gameX01.getPlayerGameStatistics)
+            for (PlayerGameStatisticsX01 stats in game!.getPlayerGameStatistics)
               Container(
                 width: WIDTH_DATA_STATISTICS.w,
                 child: Column(
@@ -69,8 +64,7 @@ class GameStats extends StatelessWidget {
                 ),
               ),
             ),
-            for (PlayerGameStatisticsX01 stats
-                in gameX01.getPlayerGameStatistics)
+            for (PlayerGameStatisticsX01 stats in game!.getPlayerGameStatistics)
               Container(
                 width: WIDTH_DATA_STATISTICS.w,
                 child: Text(
@@ -81,7 +75,7 @@ class GameStats extends StatelessWidget {
           ],
         ),
       ),
-      if (gameSettingsX01.getSetsEnabled)
+      if (game!.getGameSettings.getSetsEnabled)
         Padding(
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
           child: Row(
@@ -98,7 +92,7 @@ class GameStats extends StatelessWidget {
                 ),
               ),
               for (PlayerGameStatisticsX01 stats
-                  in gameX01.getPlayerGameStatistics)
+                  in game!.getPlayerGameStatistics)
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
