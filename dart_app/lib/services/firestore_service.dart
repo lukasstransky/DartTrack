@@ -436,6 +436,8 @@ class FirestoreService {
         .where("name", isEqualTo: mode)
         .orderBy("dateTime", descending: true);
 
+    firestoreStats.resetGames();
+
     await query.get().then(
           (value) => {
             value.docs.forEach(

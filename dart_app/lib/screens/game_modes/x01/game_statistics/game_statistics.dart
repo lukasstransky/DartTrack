@@ -1,5 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/most_frequent_scores.dart';
@@ -22,6 +24,7 @@ class GameStatistics extends StatefulWidget {
 
 class _GameStatisticsState extends State<GameStatistics> {
   Game? _game;
+  final _padding = EdgeInsets.only(left: 20, bottom: 30);
 
   @override
   void didChangeDependencies() {
@@ -67,87 +70,105 @@ class _GameStatisticsState extends State<GameStatistics> {
       appBar: CustomAppBar(true, "Statistics"),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Column(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: 10),
-                child: Text(
-                  _getHeader(),
-                  style: TextStyle(fontSize: 16.sp),
-                ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                _getHeader(),
+                style: TextStyle(fontSize: 16.sp),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 5),
-                child: Text(
-                  _game!.getFormattedDateTime(),
-                  style: TextStyle(fontSize: 12.sp),
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 5),
+              child: Text(
+                _game!.getFormattedDateTime(),
+                style: TextStyle(fontSize: 12.sp),
               ),
-              Row(
-                children: [
-                  Chip(
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Chip(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  label: Text(
+                    _game!.getGameSettings.getModeIn ==
+                            SingleOrDouble.SingleField
+                        ? "Single In"
+                        : "Double In",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 5),
+                  child: Chip(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     label: Text(
-                      _game!.getGameSettings.getModeIn ==
+                      _game!.getGameSettings.getModeOut ==
                               SingleOrDouble.SingleField
-                          ? "Single In"
-                          : "Double In",
+                          ? "Single Out"
+                          : "Double Out",
                       style: TextStyle(
                         color: Colors.white,
                       ),
                     ),
                   ),
+                ),
+                if (_game!.getGameSettings.getSuddenDeath)
                   Padding(
                     padding: EdgeInsets.only(left: 5),
                     child: Chip(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       label: Text(
-                        _game!.getGameSettings.getModeOut ==
-                                SingleOrDouble.SingleField
-                            ? "Single Out"
-                            : "Double Out",
+                        "Sudden Death",
                         style: TextStyle(
                           color: Colors.white,
                         ),
                       ),
                     ),
                   ),
-                  if (_game!.getGameSettings.getSuddenDeath)
+              ],
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: _padding,
+                    child: GameStats(game: _game),
+                  ),
+                  Padding(
+                    padding: _padding,
+                    child: ScoringStats(game: _game),
+                  ),
+                  Padding(
+                    padding: _padding,
+                    child: FinishingStats(game: _game),
+                  ),
+                  Padding(
+                    padding: _padding,
+                    child: RoundedScores(game: _game),
+                  ),
+                  Padding(
+                    padding: _padding,
+                    child: MostFrequentScores(game: _game),
+                  ),
+                  if (_game!.getGameSettings.getInputMethod ==
+                      InputMethod.ThreeDarts)
                     Padding(
-                      padding: EdgeInsets.only(left: 5),
-                      child: Chip(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        label: Text(
-                          "Sudden Death",
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      padding: _padding,
+                      child: MostFrequentScoresPerDart(game: _game),
                     ),
+                  Padding(
+                      padding: EdgeInsets.only(bottom: 30),
+                      child: DetailedLegsList(game: _game)),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GameStats(game: _game),
-                    ScoringStats(game: _game),
-                    FinishingStats(game: _game),
-                    RoundedScores(game: _game),
-                    MostFrequentScores(game: _game),
-                    if (_game!.getGameSettings.getInputMethod ==
-                        InputMethod.ThreeDarts) ...[
-                      MostFrequentScoresPerDart(game: _game),
-                    ]
-                  ],
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

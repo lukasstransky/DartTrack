@@ -1,4 +1,5 @@
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';

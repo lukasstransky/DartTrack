@@ -3,6 +3,7 @@
 //gets updated after each game
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -230,6 +231,10 @@ class StatisticsFirestore with ChangeNotifier {
     };
     _preciseScores = {};
     _allScoresPerDartAsStringCount = {};
+    _games = [];
+  }
+
+  resetGames() {
     _games = [];
   }
 

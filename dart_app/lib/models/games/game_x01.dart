@@ -1183,7 +1183,7 @@ class GameX01 extends Game {
 
   //needed to set all scores per leg
   num getCurrentLeg() {
-    num result = 0;
+    num result = 1;
     for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics)
       result += stats.getLegsWon;
 
@@ -1208,9 +1208,9 @@ class GameX01 extends Game {
 
     if (getGameSettings.getSetsEnabled) {
       currentSet = getCurrentSet();
-      key += "Set" + currentSet.toString() + " ";
+      key += "Set " + currentSet.toString() + " ";
     }
-    key += "Leg" + currentLeg.toString();
+    key += "Leg " + currentLeg.toString();
 
     return key;
   }
