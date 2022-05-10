@@ -1,12 +1,15 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/leg_average_compared.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/leg_thrown_darts_compared.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/most_frequent_scores.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/most_frequent_scores_per.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/rounded_scores.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/rounded_scores_even.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/rounded_scorse_odd.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats.dart';
 import 'package:dart_app/utils/custom_app_bar.dart';
 
@@ -24,7 +27,8 @@ class GameStatistics extends StatefulWidget {
 
 class _GameStatisticsState extends State<GameStatistics> {
   Game? _game;
-  final _padding = EdgeInsets.only(left: 20, bottom: 30);
+  final _padding = EdgeInsets.only(left: 20, bottom: 20);
+  bool _roundedScoresOdd = false;
 
   @override
   void didChangeDependencies() {
@@ -62,6 +66,26 @@ class _GameStatisticsState extends State<GameStatistics> {
         : result += _game!.getGameSettings.getPoints.toString();
 
     return result;
+  }
+
+  bool _oneLegWonAtLeast() {
+    for (PlayerGameStatisticsX01 playerGameStatisticsX01
+        in _game!.getPlayerGameStatistics) {
+      if (playerGameStatisticsX01.getLegsWon > 0 ||
+          playerGameStatisticsX01.getSetsWon > 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _showMostFrequentScoresPerDart() {
+    for (PlayerGameStatisticsX01 stats in _game!.getPlayerGameStatistics) {
+      if (stats.getAllScoresPerDart.isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
   }
 
   @override
@@ -150,21 +174,53 @@ class _GameStatisticsState extends State<GameStatistics> {
                   ),
                   Padding(
                     padding: _padding,
-                    child: RoundedScores(game: _game),
+                    child: Checkouts(game: _game),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: !_roundedScoresOdd
+                        ? RoundedScoresEven(game: _game)
+                        : RoundedScoresOdd(game: _game),
                   ),
                   Padding(
                     padding: _padding,
-                    child: MostFrequentScores(game: _game),
+                    child: Row(
+                      children: [
+                        const Text("Show Odd Rounded Scores"),
+                        Switch(
+                          value: _roundedScoresOdd,
+                          onChanged: (value) {
+                            setState(() {
+                              _roundedScoresOdd = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  if (_game!.getGameSettings.getInputMethod ==
-                      InputMethod.ThreeDarts)
+                  Padding(
+                    padding: EdgeInsets.only(left: 20),
+                    child: MostFrequentScores(
+                        game: _game, mostScoresPerDart: false),
+                  ),
+                  if (_showMostFrequentScoresPerDart())
+                    Padding(
+                      padding: EdgeInsets.only(left: 20),
+                      child: MostFrequentScores(
+                          game: _game, mostScoresPerDart: true),
+                    ),
+                  if (_oneLegWonAtLeast()) ...[
                     Padding(
                       padding: _padding,
-                      child: MostFrequentScoresPerDart(game: _game),
+                      child: LegAvgCompared(game: _game),
                     ),
-                  Padding(
-                      padding: EdgeInsets.only(bottom: 30),
-                      child: DetailedLegsList(game: _game)),
+                    Padding(
+                        padding: _padding,
+                        child: LegThrownDartsCompared(game: _game)),
+                    Padding(
+                        padding: EdgeInsets.only(bottom: 30),
+                        child: DetailedLegsList(game: _game)),
+                  ]
                 ],
               ),
             ),

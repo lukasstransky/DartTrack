@@ -192,7 +192,7 @@ class FinishingStats extends StatelessWidget {
                         children: <TextSpan>[
                           new TextSpan(text: 'Darts/Leg'),
                           new TextSpan(
-                              text: ' (avg.)',
+                              text: ' (Avg.)',
                               style: new TextStyle(fontSize: 8.sp)),
                         ],
                       ),
@@ -210,34 +210,6 @@ class FinishingStats extends StatelessWidget {
                       fontSize: FONTSIZE_STATISTICS.sp,
                     ),
                   ),
-                ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
-          child: Row(
-            children: [
-              Container(
-                width: WIDTH_HEADINGS_STATISTICS.w,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text("all Checkouts",
-                        style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
-                  ),
-                ),
-              ),
-              for (PlayerGameStatisticsX01 stats
-                  in game!.getPlayerGameStatistics)
-                Container(
-                  width: WIDTH_DATA_STATISTICS.w,
-                  child: Text(
-                      stats.getCheckouts.isNotEmpty
-                          ? stats.getCheckouts.toString()
-                          : "-",
-                      style: TextStyle(fontSize: 12.sp)),
                 ),
             ],
           ),

@@ -538,14 +538,27 @@ class GameX01 extends Game {
     else
       currentStats.getPreciseScores[totalPoints] = 1;
 
-    //set rounded score
-    List<int> keys = currentStats.getRoundedScores.keys.toList();
+    //set rounded score even
+    List<int> keys = currentStats.getRoundedScoresEven.keys.toList();
     if (totalPoints == 180) {
-      currentStats.getRoundedScores[keys[keys.length - 1]] += 1;
+      currentStats.getRoundedScoresEven[keys[keys.length - 1]] += 1;
+    } else {
+      for (int i = 0; i < keys.length - 1; i++) {
+        if (totalPoints >= keys[i] && totalPoints < keys[i + 1]) {
+          currentStats.getRoundedScoresEven[keys[i]] += 1;
+        }
+      }
     }
-    for (int i = 0; i < keys.length - 1; i++) {
-      if (totalPoints >= keys[i] && totalPoints < keys[i + 1]) {
-        currentStats.getRoundedScores[keys[i]] += 1;
+
+    //set rounded scores odd
+    keys = currentStats.getRoundedScoresOdd.keys.toList();
+    if (totalPoints >= 170) {
+      currentStats.getRoundedScoresOdd[keys[keys.length - 1]] += 1;
+    } else {
+      for (int i = 0; i < keys.length - 1; i++) {
+        if (totalPoints >= keys[i] && totalPoints < keys[i + 1]) {
+          currentStats.getRoundedScoresOdd[keys[i]] += 1;
+        }
       }
     }
 
@@ -563,8 +576,43 @@ class GameX01 extends Game {
   void legSetOrGameFinished(PlayerGameStatisticsX01 currentStats,
       BuildContext context, num totalPoints) {
     if (currentStats.getCurrentPoints == 0) {
+      //set thrown darts per leg & reset points
+      for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
+        //thrown darts per leg
+        stats.getThrownDartsPerLeg[getCurrentLegSetAsString()] =
+            stats.getCurrentThrownDartsInLeg;
+
+        if (currentStats == stats) {
+          stats.setDartsForWonLegCount =
+              stats.getDartsForWonLegCount + stats.getCurrentThrownDartsInLeg;
+
+          //set remaining points  -> in order to revert points
+          stats.setAllRemainingPoints = [
+            ...stats.getAllRemainingPoints,
+            totalPoints.toInt()
+          ];
+        } else {
+          stats.setAllRemainingPoints = [
+            ...stats.getAllRemainingPoints,
+            stats.getCurrentPoints
+          ];
+        }
+
+        stats.setCurrentPoints = getGameSettings.getPointsOrCustom();
+        stats.setStartingPoints = stats.getCurrentPoints;
+
+        if (!isGameWon(stats)) {
+          stats.setCurrentThrownDartsInLeg = 0;
+        }
+      }
+
+      //add checkout to list
+      currentStats.getCheckouts[getCurrentLegSetAsString()] =
+          totalPoints.toInt();
+
       //update won legs
       currentStats.setLegsWon = currentStats.getLegsWon + 1;
+      currentStats.setLegsWonTotal = currentStats.getLegsWonTotal + 1;
 
       if (getGameSettings.getSetsEnabled) {
         if (getGameSettings.getLegs == currentStats.getLegsWon) {
@@ -592,46 +640,12 @@ class GameX01 extends Game {
       }
 
       //set player who will begin next leg
-      if (getPlayerLegStartIndex == getGameSettings.getPlayers.length) {
+      if (getPlayerLegStartIndex == getGameSettings.getPlayers.length - 1) {
         setPlayerLegStartIndex = 0;
       } else {
         setPlayerLegStartIndex = getPlayerLegStartIndex + 1;
       }
 
-      //add checkout to list
-      currentStats.setCheckouts = [
-        ...currentStats.getCheckouts,
-        totalPoints.toInt()
-      ];
-
-      //reset points & thrown darts per leg
-      for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
-        //thrown darts per leg
-        stats.setThrownDartsPerLeg = [
-          ...stats.getThrownDartsPerLeg,
-          stats.getCurrentThrownDartsInLeg
-        ];
-
-        //set remaining points  -> in order to revert points
-        if (currentStats == stats) {
-          stats.setAllRemainingPoints = [
-            ...stats.getAllRemainingPoints,
-            totalPoints.toInt()
-          ];
-        } else {
-          stats.setAllRemainingPoints = [
-            ...stats.getAllRemainingPoints,
-            stats.getCurrentPoints
-          ];
-        }
-
-        stats.setCurrentPoints = getGameSettings.getPointsOrCustom();
-        stats.setStartingPoints = stats.getCurrentPoints;
-
-        if (!isGameWon(stats)) {
-          stats.setCurrentThrownDartsInLeg = 0;
-        }
-      }
       if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
         resetCurrentThreeDarts();
       }
@@ -726,6 +740,7 @@ class GameX01 extends Game {
               if (stats == currentStats) {
                 stats.setSetsWon = stats.getSetsWon - 1;
                 stats.setLegsWon = stats.getLegsCount.last - 1;
+                stats.setLegsWonTotal = stats.getLegsWonTotal - 1;
               }
               stats.getLegsCount.removeLast();
             }
@@ -742,6 +757,7 @@ class GameX01 extends Game {
               }
               if (!setReverted) {
                 stats.setLegsWon = stats.getLegsWon - 1;
+                stats.setLegsWonTotal = stats.getLegsWonTotal - 1;
               }
               //revert only player that is currently selected
               int lastPoints1;
@@ -815,7 +831,7 @@ class GameX01 extends Game {
     if (legOrSetReverted) {
       //checkout
       if (stats.getCheckouts.isNotEmpty) {
-        stats.getCheckouts.removeLast();
+        stats.getCheckouts.remove(stats.getCheckouts.lastKey());
       }
 
       //starting points
@@ -827,8 +843,9 @@ class GameX01 extends Game {
 
       //thrown darts per leg
       if (stats.getThrownDartsPerLeg.isNotEmpty) {
-        stats.setCurrentThrownDartsInLeg = stats.getThrownDartsPerLeg.last;
-        stats.getThrownDartsPerLeg.removeLast();
+        String lastKey = stats.getThrownDartsPerLeg.lastKey();
+        stats.setCurrentThrownDartsInLeg = stats.getThrownDartsPerLeg[lastKey];
+        stats.getThrownDartsPerLeg.remove(stats.getThrownDartsPerLeg.lastKey());
       }
     }
 
@@ -897,14 +914,26 @@ class GameX01 extends Game {
         }
       }
 
-      //rounded scores
-      List<int> keys = stats.getRoundedScores.keys.toList();
+      //rounded scores even
+      List<int> keys = stats.getRoundedScoresEven.keys.toList();
       if (points >= 170) {
-        stats.getRoundedScores[keys[keys.length - 1]] -= 1;
+        stats.getRoundedScoresEven[keys[keys.length - 1]] -= 1;
       }
       for (int i = 0; i < keys.length - 1; i++) {
         if (points >= keys[i] && points < keys[i + 1]) {
-          stats.getRoundedScores[keys[i]] -= 1;
+          stats.getRoundedScoresEven[keys[i]] -= 1;
+        }
+      }
+
+      //rounded scores odd
+      keys = stats.getRoundedScoresOdd.keys.toList();
+      if (points >= 170) {
+        stats.getRoundedScoresOdd[keys[keys.length - 1]] -= 1;
+      } else {
+        for (int i = 0; i < keys.length - 1; i++) {
+          if (points >= keys[i] && points < keys[i + 1]) {
+            stats.getRoundedScoresOdd[keys[i]] -= 1;
+          }
         }
       }
 
@@ -1192,7 +1221,7 @@ class GameX01 extends Game {
 
   //needed to set all scores per leg
   num getCurrentSet() {
-    num result = 0;
+    num result = 1;
     for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics)
       result += stats.getSetsWon;
 
@@ -1208,7 +1237,7 @@ class GameX01 extends Game {
 
     if (getGameSettings.getSetsEnabled) {
       currentSet = getCurrentSet();
-      key += "Set " + currentSet.toString() + " ";
+      key += "Set " + currentSet.toString() + " - ";
     }
     key += "Leg " + currentLeg.toString();
 

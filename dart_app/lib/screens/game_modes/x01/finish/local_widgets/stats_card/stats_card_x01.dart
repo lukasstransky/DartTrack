@@ -1,6 +1,6 @@
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry.dart';
+import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/player_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -39,15 +39,21 @@ class _StatsCardX01State extends State<StatsCardX01> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      widget.game.getGameSettings.getGameMode(),
-                      style: TextStyle(
-                          fontSize: 16.sp, fontWeight: FontWeight.bold),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        widget.game.getGameSettings.getGameMode(),
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 14.sp),
+                      ),
                     ),
                     Spacer(),
-                    Text(
-                      widget.game.getFormattedDateTime(),
-                      style: TextStyle(fontSize: 12.sp),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        widget.game.getFormattedDateTime(),
+                        style: TextStyle(fontSize: 10.sp),
+                      ),
                     ),
                   ],
                 ),
@@ -58,26 +64,26 @@ class _StatsCardX01State extends State<StatsCardX01> {
                     "X01 (" +
                         widget.game.getGameSettings.getGameModeDetails(true) +
                         ")",
-                    style: TextStyle(fontSize: 14.sp)),
+                    style: TextStyle(fontSize: 12.sp)),
               ),
-
               for (int i = 0; i < 2; i++) ...[
                 PlayerEntry(i: i, game: widget.game),
                 if (i == 0)
                   Divider(
                     height: 20,
                     thickness: 1,
-                    endIndent: 20,
+                    endIndent: 10,
+                    indent: 10,
                     color: Colors.black,
                   ),
               ],
-
               if (widget.game.getPlayerGameStatistics.length > 2) ...[
                 if (_showAllPlayers) ...[
                   Divider(
                     height: 20,
                     thickness: 1,
-                    endIndent: 20,
+                    endIndent: 10,
+                    indent: 10,
                     color: Colors.black,
                   ),
                   for (int i = 2;
@@ -88,7 +94,8 @@ class _StatsCardX01State extends State<StatsCardX01> {
                       Divider(
                         height: 20,
                         thickness: 1,
-                        endIndent: 20,
+                        endIndent: 10,
+                        indent: 10,
                         color: Colors.black,
                       ),
                   ]
@@ -111,56 +118,6 @@ class _StatsCardX01State extends State<StatsCardX01> {
                   ),
                 ),
               ]
-
-              //if (!isFinishScreen)
-              /*Padding(
-                  padding: EdgeInsets.only(right: 5),
-                  child: Container(
-                    height: 4.h,
-                    transform: Matrix4.translationValues(0.0, -10.0, 0.0),
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: () => null,
-                        child: FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: const Text("More"),
-                        ),
-                        style: ButtonStyle(
-                          shape: MaterialStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primary),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),*/
-
-              /*Align(
-                  alignment: Alignment.center,
-                  child: Text("(Click Card to view Details)"),
-                )*/
-
-              /*Align(
-                  alignment: Alignment.center,
-                  child: TextButton.icon(
-                    onPressed: null,
-                    icon: Icon(
-                      Icons.expand_more,
-                      color: Colors.black,
-                    ),
-                    label: const Text(
-                      "Full Stats",
-                      style: TextStyle(color: Colors.black),
-                    ),
-                  ),
-                ),*/
             ],
           ),
         ),

@@ -53,15 +53,23 @@ class Game with ChangeNotifier {
         if (gameSettingsX01.getWinByTwoLegsDifference)
           'maxExtraLegs': gameSettingsX01.getMaxExtraLegs,
         'checkoutCounting': gameSettingsX01.getEnableCheckoutCounting,
+        'setsEnabled': gameSettingsX01.getSetsEnabled,
       },
     };
   }
 
-  factory Game.fromMap(map) {
+  factory Game.fromMap(map, mode) {
+    late GameSettings gameSettings;
+    switch (mode) {
+      case "X01":
+        gameSettings = GameSettings.fromMapX01(map['gameSettings']);
+      //add other cases for other game modes...(other settings)
+    }
+
     return Game.firestore(
         name: map['name'],
         dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
-        gameSettings: GameSettings.fromMapX01(map['gameSettings']));
+        gameSettings: gameSettings);
   }
 
   get getName => this._name;

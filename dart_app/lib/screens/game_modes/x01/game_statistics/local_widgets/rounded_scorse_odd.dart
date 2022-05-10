@@ -2,13 +2,11 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
-
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class MostFrequentScoresPerDart extends StatelessWidget {
-  const MostFrequentScoresPerDart({Key? key, required this.game})
-      : super(key: key);
+class RoundedScoresOdd extends StatelessWidget {
+  const RoundedScoresOdd({Key? key, required this.game}) : super(key: key);
 
   final Game? game;
 
@@ -22,7 +20,7 @@ class MostFrequentScoresPerDart extends StatelessWidget {
           child: Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
             child: Text(
-              "Most Frequent Scores Per Dart",
+              "Rounded Scores",
               style: TextStyle(
                   fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                   color: Theme.of(context).primaryColor),
@@ -35,7 +33,7 @@ class MostFrequentScoresPerDart extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  for (int i = 0; i < 5; i++)
+                  for (int i = 10; i <= 170; i += 20)
                     Padding(
                       padding: EdgeInsets.only(top: 5),
                       child: Container(
@@ -44,9 +42,10 @@ class MostFrequentScoresPerDart extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           child: FittedBox(
                             fit: BoxFit.scaleDown,
-                            child: Text((i + 1).toString() + ".",
+                            child: Text(i.toString() + "+",
                                 style: TextStyle(
-                                    fontSize: FONTSIZE_STATISTICS.sp)),
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                )),
                           ),
                         ),
                       ),
@@ -57,43 +56,25 @@ class MostFrequentScoresPerDart extends StatelessWidget {
                   in game!.getPlayerGameStatistics)
                 Column(
                   children: [
-                    for (int i = 0; i < 5; i++)
+                    for (int i = 10; i <= 170; i += 20)
                       Padding(
                         padding: EdgeInsets.only(top: 5),
                         child: Container(
                           width: WIDTH_DATA_STATISTICS.w,
-                          child: Utils.sortMapStringInt(stats
-                                          .getAllScoresPerDartAsStringCount)
-                                      .keys
-                                      .length >
-                                  i
-                              ? Text(
-                                  Utils.sortMapStringInt(stats
-                                              .getAllScoresPerDartAsStringCount)
-                                          .keys
-                                          .elementAt(i)
-                                          .toString() +
-                                      " (" +
-                                      Utils.sortMapStringInt(stats
-                                              .getAllScoresPerDartAsStringCount)
-                                          .values
-                                          .elementAt(i)
-                                          .toString() +
-                                      "x)",
-                                  style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp))
-                              : Text("-",
-                                  style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp)),
+                          child: Text(stats.getRoundedScoresOdd[i].toString(),
+                              style: TextStyle(
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontWeight: Utils.getMostOccurringValue(
+                                              stats.getRoundedScoresOdd) ==
+                                          stats.getRoundedScoresOdd[i]
+                                      ? FontWeight.bold
+                                      : FontWeight.normal)),
                         ),
                       ),
                   ],
                 )
             ],
           ),
-        ),
-        SizedBox(
-          height: 5.h,
         ),
       ],
     );

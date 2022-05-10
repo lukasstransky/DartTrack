@@ -1,5 +1,6 @@
 import 'package:dart_app/models/games/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerEntry extends StatelessWidget {
@@ -13,7 +14,7 @@ class PlayerEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: 20,
+        left: 10,
       ),
       child: Column(
         children: [
@@ -23,19 +24,38 @@ class PlayerEntry extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  width: 30.w,
-                  child: Text(
-                      (i + 1).toString() +
-                          ". " +
-                          game.getPlayerGameStatistics[i].getPlayer.getName,
-                      style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: i == 0 ? FontWeight.bold : null)),
-                ),
+                    width: 40.w,
+                    child: Row(
+                      children: [
+                        Text(
+                          (i + 1).toString() + ". ",
+                          style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: i == 0 ? FontWeight.bold : null),
+                        ),
+                        if (i == 0)
+                          Padding(
+                            padding: EdgeInsets.only(
+                              right: 5,
+                            ),
+                            child: Icon(
+                              Entypo.trophy,
+                              size: 12.sp,
+                              color: Color(0xffFFD700),
+                            ),
+                          )
+                        else
+                          SizedBox.shrink(),
+                        Text(game.getPlayerGameStatistics[i].getPlayer.getName,
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: i == 0 ? FontWeight.bold : null)),
+                      ],
+                    )),
                 Padding(
-                  padding: EdgeInsets.only(left: 25),
+                  padding: EdgeInsets.only(left: 15),
                   child: Container(
-                    width: 45.w,
+                    width: 35.w,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -47,19 +67,19 @@ class PlayerEntry extends StatelessWidget {
                                 : "Legs: " +
                                     game.getPlayerGameStatistics[i].getLegsWon
                                         .toString(),
-                            style: TextStyle(fontSize: 14.sp)),
+                            style: TextStyle(fontSize: 12.sp)),
                         Text(
                             "Average: " +
                                 game.getPlayerGameStatistics[i].getAverage(
                                     game, game.getPlayerGameStatistics[i]),
-                            style: TextStyle(fontSize: 14.sp)),
+                            style: TextStyle(fontSize: 12.sp)),
                         if (game.getGameSettings.getEnableCheckoutCounting)
                           Text(
                               "Checkout %: " +
                                   game.getPlayerGameStatistics[i]
                                       .getCheckoutQuoteInPercent()
                                       .toString(),
-                              style: TextStyle(fontSize: 14.sp))
+                              style: TextStyle(fontSize: 12.sp))
                       ],
                     ),
                   ),

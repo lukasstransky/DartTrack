@@ -1,4 +1,4 @@
-import 'package:dart_app/models/statistics_firestore.dart';
+import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,7 +7,7 @@ class OtherStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StatisticsFirestore>(
+    return Consumer<StatisticsFirestoreX01>(
       builder: (_, statisticsFirestore, __) => (Column(
         children: [
           Padding(

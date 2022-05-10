@@ -38,15 +38,17 @@ class GameSettingsX01 extends GameSettings {
 
   GameSettingsX01() {}
 
-  GameSettingsX01.firestore(
-      {required bool checkoutCounting,
-      required int legs,
-      required int sets,
-      required SingleOrDouble modeIn,
-      required SingleOrDouble modeOut,
-      required int points,
-      required SingleOrTeamEnum singleOrTeam,
-      required bool winByTwoLegsDifference}) {
+  GameSettingsX01.firestore({
+    required bool checkoutCounting,
+    required int legs,
+    required int sets,
+    required SingleOrDouble modeIn,
+    required SingleOrDouble modeOut,
+    required int points,
+    required SingleOrTeamEnum singleOrTeam,
+    required bool winByTwoLegsDifference,
+    required bool setsEnabled,
+  }) {
     this._enableCheckoutCounting = checkoutCounting;
     this._legs = legs;
     this._sets = sets;

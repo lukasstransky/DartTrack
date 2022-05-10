@@ -28,11 +28,16 @@ class PlayerGameStatistics {
       legsWon: map['legsWon'],
       setsWon: map['setsWon'] == null ? 0 : map['setsWon'],
       gameWon: map['gameWon'],
-      checkouts: map['checkouts'] == null ? [] : map['checkouts'].cast<int>(),
-      checkoutCount: map['checkoutCount'] == null ? 0 : map['checkoutCount'],
-      roundedScores: map['roundedScores'] == null
+      checkouts: map['checkouts'] == null
           ? {}
-          : Map<String, int>.from(map['roundedScores']),
+          : Map<String, int>.from(map['checkouts']),
+      checkoutCount: map['checkoutCount'] == null ? 0 : map['checkoutCount'],
+      roundedScoresEven: map['roundedScoresEven'] == null
+          ? {}
+          : Map<String, int>.from(map['roundedScoresEven']),
+      roundedScoresOdd: map['roundedScoresOdd'] == null
+          ? {}
+          : Map<String, int>.from(map['roundedScoresOdd']),
       preciseScores: map['preciseScores'] == null
           ? {}
           : Map<String, int>.from(map['preciseScores']),
@@ -40,13 +45,12 @@ class PlayerGameStatistics {
       allScoresPerDart: map['allScoresPerDart'] == null
           ? []
           : map['allScoresPerDart'].cast<int>(),
-      allScoresPerDartAsStringCount:
-          map['allScoresPerDartAsStringCount'] == null
-              ? {}
-              : Map<String, int>.from(map['allScoresPerDartAsStringCount']),
+      allScoresPerDartAsStringCount: map['allScoresPerDartWithCount'] == null
+          ? {}
+          : Map<String, int>.from(map['allScoresPerDartWithCount']),
       thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
-          ? []
-          : map['thrownDartsPerLeg'].cast<int>(),
+          ? {}
+          : Map<String, int>.from(map['thrownDartsPerLeg']),
       allScoresCountForRound: map['allScoresCountForRound'],
       totalPoints: map['totalPoints'],
       allScoresPerLeg: map['allScoresPerLeg'] == null
@@ -54,6 +58,8 @@ class PlayerGameStatistics {
           : SplayTreeMap<String, List<dynamic>>.from(
               map['allScoresPerLeg'],
             ),
+      legsWonTotal: map['legsWonTotal'] == null ? 0 : map['legsWonTotal'],
+      dartsForWonLegCount: map['dartsForWonLegCount'],
     );
   }
 
@@ -96,9 +102,12 @@ class PlayerGameStatistics {
         "allScores": playerGameStatisticsX01.getAllScores,
       if (playerGameStatisticsX01.getAllScoresPerDart.isNotEmpty)
         "allScoresPerDart": playerGameStatisticsX01.getAllScoresPerDart,
-      if (playerGameStatisticsX01.getRoundedScores.isNotEmpty)
-        "roundedScores":
-            playerGameStatisticsX01.getRoundedScoresWithStringKey(),
+      if (playerGameStatisticsX01.getRoundedScoresEven.isNotEmpty)
+        "roundedScoresEven":
+            playerGameStatisticsX01.getRoundedScoresEvenWithStringKey(),
+      if (playerGameStatisticsX01.getRoundedScoresOdd.isNotEmpty)
+        "roundedScoresOdd":
+            playerGameStatisticsX01.getRoundedScoresOddWithStringKey(),
       if (playerGameStatisticsX01.getPreciseScores.isNotEmpty)
         "preciseScores":
             playerGameStatisticsX01.getPreciseScoresWithStringKey(),
@@ -107,12 +116,14 @@ class PlayerGameStatistics {
             playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
       if (playerGameStatisticsX01.getThrownDartsPerLeg.isNotEmpty)
         "thrownDartsPerLeg": playerGameStatisticsX01.getThrownDartsPerLeg,
+      "legsWonTotal": playerGameStatisticsX01.getLegsWonTotal,
+      if (playerGameStatisticsX01.getAllScoresPerLeg.isNotEmpty)
+        "allScoresPerLeg": playerGameStatisticsX01.getAllScoresPerLeg,
       "gameWon": playerGameStatisticsX01.getGameWon,
       "allScoresCountForRound":
           playerGameStatisticsX01.getAllScoresCountForRound,
       "totalPoints": playerGameStatisticsX01.getTotalPoints,
-      if (playerGameStatisticsX01.getAllScoresPerLeg.isNotEmpty)
-        "allScoresPerLeg": playerGameStatisticsX01.getAllScoresPerLeg,
+      "dartsForWonLegCount": playerGameStatisticsX01.getDartsForWonLegCount,
     };
   }
 

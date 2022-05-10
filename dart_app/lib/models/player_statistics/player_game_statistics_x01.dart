@@ -20,23 +20,26 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   num _firstNineAverageCountThreeDarts = 0;
 
   int _currentThrownDartsInLeg = 0;
-  List<int> _thrownDartsPerLeg = [];
+  Map<String, int> _thrownDartsPerLeg = {};
+  num _dartsForWonLegCount =
+      0; //for statistics screen -> average darts for leg needed (count only won legs)
 
   bool _gameWon = false;
   int _legsWon = 0;
+  num _legsWonTotal = 0; //for statistics screen (only for set mode)
   int _setsWon = 0;
   SplayTreeMap<String, List<num>> _allScoresPerLeg = new SplayTreeMap();
   //"Leg 1" : 120, 140, 100 -> to calc best, worst leg & avg. darts per leg
   List<int> _legsCount =
       []; //only relevant for set mode -> if player finished set, save current legs count of each player in this list -> in order to revert a set
 
-  List<int> _checkouts = [];
+  Map<String, int> _checkouts = {};
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
   List<Tuple3<String, num, num>> _checkoutCountAtThrownDarts =
       []; //to revert checkout count -> saves the current leg, amount of checkout counts + the thrown darts at this moment
 
-  Map<int, int> _roundedScores = {
+  Map<int, int> _roundedScoresEven = {
     0: 0,
     20: 0,
     40: 0,
@@ -48,6 +51,17 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     160: 0,
     180: 0
   }; //e.g. 140+ : 5 (0 -> for < 40)
+  Map<int, int> _roundedScoresOdd = {
+    10: 0,
+    30: 0,
+    50: 0,
+    70: 0,
+    90: 0,
+    110: 0,
+    130: 0,
+    150: 0,
+    170: 0
+  };
   Map<int, int> _preciseScores = {}; //e.g. 140 : 3
   List<int> _allScores = []; //for input method round
   num _allScoresCountForRound =
@@ -72,17 +86,20 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     required int legsWon,
     required int setsWon,
     required bool gameWon,
-    required List<int> checkouts,
+    required Map<String, int> checkouts,
     required int checkoutCount,
-    required Map<String, int> roundedScores,
+    required Map<String, int> roundedScoresEven,
+    required Map<String, int> roundedScoresOdd,
     required Map<String, int> preciseScores,
     required List<int> allScores,
     required List<int> allScoresPerDart,
     required Map<String, int> allScoresPerDartAsStringCount,
-    required List<int> thrownDartsPerLeg,
+    required Map<String, int> thrownDartsPerLeg,
     required int allScoresCountForRound,
     required int totalPoints,
     required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
+    required num legsWonTotal,
+    required num dartsForWonLegCount,
   }) : super(dateTime: dateTime, mode: mode, player: player) {
     this._firstNineAverage = firstNineAvg;
     this._legsWon = legsWon;
@@ -90,8 +107,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._gameWon = gameWon;
     this._checkouts = checkouts;
     this._checkoutCount = checkoutCount;
-    this._roundedScores =
-        roundedScores.map((key, value) => MapEntry(int.parse(key), value));
+    this._roundedScoresEven =
+        roundedScoresEven.map((key, value) => MapEntry(int.parse(key), value));
+    this._roundedScoresOdd =
+        roundedScoresOdd.map((key, value) => MapEntry(int.parse(key), value));
     this._preciseScores =
         preciseScores.map((key, value) => MapEntry(int.parse(key), value));
     this._allScores = allScores;
@@ -102,6 +121,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._totalPoints = totalPoints;
     this._allScoresPerLeg = SplayTreeMap.from(
         allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<num>())));
+    this._legsWonTotal = legsWonTotal;
+    this._dartsForWonLegCount = dartsForWonLegCount;
   }
 
   PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
@@ -143,6 +164,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   get getLegsWon => this._legsWon;
   set setLegsWon(int legsWon) => this._legsWon = legsWon;
 
+  get getLegsWonTotal => this._legsWonTotal;
+  set setLegsWonTotal(num legsWonTotal) => this._legsWonTotal = legsWonTotal;
+
   get getSetsWon => this._setsWon;
   set setSetsWon(int setsWon) => this._setsWon = setsWon;
 
@@ -155,24 +179,32 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._currentThrownDartsInLeg = thrownDartsPerLeg;
 
   get getThrownDartsPerLeg => this._thrownDartsPerLeg;
-  set setThrownDartsPerLeg(List<int> thrownDartsPerLeg) =>
+  set setThrownDartsPerLeg(Map<String, int> thrownDartsPerLeg) =>
       this._thrownDartsPerLeg = thrownDartsPerLeg;
+
+  get getDartsForWonLegCount => this._dartsForWonLegCount;
+  set setDartsForWonLegCount(num dartsForWonLegCount) =>
+      this._dartsForWonLegCount = dartsForWonLegCount;
 
   get getCheckoutCount => this._checkoutCount;
   set setCheckoutCount(int checkoutCount) =>
       this._checkoutCount = checkoutCount;
 
   get getCheckouts => this._checkouts;
-  set setCheckouts(List<int> checkouts) => this._checkouts = checkouts;
+  set setCheckouts(Map<String, int> checkouts) => this._checkouts = checkouts;
 
   get getCheckoutCountAtThrownDarts => this._checkoutCountAtThrownDarts;
   set setCheckoutCountAtThrownDarts(
           List<Tuple3<String, num, num>> checkoutCountAtThrownDarts) =>
       this._checkoutCountAtThrownDarts = checkoutCountAtThrownDarts;
 
-  get getRoundedScores => this._roundedScores;
-  set setRoundedScores(Map<int, int> roundedScores) =>
-      this._roundedScores = roundedScores;
+  get getRoundedScoresEven => this._roundedScoresEven;
+  set setRoundedScoresEven(Map<int, int> roundedScoresEven) =>
+      this._roundedScoresEven = roundedScoresEven;
+
+  get getRoundedScoresOdd => this._roundedScoresOdd;
+  set setRoundedScoresOdd(Map<int, int> roundedScoresOdd) =>
+      this._roundedScoresOdd = roundedScoresOdd;
 
   get getAllScoresPerLeg => this._allScoresPerLeg;
   set setAllScoresPerLeg(SplayTreeMap<String, List<num>> allScoresPerLeg) =>
@@ -259,7 +291,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   int getHighestCheckout() {
     int result = 0;
-    for (int checkOut in getCheckouts) {
+    for (int checkOut in getCheckouts.values) {
       if (checkOut > result) {
         result = checkOut;
       }
@@ -271,7 +303,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   Map<int, int> getSpecificRoundedScores(List<int> specificRoundedScores) {
     Map<int, int> result = {};
     for (int score in specificRoundedScores) {
-      int value = getRoundedScores[score];
+      int value = getRoundedScoresEven[score];
       result[score] = value;
     }
     return result;
@@ -431,9 +463,17 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     return result;
   }
 
-  Map<String, int> getRoundedScoresWithStringKey() {
+  Map<String, int> getRoundedScoresEvenWithStringKey() {
     Map<String, int> result = {};
-    for (var entry in getRoundedScores.entries) {
+    for (var entry in getRoundedScoresEven.entries) {
+      result[entry.key.toString()] = entry.value;
+    }
+    return result;
+  }
+
+  Map<String, int> getRoundedScoresOddWithStringKey() {
+    Map<String, int> result = {};
+    for (var entry in getRoundedScoresOdd.entries) {
       result[entry.key.toString()] = entry.value;
     }
     return result;

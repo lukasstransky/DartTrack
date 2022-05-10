@@ -17,6 +17,7 @@ class GameSettings with ChangeNotifier {
           : SingleOrDouble.DoubleField,
       points: map['points'],
       sets: map['sets'] == null ? 0 : map['sets'],
+      setsEnabled: map['setsEnabled'],
       singleOrTeam: map['singleOrTeam'] == "Single"
           ? SingleOrTeamEnum.Single
           : SingleOrTeamEnum.Team,

@@ -1,16 +1,21 @@
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class DetailedLeg extends StatefulWidget {
-  const DetailedLeg({Key? key, required this.leg, required this.game})
+  const DetailedLeg(
+      {Key? key,
+      required this.setLegString,
+      required this.game,
+      required this.winnerOfLeg})
       : super(key: key);
 
-  final String leg;
+  final String setLegString;
   final Game? game;
+  final String winnerOfLeg;
 
   @override
   State<DetailedLeg> createState() => _DetailedLegState();
@@ -38,26 +43,31 @@ class _DetailedLegState extends State<DetailedLeg> {
     String result = _currentPoints.toString();
 
     if (i ==
-        playerGameStatisticsX01.getAllScoresPerLeg[widget.leg].length - 1) {
+        playerGameStatisticsX01.getAllScoresPerLeg[widget.setLegString].length -
+            1) {
       _currentPoints = _currentPoints = getPointsOrCustom();
     }
     return result;
   }
 
-  String getAverageForLeg(PlayerGameStatisticsX01 playerGameStatisticsX01) {
-    num result = 0;
-    for (num score in playerGameStatisticsX01.getAllScoresPerLeg[widget.leg]) {
-      result += score;
-    }
-    int legIndex = int.parse(widget.leg.substring(widget.leg.length - 1)) - 1;
-    result /= (playerGameStatisticsX01.getThrownDartsPerLeg[legIndex] / 3);
-
-    return result.toStringAsFixed(2);
+  String getThrownDartsForLeg(PlayerGameStatisticsX01 playerGameStatisticsX01) {
+    return playerGameStatisticsX01.getThrownDartsPerLeg[widget.setLegString]
+        .toString();
   }
 
-  String getThrownDartsForLeg(PlayerGameStatisticsX01 playerGameStatisticsX01) {
-    int legIndex = int.parse(widget.leg.substring(widget.leg.length - 1)) - 1;
-    return playerGameStatisticsX01.getThrownDartsPerLeg[legIndex].toString();
+  bool emptyRowNeeded(num dartsToCheck) {
+    num mostDarts = 0;
+    for (PlayerGameStatisticsX01 playerGameStatisticsX01
+        in widget.game!.getPlayerGameStatistics) {
+      if (playerGameStatisticsX01
+              .getAllScoresPerLeg[widget.setLegString].length >
+          mostDarts) {
+        mostDarts = playerGameStatisticsX01
+            .getAllScoresPerLeg[widget.setLegString].length;
+      }
+    }
+
+    return mostDarts > dartsToCheck ? true : false;
   }
 
   @override
@@ -84,11 +94,12 @@ class _DetailedLegState extends State<DetailedLeg> {
                       for (num i = 0;
                           i <
                               playerGameStatisticsX01
-                                  .getAllScoresPerLeg[widget.leg].length;
+                                  .getAllScoresPerLeg[widget.setLegString]
+                                  .length;
                           i++) ...[
                         if (i == 0)
                           Padding(
-                            padding: EdgeInsets.only(bottom: 5),
+                            padding: EdgeInsets.only(bottom: 10, top: 5),
                             child: Row(
                               children: [
                                 Expanded(
@@ -97,7 +108,7 @@ class _DetailedLegState extends State<DetailedLeg> {
                                     fit: BoxFit.scaleDown,
                                     child: Text(
                                       "Score",
-                                      style: TextStyle(fontSize: 13.sp),
+                                      style: TextStyle(fontSize: 11.sp),
                                     ),
                                   )),
                                 ),
@@ -106,8 +117,8 @@ class _DetailedLegState extends State<DetailedLeg> {
                                       child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      "Remaining",
-                                      style: TextStyle(fontSize: 13.sp),
+                                      "Left",
+                                      style: TextStyle(fontSize: 11.sp),
                                     ),
                                   )),
                                 ),
@@ -121,7 +132,7 @@ class _DetailedLegState extends State<DetailedLeg> {
                                 child: Center(
                                   child: Text(
                                     playerGameStatisticsX01
-                                        .getAllScoresPerLeg[widget.leg]
+                                        .getAllScoresPerLeg[widget.setLegString]
                                         .elementAt(i)
                                         .toString(),
                                   ),
@@ -134,7 +145,8 @@ class _DetailedLegState extends State<DetailedLeg> {
                                   child: Text(
                                     getCurrentValue(
                                         playerGameStatisticsX01
-                                            .getAllScoresPerLeg[widget.leg]
+                                            .getAllScoresPerLeg[
+                                                widget.setLegString]
                                             .elementAt(i),
                                         i,
                                         playerGameStatisticsX01),
@@ -144,12 +156,29 @@ class _DetailedLegState extends State<DetailedLeg> {
                             ),
                           ],
                         ),
+                        if (i ==
+                                playerGameStatisticsX01
+                                        .getAllScoresPerLeg[widget.setLegString]
+                                        .length -
+                                    1 &&
+                            emptyRowNeeded(playerGameStatisticsX01
+                                .getAllScoresPerLeg[widget.setLegString]
+                                .length))
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Center(
+                                  child: Text(""),
+                                ),
+                              ),
+                            ],
+                          ),
                       ],
                       const Divider(
                         height: 15,
                         thickness: 1,
-                        indent: 20,
-                        endIndent: 0,
+                        indent: 10,
+                        endIndent: 10,
                         color: Colors.black,
                       ),
                       Row(
@@ -170,8 +199,9 @@ class _DetailedLegState extends State<DetailedLeg> {
                         children: [
                           Expanded(
                             child: Center(
-                              child: Text(
-                                  getAverageForLeg(playerGameStatisticsX01)),
+                              child: Text(Utils.getAverageForLeg(
+                                  playerGameStatisticsX01,
+                                  widget.setLegString)),
                             ),
                           ),
                           Expanded(

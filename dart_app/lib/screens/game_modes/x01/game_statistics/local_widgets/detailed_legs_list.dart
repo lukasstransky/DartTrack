@@ -1,7 +1,6 @@
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_leg.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:sizer/sizer.dart';
@@ -36,22 +35,6 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
     _items = getItems();
   }
 
-  String getWinnerOfLeg(String leg) {
-    num currentPoints;
-    for (PlayerGameStatisticsX01 playerGameStatistics
-        in widget.game!.getPlayerGameStatistics) {
-      currentPoints = widget.game!.getGameSettings.getPointsOrCustom();
-      for (num score in playerGameStatistics.getAllScoresPerLeg[leg]) {
-        currentPoints -= score;
-      }
-      if (currentPoints == 0) {
-        return playerGameStatistics.getPlayer.getName;
-      }
-    }
-
-    return "";
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,10 +57,12 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
                       child: Row(
                         children: [
                           SizedBox(
-                            width: 20.w,
+                            width: widget.game!.getGameSettings.getSets != 0
+                                ? 32.w
+                                : 20.w,
                             child: Text(
                               item.value,
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 14.sp),
                             ),
                           ),
                           Expanded(
@@ -85,14 +70,16 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
                               children: [
                                 Icon(
                                   Entypo.trophy,
-                                  size: 15.sp,
+                                  size: 14.sp,
                                   color: Color(0xffFFD700),
                                 ),
                                 Padding(
                                   padding: EdgeInsets.only(left: 5),
                                   child: Text(
-                                    getWinnerOfLeg(item.value),
-                                    style: TextStyle(color: Colors.black),
+                                    Utils.getWinnerOfLeg(
+                                        item.value, widget.game),
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 14.sp),
                                   ),
                                 ),
                               ],
@@ -102,7 +89,11 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
                       ),
                     ),
                   ),
-                  body: DetailedLeg(leg: item.value, game: widget.game),
+                  body: DetailedLeg(
+                      setLegString: item.value,
+                      game: widget.game,
+                      winnerOfLeg:
+                          Utils.getWinnerOfLeg(item.value, widget.game)),
                   isExpanded: item.isExpanded,
                 ),
               )

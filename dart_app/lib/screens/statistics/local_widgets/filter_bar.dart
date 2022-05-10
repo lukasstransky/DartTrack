@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/statistics_firestore.dart';
+import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -42,9 +42,9 @@ class _FilterBarState extends State<FilterBar> {
   @override
   Widget build(BuildContext context) {
     final statisticsFirestore =
-        Provider.of<StatisticsFirestore>(context, listen: false);
+        Provider.of<StatisticsFirestoreX01>(context, listen: false);
 
-    return Selector<StatisticsFirestore, FilterValue>(
+    return Selector<StatisticsFirestoreX01, FilterValue>(
       selector: (_, statisticsFirestore) =>
           statisticsFirestore.currentFilterValue,
       builder: (_, currentFilterValue, __) => Padding(

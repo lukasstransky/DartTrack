@@ -6,10 +6,20 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class MostFrequentScores extends StatelessWidget {
-  const MostFrequentScores({Key? key, required this.game}) : super(key: key);
+class MostFrequentScores extends StatefulWidget {
+  const MostFrequentScores(
+      {Key? key, required this.game, required this.mostScoresPerDart})
+      : super(key: key);
 
   final Game? game;
+  final bool mostScoresPerDart;
+
+  @override
+  State<MostFrequentScores> createState() => _MostFrequentScoresState();
+}
+
+class _MostFrequentScoresState extends State<MostFrequentScores> {
+  bool _showFirst10 = false;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +29,12 @@ class MostFrequentScores extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
           child: Container(
-            transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+            width: 100.w,
+            transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
             child: Text(
-              "Most Frequent Scores",
+              widget.mostScoresPerDart
+                  ? "Most Frequent Scores Per Dart"
+                  : "Most Frequent Scores",
               style: TextStyle(
                   fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                   color: Theme.of(context).primaryColor),
@@ -34,56 +47,104 @@ class MostFrequentScores extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  for (int i = 0; i < 5; i++)
-                    Padding(
-                      padding: EdgeInsets.only(top: 5),
-                      child: Container(
-                        width: WIDTH_HEADINGS_STATISTICS.w,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text((i + 1).toString() + ".",
-                                style: TextStyle(
-                                    fontSize: FONTSIZE_STATISTICS.sp)),
+                  for (int i = 0; i < (_showFirst10 ? 10 : 5); i++)
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: Container(
+                            width: 20.w,
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text((i + 1).toString() + ".",
+                                    style: TextStyle(
+                                        fontSize: FONTSIZE_STATISTICS.sp)),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                        for (PlayerGameStatisticsX01 stats
+                            in widget.game!.getPlayerGameStatistics)
+                          Padding(
+                            padding: EdgeInsets.only(top: 5),
+                            child: Container(
+                              width: 30.w,
+                              child: (widget.mostScoresPerDart
+                                          ? stats
+                                              .getAllScoresPerDartAsStringCount
+                                              .keys
+                                              .length
+                                          : stats
+                                              .getPreciseScores.keys.length) >
+                                      i
+                                  ? Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text(
+                                          (widget.mostScoresPerDart
+                                                  ? Utils.sortMapStringInt(stats
+                                                          .getAllScoresPerDartAsStringCount)
+                                                      .keys
+                                                      .elementAt(i)
+                                                      .toString()
+                                                  : Utils.sortMapIntInt(stats
+                                                          .getPreciseScores)
+                                                      .keys
+                                                      .elementAt(i)
+                                                      .toString()) +
+                                              " (" +
+                                              (widget.mostScoresPerDart
+                                                  ? Utils.sortMapStringInt(stats
+                                                          .getAllScoresPerDartAsStringCount)
+                                                      .values
+                                                      .elementAt(i)
+                                                      .toString()
+                                                  : Utils.sortMapIntInt(stats
+                                                          .getPreciseScores)
+                                                      .values
+                                                      .elementAt(i)
+                                                      .toString()) +
+                                              "x)",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  FONTSIZE_STATISTICS.sp)),
+                                    )
+                                  : Align(
+                                      alignment: Alignment.centerRight,
+                                      child: Text("-",
+                                          style: TextStyle(
+                                              fontSize:
+                                                  FONTSIZE_STATISTICS.sp)),
+                                    ),
+                            ),
+                          ),
+                      ],
+                    )
                 ],
               ),
-              for (PlayerGameStatisticsX01 stats
-                  in game!.getPlayerGameStatistics)
-                Column(
-                  children: [
-                    for (int i = 0; i < 5; i++)
-                      Padding(
-                        padding: EdgeInsets.only(top: 5),
-                        child: Container(
-                          width: WIDTH_DATA_STATISTICS.w,
-                          child: stats.getPreciseScores.keys.length > i
-                              ? Text(
-                                  Utils.sortMapIntInt(stats.getPreciseScores)
-                                          .keys
-                                          .elementAt(i)
-                                          .toString() +
-                                      " (" +
-                                      Utils.sortMapIntInt(
-                                              stats.getPreciseScores)
-                                          .values
-                                          .elementAt(i)
-                                          .toString() +
-                                      "x)",
-                                  style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp))
-                              : Text("-",
-                                  style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp)),
-                        ),
-                      ),
-                  ],
-                )
             ],
+          ),
+        ),
+        Container(
+          width: 100.w,
+          transform: Matrix4.translationValues(-5.w, 0.0, 0.0),
+          child: Center(
+            child: TextButton.icon(
+              onPressed: () {
+                setState(() {
+                  _showFirst10 = !_showFirst10;
+                });
+              },
+              icon: Icon(
+                _showFirst10 ? Icons.expand_less : Icons.expand_more,
+                color: Colors.black,
+              ),
+              label: const Text(
+                "Show More",
+                style: TextStyle(color: Colors.black),
+              ),
+            ),
           ),
         ),
       ],

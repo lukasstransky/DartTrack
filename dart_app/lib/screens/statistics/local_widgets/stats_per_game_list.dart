@@ -1,6 +1,6 @@
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/statistics_firestore.dart';
+import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:dart_app/utils/custom_app_bar.dart';
@@ -38,8 +38,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(true, "Stats per Game"),
-      body: Consumer<StatisticsFirestore>(
+      appBar: CustomAppBar(true, _mode + " Games"),
+      body: Consumer<StatisticsFirestoreX01>(
         builder: (_, statisticsFirestore, __) => SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Center(
@@ -54,7 +54,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                     ),
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: Text("(Click Card to view Details about Game)")),
+                        child:
+                            Text("(Click Card to view Details about a Game)")),
                   ),
                   for (Game game in statisticsFirestore.games) ...[
                     if (_mode == "X01")

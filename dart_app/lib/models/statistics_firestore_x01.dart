@@ -1,6 +1,3 @@
-//only needed for firestore
-//overall stats saved, instead of query that has to iterate over each player stats
-//gets updated after each game
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
@@ -9,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class StatisticsFirestore with ChangeNotifier {
+class StatisticsFirestoreX01 with ChangeNotifier {
   num _countOfGames = 0;
   num _countOfGamesWon = 0;
 
@@ -38,7 +35,7 @@ class StatisticsFirestore with ChangeNotifier {
   FilterValue _currentFilterValue = FilterValue.Overall;
   String _customDateFilterRange = "";
 
-  Map<int, int> _roundedScores = {
+  Map<int, int> _roundedScoresEven = {
     0: 0,
     20: 0,
     40: 0,
@@ -50,7 +47,17 @@ class StatisticsFirestore with ChangeNotifier {
     160: 0,
     180: 0
   };
-  num _mostRoundedScoresKey = 0;
+  Map<int, int> _roundedScoresOdd = {
+    10: 0,
+    30: 0,
+    50: 0,
+    70: 0,
+    90: 0,
+    110: 0,
+    130: 0,
+    150: 0,
+    170: 0
+  };
   Map<int, int> _preciseScores = {};
   Map<String, int> _allScoresPerDartAsStringCount = {};
   List<Game> _games = [];
@@ -139,13 +146,13 @@ class StatisticsFirestore with ChangeNotifier {
 
   set customDateFilterRange(value) => this._customDateFilterRange = value;
 
-  get roundedScores => this._roundedScores;
+  get roundedScoresEven => this._roundedScoresEven;
 
-  set roundedScores(value) => this._roundedScores = value;
+  set roundedScoresEven(value) => this._roundedScoresEven = value;
 
-  get mostRoundedScoresKey => this._mostRoundedScoresKey;
+  get roundedScoresOdd => this._roundedScoresOdd;
 
-  set mostRoundedScoresKey(value) => this._mostRoundedScoresKey = value;
+  set roundedScoresOdd(value) => this._roundedScoresOdd = value;
 
   get preciseScores => this._preciseScores;
 
@@ -217,7 +224,7 @@ class StatisticsFirestore with ChangeNotifier {
     _countOf180 = 0;
     _countOfAllDarts = 0;
 
-    _roundedScores = {
+    _roundedScoresEven = {
       0: 0,
       20: 0,
       40: 0,
@@ -240,15 +247,5 @@ class StatisticsFirestore with ChangeNotifier {
 
   notify() {
     notifyListeners();
-  }
-
-  setMostRoundedScores() {
-    num roundedScoreValue = 0;
-    for (int i = 0; i < roundedScores.values.length; i++) {
-      if (roundedScores.values.elementAt(i) > roundedScoreValue) {
-        roundedScoreValue = roundedScores.values.elementAt(i);
-        mostRoundedScoresKey = roundedScores.keys.elementAt(i);
-      }
-    }
   }
 }
