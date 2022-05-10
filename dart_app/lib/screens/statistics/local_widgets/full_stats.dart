@@ -1,4 +1,5 @@
-import 'package:dart_app/models/statistics_firestore.dart';
+import 'package:dart_app/models/statistics_firestore_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -12,10 +13,11 @@ class FullStats extends StatefulWidget {
 
 class _FullStatsState extends State<FullStats> {
   bool _showAllScoesPerDartWithCount = false;
+  bool _roundedScoresOdd = false;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StatisticsFirestore>(
+    return Consumer<StatisticsFirestoreX01>(
       builder: (_, statisticsFirestore, __) => Padding(
         padding: EdgeInsets.only(top: 20),
         child: Column(
@@ -60,7 +62,9 @@ class _FullStatsState extends State<FullStats> {
                       padding: EdgeInsets.only(top: 10),
                       child: Column(
                         children: [
-                          for (int i = 0; i <= 180; i += 20) ...[
+                          for (int i = (!_roundedScoresOdd ? 0 : 10);
+                              i <= (!_roundedScoresOdd ? 180 : 170);
+                              i += 20) ...[
                             Row(
                               children: [
                                 SizedBox(
@@ -75,9 +79,20 @@ class _FullStatsState extends State<FullStats> {
                                             : i.toString(),
                                         style: TextStyle(
                                             fontSize: 12.sp,
-                                            fontWeight: i ==
-                                                    statisticsFirestore
-                                                        .mostRoundedScoresKey
+                                            fontWeight: (!_roundedScoresOdd
+                                                        ? statisticsFirestore
+                                                                .roundedScoresEven[
+                                                            i]
+                                                        : statisticsFirestore
+                                                                .roundedScoresOdd[
+                                                            i]) ==
+                                                    (!_roundedScoresOdd
+                                                        ? Utils.getMostOccurringValue(
+                                                            statisticsFirestore
+                                                                .roundedScoresEven)
+                                                        : Utils.getMostOccurringValue(
+                                                            statisticsFirestore
+                                                                .roundedScoresOdd))
                                                 ? FontWeight.bold
                                                 : FontWeight.normal),
                                       ),
@@ -93,13 +108,29 @@ class _FullStatsState extends State<FullStats> {
                                     child: Align(
                                       alignment: Alignment.centerRight,
                                       child: Text(
-                                        statisticsFirestore.roundedScores[i]
-                                            .toString(),
+                                        !_roundedScoresOdd
+                                            ? statisticsFirestore
+                                                .roundedScoresEven[i]
+                                                .toString()
+                                            : statisticsFirestore
+                                                .roundedScoresOdd[i]
+                                                .toString(),
                                         style: TextStyle(
                                             fontSize: 12.sp,
-                                            fontWeight: i ==
-                                                    statisticsFirestore
-                                                        .mostRoundedScoresKey
+                                            fontWeight: (!_roundedScoresOdd
+                                                        ? statisticsFirestore
+                                                                .roundedScoresEven[
+                                                            i]
+                                                        : statisticsFirestore
+                                                                .roundedScoresOdd[
+                                                            i]) ==
+                                                    (!_roundedScoresOdd
+                                                        ? Utils.getMostOccurringValue(
+                                                            statisticsFirestore
+                                                                .roundedScoresEven)
+                                                        : Utils.getMostOccurringValue(
+                                                            statisticsFirestore
+                                                                .roundedScoresOdd))
                                                 ? FontWeight.bold
                                                 : FontWeight.normal),
                                       ),
@@ -223,6 +254,22 @@ class _FullStatsState extends State<FullStats> {
                       setState(() {
                         _showAllScoesPerDartWithCount =
                             !_showAllScoesPerDartWithCount;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 5.w),
+              child: Row(
+                children: [
+                  const Text("Show Odd Rounded Scores"),
+                  Switch(
+                    value: _roundedScoresOdd,
+                    onChanged: (value) {
+                      setState(() {
+                        _roundedScoresOdd = value;
                       });
                     },
                   ),
