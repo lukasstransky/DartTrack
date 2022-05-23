@@ -5,7 +5,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class FilterBar extends StatefulWidget {

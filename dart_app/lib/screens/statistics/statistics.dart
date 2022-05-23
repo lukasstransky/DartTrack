@@ -1,10 +1,10 @@
-import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats.dart';
+import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/full_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/other_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns.dart';
 import 'package:dart_app/services/firestore_service.dart';
-import 'package:dart_app/utils/custom_app_bar.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

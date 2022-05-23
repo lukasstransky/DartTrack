@@ -9,8 +9,8 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings.dart
 import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings.dart';
 import 'package:dart_app/screens/home/home.dart';
-import 'package:dart_app/screens/statistics/local_widgets/stats_card_filtered.dart';
-import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list.dart';
+import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/stats_card_filtered.dart';
+import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_list.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore_service.dart';
