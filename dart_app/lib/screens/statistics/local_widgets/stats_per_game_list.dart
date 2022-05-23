@@ -3,7 +3,7 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
-import 'package:dart_app/utils/custom_app_bar.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';

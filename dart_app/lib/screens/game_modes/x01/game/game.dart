@@ -4,7 +4,7 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/points_btns_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/points_btns_threeDarts.dart';
-import 'package:dart_app/utils/custom_app_bar_game_x01.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar_game_x01.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';

@@ -11,7 +11,7 @@ import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/mo
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/rounded_scores_even.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/rounded_scorse_odd.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats.dart';
-import 'package:dart_app/utils/custom_app_bar.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';

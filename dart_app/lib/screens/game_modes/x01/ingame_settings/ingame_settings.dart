@@ -4,7 +4,7 @@ import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/di
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/general_settings.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings.dart';
-import 'package:dart_app/utils/custom_app_bar.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

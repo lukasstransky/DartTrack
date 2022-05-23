@@ -20,7 +20,7 @@ class OtherStats extends StatelessWidget {
                       Text(statisticsFirestore.countOf180 > 0
                           ? statisticsFirestore.countOf180.toString()
                           : "-"),
-                      Text(
+                      const Text(
                         "180",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -35,7 +35,7 @@ class OtherStats extends StatelessWidget {
                       Text(statisticsFirestore.countOfAllDarts > 0
                           ? statisticsFirestore.countOfAllDarts.toString()
                           : "-"),
-                      Text(
+                      const Text(
                         "Darts",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -50,7 +50,7 @@ class OtherStats extends StatelessWidget {
                       Text(statisticsFirestore.countOfGames > 0
                           ? statisticsFirestore.countOfGames.toString()
                           : "-"),
-                      Text(
+                      const Text(
                         "Games",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
@@ -65,7 +65,7 @@ class OtherStats extends StatelessWidget {
                       Text(statisticsFirestore.countOfGamesWon > 0
                           ? statisticsFirestore.countOfGamesWon.toString()
                           : "-"),
-                      Text(
+                      const Text(
                         "Games Won",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

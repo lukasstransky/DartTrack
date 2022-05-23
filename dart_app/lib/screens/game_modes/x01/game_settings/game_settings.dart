@@ -15,7 +15,7 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/sing
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/start_game_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/win_by_two_legs_diff.dart';
 import 'package:dart_app/services/auth_service.dart';
-import 'package:dart_app/utils/custom_app_bar.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
