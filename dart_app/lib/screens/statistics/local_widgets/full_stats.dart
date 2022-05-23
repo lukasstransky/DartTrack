@@ -188,13 +188,15 @@ class _FullStatsState extends State<FullStats> {
                                                           .length <
                                                       i
                                                   ? "-"
-                                                  : statisticsFirestore
-                                                          .allScoresPerDartAsStringCount
+                                                  : Utils.sortMapStringIntByKey(
+                                                              statisticsFirestore
+                                                                  .allScoresPerDartAsStringCount)
                                                           .keys
                                                           .elementAt(i - 1) +
                                                       " (" +
-                                                      statisticsFirestore
-                                                          .allScoresPerDartAsStringCount
+                                                      Utils.sortMapStringIntByKey(
+                                                              statisticsFirestore
+                                                                  .allScoresPerDartAsStringCount)
                                                           .values
                                                           .elementAt(i - 1)
                                                           .toString() +
@@ -211,13 +213,17 @@ class _FullStatsState extends State<FullStats> {
                                                           .length <
                                                       i
                                                   ? "-"
-                                                  : statisticsFirestore
-                                                          .preciseScores.keys
+                                                  : Utils.sortMapIntIntByKey(
+                                                              statisticsFirestore
+                                                                  .preciseScores)
+                                                          .keys
                                                           .elementAt(i - 1)
                                                           .toString() +
                                                       " (" +
-                                                      statisticsFirestore
-                                                          .preciseScores.values
+                                                      Utils.sortMapIntIntByKey(
+                                                              statisticsFirestore
+                                                                  .preciseScores)
+                                                          .values
                                                           .elementAt(i - 1)
                                                           .toString() +
                                                       "x)",
@@ -260,20 +266,23 @@ class _FullStatsState extends State<FullStats> {
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 5.w),
-              child: Row(
-                children: [
-                  const Text("Show Odd Rounded Scores"),
-                  Switch(
-                    value: _roundedScoresOdd,
-                    onChanged: (value) {
-                      setState(() {
-                        _roundedScoresOdd = value;
-                      });
-                    },
-                  ),
-                ],
+            Container(
+              transform: Matrix4.translationValues(0.0, -10.0, 0.0),
+              child: Padding(
+                padding: EdgeInsets.only(left: 5.w),
+                child: Row(
+                  children: [
+                    const Text("Show Odd Rounded Scores"),
+                    Switch(
+                      value: _roundedScoresOdd,
+                      onChanged: (value) {
+                        setState(() {
+                          _roundedScoresOdd = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

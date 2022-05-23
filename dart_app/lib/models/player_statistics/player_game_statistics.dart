@@ -11,15 +11,18 @@ class PlayerGameStatistics {
   final DateTime _dateTime;
 
   PlayerGameStatistics(
-      {required Player player,
+      {required String gameId,
+      required Player player,
       required String mode,
       required DateTime dateTime})
-      : _player = player,
+      : _gameId = gameId,
+        _player = player,
         _mode = mode,
         _dateTime = dateTime;
 
   factory PlayerGameStatistics.fromMapX01(map) {
     return PlayerGameStatisticsX01.firestore(
+      gameId: map['gameId'],
       mode: map['mode'],
       dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
       player: new Player(name: map['player']),
@@ -31,7 +34,7 @@ class PlayerGameStatistics {
       checkouts: map['checkouts'] == null
           ? {}
           : Map<String, int>.from(map['checkouts']),
-      checkoutCount: map['checkoutCount'] == null ? 0 : map['checkoutCount'],
+      checkoutCount: map['checkoutDarts'] == null ? 0 : map['checkoutDarts'],
       roundedScoresEven: map['roundedScoresEven'] == null
           ? {}
           : Map<String, int>.from(map['roundedScoresEven']),
@@ -84,8 +87,10 @@ class PlayerGameStatistics {
         "highestScore": playerGameStatisticsX01.getHighestScore(),
       if (gameX01.getGameSettings.getEnableCheckoutCounting &&
           playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "checkoutInPercent":
-            double.parse(checkoutQuote.substring(0, checkoutQuote.length - 1)),
+        "checkoutInPercent": checkoutQuote == "-"
+            ? 0
+            : double.parse(
+                checkoutQuote.substring(0, checkoutQuote.length - 1)),
       if (playerGameStatisticsX01.getCheckoutCount > 0)
         "checkoutDarts": playerGameStatisticsX01.getCheckoutCount,
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
@@ -93,11 +98,9 @@ class PlayerGameStatistics {
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
         "checkouts": playerGameStatisticsX01.getCheckouts,
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "bestLeg": int.parse(playerGameStatisticsX01
-            .getBestLeg(gameX01.getGameSettings.getPointsOrCustom())),
+        "bestLeg": int.parse(playerGameStatisticsX01.getBestLeg()),
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "worstLeg": int.parse((playerGameStatisticsX01
-            .getWorstLeg(gameX01.getGameSettings.getPointsOrCustom()))),
+        "worstLeg": int.parse((playerGameStatisticsX01.getWorstLeg())),
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
         "allScores": playerGameStatisticsX01.getAllScores,
       if (playerGameStatisticsX01.getAllScoresPerDart.isNotEmpty)

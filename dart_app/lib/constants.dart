@@ -236,3 +236,19 @@ const Map<int, List<String>> finishWays = {
 
 //Statistics Page
 enum FilterValue { Overall, Month, Year, Custom }
+
+//for avg, best, worst statistics (when clicking on button)
+const String BEST_AVG = 'bestAvg';
+const String WORST_AVG = 'worstAvg';
+
+const String BEST_FIRST_NINE_AVG = 'bestFirstNineAvg';
+const String WORST_FIRST_NINE_AVG = 'worstFirstNineAvg';
+
+const String BEST_CHECKOUT_QUOTE = 'bestQueckoutQuote';
+const String WORST_CHECKOUT_QUOTE = 'worstCheckoutQuote';
+
+const String BEST_CHECKOUT_SCORE = 'bestCheckoutScore';
+const String WORST_CHECKOUT_SCORE = 'worstCheckoutScore';
+
+const String BEST_DARTS_PER_LEG = 'bestDartsPerLeg';
+const String WORST_DARTS_PER_LEG = 'worstDartsPerLeg';

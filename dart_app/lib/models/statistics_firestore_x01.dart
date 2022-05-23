@@ -5,6 +5,7 @@ import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 class StatisticsFirestoreX01 with ChangeNotifier {
   num _countOfGames = 0;
@@ -61,6 +62,9 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   Map<int, int> _preciseScores = {};
   Map<String, int> _allScoresPerDartAsStringCount = {};
   List<Game> _games = [];
+
+  List<Tuple2<int?, String>> _checkoutWithGameId = [];
+  List<Tuple2<int?, String>> _thrownDartsWithGameId = [];
 
   get countOfGamesWon => this._countOfGamesWon;
 
@@ -167,6 +171,16 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
   set games(value) => this._games = value;
 
+  get checkoutWithGameId => this._checkoutWithGameId;
+
+  set checkoutWithGameId(checkoutWithGameId) =>
+      this._checkoutWithGameId = checkoutWithGameId;
+
+  get thrownDartsWithGameId => this._thrownDartsWithGameId;
+
+  set thrownDartsWithGameId(thrownDartsWithGameId) =>
+      this._thrownDartsWithGameId = thrownDartsWithGameId;
+
   loadStatistics(BuildContext context, FilterValue newFilterValue) {
     currentFilterValue = newFilterValue;
     context.read<FirestoreService>().getStatistics(context);
@@ -238,7 +252,11 @@ class StatisticsFirestoreX01 with ChangeNotifier {
     };
     _preciseScores = {};
     _allScoresPerDartAsStringCount = {};
-    _games = [];
+  }
+
+  resetOverallStats() {
+    _checkoutWithGameId = [];
+    _thrownDartsWithGameId = [];
   }
 
   resetGames() {
@@ -247,5 +265,72 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
   notify() {
     notifyListeners();
+  }
+
+  sortGames() {
+    if (games.isNotEmpty) games.sort();
+    //games = games.reversed.toList();
+  }
+
+  Game? getGameById(String gameId) {
+    Game? result;
+    for (Game game in _games) {
+      if (game.getGameId == gameId) {
+        result = game;
+      }
+    }
+    return result;
+  }
+
+  sortOverallStats(bool descending) {
+    List<int?> onlyCheckouts = [];
+    List<int?> onlyBestLegs = [];
+
+    for (Tuple2<int?, String> tuple in _checkoutWithGameId) {
+      onlyCheckouts.add(tuple.item1);
+    }
+    for (Tuple2<int?, String> tuple in _thrownDartsWithGameId) {
+      onlyBestLegs.add(tuple.item1);
+    }
+
+    if (descending) {
+      onlyCheckouts.sort((b, a) => a!.compareTo(b as num));
+      onlyBestLegs.sort((b, a) => a!.compareTo(b as num));
+    } else {
+      onlyCheckouts.sort((a, b) => a!.compareTo(b as num));
+      onlyBestLegs.sort((a, b) => a!.compareTo(b as num));
+    }
+
+    List<Tuple2<int?, String>> checkoutWithGameId = [];
+    List<Tuple2<int?, String>> thrownDartsWithGameId = [];
+    for (int? checkout in onlyCheckouts) {
+      String key = _getKeyForCheckout(checkout);
+      checkoutWithGameId.add(new Tuple2(checkout, key));
+    }
+    for (int? bestLeg in onlyBestLegs) {
+      String key = _getKeyForBestLeg(bestLeg);
+      thrownDartsWithGameId.add(new Tuple2(bestLeg, key));
+    }
+
+    _checkoutWithGameId = checkoutWithGameId;
+    _thrownDartsWithGameId = thrownDartsWithGameId;
+  }
+
+  String _getKeyForCheckout(int? checkout) {
+    for (Tuple2<int?, String> tuple in _checkoutWithGameId) {
+      if (tuple.item1 == checkout) {
+        return tuple.item2;
+      }
+    }
+    return "";
+  }
+
+  _getKeyForBestLeg(int? bestLeg) {
+    for (Tuple2<int?, String> tuple in _thrownDartsWithGameId) {
+      if (tuple.item1 == bestLeg) {
+        return tuple.item2;
+      }
+    }
+    return "";
   }
 }

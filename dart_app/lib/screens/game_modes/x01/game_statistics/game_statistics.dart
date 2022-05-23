@@ -183,7 +183,7 @@ class _GameStatisticsState extends State<GameStatistics> {
                         : RoundedScoresOdd(game: _game),
                   ),
                   Padding(
-                    padding: _padding,
+                    padding: EdgeInsets.only(left: 20),
                     child: Row(
                       children: [
                         const Text("Show Odd Rounded Scores"),

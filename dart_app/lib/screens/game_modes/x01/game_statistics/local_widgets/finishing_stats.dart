@@ -140,7 +140,7 @@ class FinishingStats extends StatelessWidget {
                   in game!.getPlayerGameStatistics)
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
-                  child: Text(stats.getBestLeg(points as num),
+                  child: Text(stats.getBestLeg(),
                       style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                 ),
             ],
@@ -166,7 +166,7 @@ class FinishingStats extends StatelessWidget {
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
-                    stats.getWorstLeg(points as num),
+                    stats.getWorstLeg(),
                     style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                   ),
                 ),
@@ -205,7 +205,7 @@ class FinishingStats extends StatelessWidget {
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
-                    stats.getDartsPerLeg(points as num),
+                    stats.getDartsPerLeg(),
                     style: new TextStyle(
                       fontSize: FONTSIZE_STATISTICS.sp,
                     ),

@@ -79,6 +79,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       []; //for reverting -> input method three darts (e.g. 20 D15, 20 10 D20, D10)
 
   PlayerGameStatisticsX01.firestore({
+    required String gameId,
     required DateTime dateTime,
     required String mode,
     required Player player,
@@ -100,7 +101,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
     required num legsWonTotal,
     required num dartsForWonLegCount,
-  }) : super(dateTime: dateTime, mode: mode, player: player) {
+  }) : super(gameId: gameId, dateTime: dateTime, mode: mode, player: player) {
     this._firstNineAverage = firstNineAvg;
     this._legsWon = legsWon;
     this._setsWon = setsWon;
@@ -127,7 +128,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
       : this._currentPoints = currentPoints,
-        super(player: player, mode: mode, dateTime: dateTime);
+        super(gameId: "", player: player, mode: mode, dateTime: dateTime);
 
   get getCurrentPoints => this._currentPoints;
   set setCurrentPoints(int currentPoints) =>
@@ -377,82 +378,40 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     return ((getLegsWon / getCheckoutCount) * 100).toStringAsFixed(2) + "%";
   }
 
-  String getBestLeg(num pointsToWinLeg) {
-    num bestLeg = 0;
-    num currentPoints = 0;
-    num countOfDarts = 0;
-    getAllScoresPerLeg.values.forEach((scores) => {
-          scores.forEach((score) => {
-                currentPoints += score,
-                countOfDarts += 3,
-              }),
-          //if leg is won by player -> otherwise best leg or worst leg should not be set
-          if (currentPoints == pointsToWinLeg)
-            {
-              if (countOfDarts < bestLeg || bestLeg == 0)
-                {
-                  bestLeg = countOfDarts,
-                }
-            },
-          currentPoints = 0,
-          countOfDarts = 0,
-        });
+  String getBestLeg() {
+    int bestLeg = -1;
 
-    if (bestLeg == 0) {
-      return "-";
-    }
+    _thrownDartsPerLeg.values.forEach((element) {
+      if (element > bestLeg) {
+        bestLeg = element;
+      }
+    });
+
     return bestLeg.toString();
   }
 
-  String getWorstLeg(num pointsToWinLeg) {
-    num worstLeg = 0;
-    num currentPoints = 0;
-    num countOfDarts = 0;
-    getAllScoresPerLeg.values.forEach((scores) => {
-          scores.forEach((score) => {
-                currentPoints += score,
-                countOfDarts += 3,
-              }),
-          //if leg is won by player -> otherwise best leg or worst leg should not be set
-          if (currentPoints == pointsToWinLeg)
-            {
-              if (countOfDarts > worstLeg)
-                {
-                  worstLeg = countOfDarts,
-                }
-            },
-          currentPoints = 0,
-          countOfDarts = 0,
-        });
-    if (worstLeg == 0) {
-      return "-";
-    }
+  String getWorstLeg() {
+    int worstLeg = -1;
+
+    _thrownDartsPerLeg.values.forEach((element) {
+      if (element < worstLeg || worstLeg == -1) {
+        worstLeg = element;
+      }
+    });
+
     return worstLeg.toString();
   }
 
-  String getDartsPerLeg(num pointsToWinLeg) {
-    num totalCountOfDarts = 0;
-    num wonLegs = 0;
-    num currentPoints = 0;
-    num currentCountOfDarts = 0;
+  String getDartsPerLeg() {
+    int dartsPerLeg = 0;
+    int games = 0;
 
-    getAllScoresPerLeg.values.forEach((scores) => {
-          scores.forEach((score) => {
-                currentPoints += score,
-                currentCountOfDarts += 3,
-              }),
-          if (currentPoints == pointsToWinLeg)
-            {
-              totalCountOfDarts += currentCountOfDarts,
-              wonLegs += 1,
-            },
-          currentPoints = 0,
-          currentCountOfDarts = 0,
-        });
-    if (wonLegs == 0) {
-      return "-";
-    }
-    return (totalCountOfDarts / wonLegs).toString();
+    _checkouts.keys.forEach((key) {
+      dartsPerLeg += _thrownDartsPerLeg[key] as int;
+      games++;
+    });
+
+    return (dartsPerLeg / games).toString();
   }
 
   Map<String, int> getPreciseScoresWithStringKey() {

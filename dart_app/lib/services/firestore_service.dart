@@ -14,6 +14,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tuple/tuple.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore;
@@ -43,6 +44,7 @@ class FirestoreService {
 
     for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
       PlayerGameStatistics playerGameStatisticsToSave = PlayerGameStatistics(
+          gameId: "",
           player: stats.getPlayer,
           mode: stats.getMode,
           dateTime: stats.getDateTime);
@@ -58,11 +60,12 @@ class FirestoreService {
               });
     }
 
-    //set playerGameStatsIds for game
+    //set playerGameStatsIds + gameId for game
     await _firestore
         .collection("users/" + _firebaseAuth.currentUser!.uid + "/games")
         .doc(gameId)
-        .update({"playerGameStatisticsIds": playerGameStatsIds});
+        .update(
+            {"playerGameStatisticsIds": playerGameStatsIds, "gameId": gameId});
   }
 
   Future<void> getStatistics(BuildContext context) async {
@@ -360,7 +363,7 @@ class FirestoreService {
     firestoreStats.notify();
   }
 
-  Future<PlayerGameStatistics?> getPlayerGameStatistic(
+  Future<PlayerGameStatistics?> getPlayerGameStatisticById(
       String playerGameStatsId, String mode) async {
     PlayerGameStatistics? result;
     CollectionReference collectionReference = _firestore.collection(
@@ -386,9 +389,7 @@ class FirestoreService {
 
     CollectionReference collectionReference = _firestore
         .collection("users/" + _firebaseAuth.currentUser!.uid + "/games");
-    Query query = collectionReference
-        .where("name", isEqualTo: mode)
-        .orderBy("dateTime", descending: true);
+    Query query = collectionReference.where("name", isEqualTo: mode);
 
     firestoreStats.resetGames();
 
@@ -396,12 +397,12 @@ class FirestoreService {
           (value) => {
             value.docs.forEach(
               (element) async {
-                Game game = Game.fromMap(element.data(), mode);
+                Game game = Game.fromMap(element.data(), mode, element.id);
 
                 for (String playerGameStatsId
                     in element.get("playerGameStatisticsIds")) {
                   PlayerGameStatistics? playerGameStatistics =
-                      await getPlayerGameStatistic(playerGameStatsId, mode);
+                      await getPlayerGameStatisticById(playerGameStatsId, mode);
 
                   game.getPlayerGameStatistics.add(playerGameStatistics);
                 }
@@ -412,5 +413,59 @@ class FirestoreService {
             ),
           },
         );
+  }
+
+  Future<void> getFilteredPlayerGameStatistics(
+      String orderField, bool ascendingOrder, BuildContext context) async {
+    final firestoreStats =
+        Provider.of<StatisticsFirestoreX01>(context, listen: false);
+    final String currentPlayerName =
+        //await context.read<AuthService>().getPlayer!.getName;
+        "Strainski";
+
+    CollectionReference collectionReference = _firestore.collection(
+        "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
+    Query query = collectionReference
+        .where("player", isEqualTo: currentPlayerName)
+        .orderBy(orderField, descending: ascendingOrder);
+
+    List<Game> temp = [];
+    firestoreStats.resetOverallStats();
+
+    await query.get().then((value) => {
+          value.docs.forEach((element) async {
+            String gameId = element.get("gameId");
+
+            //for overall values -> checkouts + thrown darts per leg
+            if (orderField == 'highestFinish' || orderField == 'bestLeg') {
+              Map<String, int> checkouts =
+                  Map<String, int>.from(element.get("checkouts"));
+              Map<String, int> thrownDartsPerLeg =
+                  Map<String, int>.from(element.get("thrownDartsPerLeg"));
+
+              checkouts.entries.forEach((element) {
+                firestoreStats.checkoutWithGameId
+                    .add(new Tuple2(element.value, gameId));
+              });
+              checkouts.entries.forEach((element) {
+                firestoreStats.thrownDartsWithGameId
+                    .add(new Tuple2(thrownDartsPerLeg[element.key], gameId));
+              });
+            }
+
+            for (Game game in firestoreStats.games) {
+              for (PlayerGameStatistics playerGameStatistics
+                  in game.getPlayerGameStatistics) {
+                if (playerGameStatistics.getGameId == gameId) {
+                  temp.add(game);
+                  break;
+                }
+              }
+            }
+          }),
+        });
+    firestoreStats.sortOverallStats(ascendingOrder);
+    firestoreStats.games = temp;
+    firestoreStats.notify();
   }
 }

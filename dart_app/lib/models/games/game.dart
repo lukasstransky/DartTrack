@@ -6,7 +6,8 @@ import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-class Game with ChangeNotifier {
+class Game with ChangeNotifier implements Comparable<Game> {
+  String? _gameId;
   String? _name; //e.g. X01 or Cricket
   DateTime _dateTime; //when game was played
   GameSettings? _gameSettings; //there are different settings for each game
@@ -20,14 +21,20 @@ class Game with ChangeNotifier {
         this._dateTime = dateTime ?? DateTime.now();
 
   //needed to save game to firestore
-  Game.firestore({String? name, DateTime? dateTime, GameSettings? gameSettings})
-      : this._name = name,
+  Game.firestore(
+      {String? gameId,
+      String? name,
+      DateTime? dateTime,
+      GameSettings? gameSettings})
+      : this._gameId = gameId,
+        this._name = name,
         this._dateTime = dateTime ?? DateTime.now(),
         this._gameSettings = gameSettings;
 
   Map<String, dynamic> toMapX01() {
     GameSettingsX01 gameSettingsX01 = _gameSettings as GameSettingsX01;
     return {
+      'gameId': _gameId,
       'name': _name,
       'dateTime': _dateTime,
       'gameSettings': {
@@ -58,7 +65,7 @@ class Game with ChangeNotifier {
     };
   }
 
-  factory Game.fromMap(map, mode) {
+  factory Game.fromMap(map, mode, gameId) {
     late GameSettings gameSettings;
     switch (mode) {
       case "X01":
@@ -67,10 +74,14 @@ class Game with ChangeNotifier {
     }
 
     return Game.firestore(
+        gameId: gameId,
         name: map['name'],
         dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
         gameSettings: gameSettings);
   }
+
+  get getGameId => this._gameId;
+  set setGameId(String? gameId) => this._gameId = gameId;
 
   get getName => this._name;
   set setName(String? name) => this._name = name;
@@ -90,6 +101,17 @@ class Game with ChangeNotifier {
   get getCurrentPlayerToThrow => this._currentPlayerToThrow;
   set setCurrentPlayerToThrow(Player? currentPlayerToThrow) =>
       this._currentPlayerToThrow = currentPlayerToThrow;
+
+  @override
+  int compareTo(Game other) {
+    if (!getDateTime.isBefore(other.getDateTime)) {
+      return -1;
+    } else if (getDateTime.isBefore(other.getDateTime)) {
+      return 1;
+    } else {
+      return 0;
+    }
+  }
 
   String getFormattedDateTime() {
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');

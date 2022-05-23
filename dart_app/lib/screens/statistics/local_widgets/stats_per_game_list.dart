@@ -32,7 +32,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
             <String, dynamic>{})
         as Map; //extract arguments that are passed into in order to get game mode (X01, Cricket...)
     _mode = arguments.entries.first.value.toString();
-    context.read<FirestoreService>().getGames(_mode, context);
+    await context.read<FirestoreService>().getGames(_mode, context);
   }
 
   @override
@@ -57,6 +57,10 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                         child:
                             Text("(Click Card to view Details about a Game)")),
                   ),
+                  if (statisticsFirestore.games.isNotEmpty)
+                    statisticsFirestore.sortGames() == null
+                        ? SizedBox.shrink()
+                        : SizedBox.shrink(),
                   for (Game game in statisticsFirestore.games) ...[
                     if (_mode == "X01")
                       StatsCardX01(isFinishScreen: false, game: game),

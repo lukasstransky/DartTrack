@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -66,6 +67,12 @@ class _FilterBarState extends State<FilterBar> {
                       child: const Text("Overall"),
                     ),
                     style: ButtonStyle(
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor: Utils.getColor(
+                        Theme.of(context).colorScheme.primary,
+                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
+                      ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
@@ -94,6 +101,12 @@ class _FilterBarState extends State<FilterBar> {
                       child: const Text("Last Month"),
                     ),
                     style: ButtonStyle(
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor: Utils.getColor(
+                        Theme.of(context).colorScheme.primary,
+                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
+                      ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
@@ -121,6 +134,12 @@ class _FilterBarState extends State<FilterBar> {
                       child: const Text("Last Year"),
                     ),
                     style: ButtonStyle(
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor: Utils.getColor(
+                        Theme.of(context).colorScheme.primary,
+                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
+                      ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(
@@ -158,6 +177,12 @@ class _FilterBarState extends State<FilterBar> {
                       ),
                     ),
                     style: ButtonStyle(
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor: Utils.getColor(
+                        Theme.of(context).colorScheme.primary,
+                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
+                      ),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(

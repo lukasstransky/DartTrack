@@ -55,7 +55,7 @@ class PlayerEntry extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(left: 15),
                   child: Container(
-                    width: 35.w,
+                    width: 40.w,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -75,7 +75,7 @@ class PlayerEntry extends StatelessWidget {
                             style: TextStyle(fontSize: 12.sp)),
                         if (game.getGameSettings.getEnableCheckoutCounting)
                           Text(
-                              "Checkout %: " +
+                              "Checkout: " +
                                   game.getPlayerGameStatistics[i]
                                       .getCheckoutQuoteInPercent()
                                       .toString(),

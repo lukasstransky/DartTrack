@@ -29,7 +29,7 @@ class Checkouts extends StatelessWidget {
           ),
         ),
         for (String setLegString
-            in game!.getPlayerGameStatistics[0].getThrownDartsPerLeg.keys)
+            in game!.getPlayerGameStatistics[0].getAllScoresPerLeg.keys)
           Padding(
             padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
             child: Row(

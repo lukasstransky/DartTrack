@@ -19,7 +19,31 @@ class MostFrequentScores extends StatefulWidget {
 }
 
 class _MostFrequentScoresState extends State<MostFrequentScores> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    for (PlayerGameStatisticsX01 stats
+        in widget.game!.getPlayerGameStatistics) {
+      Utils.sortMapIntInt(stats.getPreciseScores);
+      Utils.sortMapStringInt(stats.getAllScoresPerDartAsStringCount);
+    }
+  }
+
   bool _showFirst10 = false;
+
+  bool moreThanFiveScores() {
+    for (PlayerGameStatisticsX01 stats
+        in widget.game!.getPlayerGameStatistics) {
+      if (widget.mostScoresPerDart &&
+          stats.getAllScoresPerDartAsStringCount.length > 5) {
+        return true;
+      }
+      if (!widget.mostScoresPerDart && stats.getPreciseScores.length > 5) {
+        return true;
+      }
+    }
+    return false;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,25 +107,29 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                                       alignment: Alignment.centerRight,
                                       child: Text(
                                           (widget.mostScoresPerDart
-                                                  ? Utils.sortMapStringInt(stats
-                                                          .getAllScoresPerDartAsStringCount)
+                                                  ? Utils.sortMapStringIntByKey(
+                                                          stats
+                                                              .getAllScoresPerDartAsStringCount)
                                                       .keys
                                                       .elementAt(i)
                                                       .toString()
-                                                  : Utils.sortMapIntInt(stats
-                                                          .getPreciseScores)
+                                                  : Utils.sortMapIntIntByKey(
+                                                          stats
+                                                              .getPreciseScores)
                                                       .keys
                                                       .elementAt(i)
                                                       .toString()) +
                                               " (" +
                                               (widget.mostScoresPerDart
-                                                  ? Utils.sortMapStringInt(stats
-                                                          .getAllScoresPerDartAsStringCount)
+                                                  ? Utils.sortMapStringIntByKey(
+                                                          stats
+                                                              .getAllScoresPerDartAsStringCount)
                                                       .values
                                                       .elementAt(i)
                                                       .toString()
-                                                  : Utils.sortMapIntInt(stats
-                                                          .getPreciseScores)
+                                                  : Utils.sortMapIntIntByKey(
+                                                          stats
+                                                              .getPreciseScores)
                                                       .values
                                                       .elementAt(i)
                                                       .toString()) +
@@ -126,27 +154,28 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
             ],
           ),
         ),
-        Container(
-          width: 100.w,
-          transform: Matrix4.translationValues(-5.w, 0.0, 0.0),
-          child: Center(
-            child: TextButton.icon(
-              onPressed: () {
-                setState(() {
-                  _showFirst10 = !_showFirst10;
-                });
-              },
-              icon: Icon(
-                _showFirst10 ? Icons.expand_less : Icons.expand_more,
-                color: Colors.black,
-              ),
-              label: const Text(
-                "Show More",
-                style: TextStyle(color: Colors.black),
+        if (moreThanFiveScores())
+          Container(
+            width: 100.w,
+            transform: Matrix4.translationValues(-5.w, 0.0, 0.0),
+            child: Center(
+              child: TextButton.icon(
+                onPressed: () {
+                  setState(() {
+                    _showFirst10 = !_showFirst10;
+                  });
+                },
+                icon: Icon(
+                  _showFirst10 ? Icons.expand_less : Icons.expand_more,
+                  color: Colors.black,
+                ),
+                label: Text(
+                  _showFirst10 ? "Show Less" : "Show More",
+                  style: TextStyle(color: Colors.black),
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
