@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
+import 'package:dart_app/services/auth_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,6 +11,48 @@ import 'package:sizer/sizer.dart';
 
 class StartGameBtn extends StatelessWidget {
   const StartGameBtn({Key? key}) : super(key: key);
+
+  void _showDialogNoUserInPlayerWarning(
+      BuildContext context, GameSettingsX01 gameSettingsX01) {
+    String currentUserName = context.read<AuthService>().getPlayer!.getName;
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Game will not be stored for Statistics!"),
+        content: RichText(
+          text: TextSpan(
+            text: 'No player with the current username ',
+            style: DefaultTextStyle.of(context).style,
+            children: <TextSpan>[
+              TextSpan(
+                  text: '\'$currentUserName\'',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text: ' is present, therefore the game will not be stored.'),
+              TextSpan(
+                  text:
+                      '\n\n(In order to store the game, change the name of one player to \'$currentUserName\')'),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () => {
+              Navigator.of(context).pop(),
+              _showDialogForBeginner(context, gameSettingsX01),
+            },
+            child: const Text("Continue anyways"),
+          ),
+        ],
+      ),
+    );
+  }
 
   void _showDialogForBeginner(
       BuildContext context, GameSettingsX01 gameSettingsX01) {
@@ -73,6 +116,7 @@ class StartGameBtn extends StatelessWidget {
             child: const Text("Cancel"),
           ),
           TextButton(
+            key: Key("startGameDialogBtn"),
             onPressed: () => {
               if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single)
                 {
@@ -103,6 +147,7 @@ class StartGameBtn extends StatelessWidget {
           width: 60.w,
           height: 5.h,
           child: TextButton(
+            key: Key("startGameBtn"),
             child: const Text(
               "Start Game",
               style: TextStyle(color: Colors.white),
@@ -126,7 +171,16 @@ class StartGameBtn extends StatelessWidget {
                 }
               else
                 {
+                  //todo comment out
+                  /*if (!gameSettingsX01.isCurrentUserInPlayers(context))
+                    {
+                      _showDialogNoUserInPlayerWarning(
+                          context, gameSettingsX01),
+                    }
+                  else
+                    {*/
                   _showDialogForBeginner(context, gameSettingsX01),
+                  //}
                 }
             },
           ),

@@ -75,11 +75,15 @@ class _GameSettingsState extends State<GameSettings> {
         await context.read<AuthService>().getPlayer;
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
+    //reset all values to default (player starts new game -> in order to not have the settings from the previous game saved)
+    gameSettingsX01.resetValues();
 
     //check if user already inserted -> in case of switching between othe screen -> would get inserted 2 times (method gets called in initstate)
     if (currentUserAsPlayer != null &&
-        !gameSettingsX01.checkIfPlayerAlreadyInserted(currentUserAsPlayer))
-      gameSettingsX01.addPlayer(currentUserAsPlayer);
+        !gameSettingsX01.checkIfPlayerAlreadyInserted(currentUserAsPlayer)) {
+      Player toAdd = new Player(name: currentUserAsPlayer.getName);
+      gameSettingsX01.addPlayer(toAdd);
+    }
   }
 
   void _showDialogForAddingPlayer(GameSettingsX01 gameSettingsX01) {
@@ -144,6 +148,7 @@ class _GameSettingsState extends State<GameSettings> {
                       ],
                     ),
                   ListTile(
+                    key: Key("guestPlayerRadioBtn"),
                     title: const Text("Guest"),
                     leading: Radio<NewPlayer>(
                       value: NewPlayer.Guest,
@@ -160,6 +165,7 @@ class _GameSettingsState extends State<GameSettings> {
                   ),
                   if (_newPlayer == NewPlayer.Guest)
                     TextFormField(
+                      key: Key("playerNameInput"),
                       controller: _newPlayerController,
                       textInputAction: TextInputAction.done,
                       validator: (value) {
@@ -206,6 +212,7 @@ class _GameSettingsState extends State<GameSettings> {
               child: const Text("Cancel"),
             ),
             TextButton(
+              key: Key("submitPlayerBtn"),
               onPressed: () => _submitNewPlayer(gameSettingsX01),
               child: const Text("Submit"),
             ),
@@ -486,6 +493,7 @@ class _GameSettingsState extends State<GameSettings> {
                   selector: (_, gameSettingsX01) => gameSettingsX01.getPlayers,
                   builder: (_, players, __) => players.length < MAX_PLAYERS
                       ? FloatingActionButton(
+                          key: Key("addPlayerBtn"),
                           onPressed: () => {
                             if (gameSettingsX01.getSingleOrTeam ==
                                     SingleOrTeamEnum.Single ||
@@ -523,9 +531,9 @@ class _GameSettingsState extends State<GameSettings> {
                     margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
                     child: Row(
                       children: [
-                        Points(points: 301),
-                        Points(points: 501),
-                        Points(points: 701),
+                        Points(points: 301, key: Key("points301Btn")),
+                        Points(points: 501, key: Key("points501Btn")),
+                        Points(points: 701, key: Key("points701Btn")),
                         CustomPoints(),
                       ],
                     ),

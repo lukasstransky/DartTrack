@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class FullStats extends StatefulWidget {
-  const FullStats({Key? key}) : super(key: key);
+class MoreStats extends StatefulWidget {
+  const MoreStats({Key? key}) : super(key: key);
 
   @override
-  State<FullStats> createState() => _FullStatsState();
+  State<MoreStats> createState() => _MoreStatsState();
 }
 
-class _FullStatsState extends State<FullStats> {
+class _MoreStatsState extends State<MoreStats> {
   bool _showAllScoesPerDartWithCount = false;
   bool _roundedScoresOdd = false;
 
@@ -117,20 +117,23 @@ class _FullStatsState extends State<FullStats> {
                                                 .toString(),
                                         style: TextStyle(
                                             fontSize: 12.sp,
-                                            fontWeight: (!_roundedScoresOdd
-                                                        ? statisticsFirestore
-                                                                .roundedScoresEven[
-                                                            i]
-                                                        : statisticsFirestore
-                                                                .roundedScoresOdd[
-                                                            i]) ==
+                                            fontWeight: statisticsFirestore
+                                                            .countOfGames >
+                                                        0 &&
                                                     (!_roundedScoresOdd
-                                                        ? Utils.getMostOccurringValue(
-                                                            statisticsFirestore
-                                                                .roundedScoresEven)
-                                                        : Utils.getMostOccurringValue(
-                                                            statisticsFirestore
-                                                                .roundedScoresOdd))
+                                                            ? statisticsFirestore
+                                                                    .roundedScoresEven[
+                                                                i]
+                                                            : statisticsFirestore
+                                                                    .roundedScoresOdd[
+                                                                i]) ==
+                                                        (!_roundedScoresOdd
+                                                            ? Utils.getMostOccurringValue(
+                                                                statisticsFirestore
+                                                                    .roundedScoresEven)
+                                                            : Utils.getMostOccurringValue(
+                                                                statisticsFirestore
+                                                                    .roundedScoresOdd))
                                                 ? FontWeight.bold
                                                 : FontWeight.normal),
                                       ),

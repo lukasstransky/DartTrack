@@ -64,9 +64,10 @@ class RoundedScoresOdd extends StatelessWidget {
                           child: Text(stats.getRoundedScoresOdd[i].toString(),
                               style: TextStyle(
                                   fontSize: FONTSIZE_STATISTICS.sp,
-                                  fontWeight: Utils.getMostOccurringValue(
-                                              stats.getRoundedScoresOdd) ==
-                                          stats.getRoundedScoresOdd[i]
+                                  fontWeight: stats.getHighestScore() >= 10 &&
+                                          Utils.getMostOccurringValue(
+                                                  stats.getRoundedScoresOdd) ==
+                                              stats.getRoundedScoresOdd[i]
                                       ? FontWeight.bold
                                       : FontWeight.normal)),
                         ),

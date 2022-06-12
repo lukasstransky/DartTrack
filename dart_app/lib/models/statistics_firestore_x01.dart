@@ -11,6 +11,8 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   num _countOfGames = 0;
   num _countOfGamesWon = 0;
 
+  bool _avgBestWorstStatsLoaded = false;
+
   num _avg = 0;
   num _bestAvg = -1;
   num _worstAvg = -1;
@@ -62,6 +64,8 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   Map<int, int> _preciseScores = {};
   Map<String, int> _allScoresPerDartAsStringCount = {};
   List<Game> _games = [];
+  List<Game> _filteredGames = [];
+  bool _noGamesPlayed = false;
 
   List<Tuple2<int?, String>> _checkoutWithGameId = [];
   List<Tuple2<int?, String>> _thrownDartsWithGameId = [];
@@ -73,6 +77,10 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   get countOfGames => this._countOfGames;
 
   set countOfGames(value) => this._countOfGames = value;
+
+  get avgBestWorstStatsLoaded => this._avgBestWorstStatsLoaded;
+
+  set avgBestWorstStatsLoaded(value) => this._avgBestWorstStatsLoaded = value;
 
   get avg => this._avg;
 
@@ -171,6 +179,14 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
   set games(value) => this._games = value;
 
+  get filteredGames => this._filteredGames;
+
+  set filteredGames(value) => this._filteredGames = value;
+
+  get noGamesPlayed => this._noGamesPlayed;
+
+  set noGamesPlayed(value) => this._noGamesPlayed = value;
+
   get checkoutWithGameId => this._checkoutWithGameId;
 
   set checkoutWithGameId(checkoutWithGameId) =>
@@ -181,9 +197,9 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   set thrownDartsWithGameId(thrownDartsWithGameId) =>
       this._thrownDartsWithGameId = thrownDartsWithGameId;
 
-  loadStatistics(BuildContext context, FilterValue newFilterValue) {
+  loadStatistics(BuildContext context, FilterValue newFilterValue) async {
     currentFilterValue = newFilterValue;
-    context.read<FirestoreService>().getStatistics(context);
+    await context.read<FirestoreService>().getStatistics(context);
   }
 
   DateTime getDateTimeFromCurrentFilterValue() {
@@ -220,6 +236,8 @@ class StatisticsFirestoreX01 with ChangeNotifier {
     _countOfGames = 0;
     _countOfGamesWon = 0;
 
+    _avgBestWorstStatsLoaded = false;
+
     _avg = 0;
     _bestAvg = -1;
     _worstAvg = -1;
@@ -234,6 +252,7 @@ class StatisticsFirestoreX01 with ChangeNotifier {
     _dartsPerLegAvg = 0;
     _bestLeg = -1;
     _worstLeg = -1;
+    _checkoutScoreAvg = 0;
 
     _countOf180 = 0;
     _countOfAllDarts = 0;
@@ -250,6 +269,17 @@ class StatisticsFirestoreX01 with ChangeNotifier {
       160: 0,
       180: 0
     };
+    _roundedScoresOdd = {
+      10: 0,
+      30: 0,
+      50: 0,
+      70: 0,
+      90: 0,
+      110: 0,
+      130: 0,
+      150: 0,
+      170: 0
+    };
     _preciseScores = {};
     _allScoresPerDartAsStringCount = {};
   }
@@ -261,6 +291,10 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
   resetGames() {
     _games = [];
+  }
+
+  resetFilteredGames() {
+    _filteredGames = [];
   }
 
   notify() {

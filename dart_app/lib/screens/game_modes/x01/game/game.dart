@@ -28,6 +28,7 @@ class GameState extends State<Game> {
     Provider.of<GameX01>(context, listen: false)
         .init(Provider.of<GameSettingsX01>(context, listen: false));
     super.initState();
+    newItemScrollController();
   }
 
   /*_showDialogForSuddenDeath() {

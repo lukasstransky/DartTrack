@@ -1,3 +1,4 @@
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
@@ -11,12 +12,17 @@ class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
   final String title;
 
   saveDataToFirestore(BuildContext context) async {
+    final gameSettingsX01 =
+        Provider.of<GameSettingsX01>(context, listen: false);
+    //todo comment out
+    //if (gameSettingsX01.isCurrentUserInPlayers(context)) {
     String gameId = "";
     gameId = await context
         .read<FirestoreService>()
         .postGame(Provider.of<GameX01>(context, listen: false));
     await context.read<FirestoreService>().postPlayerGameStatistics(
         Provider.of<GameX01>(context, listen: false), gameId, context);
+    //}
   }
 
   @override

@@ -116,7 +116,10 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
     return Scaffold(
       appBar: CustomAppBar(true, this.getAppBarTitle()),
       body: Consumer<StatisticsFirestoreX01>(
-          builder: (_, statisticsFirestore, __) => SingleChildScrollView(
+        builder: (_, statisticsFirestore, __) => statisticsFirestore
+                    .filteredGames.length >
+                0
+            ? SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Center(
                   child: Container(
@@ -259,7 +262,11 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                     ),
                   ),
                 ),
-              )),
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
+      ),
     );
   }
 }

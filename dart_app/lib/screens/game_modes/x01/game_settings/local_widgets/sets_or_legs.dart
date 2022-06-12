@@ -96,6 +96,7 @@ class SetsOrLegs extends StatelessWidget {
                 child: SizedBox(
                   height: HEIGHT_GAMESETTINGS_WIDGETS.h,
                   child: ElevatedButton(
+                    key: Key("setsBtn"),
                     onPressed: () => gameSettingsX01.setsClicked(),
                     child: FittedBox(
                       fit: BoxFit.fitWidth,
@@ -136,6 +137,7 @@ class SetsOrLegs extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         IconButton(
+                          key: Key("legsRemoveBtn"),
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {

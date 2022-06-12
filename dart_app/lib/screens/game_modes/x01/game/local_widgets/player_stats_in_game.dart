@@ -82,27 +82,59 @@ class PlayerStatsInGame extends StatelessWidget {
                       if (gameSettingsX01.getPlayers.length == 2)
                         Row(
                           children: [
-                            Chip(
-                              backgroundColor:
-                                  Theme.of(context).colorScheme.primary,
-                              label: Text(
-                                'Sets: ' +
-                                    playerGameStatisticsX01!.getSetsWon
-                                        .toString(),
-                                style: TextStyle(color: Colors.white),
+                            SizedBox(
+                              height: 4.h,
+                              child: ElevatedButton(
+                                onPressed: () => null,
+                                child: FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: Text(
+                                      'Sets: ' +
+                                          playerGameStatisticsX01!.getSetsWon
+                                              .toString(),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10.sp)),
+                                ),
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(20.0),
+                                      ),
+                                    ),
+                                  ),
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context).colorScheme.primary),
+                                ),
                               ),
                             ),
                             Container(
                               padding: const EdgeInsets.only(left: 5),
-                              child: Chip(
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                label: FittedBox(
-                                  child: Text(
-                                    'Legs: ' +
-                                        playerGameStatisticsX01!.getLegsWon
-                                            .toString(),
-                                    style: TextStyle(color: Colors.white),
+                              child: SizedBox(
+                                height: 4.h,
+                                child: ElevatedButton(
+                                  onPressed: () => null,
+                                  child: FittedBox(
+                                    fit: BoxFit.fitWidth,
+                                    child: Text(
+                                        'Legs: ' +
+                                            playerGameStatisticsX01!.getLegsWon
+                                                .toString(),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 10.sp)),
+                                  ),
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20.0),
+                                        ),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Theme.of(context).colorScheme.primary),
                                   ),
                                 ),
                               ),
@@ -112,18 +144,32 @@ class PlayerStatsInGame extends StatelessWidget {
                       else
                         SizedBox(
                           width: 28.w,
-                          child: Chip(
-                            backgroundColor:
-                                Theme.of(context).colorScheme.primary,
-                            label: FittedBox(
-                              child: Text(
-                                'Sets: ' +
-                                    playerGameStatisticsX01!.getSetsWon
-                                        .toString() +
-                                    ' Legs: ' +
-                                    playerGameStatisticsX01!.getLegsWon
-                                        .toString(),
-                                style: TextStyle(color: Colors.white),
+                          child: SizedBox(
+                            height: 4.h,
+                            child: ElevatedButton(
+                              onPressed: () => null,
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                    'Sets: ' +
+                                        playerGameStatisticsX01!.getSetsWon
+                                            .toString() +
+                                        ' Legs: ' +
+                                        playerGameStatisticsX01!.getLegsWon
+                                            .toString(),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 10.sp)),
+                              ),
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(20.0),
+                                    ),
+                                  ),
+                                ),
+                                backgroundColor: MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary),
                               ),
                             ),
                           ),
@@ -131,51 +177,84 @@ class PlayerStatsInGame extends StatelessWidget {
                     ],
                   )
                 else
-                  Chip(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    label: Text(
-                      'Legs: ' + playerGameStatisticsX01!.getLegsWon.toString(),
-                      style: TextStyle(color: Colors.white),
+                  SizedBox(
+                    height: 4.h,
+                    child: ElevatedButton(
+                      onPressed: () => null,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                            'Legs: ' +
+                                playerGameStatisticsX01!.getLegsWon.toString(),
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 10.sp)),
+                      ),
+                      style: ButtonStyle(
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(20.0),
+                            ),
+                          ),
+                        ),
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary),
+                      ),
                     ),
                   ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (gameSettingsX01.getShowAverage)
-                      Text(
-                        "Average: " +
-                            playerGameStatisticsX01!
-                                .getAverage(gameX01, playerGameStatisticsX01!),
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                        ),
-                      ),
-                    if (gameSettingsX01.getShowLastThrow)
-                      Text(
-                        "Last Throw: " +
-                            playerGameStatisticsX01!.getLastThrow(),
-                        style: TextStyle(
-                          fontSize: 13.sp,
-                        ),
-                      ),
-                    if (gameSettingsX01.getShowThrownDartsPerLeg)
-                      playerGameStatisticsX01!.getCurrentThrownDartsInLeg != 0
-                          ? Text(
-                              "Thrown Darts: " +
-                                  playerGameStatisticsX01!
-                                      .getCurrentThrownDartsInLeg
-                                      .toString(),
-                              style: TextStyle(
-                                fontSize: 13.sp,
-                              ),
-                            )
-                          : Text(
-                              "Thrown Darts: -",
-                              style: TextStyle(
-                                fontSize: 13.sp,
-                              ),
+                Padding(
+                  padding: EdgeInsets.only(top: 5),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (gameSettingsX01.getShowAverage)
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            "Average: " +
+                                playerGameStatisticsX01!.getAverage(
+                                    gameX01, playerGameStatisticsX01!),
+                            style: TextStyle(
+                              fontSize: 13.sp,
                             ),
-                  ],
+                          ),
+                        ),
+                      if (gameSettingsX01.getShowLastThrow)
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            "Last Throw: " +
+                                playerGameStatisticsX01!.getLastThrow(),
+                            style: TextStyle(
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                        ),
+                      if (gameSettingsX01.getShowThrownDartsPerLeg)
+                        playerGameStatisticsX01!.getCurrentThrownDartsInLeg != 0
+                            ? FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Thrown Darts: " +
+                                      playerGameStatisticsX01!
+                                          .getCurrentThrownDartsInLeg
+                                          .toString(),
+                                  style: TextStyle(
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                              )
+                            : FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Text(
+                                  "Thrown Darts: -",
+                                  style: TextStyle(
+                                    fontSize: 13.sp,
+                                  ),
+                                ),
+                              ),
+                    ],
+                  ),
                 ),
               ],
             ),

@@ -209,13 +209,18 @@ class GameX01 extends Game {
 
   //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
   bool checkIfPointBtnShouldBeDisabled(String btnValueToCheck) {
-    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
+    //todo weird bug -> if solves it -> maybe have a look on it (starting game -> end it with cross -> click any button)
+    if (getPlayerGameStatistics.isNotEmpty) {
+      PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
 
-    if (getGameSettings.getInputMethod == InputMethod.Round) {
-      return checkIfPointBtnShouldBeDisabledRound(btnValueToCheck, stats);
-    } else {
-      return checkIfPointBtnShouldBeDisabledThreeDarts(btnValueToCheck, stats);
+      if (getGameSettings.getInputMethod == InputMethod.Round) {
+        return checkIfPointBtnShouldBeDisabledRound(btnValueToCheck, stats);
+      } else {
+        return checkIfPointBtnShouldBeDisabledThreeDarts(
+            btnValueToCheck, stats);
+      }
     }
+    return true;
   }
 
   void updateCurrentPointsSelected(String newPoints) {

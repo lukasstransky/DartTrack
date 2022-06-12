@@ -17,6 +17,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
       body: Center(
         child: ElevatedButton(
           child: Text("X01"),
+          key: Key("x01GameBtn"),
           onPressed: () => Navigator.of(context).pushNamed("/settingsX01"),
         ),
       ),

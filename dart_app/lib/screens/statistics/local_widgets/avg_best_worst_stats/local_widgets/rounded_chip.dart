@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class RoundedChip extends StatelessWidget {
-  const RoundedChip({Key? key, required this.value, required this.type})
-      : super(key: key);
+  const RoundedChip({
+    Key? key,
+    required this.value,
+    required this.type,
+  }) : super(key: key);
 
   final String value;
   final String type;

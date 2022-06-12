@@ -55,6 +55,7 @@ class BestOfOrFirstTo extends StatelessWidget {
                 child: SizedBox(
                   height: HEIGHT_GAMESETTINGS_WIDGETS.h,
                   child: ElevatedButton(
+                    key: Key("firstToBtn"),
                     onPressed: () => mode == BestOfOrFirstToEnum.BestOf
                         ? gameSettingsX01.switchBestOfOrFirstTo()
                         : null,

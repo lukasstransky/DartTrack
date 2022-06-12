@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
@@ -36,6 +34,18 @@ class FirestoreService {
               gameId = value.id,
             });
     return gameId;
+  }
+
+  Future<void> postOpenGame(GameX01 gameX01) async {
+    Game gameToSave = Game.firestore(
+        name: gameX01.getName,
+        dateTime: gameX01.getDateTime,
+        gameSettings: gameX01.getGameSettings,
+        playerGameStatistics: gameX01.getPlayerGameStatistics);
+
+    await _firestore
+        .collection("users/" + _firebaseAuth.currentUser!.uid + "/openGames")
+        .add(gameToSave.toMapX01());
   }
 
   Future<void> postPlayerGameStatistics(
@@ -360,6 +370,7 @@ class FirestoreService {
                     firestoreStats.allScoresPerDartAsStringCount),
           },
         );
+    firestoreStats.avgBestWorstStatsLoaded = true;
     firestoreStats.notify();
   }
 
@@ -378,7 +389,7 @@ class FirestoreService {
     return result;
   }
 
-  Future<void> getGames(String mode, BuildContext context) async {
+  Future<bool> getGames(String mode, BuildContext context) async {
     late dynamic firestoreStats;
     switch (mode) {
       case "X01":
@@ -393,26 +404,27 @@ class FirestoreService {
 
     firestoreStats.resetGames();
 
-    await query.get().then(
-          (value) => {
-            value.docs.forEach(
-              (element) async {
-                Game game = Game.fromMap(element.data(), mode, element.id);
+    QuerySnapshot<Object?> test = await query.get();
+    if (test.docs.isEmpty) {
+      firestoreStats.noGamesPlayed = true;
+    } else {
+      firestoreStats.noGamesPlayed = false;
+    }
+    test.docs.forEach((element) async {
+      Game game = Game.fromMap(element.data(), mode, element.id);
 
-                for (String playerGameStatsId
-                    in element.get("playerGameStatisticsIds")) {
-                  PlayerGameStatistics? playerGameStatistics =
-                      await getPlayerGameStatisticById(playerGameStatsId, mode);
+      for (String playerGameStatsId in element.get("playerGameStatisticsIds")) {
+        PlayerGameStatistics? playerGameStatistics =
+            await getPlayerGameStatisticById(playerGameStatsId, mode);
 
-                  game.getPlayerGameStatistics.add(playerGameStatistics);
-                }
+        game.getPlayerGameStatistics.add(playerGameStatistics);
+      }
 
-                firestoreStats.games.add(game);
-                firestoreStats.notify();
-              },
-            ),
-          },
-        );
+      firestoreStats.games.add(game);
+      firestoreStats.notify();
+    });
+
+    return true;
   }
 
   Future<void> getFilteredPlayerGameStatistics(
@@ -431,6 +443,7 @@ class FirestoreService {
 
     List<Game> temp = [];
     firestoreStats.resetOverallStats();
+    firestoreStats.resetFilteredGames();
 
     await query.get().then((value) => {
           value.docs.forEach((element) async {
@@ -465,7 +478,7 @@ class FirestoreService {
           }),
         });
     firestoreStats.sortOverallStats(ascendingOrder);
-    firestoreStats.games = temp;
+    firestoreStats.filteredGames = temp;
     firestoreStats.notify();
   }
 }

@@ -7,6 +7,10 @@ import 'package:dart_app/models/team.dart';
 
 import 'dart:developer';
 
+import 'package:dart_app/services/auth_service.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 class GameSettingsX01 extends GameSettings {
   SingleOrTeamEnum _singleOrTeam = SingleOrTeamEnum.Single;
   List<Team> _teams = []; //todo
@@ -15,7 +19,7 @@ class GameSettingsX01 extends GameSettings {
   int _points = 301;
   int _customPoints = -1;
   int _legs = 1;
-  int _sets = 3;
+  int _sets = 5;
   bool _setsEnabled = false;
   SingleOrDouble _modeIn = SingleOrDouble.SingleField;
   SingleOrDouble _modeOut = SingleOrDouble.DoubleField;
@@ -57,6 +61,7 @@ class GameSettingsX01 extends GameSettings {
     this._points = points;
     this._singleOrTeam = singleOrTeam;
     this._winByTwoLegsDifference = winByTwoLegsDifference;
+    this._setsEnabled = setsEnabled;
   }
 
   get getSingleOrTeam => this._singleOrTeam;
@@ -66,6 +71,7 @@ class GameSettingsX01 extends GameSettings {
   get getTeams => this._teams;
 
   get getPlayers => this._players;
+  set setPlayers(List<Player> value) => this._players = value;
 
   get getMode => this._mode;
   set setMode(BestOfOrFirstToEnum mode) => this._mode = mode;
@@ -248,11 +254,8 @@ class GameSettingsX01 extends GameSettings {
       setSets = 5;
       setLegs = 3;
     }
-    if (_setsEnabled == false) {
-      setSetsEnabled = true;
-    } else {
-      setSetsEnabled = false;
-    }
+
+    setSetsEnabled = !_setsEnabled;
     notifyListeners();
   }
 
@@ -575,5 +578,43 @@ class GameSettingsX01 extends GameSettings {
       result += " / SD - after " + getMaxExtraLegs.toString() + " Legs";
 
     return result;
+  }
+
+  void resetValues() {
+    _singleOrTeam = SingleOrTeamEnum.Single;
+    _teams = [];
+    _players = [];
+    _mode = BestOfOrFirstToEnum.FirstTo;
+    _points = 301;
+    _customPoints = -1;
+    _legs = 1;
+    _sets = 5;
+    _setsEnabled = false;
+    _modeIn = SingleOrDouble.SingleField;
+    _modeOut = SingleOrDouble.DoubleField;
+    _winByTwoLegsDifference = false;
+    _suddenDeath = false;
+    _maxExtraLegs = 2;
+    _enableCheckoutCounting = false;
+    _checkoutCountingFinallyDisabled = false;
+    _showAverage = true;
+    _showFinishWays = true;
+    _showThrownDartsPerLeg = true;
+    _showLastThrow = true;
+    _callerEnabled = false;
+    _vibrationFeedbackEnabled = false;
+    _automaticallySubmitPoints = true;
+    _showMostScoredPoints = false;
+    _inputMethod = InputMethod.Round;
+    _showInputMethodInGameScreen = false;
+  }
+
+  bool isCurrentUserInPlayers(BuildContext context) {
+    for (Player player in getPlayers) {
+      if (player.getName == context.read<AuthService>().getPlayer!.getName) {
+        return true;
+      }
+    }
+    return false;
   }
 }

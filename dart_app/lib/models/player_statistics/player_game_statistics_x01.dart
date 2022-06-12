@@ -379,6 +379,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }
 
   String getBestLeg() {
+    if (getLegsWonTotal == 0) {
+      return "-";
+    }
     int bestLeg = -1;
 
     _thrownDartsPerLeg.values.forEach((element) {
@@ -391,6 +394,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }
 
   String getWorstLeg() {
+    if (getLegsWonTotal == 0) {
+      return "-";
+    }
     int worstLeg = -1;
 
     _thrownDartsPerLeg.values.forEach((element) {
@@ -403,6 +409,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }
 
   String getDartsPerLeg() {
+    if (getLegsWonTotal == 0) {
+      return "-";
+    }
+
     int dartsPerLeg = 0;
     int games = 0;
 

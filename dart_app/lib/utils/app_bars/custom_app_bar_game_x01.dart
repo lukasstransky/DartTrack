@@ -12,6 +12,47 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
 
+    void _resetValuesAndNavigateToSettings() {
+      gameX01.reset();
+      gameSettingsX01.resetValues();
+      gameSettingsX01.notify();
+      Navigator.of(context).pushNamed("/settingsX01");
+    }
+
+    void _showDialogForSavingGame(BuildContext context) {
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text("End Game"),
+          content: const Text(
+              "Would you like to save the game for finishing it at a later time or cancel it completely?"),
+          actions: [
+            TextButton(
+              onPressed: () => {
+                Navigator.of(context).pop(),
+              },
+              child: const Text("Continue"),
+            ),
+            TextButton(
+              onPressed: () => {
+                Navigator.of(context).pop(),
+                _resetValuesAndNavigateToSettings(),
+              },
+              child: const Text("Save"),
+            ),
+            TextButton(
+              onPressed: () => {
+                Navigator.of(context).pop(),
+                _resetValuesAndNavigateToSettings(),
+              },
+              child: const Text("End"),
+            ),
+          ],
+        ),
+      );
+    }
+
     return AppBar(
       centerTitle: true,
       title: Column(
@@ -32,8 +73,7 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
         children: [
           IconButton(
             onPressed: () {
-              gameX01.reset();
-              Navigator.of(context).pushNamed("/settingsX01");
+              _showDialogForSavingGame(context);
             },
             icon: Icon(Icons.close_sharp),
           )

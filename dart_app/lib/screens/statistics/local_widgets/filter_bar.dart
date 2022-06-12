@@ -1,10 +1,10 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/statistics_firestore_x01.dart';
-import 'package:dart_app/services/firestore_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class FilterBar extends StatefulWidget {
@@ -34,12 +34,6 @@ class _FilterBarState extends State<FilterBar> {
   }
 
   @override
-  void initState() {
-    context.read<FirestoreService>().getStatistics(context);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final statisticsFirestore =
         Provider.of<StatisticsFirestoreX01>(context, listen: false);
@@ -62,8 +56,11 @@ class _FilterBarState extends State<FilterBar> {
                           context, FilterValue.Overall),
                     },
                     child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: const Text("Overall"),
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "Overall",
+                        style: TextStyle(fontSize: 9.sp),
+                      ),
                     ),
                     style: ButtonStyle(
                       shadowColor:
@@ -96,8 +93,11 @@ class _FilterBarState extends State<FilterBar> {
                           context, FilterValue.Month),
                     },
                     child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: const Text("Last Month"),
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "Last 30 Days",
+                        style: TextStyle(fontSize: 7.sp),
+                      ),
                     ),
                     style: ButtonStyle(
                       shadowColor:
@@ -129,8 +129,11 @@ class _FilterBarState extends State<FilterBar> {
                           context, FilterValue.Year),
                     },
                     child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: const Text("Last Year"),
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "Last 365 Days",
+                        style: TextStyle(fontSize: 7.sp),
+                      ),
                     ),
                     style: ButtonStyle(
                       shadowColor:
@@ -165,14 +168,12 @@ class _FilterBarState extends State<FilterBar> {
                       ),
                     },
                     child: FittedBox(
-                      fit: BoxFit.fitHeight,
-                      child: Padding(
-                        padding: _customBtnDateRange != ""
-                            ? EdgeInsets.all(5)
-                            : EdgeInsets.all(0),
-                        child: Text(_showCustomBtnDateRange
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        _showCustomBtnDateRange
                             ? _customBtnDateRange
-                            : "Custom"),
+                            : "Custom",
+                        style: TextStyle(fontSize: 9.sp),
                       ),
                     ),
                     style: ButtonStyle(
@@ -206,12 +207,16 @@ class _FilterBarState extends State<FilterBar> {
                 initialSelectedRange:
                     PickerDateRange(DateTime.now(), DateTime.now()),
                 showActionButtons: true,
-                onSubmit: (p0) {
+                onSubmit: (p0) async {
                   statisticsFirestore.customDateFilterRange = _range;
-                  _showDatePicker = false;
-                  _showCustomBtnDateRange = true;
                   statisticsFirestore.loadStatistics(
                       context, FilterValue.Custom);
+                  _showCustomBtnDateRange = true;
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    setState(() {
+                      _showDatePicker = false;
+                    });
+                  });
                 },
                 onCancel: () {
                   _showDatePicker = false;

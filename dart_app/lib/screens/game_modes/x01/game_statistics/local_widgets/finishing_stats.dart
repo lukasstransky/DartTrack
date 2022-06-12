@@ -12,10 +12,6 @@ class FinishingStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final points = game!.getGameSettings.getCustomPoints != -1
-        ? game!.getGameSettings.getCustomPoints
-        : game!.getGameSettings.getPoints;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

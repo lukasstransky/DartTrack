@@ -157,6 +157,7 @@ class _AuthState extends State<Auth> {
                 Container(
                   width: deviceSize.width * 0.8,
                   child: TextFormField(
+                    key: Key("userNameInput"),
                     autofocus: false,
                     controller: _usernameController,
                     keyboardType: TextInputType.text,
@@ -193,6 +194,7 @@ class _AuthState extends State<Auth> {
               Container(
                 width: deviceSize.width * 0.8,
                 child: TextFormField(
+                  key: Key("emailInput"),
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
@@ -227,6 +229,7 @@ class _AuthState extends State<Auth> {
                 height: deviceSize.height * 0.01,
               ),
               Container(
+                key: Key("passwordInput"),
                 width: deviceSize.width * 0.8,
                 child: TextFormField(
                   obscureText: !_passwordVisible,
@@ -292,6 +295,7 @@ class _AuthState extends State<Auth> {
                 CircularProgressIndicator()
               else
                 Container(
+                  key: Key("loginRegisterBtn"),
                   width: deviceSize.width * 0.6,
                   child: TextButton(
                     child: Text(
@@ -320,6 +324,7 @@ class _AuthState extends State<Auth> {
                       ? 'Don\'t have an account? '
                       : 'Already have an account? '),
                   GestureDetector(
+                    key: Key("loginRegisterSwitch"),
                     onTap: () => _switchAuthMode(),
                     child: Text(
                       _authMode == AuthMode.Login ? 'Register' : 'Login',

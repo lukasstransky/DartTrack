@@ -11,7 +11,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
   String? _name; //e.g. X01 or Cricket
   DateTime _dateTime; //when game was played
   GameSettings? _gameSettings; //there are different settings for each game
-  List<PlayerGameStatistics> _playerGameStatistics = [];
+  List<PlayerGameStatistics>? _playerGameStatistics = [];
   Player? _currentPlayerToThrow; //player whose turn it is
 
   Game({
@@ -25,11 +25,13 @@ class Game with ChangeNotifier implements Comparable<Game> {
       {String? gameId,
       String? name,
       DateTime? dateTime,
-      GameSettings? gameSettings})
+      GameSettings? gameSettings,
+      List<PlayerGameStatistics>? playerGameStatistics})
       : this._gameId = gameId,
         this._name = name,
         this._dateTime = dateTime ?? DateTime.now(),
-        this._gameSettings = gameSettings;
+        this._gameSettings = gameSettings,
+        this._playerGameStatistics = playerGameStatistics;
 
   Map<String, dynamic> toMapX01() {
     GameSettingsX01 gameSettingsX01 = _gameSettings as GameSettingsX01;
@@ -77,7 +79,8 @@ class Game with ChangeNotifier implements Comparable<Game> {
         gameId: gameId,
         name: map['name'],
         dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
-        gameSettings: gameSettings);
+        gameSettings: gameSettings,
+        playerGameStatistics: []);
   }
 
   get getGameId => this._gameId;
