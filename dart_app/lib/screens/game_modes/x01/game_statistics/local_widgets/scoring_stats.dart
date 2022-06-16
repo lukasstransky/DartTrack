@@ -74,7 +74,8 @@ class ScoringStats extends StatelessWidget {
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
-                    stats.getFirstNineAverageCountRound == 0
+                    (stats.getAllScores.isNotEmpty &&
+                            stats.getFirstNineAverageCountRound == 0)
                         ? stats.getFirstNineAverage.toStringAsFixed(2)
                         : stats.getFirstNinveAvg(game),
                     style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),

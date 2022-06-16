@@ -1,7 +1,6 @@
 import 'package:dart_app/screens/game_modes/game_modes_overview.dart';
 import 'package:dart_app/screens/settings/settings.dart';
 import 'package:dart_app/screens/statistics/statistics.dart';
-import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';

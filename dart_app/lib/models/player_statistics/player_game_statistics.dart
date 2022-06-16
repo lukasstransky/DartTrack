@@ -1,8 +1,12 @@
 import 'dart:collection';
 
+import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class PlayerGameStatistics {
   final Player _player;
@@ -22,55 +26,184 @@ class PlayerGameStatistics {
 
   factory PlayerGameStatistics.fromMapX01(map) {
     return PlayerGameStatisticsX01.firestore(
-      gameId: map['gameId'],
-      mode: map['mode'],
-      dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
-      player: new Player(name: map['player']),
-      firstNineAvg:
-          map['firstNineAverage'] == null ? 0 : map['firstNineAverage'],
-      legsWon: map['legsWon'],
-      setsWon: map['setsWon'] == null ? 0 : map['setsWon'],
-      gameWon: map['gameWon'],
-      checkouts: map['checkouts'] == null
-          ? {}
-          : Map<String, int>.from(map['checkouts']),
-      checkoutCount: map['checkoutDarts'] == null ? 0 : map['checkoutDarts'],
-      roundedScoresEven: map['roundedScoresEven'] == null
-          ? {}
-          : Map<String, int>.from(map['roundedScoresEven']),
-      roundedScoresOdd: map['roundedScoresOdd'] == null
-          ? {}
-          : Map<String, int>.from(map['roundedScoresOdd']),
-      preciseScores: map['preciseScores'] == null
-          ? {}
-          : Map<String, int>.from(map['preciseScores']),
-      allScores: map['allScores'] == null ? [] : map['allScores'].cast<int>(),
-      allScoresPerDart: map['allScoresPerDart'] == null
-          ? []
-          : map['allScoresPerDart'].cast<int>(),
-      allScoresPerDartAsStringCount: map['allScoresPerDartWithCount'] == null
-          ? {}
-          : Map<String, int>.from(map['allScoresPerDartWithCount']),
-      thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
-          ? {}
-          : Map<String, int>.from(map['thrownDartsPerLeg']),
-      allScoresCountForRound: map['allScoresCountForRound'],
-      totalPoints: map['totalPoints'],
-      allScoresPerLeg: map['allScoresPerLeg'] == null
-          ? new SplayTreeMap()
-          : SplayTreeMap<String, List<dynamic>>.from(
-              map['allScoresPerLeg'],
-            ),
-      legsWonTotal: map['legsWonTotal'] == null ? 0 : map['legsWonTotal'],
-      dartsForWonLegCount: map['dartsForWonLegCount'],
-    );
+        gameId: map['gameId'],
+        dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
+        mode: map['mode'],
+        player: Player.fromMap(map['player']),
+        currentPoints: map['currentPoints'] == null ? 0 : map['currentPoints'],
+        totalPoints: map['totalPoints'] == null ? 0 : map['totalPoints'],
+        startingPoints:
+            map['startingPoints'] == null ? 0 : map['startingPoints'],
+        firstNineAvg:
+            map['firstNineAverage'] == null ? 0 : map['firstNineAverage'],
+        firstNineAverageCountRound: map['firstNineAverageCountRound'] == null
+            ? 0
+            : map['firstNineAverageCountRound'],
+        firstNineAverageCountThreeDarts:
+            map['firstNineAverageCountThreeDarts'] == null
+                ? 0
+                : map['firstNineAverageCountThreeDarts'],
+        currentThrownDartsInLeg: map['currentThrownDartsInLeg'] == null
+            ? 0
+            : map['currentThrownDartsInLeg'],
+        thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
+            ? new SplayTreeMap()
+            : SplayTreeMap<String, int>.from(map['thrownDartsPerLeg']),
+        dartsForWonLegCount:
+            map['dartsForWonLegCount'] == null ? 0 : map['dartsForWonLegCount'],
+        gameWon: map['gameWon'] == null ? false : map['gameWon'],
+        legsWon: map['legsWon'] == null ? 0 : map['legsWon'],
+        legsWonTotal: map['legsWonTotal'] == null ? 0 : map['legsWonTotal'],
+        setsWon: map['setsWon'] == null ? 0 : map['setsWon'],
+        allScoresPerLeg: map['allScoresPerLeg'] == null
+            ? new SplayTreeMap()
+            : SplayTreeMap<String, List<dynamic>>.from(
+                map['allScoresPerLeg'],
+              ),
+        legsCount: map['legsCount'] == null ? [] : map['legsCount'].cast<int>(),
+        checkoutCount: map['checkoutDarts'] == null ? 0 : map['checkoutDarts'],
+        checkouts: map['checkouts'] == null
+            ? new SplayTreeMap()
+            : SplayTreeMap<String, int>.from(map['checkouts']),
+        roundedScoresEven: map['roundedScoresEven'] == null
+            ? {}
+            : Map<String, int>.from(map['roundedScoresEven']),
+        roundedScoresOdd: map['roundedScoresOdd'] == null
+            ? {}
+            : Map<String, int>.from(map['roundedScoresOdd']),
+        preciseScores: map['preciseScores'] == null
+            ? {}
+            : Map<String, int>.from(map['preciseScores']),
+        allScores: map['allScores'] == null ? [] : map['allScores'].cast<int>(),
+        allScoresCountForRound: map['allScoresCountForRound'] == null
+            ? 0
+            : map['allScoresCountForRound'],
+        allScoresPerDart: map['allScoresPerDart'] == null
+            ? []
+            : map['allScoresPerDart'].cast<int>(),
+        allScoresPerDartAsStringCount:
+            map['allScoresPerDartAsStringCount'] == null
+                ? {}
+                : Map<String, int>.from(map['allScoresPerDartAsStringCount']),
+        allScoresPerDartAsString: map['allScoresPerDartAsString'] == null
+            ? []
+            : map['allScoresPerDartAsString'].cast<String>(),
+        allRemainingPoints: map['allRemainingPoints'] == null
+            ? []
+            : map['allRemainingPoints'].cast<int>(),
+        allRemainingScoresPerDart: map['allRemainingScoresPerDart'] == null
+            ? []
+            : List<List<String>>.from(map['allRemainingScoresPerDart']));
   }
 
   Map<String, dynamic> toMapX01(PlayerGameStatisticsX01 playerGameStatisticsX01,
-      GameX01 gameX01, String gameId) {
+      GameX01 gameX01, String gameId, bool openGame) {
     String checkoutQuote = playerGameStatisticsX01.getCheckoutQuoteInPercent();
+
+    if (openGame) {
+      return {
+        if (playerGameStatisticsX01.getPlayer is Bot)
+          "player": {
+            'name': playerGameStatisticsX01.getPlayer.getName,
+            'preDefinedAverage':
+                playerGameStatisticsX01.getPlayer.getPreDefinedAverage
+          },
+        if (!(playerGameStatisticsX01.getPlayer is Bot))
+          "player": {
+            'name': playerGameStatisticsX01.getPlayer.getName,
+          },
+        "mode": _mode,
+        "gameId": gameId,
+        "dateTime": _dateTime,
+        if (playerGameStatisticsX01.getAllScores.isNotEmpty)
+          "average": double.parse(playerGameStatisticsX01.getAverage(
+              gameX01, playerGameStatisticsX01)),
+        if (playerGameStatisticsX01.getAllScores.isNotEmpty)
+          "highestScore": playerGameStatisticsX01.getHighestScore(),
+        if (gameX01.getGameSettings.getEnableCheckoutCounting &&
+            playerGameStatisticsX01.getCheckouts.isNotEmpty)
+          "checkoutInPercent": checkoutQuote == "-"
+              ? 0
+              : double.parse(
+                  checkoutQuote.substring(0, checkoutQuote.length - 1)),
+        if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
+          "highestFinish": playerGameStatisticsX01.getHighestCheckout(),
+        if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
+          "bestLeg": int.parse(playerGameStatisticsX01.getBestLeg()),
+        if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
+          "worstLeg": int.parse((playerGameStatisticsX01.getWorstLeg())),
+        if (playerGameStatisticsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
+          "allScoresPerDartWithCount":
+              playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
+        "currentPoints": playerGameStatisticsX01.getCurrentPoints,
+        "totalPoints": playerGameStatisticsX01.getTotalPoints,
+        "startingPoints": playerGameStatisticsX01.getStartingPoints,
+        if (playerGameStatisticsX01.getAllScores.isNotEmpty)
+          "firstNineAverage":
+              double.parse(playerGameStatisticsX01.getFirstNinveAvg(gameX01)),
+        "firstNineAverageCountRound":
+            playerGameStatisticsX01.getFirstNineAverageCountRound,
+        "firstNineAverageCountThreeDarts":
+            playerGameStatisticsX01.getFirstNineAverageCountThreeDarts,
+        "currentThrownDartsInLeg":
+            playerGameStatisticsX01.getCurrentThrownDartsInLeg,
+        if (playerGameStatisticsX01.getThrownDartsPerLeg.isNotEmpty)
+          "thrownDartsPerLeg": playerGameStatisticsX01.getThrownDartsPerLeg,
+        "dartsForWonLegCount": playerGameStatisticsX01.getDartsForWonLegCount,
+        "gameWon": playerGameStatisticsX01.getGameWon,
+        "legsWon": playerGameStatisticsX01.getLegsWon,
+        "legsWonTotal": playerGameStatisticsX01.getLegsWonTotal,
+        if (gameX01.getGameSettings.getSetsEnabled)
+          "setsWon": playerGameStatisticsX01.getSetsWon,
+        if (playerGameStatisticsX01.getAllScoresPerLeg.isNotEmpty)
+          "allScoresPerLeg": playerGameStatisticsX01.getAllScoresPerLeg,
+        if (playerGameStatisticsX01.getLegsCount.isNotEmpty)
+          "legsCount": playerGameStatisticsX01.getLegsCount,
+        if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
+          "checkouts": playerGameStatisticsX01.getCheckouts,
+        if (playerGameStatisticsX01.getCheckoutCount > 0)
+          "checkoutDarts": playerGameStatisticsX01.getCheckoutCount,
+        //todo add _checkoutCountAtThrownDarts
+        if (playerGameStatisticsX01.getRoundedScoresEven.isNotEmpty)
+          "roundedScoresEven":
+              playerGameStatisticsX01.getRoundedScoresEvenWithStringKey(),
+        if (playerGameStatisticsX01.getRoundedScoresOdd.isNotEmpty)
+          "roundedScoresOdd":
+              playerGameStatisticsX01.getRoundedScoresOddWithStringKey(),
+        if (playerGameStatisticsX01.getPreciseScores.isNotEmpty)
+          "preciseScores":
+              playerGameStatisticsX01.getPreciseScoresWithStringKey(),
+        if (playerGameStatisticsX01.getAllScores.isNotEmpty)
+          "allScores": playerGameStatisticsX01.getAllScores,
+        "allScoresCountForRound":
+            playerGameStatisticsX01.getAllScoresCountForRound,
+        if (playerGameStatisticsX01.getAllScoresPerDart.isNotEmpty)
+          "allScoresPerDart": playerGameStatisticsX01.getAllScoresPerDart,
+        if (playerGameStatisticsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
+          "allScoresPerDartAsStringCount":
+              playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
+        if (playerGameStatisticsX01.getAllScoresPerDartAsString.isNotEmpty)
+          "allScoresPerDartAsString":
+              playerGameStatisticsX01.getAllScoresPerDartAsString,
+        if (playerGameStatisticsX01.getAllRemainingPoints.isNotEmpty)
+          "allRemainingPoints": playerGameStatisticsX01.getAllRemainingPoints,
+        if (playerGameStatisticsX01.getAllRemainingScoresPerDart.isNotEmpty)
+          "allRemainingScoresPerDart":
+              playerGameStatisticsX01.getAllRemainingScoresPerDart
+      };
+    }
+
     return {
-      "player": _player.getName,
+      if (playerGameStatisticsX01.getPlayer is Bot)
+        "player": {
+          'name': playerGameStatisticsX01.getPlayer.getName,
+          'preDefinedAverage':
+              playerGameStatisticsX01.getPlayer.getPreDefinedAverage
+        },
+      if (!(playerGameStatisticsX01.getPlayer is Bot))
+        "player": {
+          'name': playerGameStatisticsX01.getPlayer.getName,
+        },
       "mode": _mode,
       "legsWon": playerGameStatisticsX01.getLegsWon,
       "gameId": gameId,

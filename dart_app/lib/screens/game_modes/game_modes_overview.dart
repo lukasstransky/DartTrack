@@ -1,5 +1,9 @@
+import 'package:dart_app/models/open_games_firestore.dart';
+import 'package:dart_app/services/firestore_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class GameModesOverView extends StatefulWidget {
   const GameModesOverView({Key? key}) : super(key: key);
@@ -11,15 +15,152 @@ class GameModesOverView extends StatefulWidget {
 
 class _GameModesOverViewScreenState extends State<GameModesOverView> {
   @override
+  void initState() {
+    _getOpenGames();
+    super.initState();
+  }
+
+  void _getOpenGames() async {
+    await context.read<FirestoreService>().getOpenGames(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(false, "Game Modes"),
-      body: Center(
-        child: ElevatedButton(
-          child: Text("X01"),
-          key: Key("x01GameBtn"),
-          onPressed: () => Navigator.of(context).pushNamed("/settingsX01"),
-        ),
+      body: Consumer<OpenGamesFirestore>(
+        builder: (_, openGamesFirestore, __) => openGamesFirestore.init
+            ? Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(top: 15, right: 15),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text("Open Games: "),
+                        Container(
+                          height: 3.h,
+                          child: ElevatedButton(
+                            child: Text(
+                                openGamesFirestore.openGames.length.toString()),
+                            onPressed: () =>
+                                Navigator.of(context).pushNamed("/openGames"),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Container(
+                              width: 50.w,
+                              child: ElevatedButton(
+                                child: Text(
+                                  "X01",
+                                  style: TextStyle(fontSize: 14.sp),
+                                ),
+                                onPressed: () => Navigator.of(context)
+                                    .pushNamed("/settingsX01"),
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Container(
+                              width: 50.w,
+                              child: ElevatedButton(
+                                child: Text(
+                                  "Cricket",
+                                  style: TextStyle(fontSize: 14.sp),
+                                ),
+                                onPressed: () => null,
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 5),
+                            child: Container(
+                              width: 50.w,
+                              child: ElevatedButton(
+                                child: Text(
+                                  "Singles Training",
+                                  style: TextStyle(fontSize: 14.sp),
+                                ),
+                                onPressed: () => null,
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(10.0),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 50.w,
+                            child: ElevatedButton(
+                              child: Text(
+                                "Doubles Training",
+                                style: TextStyle(fontSize: 14.sp),
+                              ),
+                              onPressed: () => null,
+                              style: ButtonStyle(
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Center(
+                child: CircularProgressIndicator(),
+              ),
       ),
     );
   }

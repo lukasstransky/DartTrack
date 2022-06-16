@@ -25,10 +25,19 @@ class Game extends StatefulWidget {
 class GameState extends State<Game> {
   @override
   void initState() {
-    Provider.of<GameX01>(context, listen: false)
-        .init(Provider.of<GameSettingsX01>(context, listen: false));
     super.initState();
     newItemScrollController();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    if (arguments.isNotEmpty && !arguments['openGame']) {
+      Provider.of<GameX01>(context, listen: false)
+          .init(Provider.of<GameSettingsX01>(context, listen: false));
+    }
+    super.didChangeDependencies();
   }
 
   /*_showDialogForSuddenDeath() {

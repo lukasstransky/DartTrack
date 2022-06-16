@@ -1,8 +1,10 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/open_games_firestore.dart';
 import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/auth/auth.dart';
 import 'package:dart_app/screens/auth/forgot_password.dart';
+import 'package:dart_app/screens/game_modes/x01/open_games/open_games.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/finish.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings.dart';
@@ -61,6 +63,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => StatisticsFirestoreX01(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => OpenGamesFirestore(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -81,6 +86,7 @@ class MyApp extends StatelessWidget {
             StatsPerGameList.routeName: (ctx) => StatsPerGameList(),
             StatsPerGameFilteredList.routeName: (ctx) =>
                 StatsPerGameFilteredList(),
+            OpenGames.routeName: (ctx) => OpenGames(),
           },
           home: AuthWrapper(),
         );

@@ -1,10 +1,14 @@
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class Game with ChangeNotifier implements Comparable<Game> {
   String? _gameId;
@@ -26,20 +30,42 @@ class Game with ChangeNotifier implements Comparable<Game> {
       String? name,
       DateTime? dateTime,
       GameSettings? gameSettings,
-      List<PlayerGameStatistics>? playerGameStatistics})
+      List<PlayerGameStatistics>? playerGameStatistics,
+      Player? currentPlayerToThrow})
       : this._gameId = gameId,
         this._name = name,
         this._dateTime = dateTime ?? DateTime.now(),
         this._gameSettings = gameSettings,
-        this._playerGameStatistics = playerGameStatistics;
+        this._playerGameStatistics = playerGameStatistics,
+        this._currentPlayerToThrow = currentPlayerToThrow;
 
-  Map<String, dynamic> toMapX01() {
+  Map<String, dynamic> toMapX01(GameX01 gameX01, bool openGame) {
     GameSettingsX01 gameSettingsX01 = _gameSettings as GameSettingsX01;
+
     return {
       'gameId': _gameId,
       'name': _name,
       'dateTime': _dateTime,
+      if (openGame)
+        'playerGameStatistics': _playerGameStatistics!.map((item) {
+          return item.toMapX01(
+              item as PlayerGameStatisticsX01, gameX01, "", openGame);
+        }).toList(),
+      if (openGame && gameX01.getCurrentPlayerToThrow is Bot)
+        'currentPlayerToThrow': {
+          'name': gameX01.getCurrentPlayerToThrow.getName,
+          'preDefinedAverage':
+              gameX01.getCurrentPlayerToThrow.getPreDefinedAverage
+        },
+      if (openGame && !(gameX01.getCurrentPlayerToThrow is Bot))
+        'currentPlayerToThrow': {
+          'name': gameX01.getCurrentPlayerToThrow.getName,
+        },
       'gameSettings': {
+        if (openGame)
+          'players': gameX01.getGameSettings.getPlayers.map((player) {
+            return player.toMap(player);
+          }).toList(),
         'singleOrTeam':
             gameSettingsX01.getSingleOrTeam.toString().split('.').last,
         'legs': gameSettingsX01.getLegs,
@@ -67,12 +93,27 @@ class Game with ChangeNotifier implements Comparable<Game> {
     };
   }
 
-  factory Game.fromMap(map, mode, gameId) {
+  factory Game.fromMap(map, mode, gameId, openGame) {
     late GameSettings gameSettings;
     switch (mode) {
       case "X01":
         gameSettings = GameSettings.fromMapX01(map['gameSettings']);
       //add other cases for other game modes...(other settings)
+    }
+
+    if (openGame) {
+      return Game.firestore(
+          gameId: gameId,
+          name: map['name'],
+          dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
+          gameSettings: gameSettings,
+          currentPlayerToThrow: Player.getPlayerFromList(
+              gameSettings.getPlayers,
+              Player.fromMap(map['currentPlayerToThrow'])),
+          playerGameStatistics:
+              map['playerGameStatistics'].map<PlayerGameStatistics>((item) {
+            return PlayerGameStatistics.fromMapX01(item);
+          }).toList());
     }
 
     return Game.firestore(

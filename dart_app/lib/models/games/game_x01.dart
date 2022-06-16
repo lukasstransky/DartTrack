@@ -1,14 +1,17 @@
+import 'dart:collection';
+
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:provider/provider.dart';
 
 import 'dart:developer';
 import 'package:tuple/tuple.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
 class GameX01 extends Game {
@@ -251,8 +254,15 @@ class GameX01 extends Game {
   }
 
   PlayerGameStatisticsX01 getCurrentPlayerGameStatistics() {
-    return getPlayerGameStatistics
-        .firstWhere((stats) => stats.getPlayer == getCurrentPlayerToThrow);
+    if (getCurrentPlayerToThrow is Bot) {
+      return getPlayerGameStatistics.firstWhere((stats) =>
+          stats.getPlayer is Bot &&
+          stats.getPlayer.getName == getCurrentPlayerToThrow.getName &&
+          stats.getPlayer.getPreDefinedAverage ==
+              getCurrentPlayerToThrow.getPreDefinedAverage);
+    }
+    return getPlayerGameStatistics.firstWhere(
+        (stats) => stats.getPlayer.getName == getCurrentPlayerToThrow.getName);
   }
 
   //only for cancel button in add checkout count dialog
@@ -835,6 +845,7 @@ class GameX01 extends Game {
     //LEG OR SET REVERTED
     if (legOrSetReverted) {
       //checkout
+
       if (stats.getCheckouts.isNotEmpty) {
         stats.getCheckouts.remove(stats.getCheckouts.lastKey());
       }
@@ -1314,5 +1325,18 @@ class GameX01 extends Game {
     for (int i = 0; i < points.length; i++) {
       getCurrentThreeDarts[i] = points[i];
     }
+  }
+
+  void setNewGameValuesFromOpenGame(Game game, BuildContext context) {
+    Provider.of<GameSettingsX01>(context, listen: false)
+        .setNewGameSettingsFromOpenGame(
+            game.getGameSettings as GameSettingsX01);
+
+    setPlayerGameStatistics = game.getPlayerGameStatistics;
+    setDateTime = game.getDateTime;
+    setGameId = game.getGameId;
+    setName = game.getName;
+    setGameSettings = game.getGameSettings;
+    setCurrentPlayerToThrow = game.getCurrentPlayerToThrow;
   }
 }

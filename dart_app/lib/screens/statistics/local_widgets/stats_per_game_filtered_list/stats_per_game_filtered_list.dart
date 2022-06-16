@@ -31,10 +31,16 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    getGames();
+    //_getGames();
+    _getSortedPlayerStats();
   }
 
-  getGames() async {
+  //todo cant load games before playerstats
+  /*_getGames() async {
+    await context.read<FirestoreService>().getGames("X01", context);
+  }*/
+
+  _getSortedPlayerStats() async {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
     if (arguments.isNotEmpty) {
@@ -214,7 +220,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                           child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                  "(Click Card to view Details about a Game)")),
+                                  "Click Card to view Details about a Game")),
                         ),
                         if (_orderField == 'highestFinish' &&
                             _overallFilter &&

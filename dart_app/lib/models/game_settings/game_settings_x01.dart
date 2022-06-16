@@ -13,8 +13,6 @@ import 'package:provider/provider.dart';
 
 class GameSettingsX01 extends GameSettings {
   SingleOrTeamEnum _singleOrTeam = SingleOrTeamEnum.Single;
-  List<Team> _teams = []; //todo
-  List<Player> _players = [];
   BestOfOrFirstToEnum _mode = BestOfOrFirstToEnum.FirstTo;
   int _points = 301;
   int _customPoints = -1;
@@ -52,6 +50,7 @@ class GameSettingsX01 extends GameSettings {
     required SingleOrTeamEnum singleOrTeam,
     required bool winByTwoLegsDifference,
     required bool setsEnabled,
+    List<Player>? players,
   }) {
     this._enableCheckoutCounting = checkoutCounting;
     this._legs = legs;
@@ -62,16 +61,14 @@ class GameSettingsX01 extends GameSettings {
     this._singleOrTeam = singleOrTeam;
     this._winByTwoLegsDifference = winByTwoLegsDifference;
     this._setsEnabled = setsEnabled;
+    if (players != null) {
+      setPlayers = players;
+    }
   }
 
   get getSingleOrTeam => this._singleOrTeam;
   set setSingleOrTeam(SingleOrTeamEnum _singleOrTeam) =>
       this._singleOrTeam = _singleOrTeam;
-
-  get getTeams => this._teams;
-
-  get getPlayers => this._players;
-  set setPlayers(List<Player> value) => this._players = value;
 
   get getMode => this._mode;
   set setMode(BestOfOrFirstToEnum mode) => this._mode = mode;
@@ -269,15 +266,15 @@ class GameSettingsX01 extends GameSettings {
   }
 
   void removePlayer(Player player) {
-    _players = List.from(_players)..remove(player);
+    setPlayers = List.from(getPlayers)..remove(player);
     //remove player from team
-    for (Team team in _teams) {
+    for (Team team in getTeams) {
       List<Player> players = team.getPlayers as List<Player>;
       for (Player p in players) {
         if (p == player) {
           //remove team if no other player is in it
           if (team.getPlayers.length == 1) {
-            _teams = List.from(_teams)..remove(team);
+            setTeams = List.from(getTeams)..remove(team);
           }
           team.setPlayers = List.from(players)..remove(player);
         }
@@ -287,16 +284,16 @@ class GameSettingsX01 extends GameSettings {
   }
 
   void addPlayer(Player player) {
-    _players = [..._players, player];
+    setPlayers = [...getPlayers, player];
     //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
 
-    if (_teams.isEmpty) {
+    if (getTeams.isEmpty) {
       Team team = new Team(name: "Team");
       team.setPlayers = [...team.getPlayers, player];
-      _teams = [..._teams, team];
+      setTeams = [...getTeams, team];
     } else {
       bool foundExistingTeam = false;
-      for (Team team in _teams) {
+      for (Team team in getTeams) {
         List<Player> players = team.getPlayers as List<Player>;
         if (players.length < 2) {
           team.setPlayers = [...players, player];
@@ -307,7 +304,7 @@ class GameSettingsX01 extends GameSettings {
       if (foundExistingTeam == false) {
         Team team = new Team(name: "Team");
         team.setPlayers = [...team.getPlayers, player];
-        _teams = [..._teams, team];
+        setTeams = [...getTeams, team];
       }
     }
 
@@ -315,8 +312,8 @@ class GameSettingsX01 extends GameSettings {
   }
 
   void addNewPlayerToSpecificTeam(Player playerToAdd, Team? teamToAdd) {
-    _players = [..._players, playerToAdd];
-    for (Team team in _teams) {
+    setPlayers = [...getPlayers, playerToAdd];
+    for (Team team in getTeams) {
       if (team == teamToAdd) {
         List<Player> players = team.getPlayers as List<Player>;
         team.setPlayers = [...players, playerToAdd];
@@ -327,7 +324,7 @@ class GameSettingsX01 extends GameSettings {
 
   void addNewTeam(String teamName) {
     Team newTeam = new Team(name: teamName);
-    _teams = [..._teams, newTeam];
+    setTeams = [...getTeams, newTeam];
     notifyListeners();
   }
 
@@ -336,7 +333,7 @@ class GameSettingsX01 extends GameSettings {
     int count = 0;
     Team? team;
 
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       if (t.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
         count++;
         team = t;
@@ -351,7 +348,7 @@ class GameSettingsX01 extends GameSettings {
 
   //checks if its possible to add an player to a team -> e.g. there is 1 team with the MAX players in the team -> should not be possible to add a player, instead only possible to add a team
   bool possibleToAddPlayer() {
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       if (t.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
         return true;
       }
@@ -366,7 +363,7 @@ class GameSettingsX01 extends GameSettings {
     int count = 0;
     Team? team;
 
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       if (t.getPlayers.length < MAX_PLAYERS_PER_TEAM && t != currentTeam) {
         count++;
         team = t;
@@ -380,7 +377,7 @@ class GameSettingsX01 extends GameSettings {
   }
 
   Team? getTeamOfPlayer(Player player) {
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       for (Player p in t.getPlayers) {
         if (p == player) {
           return t;
@@ -393,7 +390,7 @@ class GameSettingsX01 extends GameSettings {
 
   void swapTeam(Player playerToSwap, Team? newTeam) {
     Team? currentTeam = getTeamOfPlayer(playerToSwap);
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       if (t == currentTeam) {
         //remove player in current team
         t.setPlayers = List.from(t.getPlayers)..remove(playerToSwap);
@@ -410,7 +407,7 @@ class GameSettingsX01 extends GameSettings {
     Team? currentTeam = getTeamOfPlayer(playerToSwap);
     List<Team> result = [];
 
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       if (t != currentTeam) {
         result = [...result, t];
       }
@@ -420,12 +417,12 @@ class GameSettingsX01 extends GameSettings {
   }
 
   void deleteTeam(Team teamToDelete) {
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       if (t == teamToDelete) {
-        _teams = List.from(_teams)..remove(teamToDelete);
+        setTeams = List.from(getTeams)..remove(teamToDelete);
 
         for (Player playerToDelete in t.getPlayers) {
-          _players = List.from(_players)..remove(playerToDelete);
+          setPlayers = List.from(getPlayers)..remove(playerToDelete);
         }
       }
     }
@@ -434,7 +431,7 @@ class GameSettingsX01 extends GameSettings {
   }
 
   bool checkIfTeamNameExists(String? teamNameToCheck) {
-    for (Team t in _teams) {
+    for (Team t in getTeams) {
       if (t.getName == teamNameToCheck) {
         return true;
       }
@@ -443,7 +440,7 @@ class GameSettingsX01 extends GameSettings {
   }
 
   bool checkIfPlayerNameExists(String? playerNameToCheck) {
-    for (Player p in _players) {
+    for (Player p in getPlayers) {
       if (p.getName == playerNameToCheck) {
         return true;
       }
@@ -452,7 +449,7 @@ class GameSettingsX01 extends GameSettings {
   }
 
   bool checkIfPlayerAlreadyInserted(Player playerToInsert) {
-    for (Player p in _players) {
+    for (Player p in getPlayers) {
       if (p.getName == playerToInsert.getName) {
         return true;
       }
@@ -476,33 +473,33 @@ class GameSettingsX01 extends GameSettings {
 
   void setBeginnerPlayer(Player? playerToSet) {
     int index = 0;
-    for (int i = 0; i < _players.length; i++) {
-      if (_players[i] == playerToSet) {
+    for (int i = 0; i < getPlayers.length; i++) {
+      if (getPlayers[i] == playerToSet) {
         index = i;
       }
     }
 
     //otherwise player is already first in list
     if (index != 0) {
-      Player temp = _players[0];
-      _players[0] = playerToSet as Player;
-      _players[index] = temp;
+      Player temp = getPlayers[0];
+      getPlayers[0] = playerToSet as Player;
+      getPlayers[index] = temp;
     }
   }
 
   void setBeginnerTeam(Team? teamToSet) {
     int index = 0;
-    for (int i = 0; i < _teams.length; i++) {
-      if (_teams[i] == teamToSet) {
+    for (int i = 0; i < getTeams.length; i++) {
+      if (getTeams[i] == teamToSet) {
         index = i;
       }
     }
 
     //otherwise team is already first in list
     if (index != 0) {
-      Team temp = _teams[0];
-      _teams[0] = teamToSet as Team;
-      _teams[index] = temp;
+      Team temp = getTeams[0];
+      getTeams[0] = teamToSet as Team;
+      getTeams[index] = temp;
     }
   }
 
@@ -582,8 +579,8 @@ class GameSettingsX01 extends GameSettings {
 
   void resetValues() {
     _singleOrTeam = SingleOrTeamEnum.Single;
-    _teams = [];
-    _players = [];
+    setTeams = [];
+    setPlayers = [];
     _mode = BestOfOrFirstToEnum.FirstTo;
     _points = 301;
     _customPoints = -1;
@@ -616,5 +613,22 @@ class GameSettingsX01 extends GameSettings {
       }
     }
     return false;
+  }
+
+  void setNewGameSettingsFromOpenGame(GameSettingsX01 gameSettingsX01) {
+    setEnableCheckoutCounting = gameSettingsX01.getEnableCheckoutCounting;
+    setLegs = gameSettingsX01.getLegs;
+    setSets = gameSettingsX01.getSets;
+    setModeIn = gameSettingsX01.getModeIn;
+    setModeOut = gameSettingsX01.getModeOut;
+    if (startPointsPossibilities.contains(gameSettingsX01.getPoints)) {
+      setPoints = gameSettingsX01.getPoints;
+    } else {
+      setCustomPoints = gameSettingsX01.getPoints;
+    }
+    setSingleOrTeam = gameSettingsX01.getSingleOrTeam;
+    setWinByTwoLegsDifference = gameSettingsX01.getWinByTwoLegsDifference;
+    setSuddenDeath = gameSettingsX01.getSuddenDeath;
+    setPlayers = gameSettingsX01.getPlayers;
   }
 }

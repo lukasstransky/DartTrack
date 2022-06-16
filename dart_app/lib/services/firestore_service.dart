@@ -1,8 +1,11 @@
+import 'dart:collection';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_app/models/open_games_firestore.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/models/statistics_firestore_x01.dart';
@@ -29,23 +32,78 @@ class FirestoreService {
     String gameId = "";
     await _firestore
         .collection("users/" + _firebaseAuth.currentUser!.uid + "/games")
-        .add(gameToSave.toMapX01())
+        .add(gameToSave.toMapX01(gameX01, false))
         .then((value) => {
               gameId = value.id,
             });
     return gameId;
   }
 
-  Future<void> postOpenGame(GameX01 gameX01) async {
+  Future<void> postOpenGame(GameX01 gameX01, BuildContext context) async {
     Game gameToSave = Game.firestore(
+        gameId: gameX01.getGameId,
         name: gameX01.getName,
         dateTime: gameX01.getDateTime,
         gameSettings: gameX01.getGameSettings,
-        playerGameStatistics: gameX01.getPlayerGameStatistics);
+        playerGameStatistics: gameX01.getPlayerGameStatistics,
+        currentPlayerToThrow: gameX01.getCurrentPlayerToThrow);
+
+    final openGamesFirestore =
+        Provider.of<OpenGamesFirestore>(context, listen: false);
+    for (Game openGame in openGamesFirestore.openGames) {
+      if (openGame.getGameId == gameX01.getGameId) {
+        await deleteOpenGame(gameX01.getGameId, context);
+      }
+    }
 
     await _firestore
         .collection("users/" + _firebaseAuth.currentUser!.uid + "/openGames")
-        .add(gameToSave.toMapX01());
+        .add(gameToSave.toMapX01(gameX01, true))
+        .then((value) async => {
+              await _firestore
+                  .collection(
+                      "users/" + _firebaseAuth.currentUser!.uid + "/openGames")
+                  .doc(value.id)
+                  .update({"gameId": value.id})
+            });
+  }
+
+  Future<void> deleteOpenGame(String gameId, BuildContext context) async {
+    await _firestore
+        .collection("users/" + _firebaseAuth.currentUser!.uid + "/openGames")
+        .doc(gameId)
+        .delete()
+        .then((value) async => {
+              await getOpenGames(context),
+            });
+  }
+
+  Future<void> getOpenGames(BuildContext context) async {
+    CollectionReference collectionReference = _firestore
+        .collection("users/" + _firebaseAuth.currentUser!.uid + "/openGames");
+    final openGamesFirestore =
+        Provider.of<OpenGamesFirestore>(context, listen: false);
+    openGamesFirestore.reset();
+
+    await collectionReference.get().then((openGames) => {
+          openGames.docs.forEach((openGame) {
+            String mode = "";
+            if ((openGame.data() as Map<String, dynamic>)
+                .containsValue("X01")) {
+              mode = "X01";
+            } else if ((openGame.data() as Map<String, dynamic>)
+                .containsValue("Cricket")) {
+              mode = "Cricket";
+            }
+
+            Game game = Game.fromMap(openGame.data(), mode, openGame.id, true);
+
+            openGamesFirestore.openGames.add(game);
+            openGamesFirestore.notify();
+          })
+        });
+    openGamesFirestore.init = true;
+    openGamesFirestore.notify();
   }
 
   Future<void> postPlayerGameStatistics(
@@ -64,7 +122,8 @@ class FirestoreService {
           .collection("users/" +
               _firebaseAuth.currentUser!.uid +
               "/playerGameStatistics")
-          .add(playerGameStatisticsToSave.toMapX01(stats, gameX01, gameId))
+          .add(playerGameStatisticsToSave.toMapX01(
+              stats, gameX01, gameId, false))
           .then((value) => {
                 playerGameStatsIds.add(value.id),
               });
@@ -123,7 +182,7 @@ class FirestoreService {
     CollectionReference collectionReference = _firestore.collection(
         "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
     Query query =
-        collectionReference.where("player", isEqualTo: currentPlayerName);
+        collectionReference.where("player.name", isEqualTo: currentPlayerName);
 
     if (firestoreStats.currentFilterValue == FilterValue.Year ||
         firestoreStats.currentFilterValue == FilterValue.Month) {
@@ -389,7 +448,7 @@ class FirestoreService {
     return result;
   }
 
-  Future<bool> getGames(String mode, BuildContext context) async {
+  Future<void> getGames(String mode, BuildContext context) async {
     late dynamic firestoreStats;
     switch (mode) {
       case "X01":
@@ -404,14 +463,15 @@ class FirestoreService {
 
     firestoreStats.resetGames();
 
-    QuerySnapshot<Object?> test = await query.get();
-    if (test.docs.isEmpty) {
+    QuerySnapshot<Object?> games = await query.get();
+    if (games.docs.isEmpty) {
       firestoreStats.noGamesPlayed = true;
+      firestoreStats.notify();
     } else {
       firestoreStats.noGamesPlayed = false;
     }
-    test.docs.forEach((element) async {
-      Game game = Game.fromMap(element.data(), mode, element.id);
+    games.docs.forEach((element) async {
+      Game game = Game.fromMap(element.data(), mode, element.id, false);
 
       for (String playerGameStatsId in element.get("playerGameStatisticsIds")) {
         PlayerGameStatistics? playerGameStatistics =
@@ -423,8 +483,6 @@ class FirestoreService {
       firestoreStats.games.add(game);
       firestoreStats.notify();
     });
-
-    return true;
   }
 
   Future<void> getFilteredPlayerGameStatistics(
@@ -438,7 +496,7 @@ class FirestoreService {
     CollectionReference collectionReference = _firestore.collection(
         "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
     Query query = collectionReference
-        .where("player", isEqualTo: currentPlayerName)
+        .where("player.name", isEqualTo: currentPlayerName)
         .orderBy(orderField, descending: ascendingOrder);
 
     List<Game> temp = [];
@@ -451,10 +509,11 @@ class FirestoreService {
 
             //for overall values -> checkouts + thrown darts per leg
             if (orderField == 'highestFinish' || orderField == 'bestLeg') {
-              Map<String, int> checkouts =
-                  Map<String, int>.from(element.get("checkouts"));
-              Map<String, int> thrownDartsPerLeg =
-                  Map<String, int>.from(element.get("thrownDartsPerLeg"));
+              SplayTreeMap<String, int> checkouts =
+                  SplayTreeMap<String, int>.from(element.get("checkouts"));
+              SplayTreeMap<String, int> thrownDartsPerLeg =
+                  SplayTreeMap<String, int>.from(
+                      element.get("thrownDartsPerLeg"));
 
               checkouts.entries.forEach((element) {
                 firestoreStats.checkoutWithGameId

@@ -11,6 +11,15 @@ class RoundedScoresEven extends StatelessWidget {
 
   final Game? game;
 
+  bool _atLeastOneRoundedScoreValue(PlayerGameStatisticsX01 stats) {
+    for (int value in stats.getRoundedScoresEven.values) {
+      if (value != 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,37 +44,29 @@ class RoundedScoresEven extends StatelessWidget {
               Column(
                 children: [
                   for (int i = 0; i <= 180; i += 20)
-                    i == 180
-                        ? Padding(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Container(
-                              width: WIDTH_HEADINGS_STATISTICS.w,
+                    Padding(
+                      padding: EdgeInsets.only(top: 5),
+                      child: Container(
+                        width: WIDTH_HEADINGS_STATISTICS.w,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 12.w,
                               child: Align(
-                                alignment: Alignment.centerLeft,
+                                alignment: Alignment.centerRight,
                                 child: FittedBox(
                                   fit: BoxFit.scaleDown,
-                                  child: Text("180",
+                                  child: Text(
+                                      i == 180 ? "180" : i.toString() + "+",
                                       style: TextStyle(
                                           fontSize: FONTSIZE_STATISTICS.sp)),
                                 ),
                               ),
-                            ),
-                          )
-                        : Padding(
-                            padding: EdgeInsets.only(top: 5),
-                            child: Container(
-                              width: WIDTH_HEADINGS_STATISTICS.w,
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(i.toString() + "+",
-                                      style: TextStyle(
-                                          fontSize: FONTSIZE_STATISTICS.sp)),
-                                ),
-                              ),
-                            ),
-                          ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                 ],
               ),
               for (PlayerGameStatisticsX01 stats
@@ -81,9 +82,11 @@ class RoundedScoresEven extends StatelessWidget {
                             stats.getRoundedScoresEven[i].toString(),
                             style: TextStyle(
                                 fontSize: FONTSIZE_STATISTICS.sp,
-                                fontWeight: Utils.getMostOccurringValue(
-                                            stats.getRoundedScoresEven) ==
-                                        stats.getRoundedScoresEven[i]
+                                fontWeight: _atLeastOneRoundedScoreValue(
+                                            stats) &&
+                                        Utils.getMostOccurringValue(
+                                                stats.getRoundedScoresEven) ==
+                                            stats.getRoundedScoresEven[i]
                                     ? FontWeight.bold
                                     : FontWeight.normal),
                           ),

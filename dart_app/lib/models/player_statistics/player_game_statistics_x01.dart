@@ -20,7 +20,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   num _firstNineAverageCountThreeDarts = 0;
 
   int _currentThrownDartsInLeg = 0;
-  Map<String, int> _thrownDartsPerLeg = {};
+  SplayTreeMap<String, int> _thrownDartsPerLeg = new SplayTreeMap();
   num _dartsForWonLegCount =
       0; //for statistics screen -> average darts for leg needed (count only won legs)
 
@@ -33,7 +33,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   List<int> _legsCount =
       []; //only relevant for set mode -> if player finished set, save current legs count of each player in this list -> in order to revert a set
 
-  Map<String, int> _checkouts = {};
+  SplayTreeMap<String, int> _checkouts = new SplayTreeMap();
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
   List<Tuple3<String, num, num>> _checkoutCountAtThrownDarts =
@@ -78,36 +78,57 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   List<List<String>> _allRemainingScoresPerDart =
       []; //for reverting -> input method three darts (e.g. 20 D15, 20 10 D20, D10)
 
-  PlayerGameStatisticsX01.firestore({
-    required String gameId,
-    required DateTime dateTime,
-    required String mode,
-    required Player player,
-    required num firstNineAvg,
-    required int legsWon,
-    required int setsWon,
-    required bool gameWon,
-    required Map<String, int> checkouts,
-    required int checkoutCount,
-    required Map<String, int> roundedScoresEven,
-    required Map<String, int> roundedScoresOdd,
-    required Map<String, int> preciseScores,
-    required List<int> allScores,
-    required List<int> allScoresPerDart,
-    required Map<String, int> allScoresPerDartAsStringCount,
-    required Map<String, int> thrownDartsPerLeg,
-    required int allScoresCountForRound,
-    required int totalPoints,
-    required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
-    required num legsWonTotal,
-    required num dartsForWonLegCount,
-  }) : super(gameId: gameId, dateTime: dateTime, mode: mode, player: player) {
+  PlayerGameStatisticsX01.firestore(
+      {required String gameId,
+      required DateTime dateTime,
+      required String mode,
+      required Player player,
+      required int currentPoints,
+      required int totalPoints,
+      required int startingPoints,
+      required num firstNineAvg,
+      required num firstNineAverageCountRound,
+      required num firstNineAverageCountThreeDarts,
+      required int currentThrownDartsInLeg,
+      required SplayTreeMap<String, int> thrownDartsPerLeg,
+      required num dartsForWonLegCount,
+      required bool gameWon,
+      required int legsWon,
+      required num legsWonTotal,
+      required int setsWon,
+      required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
+      required List<int> legsCount,
+      required int checkoutCount,
+      required SplayTreeMap<String, int> checkouts,
+      required Map<String, int> roundedScoresEven,
+      required Map<String, int> roundedScoresOdd,
+      required Map<String, int> preciseScores,
+      required List<int> allScores,
+      required num allScoresCountForRound,
+      required List<int> allScoresPerDart,
+      required Map<String, int> allScoresPerDartAsStringCount,
+      required List<String> allScoresPerDartAsString,
+      required List<int> allRemainingPoints,
+      required List<List<String>> allRemainingScoresPerDart})
+      : super(gameId: gameId, dateTime: dateTime, mode: mode, player: player) {
+    this._currentPoints = currentPoints;
+    this._totalPoints = totalPoints;
+    this._startingPoints = startingPoints;
     this._firstNineAverage = firstNineAvg;
-    this._legsWon = legsWon;
-    this._setsWon = setsWon;
+    this._firstNineAverageCountRound = firstNineAverageCountRound;
+    this._firstNineAverageCountThreeDarts = firstNineAverageCountThreeDarts;
+    this._currentThrownDartsInLeg = currentThrownDartsInLeg;
+    this._thrownDartsPerLeg = thrownDartsPerLeg;
+    this._dartsForWonLegCount = dartsForWonLegCount;
     this._gameWon = gameWon;
-    this._checkouts = checkouts;
+    this._legsWon = legsWon;
+    this._legsWonTotal = legsWonTotal;
+    this._setsWon = setsWon;
+    this._allScoresPerLeg = SplayTreeMap.from(
+        allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<num>())));
+    this._legsCount = legsCount;
     this._checkoutCount = checkoutCount;
+    this._checkouts = checkouts;
     this._roundedScoresEven =
         roundedScoresEven.map((key, value) => MapEntry(int.parse(key), value));
     this._roundedScoresOdd =
@@ -115,15 +136,12 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._preciseScores =
         preciseScores.map((key, value) => MapEntry(int.parse(key), value));
     this._allScores = allScores;
+    this._allScoresCountForRound = allScoresCountForRound;
     this._allScoresPerDart = allScoresPerDart;
     this._allScoresPerDartAsStringCount = allScoresPerDartAsStringCount;
-    this._thrownDartsPerLeg = thrownDartsPerLeg;
-    this._allScoresCountForRound = allScoresCountForRound;
-    this._totalPoints = totalPoints;
-    this._allScoresPerLeg = SplayTreeMap.from(
-        allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<num>())));
-    this._legsWonTotal = legsWonTotal;
-    this._dartsForWonLegCount = dartsForWonLegCount;
+    this._allScoresPerDartAsString = allScoresPerDartAsString;
+    this._allRemainingPoints = allRemainingPoints;
+    this._allRemainingScoresPerDart = allRemainingScoresPerDart;
   }
 
   PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
@@ -180,7 +198,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._currentThrownDartsInLeg = thrownDartsPerLeg;
 
   get getThrownDartsPerLeg => this._thrownDartsPerLeg;
-  set setThrownDartsPerLeg(Map<String, int> thrownDartsPerLeg) =>
+  set setThrownDartsPerLeg(SplayTreeMap<String, int> thrownDartsPerLeg) =>
       this._thrownDartsPerLeg = thrownDartsPerLeg;
 
   get getDartsForWonLegCount => this._dartsForWonLegCount;
@@ -192,7 +210,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._checkoutCount = checkoutCount;
 
   get getCheckouts => this._checkouts;
-  set setCheckouts(Map<String, int> checkouts) => this._checkouts = checkouts;
+  set setCheckouts(SplayTreeMap<String, int> checkouts) =>
+      this._checkouts = checkouts;
 
   get getCheckoutCountAtThrownDarts => this._checkoutCountAtThrownDarts;
   set setCheckoutCountAtThrownDarts(

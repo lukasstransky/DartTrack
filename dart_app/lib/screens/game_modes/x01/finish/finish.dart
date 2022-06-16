@@ -25,6 +25,7 @@ class Finish extends StatelessWidget {
               StatsCardX01(
                 isFinishScreen: true,
                 game: Provider.of<GameX01>(context, listen: false),
+                openGame: false,
               ),
               Buttons(),
             ],

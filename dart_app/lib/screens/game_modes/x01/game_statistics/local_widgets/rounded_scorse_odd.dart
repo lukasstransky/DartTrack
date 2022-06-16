@@ -38,15 +38,22 @@ class RoundedScoresOdd extends StatelessWidget {
                       padding: EdgeInsets.only(top: 5),
                       child: Container(
                         width: WIDTH_HEADINGS_STATISTICS.w,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(i.toString() + "+",
-                                style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
-                                )),
-                          ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 12.w,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(i.toString() + "+",
+                                      style: TextStyle(
+                                        fontSize: FONTSIZE_STATISTICS.sp,
+                                      )),
+                                ),
+                              ),
+                            )
+                          ],
                         ),
                       ),
                     ),

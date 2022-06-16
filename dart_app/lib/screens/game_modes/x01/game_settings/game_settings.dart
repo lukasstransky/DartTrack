@@ -64,7 +64,7 @@ class _GameSettingsState extends State<GameSettings> {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
     if (gameSettingsX01.getPlayers.length < 2) {
-      gameSettingsX01.addPlayer(new Player(name: "Luki"));
+      gameSettingsX01.addPlayer(new Player(name: "Strainski"));
       gameSettingsX01.addPlayer(new Player(name: "GG"));
     }
   }

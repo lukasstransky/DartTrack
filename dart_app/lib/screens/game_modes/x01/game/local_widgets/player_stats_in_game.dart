@@ -1,5 +1,6 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 
 import 'package:flutter/material.dart';
@@ -17,8 +18,8 @@ class PlayerStatsInGame extends StatelessWidget {
     return Consumer2<GameX01, GameSettingsX01>(
       //todo -> add selector
       builder: (_, gameX01, gameSettingsX01, __) => Container(
-        color: gameX01.getCurrentPlayerToThrow ==
-                playerGameStatisticsX01!.getPlayer
+        color: Player.samePlayer(gameX01.getCurrentPlayerToThrow,
+                playerGameStatisticsX01!.getPlayer)
             ? Colors.grey
             : Colors.transparent,
         width: 50.w,

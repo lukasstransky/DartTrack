@@ -367,4 +367,11 @@ class StatisticsFirestoreX01 with ChangeNotifier {
     }
     return "";
   }
+
+  bool atLeastOneGamePlayed() {
+    if (games.isNotEmpty) {
+      return true;
+    }
+    return false;
+  }
 }

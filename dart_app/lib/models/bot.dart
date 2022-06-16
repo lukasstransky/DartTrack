@@ -7,5 +7,5 @@ class Bot extends Player {
   set setPreDefinedAverage(double preDefinedAverage) =>
       this.preDefinedAverage = preDefinedAverage;
 
-  Bot({name, required this.preDefinedAverage}) : super(name: name);
+  Bot({required name, required this.preDefinedAverage}) : super(name: name);
 }

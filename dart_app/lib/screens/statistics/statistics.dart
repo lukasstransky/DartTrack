@@ -8,7 +8,6 @@ import 'package:dart_app/services/firestore_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({Key? key}) : super(key: key);
@@ -23,11 +22,16 @@ class _StatisticsState extends State<Statistics> {
   @override
   void initState() {
     _getPlayerGameStatistics();
+    _getGames();
     super.initState();
   }
 
   _getPlayerGameStatistics() async {
     await context.read<FirestoreService>().getStatistics(context);
+  }
+
+  _getGames() async {
+    await context.read<FirestoreService>().getGames("X01", context);
   }
 
   @override

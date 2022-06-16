@@ -1,16 +1,19 @@
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class StatsCardX01 extends StatefulWidget {
   const StatsCardX01(
-      {Key? key, required this.isFinishScreen, required this.game})
+      {Key? key,
+      required this.isFinishScreen,
+      required this.game,
+      required this.openGame})
       : super(key: key);
 
   final bool isFinishScreen;
   final Game game;
+  final bool openGame;
 
   @override
   State<StatsCardX01> createState() => _StatsCardX01State();
@@ -67,7 +70,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
                     style: TextStyle(fontSize: 12.sp)),
               ),
               for (int i = 0; i < 2; i++) ...[
-                PlayerEntry(i: i, game: widget.game),
+                PlayerEntry(i: i, game: widget.game, openGame: widget.openGame),
                 if (i == 0)
                   Divider(
                     height: 20,
@@ -89,7 +92,8 @@ class _StatsCardX01State extends State<StatsCardX01> {
                   for (int i = 2;
                       i < widget.game.getPlayerGameStatistics.length;
                       i++) ...[
-                    PlayerEntry(i: i, game: widget.game),
+                    PlayerEntry(
+                        i: i, game: widget.game, openGame: widget.openGame),
                     if (i != widget.game.getPlayerGameStatistics.length - 1)
                       Divider(
                         height: 20,

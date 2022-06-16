@@ -126,7 +126,10 @@ class StartGameBtn extends StatelessWidget {
                 {
                   gameSettingsX01.setBeginnerTeam(selectedTeam),
                 },
-              Navigator.of(context).pushNamed("/gameX01"),
+              Navigator.of(context).pushNamed(
+                "/gameX01",
+                arguments: {'openGame': false},
+              ),
             },
             child: const Text("Start Game"),
           ),

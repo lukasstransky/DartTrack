@@ -4,6 +4,7 @@ import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -30,7 +31,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
             <String, dynamic>{})
         as Map; //extract arguments that are passed into in order to get game mode (X01, Cricket...)
     _mode = arguments.entries.first.value.toString();
-    context.read<FirestoreService>().getGames(_mode, context);
+    await context.read<FirestoreService>().getGames(_mode, context);
   }
 
   @override
@@ -55,7 +56,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                               child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                      "(Click Card to view Details about a Game)")),
+                                      "Click Card to view Details about a Game")),
                             ),
                             if (statisticsFirestore.games.isNotEmpty)
                               statisticsFirestore.sortGames() == null
@@ -63,7 +64,10 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                                   : SizedBox.shrink(),
                             for (Game game in statisticsFirestore.games) ...[
                               if (_mode == "X01")
-                                StatsCardX01(isFinishScreen: false, game: game),
+                                StatsCardX01(
+                                    isFinishScreen: false,
+                                    game: game,
+                                    openGame: false),
                               //add cards for other modes (StatsCardCricket)
                             ]
                           ],

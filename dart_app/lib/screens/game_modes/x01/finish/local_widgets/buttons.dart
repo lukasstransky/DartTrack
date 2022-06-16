@@ -67,7 +67,10 @@ class Buttons extends StatelessWidget {
                 saveGameX01ToFirestore(context),
                 savePlayerGameStatisticsX01ToFirestore(context),
                 gameX01.reset(),
-                Navigator.of(context).pushNamed("/gameX01"),
+                Navigator.of(context).pushNamed(
+                  "/gameX01",
+                  arguments: {'openGame': false},
+                ),
               },
               child: FittedBox(
                 fit: BoxFit.fitWidth,
@@ -94,7 +97,10 @@ class Buttons extends StatelessWidget {
             height: 6.h,
             child: ElevatedButton(
               onPressed: () => {
-                Navigator.of(context).pushNamed("/gameX01"),
+                Navigator.of(context).pushNamed(
+                  "/gameX01",
+                  arguments: {'openGame': false},
+                ),
                 gameX01.revertPoints(),
               },
               child: FittedBox(

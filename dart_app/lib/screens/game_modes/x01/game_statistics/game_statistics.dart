@@ -28,6 +28,7 @@ class GameStatistics extends StatefulWidget {
 class _GameStatisticsState extends State<GameStatistics> {
   Game? _game;
   final _padding = EdgeInsets.only(left: 20, bottom: 20);
+  final _paddingLastItem = EdgeInsets.only(left: 20, bottom: 30);
   bool _roundedScoresOdd = false;
 
   @override
@@ -172,10 +173,11 @@ class _GameStatisticsState extends State<GameStatistics> {
                     padding: _padding,
                     child: FinishingStats(game: _game),
                   ),
-                  Padding(
-                    padding: _padding,
-                    child: Checkouts(game: _game),
-                  ),
+                  if (_oneLegWonAtLeast())
+                    Padding(
+                      padding: _padding,
+                      child: Checkouts(game: _game),
+                    ),
                   Padding(
                     padding: EdgeInsets.only(left: 20),
                     child: !_roundedScoresOdd
@@ -199,13 +201,13 @@ class _GameStatisticsState extends State<GameStatistics> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 20),
+                    padding: _paddingLastItem,
                     child: MostFrequentScores(
                         game: _game, mostScoresPerDart: false),
                   ),
                   if (_showMostFrequentScoresPerDart())
                     Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: _paddingLastItem,
                       child: MostFrequentScores(
                           game: _game, mostScoresPerDart: true),
                     ),

@@ -1,5 +1,6 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/services/firestore_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,11 +13,11 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
 
-    void _resetValuesAndNavigateToSettings() {
+    void _resetValuesAndNavigateToHome() {
       gameX01.reset();
       gameSettingsX01.resetValues();
       gameSettingsX01.notify();
-      Navigator.of(context).pushNamed("/settingsX01");
+      Navigator.of(context).pushNamed("/home");
     }
 
     void _showDialogForSavingGame(BuildContext context) {
@@ -26,7 +27,7 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
         builder: (context) => AlertDialog(
           title: const Text("End Game"),
           content: const Text(
-              "Would you like to save the game for finishing it at a later time or cancel it completely?"),
+              "Would you like to save the game for finishing it later or cancel it completely?"),
           actions: [
             TextButton(
               onPressed: () => {
@@ -35,16 +36,18 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
               child: const Text("Continue"),
             ),
             TextButton(
-              onPressed: () => {
+              onPressed: () async => {
                 Navigator.of(context).pop(),
-                _resetValuesAndNavigateToSettings(),
+                await context.read<FirestoreService>().postOpenGame(
+                    Provider.of<GameX01>(context, listen: false), context),
+                _resetValuesAndNavigateToHome(),
               },
               child: const Text("Save"),
             ),
             TextButton(
               onPressed: () => {
                 Navigator.of(context).pop(),
-                _resetValuesAndNavigateToSettings(),
+                _resetValuesAndNavigateToHome(),
               },
               child: const Text("End"),
             ),

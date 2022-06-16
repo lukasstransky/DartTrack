@@ -4,11 +4,13 @@ import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerEntry extends StatelessWidget {
-  const PlayerEntry({Key? key, required this.i, required this.game})
+  const PlayerEntry(
+      {Key? key, required this.i, required this.game, required this.openGame})
       : super(key: key);
 
   final int i;
   final Game game;
+  final bool openGame;
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +33,31 @@ class PlayerEntry extends StatelessWidget {
                           (i + 1).toString() + ". ",
                           style: TextStyle(
                               fontSize: 14.sp,
-                              fontWeight: i == 0 ? FontWeight.bold : null),
+                              fontWeight: (i == 0 && !openGame)
+                                  ? FontWeight.bold
+                                  : null),
                         ),
-                        if (i == 0)
-                          Padding(
-                            padding: EdgeInsets.only(
-                              right: 5,
-                            ),
-                            child: Icon(
-                              Entypo.trophy,
-                              size: 12.sp,
-                              color: Color(0xffFFD700),
-                            ),
-                          )
-                        else
-                          SizedBox.shrink(),
+                        if (!openGame) ...[
+                          if (i == 0)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                right: 5,
+                              ),
+                              child: Icon(
+                                Entypo.trophy,
+                                size: 12.sp,
+                                color: Color(0xffFFD700),
+                              ),
+                            )
+                          else
+                            SizedBox.shrink(),
+                        ],
                         Text(game.getPlayerGameStatistics[i].getPlayer.getName,
                             style: TextStyle(
                                 fontSize: 14.sp,
-                                fontWeight: i == 0 ? FontWeight.bold : null)),
+                                fontWeight: (i == 0 && !openGame)
+                                    ? FontWeight.bold
+                                    : null)),
                       ],
                     )),
                 Padding(
@@ -68,18 +76,21 @@ class PlayerEntry extends StatelessWidget {
                                     game.getPlayerGameStatistics[i].getLegsWon
                                         .toString(),
                             style: TextStyle(fontSize: 12.sp)),
-                        Text(
-                            "Average: " +
-                                game.getPlayerGameStatistics[i].getAverage(
-                                    game, game.getPlayerGameStatistics[i]),
-                            style: TextStyle(fontSize: 12.sp)),
-                        if (game.getGameSettings.getEnableCheckoutCounting)
+                        if (!openGame) ...[
                           Text(
+                              "Average: " +
+                                  game.getPlayerGameStatistics[i].getAverage(
+                                      game, game.getPlayerGameStatistics[i]),
+                              style: TextStyle(fontSize: 12.sp)),
+                          if (game.getGameSettings.getEnableCheckoutCounting)
+                            Text(
                               "Checkout: " +
                                   game.getPlayerGameStatistics[i]
                                       .getCheckoutQuoteInPercent()
                                       .toString(),
-                              style: TextStyle(fontSize: 12.sp))
+                              style: TextStyle(fontSize: 12.sp),
+                            ),
+                        ],
                       ],
                     ),
                   ),
