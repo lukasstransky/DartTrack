@@ -22,7 +22,7 @@ class DetailedLeg extends StatefulWidget {
 }
 
 class _DetailedLegState extends State<DetailedLeg> {
-  num _currentPoints = 0;
+  int _currentPoints = 0;
 
   @override
   void initState() {
@@ -31,14 +31,14 @@ class _DetailedLegState extends State<DetailedLeg> {
     _currentPoints = getPointsOrCustom();
   }
 
-  num getPointsOrCustom() {
+  int getPointsOrCustom() {
     return widget.game!.getGameSettings.getCustomPoints != -1
         ? widget.game!.getGameSettings.getCustomPoints
         : widget.game!.getGameSettings.getPoints;
   }
 
   String getCurrentValue(
-      num score, num i, PlayerGameStatisticsX01 playerGameStatisticsX01) {
+      int score, int i, PlayerGameStatisticsX01 playerGameStatisticsX01) {
     _currentPoints -= score;
     String result = _currentPoints.toString();
 
@@ -55,8 +55,8 @@ class _DetailedLegState extends State<DetailedLeg> {
         .toString();
   }
 
-  bool emptyRowNeeded(num dartsToCheck) {
-    num mostDarts = 0;
+  bool emptyRowNeeded(int dartsToCheck) {
+    int mostDarts = 0;
     for (PlayerGameStatisticsX01 playerGameStatisticsX01
         in widget.game!.getPlayerGameStatistics) {
       if (playerGameStatisticsX01
@@ -91,7 +91,7 @@ class _DetailedLegState extends State<DetailedLeg> {
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15.sp),
                       ),
-                      for (num i = 0;
+                      for (int i = 0;
                           i <
                               playerGameStatisticsX01
                                   .getAllScoresPerLeg[widget.setLegString]

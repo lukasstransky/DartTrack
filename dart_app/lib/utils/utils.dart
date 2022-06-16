@@ -84,11 +84,11 @@ class Utils {
   }
 
   static String getWinnerOfLeg(String setLegString, Game? game) {
-    num currentPoints;
+    int currentPoints;
     for (PlayerGameStatisticsX01 playerGameStatistics
         in game!.getPlayerGameStatistics) {
       currentPoints = game.getGameSettings.getPointsOrCustom();
-      for (num score in playerGameStatistics.getAllScoresPerLeg[setLegString]) {
+      for (int score in playerGameStatistics.getAllScoresPerLeg[setLegString]) {
         currentPoints -= score;
       }
       if (currentPoints == 0) {
@@ -101,8 +101,8 @@ class Utils {
 
   static String getAverageForLeg(
       PlayerGameStatisticsX01 playerGameStatisticsX01, String setLegString) {
-    num result = 0;
-    for (num score
+    double result = 0;
+    for (int score
         in playerGameStatisticsX01.getAllScoresPerLeg[setLegString]) {
       result += score;
     }
@@ -112,8 +112,8 @@ class Utils {
     return result.toStringAsFixed(2);
   }
 
-  static num getMostOccurringValue(Map<int, int> map) {
-    num mostOccuringValue = 0;
+  static int getMostOccurringValue(Map<int, int> map) {
+    int mostOccuringValue = 0;
     map.forEach((key, value) {
       if (value > mostOccuringValue) {
         mostOccuringValue = value;

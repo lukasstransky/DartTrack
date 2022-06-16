@@ -146,33 +146,33 @@ class FirestoreService {
         Provider.of<StatisticsFirestoreX01>(context, listen: false);
     firestoreStats.resetValues();
 
-    num avg = 0;
-    num bestAvg = -1;
-    num worstAvg = -1;
+    double avg = 0;
+    double bestAvg = -1;
+    double worstAvg = -1;
 
-    num firstNineAvg = 0;
-    num bestFirstNineAvg = -1;
-    num worstFirstNineAvg = -1;
-    num counter = 0;
+    double firstNineAvg = 0;
+    double bestFirstNineAvg = -1;
+    double worstFirstNineAvg = -1;
+    int counter = 0;
 
-    num checkoutQuoteAvg = 0;
-    num bestCheckoutQuote = -1;
-    num worstCheckoutQuote = -1;
-    num checkoutQuoteCounter = 0;
+    double checkoutQuoteAvg = 0;
+    double bestCheckoutQuote = -1;
+    double worstCheckoutQuote = -1;
+    int checkoutQuoteCounter = 0;
 
-    num checkoutScoreAvg = 0;
-    num bestCheckoutScore = -1;
-    num worstCheckoutScore = -1;
-    num checkoutScoreCounter = 0;
+    double checkoutScoreAvg = 0;
+    int bestCheckoutScore = -1;
+    int worstCheckoutScore = -1;
+    int checkoutScoreCounter = 0;
 
-    num countOfAllDarts = 0;
-    num bestLeg = -1;
-    num worstLeg = -1;
-    num dartsForWonLegCount = 0;
-    num legsWonTotal = 0;
+    int countOfAllDarts = 0;
+    int bestLeg = -1;
+    int worstLeg = -1;
+    int dartsForWonLegCount = 0;
+    int legsWonTotal = 0;
 
-    num countOf180 = 0;
-    num countOfGamesWon = 0;
+    int countOf180 = 0;
+    int countOfGamesWon = 0;
 
     Map<String, dynamic> _roundedScoresEven = {};
     Map<String, dynamic> _roundedScoresOdd = {};
@@ -230,7 +230,7 @@ class FirestoreService {
                 if ((element.data() as Map<String, dynamic>)
                     .containsKey("checkouts"))
                   {
-                    for (num checkoutScore in element.get("checkouts").values)
+                    for (int checkoutScore in element.get("checkouts").values)
                       {
                         checkoutScoreAvg += checkoutScore,
                         checkoutScoreCounter++,
@@ -280,12 +280,13 @@ class FirestoreService {
                 if ((element.data() as Map<String, dynamic>)
                     .containsKey("dartsForWonLegCount"))
                   {
-                    dartsForWonLegCount += element.get("dartsForWonLegCount"),
+                    dartsForWonLegCount +=
+                        element.get("dartsForWonLegCount") as int,
                   },
                 if ((element.data() as Map<String, dynamic>)
                     .containsKey("legsWonTotal"))
                   {
-                    legsWonTotal += element.get("legsWonTotal"),
+                    legsWonTotal += element.get("legsWonTotal") as int,
                   },
 
                 //avg
@@ -313,7 +314,7 @@ class FirestoreService {
                 counter++,
 
                 //180
-                countOf180 += element.get("roundedScoresEven")["180"],
+                countOf180 += element.get("roundedScoresEven")["180"] as int,
 
                 //rounded scores even
                 _roundedScoresEven = element.get("roundedScoresEven"),

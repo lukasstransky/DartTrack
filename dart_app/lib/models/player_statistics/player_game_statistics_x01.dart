@@ -15,20 +15,20 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _pointsSelectedCount =
       0; //for input method -> three darts (to prevent user from entering more than 3 darts when spaming the keyboard)
 
-  num _firstNineAverage = 0.0;
-  num _firstNineAverageCountRound = 0;
-  num _firstNineAverageCountThreeDarts = 0;
+  double _firstNineAverage = 0.0;
+  int _firstNineAverageCountRound = 0;
+  int _firstNineAverageCountThreeDarts = 0;
 
   int _currentThrownDartsInLeg = 0;
   SplayTreeMap<String, int> _thrownDartsPerLeg = new SplayTreeMap();
-  num _dartsForWonLegCount =
+  int _dartsForWonLegCount =
       0; //for statistics screen -> average darts for leg needed (count only won legs)
 
   bool _gameWon = false;
   int _legsWon = 0;
-  num _legsWonTotal = 0; //for statistics screen (only for set mode)
+  int _legsWonTotal = 0; //for statistics screen (only for set mode)
   int _setsWon = 0;
-  SplayTreeMap<String, List<num>> _allScoresPerLeg = new SplayTreeMap();
+  SplayTreeMap<String, List<int>> _allScoresPerLeg = new SplayTreeMap();
   //"Leg 1" : 120, 140, 100 -> to calc best, worst leg & avg. darts per leg
   List<int> _legsCount =
       []; //only relevant for set mode -> if player finished set, save current legs count of each player in this list -> in order to revert a set
@@ -36,7 +36,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   SplayTreeMap<String, int> _checkouts = new SplayTreeMap();
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
-  List<Tuple3<String, num, num>> _checkoutCountAtThrownDarts =
+  List<Tuple3<String, int, int>> _checkoutCountAtThrownDarts =
       []; //to revert checkout count -> saves the current leg, amount of checkout counts + the thrown darts at this moment
 
   Map<int, int> _roundedScoresEven = {
@@ -64,7 +64,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   };
   Map<int, int> _preciseScores = {}; //e.g. 140 : 3
   List<int> _allScores = []; //for input method round
-  num _allScoresCountForRound =
+  int _allScoresCountForRound =
       0; //for average (when switching between round & three darts)
   List<int> _allScoresPerDart =
       []; //for input method three darts -> to keep track of each thrown dart
@@ -86,15 +86,15 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       required int currentPoints,
       required int totalPoints,
       required int startingPoints,
-      required num firstNineAvg,
-      required num firstNineAverageCountRound,
-      required num firstNineAverageCountThreeDarts,
+      required double firstNineAvg,
+      required int firstNineAverageCountRound,
+      required int firstNineAverageCountThreeDarts,
       required int currentThrownDartsInLeg,
       required SplayTreeMap<String, int> thrownDartsPerLeg,
-      required num dartsForWonLegCount,
+      required int dartsForWonLegCount,
       required bool gameWon,
       required int legsWon,
-      required num legsWonTotal,
+      required int legsWonTotal,
       required int setsWon,
       required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
       required List<int> legsCount,
@@ -104,7 +104,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       required Map<String, int> roundedScoresOdd,
       required Map<String, int> preciseScores,
       required List<int> allScores,
-      required num allScoresCountForRound,
+      required int allScoresCountForRound,
       required List<int> allScoresPerDart,
       required Map<String, int> allScoresPerDartAsStringCount,
       required List<String> allScoresPerDartAsString,
@@ -125,7 +125,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._legsWonTotal = legsWonTotal;
     this._setsWon = setsWon;
     this._allScoresPerLeg = SplayTreeMap.from(
-        allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<num>())));
+        allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<int>())));
     this._legsCount = legsCount;
     this._checkoutCount = checkoutCount;
     this._checkouts = checkouts;
@@ -165,28 +165,28 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   get getFirstNineAverage => this._firstNineAverage;
 
-  set setFirstNineAverage(num firstNineAverage) =>
+  set setFirstNineAverage(double firstNineAverage) =>
       this._firstNineAverage = firstNineAverage;
 
   get getFirstNineAverageCountRound => this._firstNineAverageCountRound;
-  set setFirstNineAverageCountRound(num firstNineAverageCountRound) =>
+  set setFirstNineAverageCountRound(int firstNineAverageCountRound) =>
       this._firstNineAverageCountRound = firstNineAverageCountRound;
 
   get getFirstNineAverageCountThreeDarts =>
       this._firstNineAverageCountThreeDarts;
-  set setFirstNineAverageCountThreeDarts(num firstNineAverageCountThreeDarts) =>
+  set setFirstNineAverageCountThreeDarts(int firstNineAverageCountThreeDarts) =>
       this._firstNineAverageCountThreeDarts = firstNineAverageCountThreeDarts;
 
   get getGameWon => this._gameWon;
   set setGameWon(bool gameWon) => this._gameWon = gameWon;
 
-  get getLegsWon => this._legsWon;
+  int get getLegsWon => this._legsWon;
   set setLegsWon(int legsWon) => this._legsWon = legsWon;
 
-  get getLegsWonTotal => this._legsWonTotal;
-  set setLegsWonTotal(num legsWonTotal) => this._legsWonTotal = legsWonTotal;
+  int get getLegsWonTotal => this._legsWonTotal;
+  set setLegsWonTotal(int legsWonTotal) => this._legsWonTotal = legsWonTotal;
 
-  get getSetsWon => this._setsWon;
+  int get getSetsWon => this._setsWon;
   set setSetsWon(int setsWon) => this._setsWon = setsWon;
 
   get getPreciseScores => this._preciseScores;
@@ -202,7 +202,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._thrownDartsPerLeg = thrownDartsPerLeg;
 
   get getDartsForWonLegCount => this._dartsForWonLegCount;
-  set setDartsForWonLegCount(num dartsForWonLegCount) =>
+  set setDartsForWonLegCount(int dartsForWonLegCount) =>
       this._dartsForWonLegCount = dartsForWonLegCount;
 
   get getCheckoutCount => this._checkoutCount;
@@ -215,7 +215,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   get getCheckoutCountAtThrownDarts => this._checkoutCountAtThrownDarts;
   set setCheckoutCountAtThrownDarts(
-          List<Tuple3<String, num, num>> checkoutCountAtThrownDarts) =>
+          List<Tuple3<String, int, int>> checkoutCountAtThrownDarts) =>
       this._checkoutCountAtThrownDarts = checkoutCountAtThrownDarts;
 
   get getRoundedScoresEven => this._roundedScoresEven;
@@ -227,14 +227,14 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._roundedScoresOdd = roundedScoresOdd;
 
   get getAllScoresPerLeg => this._allScoresPerLeg;
-  set setAllScoresPerLeg(SplayTreeMap<String, List<num>> allScoresPerLeg) =>
+  set setAllScoresPerLeg(SplayTreeMap<String, List<int>> allScoresPerLeg) =>
       this._allScoresPerLeg = allScoresPerLeg;
 
   get getAllScores => this._allScores;
   set setAllScores(List<int> allScores) => this._allScores = allScores;
 
   get getAllScoresCountForRound => this._allScoresCountForRound;
-  set setAllScoresCountForRound(num allScoresCountForRound) =>
+  set setAllScoresCountForRound(int allScoresCountForRound) =>
       this._allScoresCountForRound = allScoresCountForRound;
 
   get getAllScoresPerDart => this._allScoresPerDart;
@@ -268,7 +268,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       return "-";
     }
 
-    num length, multiplicator;
+    num length;
+    int multiplicator;
     if (game.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
       length = stats.getAllScoresPerDart.length;
       if (getAllScoresCountForRound > 0) {
@@ -355,18 +356,19 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       return "-";
     }
 
-    num multiplicator, totalCount;
-    num countRound = getFirstNineAverageCountRound;
-    num countThreeDarts = getFirstNineAverageCountThreeDarts;
+    int multiplicator;
+    double totalCount;
+    int countRound = getFirstNineAverageCountRound;
+    int countThreeDarts = getFirstNineAverageCountThreeDarts;
     if (gameX01!.getGameSettings.getInputMethod == InputMethod.Round) {
       multiplicator = 1;
-      totalCount = countRound;
+      totalCount = countRound.toDouble();
       if (countThreeDarts >= 3) {
         totalCount += countThreeDarts / 3;
       }
     } else {
       multiplicator = 3;
-      totalCount = countThreeDarts;
+      totalCount = countThreeDarts.toDouble();
       if (countRound >= 1) {
         totalCount += countRound * 3;
       }

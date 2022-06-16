@@ -359,8 +359,8 @@ class GameX01 extends Game {
     if (shouldSubmit(thrownPointsString)) {
       setRevertPossible = true;
       PlayerGameStatisticsX01 currentStats = getCurrentPlayerGameStatistics();
-      num thrownPoints =
-          thrownPointsString == "Bust" ? 0 : num.parse(thrownPointsString);
+      int thrownPoints =
+          thrownPointsString == "Bust" ? 0 : int.parse(thrownPointsString);
 
       if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
         if (thrownPointsString == "Bust") {
@@ -416,9 +416,9 @@ class GameX01 extends Game {
 
         setCheckoutCountAtThrownDarts(currentStats, checkoutCount);
 
-        num totalPoints = getGameSettings.getInputMethod == InputMethod.Round
+        int totalPoints = getGameSettings.getInputMethod == InputMethod.Round
             ? thrownPoints
-            : num.parse(getCurrentThreeDartsCalculated());
+            : int.parse(getCurrentThreeDartsCalculated());
 
         //set total score
         currentStats.setAllScores = [
@@ -540,13 +540,13 @@ class GameX01 extends Game {
 
       currentStats.setCheckoutCountAtThrownDarts = [
         ...currentStats.getCheckoutCountAtThrownDarts,
-        Tuple3<String, num, num>(getCurrentLegSetAsString(),
+        Tuple3<String, int, int>(getCurrentLegSetAsString(),
             currentStats.getCurrentThrownDartsInLeg, checkoutCount),
       ];
     }
   }
 
-  void setScores(PlayerGameStatisticsX01 currentStats, num totalPoints) {
+  void setScores(PlayerGameStatisticsX01 currentStats, int totalPoints) {
     //set precise scores
     if (currentStats.getPreciseScores.containsKey(totalPoints))
       currentStats.getPreciseScores[totalPoints] += 1;
@@ -589,7 +589,7 @@ class GameX01 extends Game {
   }
 
   void legSetOrGameFinished(PlayerGameStatisticsX01 currentStats,
-      BuildContext context, num totalPoints) {
+      BuildContext context, int totalPoints) {
     if (currentStats.getCurrentPoints == 0) {
       //set thrown darts per leg & reset points
       for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
@@ -965,7 +965,7 @@ class GameX01 extends Game {
     if (roundCompleted || legOrSetReverted) {
       //checkout count
       if (stats.getCheckoutCountAtThrownDarts.isNotEmpty) {
-        Tuple3<String, num, num> tuple =
+        Tuple3<String, int, int> tuple =
             stats.getCheckoutCountAtThrownDarts.last;
         if (tuple.item1 == getCurrentLegSetAsString() &&
             tuple.item2 == stats.getCurrentThrownDartsInLeg) {
@@ -1227,8 +1227,8 @@ class GameX01 extends Game {
   }
 
   //needed to set all scores per leg
-  num getCurrentLeg() {
-    num result = 1;
+  int getCurrentLeg() {
+    int result = 1;
     for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics)
       result += stats.getLegsWon;
 
@@ -1236,8 +1236,8 @@ class GameX01 extends Game {
   }
 
   //needed to set all scores per leg
-  num getCurrentSet() {
-    num result = 1;
+  int getCurrentSet() {
+    int result = 1;
     for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics)
       result += stats.getSetsWon;
 
@@ -1247,8 +1247,8 @@ class GameX01 extends Game {
   //needed for allScoresPerLeg + CheckoutCountAtThrownDarts
   //returns e.g. 'Leg 1' or 'Set 1 Leg 2'
   String getCurrentLegSetAsString() {
-    num currentLeg = getCurrentLeg();
-    num currentSet = -1;
+    int currentLeg = getCurrentLeg();
+    int currentSet = -1;
     String key = "";
 
     if (getGameSettings.getSetsEnabled) {

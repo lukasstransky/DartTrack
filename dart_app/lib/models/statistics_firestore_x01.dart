@@ -1,6 +1,5 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,32 +7,32 @@ import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 class StatisticsFirestoreX01 with ChangeNotifier {
-  num _countOfGames = 0;
-  num _countOfGamesWon = 0;
+  int _countOfGames = 0;
+  int _countOfGamesWon = 0;
 
   bool _avgBestWorstStatsLoaded = false;
 
-  num _avg = 0;
-  num _bestAvg = -1;
-  num _worstAvg = -1;
-  num _firstNineAvg = 0;
-  num _bestFirstNineAvg = -1;
-  num _worstFirstNineAvg = -1;
+  double _avg = 0;
+  double _bestAvg = -1;
+  double _worstAvg = -1;
+  double _firstNineAvg = 0;
+  double _bestFirstNineAvg = -1;
+  double _worstFirstNineAvg = -1;
 
-  num _checkoutQuoteAvg = 0;
-  num _bestCheckoutQuote = -1;
-  num _worstCheckoutQuote = -1;
+  double _checkoutQuoteAvg = 0;
+  double _bestCheckoutQuote = -1;
+  double _worstCheckoutQuote = -1;
 
-  num _checkoutScoreAvg = 0;
-  num _bestCheckoutScore = -1;
-  num _worstCheckoutScore = -1;
+  double _checkoutScoreAvg = 0;
+  int _bestCheckoutScore = -1;
+  int _worstCheckoutScore = -1;
 
-  num _dartsPerLegAvg = 0;
-  num _bestLeg = -1;
-  num _worstLeg = -1;
+  double _dartsPerLegAvg = 0;
+  int _bestLeg = -1;
+  int _worstLeg = -1;
 
-  num _countOf180 = 0;
-  num _countOfAllDarts = 0;
+  int _countOf180 = 0;
+  int _countOfAllDarts = 0;
 
   FilterValue _currentFilterValue = FilterValue.Overall;
   String _customDateFilterRange = "";
@@ -328,11 +327,11 @@ class StatisticsFirestoreX01 with ChangeNotifier {
     }
 
     if (descending) {
-      onlyCheckouts.sort((b, a) => a!.compareTo(b as num));
-      onlyBestLegs.sort((b, a) => a!.compareTo(b as num));
+      onlyCheckouts.sort((b, a) => a!.compareTo(b as int));
+      onlyBestLegs.sort((b, a) => a!.compareTo(b as int));
     } else {
-      onlyCheckouts.sort((a, b) => a!.compareTo(b as num));
-      onlyBestLegs.sort((a, b) => a!.compareTo(b as num));
+      onlyCheckouts.sort((a, b) => a!.compareTo(b as int));
+      onlyBestLegs.sort((a, b) => a!.compareTo(b as int));
     }
 
     List<Tuple2<int?, String>> checkoutWithGameId = [];
