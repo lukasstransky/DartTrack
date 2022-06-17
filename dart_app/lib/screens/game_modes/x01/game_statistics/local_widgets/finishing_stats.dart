@@ -75,7 +75,7 @@ class FinishingStats extends StatelessWidget {
                     width: WIDTH_DATA_STATISTICS.w,
                     child: stats.getCheckoutCount != 0
                         ? Text(
-                            stats.getLegsWon.toString() +
+                            stats.getLegsWonTotal.toString() +
                                 "/" +
                                 stats.getCheckoutCount.toString(),
                             style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp))

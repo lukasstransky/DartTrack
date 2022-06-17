@@ -12,29 +12,29 @@ import 'package:provider/provider.dart';
 
 class Game with ChangeNotifier implements Comparable<Game> {
   String? _gameId;
-  String? _name; //e.g. X01 or Cricket
+  String _name; //e.g. X01 or Cricket
   DateTime _dateTime; //when game was played
   GameSettings? _gameSettings; //there are different settings for each game
-  List<PlayerGameStatistics>? _playerGameStatistics = [];
+  List<PlayerGameStatistics> _playerGameStatistics = [];
   Player? _currentPlayerToThrow; //player whose turn it is
 
   Game({
-    String? name,
-    DateTime? dateTime,
+    required String name,
+    required DateTime dateTime,
   })  : this._name = name,
-        this._dateTime = dateTime ?? DateTime.now();
+        this._dateTime = DateTime.now();
 
   //needed to save game to firestore
   Game.firestore(
       {String? gameId,
-      String? name,
-      DateTime? dateTime,
-      GameSettings? gameSettings,
-      List<PlayerGameStatistics>? playerGameStatistics,
+      required String name,
+      required DateTime dateTime,
+      required GameSettings gameSettings,
+      required List<PlayerGameStatistics> playerGameStatistics,
       Player? currentPlayerToThrow})
       : this._gameId = gameId,
         this._name = name,
-        this._dateTime = dateTime ?? DateTime.now(),
+        this._dateTime = dateTime,
         this._gameSettings = gameSettings,
         this._playerGameStatistics = playerGameStatistics,
         this._currentPlayerToThrow = currentPlayerToThrow;
@@ -47,7 +47,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
       'name': _name,
       'dateTime': _dateTime,
       if (openGame)
-        'playerGameStatistics': _playerGameStatistics!.map((item) {
+        'playerGameStatistics': _playerGameStatistics.map((item) {
           return item.toMapX01(
               item as PlayerGameStatisticsX01, gameX01, "", openGame);
         }).toList(),
@@ -127,10 +127,10 @@ class Game with ChangeNotifier implements Comparable<Game> {
   get getGameId => this._gameId;
   set setGameId(String? gameId) => this._gameId = gameId;
 
-  get getName => this._name;
-  set setName(String? name) => this._name = name;
+  String get getName => this._name;
+  set setName(String name) => this._name = name;
 
-  get getDateTime => this._dateTime;
+  DateTime get getDateTime => this._dateTime;
   set setDateTime(DateTime dateTime) => this._dateTime = dateTime;
 
   get getGameSettings => this._gameSettings;

@@ -1,12 +1,9 @@
 import 'dart:collection';
 
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class PlayerGameStatistics {
   final Player _player;
@@ -36,16 +33,13 @@ class PlayerGameStatistics {
             map['startingPoints'] == null ? 0 : map['startingPoints'],
         firstNineAvg:
             map['firstNineAverage'] == null ? 0 : map['firstNineAverage'],
-        firstNineAverageCountRound: map['firstNineAverageCountRound'] == null
-            ? 0
-            : map['firstNineAverageCountRound'],
-        firstNineAverageCountThreeDarts:
-            map['firstNineAverageCountThreeDarts'] == null
-                ? 0
-                : map['firstNineAverageCountThreeDarts'],
+        firstNineAvgCount:
+            map['firstNineAvgCount'] == null ? 0 : map['firstNineAvgCount'],
         currentThrownDartsInLeg: map['currentThrownDartsInLeg'] == null
             ? 0
             : map['currentThrownDartsInLeg'],
+        allThrownDarts:
+            map['allThrownDarts'] == null ? 0 : map['allThrownDarts'],
         thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
             ? new SplayTreeMap()
             : SplayTreeMap<String, int>.from(map['thrownDartsPerLeg']),
@@ -141,12 +135,11 @@ class PlayerGameStatistics {
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
           "firstNineAverage":
               double.parse(playerGameStatisticsX01.getFirstNinveAvg(gameX01)),
-        "firstNineAverageCountRound":
-            playerGameStatisticsX01.getFirstNineAverageCountRound,
-        "firstNineAverageCountThreeDarts":
-            playerGameStatisticsX01.getFirstNineAverageCountThreeDarts,
+        "firstNineAvgCount": playerGameStatisticsX01.getFirstNineAvgCount,
+
         "currentThrownDartsInLeg":
             playerGameStatisticsX01.getCurrentThrownDartsInLeg,
+        "allThrownDarts": playerGameStatisticsX01.getAllThrownDarts,
         if (playerGameStatisticsX01.getThrownDartsPerLeg.isNotEmpty)
           "thrownDartsPerLeg": playerGameStatisticsX01.getThrownDartsPerLeg,
         "dartsForWonLegCount": playerGameStatisticsX01.getDartsForWonLegCount,

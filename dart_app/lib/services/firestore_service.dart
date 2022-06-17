@@ -27,7 +27,8 @@ class FirestoreService {
     Game gameToSave = Game.firestore(
         name: gameX01.getName,
         dateTime: gameX01.getDateTime,
-        gameSettings: gameX01.getGameSettings);
+        gameSettings: gameX01.getGameSettings,
+        playerGameStatistics: []);
 
     String gameId = "";
     await _firestore
@@ -141,7 +142,7 @@ class FirestoreService {
     //todo comment out
     final String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
-        "Strainski";
+        "test";
     final firestoreStats =
         Provider.of<StatisticsFirestoreX01>(context, listen: false);
     firestoreStats.resetValues();

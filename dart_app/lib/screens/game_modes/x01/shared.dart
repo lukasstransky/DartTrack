@@ -389,7 +389,7 @@ submitPointsForInputMethodRound(
     if (currentPointsSelected.isNotEmpty && currentPointsSelected != "Points") {
       if (gameX01.checkoutPossible()) {
         if (gameX01.finishedWithThreeDarts(currentPointsSelected)) {
-          gameX01.submitPoints(currentPointsSelected, context);
+          gameX01.submitPoints(currentPointsSelected, context, 3, 1);
         } else {
           if (gameX01.getGameSettings.getEnableCheckoutCounting &&
               gameX01.getGameSettings.getCheckoutCountingFinallyDisabled ==

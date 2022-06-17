@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -51,7 +52,7 @@ class LegThrownDartsCompared extends StatelessWidget {
                 ),
               ),
               for (String setLegString
-                  in game!.getPlayerGameStatistics[0].getAllScoresPerLeg.keys)
+                  in (game as GameX01).getAllLegSetStringsExceptCurrentOne())
                 Container(
                   width: 25.w,
                   child: Padding(
@@ -82,7 +83,7 @@ class LegThrownDartsCompared extends StatelessWidget {
               width: 20.w,
             ),
             for (String setLegString
-                in game!.getPlayerGameStatistics[0].getAllScoresPerLeg.keys)
+                in (game as GameX01).getAllLegSetStringsExceptCurrentOne())
               Container(
                 width: 25.w,
                 child: Padding(

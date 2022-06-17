@@ -9,17 +9,17 @@ import 'package:tuple/tuple.dart';
 import 'dart:developer';
 
 class PlayerGameStatisticsX01 extends PlayerGameStatistics {
-  int? _currentPoints;
+  int _currentPoints = 0;
   int _totalPoints = 0; //for average
   int _startingPoints = 0; //for input method -> three darts
   int _pointsSelectedCount =
       0; //for input method -> three darts (to prevent user from entering more than 3 darts when spaming the keyboard)
 
-  double _firstNineAverage = 0.0;
-  int _firstNineAverageCountRound = 0;
-  int _firstNineAverageCountThreeDarts = 0;
+  double _firstNineAvgPoints = 0.0;
+  int _firstNineAvgCount = 0;
 
   int _currentThrownDartsInLeg = 0;
+  int _allThrownDarts = 0; //for calculating averages
   SplayTreeMap<String, int> _thrownDartsPerLeg = new SplayTreeMap();
   int _dartsForWonLegCount =
       0; //for statistics screen -> average darts for leg needed (count only won legs)
@@ -38,6 +38,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       0; //counts the checkout possibilities -> for calculating checkout quote
   List<Tuple3<String, int, int>> _checkoutCountAtThrownDarts =
       []; //to revert checkout count -> saves the current leg, amount of checkout counts + the thrown darts at this moment
+  SplayTreeMap<String, int> _amountOfFinishDarts =
+      new SplayTreeMap(); //saves for each leg the amount of finish darts (for reverting)
 
   Map<int, int> _roundedScoresEven = {
     0: 0,
@@ -87,9 +89,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       required int totalPoints,
       required int startingPoints,
       required double firstNineAvg,
-      required int firstNineAverageCountRound,
-      required int firstNineAverageCountThreeDarts,
+      required int firstNineAvgCount,
       required int currentThrownDartsInLeg,
+      required int allThrownDarts,
       required SplayTreeMap<String, int> thrownDartsPerLeg,
       required int dartsForWonLegCount,
       required bool gameWon,
@@ -114,10 +116,10 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._currentPoints = currentPoints;
     this._totalPoints = totalPoints;
     this._startingPoints = startingPoints;
-    this._firstNineAverage = firstNineAvg;
-    this._firstNineAverageCountRound = firstNineAverageCountRound;
-    this._firstNineAverageCountThreeDarts = firstNineAverageCountThreeDarts;
+    this._firstNineAvgPoints = firstNineAvg;
+    this._firstNineAvgCount = firstNineAvgCount;
     this._currentThrownDartsInLeg = currentThrownDartsInLeg;
+    this._allThrownDarts = allThrownDarts;
     this._thrownDartsPerLeg = thrownDartsPerLeg;
     this._dartsForWonLegCount = dartsForWonLegCount;
     this._gameWon = gameWon;
@@ -144,40 +146,38 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._allRemainingScoresPerDart = allRemainingScoresPerDart;
   }
 
-  PlayerGameStatisticsX01({player, mode, int? currentPoints, dateTime})
+  PlayerGameStatisticsX01(
+      {required Player player,
+      required String mode,
+      required int currentPoints,
+      required DateTime dateTime})
       : this._currentPoints = currentPoints,
         super(gameId: "", player: player, mode: mode, dateTime: dateTime);
 
-  get getCurrentPoints => this._currentPoints;
+  int get getCurrentPoints => this._currentPoints;
   set setCurrentPoints(int currentPoints) =>
       this._currentPoints = currentPoints;
 
-  get getTotalPoints => this._totalPoints;
+  int get getTotalPoints => this._totalPoints;
   set setTotalPoints(int totalPoints) => this._totalPoints = totalPoints;
 
-  get getStartingPoints => this._startingPoints;
+  int get getStartingPoints => this._startingPoints;
   set setStartingPoints(int startingPoints) =>
       this._startingPoints = startingPoints;
 
-  get getPointsSelectedCount => this._pointsSelectedCount;
+  int get getPointsSelectedCount => this._pointsSelectedCount;
   set setPointsSelectedCount(int pointsSelectedCount) =>
       this._pointsSelectedCount = pointsSelectedCount;
 
-  get getFirstNineAverage => this._firstNineAverage;
-
+  double get getFirstNineAverage => this._firstNineAvgPoints;
   set setFirstNineAverage(double firstNineAverage) =>
-      this._firstNineAverage = firstNineAverage;
+      this._firstNineAvgPoints = firstNineAverage;
 
-  get getFirstNineAverageCountRound => this._firstNineAverageCountRound;
-  set setFirstNineAverageCountRound(int firstNineAverageCountRound) =>
-      this._firstNineAverageCountRound = firstNineAverageCountRound;
+  int get getFirstNineAvgCount => this._firstNineAvgCount;
+  set setFirstNineAvgCount(int firstNineAvgCount) =>
+      this._firstNineAvgCount = firstNineAvgCount;
 
-  get getFirstNineAverageCountThreeDarts =>
-      this._firstNineAverageCountThreeDarts;
-  set setFirstNineAverageCountThreeDarts(int firstNineAverageCountThreeDarts) =>
-      this._firstNineAverageCountThreeDarts = firstNineAverageCountThreeDarts;
-
-  get getGameWon => this._gameWon;
+  bool get getGameWon => this._gameWon;
   set setGameWon(bool gameWon) => this._gameWon = gameWon;
 
   int get getLegsWon => this._legsWon;
@@ -193,19 +193,23 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setPreciesScores(Map<int, int> preciseScores) =>
       this._preciseScores = preciseScores;
 
-  get getCurrentThrownDartsInLeg => this._currentThrownDartsInLeg;
-  set setCurrentThrownDartsInLeg(int thrownDartsPerLeg) =>
-      this._currentThrownDartsInLeg = thrownDartsPerLeg;
+  int get getCurrentThrownDartsInLeg => this._currentThrownDartsInLeg;
+  set setCurrentThrownDartsInLeg(int currentThrownDartsInLeg) =>
+      this._currentThrownDartsInLeg = currentThrownDartsInLeg;
+
+  int get getAllThrownDarts => this._allThrownDarts;
+  set setAllThrownDarts(int allThrownDarts) =>
+      this._allThrownDarts = allThrownDarts;
 
   get getThrownDartsPerLeg => this._thrownDartsPerLeg;
   set setThrownDartsPerLeg(SplayTreeMap<String, int> thrownDartsPerLeg) =>
       this._thrownDartsPerLeg = thrownDartsPerLeg;
 
-  get getDartsForWonLegCount => this._dartsForWonLegCount;
+  int get getDartsForWonLegCount => this._dartsForWonLegCount;
   set setDartsForWonLegCount(int dartsForWonLegCount) =>
       this._dartsForWonLegCount = dartsForWonLegCount;
 
-  get getCheckoutCount => this._checkoutCount;
+  int get getCheckoutCount => this._checkoutCount;
   set setCheckoutCount(int checkoutCount) =>
       this._checkoutCount = checkoutCount;
 
@@ -213,7 +217,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setCheckouts(SplayTreeMap<String, int> checkouts) =>
       this._checkouts = checkouts;
 
-  get getCheckoutCountAtThrownDarts => this._checkoutCountAtThrownDarts;
+  List<Tuple3<String, int, int>> get getCheckoutCountAtThrownDarts =>
+      this._checkoutCountAtThrownDarts;
   set setCheckoutCountAtThrownDarts(
           List<Tuple3<String, int, int>> checkoutCountAtThrownDarts) =>
       this._checkoutCountAtThrownDarts = checkoutCountAtThrownDarts;
@@ -230,14 +235,14 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setAllScoresPerLeg(SplayTreeMap<String, List<int>> allScoresPerLeg) =>
       this._allScoresPerLeg = allScoresPerLeg;
 
-  get getAllScores => this._allScores;
+  List<int> get getAllScores => this._allScores;
   set setAllScores(List<int> allScores) => this._allScores = allScores;
 
-  get getAllScoresCountForRound => this._allScoresCountForRound;
+  int get getAllScoresCountForRound => this._allScoresCountForRound;
   set setAllScoresCountForRound(int allScoresCountForRound) =>
       this._allScoresCountForRound = allScoresCountForRound;
 
-  get getAllScoresPerDart => this._allScoresPerDart;
+  List<int> get getAllScoresPerDart => this._allScoresPerDart;
   set setAllScoresPerDart(List<int> allScoresPerDart) =>
       this._allScoresPerDart = allScoresPerDart;
 
@@ -246,21 +251,28 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
           Map<String, int> allScoresPerDartAsString) =>
       this._allScoresPerDartAsStringCount = allScoresPerDartAsString;
 
-  get getAllScoresPerDartAsString => this._allScoresPerDartAsString;
+  List<String> get getAllScoresPerDartAsString =>
+      this._allScoresPerDartAsString;
   set setAllScoresPerDartAsString(List<String> allScoresPerDartAsString) =>
       this._allScoresPerDartAsString = allScoresPerDartAsString;
 
-  get getAllRemainingPoints => this._allRemainingPoints;
+  List<int> get getAllRemainingPoints => this._allRemainingPoints;
   set setAllRemainingPoints(List<int> allRemainingPoints) =>
       this._allRemainingPoints = allRemainingPoints;
 
-  get getAllRemainingScoresPerDart => this._allRemainingScoresPerDart;
+  List<List<String>> get getAllRemainingScoresPerDart =>
+      this._allRemainingScoresPerDart;
   set setAllRemainingScoresPerDart(
           List<List<String>> allRemainingScoresPerDart) =>
       this._allRemainingScoresPerDart = allRemainingScoresPerDart;
 
-  get getLegsCount => this._legsCount;
+  List<int> get getLegsCount => this._legsCount;
   set setLegsCount(List<int> legsCount) => this._legsCount = legsCount;
+
+  SplayTreeMap<String, int> get getAmountOfFinishDarts =>
+      this._amountOfFinishDarts;
+  set setAmountOfFinishDarts(SplayTreeMap<String, int> value) =>
+      this._amountOfFinishDarts = value;
 
   //calc average based on total points and all scores length
   String getAverage(Game game, PlayerGameStatisticsX01 stats) {
@@ -268,29 +280,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       return "-";
     }
 
-    num length;
-    int multiplicator;
-    if (game.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-      length = stats.getAllScoresPerDart.length;
-      if (getAllScoresCountForRound > 0) {
-        length += getAllScoresCountForRound * 3;
-      }
-      multiplicator = 3;
-    } else {
-      if (getAllScoresCountForRound == 0 &&
-          stats.getAllScoresPerDart.length == 0) {
-        length = 1;
-      } else {
-        length = getAllScoresCountForRound;
-      }
-      if (stats.getAllScoresPerDart.length > 0) {
-        length += stats.getAllScoresPerDart.length / 3;
-      }
-
-      multiplicator = 1;
-    }
-
-    return ((getTotalPoints / length) * multiplicator).toStringAsFixed(2);
+    return ((stats.getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
   }
 
   String getLastThrow() {
@@ -324,7 +314,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   Map<int, int> getSpecificRoundedScores(List<int> specificRoundedScores) {
     Map<int, int> result = {};
     for (int score in specificRoundedScores) {
-      int value = getRoundedScoresEven[score];
+      int value = getRoundedScoresEven[score]!.toInt();
       result[score] = value;
     }
     return result;
@@ -356,47 +346,28 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       return "-";
     }
 
-    int multiplicator;
-    double totalCount;
-    int countRound = getFirstNineAverageCountRound;
-    int countThreeDarts = getFirstNineAverageCountThreeDarts;
-    if (gameX01!.getGameSettings.getInputMethod == InputMethod.Round) {
-      multiplicator = 1;
-      totalCount = countRound.toDouble();
-      if (countThreeDarts >= 3) {
-        totalCount += countThreeDarts / 3;
-      }
-    } else {
-      multiplicator = 3;
-      totalCount = countThreeDarts.toDouble();
-      if (countRound >= 1) {
-        totalCount += countRound * 3;
-      }
-    }
-
-    return ((getFirstNineAverage / totalCount) * multiplicator)
+    return ((getFirstNineAverage / getFirstNineAvgCount) * 3)
         .toStringAsFixed(2);
   }
 
   Map<int, int> getPreciseScoresSorted() {
-    return new SplayTreeMap<int, int>.from(getPreciseScores,
-        (a, b) => getPreciseScores[b] > getPreciseScores[a] ? 1 : -1);
+    Map<dynamic, dynamic> mapToSort = getPreciseScores;
+    return new SplayTreeMap<int, int>.from(
+        mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
   }
 
   Map<String, int> getAllScoresPerDartAsStringCountSorted() {
+    Map<dynamic, dynamic> mapToSort = getAllScoresPerDartAsStringCount;
     return new SplayTreeMap<String, int>.from(
-        getAllScoresPerDartAsStringCount,
-        (a, b) => getAllScoresPerDartAsStringCount[b] >
-                getAllScoresPerDartAsStringCount[a]
-            ? 1
-            : -1);
+        mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
   }
 
   String getCheckoutQuoteInPercent() {
     if (getCheckoutCount == 0) {
       return "-";
     }
-    return ((getLegsWon / getCheckoutCount) * 100).toStringAsFixed(2) + "%";
+    return ((getLegsWonTotal / getCheckoutCount) * 100).toStringAsFixed(2) +
+        "%";
   }
 
   String getBestLeg() {
@@ -406,7 +377,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     int bestLeg = -1;
 
     _thrownDartsPerLeg.values.forEach((element) {
-      if (element > bestLeg) {
+      if (element < bestLeg || bestLeg == -1) {
         bestLeg = element;
       }
     });
@@ -421,7 +392,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     int worstLeg = -1;
 
     _thrownDartsPerLeg.values.forEach((element) {
-      if (element < worstLeg || worstLeg == -1) {
+      if (element > worstLeg) {
         worstLeg = element;
       }
     });
@@ -442,7 +413,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       games++;
     });
 
-    return (dartsPerLeg / games).toString();
+    return (dartsPerLeg / games).toStringAsFixed(2);
   }
 
   Map<String, int> getPreciseScoresWithStringKey() {

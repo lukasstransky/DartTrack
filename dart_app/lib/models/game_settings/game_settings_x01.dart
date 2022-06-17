@@ -23,7 +23,7 @@ class GameSettingsX01 extends GameSettings {
   SingleOrDouble _modeOut = SingleOrDouble.DoubleField;
   bool _winByTwoLegsDifference = false;
   bool _suddenDeath = false;
-  int? _maxExtraLegs = 2;
+  int _maxExtraLegs = 2;
   bool _enableCheckoutCounting = false;
   bool _checkoutCountingFinallyDisabled =
       false; //if user disables checkout counting in the in game settings -> cant be reversed (cause of inconsistent stats then)
@@ -66,70 +66,70 @@ class GameSettingsX01 extends GameSettings {
     }
   }
 
-  get getSingleOrTeam => this._singleOrTeam;
+  SingleOrTeamEnum get getSingleOrTeam => this._singleOrTeam;
   set setSingleOrTeam(SingleOrTeamEnum _singleOrTeam) =>
       this._singleOrTeam = _singleOrTeam;
 
-  get getMode => this._mode;
+  BestOfOrFirstToEnum get getMode => this._mode;
   set setMode(BestOfOrFirstToEnum mode) => this._mode = mode;
 
-  get getPoints => this._points;
+  int get getPoints => this._points;
   set setPoints(int points) => {
         this._points = points,
         this._customPoints = -1,
         notifyListeners(),
       };
 
-  get getCustomPoints => this._customPoints;
+  int get getCustomPoints => this._customPoints;
   set setCustomPoints(int customPoints) => {
         this._customPoints = customPoints,
         notifyListeners(),
       };
 
-  get getLegs => this._legs;
+  int get getLegs => this._legs;
   set setLegs(int legs) => {
         this._legs = legs,
         notifyListeners(),
       };
 
-  get getSets => this._sets;
+  int get getSets => this._sets;
   set setSets(int sets) => {
         this._sets = sets,
         notifyListeners(),
       };
 
-  get getSetsEnabled => this._setsEnabled;
+  bool get getSetsEnabled => this._setsEnabled;
   set setSetsEnabled(bool setsEnabled) => this._setsEnabled = setsEnabled;
 
-  get getModeIn => this._modeIn;
+  SingleOrDouble get getModeIn => this._modeIn;
   set setModeIn(SingleOrDouble modeIn) => this._modeIn = modeIn;
 
-  get getModeOut => this._modeOut;
+  SingleOrDouble get getModeOut => this._modeOut;
   set setModeOut(SingleOrDouble modeOut) => this._modeOut = modeOut;
 
-  get getWinByTwoLegsDifference => this._winByTwoLegsDifference;
+  bool get getWinByTwoLegsDifference => this._winByTwoLegsDifference;
   set setWinByTwoLegsDifference(bool winByTwoLegsDifference) =>
       this._winByTwoLegsDifference = winByTwoLegsDifference;
 
-  get getSuddenDeath => this._suddenDeath;
+  bool get getSuddenDeath => this._suddenDeath;
   set setSuddenDeath(bool suddenDeath) => {
         this._suddenDeath = suddenDeath,
         notifyListeners(),
       };
 
-  get getMaxExtraLegs => this._maxExtraLegs;
-  set setMaxExtraLegs(int? maxLegDifference) => {
+  int get getMaxExtraLegs => this._maxExtraLegs;
+  set setMaxExtraLegs(int maxLegDifference) => {
         this._maxExtraLegs = maxLegDifference,
         notifyListeners(),
       };
 
-  get getEnableCheckoutCounting => this._enableCheckoutCounting;
+  bool get getEnableCheckoutCounting => this._enableCheckoutCounting;
   set setEnableCheckoutCounting(bool enableCheckoutCounting) => {
         this._enableCheckoutCounting = enableCheckoutCounting,
         notifyListeners(),
       };
 
-  get getCheckoutCountingFinallyDisabled =>
+  bool get getCheckoutCountingFinallyDisabled =>
       this._checkoutCountingFinallyDisabled;
   set setCheckoutCountingFinallyDisabled(
           bool checkoutCountingFinallyDisabled) =>
@@ -138,59 +138,59 @@ class GameSettingsX01 extends GameSettings {
         notifyListeners(),
       };
 
-  get getShowAverage => this._showAverage;
+  bool get getShowAverage => this._showAverage;
   set setShowAverage(bool showAverage) => {
         this._showAverage = showAverage,
         notifyListeners(),
       };
 
-  get getShowFinishWays => this._showFinishWays;
+  bool get getShowFinishWays => this._showFinishWays;
   set setShowFinishWays(bool showFinishWays) => {
         this._showFinishWays = showFinishWays,
         notifyListeners(),
       };
 
-  get getShowThrownDartsPerLeg => this._showThrownDartsPerLeg;
+  bool get getShowThrownDartsPerLeg => this._showThrownDartsPerLeg;
   set setShowThrownDartsPerLeg(bool showThrownDartsPerLeg) => {
         this._showThrownDartsPerLeg = showThrownDartsPerLeg,
         notifyListeners(),
       };
 
-  get getShowLastThrow => this._showLastThrow;
+  bool get getShowLastThrow => this._showLastThrow;
   set setShowLastThrow(bool showLastThrow) => {
         this._showLastThrow = showLastThrow,
         notifyListeners(),
       };
 
-  get getCallerEnabled => this._callerEnabled;
+  bool get getCallerEnabled => this._callerEnabled;
   set setCallerEnabled(bool callerEnabled) => {
         this._callerEnabled = callerEnabled,
         notifyListeners(),
       };
 
-  get getVibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
+  bool get getVibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
   set setVibrationFeedbackEnabled(bool vibrationFeedbackEnabled) => {
         this._vibrationFeedbackEnabled = vibrationFeedbackEnabled,
         notifyListeners(),
       };
 
-  get getAutomaticallySubmitPoints => this._automaticallySubmitPoints;
+  bool get getAutomaticallySubmitPoints => this._automaticallySubmitPoints;
   set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) => {
         this._automaticallySubmitPoints = automaticallySubmitPoints,
         notifyListeners(),
       };
 
-  get getShowMostScoredPoints => this._showMostScoredPoints;
+  bool get getShowMostScoredPoints => this._showMostScoredPoints;
   set setShowMostScoredPoints(bool showMostScoredPoints) => {
         this._showMostScoredPoints = showMostScoredPoints,
         notifyListeners(),
       };
 
-  get getInputMethod => this._inputMethod;
+  InputMethod get getInputMethod => this._inputMethod;
   set setInputMethod(InputMethod inputMethod) =>
       this._inputMethod = inputMethod;
 
-  get getShowInputMethodInGameScreen => this._showInputMethodInGameScreen;
+  bool get getShowInputMethodInGameScreen => this._showInputMethodInGameScreen;
   set setShowInputMethodInGameScreen(bool showInputMethodInGameScreen) {
     this._showInputMethodInGameScreen = showInputMethodInGameScreen;
     notifyListeners();

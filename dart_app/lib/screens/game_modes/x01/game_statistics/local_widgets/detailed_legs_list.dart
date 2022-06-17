@@ -1,4 +1,5 @@
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_leg.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -19,12 +20,9 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
 
   List<Item> getItems() {
     List<Item> items = [];
-    for (int i = 0;
-        i < widget.game!.getPlayerGameStatistics[0].getAllScoresPerLeg.length;
-        i++) {
-      items.add(Item(
-          value: widget.game!.getPlayerGameStatistics[0].getAllScoresPerLeg.keys
-              .elementAt(i)));
+    for (String setLegKey
+        in (widget.game as GameX01).getAllLegSetStringsExceptCurrentOne()) {
+      items.add(Item(value: setLegKey));
     }
     return items;
   }

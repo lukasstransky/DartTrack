@@ -27,7 +27,7 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
         builder: (context) => AlertDialog(
           title: const Text("End Game"),
           content: const Text(
-              "Would you like to save the game for finishing it later or cancel it completely?"),
+              "Would you like to save the game for finishing it later or end it completely?"),
           actions: [
             TextButton(
               onPressed: () => {

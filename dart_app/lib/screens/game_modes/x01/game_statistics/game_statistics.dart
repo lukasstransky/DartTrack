@@ -51,7 +51,11 @@ class _GameStatisticsState extends State<GameStatistics> {
 
     //sets
     if (_game!.getGameSettings.getSetsEnabled) {
-      result += _game!.getGameSettings.getSets.toString() + " Sets ";
+      if (_game!.getGameSettings.getSets == 1) {
+        result += _game!.getGameSettings.getSets.toString() + " Set ";
+      } else {
+        result += _game!.getGameSettings.getSets.toString() + " Sets ";
+      }
     }
 
     //legs
