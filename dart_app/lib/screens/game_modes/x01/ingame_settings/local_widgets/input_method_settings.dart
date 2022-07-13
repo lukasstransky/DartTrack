@@ -67,7 +67,7 @@ class InputMethodSettings extends StatelessWidget {
                     children: [
                       Expanded(
                         child: SizedBox(
-                          height: HEIGHT_GAMESETTINGS_WIDGETS.h,
+                          height: WIDGET_HEIGHT_GAMESETTINGS.h,
                           child: ElevatedButton(
                             onPressed: () => gameSettingsX01.getInputMethod ==
                                     InputMethod.ThreeDarts
@@ -98,7 +98,7 @@ class InputMethodSettings extends StatelessWidget {
                       ),
                       Expanded(
                         child: SizedBox(
-                          height: HEIGHT_GAMESETTINGS_WIDGETS.h,
+                          height: WIDGET_HEIGHT_GAMESETTINGS.h,
                           child: ElevatedButton(
                             onPressed: () => gameSettingsX01.getInputMethod ==
                                     InputMethod.Round

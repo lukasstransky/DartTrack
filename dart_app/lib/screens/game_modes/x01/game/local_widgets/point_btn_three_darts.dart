@@ -42,7 +42,7 @@ class PointBtnThreeDart extends StatelessWidget {
             : MaterialStateProperty.all(
                 Utils.darken(Theme.of(context).colorScheme.primary, 25)),
         overlayColor: activeBtn as bool && gameX01.getCanBePressed
-            ? Utils.getColor(
+            ? Utils.getColorOrPressed(
                 Theme.of(context).colorScheme.primary,
                 Utils.darken(Theme.of(context).colorScheme.primary, 15),
               )

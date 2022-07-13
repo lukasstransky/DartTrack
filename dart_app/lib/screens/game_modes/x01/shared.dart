@@ -5,7 +5,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'dart:developer';
 
 //HERE ARE METHODS DEFINED THAT ARE NEEDED BY MULTIPLE WIDGETS
 //instead of defining & passing callbacks...
@@ -14,7 +13,7 @@ import 'dart:developer';
 //finishCount is only transfered when the input method is three darts (there I know the finish count)
 showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
     String currentPointsSelected, BuildContext context) {
-  String threeDartsCalculated = "";
+  String threeDartsCalculated = '';
   int selectedCheckoutCount = 0;
   int selectedFinishCount = 3;
 
@@ -40,8 +39,8 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
     context: context,
     builder: (context) => AlertDialog(
       title: gameX01.getGameSettings.getEnableCheckoutCounting
-          ? Text("Checkout Counting")
-          : Text("Finish Counting"),
+          ? Text('Checkout Counting')
+          : Text('Finish Counting'),
       content: StatefulBuilder(
         builder: (context, setState) {
           return Column(
@@ -52,7 +51,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                       false)
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Darts on Double:")),
+                    child: Text('Darts on Double:')),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -75,7 +74,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text("0"),
+                              child: const Text('0'),
                             ),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
@@ -110,7 +109,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
-                            child: const Text("1"),
+                            child: const Text('1'),
                           ),
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
@@ -147,7 +146,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text("2"),
+                              child: const Text('2'),
                             ),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
@@ -186,7 +185,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text("3"),
+                              child: const Text('3'),
                             ),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
@@ -219,7 +218,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                   gameX01.finishedLegSetOrGame(currentPointsSelected)) ...[
                 Align(
                     alignment: Alignment.centerLeft,
-                    child: Text("Darts for Finish:")),
+                    child: Text('Darts for Finish:')),
                 Row(
                   children: [
                     if (gameX01.isDoubleField(currentPointsSelected))
@@ -233,7 +232,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text("1"),
+                              child: const Text('1'),
                             ),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
@@ -273,7 +272,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
-                            child: const Text("2"),
+                            child: const Text('2'),
                           ),
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
@@ -311,7 +310,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
-                            child: const Text("3"),
+                            child: const Text('3'),
                           ),
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
@@ -350,15 +349,15 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                 InputMethod.ThreeDarts) {
               int amount = gameX01.getAmountOfDartsThrown();
               gameX01.getCurrentThreeDarts[amount - 1] =
-                  "Dart " + amount.toString();
+                  'Dart ' + amount.toString();
               gameX01.revertSomeStats(int.parse(currentPointsSelected));
             } else {
-              gameX01.setCurrentPointsSelected = "Points";
+              gameX01.setCurrentPointsSelected = 'Points';
             }
 
             gameX01.notify();
           },
-          child: const Text("Cancel"),
+          child: const Text('Cancel'),
         ),
         TextButton(
           onPressed: () {
@@ -370,7 +369,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                 selectedFinishCount,
                 selectedCheckoutCount); //submit is called because of the checkout dialog -> otherwise points would be immediately subtracted and shown on ui
           },
-          child: const Text("Submit"),
+          child: const Text('Submit'),
         ),
       ],
     ),
@@ -382,11 +381,11 @@ submitPointsForInputMethodRound(
   //double in -> check for 1, 3, 5 -> invalid
   if (gameX01.getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
       gameX01.checkIfInvalidDoubleInPointsSubmitted(currentPointsSelected)) {
-    Fluttertoast.showToast(msg: "Invalid Score for Double In!");
-    gameX01.setCurrentPointsSelected = "Points";
+    Fluttertoast.showToast(msg: 'Invalid Score for Double In!');
+    gameX01.setCurrentPointsSelected = 'Points';
     gameX01.notify();
   } else {
-    if (currentPointsSelected.isNotEmpty && currentPointsSelected != "Points") {
+    if (currentPointsSelected.isNotEmpty && currentPointsSelected != 'Points') {
       if (gameX01.checkoutPossible()) {
         if (gameX01.finishedWithThreeDarts(currentPointsSelected)) {
           gameX01.submitPoints(currentPointsSelected, context, 3, 1);
@@ -423,7 +422,7 @@ submitPointsForInputMethodThreeDarts(GameX01 gameX01, String scoredPoint,
 
     //calculate points based on single, double, tripple
     int parsedPoints;
-    if (scoredPoint == "Bull") {
+    if (scoredPoint == 'Bull') {
       parsedPoints = 50;
     } else {
       parsedPoints = int.parse(scoredPoint);

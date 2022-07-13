@@ -28,7 +28,7 @@ class PointBtnRound extends StatelessWidget {
             : MaterialStateProperty.all(
                 Utils.darken(Theme.of(context).colorScheme.primary, 25)),
         overlayColor: activeBtn as bool
-            ? Utils.getColor(
+            ? Utils.getColorOrPressed(
                 Theme.of(context).colorScheme.primary,
                 Utils.darken(Theme.of(context).colorScheme.primary, 15),
               )

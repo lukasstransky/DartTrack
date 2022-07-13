@@ -1,13 +1,13 @@
 import 'package:dart_app/models/player.dart';
 
 class Team {
-  String? _name;
+  String _name;
   List<Player> _players = [];
 
-  get getName => this._name;
+  String get getName => this._name;
   set setName(String name) => this._name = name;
 
-  get getPlayers => this._players;
+  List<Player> get getPlayers => this._players;
   set setPlayers(List<Player> players) => this._players = players;
 
   Team({required name}) : _name = name;

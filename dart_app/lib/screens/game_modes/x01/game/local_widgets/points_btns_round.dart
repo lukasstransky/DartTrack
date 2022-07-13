@@ -190,7 +190,7 @@ class PointsBtnsRound extends StatelessWidget {
                                 ),
                                 backgroundColor: MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.primary),
-                                overlayColor: Utils.getColor(
+                                overlayColor: Utils.getColorOrPressed(
                                   Theme.of(context).colorScheme.primary,
                                   Utils.darken(
                                       Theme.of(context).colorScheme.primary,
@@ -250,7 +250,7 @@ class PointsBtnsRound extends StatelessWidget {
                             ),
                             backgroundColor: MaterialStateProperty.all(
                                 Theme.of(context).colorScheme.primary),
-                            overlayColor: Utils.getColor(
+                            overlayColor: Utils.getColorOrPressed(
                               Theme.of(context).colorScheme.primary,
                               Utils.darken(
                                   Theme.of(context).colorScheme.primary, 15),

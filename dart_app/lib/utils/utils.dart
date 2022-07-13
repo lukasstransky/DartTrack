@@ -5,7 +5,11 @@ import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dar
 import 'package:flutter/material.dart';
 
 class Utils {
-  static MaterialStateProperty<Color> getColor(
+  static MaterialStateProperty<Color> getColor(Color color) {
+    return MaterialStateProperty.all<Color>(color);
+  }
+
+  static MaterialStateProperty<Color> getColorOrPressed(
       Color color, Color colorPressed) {
     final getColor = (Set<MaterialState> states) {
       if (states.contains(MaterialState.pressed)) {

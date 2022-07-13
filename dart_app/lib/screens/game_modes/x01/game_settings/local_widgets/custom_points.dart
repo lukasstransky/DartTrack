@@ -1,35 +1,45 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 
-final TextEditingController _customPointsController =
-    new TextEditingController();
-final GlobalKey<FormState> _formKeyPoints = GlobalKey<FormState>();
+class CustomPoints extends StatefulWidget {
+  @override
+  State<CustomPoints> createState() => _CustomPointsState();
+}
 
-class CustomPoints extends StatelessWidget {
-  const CustomPoints({Key? key}) : super(key: key);
+class _CustomPointsState extends State<CustomPoints> {
+  TextEditingController? _customPointsController;
+  final GlobalKey<FormState> _formKeyCustomPoints = GlobalKey<FormState>();
 
-  Future<int?> _openDialogForPoints(
-          BuildContext context, GameSettingsX01 GameSettingsX01) =>
+  void _initTextController(GameSettingsX01 gameSettingsX01) {
+    _customPointsController = new TextEditingController(
+        text: gameSettingsX01.getCustomPoints != -1
+            ? gameSettingsX01.getCustomPoints.toString()
+            : '');
+  }
+
+  Future<int?> _showDialogForCustomPoints(
+          BuildContext context, GameSettingsX01 gameSettingsX01) =>
       showDialog<int>(
         barrierDismissible: false,
         context: context,
         builder: (context) => Form(
-          key: _formKeyPoints,
+          key: _formKeyCustomPoints,
           child: AlertDialog(
-            title: const Text("Enter Points"),
+            title: const Text('Enter Points'),
             content: TextFormField(
               controller: _customPointsController,
               validator: (value) {
                 if (value!.isEmpty) {
-                  return ("Please Enter Points!");
+                  return ('Please Enter Points!');
                 }
-                if (int.parse(value) < POINTS_MIN_NUMBER) {
-                  return ("Minimum Points are 100!");
+                if (int.parse(value) < CUSTOM_POINTS_MIN_NUMBER) {
+                  return ('Minimum Points are 100!');
                 }
                 return null;
               },
@@ -40,7 +50,7 @@ class CustomPoints extends StatelessWidget {
                 LengthLimitingTextInputFormatter(MAX_NUMBERS_POINTS),
               ],
               decoration: InputDecoration(
-                hintText: "max 9999",
+                hintText: 'max 9999',
                 filled: true,
                 hintStyle: TextStyle(color: Colors.grey),
               ),
@@ -49,13 +59,12 @@ class CustomPoints extends StatelessWidget {
               TextButton(
                 onPressed: () => {
                   Navigator.of(context).pop(),
-                  GameSettingsX01.setPoints = 501,
                 },
-                child: const Text("Cancel"),
+                child: const Text('Cancel'),
               ),
               TextButton(
                 onPressed: () => _submitPoints(context),
-                child: const Text("Submit"),
+                child: const Text('Submit'),
               ),
             ],
           ),
@@ -63,13 +72,13 @@ class CustomPoints extends StatelessWidget {
       );
 
   void _submitPoints(BuildContext context) {
-    if (!_formKeyPoints.currentState!.validate()) {
+    if (!_formKeyCustomPoints.currentState!.validate()) {
       return;
     }
-    _formKeyPoints.currentState!.save();
+    _formKeyCustomPoints.currentState!.save();
 
-    Navigator.of(context).pop(int.parse(_customPointsController.text));
-    _customPointsController.clear();
+    Navigator.of(context).pop(int.parse(_customPointsController!.text));
+    _customPointsController!.clear();
   }
 
   @override
@@ -80,44 +89,50 @@ class CustomPoints extends StatelessWidget {
     return Expanded(
       child: Selector<GameSettingsX01, int>(
         selector: (_, gameSettingsX01) => gameSettingsX01.getCustomPoints,
-        builder: (_, customPoints, __) => SizedBox(
-          height: HEIGHT_GAMESETTINGS_WIDGETS.h,
+        builder: (_, customPoints, __) => Container(
+          height: WIDGET_HEIGHT_GAMESETTINGS.h,
           child: ElevatedButton(
             onPressed: () async {
-              int? result =
-                  await _openDialogForPoints(context, gameSettingsX01);
+              _initTextController(gameSettingsX01);
+              final int? result =
+                  await _showDialogForCustomPoints(context, gameSettingsX01);
               if (result == null) return;
-              if (result == 301) {
-                gameSettingsX01.setPoints = 301;
-                gameSettingsX01.setCustomPoints = -1;
-              } else if (result == 501) {
-                gameSettingsX01.setPoints = 501;
-                gameSettingsX01.setCustomPoints = -1;
-              } else if (result == 701) {
-                gameSettingsX01.setPoints = 701;
-                gameSettingsX01.setCustomPoints = -1;
-              } else {
-                gameSettingsX01.setCustomPoints = result;
+              switch (result) {
+                case 301:
+                  gameSettingsX01.setPoints = 301;
+                  gameSettingsX01.setCustomPoints = -1;
+                  break;
+                case 501:
+                  gameSettingsX01.setPoints = 501;
+                  gameSettingsX01.setCustomPoints = -1;
+                  break;
+                case 701:
+                  gameSettingsX01.setPoints = 701;
+                  gameSettingsX01.setCustomPoints = -1;
+                  break;
+                default:
+                  gameSettingsX01.setCustomPoints = result;
+                  break;
               }
             },
             style: ButtonStyle(
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(10.0),
-                    bottomRight: Radius.circular(10.0),
+                    topRight: Radius.circular(BUTTON_BORDER_RADIUS),
+                    bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
                   ),
                 ),
               ),
               backgroundColor: customPoints != -1
-                  ? MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primary)
-                  : MaterialStateProperty.all<Color>(Colors.grey),
+                  ? Utils.getColor(Theme.of(context).colorScheme.primary)
+                  : Utils.getColor(Colors.grey),
             ),
             child: FittedBox(
-              fit: BoxFit.fitWidth,
-              child:
-                  Text(customPoints == -1 ? "Custom" : customPoints.toString()),
+              fit: BoxFit.scaleDown,
+              child: Text(
+                customPoints == -1 ? 'Custom' : customPoints.toString(),
+              ),
             ),
           ),
         ),

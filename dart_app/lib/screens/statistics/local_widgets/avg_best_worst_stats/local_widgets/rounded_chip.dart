@@ -34,7 +34,7 @@ class RoundedChip extends StatelessWidget {
             style: ButtonStyle(
               shadowColor: MaterialStateProperty.all(Colors.transparent),
               overlayColor: this.value != "-" && this.type != ""
-                  ? Utils.getColor(
+                  ? Utils.getColorOrPressed(
                       Theme.of(context).colorScheme.primary,
                       Utils.darken(Theme.of(context).colorScheme.primary, 15),
                     )

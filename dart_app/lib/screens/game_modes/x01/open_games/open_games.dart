@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class OpenGames extends StatefulWidget {
-  static const routeName = "/openGames";
+  static const routeName = '/openGames';
 
   const OpenGames({Key? key}) : super(key: key);
 
@@ -22,7 +22,7 @@ class _OpenGamesState extends State<OpenGames> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(true, "Open Games"),
+      appBar: CustomAppBar(true, 'Open Games'),
       body: Consumer<OpenGamesFirestore>(
         builder: (_, openGamesFirestore, __) => openGamesFirestore
                     .openGames.length !=
@@ -42,7 +42,7 @@ class _OpenGamesState extends State<OpenGames> {
                           child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                  "Swipe left for Actions (Play & Delete)")),
+                                  'Swipe left for Actions (Play & Delete)')),
                         ),
                         for (Game game in openGamesFirestore.openGames) ...[
                           Slidable(
@@ -61,7 +61,7 @@ class _OpenGamesState extends State<OpenGames> {
                                         .setNewGameValuesFromOpenGame(
                                             game, context);
                                     Navigator.of(context).pushNamed(
-                                      "/gameX01",
+                                      '/gameX01',
                                       arguments: {'openGame': true},
                                     );
                                   },
@@ -93,7 +93,7 @@ class _OpenGamesState extends State<OpenGames> {
                 ),
               )
             : Center(
-                child: Text("Currently there are no Open Games!"),
+                child: Text('Currently there are no Open Games!'),
               ),
       ),
     );

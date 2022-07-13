@@ -471,20 +471,21 @@ class FirestoreService {
       firestoreStats.notify();
     } else {
       firestoreStats.noGamesPlayed = false;
+      games.docs.forEach((element) async {
+        Game game = Game.fromMap(element.data(), mode, element.id, false);
+
+        for (String playerGameStatsId
+            in element.get("playerGameStatisticsIds")) {
+          PlayerGameStatistics? playerGameStatistics =
+              await getPlayerGameStatisticById(playerGameStatsId, mode);
+
+          game.getPlayerGameStatistics.add(playerGameStatistics);
+        }
+
+        firestoreStats.games.add(game);
+        firestoreStats.notify();
+      });
     }
-    games.docs.forEach((element) async {
-      Game game = Game.fromMap(element.data(), mode, element.id, false);
-
-      for (String playerGameStatsId in element.get("playerGameStatisticsIds")) {
-        PlayerGameStatistics? playerGameStatistics =
-            await getPlayerGameStatisticById(playerGameStatsId, mode);
-
-        game.getPlayerGameStatistics.add(playerGameStatistics);
-      }
-
-      firestoreStats.games.add(game);
-      firestoreStats.notify();
-    });
   }
 
   Future<void> getFilteredPlayerGameStatistics(

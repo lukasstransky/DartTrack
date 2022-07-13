@@ -20,16 +20,16 @@ class GameSettings with ChangeNotifier {
     return GameSettingsX01.firestore(
       checkoutCounting: map['checkoutCounting'],
       legs: map['legs'],
-      modeIn: map['modeIn'] == "Single"
+      modeIn: map['modeIn'] == 'Single'
           ? SingleOrDouble.SingleField
           : SingleOrDouble.DoubleField,
-      modeOut: map['modeOut'] == "Single"
+      modeOut: map['modeOut'] == 'Single'
           ? SingleOrDouble.SingleField
           : SingleOrDouble.DoubleField,
       points: map['points'],
       sets: map['sets'] == null ? 0 : map['sets'],
       setsEnabled: map['setsEnabled'],
-      singleOrTeam: map['singleOrTeam'] == "Single"
+      singleOrTeam: map['singleOrTeam'] == 'Single'
           ? SingleOrTeamEnum.Single
           : SingleOrTeamEnum.Team,
       winByTwoLegsDifference: map['winByTwoLegsDifference'],

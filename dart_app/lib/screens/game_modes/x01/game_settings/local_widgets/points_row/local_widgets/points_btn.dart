@@ -1,13 +1,14 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 import 'package:sizer/sizer.dart';
 
-class Points extends StatelessWidget {
-  const Points({
+class PointsBtn extends StatelessWidget {
+  const PointsBtn({
     Key? key,
     required this.points,
   }) : super(key: key);
@@ -23,13 +24,15 @@ class Points extends StatelessWidget {
       child: Selector<GameSettingsX01, Tuple2<int, int>>(
         selector: (_, gameSettingsX01) =>
             Tuple2(gameSettingsX01.getPoints, gameSettingsX01.getCustomPoints),
-        builder: (_, tuple, __) => SizedBox(
-          height: HEIGHT_GAMESETTINGS_WIDGETS.h,
+        builder: (_, tuple, __) => Container(
+          height: WIDGET_HEIGHT_GAMESETTINGS.h,
           child: ElevatedButton(
             onPressed: () => gameSettingsX01.setPoints = points,
             child: FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text(points.toString()),
+              fit: BoxFit.scaleDown,
+              child: Text(
+                points.toString(),
+              ),
             ),
             style: ButtonStyle(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -37,15 +40,14 @@ class Points extends StatelessWidget {
                   borderRadius: points != 301
                       ? BorderRadius.zero
                       : BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10),
+                          topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+                          bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
                         ),
                 ),
               ),
               backgroundColor: tuple.item1 == points && tuple.item2 == -1
-                  ? MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primary)
-                  : MaterialStateProperty.all<Color>(Colors.grey),
+                  ? Utils.getColor(Theme.of(context).colorScheme.primary)
+                  : Utils.getColor(Colors.grey),
             ),
           ),
         ),

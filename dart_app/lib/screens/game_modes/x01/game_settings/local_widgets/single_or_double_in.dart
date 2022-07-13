@@ -1,15 +1,12 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SingleOrDoubleIn extends StatelessWidget {
-  const SingleOrDoubleIn({
-    Key? key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     final gameSettingsX01 =
@@ -24,56 +21,56 @@ class SingleOrDoubleIn extends StatelessWidget {
           builder: (_, modeIn, __) => Row(
             children: [
               Expanded(
-                child: SizedBox(
-                  height: HEIGHT_GAMESETTINGS_WIDGETS.h,
+                child: Container(
+                  height: WIDGET_HEIGHT_GAMESETTINGS.h,
                   child: ElevatedButton(
                     onPressed: () => modeIn == SingleOrDouble.DoubleField
                         ? gameSettingsX01.switchSingleOrDoubleIn()
                         : null,
                     child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: const Text("Single In"),
+                      fit: BoxFit.scaleDown,
+                      child: const Text('Single In'),
                     ),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            bottomLeft: Radius.circular(10.0),
+                            topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+                            bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
                           ),
                         ),
                       ),
                       backgroundColor: modeIn == SingleOrDouble.DoubleField
-                          ? MaterialStateProperty.all<Color>(Colors.grey)
-                          : MaterialStateProperty.all(
+                          ? Utils.getColor(Colors.grey)
+                          : Utils.getColor(
                               Theme.of(context).colorScheme.primary),
                     ),
                   ),
                 ),
               ),
               Expanded(
-                child: SizedBox(
-                  height: HEIGHT_GAMESETTINGS_WIDGETS.h,
+                child: Container(
+                  height: WIDGET_HEIGHT_GAMESETTINGS.h,
                   child: ElevatedButton(
                     onPressed: () => modeIn == SingleOrDouble.SingleField
                         ? gameSettingsX01.switchSingleOrDoubleIn()
                         : null,
                     child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: const Text("Double In"),
+                      fit: BoxFit.scaleDown,
+                      child: const Text('Double In'),
                     ),
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0),
-                            bottomRight: Radius.circular(10.0),
+                            topRight: Radius.circular(BUTTON_BORDER_RADIUS),
+                            bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
                           ),
                         ),
                       ),
                       backgroundColor: modeIn == SingleOrDouble.SingleField
-                          ? MaterialStateProperty.all<Color>(Colors.grey)
-                          : MaterialStateProperty.all(
+                          ? Utils.getColor(Colors.grey)
+                          : Utils.getColor(
                               Theme.of(context).colorScheme.primary),
                     ),
                   ),

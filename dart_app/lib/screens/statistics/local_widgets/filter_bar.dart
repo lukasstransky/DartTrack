@@ -65,7 +65,7 @@ class _FilterBarState extends State<FilterBar> {
                     style: ButtonStyle(
                       shadowColor:
                           MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColor(
+                      overlayColor: Utils.getColorOrPressed(
                         Theme.of(context).colorScheme.primary,
                         Utils.darken(Theme.of(context).colorScheme.primary, 15),
                       ),
@@ -102,7 +102,7 @@ class _FilterBarState extends State<FilterBar> {
                     style: ButtonStyle(
                       shadowColor:
                           MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColor(
+                      overlayColor: Utils.getColorOrPressed(
                         Theme.of(context).colorScheme.primary,
                         Utils.darken(Theme.of(context).colorScheme.primary, 15),
                       ),
@@ -138,7 +138,7 @@ class _FilterBarState extends State<FilterBar> {
                     style: ButtonStyle(
                       shadowColor:
                           MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColor(
+                      overlayColor: Utils.getColorOrPressed(
                         Theme.of(context).colorScheme.primary,
                         Utils.darken(Theme.of(context).colorScheme.primary, 15),
                       ),
@@ -179,7 +179,7 @@ class _FilterBarState extends State<FilterBar> {
                     style: ButtonStyle(
                       shadowColor:
                           MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColor(
+                      overlayColor: Utils.getColorOrPressed(
                         Theme.of(context).colorScheme.primary,
                         Utils.darken(Theme.of(context).colorScheme.primary, 15),
                       ),

@@ -629,7 +629,7 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                         overlayColor: gameX01.getCurrentPointType ==
                                 PointType.Single
                             ? MaterialStateProperty.all(Colors.transparent)
-                            : Utils.getColor(
+                            : Utils.getColorOrPressed(
                                 Theme.of(context).colorScheme.primary,
                                 Utils.darken(
                                     Theme.of(context).colorScheme.primary, 15),
@@ -674,7 +674,7 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                         overlayColor: gameX01.getCurrentPointType ==
                                 PointType.Double
                             ? MaterialStateProperty.all(Colors.transparent)
-                            : Utils.getColor(
+                            : Utils.getColorOrPressed(
                                 Theme.of(context).colorScheme.primary,
                                 Utils.darken(
                                     Theme.of(context).colorScheme.primary, 15),
@@ -719,7 +719,7 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                         overlayColor: gameX01.getCurrentPointType ==
                                 PointType.Tripple
                             ? MaterialStateProperty.all(Colors.transparent)
-                            : Utils.getColor(
+                            : Utils.getColorOrPressed(
                                 Theme.of(context).colorScheme.primary,
                                 Utils.darken(
                                     Theme.of(context).colorScheme.primary, 15),

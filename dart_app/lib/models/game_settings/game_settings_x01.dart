@@ -1,11 +1,10 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
-
-import 'dart:developer';
 
 import 'package:dart_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +36,8 @@ class GameSettingsX01 extends GameSettings {
   bool _showMostScoredPoints = false;
   InputMethod _inputMethod = InputMethod.Round;
   bool _showInputMethodInGameScreen = false;
+  List<int> _botNamingIds = [];
+  List<int> _teamNamingIds = [];
 
   GameSettingsX01() {}
 
@@ -196,28 +197,45 @@ class GameSettingsX01 extends GameSettings {
     notifyListeners();
   }
 
-  void switchSingleOrTeamMode() {
-    setSingleOrTeam = _singleOrTeam == SingleOrTeamEnum.Single
-        ? SingleOrTeamEnum.Team
-        : SingleOrTeamEnum.Single;
+  List<int> get getBotNamingIds => this._botNamingIds;
+  set setBotNamingIds(List<int> value) => this._botNamingIds = value;
+
+  List<int> get getTeamNamingIds => this._teamNamingIds;
+  set setTeamNamingIds(List<int> value) => this._teamNamingIds = value;
+
+  void switchSingleOrTeamMode() async {
+    if (_singleOrTeam == SingleOrTeamEnum.Single) {
+      setSingleOrTeam = SingleOrTeamEnum.Team;
+      /*await Future.delayed(const Duration(milliseconds: 100));
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (scrollControllerTeams.hasClients)
+          scrollControllerTeams.animateTo(
+              scrollControllerTeams.position.maxScrollExtent,
+              duration: Duration(milliseconds: 300),
+              curve: Curves.fastOutSlowIn);
+      });*/
+    } else {
+      setSingleOrTeam = SingleOrTeamEnum.Single;
+    }
+
     notifyListeners();
   }
 
   void switchSingleOrDoubleIn() {
-    if (_modeIn == SingleOrDouble.SingleField) {
+    if (_modeIn == SingleOrDouble.SingleField)
       setModeIn = SingleOrDouble.DoubleField;
-    } else {
+    else
       setModeIn = SingleOrDouble.SingleField;
-    }
+
     notifyListeners();
   }
 
   void switchSingleOrDoubleOut() {
-    if (_modeOut == SingleOrDouble.SingleField) {
+    if (_modeOut == SingleOrDouble.SingleField)
       setModeOut = SingleOrDouble.DoubleField;
-    } else {
+    else
       setModeOut = SingleOrDouble.SingleField;
-    }
+
     notifyListeners();
   }
 
@@ -227,19 +245,18 @@ class GameSettingsX01 extends GameSettings {
       if (_setsEnabled) {
         setLegs = 2;
         setSets = 3;
-      } else {
+      } else
         setLegs = 5;
-      }
     } else {
       setMode = BestOfOrFirstToEnum.BestOf;
       setWinByTwoLegsDifference = false;
       if (_setsEnabled) {
         setSets = 5;
         setLegs = 3;
-      } else {
+      } else
         setLegs = 11;
-      }
     }
+
     notifyListeners();
   }
 
@@ -262,69 +279,140 @@ class GameSettingsX01 extends GameSettings {
       setSuddenDeath = false;
       setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
     }
+
     notifyListeners();
   }
 
-  void removePlayer(Player player) {
-    setPlayers = List.from(getPlayers)..remove(player);
+  void removePlayer(Player playerToRemove) {
+    getPlayers.remove(playerToRemove);
+
     //remove player from team
+    outerLoop:
     for (Team team in getTeams) {
-      List<Player> players = team.getPlayers as List<Player>;
-      for (Player p in players) {
-        if (p == player) {
+      for (Player player in team.getPlayers) {
+        if (player == playerToRemove) {
           //remove team if no other player is in it
-          if (team.getPlayers.length == 1) {
-            setTeams = List.from(getTeams)..remove(team);
-          }
-          team.setPlayers = List.from(players)..remove(player);
+          if (team.getPlayers.length == 1) getTeams.remove(team);
+          team.getPlayers.remove(playerToRemove);
+          break outerLoop;
         }
+      }
+    }
+
+    notifyListeners();
+  }
+
+  void checkBotNamingIds(Player player) {
+    if (!(player is Bot)) return;
+
+    int botNamingId =
+        int.parse(player.getName.substring(player.getName.length - 1));
+    getBotNamingIds.remove(botNamingId);
+
+    if (getBotNamingIds.isEmpty || getBotNamingIds.last == botNamingId) return;
+
+    int idCounter = 1;
+    for (botNamingId in getBotNamingIds) {
+      if (botNamingId != idCounter) {
+        final int index = getBotNamingIds.indexOf(botNamingId);
+        getBotNamingIds[index] = idCounter;
+        _setNewBotNamingId(botNamingId, idCounter);
+      }
+      idCounter++;
+    }
+    notifyListeners();
+  }
+
+  void _setNewBotNamingId(int currentBotNamingId, int newBotNamingId) {
+    for (Player player in getPlayers) {
+      if (player is Bot) {
+        final int botNamingId =
+            int.parse(player.getName.substring(player.getName.length - 1));
+        if (botNamingId == currentBotNamingId) {
+          final String newBotName =
+              player.getName.substring(0, player.getName.length - 1) +
+                  newBotNamingId.toString();
+          player.setName = newBotName;
+        }
+      }
+    }
+    notifyListeners();
+  }
+
+  void checkTeamNamingIds(Team team) {
+    int teamNamingId =
+        int.parse(team.getName.substring(team.getName.length - 1));
+    getTeamNamingIds.remove(teamNamingId);
+
+    if (getTeamNamingIds.isEmpty || getTeamNamingIds.last == teamNamingId)
+      return;
+
+    int idCounter = 1;
+    for (teamNamingId in getTeamNamingIds) {
+      if (teamNamingId != idCounter) {
+        final int index = getTeamNamingIds.indexOf(teamNamingId);
+        getTeamNamingIds[index] = idCounter;
+        _setNewTeamNamingId(teamNamingId, idCounter);
+      }
+      idCounter++;
+    }
+    notifyListeners();
+  }
+
+  void _setNewTeamNamingId(int currentTeamNamingId, int newTeamNamingId) {
+    for (Team team in getTeams) {
+      final int teamNamingId =
+          int.parse(team.getName.substring(team.getName.length - 1));
+      if (teamNamingId == currentTeamNamingId) {
+        final String newTeamName =
+            team.getName.substring(0, team.getName.length - 1) +
+                newTeamNamingId.toString();
+        team.setName = newTeamName;
       }
     }
     notifyListeners();
   }
 
   void addPlayer(Player player) {
-    setPlayers = [...getPlayers, player];
-    //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
+    getPlayers.add(player);
 
-    if (getTeams.isEmpty) {
-      Team team = new Team(name: "Team");
-      team.setPlayers = [...team.getPlayers, player];
-      setTeams = [...getTeams, team];
-    } else {
-      bool foundExistingTeam = false;
+    //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
+    if (getTeams.isEmpty)
+      _createTeamAndAddPlayer(player);
+    else {
+      bool foundTeamWithLessTwoPlayers = false;
       for (Team team in getTeams) {
-        List<Player> players = team.getPlayers as List<Player>;
-        if (players.length < 2) {
-          team.setPlayers = [...players, player];
-          foundExistingTeam = true;
+        if (team.getPlayers.length < MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING) {
+          team.getPlayers.add(player);
+          foundTeamWithLessTwoPlayers = true;
           break;
         }
       }
-      if (foundExistingTeam == false) {
-        Team team = new Team(name: "Team");
-        team.setPlayers = [...team.getPlayers, player];
-        setTeams = [...getTeams, team];
-      }
+      if (!foundTeamWithLessTwoPlayers) _createTeamAndAddPlayer(player);
     }
 
     notifyListeners();
   }
 
-  void addNewPlayerToSpecificTeam(Player playerToAdd, Team? teamToAdd) {
-    setPlayers = [...getPlayers, playerToAdd];
-    for (Team team in getTeams) {
-      if (team == teamToAdd) {
-        List<Player> players = team.getPlayers as List<Player>;
-        team.setPlayers = [...players, playerToAdd];
-      }
-    }
+  void _createTeamAndAddPlayer(Player player) {
+    final int teamNameId = getTeamNamingIds.length + 1;
+    final Team team = new Team(name: 'Team $teamNameId');
+
+    team.getPlayers.add(player);
+    getTeams.add(team);
+    getTeamNamingIds.add(teamNameId);
+  }
+
+  void addNewPlayerToSpecificTeam(Player playerToAdd, Team? teamForNewPlayer) {
+    getPlayers.add(playerToAdd);
+    for (Team team in getTeams)
+      if (team == teamForNewPlayer) team.getPlayers.add(playerToAdd);
+
     notifyListeners();
   }
 
   void addNewTeam(String teamName) {
-    Team newTeam = new Team(name: teamName);
-    setTeams = [...getTeams, newTeam];
+    getTeams.add(new Team(name: teamName));
     notifyListeners();
   }
 
@@ -339,132 +427,101 @@ class GameSettingsX01 extends GameSettings {
         team = t;
       }
     }
-    if (count == 1) {
-      return team;
-    }
+    if (count == 1) return team;
 
     return null;
   }
 
   //checks if its possible to add an player to a team -> e.g. there is 1 team with the MAX players in the team -> should not be possible to add a player, instead only possible to add a team
-  bool possibleToAddPlayer() {
-    for (Team t in getTeams) {
-      if (t.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
-        return true;
-      }
-    }
+  bool possibleToAddPlayerToSomeTeam() {
+    for (Team t in getTeams)
+      if (t.getPlayers.length < MAX_PLAYERS_PER_TEAM) return true;
 
     return false;
   }
 
-  //for swaping team -> if only one other team is available than the current one -> swap immediately instead of showing 1 radio button
-  Team? checkIfMultipleTeamsToAddExceptCurrentTeam(Player playerToSwap) {
+  //for swaping team -> if only one other team is available then the current one -> swap immediately instead of showing 1 radio button
+  Team? checkIfSwappingOnlyToOneTeamPossible(Player playerToSwap) {
     Team? currentTeam = getTeamOfPlayer(playerToSwap);
     int count = 0;
-    Team? team;
+    Team? resultTeam;
 
-    for (Team t in getTeams) {
-      if (t.getPlayers.length < MAX_PLAYERS_PER_TEAM && t != currentTeam) {
+    for (Team team in getTeams) {
+      if (team.getPlayers.length < MAX_PLAYERS_PER_TEAM &&
+          team != currentTeam) {
         count++;
-        team = t;
+        resultTeam = team;
       }
     }
-    if (count == 1) {
-      return team;
-    }
 
+    if (count == 1) return resultTeam;
     return null;
   }
 
-  Team? getTeamOfPlayer(Player player) {
-    for (Team t in getTeams) {
-      for (Player p in t.getPlayers) {
-        if (p == player) {
-          return t;
-        }
+  Team? getTeamOfPlayer(Player playerToCheck) {
+    for (Team team in getTeams) {
+      for (Player player in team.getPlayers) {
+        if (player == playerToCheck) return team;
       }
     }
-
     return null;
   }
 
   void swapTeam(Player playerToSwap, Team? newTeam) {
-    Team? currentTeam = getTeamOfPlayer(playerToSwap);
-    for (Team t in getTeams) {
-      if (t == currentTeam) {
-        //remove player in current team
-        t.setPlayers = List.from(t.getPlayers)..remove(playerToSwap);
-      }
-      if (t == newTeam) {
-        //add player in new team
-        t.setPlayers = [...t.getPlayers, playerToSwap];
-      }
+    final Team? currentTeam = getTeamOfPlayer(playerToSwap);
+
+    for (Team team in getTeams) {
+      if (team == currentTeam) team.getPlayers.remove(playerToSwap);
+      if (team == newTeam) team.getPlayers.add(playerToSwap);
     }
+
     notifyListeners();
   }
 
   List<Team> getPossibleTeamsToSwap(Player playerToSwap) {
-    Team? currentTeam = getTeamOfPlayer(playerToSwap);
+    final Team? currentTeam = getTeamOfPlayer(playerToSwap);
     List<Team> result = [];
 
-    for (Team t in getTeams) {
-      if (t != currentTeam) {
-        result = [...result, t];
-      }
-    }
+    for (Team team in getTeams) if (team != currentTeam) result.add(team);
 
     return result;
   }
 
   void deleteTeam(Team teamToDelete) {
-    for (Team t in getTeams) {
-      if (t == teamToDelete) {
-        setTeams = List.from(getTeams)..remove(teamToDelete);
-
-        for (Player playerToDelete in t.getPlayers) {
-          setPlayers = List.from(getPlayers)..remove(playerToDelete);
-        }
-      }
+    getTeams.remove(teamToDelete);
+    for (Player playerToDelete in teamToDelete.getPlayers) {
+      final int botNamingId = int.parse(
+          playerToDelete.getName.substring(playerToDelete.getName.length - 1));
+      getBotNamingIds.remove(botNamingId);
+      getPlayers.remove(playerToDelete);
     }
 
     notifyListeners();
   }
 
   bool checkIfTeamNameExists(String? teamNameToCheck) {
-    for (Team t in getTeams) {
-      if (t.getName == teamNameToCheck) {
-        return true;
-      }
-    }
+    for (Team team in getTeams)
+      if (team.getName == teamNameToCheck) return true;
+
     return false;
   }
 
   bool checkIfPlayerNameExists(String? playerNameToCheck) {
-    for (Player p in getPlayers) {
-      if (p.getName == playerNameToCheck) {
-        return true;
-      }
-    }
+    for (Player player in getPlayers)
+      if (player.getName == playerNameToCheck) return true;
+
     return false;
   }
 
   bool checkIfPlayerAlreadyInserted(Player playerToInsert) {
-    for (Player p in getPlayers) {
-      if (p.getName == playerToInsert.getName) {
-        return true;
-      }
-    }
-    return false;
-  }
+    for (Player player in getPlayers)
+      if (player.getName == playerToInsert.getName) return true;
 
-  void updateTeamName(String newTeamName, Team teamToUpdate) {
-    teamToUpdate.setName = newTeamName;
-    notifyListeners();
+    return false;
   }
 
   void updatePlayerName(String newPlayerName, Player playerToUpdate) {
     playerToUpdate.setName = newPlayerName;
-    notifyListeners();
   }
 
   void notify() {
@@ -473,15 +530,13 @@ class GameSettingsX01 extends GameSettings {
 
   void setBeginnerPlayer(Player? playerToSet) {
     int index = 0;
-    for (int i = 0; i < getPlayers.length; i++) {
-      if (getPlayers[i] == playerToSet) {
-        index = i;
-      }
-    }
+
+    for (int i = 0; i < getPlayers.length; i++)
+      if (getPlayers[i] == playerToSet) index = i;
 
     //otherwise player is already first in list
     if (index != 0) {
-      Player temp = getPlayers[0];
+      final Player temp = getPlayers[0];
       getPlayers[0] = playerToSet as Player;
       getPlayers[index] = temp;
     }
@@ -489,38 +544,35 @@ class GameSettingsX01 extends GameSettings {
 
   void setBeginnerTeam(Team? teamToSet) {
     int index = 0;
-    for (int i = 0; i < getTeams.length; i++) {
-      if (getTeams[i] == teamToSet) {
-        index = i;
-      }
-    }
+
+    for (int i = 0; i < getTeams.length; i++)
+      if (getTeams[i] == teamToSet) index = i;
 
     //otherwise team is already first in list
     if (index != 0) {
-      Team temp = getTeams[0];
+      final Team temp = getTeams[0];
       getTeams[0] = teamToSet as Team;
       getTeams[index] = temp;
     }
   }
 
   int getPointsOrCustom() {
-    if (getCustomPoints != -1) {
-      return getCustomPoints;
-    }
+    if (getCustomPoints != -1) return getCustomPoints;
+
     return getPoints;
   }
 
   void switchInputMethod(GameX01 gameX01) {
-    if (getInputMethod == InputMethod.Round) {
+    if (getInputMethod == InputMethod.Round)
       setInputMethod = InputMethod.ThreeDarts;
-    } else {
+    else {
       setInputMethod = InputMethod.Round;
 
       //in case user enters e.g. 1 or 2 darts in three dart mode -> switches to round mode
       if (gameX01.getInit) {
         PlayerGameStatisticsX01? stats =
             gameX01.getCurrentPlayerGameStatistics();
-        int currentPointsEntered =
+        final int currentPointsEntered =
             int.parse(gameX01.getCurrentThreeDartsCalculated());
         stats.setCurrentPoints = stats.getCurrentPoints + currentPointsEntered;
         gameX01.resetCurrentThreeDarts();
@@ -531,48 +583,48 @@ class GameSettingsX01 extends GameSettings {
   }
 
   String getGameMode() {
-    String result = "";
+    String result = '';
     if (getMode == BestOfOrFirstToEnum.BestOf)
-      result += "Best Of ";
+      result += 'Best Of ';
     else
-      result += "First To ";
+      result += 'First To ';
 
     if (getSetsEnabled) {
       if (getSets > 1)
-        result += getSets.toString() + " Sets - ";
+        result += getSets.toString() + ' Sets - ';
       else
-        result += getSets.toString() + " Set - ";
+        result += getSets.toString() + ' Set - ';
     }
     if (getLegs > 1)
-      result += getLegs.toString() + " Legs";
+      result += getLegs.toString() + ' Legs';
     else
-      result += getLegs.toString() + " Leg";
+      result += getLegs.toString() + ' Leg';
 
     return result;
   }
 
   String getGameModeDetails(bool showPoints) {
-    String result = "";
+    String result = '';
 
     if (showPoints) {
       if (getCustomPoints != -1)
-        result += getCustomPoints.toString() + " / ";
+        result += getCustomPoints.toString() + ' / ';
       else
-        result += getPoints.toString() + " / ";
+        result += getPoints.toString() + ' / ';
     }
 
     if (getModeIn == SingleOrDouble.SingleField)
-      result += "Single In / ";
+      result += 'Single In / ';
     else
-      result += "Double In / ";
+      result += 'Double In / ';
 
     if (getModeOut == SingleOrDouble.SingleField)
-      result += "Single Out";
+      result += 'Single Out';
     else
-      result += "Double Out";
+      result += 'Double Out';
 
     if (getSuddenDeath)
-      result += " / SD - after " + getMaxExtraLegs.toString() + " Legs";
+      result += ' / SD - after ' + getMaxExtraLegs.toString() + ' Legs';
 
     return result;
   }
@@ -607,11 +659,10 @@ class GameSettingsX01 extends GameSettings {
   }
 
   bool isCurrentUserInPlayers(BuildContext context) {
-    for (Player player in getPlayers) {
-      if (player.getName == context.read<AuthService>().getPlayer!.getName) {
+    for (Player player in getPlayers)
+      if (player.getName == context.read<AuthService>().getPlayer!.getName)
         return true;
-      }
-    }
+
     return false;
   }
 
