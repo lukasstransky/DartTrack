@@ -51,6 +51,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                         onChanged: (value) {
                           setState(() {
                             gameSettingsX01.setSuddenDeath = value;
+                            gameSettingsX01.notify();
                           });
                         },
                       ),
@@ -87,6 +88,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                           onChanged: (value) {
                             setState(() {
                               gameSettingsX01.setMaxExtraLegs = value;
+                              gameSettingsX01.notify();
                             });
                           },
                         ),

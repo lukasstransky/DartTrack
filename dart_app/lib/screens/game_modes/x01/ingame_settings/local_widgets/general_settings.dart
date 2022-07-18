@@ -26,7 +26,7 @@ class GeneralSettings extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "General",
+                    'General',
                     style: TextStyle(
                         fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
                         color: Theme.of(context).colorScheme.primary),
@@ -41,7 +41,7 @@ class GeneralSettings extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Caller",
+                          'Caller',
                           style:
                               TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                         ),
@@ -50,6 +50,7 @@ class GeneralSettings extends StatelessWidget {
                           value: gameSettingsX01.getCallerEnabled,
                           onChanged: (value) {
                             gameSettingsX01.setCallerEnabled = value;
+                            gameSettingsX01.notify();
                           },
                         ),
                       ],
@@ -65,7 +66,7 @@ class GeneralSettings extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Vibration Feedback",
+                          'Vibration Feedback',
                           style:
                               TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                         ),
@@ -74,6 +75,7 @@ class GeneralSettings extends StatelessWidget {
                           value: gameSettingsX01.getVibrationFeedbackEnabled,
                           onChanged: (value) {
                             gameSettingsX01.setVibrationFeedbackEnabled = value;
+                            gameSettingsX01.notify();
                           },
                         ),
                       ],

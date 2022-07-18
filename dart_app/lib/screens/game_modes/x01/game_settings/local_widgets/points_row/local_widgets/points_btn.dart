@@ -27,7 +27,10 @@ class PointsBtn extends StatelessWidget {
         builder: (_, tuple, __) => Container(
           height: WIDGET_HEIGHT_GAMESETTINGS.h,
           child: ElevatedButton(
-            onPressed: () => gameSettingsX01.setPoints = points,
+            onPressed: () => {
+              gameSettingsX01.setPoints = points,
+              gameSettingsX01.notify(),
+            },
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(

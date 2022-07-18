@@ -26,7 +26,7 @@ class HideShow extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Hide/Show",
+                    'Hide/Show',
                     style: TextStyle(
                         fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
                         color: Theme.of(context).colorScheme.primary),
@@ -41,7 +41,7 @@ class HideShow extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Average",
+                          'Average',
                           style:
                               TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                         ),
@@ -50,6 +50,7 @@ class HideShow extends StatelessWidget {
                           value: gameSettingsX01.getShowAverage,
                           onChanged: (value) {
                             gameSettingsX01.setShowAverage = value;
+                            gameSettingsX01.notify();
                           },
                         ),
                       ],
@@ -65,7 +66,7 @@ class HideShow extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Finish Ways",
+                          'Finish Ways',
                           style:
                               TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                         ),
@@ -74,6 +75,7 @@ class HideShow extends StatelessWidget {
                           value: gameSettingsX01.getShowFinishWays,
                           onChanged: (value) {
                             gameSettingsX01.setShowFinishWays = value;
+                            gameSettingsX01.notify();
                           },
                         ),
                       ],
@@ -89,7 +91,7 @@ class HideShow extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Last Throw",
+                          'Last Throw',
                           style:
                               TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                         ),
@@ -98,6 +100,7 @@ class HideShow extends StatelessWidget {
                           value: gameSettingsX01.getShowLastThrow,
                           onChanged: (value) {
                             gameSettingsX01.setShowLastThrow = value;
+                            gameSettingsX01.notify();
                           },
                         ),
                       ],
@@ -113,7 +116,7 @@ class HideShow extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Thrown Darts per Leg",
+                          'Thrown Darts per Leg',
                           style:
                               TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                         ),
@@ -122,6 +125,7 @@ class HideShow extends StatelessWidget {
                           value: gameSettingsX01.getShowThrownDartsPerLeg,
                           onChanged: (value) {
                             gameSettingsX01.setShowThrownDartsPerLeg = value;
+                            gameSettingsX01.notify();
                           },
                         ),
                       ],

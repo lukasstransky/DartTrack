@@ -8,6 +8,8 @@ class Player {
 
   Player({required String name}) : _name = name;
 
+  Player.clone({required Player player}) : _name = player.getName;
+
   factory Player.fromMap(map) {
     if (map.containsKey('preDefinedAverage')) {
       return new Bot(

@@ -48,6 +48,7 @@ class _LegsAmountState extends State<LegsAmount> {
                     } else {
                       gameSettingsX01.setLegs = tuple.item2 - 1;
                     }
+                    gameSettingsX01.notify();
                   },
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
@@ -75,6 +76,7 @@ class _LegsAmountState extends State<LegsAmount> {
                     } else {
                       gameSettingsX01.setLegs = tuple.item2 + 1;
                     }
+                    gameSettingsX01.notify();
                   },
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),

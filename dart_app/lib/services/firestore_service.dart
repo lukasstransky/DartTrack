@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 
@@ -11,7 +12,6 @@ import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dar
 import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,9 +30,9 @@ class FirestoreService {
         gameSettings: gameX01.getGameSettings,
         playerGameStatistics: []);
 
-    String gameId = "";
+    String gameId = '';
     await _firestore
-        .collection("users/" + _firebaseAuth.currentUser!.uid + "/games")
+        .collection('users/' + _firebaseAuth.currentUser!.uid + '/games')
         .add(gameToSave.toMapX01(gameX01, false))
         .then((value) => {
               gameId = value.id,
@@ -58,20 +58,20 @@ class FirestoreService {
     }
 
     await _firestore
-        .collection("users/" + _firebaseAuth.currentUser!.uid + "/openGames")
+        .collection('users/' + _firebaseAuth.currentUser!.uid + '/openGames')
         .add(gameToSave.toMapX01(gameX01, true))
         .then((value) async => {
               await _firestore
                   .collection(
-                      "users/" + _firebaseAuth.currentUser!.uid + "/openGames")
+                      'users/' + _firebaseAuth.currentUser!.uid + '/openGames')
                   .doc(value.id)
-                  .update({"gameId": value.id})
+                  .update({'gameId': value.id})
             });
   }
 
   Future<void> deleteOpenGame(String gameId, BuildContext context) async {
     await _firestore
-        .collection("users/" + _firebaseAuth.currentUser!.uid + "/openGames")
+        .collection('users/' + _firebaseAuth.currentUser!.uid + '/openGames')
         .doc(gameId)
         .delete()
         .then((value) async => {
@@ -81,20 +81,20 @@ class FirestoreService {
 
   Future<void> getOpenGames(BuildContext context) async {
     CollectionReference collectionReference = _firestore
-        .collection("users/" + _firebaseAuth.currentUser!.uid + "/openGames");
+        .collection('users/' + _firebaseAuth.currentUser!.uid + '/openGames');
     final openGamesFirestore =
         Provider.of<OpenGamesFirestore>(context, listen: false);
     openGamesFirestore.reset();
 
     await collectionReference.get().then((openGames) => {
           openGames.docs.forEach((openGame) {
-            String mode = "";
+            String mode = '';
             if ((openGame.data() as Map<String, dynamic>)
-                .containsValue("X01")) {
-              mode = "X01";
+                .containsValue('X01')) {
+              mode = 'X01';
             } else if ((openGame.data() as Map<String, dynamic>)
-                .containsValue("Cricket")) {
-              mode = "Cricket";
+                .containsValue('Cricket')) {
+              mode = 'Cricket';
             }
 
             Game game = Game.fromMap(openGame.data(), mode, openGame.id, true);
@@ -113,16 +113,16 @@ class FirestoreService {
 
     for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
       PlayerGameStatistics playerGameStatisticsToSave = PlayerGameStatistics(
-          gameId: "",
+          gameId: '',
           player: stats.getPlayer,
           mode: stats.getMode,
           dateTime: stats.getDateTime);
 
       //add playerGameStats
       await _firestore
-          .collection("users/" +
+          .collection('users/' +
               _firebaseAuth.currentUser!.uid +
-              "/playerGameStatistics")
+              '/playerGameStatistics')
           .add(playerGameStatisticsToSave.toMapX01(
               stats, gameX01, gameId, false))
           .then((value) => {
@@ -132,17 +132,17 @@ class FirestoreService {
 
     //set playerGameStatsIds + gameId for game
     await _firestore
-        .collection("users/" + _firebaseAuth.currentUser!.uid + "/games")
+        .collection('users/' + _firebaseAuth.currentUser!.uid + '/games')
         .doc(gameId)
         .update(
-            {"playerGameStatisticsIds": playerGameStatsIds, "gameId": gameId});
+            {'playerGameStatisticsIds': playerGameStatsIds, 'gameId': gameId});
   }
 
   Future<void> getStatistics(BuildContext context) async {
     //todo comment out
-    final String currentPlayerName =
+    const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
-        "test";
+        'test';
     final firestoreStats =
         Provider.of<StatisticsFirestoreX01>(context, listen: false);
     firestoreStats.resetValues();
@@ -181,19 +181,19 @@ class FirestoreService {
     Map<String, dynamic> _allScoresPerDartWithCount = {};
 
     CollectionReference collectionReference = _firestore.collection(
-        "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
+        'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics');
     Query query =
-        collectionReference.where("player.name", isEqualTo: currentPlayerName);
+        collectionReference.where('player.name', isEqualTo: currentPlayerName);
 
     if (firestoreStats.currentFilterValue == FilterValue.Year ||
         firestoreStats.currentFilterValue == FilterValue.Month) {
-      query = query.where("dateTime",
+      query = query.where('dateTime',
           isGreaterThanOrEqualTo:
               firestoreStats.getDateTimeFromCurrentFilterValue());
     } else if (firestoreStats.currentFilterValue == FilterValue.Custom) {
-      query = query.where("dateTime",
+      query = query.where('dateTime',
           isGreaterThanOrEqualTo: firestoreStats.getCustomStartDate());
-      query = query.where("dateTime",
+      query = query.where('dateTime',
           isLessThanOrEqualTo: firestoreStats.getCustomEndDate());
     }
 
@@ -205,33 +205,33 @@ class FirestoreService {
                 firestoreStats.countOfGames = value.size,
 
                 //count of games won
-                if (element.get("gameWon") == true)
+                if (element.get('gameWon') == true)
                   {
                     countOfGamesWon++,
                   },
 
                 //checkout quote
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("checkoutInPercent"))
+                    .containsKey('checkoutInPercent'))
                   {
-                    checkoutQuoteAvg += element.get("checkoutInPercent"),
+                    checkoutQuoteAvg += element.get('checkoutInPercent'),
                     checkoutQuoteCounter++,
-                    if (element.get("checkoutInPercent") > bestCheckoutQuote)
+                    if (element.get('checkoutInPercent') > bestCheckoutQuote)
                       {
-                        bestCheckoutQuote = element.get("checkoutInPercent"),
+                        bestCheckoutQuote = element.get('checkoutInPercent'),
                       },
-                    if (element.get("checkoutInPercent") < worstCheckoutQuote ||
+                    if (element.get('checkoutInPercent') < worstCheckoutQuote ||
                         worstCheckoutQuote == -1)
                       {
-                        worstCheckoutQuote = element.get("checkoutInPercent"),
+                        worstCheckoutQuote = element.get('checkoutInPercent'),
                       },
                   },
 
                 //checkout score
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("checkouts"))
+                    .containsKey('checkouts'))
                   {
-                    for (int checkoutScore in element.get("checkouts").values)
+                    for (int checkoutScore in element.get('checkouts').values)
                       {
                         checkoutScoreAvg += checkoutScore,
                         checkoutScoreCounter++,
@@ -244,81 +244,81 @@ class FirestoreService {
                   },
 
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("highestFinish"))
+                    .containsKey('highestFinish'))
                   {
-                    if (element.get("highestFinish") > bestCheckoutScore)
+                    if (element.get('highestFinish') > bestCheckoutScore)
                       {
-                        bestCheckoutScore = element.get("highestFinish"),
+                        bestCheckoutScore = element.get('highestFinish'),
                       }
                   },
 
                 //legs
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("thrownDartsPerLeg"))
+                    .containsKey('thrownDartsPerLeg'))
                   {
                     for (int thrownDarts
-                        in element.get("thrownDartsPerLeg").values)
+                        in element.get('thrownDartsPerLeg').values)
                       {
                         countOfAllDarts += thrownDarts,
                       }
                   },
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("bestLeg"))
+                    .containsKey('bestLeg'))
                   {
-                    if (element.get("bestLeg") < bestLeg || bestLeg == -1)
+                    if (element.get('bestLeg') < bestLeg || bestLeg == -1)
                       {
-                        bestLeg = element.get("bestLeg"),
+                        bestLeg = element.get('bestLeg'),
                       }
                   },
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("worstLeg"))
+                    .containsKey('worstLeg'))
                   {
-                    if (element.get("worstLeg") > worstLeg)
+                    if (element.get('worstLeg') > worstLeg)
                       {
-                        worstLeg = element.get("worstLeg"),
+                        worstLeg = element.get('worstLeg'),
                       }
                   },
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("dartsForWonLegCount"))
+                    .containsKey('dartsForWonLegCount'))
                   {
                     dartsForWonLegCount +=
-                        element.get("dartsForWonLegCount") as int,
+                        element.get('dartsForWonLegCount') as int,
                   },
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("legsWonTotal"))
+                    .containsKey('legsWonTotal'))
                   {
-                    legsWonTotal += element.get("legsWonTotal") as int,
+                    legsWonTotal += element.get('legsWonTotal') as int,
                   },
 
                 //avg
-                avg += element.get("average"),
-                if (element.get("average") > bestAvg)
+                avg += element.get('average'),
+                if (element.get('average') > bestAvg)
                   {
-                    bestAvg = element.get("average"),
+                    bestAvg = element.get('average'),
                   },
-                if (element.get("average") < worstAvg || worstAvg == -1)
+                if (element.get('average') < worstAvg || worstAvg == -1)
                   {
-                    worstAvg = element.get("average"),
+                    worstAvg = element.get('average'),
                   },
 
                 //first nine avg
-                firstNineAvg += element.get("firstNineAverage"),
-                if (element.get("firstNineAverage") > bestFirstNineAvg)
+                firstNineAvg += element.get('firstNineAverage'),
+                if (element.get('firstNineAverage') > bestFirstNineAvg)
                   {
-                    bestFirstNineAvg = element.get("firstNineAverage"),
+                    bestFirstNineAvg = element.get('firstNineAverage'),
                   },
-                if (element.get("firstNineAverage") < worstFirstNineAvg ||
+                if (element.get('firstNineAverage') < worstFirstNineAvg ||
                     worstFirstNineAvg == -1)
                   {
-                    worstFirstNineAvg = element.get("firstNineAverage"),
+                    worstFirstNineAvg = element.get('firstNineAverage'),
                   },
                 counter++,
 
                 //180
-                countOf180 += element.get("roundedScoresEven")["180"] as int,
+                countOf180 += element.get('roundedScoresEven')['180'] as int,
 
                 //rounded scores even
-                _roundedScoresEven = element.get("roundedScoresEven"),
+                _roundedScoresEven = element.get('roundedScoresEven'),
                 for (String key in _roundedScoresEven.keys)
                   {
                     firestoreStats.roundedScoresEven[int.parse(key)] +=
@@ -326,7 +326,7 @@ class FirestoreService {
                   },
 
                 //rounded scores odd
-                _roundedScoresOdd = element.get("roundedScoresOdd"),
+                _roundedScoresOdd = element.get('roundedScoresOdd'),
                 for (String key in _roundedScoresOdd.keys)
                   {
                     firestoreStats.roundedScoresOdd[int.parse(key)] +=
@@ -334,7 +334,7 @@ class FirestoreService {
                   },
 
                 //precise scores
-                _preciseScores = element.get("preciseScores"),
+                _preciseScores = element.get('preciseScores'),
                 for (String key in _preciseScores.keys)
                   {
                     if (firestoreStats.preciseScores
@@ -352,10 +352,10 @@ class FirestoreService {
 
                 //all scores per dart with count
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey("allScoresPerDartWithCount"))
+                    .containsKey('allScoresPerDartWithCount'))
                   {
                     _allScoresPerDartWithCount =
-                        element.get("allScoresPerDartWithCount"),
+                        element.get('allScoresPerDartWithCount'),
                     for (String key in _allScoresPerDartWithCount.keys)
                       {
                         if (firestoreStats.allScoresPerDartAsStringCount
@@ -439,10 +439,10 @@ class FirestoreService {
       String playerGameStatsId, String mode) async {
     PlayerGameStatistics? result;
     CollectionReference collectionReference = _firestore.collection(
-        "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
+        'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics');
 
     await collectionReference.doc(playerGameStatsId).get().then((value) => {
-          if (mode == "X01")
+          if (mode == 'X01')
             {
               result = PlayerGameStatistics.fromMapX01(value.data()),
             },
@@ -453,15 +453,15 @@ class FirestoreService {
   Future<void> getGames(String mode, BuildContext context) async {
     late dynamic firestoreStats;
     switch (mode) {
-      case "X01":
+      case 'X01':
         firestoreStats =
             Provider.of<StatisticsFirestoreX01>(context, listen: false);
       //add other modes
     }
 
     CollectionReference collectionReference = _firestore
-        .collection("users/" + _firebaseAuth.currentUser!.uid + "/games");
-    Query query = collectionReference.where("name", isEqualTo: mode);
+        .collection('users/' + _firebaseAuth.currentUser!.uid + '/games');
+    Query query = collectionReference.where('name', isEqualTo: mode);
 
     firestoreStats.resetGames();
 
@@ -475,7 +475,7 @@ class FirestoreService {
         Game game = Game.fromMap(element.data(), mode, element.id, false);
 
         for (String playerGameStatsId
-            in element.get("playerGameStatisticsIds")) {
+            in element.get('playerGameStatisticsIds')) {
           PlayerGameStatistics? playerGameStatistics =
               await getPlayerGameStatisticById(playerGameStatsId, mode);
 
@@ -492,14 +492,14 @@ class FirestoreService {
       String orderField, bool ascendingOrder, BuildContext context) async {
     final firestoreStats =
         Provider.of<StatisticsFirestoreX01>(context, listen: false);
-    final String currentPlayerName =
+    const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
-        "Strainski";
+        'Strainski';
 
     CollectionReference collectionReference = _firestore.collection(
-        "users/" + _firebaseAuth.currentUser!.uid + "/playerGameStatistics");
+        'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics');
     Query query = collectionReference
-        .where("player.name", isEqualTo: currentPlayerName)
+        .where('player.name', isEqualTo: currentPlayerName)
         .orderBy(orderField, descending: ascendingOrder);
 
     List<Game> temp = [];
@@ -508,15 +508,15 @@ class FirestoreService {
 
     await query.get().then((value) => {
           value.docs.forEach((element) async {
-            String gameId = element.get("gameId");
+            String gameId = element.get('gameId');
 
             //for overall values -> checkouts + thrown darts per leg
             if (orderField == 'highestFinish' || orderField == 'bestLeg') {
               SplayTreeMap<String, int> checkouts =
-                  SplayTreeMap<String, int>.from(element.get("checkouts"));
+                  SplayTreeMap<String, int>.from(element.get('checkouts'));
               SplayTreeMap<String, int> thrownDartsPerLeg =
                   SplayTreeMap<String, int>.from(
-                      element.get("thrownDartsPerLeg"));
+                      element.get('thrownDartsPerLeg'));
 
               checkouts.entries.forEach((element) {
                 firestoreStats.checkoutWithGameId
@@ -542,5 +542,34 @@ class FirestoreService {
     firestoreStats.sortOverallStats(ascendingOrder);
     firestoreStats.filteredGames = temp;
     firestoreStats.notify();
+  }
+
+  Future<void> postDefaultSettingsX01(BuildContext context) async {
+    final defaultSettingsX01 =
+        Provider.of<DefaultSettingsX01>(context, listen: false);
+    final CollectionReference ref = await _firestore.collection(
+        'users/' + _firebaseAuth.currentUser!.uid + '/defaultSettingsX01');
+    final QuerySnapshot<Object?> result = await ref.get();
+
+    if (result.docs.isNotEmpty) {
+      await ref.doc(defaultSettingsX01.id).delete();
+    }
+    await ref
+        .add(defaultSettingsX01.toMap())
+        .then((value) => defaultSettingsX01.id = value.id);
+    await ref.doc(defaultSettingsX01.id).update({'id': defaultSettingsX01.id});
+  }
+
+  Future<void> getDefaultSettingsX01(BuildContext context) async {
+    final defaultSettingsX01 =
+        Provider.of<DefaultSettingsX01>(context, listen: false);
+    final QuerySnapshot<Object?> result = await _firestore
+        .collection(
+            'users/' + _firebaseAuth.currentUser!.uid + '/defaultSettingsX01')
+        .get();
+
+    if (result.docs.isNotEmpty) {
+      defaultSettingsX01.fromMap(result.docs[0].data());
+    }
   }
 }

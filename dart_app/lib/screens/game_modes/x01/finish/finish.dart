@@ -9,14 +9,12 @@ import 'package:sizer/sizer.dart';
 import 'dart:developer';
 
 class Finish extends StatelessWidget {
-  static const routeName = "/finishX01";
-
-  const Finish({Key? key}) : super(key: key);
+  static const routeName = '/finishX01';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarX01Finished("Finished Game"),
+      appBar: CustomAppBarX01Finished('Finished Game'),
       body: Center(
         child: Container(
           width: 90.w,

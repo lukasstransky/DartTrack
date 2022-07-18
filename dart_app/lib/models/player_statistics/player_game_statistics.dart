@@ -97,162 +97,162 @@ class PlayerGameStatistics {
     if (openGame) {
       return {
         if (playerGameStatisticsX01.getPlayer is Bot)
-          "player": {
+          'player': {
             'name': playerGameStatisticsX01.getPlayer.getName,
             'preDefinedAverage':
                 playerGameStatisticsX01.getPlayer.getPreDefinedAverage
           },
         if (!(playerGameStatisticsX01.getPlayer is Bot))
-          "player": {
+          'player': {
             'name': playerGameStatisticsX01.getPlayer.getName,
           },
-        "mode": _mode,
-        "gameId": gameId,
-        "dateTime": _dateTime,
+        'mode': _mode,
+        'gameId': gameId,
+        'dateTime': _dateTime,
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-          "average": double.parse(playerGameStatisticsX01.getAverage(
+          'average': double.parse(playerGameStatisticsX01.getAverage(
               gameX01, playerGameStatisticsX01)),
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-          "highestScore": playerGameStatisticsX01.getHighestScore(),
+          'highestScore': playerGameStatisticsX01.getHighestScore(),
         if (gameX01.getGameSettings.getEnableCheckoutCounting &&
             playerGameStatisticsX01.getCheckouts.isNotEmpty)
-          "checkoutInPercent": checkoutQuote == "-"
+          'checkoutInPercent': checkoutQuote == '-'
               ? 0
               : double.parse(
                   checkoutQuote.substring(0, checkoutQuote.length - 1)),
         if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-          "highestFinish": playerGameStatisticsX01.getHighestCheckout(),
+          'highestFinish': playerGameStatisticsX01.getHighestCheckout(),
         if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-          "bestLeg": int.parse(playerGameStatisticsX01.getBestLeg()),
+          'bestLeg': int.parse(playerGameStatisticsX01.getBestLeg()),
         if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-          "worstLeg": int.parse((playerGameStatisticsX01.getWorstLeg())),
+          'worstLeg': int.parse((playerGameStatisticsX01.getWorstLeg())),
         if (playerGameStatisticsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
-          "allScoresPerDartWithCount":
+          'allScoresPerDartWithCount':
               playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
-        "currentPoints": playerGameStatisticsX01.getCurrentPoints,
-        "totalPoints": playerGameStatisticsX01.getTotalPoints,
-        "startingPoints": playerGameStatisticsX01.getStartingPoints,
+        'currentPoints': playerGameStatisticsX01.getCurrentPoints,
+        'totalPoints': playerGameStatisticsX01.getTotalPoints,
+        'startingPoints': playerGameStatisticsX01.getStartingPoints,
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-          "firstNineAverage":
+          'firstNineAverage':
               double.parse(playerGameStatisticsX01.getFirstNinveAvg(gameX01)),
-        "firstNineAvgCount": playerGameStatisticsX01.getFirstNineAvgCount,
+        'firstNineAvgCount': playerGameStatisticsX01.getFirstNineAvgCount,
 
-        "currentThrownDartsInLeg":
+        'currentThrownDartsInLeg':
             playerGameStatisticsX01.getCurrentThrownDartsInLeg,
-        "allThrownDarts": playerGameStatisticsX01.getAllThrownDarts,
+        'allThrownDarts': playerGameStatisticsX01.getAllThrownDarts,
         if (playerGameStatisticsX01.getThrownDartsPerLeg.isNotEmpty)
-          "thrownDartsPerLeg": playerGameStatisticsX01.getThrownDartsPerLeg,
-        "dartsForWonLegCount": playerGameStatisticsX01.getDartsForWonLegCount,
-        "gameWon": playerGameStatisticsX01.getGameWon,
-        "legsWon": playerGameStatisticsX01.getLegsWon,
-        "legsWonTotal": playerGameStatisticsX01.getLegsWonTotal,
+          'thrownDartsPerLeg': playerGameStatisticsX01.getThrownDartsPerLeg,
+        'dartsForWonLegCount': playerGameStatisticsX01.getDartsForWonLegCount,
+        'gameWon': playerGameStatisticsX01.getGameWon,
+        'legsWon': playerGameStatisticsX01.getLegsWon,
+        'legsWonTotal': playerGameStatisticsX01.getLegsWonTotal,
         if (gameX01.getGameSettings.getSetsEnabled)
-          "setsWon": playerGameStatisticsX01.getSetsWon,
+          'setsWon': playerGameStatisticsX01.getSetsWon,
         if (playerGameStatisticsX01.getAllScoresPerLeg.isNotEmpty)
-          "allScoresPerLeg": playerGameStatisticsX01.getAllScoresPerLeg,
+          'allScoresPerLeg': playerGameStatisticsX01.getAllScoresPerLeg,
         if (playerGameStatisticsX01.getLegsCount.isNotEmpty)
-          "legsCount": playerGameStatisticsX01.getLegsCount,
+          'legsCount': playerGameStatisticsX01.getLegsCount,
         if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-          "checkouts": playerGameStatisticsX01.getCheckouts,
+          'checkouts': playerGameStatisticsX01.getCheckouts,
         if (playerGameStatisticsX01.getCheckoutCount > 0)
-          "checkoutDarts": playerGameStatisticsX01.getCheckoutCount,
+          'checkoutDarts': playerGameStatisticsX01.getCheckoutCount,
         //todo add _checkoutCountAtThrownDarts
         if (playerGameStatisticsX01.getRoundedScoresEven.isNotEmpty)
-          "roundedScoresEven":
+          'roundedScoresEven':
               playerGameStatisticsX01.getRoundedScoresEvenWithStringKey(),
         if (playerGameStatisticsX01.getRoundedScoresOdd.isNotEmpty)
-          "roundedScoresOdd":
+          'roundedScoresOdd':
               playerGameStatisticsX01.getRoundedScoresOddWithStringKey(),
         if (playerGameStatisticsX01.getPreciseScores.isNotEmpty)
-          "preciseScores":
+          'preciseScores':
               playerGameStatisticsX01.getPreciseScoresWithStringKey(),
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-          "allScores": playerGameStatisticsX01.getAllScores,
-        "allScoresCountForRound":
+          'allScores': playerGameStatisticsX01.getAllScores,
+        'allScoresCountForRound':
             playerGameStatisticsX01.getAllScoresCountForRound,
         if (playerGameStatisticsX01.getAllScoresPerDart.isNotEmpty)
-          "allScoresPerDart": playerGameStatisticsX01.getAllScoresPerDart,
+          'allScoresPerDart': playerGameStatisticsX01.getAllScoresPerDart,
         if (playerGameStatisticsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
-          "allScoresPerDartAsStringCount":
+          'allScoresPerDartAsStringCount':
               playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
         if (playerGameStatisticsX01.getAllScoresPerDartAsString.isNotEmpty)
-          "allScoresPerDartAsString":
+          'allScoresPerDartAsString':
               playerGameStatisticsX01.getAllScoresPerDartAsString,
         if (playerGameStatisticsX01.getAllRemainingPoints.isNotEmpty)
-          "allRemainingPoints": playerGameStatisticsX01.getAllRemainingPoints,
+          'allRemainingPoints': playerGameStatisticsX01.getAllRemainingPoints,
         if (playerGameStatisticsX01.getAllRemainingScoresPerDart.isNotEmpty)
-          "allRemainingScoresPerDart":
+          'allRemainingScoresPerDart':
               playerGameStatisticsX01.getAllRemainingScoresPerDart
       };
     }
 
     return {
       if (playerGameStatisticsX01.getPlayer is Bot)
-        "player": {
+        'player': {
           'name': playerGameStatisticsX01.getPlayer.getName,
           'preDefinedAverage':
               playerGameStatisticsX01.getPlayer.getPreDefinedAverage
         },
       if (!(playerGameStatisticsX01.getPlayer is Bot))
-        "player": {
+        'player': {
           'name': playerGameStatisticsX01.getPlayer.getName,
         },
-      "mode": _mode,
-      "legsWon": playerGameStatisticsX01.getLegsWon,
-      "gameId": gameId,
-      "dateTime": _dateTime,
+      'mode': _mode,
+      'legsWon': playerGameStatisticsX01.getLegsWon,
+      'gameId': gameId,
+      'dateTime': _dateTime,
       if (gameX01.getGameSettings.getSetsEnabled)
-        "setsWon": playerGameStatisticsX01.getSetsWon,
+        'setsWon': playerGameStatisticsX01.getSetsWon,
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-        "average": double.parse(playerGameStatisticsX01.getAverage(
+        'average': double.parse(playerGameStatisticsX01.getAverage(
             gameX01, playerGameStatisticsX01)),
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-        "firstNineAverage":
+        'firstNineAverage':
             double.parse(playerGameStatisticsX01.getFirstNinveAvg(gameX01)),
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-        "highestScore": playerGameStatisticsX01.getHighestScore(),
+        'highestScore': playerGameStatisticsX01.getHighestScore(),
       if (gameX01.getGameSettings.getEnableCheckoutCounting &&
           playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "checkoutInPercent": checkoutQuote == "-"
+        'checkoutInPercent': checkoutQuote == '-'
             ? 0
             : double.parse(
                 checkoutQuote.substring(0, checkoutQuote.length - 1)),
       if (playerGameStatisticsX01.getCheckoutCount > 0)
-        "checkoutDarts": playerGameStatisticsX01.getCheckoutCount,
+        'checkoutDarts': playerGameStatisticsX01.getCheckoutCount,
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "highestFinish": playerGameStatisticsX01.getHighestCheckout(),
+        'highestFinish': playerGameStatisticsX01.getHighestCheckout(),
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "checkouts": playerGameStatisticsX01.getCheckouts,
+        'checkouts': playerGameStatisticsX01.getCheckouts,
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "bestLeg": int.parse(playerGameStatisticsX01.getBestLeg()),
+        'bestLeg': int.parse(playerGameStatisticsX01.getBestLeg()),
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
-        "worstLeg": int.parse((playerGameStatisticsX01.getWorstLeg())),
+        'worstLeg': int.parse((playerGameStatisticsX01.getWorstLeg())),
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-        "allScores": playerGameStatisticsX01.getAllScores,
+        'allScores': playerGameStatisticsX01.getAllScores,
       if (playerGameStatisticsX01.getAllScoresPerDart.isNotEmpty)
-        "allScoresPerDart": playerGameStatisticsX01.getAllScoresPerDart,
+        'allScoresPerDart': playerGameStatisticsX01.getAllScoresPerDart,
       if (playerGameStatisticsX01.getRoundedScoresEven.isNotEmpty)
-        "roundedScoresEven":
+        'roundedScoresEven':
             playerGameStatisticsX01.getRoundedScoresEvenWithStringKey(),
       if (playerGameStatisticsX01.getRoundedScoresOdd.isNotEmpty)
-        "roundedScoresOdd":
+        'roundedScoresOdd':
             playerGameStatisticsX01.getRoundedScoresOddWithStringKey(),
       if (playerGameStatisticsX01.getPreciseScores.isNotEmpty)
-        "preciseScores":
+        'preciseScores':
             playerGameStatisticsX01.getPreciseScoresWithStringKey(),
       if (playerGameStatisticsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
-        "allScoresPerDartWithCount":
+        'allScoresPerDartWithCount':
             playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
       if (playerGameStatisticsX01.getThrownDartsPerLeg.isNotEmpty)
-        "thrownDartsPerLeg": playerGameStatisticsX01.getThrownDartsPerLeg,
-      "legsWonTotal": playerGameStatisticsX01.getLegsWonTotal,
+        'thrownDartsPerLeg': playerGameStatisticsX01.getThrownDartsPerLeg,
+      'legsWonTotal': playerGameStatisticsX01.getLegsWonTotal,
       if (playerGameStatisticsX01.getAllScoresPerLeg.isNotEmpty)
-        "allScoresPerLeg": playerGameStatisticsX01.getAllScoresPerLeg,
-      "gameWon": playerGameStatisticsX01.getGameWon,
-      "allScoresCountForRound":
+        'allScoresPerLeg': playerGameStatisticsX01.getAllScoresPerLeg,
+      'gameWon': playerGameStatisticsX01.getGameWon,
+      'allScoresCountForRound':
           playerGameStatisticsX01.getAllScoresCountForRound,
-      "totalPoints": playerGameStatisticsX01.getTotalPoints,
-      "dartsForWonLegCount": playerGameStatisticsX01.getDartsForWonLegCount,
+      'totalPoints': playerGameStatisticsX01.getTotalPoints,
+      'dartsForWonLegCount': playerGameStatisticsX01.getDartsForWonLegCount,
     };
   }
 

@@ -17,6 +17,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   @override
   void initState() {
     _getOpenGames();
+    _getDefaultSettingsX01();
     super.initState();
   }
 
@@ -24,10 +25,14 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
     await context.read<FirestoreService>().getOpenGames(context);
   }
 
+  void _getDefaultSettingsX01() async {
+    await context.read<FirestoreService>().getDefaultSettingsX01(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(false, "Game Modes"),
+      appBar: CustomAppBar(false, 'Game Modes'),
       body: Consumer<OpenGamesFirestore>(
         builder: (_, openGamesFirestore, __) => openGamesFirestore.init
             ? Column(
@@ -37,14 +42,14 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text("Open Games: "),
+                        Text('Open Games: '),
                         Container(
                           height: 3.h,
                           child: ElevatedButton(
                             child: Text(
                                 openGamesFirestore.openGames.length.toString()),
                             onPressed: () =>
-                                Navigator.of(context).pushNamed("/openGames"),
+                                Navigator.of(context).pushNamed('/openGames'),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
@@ -72,11 +77,11 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                               width: 50.w,
                               child: ElevatedButton(
                                 child: Text(
-                                  "X01",
+                                  'X01',
                                   style: TextStyle(fontSize: 14.sp),
                                 ),
                                 onPressed: () => Navigator.of(context)
-                                    .pushNamed("/settingsX01"),
+                                    .pushNamed('/settingsX01'),
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -95,7 +100,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                               width: 50.w,
                               child: ElevatedButton(
                                 child: Text(
-                                  "Cricket",
+                                  'Cricket',
                                   style: TextStyle(fontSize: 14.sp),
                                 ),
                                 onPressed: () => null,
@@ -117,7 +122,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                               width: 50.w,
                               child: ElevatedButton(
                                 child: Text(
-                                  "Singles Training",
+                                  'Singles Training',
                                   style: TextStyle(fontSize: 14.sp),
                                 ),
                                 onPressed: () => null,
@@ -137,7 +142,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                             width: 50.w,
                             child: ElevatedButton(
                               child: Text(
-                                "Doubles Training",
+                                'Doubles Training',
                                 style: TextStyle(fontSize: 14.sp),
                               ),
                               onPressed: () => null,

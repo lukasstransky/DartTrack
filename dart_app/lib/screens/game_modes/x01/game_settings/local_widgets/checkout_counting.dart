@@ -29,6 +29,7 @@ class CheckoutCounting extends StatelessWidget {
                   value: tuple.item1,
                   onChanged: (value) {
                     gameSettingsX01.setEnableCheckoutCounting = value;
+                    gameSettingsX01.notify();
                   },
                 ),
               ],

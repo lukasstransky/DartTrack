@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class Buttons extends StatelessWidget {
-  Buttons({Key? key}) : super(key: key);
-
   saveGameX01ToFirestore(BuildContext context) async {
     gameId = await context
         .read<FirestoreService>()
@@ -19,11 +17,12 @@ class Buttons extends StatelessWidget {
         Provider.of<GameX01>(context, listen: false), gameId, context);
   }
 
-  String gameId = "";
+  String gameId = '';
 
   @override
   Widget build(BuildContext context) {
     final gameX01 = Provider.of<GameX01>(context, listen: false);
+
     return Column(
       children: [
         Padding(
@@ -32,14 +31,14 @@ class Buttons extends StatelessWidget {
             width: 40.w,
             height: 6.h,
             child: ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed("/statisticsX01",
+              onPressed: () => Navigator.of(context).pushNamed('/statisticsX01',
                   arguments: {
                     'game': Provider.of<GameX01>(context, listen: false)
                   }),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
-                  "Statistics",
+                  'Statistics',
                   style: TextStyle(fontSize: 15.sp),
                 ),
               ),
@@ -68,13 +67,13 @@ class Buttons extends StatelessWidget {
                 savePlayerGameStatisticsX01ToFirestore(context),
                 gameX01.reset(),
                 Navigator.of(context).pushNamed(
-                  "/gameX01",
+                  '/gameX01',
                   arguments: {'openGame': false},
                 ),
               },
               child: FittedBox(
                 fit: BoxFit.fitWidth,
-                child: Text("New Game", style: TextStyle(fontSize: 15.sp)),
+                child: Text('New Game', style: TextStyle(fontSize: 15.sp)),
               ),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(
@@ -98,7 +97,7 @@ class Buttons extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () => {
                 Navigator.of(context).pushNamed(
-                  "/gameX01",
+                  '/gameX01',
                   arguments: {'openGame': false},
                 ),
                 gameX01.revertPoints(),
@@ -106,7 +105,7 @@ class Buttons extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child:
-                    Text("Undo Last Throw", style: TextStyle(fontSize: 15.sp)),
+                    Text('Undo Last Throw', style: TextStyle(fontSize: 15.sp)),
               ),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(

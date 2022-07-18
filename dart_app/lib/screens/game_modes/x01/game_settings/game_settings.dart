@@ -13,7 +13,7 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/sing
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/start_game_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/win_by_two_legs_diff.dart';
 import 'package:dart_app/services/auth_service.dart';
-import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar_x01_settings.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
@@ -30,6 +30,8 @@ class _GameSettingsState extends State<GameSettings> {
   @override
   void initState() {
     super.initState();
+    Provider.of<GameSettingsX01>(context, listen: false)
+        .setSettingsFromDefault(context);
     addCurrentUserToPlayers();
   }
 
@@ -45,8 +47,6 @@ class _GameSettingsState extends State<GameSettings> {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
 
-    gameSettingsX01.resetValues();
-
     //check if user already inserted -> in case of switching between other screen -> would get inserted multiple times
     if (currentUserAsPlayer != null &&
         !gameSettingsX01.checkIfPlayerAlreadyInserted(currentUserAsPlayer)) {
@@ -59,7 +59,7 @@ class _GameSettingsState extends State<GameSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(true, 'Game Settings'),
+      appBar: CustomAppBarX01Settings(),
       body: SafeArea(
         child: Column(
           children: [

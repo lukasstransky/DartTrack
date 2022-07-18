@@ -4,7 +4,7 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/points_btns_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/points_btns_threeDarts.dart';
-import 'package:dart_app/utils/app_bars/custom_app_bar_game_x01.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar_x01_game.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'dart:developer';
 
 class Game extends StatefulWidget {
-  static const routeName = "/gameX01";
+  static const routeName = '/gameX01';
 
   const Game({Key? key}) : super(key: key);
 
@@ -64,7 +64,7 @@ class GameState extends State<Game> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBarGameX01(),
+      appBar: CustomAppBarX01Game(),
       body: Consumer2<GameX01, GameSettingsX01>(
         builder: (_, gameX01, gameSettingsX01, __) => Column(
           children: [

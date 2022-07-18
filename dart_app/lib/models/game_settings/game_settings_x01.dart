@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
@@ -11,35 +12,37 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GameSettingsX01 extends GameSettings {
-  SingleOrTeamEnum _singleOrTeam = SingleOrTeamEnum.Single;
-  BestOfOrFirstToEnum _mode = BestOfOrFirstToEnum.FirstTo;
-  int _points = 301;
-  int _customPoints = -1;
-  int _legs = 1;
-  int _sets = 5;
-  bool _setsEnabled = false;
-  SingleOrDouble _modeIn = SingleOrDouble.SingleField;
-  SingleOrDouble _modeOut = SingleOrDouble.DoubleField;
-  bool _winByTwoLegsDifference = false;
-  bool _suddenDeath = false;
-  int _maxExtraLegs = 2;
-  bool _enableCheckoutCounting = false;
-  bool _checkoutCountingFinallyDisabled =
-      false; //if user disables checkout counting in the in game settings -> cant be reversed (cause of inconsistent stats then)
-  bool _showAverage = true;
-  bool _showFinishWays = true;
-  bool _showThrownDartsPerLeg = true;
-  bool _showLastThrow = true;
-  bool _callerEnabled = false;
-  bool _vibrationFeedbackEnabled = false;
-  bool _automaticallySubmitPoints = true;
-  bool _showMostScoredPoints = false;
-  InputMethod _inputMethod = InputMethod.Round;
-  bool _showInputMethodInGameScreen = false;
-  List<int> _botNamingIds = [];
-  List<int> _teamNamingIds = [];
+  late SingleOrTeamEnum _singleOrTeam;
+  late BestOfOrFirstToEnum _mode;
+  late int _points;
+  late int _customPoints;
+  late int _legs;
+  late int _sets;
+  late bool _setsEnabled;
+  late SingleOrDouble _modeIn;
+  late SingleOrDouble _modeOut;
+  late bool _winByTwoLegsDifference;
+  late bool _suddenDeath;
+  late int _maxExtraLegs;
+  late bool _enableCheckoutCounting;
+  late bool
+      _checkoutCountingFinallyDisabled; //if user disables checkout counting in the in game settings -> cant be reversed (cause of inconsistent stats then)
+  late bool _showAverage;
+  late bool _showFinishWays;
+  late bool _showThrownDartsPerLeg;
+  late bool _showLastThrow;
+  late bool _callerEnabled;
+  late bool _vibrationFeedbackEnabled;
+  late bool _automaticallySubmitPoints;
+  late bool _showMostScoredPoints;
+  late InputMethod _inputMethod;
+  late bool _showInputMethodInGameScreen;
+  late List<int> _botNamingIds;
+  late List<int> _teamNamingIds;
 
-  GameSettingsX01() {}
+  GameSettingsX01() {
+    this.initValues();
+  }
 
   GameSettingsX01.firestore({
     required bool checkoutCounting,
@@ -78,25 +81,21 @@ class GameSettingsX01 extends GameSettings {
   set setPoints(int points) => {
         this._points = points,
         this._customPoints = -1,
-        notifyListeners(),
       };
 
   int get getCustomPoints => this._customPoints;
   set setCustomPoints(int customPoints) => {
         this._customPoints = customPoints,
-        notifyListeners(),
       };
 
   int get getLegs => this._legs;
   set setLegs(int legs) => {
         this._legs = legs,
-        notifyListeners(),
       };
 
   int get getSets => this._sets;
   set setSets(int sets) => {
         this._sets = sets,
-        notifyListeners(),
       };
 
   bool get getSetsEnabled => this._setsEnabled;
@@ -115,19 +114,16 @@ class GameSettingsX01 extends GameSettings {
   bool get getSuddenDeath => this._suddenDeath;
   set setSuddenDeath(bool suddenDeath) => {
         this._suddenDeath = suddenDeath,
-        notifyListeners(),
       };
 
   int get getMaxExtraLegs => this._maxExtraLegs;
   set setMaxExtraLegs(int maxLegDifference) => {
         this._maxExtraLegs = maxLegDifference,
-        notifyListeners(),
       };
 
   bool get getEnableCheckoutCounting => this._enableCheckoutCounting;
   set setEnableCheckoutCounting(bool enableCheckoutCounting) => {
         this._enableCheckoutCounting = enableCheckoutCounting,
-        notifyListeners(),
       };
 
   bool get getCheckoutCountingFinallyDisabled =>
@@ -136,55 +132,46 @@ class GameSettingsX01 extends GameSettings {
           bool checkoutCountingFinallyDisabled) =>
       {
         this._checkoutCountingFinallyDisabled = checkoutCountingFinallyDisabled,
-        notifyListeners(),
       };
 
   bool get getShowAverage => this._showAverage;
   set setShowAverage(bool showAverage) => {
         this._showAverage = showAverage,
-        notifyListeners(),
       };
 
   bool get getShowFinishWays => this._showFinishWays;
   set setShowFinishWays(bool showFinishWays) => {
         this._showFinishWays = showFinishWays,
-        notifyListeners(),
       };
 
   bool get getShowThrownDartsPerLeg => this._showThrownDartsPerLeg;
   set setShowThrownDartsPerLeg(bool showThrownDartsPerLeg) => {
         this._showThrownDartsPerLeg = showThrownDartsPerLeg,
-        notifyListeners(),
       };
 
   bool get getShowLastThrow => this._showLastThrow;
   set setShowLastThrow(bool showLastThrow) => {
         this._showLastThrow = showLastThrow,
-        notifyListeners(),
       };
 
   bool get getCallerEnabled => this._callerEnabled;
   set setCallerEnabled(bool callerEnabled) => {
         this._callerEnabled = callerEnabled,
-        notifyListeners(),
       };
 
   bool get getVibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
   set setVibrationFeedbackEnabled(bool vibrationFeedbackEnabled) => {
         this._vibrationFeedbackEnabled = vibrationFeedbackEnabled,
-        notifyListeners(),
       };
 
   bool get getAutomaticallySubmitPoints => this._automaticallySubmitPoints;
   set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) => {
         this._automaticallySubmitPoints = automaticallySubmitPoints,
-        notifyListeners(),
       };
 
   bool get getShowMostScoredPoints => this._showMostScoredPoints;
   set setShowMostScoredPoints(bool showMostScoredPoints) => {
         this._showMostScoredPoints = showMostScoredPoints,
-        notifyListeners(),
       };
 
   InputMethod get getInputMethod => this._inputMethod;
@@ -194,7 +181,6 @@ class GameSettingsX01 extends GameSettings {
   bool get getShowInputMethodInGameScreen => this._showInputMethodInGameScreen;
   set setShowInputMethodInGameScreen(bool showInputMethodInGameScreen) {
     this._showInputMethodInGameScreen = showInputMethodInGameScreen;
-    notifyListeners();
   }
 
   List<int> get getBotNamingIds => this._botNamingIds;
@@ -629,35 +615,6 @@ class GameSettingsX01 extends GameSettings {
     return result;
   }
 
-  void resetValues() {
-    _singleOrTeam = SingleOrTeamEnum.Single;
-    setTeams = [];
-    setPlayers = [];
-    _mode = BestOfOrFirstToEnum.FirstTo;
-    _points = 301;
-    _customPoints = -1;
-    _legs = 1;
-    _sets = 5;
-    _setsEnabled = false;
-    _modeIn = SingleOrDouble.SingleField;
-    _modeOut = SingleOrDouble.DoubleField;
-    _winByTwoLegsDifference = false;
-    _suddenDeath = false;
-    _maxExtraLegs = 2;
-    _enableCheckoutCounting = false;
-    _checkoutCountingFinallyDisabled = false;
-    _showAverage = true;
-    _showFinishWays = true;
-    _showThrownDartsPerLeg = true;
-    _showLastThrow = true;
-    _callerEnabled = false;
-    _vibrationFeedbackEnabled = false;
-    _automaticallySubmitPoints = true;
-    _showMostScoredPoints = false;
-    _inputMethod = InputMethod.Round;
-    _showInputMethodInGameScreen = false;
-  }
-
   bool isCurrentUserInPlayers(BuildContext context) {
     for (Player player in getPlayers)
       if (player.getName == context.read<AuthService>().getPlayer!.getName)
@@ -681,5 +638,190 @@ class GameSettingsX01 extends GameSettings {
     setWinByTwoLegsDifference = gameSettingsX01.getWinByTwoLegsDifference;
     setSuddenDeath = gameSettingsX01.getSuddenDeath;
     setPlayers = gameSettingsX01.getPlayers;
+  }
+
+  void setDefaultSettings(BuildContext context) {
+    final defaultSettingsX01 =
+        Provider.of<DefaultSettingsX01>(context, listen: false);
+
+    defaultSettingsX01.automaticallySubmitPoints =
+        this.getAutomaticallySubmitPoints;
+    defaultSettingsX01.callerEnabled = this.getCallerEnabled;
+    defaultSettingsX01.checkoutCountingFinallyDisabled =
+        this.getCheckoutCountingFinallyDisabled;
+    defaultSettingsX01.customPoints = this.getCustomPoints;
+    defaultSettingsX01.enableCheckoutCounting = this.getEnableCheckoutCounting;
+    defaultSettingsX01.inputMethod = this.getInputMethod;
+    defaultSettingsX01.legs = this.getLegs;
+    defaultSettingsX01.maxExtraLegs = this.getMaxExtraLegs;
+    defaultSettingsX01.mode = this.getMode;
+    defaultSettingsX01.modeIn = this.getModeIn;
+    defaultSettingsX01.modeOut = this.getModeOut;
+    defaultSettingsX01.points = this.getPoints;
+    defaultSettingsX01.sets = this.getSets;
+    defaultSettingsX01.setsEnabled = this.getSetsEnabled;
+    defaultSettingsX01.showAverage = this.getShowAverage;
+    defaultSettingsX01.showFinishWays = this.getShowFinishWays;
+    defaultSettingsX01.showInputMethodInGameScreen =
+        this.getShowInputMethodInGameScreen;
+    defaultSettingsX01.showLastThrow = this.getShowLastThrow;
+    defaultSettingsX01.showMostScoredPoints = this.getShowMostScoredPoints;
+    defaultSettingsX01.showThrownDartsPerLeg = this.getShowThrownDartsPerLeg;
+    defaultSettingsX01.singleOrTeam = this.getSingleOrTeam;
+    defaultSettingsX01.suddenDeath = this.getSuddenDeath;
+    defaultSettingsX01.vibrationFeedbackEnabled =
+        this.getVibrationFeedbackEnabled;
+    defaultSettingsX01.winByTwoLegsDifference = this.getWinByTwoLegsDifference;
+    defaultSettingsX01.players = this.getPlayers;
+    defaultSettingsX01.playersNames = [];
+    for (Player player in this.getPlayers) {
+      defaultSettingsX01.playersNames.add(player.getName);
+    }
+    defaultSettingsX01.botNamingIds = this.getBotNamingIds;
+
+    this.notify();
+  }
+
+  void setSettingsFromDefault(BuildContext context) {
+    final defaultSettingsX01 =
+        Provider.of<DefaultSettingsX01>(context, listen: false);
+
+    this.setAutomaticallySubmitPoints =
+        defaultSettingsX01.automaticallySubmitPoints;
+    this.setCallerEnabled = defaultSettingsX01.callerEnabled;
+    this.setCheckoutCountingFinallyDisabled =
+        defaultSettingsX01.checkoutCountingFinallyDisabled;
+    this.setCustomPoints = defaultSettingsX01.customPoints;
+    this.setEnableCheckoutCounting = defaultSettingsX01.enableCheckoutCounting;
+    this.setInputMethod = defaultSettingsX01.inputMethod;
+    this.setLegs = defaultSettingsX01.legs;
+    this.setMaxExtraLegs = defaultSettingsX01.maxExtraLegs;
+    this.setMode = defaultSettingsX01.mode;
+    this.setModeIn = defaultSettingsX01.modeIn;
+    this.setModeOut = defaultSettingsX01.modeOut;
+    this.setPoints = defaultSettingsX01.points;
+    this.setSets = defaultSettingsX01.sets;
+    this.setSetsEnabled = defaultSettingsX01.setsEnabled;
+    this.setShowAverage = defaultSettingsX01.showAverage;
+    this.setShowFinishWays = defaultSettingsX01.showFinishWays;
+    this.setShowInputMethodInGameScreen =
+        defaultSettingsX01.showInputMethodInGameScreen;
+    this.setShowLastThrow = defaultSettingsX01.showLastThrow;
+    this.setShowMostScoredPoints = defaultSettingsX01.showMostScoredPoints;
+    this.setShowThrownDartsPerLeg = defaultSettingsX01.showThrownDartsPerLeg;
+    this.setSingleOrTeam = defaultSettingsX01.singleOrTeam;
+    this.setSuddenDeath = defaultSettingsX01.suddenDeath;
+    this.setVibrationFeedbackEnabled =
+        defaultSettingsX01.vibrationFeedbackEnabled;
+    this.setWinByTwoLegsDifference = defaultSettingsX01.winByTwoLegsDifference;
+    this.setPlayers = defaultSettingsX01.players;
+    this.setBotNamingIds = defaultSettingsX01.botNamingIds;
+  }
+
+  bool defaultSettingsSelected(BuildContext context) {
+    final defaultSettingsX01 =
+        Provider.of<DefaultSettingsX01>(context, listen: false);
+
+    if (defaultSettingsX01.automaticallySubmitPoints ==
+            this.getAutomaticallySubmitPoints &&
+        defaultSettingsX01.callerEnabled == this.getCallerEnabled &&
+        defaultSettingsX01.checkoutCountingFinallyDisabled ==
+            this.getCheckoutCountingFinallyDisabled &&
+        defaultSettingsX01.customPoints == this.getCustomPoints &&
+        defaultSettingsX01.enableCheckoutCounting ==
+            this.getEnableCheckoutCounting &&
+        defaultSettingsX01.inputMethod == this.getInputMethod &&
+        defaultSettingsX01.legs == this.getLegs &&
+        defaultSettingsX01.maxExtraLegs == this.getMaxExtraLegs &&
+        defaultSettingsX01.mode == this.getMode &&
+        defaultSettingsX01.modeIn == this.getModeIn &&
+        defaultSettingsX01.modeOut == this.getModeOut &&
+        defaultSettingsX01.points == this.getPoints &&
+        defaultSettingsX01.sets == this.getSets &&
+        defaultSettingsX01.setsEnabled == this.getSetsEnabled &&
+        defaultSettingsX01.showAverage == this.getShowAverage &&
+        defaultSettingsX01.showFinishWays == this.getShowFinishWays &&
+        defaultSettingsX01.showInputMethodInGameScreen ==
+            this.getShowInputMethodInGameScreen &&
+        defaultSettingsX01.showLastThrow == this.getShowLastThrow &&
+        defaultSettingsX01.showMostScoredPoints ==
+            this.getShowMostScoredPoints &&
+        defaultSettingsX01.showThrownDartsPerLeg ==
+            this.getShowThrownDartsPerLeg &&
+        defaultSettingsX01.singleOrTeam == this.getSingleOrTeam &&
+        defaultSettingsX01.suddenDeath == this.getSuddenDeath &&
+        defaultSettingsX01.vibrationFeedbackEnabled ==
+            this.getVibrationFeedbackEnabled &&
+        defaultSettingsX01.winByTwoLegsDifference ==
+            this.getWinByTwoLegsDifference &&
+        defaultSettingsX01.samePlayers(this.getPlayers)) {
+      return true;
+    }
+    return false;
+  }
+
+  bool generalDefaultSettingsSelected() {
+    if (this.getAutomaticallySubmitPoints == DEFAULT_AUTO_SUBMIT_POINTS &&
+        this.getCallerEnabled == DEFAULT_CALLER_ENABLED &&
+        this.getCheckoutCountingFinallyDisabled ==
+            DEFAULT_CHECKOUT_COUNTING_FINALLY_DISABLED &&
+        this.getCustomPoints == DEFAULT_CUSTOM_POINTS &&
+        this.getEnableCheckoutCounting == DEFAULT_ENABLE_CHECKOUT_COUNTING &&
+        this.getInputMethod == DEFAULT_INPUT_METHOD &&
+        this.getLegs == DEFAULT_LEGS &&
+        this.getMaxExtraLegs == DEFAULT_MAX_EXTRA_LEGS &&
+        this.getMode == DEFAULT_MODE &&
+        this.getModeIn == DEFAULT_MODE_IN &&
+        this.getModeOut == DEFAULT_MODE_OUT &&
+        this.getPoints == DEFAULT_POINTS &&
+        this.getSets == DEFAULT_SETS &&
+        this.getSetsEnabled == DEFAULT_SETS_ENABLED &&
+        this.getShowAverage == DEFAULT_SHOW_AVG &&
+        this.getShowFinishWays == DEFAULT_SHOW_FINISH_WAYS &&
+        this.getShowInputMethodInGameScreen ==
+            DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN &&
+        this.getShowLastThrow == DEFAULT_SHOW_LAST_THROW &&
+        this.getShowMostScoredPoints == DEFAULT_SHOW_MOST_SCORED_POINTS &&
+        this.getShowThrownDartsPerLeg == DEFAULT_SHOW_THROWN_DARTS_PER_LEG &&
+        this.getSingleOrTeam == DEFAULT_SINGLE_OR_TEAM &&
+        this.getSuddenDeath == DEFAULT_SUDDEN_DEATH &&
+        this.getVibrationFeedbackEnabled == DEFAULT_VIBRATION_FEEDBACK &&
+        this.getWinByTwoLegsDifference == DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE &&
+        this.getPlayers.length == 0) {
+      return true;
+    }
+    return false;
+  }
+
+  void initValues() {
+    setPlayers = [];
+    setBotNamingIds = [];
+    setTeamNamingIds = [];
+
+    setSingleOrTeam = DEFAULT_SINGLE_OR_TEAM;
+    setMode = DEFAULT_MODE;
+    setPoints = DEFAULT_POINTS;
+    setCustomPoints = DEFAULT_CUSTOM_POINTS;
+    setLegs = DEFAULT_LEGS;
+    setSets = DEFAULT_SETS;
+    setSetsEnabled = DEFAULT_SETS_ENABLED;
+    setModeIn = DEFAULT_MODE_IN;
+    setModeOut = DEFAULT_MODE_OUT;
+    setWinByTwoLegsDifference = DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE;
+    setSuddenDeath = DEFAULT_SUDDEN_DEATH;
+    setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
+    setEnableCheckoutCounting = DEFAULT_ENABLE_CHECKOUT_COUNTING;
+    setCheckoutCountingFinallyDisabled =
+        DEFAULT_CHECKOUT_COUNTING_FINALLY_DISABLED;
+    setShowAverage = DEFAULT_SHOW_AVG;
+    setShowFinishWays = DEFAULT_SHOW_FINISH_WAYS;
+    setShowThrownDartsPerLeg = DEFAULT_SHOW_THROWN_DARTS_PER_LEG;
+    setShowLastThrow = DEFAULT_SHOW_LAST_THROW;
+    setCallerEnabled = DEFAULT_CALLER_ENABLED;
+    setVibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
+    setAutomaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
+    setShowMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
+    setInputMethod = DEFAULT_INPUT_METHOD;
+    setShowInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
   }
 }

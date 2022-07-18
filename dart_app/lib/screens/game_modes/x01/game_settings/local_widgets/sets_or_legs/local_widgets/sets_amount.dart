@@ -43,6 +43,7 @@ class SetsAmount extends StatelessWidget {
                     } else {
                       gameSettingsX01.setSets = tuple.item2 - 1;
                     }
+                    gameSettingsX01.notify();
                   },
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
@@ -71,6 +72,7 @@ class SetsAmount extends StatelessWidget {
                     } else {
                       gameSettingsX01.setSets = tuple.item2 + 1;
                     }
+                    gameSettingsX01.notify();
                   },
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),

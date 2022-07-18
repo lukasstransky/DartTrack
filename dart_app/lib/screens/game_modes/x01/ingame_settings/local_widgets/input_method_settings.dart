@@ -28,7 +28,7 @@ class InputMethodSettings extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Input Method",
+                    'Input Method',
                     style: TextStyle(
                         fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
                         color: Theme.of(context).colorScheme.primary),
@@ -43,7 +43,7 @@ class InputMethodSettings extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          "Show in Game Screen",
+                          'Show in Game Screen',
                           style:
                               TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                         ),
@@ -53,6 +53,7 @@ class InputMethodSettings extends StatelessWidget {
                           onChanged: (value) {
                             gameSettingsX01.setShowInputMethodInGameScreen =
                                 value;
+                            gameSettingsX01.notify();
                           },
                         ),
                       ],
@@ -75,7 +76,7 @@ class InputMethodSettings extends StatelessWidget {
                                 : null,
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text("Round"),
+                              child: const Text('Round'),
                             ),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
@@ -106,7 +107,7 @@ class InputMethodSettings extends StatelessWidget {
                                 : null,
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text("3 Darts"),
+                              child: const Text('3 Darts'),
                             ),
                             style: ButtonStyle(
                               shape: MaterialStateProperty.all(
@@ -182,7 +183,7 @@ class InputMethodSettings extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            "Most Scored Points",
+                            'Most Scored Points',
                             style: TextStyle(
                                 fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                           ),
@@ -191,6 +192,7 @@ class InputMethodSettings extends StatelessWidget {
                             value: gameSettingsX01.getShowMostScoredPoints,
                             onChanged: (value) {
                               gameSettingsX01.setShowMostScoredPoints = value;
+                              gameSettingsX01.notify();
                             },
                           ),
                         ],
@@ -207,7 +209,7 @@ class InputMethodSettings extends StatelessWidget {
                       child: Row(
                         children: [
                           Text(
-                            "Automatically Submit Points",
+                            'Automatically Submit Points',
                             style: TextStyle(
                                 fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
                           ),
@@ -217,6 +219,7 @@ class InputMethodSettings extends StatelessWidget {
                             onChanged: (value) {
                               gameSettingsX01.setAutomaticallySubmitPoints =
                                   value;
+                              gameSettingsX01.notify();
                             },
                           ),
                         ],

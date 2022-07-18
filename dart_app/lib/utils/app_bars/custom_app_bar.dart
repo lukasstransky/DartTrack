@@ -18,11 +18,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
               onPressed: () {
                 var route = ModalRoute.of(context);
                 if (route != null) {
-                  if (route.settings.name == "/settingsX01") {
-                    Navigator.of(context).pushNamed("/home");
-                  } else {
-                    Navigator.of(context).pop();
-                  }
+                  Navigator.of(context).pop();
                 }
               },
               icon: Icon(Icons.arrow_back),

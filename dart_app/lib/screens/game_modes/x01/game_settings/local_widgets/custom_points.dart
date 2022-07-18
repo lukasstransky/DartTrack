@@ -114,6 +114,7 @@ class _CustomPointsState extends State<CustomPoints> {
                   gameSettingsX01.setCustomPoints = result;
                   break;
               }
+              gameSettingsX01.notify();
             },
             style: ButtonStyle(
               shape: MaterialStateProperty.all(

@@ -44,8 +44,11 @@ class DisableCheckoutCounting extends StatelessWidget {
                     child: Row(
                       children: [
                         ElevatedButton(
-                          onPressed: () => gameSettingsX01
-                              .setCheckoutCountingFinallyDisabled = true,
+                          onPressed: () => {
+                            gameSettingsX01.setCheckoutCountingFinallyDisabled =
+                                true,
+                            gameSettingsX01.notify(),
+                          },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
                             child: const Text("Disable"),

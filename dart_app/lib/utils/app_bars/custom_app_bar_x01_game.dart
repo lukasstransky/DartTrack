@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final gameX01 = Provider.of<GameX01>(context, listen: false);
@@ -15,9 +15,7 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
 
     void _resetValuesAndNavigateToHome() {
       gameX01.reset();
-      gameSettingsX01.resetValues();
-      gameSettingsX01.notify();
-      Navigator.of(context).pushNamed("/home");
+      Navigator.of(context).pushNamed('/home');
     }
 
     void _showDialogForSavingGame(BuildContext context) {
@@ -25,15 +23,15 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("End Game"),
+          title: const Text('End Game'),
           content: const Text(
-              "Would you like to save the game for finishing it later or end it completely?"),
+              'Would you like to save the game for finishing it later or end it completely?'),
           actions: [
             TextButton(
               onPressed: () => {
                 Navigator.of(context).pop(),
               },
-              child: const Text("Continue"),
+              child: const Text('Continue'),
             ),
             TextButton(
               onPressed: () async => {
@@ -42,14 +40,14 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
                     Provider.of<GameX01>(context, listen: false), context),
                 _resetValuesAndNavigateToHome(),
               },
-              child: const Text("Save"),
+              child: const Text('Save'),
             ),
             TextButton(
               onPressed: () => {
                 Navigator.of(context).pop(),
                 _resetValuesAndNavigateToHome(),
               },
-              child: const Text("End"),
+              child: const Text('End'),
             ),
           ],
         ),
@@ -85,7 +83,7 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
       actions: [
         IconButton(
           onPressed: () => {
-            Navigator.of(context).pushNamed("/statisticsX01", arguments: {
+            Navigator.of(context).pushNamed('/statisticsX01', arguments: {
               'game': Provider.of<GameX01>(context, listen: false),
             }),
           },
@@ -93,7 +91,7 @@ class CustomAppBarGameX01 extends StatelessWidget with PreferredSizeWidget {
         ),
         IconButton(
           onPressed: () =>
-              Navigator.of(context).pushNamed("/inGameSettingsX01"),
+              Navigator.of(context).pushNamed('/inGameSettingsX01'),
           icon: Icon(Icons.settings),
         )
       ],
