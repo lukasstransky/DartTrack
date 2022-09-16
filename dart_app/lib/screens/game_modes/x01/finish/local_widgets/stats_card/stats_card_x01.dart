@@ -1,4 +1,5 @@
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -12,7 +13,7 @@ class StatsCardX01 extends StatefulWidget {
       : super(key: key);
 
   final bool isFinishScreen;
-  final Game game;
+  final GameX01 game;
   final bool openGame;
 
   @override
@@ -29,7 +30,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
       child: GestureDetector(
         onTap: () {
           if (!widget.isFinishScreen)
-            Navigator.pushNamed(context, "/statisticsX01",
+            Navigator.pushNamed(context, '/statisticsX01',
                 arguments: {'game': widget.game});
         },
         child: Card(
@@ -64,9 +65,9 @@ class _StatsCardX01State extends State<StatsCardX01> {
               Padding(
                 padding: EdgeInsets.only(left: 10, bottom: 10),
                 child: Text(
-                    "X01 (" +
+                    'X01 (' +
                         widget.game.getGameSettings.getGameModeDetails(true) +
-                        ")",
+                        ')',
                     style: TextStyle(fontSize: 12.sp)),
               ),
               for (int i = 0; i < 2; i++) ...[
@@ -116,7 +117,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
                       color: Colors.black,
                     ),
                     label: const Text(
-                      "All Players",
+                      'All Players',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),

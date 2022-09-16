@@ -59,12 +59,12 @@ class PlayerStatsInGame extends StatelessWidget {
                             fontSize: 15.sp)),
                   ] else if (gameX01.onePlayerInFinishArea())
                     if (playerGameStatisticsX01!.isBogeyNumber())
-                      Text("No Finish possible!",
+                      Text('No Finish possible!',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 12.sp))
                     else
-                      Text("",
+                      Text('',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 15.sp)),
@@ -212,9 +212,9 @@ class PlayerStatsInGame extends StatelessWidget {
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            "Average: " +
-                                playerGameStatisticsX01!.getAverage(
-                                    gameX01, playerGameStatisticsX01!),
+                            'Average: ' +
+                                playerGameStatisticsX01!
+                                    .getAverage(playerGameStatisticsX01!),
                             style: TextStyle(
                               fontSize: 13.sp,
                             ),
@@ -224,7 +224,7 @@ class PlayerStatsInGame extends StatelessWidget {
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            "Last Throw: " +
+                            'Last Throw: ' +
                                 playerGameStatisticsX01!.getLastThrow(),
                             style: TextStyle(
                               fontSize: 13.sp,
@@ -236,7 +236,7 @@ class PlayerStatsInGame extends StatelessWidget {
                             ? FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  "Thrown Darts: " +
+                                  'Thrown Darts: ' +
                                       playerGameStatisticsX01!
                                           .getCurrentThrownDartsInLeg
                                           .toString(),
@@ -248,7 +248,7 @@ class PlayerStatsInGame extends StatelessWidget {
                             : FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  "Thrown Darts: -",
+                                  'Thrown Darts: -',
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                   ),

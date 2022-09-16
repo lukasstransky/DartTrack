@@ -31,8 +31,8 @@ class PlayerGameStatistics {
         totalPoints: map['totalPoints'] == null ? 0 : map['totalPoints'],
         startingPoints:
             map['startingPoints'] == null ? 0 : map['startingPoints'],
-        firstNineAvg:
-            map['firstNineAverage'] == null ? 0 : map['firstNineAverage'],
+        firstNineAvgPoints:
+            map['firstNineAvgPoints'] == null ? 0 : map['firstNineAvgPoints'],
         firstNineAvgCount:
             map['firstNineAvgCount'] == null ? 0 : map['firstNineAvgCount'],
         currentThrownDartsInLeg: map['currentThrownDartsInLeg'] == null
@@ -110,8 +110,8 @@ class PlayerGameStatistics {
         'gameId': gameId,
         'dateTime': _dateTime,
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-          'average': double.parse(playerGameStatisticsX01.getAverage(
-              gameX01, playerGameStatisticsX01)),
+          'average': double.parse(
+              playerGameStatisticsX01.getAverage(playerGameStatisticsX01)),
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
           'highestScore': playerGameStatisticsX01.getHighestScore(),
         if (gameX01.getGameSettings.getEnableCheckoutCounting &&
@@ -133,10 +133,8 @@ class PlayerGameStatistics {
         'totalPoints': playerGameStatisticsX01.getTotalPoints,
         'startingPoints': playerGameStatisticsX01.getStartingPoints,
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-          'firstNineAverage':
-              double.parse(playerGameStatisticsX01.getFirstNinveAvg(gameX01)),
+          'firstNineAvgPoints': playerGameStatisticsX01.getFirstNineAvgPoints,
         'firstNineAvgCount': playerGameStatisticsX01.getFirstNineAvgCount,
-
         'currentThrownDartsInLeg':
             playerGameStatisticsX01.getCurrentThrownDartsInLeg,
         'allThrownDarts': playerGameStatisticsX01.getAllThrownDarts,
@@ -187,28 +185,26 @@ class PlayerGameStatistics {
     }
 
     return {
-      if (playerGameStatisticsX01.getPlayer is Bot)
-        'player': {
-          'name': playerGameStatisticsX01.getPlayer.getName,
-          'preDefinedAverage':
-              playerGameStatisticsX01.getPlayer.getPreDefinedAverage
-        },
-      if (!(playerGameStatisticsX01.getPlayer is Bot))
-        'player': {
-          'name': playerGameStatisticsX01.getPlayer.getName,
-        },
+      'player': playerGameStatisticsX01.getPlayer
+          .toMap(playerGameStatisticsX01.getPlayer),
       'mode': _mode,
       'legsWon': playerGameStatisticsX01.getLegsWon,
       'gameId': gameId,
       'dateTime': _dateTime,
+      'dateTimeForFiltering':
+          DateTime(_dateTime.year, _dateTime.month, _dateTime.day),
       if (gameX01.getGameSettings.getSetsEnabled)
         'setsWon': playerGameStatisticsX01.getSetsWon,
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-        'average': double.parse(playerGameStatisticsX01.getAverage(
-            gameX01, playerGameStatisticsX01)),
+        'average': double.parse(
+            playerGameStatisticsX01.getAverage(playerGameStatisticsX01)),
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-        'firstNineAverage':
-            double.parse(playerGameStatisticsX01.getFirstNinveAvg(gameX01)),
+        'firstNineAvgPoints': playerGameStatisticsX01.getFirstNineAvgPoints,
+      if (playerGameStatisticsX01.getFirstNineAvgCount > 0)
+        'firstNineAvgCount': playerGameStatisticsX01.getFirstNineAvgCount,
+      if (playerGameStatisticsX01.getFirstNineAvgCount > 0)
+        'firstNineAvg':
+            double.parse(playerGameStatisticsX01.getFirstNinveAvg()),
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
         'highestScore': playerGameStatisticsX01.getHighestScore(),
       if (gameX01.getGameSettings.getEnableCheckoutCounting &&
@@ -219,6 +215,8 @@ class PlayerGameStatistics {
                 checkoutQuote.substring(0, checkoutQuote.length - 1)),
       if (playerGameStatisticsX01.getCheckoutCount > 0)
         'checkoutDarts': playerGameStatisticsX01.getCheckoutCount,
+      if (playerGameStatisticsX01.getAllThrownDarts > 0)
+        'allThrownDarts': playerGameStatisticsX01.getAllThrownDarts,
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)
         'highestFinish': playerGameStatisticsX01.getHighestCheckout(),
       if (playerGameStatisticsX01.getCheckouts.isNotEmpty)

@@ -27,7 +27,7 @@ class _MoreStatsState extends State<MoreStats> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      "Rounded Scores",
+                      'Rounded Scores',
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
@@ -39,8 +39,8 @@ class _MoreStatsState extends State<MoreStats> {
                   child: Center(
                     child: Text(
                       _showAllScoesPerDartWithCount
-                          ? "All Scores per Dart"
-                          : "Precise Scores",
+                          ? 'All Scores per Dart'
+                          : 'Precise Scores',
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
@@ -73,12 +73,13 @@ class _MoreStatsState extends State<MoreStats> {
                                     alignment: Alignment.centerRight,
                                     child: Text(
                                       i != 180
-                                          ? i.toString() + "+"
+                                          ? i.toString() + '+'
                                           : i.toString(),
                                       style: TextStyle(
                                           fontSize: 12.sp,
                                           fontWeight: statisticsFirestore
-                                                      .atLeastOneGamePlayed() &&
+                                                          .countOfGames >
+                                                      0 &&
                                                   (!_roundedScoresOdd
                                                           ? statisticsFirestore
                                                                   .roundedScoresEven[
@@ -118,7 +119,8 @@ class _MoreStatsState extends State<MoreStats> {
                                       style: TextStyle(
                                           fontSize: 12.sp,
                                           fontWeight: statisticsFirestore
-                                                      .atLeastOneGamePlayed() &&
+                                                          .countOfGames >
+                                                      0 &&
                                                   statisticsFirestore
                                                           .countOfGames >
                                                       0 &&
@@ -170,11 +172,12 @@ class _MoreStatsState extends State<MoreStats> {
                                   child: Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      i.toString() + ".",
+                                      i.toString() + '.',
                                       style: TextStyle(
                                           fontSize: 12.sp,
                                           fontWeight: statisticsFirestore
-                                                      .atLeastOneGamePlayed() &&
+                                                          .countOfGames >
+                                                      0 &&
                                                   (i == 1 || i == 2 || i == 3)
                                               ? FontWeight.bold
                                               : FontWeight.normal),
@@ -195,24 +198,25 @@ class _MoreStatsState extends State<MoreStats> {
                                                         .allScoresPerDartAsStringCount
                                                         .length <
                                                     i
-                                                ? "-"
+                                                ? '-'
                                                 : Utils.sortMapStringIntByKey(
                                                             statisticsFirestore
                                                                 .allScoresPerDartAsStringCount)
                                                         .keys
                                                         .elementAt(i - 1) +
-                                                    " (" +
+                                                    ' (' +
                                                     Utils.sortMapStringIntByKey(
                                                             statisticsFirestore
                                                                 .allScoresPerDartAsStringCount)
                                                         .values
                                                         .elementAt(i - 1)
                                                         .toString() +
-                                                    "x)",
+                                                    'x)',
                                             style: TextStyle(
                                                 fontSize: 12.sp,
                                                 fontWeight: statisticsFirestore
-                                                            .atLeastOneGamePlayed() &&
+                                                                .countOfGames >
+                                                            0 &&
                                                         (i == 1 ||
                                                             i == 2 ||
                                                             i == 3)
@@ -223,25 +227,26 @@ class _MoreStatsState extends State<MoreStats> {
                                             statisticsFirestore
                                                         .preciseScores.length <
                                                     i
-                                                ? "-"
+                                                ? '-'
                                                 : Utils.sortMapIntIntByKey(
                                                             statisticsFirestore
                                                                 .preciseScores)
                                                         .keys
                                                         .elementAt(i - 1)
                                                         .toString() +
-                                                    " (" +
+                                                    ' (' +
                                                     Utils.sortMapIntIntByKey(
                                                             statisticsFirestore
                                                                 .preciseScores)
                                                         .values
                                                         .elementAt(i - 1)
                                                         .toString() +
-                                                    "x)",
+                                                    'x)',
                                             style: TextStyle(
                                                 fontSize: 12.sp,
                                                 fontWeight: statisticsFirestore
-                                                            .atLeastOneGamePlayed() &&
+                                                                .countOfGames >
+                                                            0 &&
                                                         (i == 1 ||
                                                             i == 2 ||
                                                             i == 3)
@@ -266,7 +271,7 @@ class _MoreStatsState extends State<MoreStats> {
               padding: EdgeInsets.only(left: 5.w, top: 5),
               child: Row(
                 children: [
-                  const Text("Show All Scores per Dart"),
+                  const Text('Show All Scores per Dart'),
                   Switch(
                     value: _showAllScoesPerDartWithCount,
                     onChanged: (value) {
@@ -285,7 +290,7 @@ class _MoreStatsState extends State<MoreStats> {
                 padding: EdgeInsets.only(left: 5.w),
                 child: Row(
                   children: [
-                    const Text("Show Odd Rounded Scores"),
+                    const Text('Show Odd Rounded Scores'),
                     Switch(
                       value: _roundedScoresOdd,
                       onChanged: (value) {

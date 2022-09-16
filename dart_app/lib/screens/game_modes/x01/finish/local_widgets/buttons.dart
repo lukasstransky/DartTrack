@@ -1,5 +1,6 @@
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +9,12 @@ import 'package:sizer/sizer.dart';
 class Buttons extends StatelessWidget {
   saveGameX01ToFirestore(BuildContext context) async {
     gameId = await context
-        .read<FirestoreService>()
+        .read<FirestoreServiceGames>()
         .postGame(Provider.of<GameX01>(context, listen: false));
   }
 
   savePlayerGameStatisticsX01ToFirestore(BuildContext context) async {
-    await context.read<FirestoreService>().postPlayerGameStatistics(
+    await context.read<FirestoreServicePlayerStats>().postPlayerGameStatistics(
         Provider.of<GameX01>(context, listen: false), gameId, context);
   }
 

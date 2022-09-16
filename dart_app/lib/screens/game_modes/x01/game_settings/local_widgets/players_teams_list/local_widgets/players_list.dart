@@ -9,7 +9,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class PlayersList extends StatelessWidget {
+class PlayersList extends StatefulWidget {
+  @override
+  State<PlayersList> createState() => _PlayersListState();
+}
+
+class _PlayersListState extends State<PlayersList> {
+  @override
+  void initState() {
+    super.initState();
+    newScrollControllerPlayers();
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameSettingsX01 =
@@ -19,59 +30,88 @@ class PlayersList extends StatelessWidget {
       selector: (_, gameSettingsX01) => gameSettingsX01.getPlayers,
       shouldRebuild: (previous, next) => true,
       builder: (_, players, __) => ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: 20.h),
+        constraints: BoxConstraints(maxHeight: 16.h),
         child: ListView.builder(
           shrinkWrap: true,
-          controller: scrollControllerPlayers,
+          controller: newScrollControllerPlayers(),
           reverse: true, //show new added player on top
           scrollDirection: Axis.vertical,
           itemCount: gameSettingsX01.getPlayers.length,
           itemBuilder: (BuildContext context, int index) {
             final player = players[index];
 
-            return ListTile(
-              key: ValueKey(player),
-              title: player is Bot
-                  ? Row(
+            return Container(
+              padding: EdgeInsets.only(left: 4.w),
+              height: 4.h,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 46.w,
+                    child: player is Bot
+                        ? FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Container(
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Level ${player.getLevel} Bot',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                    ),
+                                  ),
+                                  Container(
+                                    transform: Matrix4.translationValues(
+                                        0.0, -0.5.w, 0.0),
+                                    child: Text(
+                                      ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                      style: TextStyle(
+                                        fontSize: 8.sp,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(player.getName),
+                          ),
+                  ),
+                  Container(
+                    width: 30.w,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          player.getName,
-                          style: TextStyle(
-                            fontSize: 12.sp,
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            Icons.edit,
+                            color: Colors.grey,
                           ),
+                          onPressed: () => PlayersTeamsListDialogs
+                              .showDialogForEditingPlayer(
+                                  context, player, gameSettingsX01),
                         ),
-                        Text(
-                          ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                          style: TextStyle(
-                            fontSize: 9.sp,
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            Icons.highlight_remove,
+                            color: Colors.grey,
                           ),
+                          onPressed: () => {
+                            gameSettingsX01.removePlayer(player, true),
+                          },
                         ),
                       ],
-                    )
-                  : FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerLeft,
-                      child: Text(player.getName),
                     ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.edit),
-                    onPressed: () =>
-                        PlayersTeamsListDialogs.showDialogForEditingPlayer(
-                            context, player, gameSettingsX01),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.highlight_remove),
-                    onPressed: () => {
-                      gameSettingsX01.checkBotNamingIds(player),
-                      gameSettingsX01.removePlayer(player),
-                    },
                   ),
                 ],
               ),
-              visualDensity: VisualDensity(horizontal: 0, vertical: -4),
             );
           },
         ),

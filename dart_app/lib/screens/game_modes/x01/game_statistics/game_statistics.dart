@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list.dart';
@@ -17,16 +18,14 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class GameStatistics extends StatefulWidget {
-  static const routeName = "/statisticsX01";
-
-  const GameStatistics({Key? key}) : super(key: key);
+  static const routeName = '/statisticsX01';
 
   @override
   State<GameStatistics> createState() => _GameStatisticsState();
 }
 
 class _GameStatisticsState extends State<GameStatistics> {
-  Game? _game;
+  GameX01? _game;
   final _padding = EdgeInsets.only(left: 20, bottom: 20);
   final _paddingLastItem = EdgeInsets.only(left: 20, bottom: 30);
   bool _roundedScoresOdd = false;
@@ -42,27 +41,27 @@ class _GameStatisticsState extends State<GameStatistics> {
   }
 
   String _getHeader() {
-    String result = "";
+    String result = '';
 
     //mode
     _game!.getGameSettings.getMode == BestOfOrFirstToEnum.BestOf
-        ? result += "Best Of "
-        : result += "First To ";
+        ? result += 'Best Of '
+        : result += 'First To ';
 
     //sets
     if (_game!.getGameSettings.getSetsEnabled) {
       if (_game!.getGameSettings.getSets == 1) {
-        result += _game!.getGameSettings.getSets.toString() + " Set ";
+        result += _game!.getGameSettings.getSets.toString() + ' Set ';
       } else {
-        result += _game!.getGameSettings.getSets.toString() + " Sets ";
+        result += _game!.getGameSettings.getSets.toString() + ' Sets ';
       }
     }
 
     //legs
     if (_game!.getGameSettings.getLegs == 1) {
-      result += _game!.getGameSettings.getLegs.toString() + " Leg - ";
+      result += _game!.getGameSettings.getLegs.toString() + ' Leg - ';
     } else {
-      result += _game!.getGameSettings.getLegs.toString() + " Legs - ";
+      result += _game!.getGameSettings.getLegs.toString() + ' Legs - ';
     }
 
     //points
@@ -96,7 +95,7 @@ class _GameStatisticsState extends State<GameStatistics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(true, "Statistics"),
+      appBar: CustomAppBar(true, 'Statistics'),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -123,8 +122,8 @@ class _GameStatisticsState extends State<GameStatistics> {
                   label: Text(
                     _game!.getGameSettings.getModeIn ==
                             SingleOrDouble.SingleField
-                        ? "Single In"
-                        : "Double In",
+                        ? 'Single In'
+                        : 'Double In',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -137,8 +136,8 @@ class _GameStatisticsState extends State<GameStatistics> {
                     label: Text(
                       _game!.getGameSettings.getModeOut ==
                               SingleOrDouble.SingleField
-                          ? "Single Out"
-                          : "Double Out",
+                          ? 'Single Out'
+                          : 'Double Out',
                       style: TextStyle(
                         color: Colors.white,
                       ),
@@ -151,7 +150,7 @@ class _GameStatisticsState extends State<GameStatistics> {
                     child: Chip(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       label: Text(
-                        "Sudden Death",
+                        'Sudden Death',
                         style: TextStyle(
                           color: Colors.white,
                         ),
@@ -192,7 +191,7 @@ class _GameStatisticsState extends State<GameStatistics> {
                     padding: EdgeInsets.only(left: 20),
                     child: Row(
                       children: [
-                        const Text("Show Odd Rounded Scores"),
+                        const Text('Show Odd Rounded Scores'),
                         Switch(
                           value: _roundedScoresOdd,
                           onChanged: (value) {

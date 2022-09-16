@@ -1,15 +1,16 @@
 import 'package:dart_app/models/player.dart';
 
 class Bot extends Player {
-  double? preDefinedAverage;
+  int preDefinedAverage;
+  int level;
 
   get getPreDefinedAverage => this.preDefinedAverage;
-  set setPreDefinedAverage(double preDefinedAverage) =>
+  set setPreDefinedAverage(int preDefinedAverage) =>
       this.preDefinedAverage = preDefinedAverage;
 
-  Bot({required name, required this.preDefinedAverage}) : super(name: name);
+  int get getLevel => this.level;
+  set setLevel(int level) => this.level = level;
 
-  Bot.clone({required Bot player}) : super(name: player.getName) {
-    preDefinedAverage = player.getPreDefinedAverage;
-  }
+  Bot({required name, required this.preDefinedAverage, required this.level})
+      : super(name: name);
 }

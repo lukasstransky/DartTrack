@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -8,7 +9,7 @@ class CheckoutStatsCard extends StatefulWidget {
       : super(key: key);
 
   final int finish;
-  final Game game;
+  final GameX01 game;
 
   @override
   State<CheckoutStatsCard> createState() => _CheckoutStatsCardState();
@@ -19,7 +20,7 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/statisticsX01",
+        Navigator.pushNamed(context, '/statisticsX01',
             arguments: {'game': widget.game});
       },
       child: Card(
@@ -36,8 +37,8 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
                     child: Text(
                       widget.game.getGameSettings.getModeOut ==
                               SingleOrDouble.DoubleField
-                          ? "Double Out"
-                          : "Single Out",
+                          ? 'Double Out'
+                          : 'Single Out',
                       style: TextStyle(fontSize: 12.sp),
                     ),
                   ),
@@ -55,7 +56,7 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
             Padding(
               padding: EdgeInsets.only(left: 10, bottom: 10),
               child: Text(
-                "Highest Finish: " + widget.finish.toString(),
+                'Highest Finish: ' + widget.finish.toString(),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
               ),
             ),

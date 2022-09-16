@@ -16,7 +16,15 @@ class _CustomPointsState extends State<CustomPoints> {
   TextEditingController? _customPointsController;
   final GlobalKey<FormState> _formKeyCustomPoints = GlobalKey<FormState>();
 
-  void _initTextController(GameSettingsX01 gameSettingsX01) {
+  @override
+  void initState() {
+    _initTextController();
+    super.initState();
+  }
+
+  void _initTextController() {
+    final gameSettingsX01 =
+        Provider.of<GameSettingsX01>(context, listen: false);
     _customPointsController = new TextEditingController(
         text: gameSettingsX01.getCustomPoints != -1
             ? gameSettingsX01.getCustomPoints.toString()
@@ -31,6 +39,11 @@ class _CustomPointsState extends State<CustomPoints> {
         builder: (context) => Form(
           key: _formKeyCustomPoints,
           child: AlertDialog(
+            contentPadding: EdgeInsets.only(
+                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+                top: DIALOG_CONTENT_PADDING_TOP,
+                left: DIALOG_CONTENT_PADDING_LEFT,
+                right: DIALOG_CONTENT_PADDING_RIGHT),
             title: const Text('Enter Points'),
             content: TextFormField(
               controller: _customPointsController,
@@ -83,17 +96,13 @@ class _CustomPointsState extends State<CustomPoints> {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
     return Expanded(
-      child: Selector<GameSettingsX01, int>(
-        selector: (_, gameSettingsX01) => gameSettingsX01.getCustomPoints,
-        builder: (_, customPoints, __) => Container(
-          height: WIDGET_HEIGHT_GAMESETTINGS.h,
+      child: Consumer<GameSettingsX01>(
+        builder: (_, gameSettingsX01, __) => Container(
+          height: Utils.getHeightForWidget(gameSettingsX01).h,
           child: ElevatedButton(
             onPressed: () async {
-              _initTextController(gameSettingsX01);
+              _initTextController();
               final int? result =
                   await _showDialogForCustomPoints(context, gameSettingsX01);
               if (result == null) return;
@@ -117,6 +126,13 @@ class _CustomPointsState extends State<CustomPoints> {
               gameSettingsX01.notify();
             },
             style: ButtonStyle(
+              splashFactory: gameSettingsX01.getCustomPoints != -1
+                  ? NoSplash.splashFactory
+                  : InkRipple.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: gameSettingsX01.getCustomPoints != -1
+                  ? MaterialStateProperty.all(Colors.transparent)
+                  : Utils.getDefaultOverlayColor(context),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
@@ -125,14 +141,16 @@ class _CustomPointsState extends State<CustomPoints> {
                   ),
                 ),
               ),
-              backgroundColor: customPoints != -1
+              backgroundColor: gameSettingsX01.getCustomPoints != -1
                   ? Utils.getColor(Theme.of(context).colorScheme.primary)
                   : Utils.getColor(Colors.grey),
             ),
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                customPoints == -1 ? 'Custom' : customPoints.toString(),
+                gameSettingsX01.getCustomPoints == -1
+                    ? 'Custom'
+                    : gameSettingsX01.getCustomPoints.toString(),
               ),
             ),
           ),

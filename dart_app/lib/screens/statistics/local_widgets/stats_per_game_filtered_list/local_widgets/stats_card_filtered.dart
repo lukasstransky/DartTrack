@@ -1,4 +1,4 @@
-import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -8,7 +8,7 @@ class StatsCardFiltered extends StatefulWidget {
       {Key? key, required this.game, required this.orderField})
       : super(key: key);
 
-  final Game? game;
+  final GameX01? game;
   final String orderField;
 
   @override
@@ -18,48 +18,48 @@ class StatsCardFiltered extends StatefulWidget {
 class _StatsCardFilteredState extends State<StatsCardFiltered> {
   String _getValueOfOrderField() {
     //todo change
-    final String currentPlayerName =
+    const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
-        "Strainski";
+        'Strainski';
 
     for (PlayerGameStatisticsX01 playerStats
         in widget.game!.getPlayerGameStatistics) {
       if (playerStats.getPlayer.getName == currentPlayerName) {
         switch (widget.orderField) {
-          case "average":
-            return playerStats.getAverage(widget.game as Game, playerStats);
-          case "firstNineAverage":
-            return playerStats.getFirstNineAverage.toString();
-          case "checkoutInPercent":
+          case 'average':
+            return playerStats.getAverage(playerStats);
+          case 'firstNineAverage':
+            return playerStats.getFirstNineAvgPoints.toString();
+          case 'checkoutInPercent':
             return playerStats.getCheckoutQuoteInPercent();
-          case "highestFinish":
+          case 'highestFinish':
             return playerStats.getHighestCheckout().toString();
-          case "bestLeg":
+          case 'bestLeg':
             return playerStats.getBestLeg();
         }
       }
     }
 
-    return "";
+    return '';
   }
 
   String _getField() {
-    String result = "";
+    String result = '';
     switch (widget.orderField) {
-      case "average":
-        result += "Average: ";
+      case 'average':
+        result += 'Average: ';
         break;
-      case "firstNineAverage":
-        result += "First Nine Average: ";
+      case 'firstNineAverage':
+        result += 'First Nine Average: ';
         break;
-      case "checkoutInPercent":
-        result += "Checkout in Percent: ";
+      case 'checkoutInPercent':
+        result += 'Checkout in Percent: ';
         break;
-      case "highestFinish":
-        result += "Highest Finish: ";
+      case 'highestFinish':
+        result += 'Highest Finish: ';
         break;
-      case "bestLeg":
-        result += "Darts for Leg: ";
+      case 'bestLeg':
+        result += 'Darts for Leg: ';
         break;
     }
     result += _getValueOfOrderField();
@@ -71,7 +71,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/statisticsX01",
+        Navigator.pushNamed(context, '/statisticsX01',
             arguments: {'game': widget.game});
       },
       child: Card(

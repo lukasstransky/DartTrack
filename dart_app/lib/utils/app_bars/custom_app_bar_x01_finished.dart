@@ -1,10 +1,10 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
-import 'dart:developer';
 
 class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
   CustomAppBarX01Finished(this.title);
@@ -16,11 +16,11 @@ class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
         Provider.of<GameSettingsX01>(context, listen: false);
     //todo comment out
     //if (gameSettingsX01.isCurrentUserInPlayers(context)) {
-    String gameId = "";
+    String gameId = '';
     gameId = await context
-        .read<FirestoreService>()
+        .read<FirestoreServiceGames>()
         .postGame(Provider.of<GameX01>(context, listen: false));
-    await context.read<FirestoreService>().postPlayerGameStatistics(
+    await context.read<FirestoreServicePlayerStats>().postPlayerGameStatistics(
         Provider.of<GameX01>(context, listen: false), gameId, context);
     //}
   }
@@ -38,7 +38,7 @@ class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
         ),
         IconButton(
             onPressed: () => {
-                  Navigator.of(context).pushNamed("/home"),
+                  Navigator.of(context).pushNamed('/home'),
                   saveDataToFirestore(context),
                 },
             icon: Icon(

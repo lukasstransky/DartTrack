@@ -9,29 +9,43 @@ import 'package:sizer/sizer.dart';
 class SingleOrTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
     return Center(
-      child: Container(
-        width: WIDTH_GAMESETTINGS.w,
-        margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-        child: Selector<GameSettingsX01, SingleOrTeamEnum>(
-          selector: (_, gameSettingsX01) => gameSettingsX01.getSingleOrTeam,
-          builder: (_, singleOrTeam, __) => Row(
+      child: Consumer<GameSettingsX01>(
+        builder: (_, gameSettingsX01, __) => Container(
+          width: WIDTH_GAMESETTINGS.w,
+          height: Utils.getHeightForWidget(gameSettingsX01).h,
+          margin: EdgeInsets.only(
+              top: MARGIN_GAMESETTINGS.h, bottom: MARGIN_GAMESETTINGS.h),
+          child: Row(
             children: [
               Expanded(
                 child: Container(
-                  height: WIDGET_HEIGHT_GAMESETTINGS.h,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      right: BorderSide(width: 1.0, color: Colors.white),
+                    ),
+                    color: Colors.white,
+                  ),
                   child: ElevatedButton(
-                    onPressed: () => singleOrTeam == SingleOrTeamEnum.Team
-                        ? gameSettingsX01.switchSingleOrTeamMode()
-                        : null,
+                    onPressed: () =>
+                        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team
+                            ? gameSettingsX01.switchSingleOrTeamMode(context)
+                            : null,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: const Text('Single'),
                     ),
                     style: ButtonStyle(
+                      splashFactory: gameSettingsX01.getSingleOrTeam ==
+                              SingleOrTeamEnum.Single
+                          ? NoSplash.splashFactory
+                          : InkRipple.splashFactory,
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor: gameSettingsX01.getSingleOrTeam ==
+                              SingleOrTeamEnum.Single
+                          ? MaterialStateProperty.all(Colors.transparent)
+                          : Utils.getDefaultOverlayColor(context),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
@@ -40,7 +54,8 @@ class SingleOrTeam extends StatelessWidget {
                           ),
                         ),
                       ),
-                      backgroundColor: singleOrTeam == SingleOrTeamEnum.Single
+                      backgroundColor: gameSettingsX01.getSingleOrTeam ==
+                              SingleOrTeamEnum.Single
                           ? Utils.getColor(
                               Theme.of(context).colorScheme.primary)
                           : Utils.getColor(Colors.grey),
@@ -50,16 +65,26 @@ class SingleOrTeam extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  height: WIDGET_HEIGHT_GAMESETTINGS.h,
                   child: ElevatedButton(
-                    onPressed: () => singleOrTeam == SingleOrTeamEnum.Single
-                        ? gameSettingsX01.switchSingleOrTeamMode()
+                    onPressed: () => gameSettingsX01.getSingleOrTeam ==
+                            SingleOrTeamEnum.Single
+                        ? gameSettingsX01.switchSingleOrTeamMode(context)
                         : null,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: const Text('Teams'),
                     ),
                     style: ButtonStyle(
+                      splashFactory: gameSettingsX01.getSingleOrTeam ==
+                              SingleOrTeamEnum.Team
+                          ? NoSplash.splashFactory
+                          : InkRipple.splashFactory,
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor: gameSettingsX01.getSingleOrTeam ==
+                              SingleOrTeamEnum.Team
+                          ? MaterialStateProperty.all(Colors.transparent)
+                          : Utils.getDefaultOverlayColor(context),
                       shape: MaterialStateProperty.all(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.only(
@@ -68,7 +93,8 @@ class SingleOrTeam extends StatelessWidget {
                           ),
                         ),
                       ),
-                      backgroundColor: singleOrTeam == SingleOrTeamEnum.Team
+                      backgroundColor: gameSettingsX01.getSingleOrTeam ==
+                              SingleOrTeamEnum.Team
                           ? Utils.getColor(
                               Theme.of(context).colorScheme.primary)
                           : Utils.getColor(Colors.grey),

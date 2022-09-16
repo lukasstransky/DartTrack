@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'dart:developer';
 
 class Game extends StatefulWidget {
   static const routeName = '/gameX01';
@@ -45,6 +44,8 @@ class GameState extends State<Game> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+contentPadding:
+              EdgeInsets.only(bottom: DIALOG_CONTENT_PADDING_BOTTOM, top: DIALOG_CONTENT_PADDING_TOP, left: DIALOG_CONTENT_PADDING_LEFT, right: DIALOG_CONTENT_PADDING_RIGHT),
         title: Text("Sudden Death"),
         content: Text(
             "The 'Sudden Death' leg is reached. The player who wins this leg also wins the game."),

@@ -4,7 +4,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tuple/tuple.dart';
 import 'package:sizer/sizer.dart';
 
 class PointsBtn extends StatelessWidget {
@@ -17,15 +16,16 @@ class PointsBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
     return Expanded(
-      child: Selector<GameSettingsX01, Tuple2<int, int>>(
-        selector: (_, gameSettingsX01) =>
-            Tuple2(gameSettingsX01.getPoints, gameSettingsX01.getCustomPoints),
-        builder: (_, tuple, __) => Container(
-          height: WIDGET_HEIGHT_GAMESETTINGS.h,
+      child: Consumer<GameSettingsX01>(
+        builder: (_, gameSettingsX01, __) => Container(
+          height: Utils.getHeightForWidget(gameSettingsX01).h,
+          decoration: BoxDecoration(
+            border: Border(
+              right: BorderSide(width: 1.0, color: Colors.white),
+            ),
+            color: Colors.white,
+          ),
           child: ElevatedButton(
             onPressed: () => {
               gameSettingsX01.setPoints = points,
@@ -38,6 +38,15 @@ class PointsBtn extends StatelessWidget {
               ),
             ),
             style: ButtonStyle(
+              splashFactory: gameSettingsX01.getPoints == points &&
+                      gameSettingsX01.getCustomPoints == -1
+                  ? NoSplash.splashFactory
+                  : InkRipple.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: gameSettingsX01.getPoints == points &&
+                      gameSettingsX01.getCustomPoints == -1
+                  ? MaterialStateProperty.all(Colors.transparent)
+                  : Utils.getDefaultOverlayColor(context),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: points != 301
@@ -48,7 +57,8 @@ class PointsBtn extends StatelessWidget {
                         ),
                 ),
               ),
-              backgroundColor: tuple.item1 == points && tuple.item2 == -1
+              backgroundColor: gameSettingsX01.getPoints == points &&
+                      gameSettingsX01.getCustomPoints == -1
                   ? Utils.getColor(Theme.of(context).colorScheme.primary)
                   : Utils.getColor(Colors.grey),
             ),

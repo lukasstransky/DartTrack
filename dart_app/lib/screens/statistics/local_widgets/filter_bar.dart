@@ -16,8 +16,8 @@ class FilterBar extends StatefulWidget {
 
 class _FilterBarState extends State<FilterBar> {
   bool _showDatePicker = false;
-  String _range = "";
-  String _customBtnDateRange = "";
+  String _range = '';
+  String _customBtnDateRange = '';
   bool _showCustomBtnDateRange = false;
 
   void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
@@ -25,10 +25,16 @@ class _FilterBarState extends State<FilterBar> {
       if (args.value is PickerDateRange) {
         _range = '${DateFormat('dd-MM-yyyy').format(args.value.startDate)};'
             '${DateFormat('dd-MM-yyyy').format(args.value.endDate ?? args.value.startDate)}';
+
         _customBtnDateRange =
             '${DateFormat('dd-MM-yy').format(args.value.startDate)}' +
-                "\n" +
+                '\n' +
                 '${DateFormat('dd-MM-yy').format(args.value.endDate ?? args.value.startDate)}';
+
+        final List<String> dateParts = _range.split(';');
+        if (dateParts[0] == dateParts[1]) {
+          _customBtnDateRange = dateParts[0];
+        }
       }
     });
   }
@@ -58,7 +64,7 @@ class _FilterBarState extends State<FilterBar> {
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        "Overall",
+                        'Overall',
                         style: TextStyle(fontSize: 9.sp),
                       ),
                     ),
@@ -85,38 +91,48 @@ class _FilterBarState extends State<FilterBar> {
                   ),
                 ),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => {
-                      _showDatePicker = false,
-                      _showCustomBtnDateRange = false,
-                      statisticsFirestore.loadStatistics(
-                          context, FilterValue.Month),
-                    },
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        "Last 30 Days",
-                        style: TextStyle(fontSize: 7.sp),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(width: 1.0, color: Colors.white),
+                        right: BorderSide(width: 1.0, color: Colors.white),
                       ),
+                      color: Colors.white,
                     ),
-                    style: ButtonStyle(
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColorOrPressed(
-                        Theme.of(context).colorScheme.primary,
-                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.zero,
-                          ),
+                    child: ElevatedButton(
+                      onPressed: () => {
+                        _showDatePicker = false,
+                        _showCustomBtnDateRange = false,
+                        statisticsFirestore.loadStatistics(
+                            context, FilterValue.Month),
+                      },
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Last 30 Days',
+                          style: TextStyle(fontSize: 7.sp),
                         ),
                       ),
-                      backgroundColor: currentFilterValue == FilterValue.Month
-                          ? MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primary)
-                          : MaterialStateProperty.all<Color>(Colors.grey),
+                      style: ButtonStyle(
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor: Utils.getColorOrPressed(
+                          Theme.of(context).colorScheme.primary,
+                          Utils.darken(
+                              Theme.of(context).colorScheme.primary, 15),
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.zero,
+                            ),
+                          ),
+                        ),
+                        backgroundColor: currentFilterValue == FilterValue.Month
+                            ? MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary)
+                            : MaterialStateProperty.all<Color>(Colors.grey),
+                      ),
                     ),
                   ),
                 ),
@@ -131,7 +147,7 @@ class _FilterBarState extends State<FilterBar> {
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        "Last 365 Days",
+                        'Last 365 Days',
                         style: TextStyle(fontSize: 7.sp),
                       ),
                     ),
@@ -157,44 +173,54 @@ class _FilterBarState extends State<FilterBar> {
                   ),
                 ),
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => {
-                      setState(
-                        () {
-                          _showDatePicker = true;
-                          statisticsFirestore.currentFilterValue =
-                              FilterValue.Custom;
-                        },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(width: 1.0, color: Colors.white),
                       ),
-                    },
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        _showCustomBtnDateRange
-                            ? _customBtnDateRange
-                            : "Custom",
-                        style: TextStyle(fontSize: 9.sp),
-                      ),
+                      color: Colors.white,
                     ),
-                    style: ButtonStyle(
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColorOrPressed(
-                        Theme.of(context).colorScheme.primary,
-                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(10.0),
-                            bottomRight: Radius.circular(10.0),
-                          ),
+                    child: ElevatedButton(
+                      onPressed: () => {
+                        setState(
+                          () {
+                            _showDatePicker = true;
+                            statisticsFirestore.currentFilterValue =
+                                FilterValue.Custom;
+                          },
+                        ),
+                      },
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          _showCustomBtnDateRange
+                              ? _customBtnDateRange
+                              : 'Custom',
+                          style: TextStyle(fontSize: 9.sp),
                         ),
                       ),
-                      backgroundColor: currentFilterValue == FilterValue.Custom
-                          ? MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primary)
-                          : MaterialStateProperty.all<Color>(Colors.grey),
+                      style: ButtonStyle(
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor: Utils.getColorOrPressed(
+                          Theme.of(context).colorScheme.primary,
+                          Utils.darken(
+                              Theme.of(context).colorScheme.primary, 15),
+                        ),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10.0),
+                              bottomRight: Radius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        backgroundColor:
+                            currentFilterValue == FilterValue.Custom
+                                ? MaterialStateProperty.all(
+                                    Theme.of(context).colorScheme.primary)
+                                : MaterialStateProperty.all<Color>(Colors.grey),
+                      ),
                     ),
                   ),
                 ),
@@ -220,6 +246,7 @@ class _FilterBarState extends State<FilterBar> {
                 },
                 onCancel: () {
                   _showDatePicker = false;
+                  _showCustomBtnDateRange = false;
                   statisticsFirestore.loadStatistics(
                       context, FilterValue.Overall);
                 },

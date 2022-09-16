@@ -1,12 +1,9 @@
-import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 
 import 'dart:collection';
 import 'package:dart_app/constants.dart';
 import 'package:tuple/tuple.dart';
-import 'dart:developer';
 
 class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _currentPoints = 0;
@@ -15,7 +12,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _pointsSelectedCount =
       0; //for input method -> three darts (to prevent user from entering more than 3 darts when spaming the keyboard)
 
-  double _firstNineAvgPoints = 0.0;
+  int _firstNineAvgPoints = 0;
   int _firstNineAvgCount = 0;
 
   int _currentThrownDartsInLeg = 0;
@@ -88,7 +85,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       required int currentPoints,
       required int totalPoints,
       required int startingPoints,
-      required double firstNineAvg,
+      required int firstNineAvgPoints,
       required int firstNineAvgCount,
       required int currentThrownDartsInLeg,
       required int allThrownDarts,
@@ -116,7 +113,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._currentPoints = currentPoints;
     this._totalPoints = totalPoints;
     this._startingPoints = startingPoints;
-    this._firstNineAvgPoints = firstNineAvg;
+    this._firstNineAvgPoints = firstNineAvgPoints;
     this._firstNineAvgCount = firstNineAvgCount;
     this._currentThrownDartsInLeg = currentThrownDartsInLeg;
     this._allThrownDarts = allThrownDarts;
@@ -152,7 +149,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       required int currentPoints,
       required DateTime dateTime})
       : this._currentPoints = currentPoints,
-        super(gameId: "", player: player, mode: mode, dateTime: dateTime);
+        super(gameId: '', player: player, mode: mode, dateTime: dateTime);
 
   int get getCurrentPoints => this._currentPoints;
   set setCurrentPoints(int currentPoints) =>
@@ -169,9 +166,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   set setPointsSelectedCount(int pointsSelectedCount) =>
       this._pointsSelectedCount = pointsSelectedCount;
 
-  double get getFirstNineAverage => this._firstNineAvgPoints;
-  set setFirstNineAverage(double firstNineAverage) =>
-      this._firstNineAvgPoints = firstNineAverage;
+  int get getFirstNineAvgPoints => this._firstNineAvgPoints;
+  set setFirstNineAvgPoints(int firstNineAvgPoints) =>
+      this._firstNineAvgPoints = firstNineAvgPoints;
 
   int get getFirstNineAvgCount => this._firstNineAvgCount;
   set setFirstNineAvgCount(int firstNineAvgCount) =>
@@ -275,17 +272,18 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._amountOfFinishDarts = value;
 
   //calc average based on total points and all scores length
-  String getAverage(Game game, PlayerGameStatisticsX01 stats) {
-    if (getTotalPoints == 0 && getAllScores.length == 0) {
-      return "-";
+  String getAverage(PlayerGameStatisticsX01 stats) {
+    if (stats.getTotalPoints == 0 && stats.getAllScores.length == 0) {
+      return '-';
     }
 
-    return ((stats.getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
+    return ((stats.getTotalPoints / stats.getAllThrownDarts) * 3)
+        .toStringAsFixed(2);
   }
 
   String getLastThrow() {
     if (getAllScores.length == 0) {
-      return "-";
+      return '-';
     }
     return getAllScores[getAllScores.length - 1].toString();
   }
@@ -324,7 +322,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     if (getCurrentPoints != 0) {
       return finishWays[getCurrentPoints]![0];
     }
-    return "";
+    return '';
   }
 
   bool checkoutPossible() {
@@ -341,12 +339,12 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     return false;
   }
 
-  String getFirstNinveAvg(Game? gameX01) {
+  String getFirstNinveAvg() {
     if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) {
-      return "-";
+      return '-';
     }
 
-    return ((getFirstNineAverage / getFirstNineAvgCount) * 3)
+    return ((getFirstNineAvgPoints / getFirstNineAvgCount) * 3)
         .toStringAsFixed(2);
   }
 
@@ -364,15 +362,15 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   String getCheckoutQuoteInPercent() {
     if (getCheckoutCount == 0) {
-      return "-";
+      return '-';
     }
     return ((getLegsWonTotal / getCheckoutCount) * 100).toStringAsFixed(2) +
-        "%";
+        '%';
   }
 
   String getBestLeg() {
     if (getLegsWonTotal == 0) {
-      return "-";
+      return '-';
     }
     int bestLeg = -1;
 
@@ -387,7 +385,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   String getWorstLeg() {
     if (getLegsWonTotal == 0) {
-      return "-";
+      return '-';
     }
     int worstLeg = -1;
 
@@ -402,7 +400,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   String getDartsPerLeg() {
     if (getLegsWonTotal == 0) {
-      return "-";
+      return '-';
     }
 
     int dartsPerLeg = 0;

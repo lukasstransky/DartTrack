@@ -3,9 +3,7 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 final GlobalKey<FormState> _formKeyLegDifference = GlobalKey<FormState>();
 
@@ -18,6 +16,11 @@ class WinByTwoLegsDifference extends StatelessWidget {
       builder: (context) => Form(
         key: _formKeyLegDifference,
         child: AlertDialog(
+          contentPadding: EdgeInsets.only(
+              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+              top: DIALOG_CONTENT_PADDING_TOP,
+              left: DIALOG_CONTENT_PADDING_LEFT,
+              right: DIALOG_CONTENT_PADDING_RIGHT),
           title: const Text('Sudden Death'),
           content: StatefulBuilder(
             builder: (context, setState) {
@@ -33,25 +36,24 @@ class WinByTwoLegsDifference extends StatelessWidget {
                             Icons.info_outline,
                             color: Colors.grey,
                           ),
-                          margin: const EdgeInsets.all(15.0),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: Colors.blue,
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white,
                           ),
                           textStyle: const TextStyle(
-                            fontSize: 24,
+                            fontSize: 18,
                           ),
                           message: SUDDEN_DEATH_INFO,
                           preferBelow: false,
                         ),
                       ),
-                      const Text('Enable Sudden Death'),
+                      const Text('enable Sudden Death'),
                       Switch(
                         value: gameSettingsX01.getSuddenDeath,
                         onChanged: (value) {
                           setState(() {
                             gameSettingsX01.setSuddenDeath = value;
-                            gameSettingsX01.notify();
                           });
                         },
                       ),
@@ -67,30 +69,69 @@ class WinByTwoLegsDifference extends StatelessWidget {
                               Icons.info_outline,
                               color: Colors.grey,
                             ),
-                            margin: const EdgeInsets.all(15.0),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(25),
-                              color: Colors.blue,
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.white,
                             ),
                             textStyle: const TextStyle(
-                              fontSize: 24,
+                              fontSize: 18,
                             ),
                             message: SUDDEN_DEATH_LEG_DIFFERENCE_INFO,
                             preferBelow: false,
                           ),
                         ),
                         const Text('after max. Legs'),
-                        NumberPicker(
-                          value: gameSettingsX01.getMaxExtraLegs,
-                          itemCount: 1,
-                          minValue: 1,
-                          maxValue: MAX_EXTRA_LEGS,
-                          onChanged: (value) {
+                        Padding(
+                          padding: EdgeInsets.only(left: 3.w),
+                          child: IconButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            onPressed: () {
+                              setState(() {
+                                if (gameSettingsX01.getMaxExtraLegs == 1)
+                                  return;
+                                gameSettingsX01.setMaxExtraLegs =
+                                    gameSettingsX01.getMaxExtraLegs - 1;
+                                ;
+                              });
+                            },
+                            padding: EdgeInsets.zero,
+                            constraints: BoxConstraints(),
+                            icon: Icon(Icons.remove,
+                                color: gameSettingsX01.getMaxExtraLegs > 1
+                                    ? Theme.of(context).colorScheme.primary
+                                    : Colors.grey),
+                          ),
+                        ),
+                        Container(
+                          width: 5.w,
+                          child: Center(
+                            child: Text(
+                              gameSettingsX01.getMaxExtraLegs.toString(),
+                              style: TextStyle(fontSize: 18.sp),
+                            ),
+                          ),
+                        ),
+                        IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {
+                            if (gameSettingsX01.getMaxExtraLegs >=
+                                MAX_EXTRA_LEGS) return;
                             setState(() {
-                              gameSettingsX01.setMaxExtraLegs = value;
-                              gameSettingsX01.notify();
+                              gameSettingsX01.setMaxExtraLegs =
+                                  gameSettingsX01.getMaxExtraLegs + 1;
+                              ;
                             });
                           },
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          icon: Icon(Icons.add,
+                              color: gameSettingsX01.getMaxExtraLegs !=
+                                      MAX_EXTRA_LEGS
+                                  ? Theme.of(context).colorScheme.primary
+                                  : Colors.grey),
                         ),
                       ],
                     ),
@@ -102,12 +143,17 @@ class WinByTwoLegsDifference extends StatelessWidget {
             TextButton(
               onPressed: () => {
                 gameSettingsX01.switchWinByTwoLegsDifference(false),
+                gameSettingsX01.notify(),
                 Navigator.of(context).pop(),
               },
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => {
+                gameSettingsX01.switchWinByTwoLegsDifference(true),
+                gameSettingsX01.notify(),
+                Navigator.of(context).pop(),
+              },
               child: const Text('Submit'),
             ),
           ],
@@ -118,42 +164,48 @@ class WinByTwoLegsDifference extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
-    return Selector<GameSettingsX01,
-            Tuple4<bool, BestOfOrFirstToEnum, int, bool>>(
-        selector: (_, gameSettingsX01) => Tuple4(
-            gameSettingsX01.getSetsEnabled,
-            gameSettingsX01.getMode,
-            gameSettingsX01.getLegs,
-            gameSettingsX01.getWinByTwoLegsDifference),
-        builder: (_, tuple, __) {
-          if (tuple.item1 == false &&
-              tuple.item2 == BestOfOrFirstToEnum.FirstTo &&
-              tuple.item3 > 1) {
-            return Container(
-              width: WIDTH_GAMESETTINGS.w,
-              margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-              child: Container(
-                height: WIDGET_HEIGHT_GAMESETTINGS.h,
-                child: Row(
+    return Consumer<GameSettingsX01>(
+      builder: (_, gameSettingsX01, __) {
+        if (!gameSettingsX01.getSetsEnabled &&
+            gameSettingsX01.getLegs > 1 &&
+            !gameSettingsX01.getDrawMode) {
+          return Container(
+            margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
+            width: WIDTH_GAMESETTINGS.w,
+            child: Column(
+              children: [
+                Row(
                   children: [
                     const Text('Win by Two Legs Difference'),
                     Switch(
-                      value: tuple.item4,
+                      value: gameSettingsX01.getWinByTwoLegsDifference,
                       onChanged: (value) {
-                        gameSettingsX01.switchWinByTwoLegsDifference(value);
-                        if (!tuple.item4)
+                        if (value) {
                           showDialogForSuddenDeath(context, gameSettingsX01);
+                        } else {
+                          gameSettingsX01.switchWinByTwoLegsDifference(value);
+                        }
                       },
                     ),
                   ],
                 ),
-              ),
-            );
-          }
-          return SizedBox.shrink();
-        });
+                if (gameSettingsX01.getSuddenDeath)
+                  Container(
+                    transform: Matrix4.translationValues(0.0, -1.h, 0.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '(Sudden Death Leg after max. ${gameSettingsX01.getMaxExtraLegs} additional Legs)',
+                        style: TextStyle(fontSize: 8.sp),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          );
+        }
+        return SizedBox.shrink();
+      },
+    );
   }
 }

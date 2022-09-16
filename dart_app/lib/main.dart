@@ -15,7 +15,9 @@ import 'package:dart_app/screens/home/home.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_list.dart';
 import 'package:dart_app/services/auth_service.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
+import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,8 +47,20 @@ class MyApp extends StatelessWidget {
           create: (_) =>
               AuthService(FirebaseAuth.instance, FirebaseFirestore.instance),
         ),
-        Provider<FirestoreService>(
-          create: (_) => FirestoreService(
+        Provider<FirestoreServiceDefaultSettings>(
+          create: (_) => FirestoreServiceDefaultSettings(
+            FirebaseFirestore.instance,
+            FirebaseAuth.instance,
+          ),
+        ),
+        Provider<FirestoreServiceGames>(
+          create: (_) => FirestoreServiceGames(
+            FirebaseFirestore.instance,
+            FirebaseAuth.instance,
+          ),
+        ),
+        Provider<FirestoreServicePlayerStats>(
+          create: (_) => FirestoreServicePlayerStats(
             FirebaseFirestore.instance,
             FirebaseAuth.instance,
           ),

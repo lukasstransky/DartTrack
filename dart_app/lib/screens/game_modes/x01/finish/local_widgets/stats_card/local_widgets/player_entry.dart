@@ -30,7 +30,7 @@ class PlayerEntry extends StatelessWidget {
                     child: Row(
                       children: [
                         Text(
-                          (i + 1).toString() + ". ",
+                          (i + 1).toString() + '. ',
                           style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: (i == 0 && !openGame)
@@ -69,22 +69,22 @@ class PlayerEntry extends StatelessWidget {
                       children: [
                         Text(
                             game.getGameSettings.getSetsEnabled
-                                ? "Sets: " +
+                                ? 'Sets: ' +
                                     game.getPlayerGameStatistics[i].getSetsWon
                                         .toString()
-                                : "Legs: " +
+                                : 'Legs: ' +
                                     game.getPlayerGameStatistics[i].getLegsWon
                                         .toString(),
                             style: TextStyle(fontSize: 12.sp)),
                         if (!openGame) ...[
                           Text(
-                              "Average: " +
+                              'Average: ' +
                                   game.getPlayerGameStatistics[i].getAverage(
-                                      game, game.getPlayerGameStatistics[i]),
+                                      game.getPlayerGameStatistics[i]),
                               style: TextStyle(fontSize: 12.sp)),
                           if (game.getGameSettings.getEnableCheckoutCounting)
                             Text(
-                              "Checkout: " +
+                              'Checkout: ' +
                                   game.getPlayerGameStatistics[i]
                                       .getCheckoutQuoteInPercent()
                                       .toString(),

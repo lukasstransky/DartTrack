@@ -4,10 +4,12 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -15,10 +17,18 @@ class AddPlayerTeamBtnDialogs {
   static final GlobalKey<FormState> _formKeyNewTeam = GlobalKey<FormState>();
   static final GlobalKey<FormState> _formKeyNewPlayer = GlobalKey<FormState>();
 
-  static double _selectedBotAvgValue = 0.0;
+  static int _selectedBotAvgValue = 0;
 
   static void _resetBotAvgValue() {
-    _selectedBotAvgValue = DEFAULT_BOT_AVG_SLIDER_VALUE.toDouble();
+    _selectedBotAvgValue = DEFAULT_BOT_AVG_SLIDER_VALUE;
+  }
+
+  static bool showBotOption(GameSettingsX01 gameSettingsX01) {
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      return gameSettingsX01.getCountOfBotPlayers() < 2;
+    }
+    return !(gameSettingsX01.getCountOfBotPlayers() >= 1) &&
+        gameSettingsX01.getPlayers.length <= 1;
   }
 
   static void showDialogForAddingPlayer(
@@ -35,117 +45,179 @@ class AddPlayerTeamBtnDialogs {
       builder: (context) => Form(
         key: _formKeyNewPlayer,
         child: AlertDialog(
+          contentPadding: EdgeInsets.only(
+              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+              top: DIALOG_CONTENT_PADDING_TOP,
+              left: DIALOG_CONTENT_PADDING_LEFT,
+              right: DIALOG_CONTENT_PADDING_RIGHT),
           title: const Text('Add New Player'),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ListTile(
-                    title: Row(
-                      children: [
-                        const Text('Bot'),
-                        if (newPlayer == NewPlayer.Bot)
-                          Text(
-                            ' (${_selectedBotAvgValue - BOT_AVG_SLIDER_VALUE_RANGE}-${_selectedBotAvgValue + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                            style: TextStyle(fontSize: 10.sp),
+                  if (showBotOption(gameSettingsX01)) ...[
+                    ListTile(
+                      title: Container(
+                        transform: Matrix4.translationValues(
+                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (newPlayer == NewPlayer.Bot) ...[
+                                  Text(
+                                      'Level ${Utils.getLevelForBot(_selectedBotAvgValue)} Bot'),
+                                  Container(
+                                    transform: Matrix4.translationValues(
+                                        -1.w, 0.0, 0.0),
+                                    child: Text(
+                                      ' (${_selectedBotAvgValue - BOT_AVG_SLIDER_VALUE_RANGE}-${_selectedBotAvgValue + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                      style: TextStyle(fontSize: 10.sp),
+                                    ),
+                                  ),
+                                ] else ...[
+                                  const Text('Bot')
+                                ]
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                      leading: Radio<NewPlayer>(
+                        value: NewPlayer.Bot,
+                        groupValue: newPlayer,
+                        onChanged: (value) => {
+                          setState(
+                            () {
+                              newPlayerController.text = '';
+                              newPlayer = value;
+                            },
                           ),
-                      ],
+                        },
+                      ),
                     ),
-                    leading: Radio<NewPlayer>(
-                      value: NewPlayer.Bot,
-                      groupValue: newPlayer,
-                      onChanged: (value) => {
-                        setState(
-                          () {
-                            newPlayerController.text = '';
-                            newPlayer = value;
-                          },
-                        ),
-                      },
+                    if (newPlayer == NewPlayer.Bot)
+                      SfSlider(
+                        min: 22,
+                        max: 118,
+                        value: _selectedBotAvgValue,
+                        stepSize: 4,
+                        interval: 100,
+                        showTicks: false,
+                        onChanged: (dynamic newValue) {
+                          setState(() {
+                            _selectedBotAvgValue = newValue.round();
+                          });
+                        },
+                      ),
+                    ListTile(
+                      title: Container(
+                          transform: Matrix4.translationValues(
+                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                          child: const Text('Guest')),
+                      leading: Radio<NewPlayer>(
+                        value: NewPlayer.Guest,
+                        groupValue: newPlayer,
+                        onChanged: (value) => {
+                          setState(
+                            () {
+                              _resetBotAvgValue();
+                              newPlayer = value;
+                            },
+                          ),
+                        },
+                      ),
                     ),
-                  ),
-                  if (newPlayer == NewPlayer.Bot)
-                    SfSlider(
-                      min: 22,
-                      max: 118,
-                      value: _selectedBotAvgValue,
-                      stepSize: 4,
-                      interval: 100,
-                      showTicks: false,
-                      onChanged: (dynamic newValue) {
-                        setState(() {
-                          _selectedBotAvgValue = newValue;
-                        });
-                      },
-                    ),
-                  ListTile(
-                    title: const Text('Guest'),
-                    leading: Radio<NewPlayer>(
-                      value: NewPlayer.Guest,
-                      groupValue: newPlayer,
-                      onChanged: (value) => {
-                        setState(
-                          () {
-                            _resetBotAvgValue();
-                            newPlayer = value;
-                          },
-                        ),
-                      },
-                    ),
-                  ),
-                  if (newPlayer == NewPlayer.Guest)
-                    TextFormField(
-                      controller: newPlayerController,
-                      textInputAction: TextInputAction.done,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return ('Please Enter a Name!');
-                        }
-                        if (gameSettingsX01.checkIfPlayerNameExists(value)) {
-                          return 'Playername already exists!';
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(
-                            MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                      ],
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          Icons.person,
-                        ),
-                        hintText: 'Name',
-                        filled: true,
-                        hintStyle: TextStyle(color: Colors.grey),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
+                    if (newPlayer == NewPlayer.Guest)
+                      TextFormField(
+                        controller: newPlayerController,
+                        textInputAction: TextInputAction.done,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return ('Please enter a name!');
+                          }
+                          if (gameSettingsX01.checkIfPlayerNameExists(value)) {
+                            return 'Playername already exists!';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(
+                              MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+                        ],
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.person,
+                          ),
+                          hintText: 'Name',
+                          filled: true,
+                          hintStyle: TextStyle(color: Colors.grey),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
                           ),
                         ),
                       ),
-                    ),
+                  ] else ...[
+                    GuestTextFormField(),
+                  ]
                 ],
               );
             },
           ),
           actions: [
-            TextButton(
-              onPressed: () => {
-                _resetBotAvgValue(),
-                newPlayerController.clear(),
-                Navigator.of(context).pop(),
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              key: Key('submitPlayerBtn'),
-              onPressed: () =>
-                  _submitNewPlayer(gameSettingsX01, context, newPlayer),
-              child: const Text('Submit'),
+            Row(
+              children: [
+                gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+                        gameSettingsX01.getTeams.length < 4
+                    ? Expanded(
+                        child: Container(
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.arrow_back,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+
+                                showDialogForAddingPlayerOrTeam(
+                                    gameSettingsX01, context);
+                              },
+                            ),
+                          ),
+                        ),
+                      )
+                    : SizedBox.shrink(),
+                Expanded(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _resetBotAvgValue();
+                        newPlayerController.clear();
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _submitNewPlayer(gameSettingsX01, context, newPlayer);
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ],
+                ))
+              ],
             ),
           ],
         ),
@@ -159,11 +231,15 @@ class AddPlayerTeamBtnDialogs {
     _formKeyNewPlayer.currentState!.save();
 
     Player playerToAdd;
+    if (!showBotOption(gameSettingsX01)) {
+      newPlayer = NewPlayer.Guest;
+    }
     if (newPlayer == NewPlayer.Bot) {
-      final int botNameId = gameSettingsX01.getBotNamingIds.length + 1;
+      final int botNameId = gameSettingsX01.getCountOfBotPlayers() == 0 ? 1 : 2;
       playerToAdd = new Bot(
-          name: 'Bot$botNameId', preDefinedAverage: _selectedBotAvgValue);
-      gameSettingsX01.getBotNamingIds.add(botNameId);
+          name: 'Bot$botNameId',
+          preDefinedAverage: _selectedBotAvgValue,
+          level: int.parse(Utils.getLevelForBot(_selectedBotAvgValue)));
     } else
       playerToAdd = new Player(name: newPlayerController.text);
 
@@ -202,6 +278,11 @@ class AddPlayerTeamBtnDialogs {
         return Form(
           key: _formKeyNewTeam,
           child: AlertDialog(
+            contentPadding: EdgeInsets.only(
+                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+                top: DIALOG_CONTENT_PADDING_TOP,
+                left: DIALOG_CONTENT_PADDING_LEFT,
+                right: DIALOG_CONTENT_PADDING_RIGHT),
             title: const Text('Add Team'),
             content: StatefulBuilder(
               builder: (context, setState) {
@@ -246,19 +327,49 @@ class AddPlayerTeamBtnDialogs {
               },
             ),
             actions: [
-              TextButton(
-                onPressed: () => {
-                  newTeamController.clear(),
-                  Navigator.of(context).pop(),
-                },
-                child: const Text('Cancel'),
-              ),
-              TextButton(
-                onPressed: () => {
-                  _submitNewTeam(gameSettingsX01, context),
-                  newTeamController.clear(),
-                },
-                child: const Text('Submit'),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+
+                            showDialogForAddingPlayerOrTeam(
+                                gameSettingsX01, context);
+                          },
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () => {
+                              newTeamController.clear(),
+                              Navigator.of(context).pop(),
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () => {
+                              _submitNewTeam(gameSettingsX01, context),
+                              newTeamController.clear(),
+                            },
+                            child: const Text('Submit'),
+                          ),
+                        ]),
+                  ),
+                ],
               ),
             ],
           ),
@@ -286,7 +397,12 @@ class AddPlayerTeamBtnDialogs {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Wanna add a Team or Player?'),
+          contentPadding: EdgeInsets.only(
+              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+              top: DIALOG_CONTENT_PADDING_TOP,
+              left: DIALOG_CONTENT_PADDING_LEFT,
+              right: DIALOG_CONTENT_PADDING_RIGHT),
+          title: const Text('Add Team or Player?'),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Column(
@@ -294,7 +410,10 @@ class AddPlayerTeamBtnDialogs {
                 children: [
                   if (gameSettingsX01.getTeams.length < MAX_TEAMS)
                     RadioListTile(
-                      title: const Text('Add Team'),
+                      title: Container(
+                          transform: Matrix4.translationValues(
+                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                          child: const Text('Team')),
                       value: 'team',
                       groupValue: teamOrPlayer,
                       onChanged: (String? value) {
@@ -303,7 +422,10 @@ class AddPlayerTeamBtnDialogs {
                     ),
                   if (gameSettingsX01.getTeams.length > 0)
                     RadioListTile(
-                      title: const Text('Add Player'),
+                      title: Container(
+                          transform: Matrix4.translationValues(
+                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                          child: const Text('Player')),
                       value: 'player',
                       groupValue: teamOrPlayer,
                       onChanged: (String? value) {
@@ -335,18 +457,35 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
+  static Team _getTeamWithLeastPlayers(GameSettingsX01 gameSettingsX01) {
+    Team teamWithLeastPlayers = gameSettingsX01.getTeams[0];
+    for (Team team in gameSettingsX01.getTeams) {
+      if (team.getPlayers.length < teamWithLeastPlayers.getPlayers.length) {
+        teamWithLeastPlayers = team;
+      }
+    }
+    return teamWithLeastPlayers;
+  }
+
   static void showDialogForSelectingTeam(Player playerToAdd, List<Team> teams,
-      GameSettingsX01 gameSettings, BuildContext context) {
+      GameSettingsX01 gameSettingsX01, BuildContext context) {
     Team? selectedTeam;
     if (teams.length >= 2) {
-      selectedTeam = teams[0]; //set first team as default
+      selectedTeam =
+          AddPlayerTeamBtnDialogs._getTeamWithLeastPlayers(gameSettingsX01);
     }
+    teams = teams.reversed.toList();
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) {
         return AlertDialog(
+          contentPadding: EdgeInsets.only(
+              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+              top: DIALOG_CONTENT_PADDING_TOP,
+              left: DIALOG_CONTENT_PADDING_LEFT,
+              right: DIALOG_CONTENT_PADDING_RIGHT),
           title: const Text('Which Team?'),
           content: StatefulBuilder(
             builder: (context, setState) {
@@ -358,12 +497,18 @@ class AddPlayerTeamBtnDialogs {
                     ListView.builder(
                       shrinkWrap: true,
                       itemCount: teams.length,
+                      reverse: true,
                       itemBuilder: (BuildContext context, int index) {
                         final team = teams[index];
 
                         if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM) {
                           return RadioListTile(
-                            title: Text(team.getName),
+                            title: Container(
+                                transform: Matrix4.translationValues(
+                                    DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w,
+                                    0.0,
+                                    0.0),
+                                child: Text(team.getName)),
                             value: team,
                             groupValue: selectedTeam,
                             onChanged: (Team? value) =>
@@ -379,14 +524,44 @@ class AddPlayerTeamBtnDialogs {
             },
           ),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () => _submitNewTeamForPlayer(
-                  playerToAdd, selectedTeam, gameSettings, context),
-              child: const Text('Submit'),
+            Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        showDialogForAddingPlayer(gameSettingsX01, context);
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                    child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        _submitNewTeamForPlayer(playerToAdd, selectedTeam,
+                            gameSettingsX01, context);
+                      },
+                      child: const Text('Submit'),
+                    ),
+                  ],
+                ))
+              ],
             ),
           ],
         );
@@ -399,5 +574,46 @@ class AddPlayerTeamBtnDialogs {
     gameSettings.addNewPlayerToSpecificTeam(player, selectedTeam);
 
     Navigator.of(context).pop();
+  }
+}
+
+class GuestTextFormField extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final gameSettingsX01 =
+        Provider.of<GameSettingsX01>(context, listen: false);
+
+    return TextFormField(
+      controller: newPlayerController,
+      textInputAction: TextInputAction.done,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ('Please enter a name!');
+        }
+        if (gameSettingsX01.checkIfPlayerNameExists(value)) {
+          return 'Playername already exists!';
+        }
+        return null;
+      },
+      keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+      ],
+      decoration: InputDecoration(
+        prefixIcon: Icon(
+          Icons.person,
+        ),
+        hintText: 'Name',
+        filled: true,
+        hintStyle: TextStyle(color: Colors.grey),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
+    );
   }
 }

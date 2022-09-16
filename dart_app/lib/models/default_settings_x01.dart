@@ -16,8 +16,8 @@ class DefaultSettingsX01 with ChangeNotifier {
   late int _legs;
   late int _sets;
   late bool _setsEnabled;
-  late SingleOrDouble _modeIn;
-  late SingleOrDouble _modeOut;
+  late ModeOutIn _modeIn;
+  late ModeOutIn _modeOut;
   late bool _winByTwoLegsDifference;
   late bool _suddenDeath;
   late int _maxExtraLegs;
@@ -33,12 +33,35 @@ class DefaultSettingsX01 with ChangeNotifier {
   late bool _showMostScoredPoints;
   late InputMethod _inputMethod;
   late bool _showInputMethodInGameScreen;
+  late bool _drawMode;
 
   DefaultSettingsX01() {
     this.resetValues();
   }
 
   void fromMap(map) {
+    switch (map['modeIn']) {
+      case 'Single':
+        modeIn = ModeOutIn.Single;
+        break;
+      case 'Double':
+        modeIn = ModeOutIn.Double;
+        break;
+      case 'Master':
+        modeIn = ModeOutIn.Master;
+        break;
+    }
+    switch (map['modeOut']) {
+      case 'Single':
+        modeOut = ModeOutIn.Single;
+        break;
+      case 'Double':
+        modeOut = ModeOutIn.Double;
+        break;
+      case 'Master':
+        modeOut = ModeOutIn.Master;
+        break;
+    }
     id = map['id'];
     singleOrTeam = map['singleOrTeam'] == 'Single'
         ? SingleOrTeamEnum.Single
@@ -52,12 +75,6 @@ class DefaultSettingsX01 with ChangeNotifier {
     legs = map['legs'];
     sets = map['sets'];
     setsEnabled = map['setsEnabled'];
-    modeIn = map['modeIn'] == 'Single'
-        ? SingleOrDouble.SingleField
-        : SingleOrDouble.DoubleField;
-    modeOut = map['modeOut'] == 'Single'
-        ? SingleOrDouble.SingleField
-        : SingleOrDouble.DoubleField;
     winByTwoLegsDifference = map['winByTwoLegsDifference'];
     suddenDeath = map['suddenDeath'];
     maxExtraLegs = map['maxExtraLegs'];
@@ -81,16 +98,40 @@ class DefaultSettingsX01 with ChangeNotifier {
             return Player.fromMap(item);
           }).toList();
     if (players.isNotEmpty) {
-      this.playersNames = [];
       for (Player player in this.players) {
         this.playersNames.add(player.getName);
       }
     }
     botNamingIds =
         map['botNamingIds'] == null ? [] : map['botNamingIds'].cast<int>();
+    drawMode = map['drawMode'];
   }
 
   Map<String, dynamic> toMap() {
+    String modeInResult = '';
+    String modeOutResult = '';
+    switch (modeIn) {
+      case ModeOutIn.Single:
+        modeInResult = 'Single';
+        break;
+      case ModeOutIn.Double:
+        modeInResult = 'Double';
+        break;
+      case ModeOutIn.Master:
+        modeInResult = 'Master';
+        break;
+    }
+    switch (modeOut) {
+      case ModeOutIn.Single:
+        modeOutResult = 'Single';
+        break;
+      case ModeOutIn.Double:
+        modeOutResult = 'Double';
+        break;
+      case ModeOutIn.Master:
+        modeOutResult = 'Master';
+        break;
+    }
     return {
       'id': id,
       'isSelected': isSelected,
@@ -102,8 +143,8 @@ class DefaultSettingsX01 with ChangeNotifier {
       'legs': legs,
       'sets': sets,
       'setsEnabled': setsEnabled,
-      'modeIn': modeIn == SingleOrDouble.SingleField ? 'Single' : 'Double',
-      'modeOut': modeOut == SingleOrDouble.SingleField ? 'Single' : 'Double',
+      'modeIn': modeInResult,
+      'modeOut': modeOutResult,
       'winByTwoLegsDifference': winByTwoLegsDifference,
       'suddenDeath': suddenDeath,
       'maxExtraLegs': maxExtraLegs,
@@ -124,6 +165,7 @@ class DefaultSettingsX01 with ChangeNotifier {
         'players': players.map((player) {
           return player.toMap(player);
         }).toList(),
+      'drawMode': drawMode,
     };
   }
 
@@ -246,6 +288,10 @@ class DefaultSettingsX01 with ChangeNotifier {
   set showInputMethodInGameScreen(value) =>
       this._showInputMethodInGameScreen = value;
 
+  get drawMode => this._drawMode;
+
+  set drawMode(value) => this._drawMode = value;
+
   void resetValues() {
     players = [];
     playersNames = [];
@@ -276,9 +322,10 @@ class DefaultSettingsX01 with ChangeNotifier {
     showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
     inputMethod = DEFAULT_INPUT_METHOD;
     showInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
+    drawMode = DEFAULT_DRAW_MODE;
   }
 
-  bool samePlayers(List<Player> players) {
+  bool samePlayers(List<Player> players, BuildContext context) {
     int count = 0;
     for (Player player in players) {
       if (this.playersNames.contains(player.getName)) {

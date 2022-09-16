@@ -2,7 +2,7 @@ import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/open_games_firestore.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -49,7 +49,7 @@ class _OpenGamesState extends State<OpenGames> {
                             key: ValueKey(game.getGameId),
                             child: StatsCardX01(
                                 isFinishScreen: false,
-                                game: game,
+                                game: GameX01.createGameX01(game),
                                 openGame: true),
                             startActionPane: ActionPane(
                               dismissible: DismissiblePane(onDismissed: () {}),
@@ -74,7 +74,7 @@ class _OpenGamesState extends State<OpenGames> {
                                 SlidableAction(
                                   onPressed: (context) {
                                     context
-                                        .read<FirestoreService>()
+                                        .read<FirestoreServiceGames>()
                                         .deleteOpenGame(
                                             game.getGameId, context);
                                   },

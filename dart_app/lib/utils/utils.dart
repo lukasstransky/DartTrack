@@ -1,10 +1,18 @@
 import 'dart:collection';
 
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
 
 class Utils {
+  static MaterialStateProperty<Color> getDefaultOverlayColor(
+      BuildContext context) {
+    return Utils.getColorOrPressed(Theme.of(context).colorScheme.primary,
+        Utils.darken(Theme.of(context).colorScheme.primary, 15));
+  }
+
   static MaterialStateProperty<Color> getColor(Color color) {
     return MaterialStateProperty.all<Color>(color);
   }
@@ -100,7 +108,7 @@ class Utils {
       }
     }
 
-    return "";
+    return '';
   }
 
   static String getAverageForLeg(
@@ -161,9 +169,9 @@ class Utils {
     List<String> result = [];
 
     for (String key in keys) {
-      if (key[0] == "T") {
+      if (key[0] == 'T') {
         tripples.add(int.parse(key.substring(1)));
-      } else if (key[0] == "D") {
+      } else if (key[0] == 'D') {
         doubles.add(int.parse(key.substring(1)));
       } else {
         singles.add(int.parse(key));
@@ -179,12 +187,12 @@ class Utils {
 
     List<String> temp = [];
     for (int tripple in tripples) {
-      temp.add("T" + tripple.toString());
+      temp.add('T' + tripple.toString());
     }
     result.addAll(temp);
     temp = [];
     for (int double in doubles) {
-      temp.add("D" + double.toString());
+      temp.add('D' + double.toString());
     }
     result.addAll(temp);
     temp = [];
@@ -219,5 +227,74 @@ class Utils {
     }
 
     return result;
+  }
+
+  static String getLevelForBot(int selectedBotAvgValue) {
+    switch (selectedBotAvgValue) {
+      case 22:
+        return '1';
+      case 26:
+        return '2';
+      case 30:
+        return '3';
+      case 34:
+        return '4';
+      case 38:
+        return '5';
+      case 42:
+        return '6';
+      case 46:
+        return '7';
+      case 50:
+        return '8';
+      case 54:
+        return '9';
+      case 58:
+        return '10';
+      case 62:
+        return '11';
+      case 66:
+        return '12';
+      case 70:
+        return '13';
+      case 74:
+        return '14';
+      case 78:
+        return '15';
+      case 82:
+        return '16';
+      case 86:
+        return '17';
+      case 90:
+        return '18';
+      case 94:
+        return '19';
+      case 98:
+        return '20';
+      case 102:
+        return '21';
+      case 106:
+        return '22';
+      case 110:
+        return '23';
+      case 114:
+        return '24';
+      case 118:
+        return '25';
+    }
+    return '';
+  }
+
+  static double getHeightForWidget(GameSettingsX01 gameSettingsX01) {
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        gameSettingsX01.getPlayers.length >= 4 &&
+        !gameSettingsX01.getSetsEnabled &&
+        gameSettingsX01.getLegs > 1 &&
+        !gameSettingsX01.getWinByTwoLegsDifference &&
+        !gameSettingsX01.getDrawMode &&
+        gameSettingsX01.getModeOut == ModeOutIn.Double) {
+      return WIDGET_HEIGHT_GAMESETTINGS_TEAM;
+    }
+    return WIDGET_HEIGHT_GAMESETTINGS;
   }
 }

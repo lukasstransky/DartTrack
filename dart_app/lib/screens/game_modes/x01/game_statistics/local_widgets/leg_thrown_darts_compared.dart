@@ -22,7 +22,7 @@ class LegThrownDartsCompared extends StatelessWidget {
             padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS, bottom: 10),
             child: Center(
               child: Text(
-                "Darts per Leg",
+                'Darts per Leg',
                 style: TextStyle(
                     fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                     color: Theme.of(context).primaryColor),
@@ -63,7 +63,7 @@ class LegThrownDartsCompared extends StatelessWidget {
                           ? Text(game!.getPlayerGameStatistics[i]
                               .getThrownDartsPerLeg[setLegString]
                               .toString())
-                          : Text("-"),
+                          : Text('-'),
                     ),
                   ),
                   decoration: BoxDecoration(

@@ -57,7 +57,7 @@ class SetsAmount extends StatelessWidget {
                   child: Center(
                     child: Text(
                       tuple.item2.toString(),
-                      style: TextStyle(fontSize: 20.sp),
+                      style: TextStyle(fontSize: 18.sp),
                     ),
                   ),
                 ),

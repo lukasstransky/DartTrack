@@ -10,6 +10,8 @@ enum SingleOrTeamEnum { Single, Team }
 
 enum SingleOrDouble { SingleField, DoubleField }
 
+enum ModeOutIn { Single, Double, Master }
+
 enum BestOfOrFirstToEnum { BestOf, FirstTo }
 
 enum SetsOrLegsEnum { Sets, Legs }
@@ -36,7 +38,8 @@ const int MAX_EXTRA_LEGS = 9;
 const int CUSTOM_POINTS_MIN_NUMBER = 100;
 
 const int WIDTH_GAMESETTINGS = 80;
-const int WIDGET_HEIGHT_GAMESETTINGS = 4;
+const double WIDGET_HEIGHT_GAMESETTINGS = 4;
+const double WIDGET_HEIGHT_GAMESETTINGS_TEAM = 3.5;
 const double MARGIN_GAMESETTINGS = 1.0;
 const double BUTTON_BORDER_RADIUS = 10.0;
 
@@ -269,8 +272,8 @@ const int DEFAULT_CUSTOM_POINTS = -1;
 const int DEFAULT_LEGS = 1;
 const int DEFAULT_SETS = 5;
 const bool DEFAULT_SETS_ENABLED = false;
-const SingleOrDouble DEFAULT_MODE_IN = SingleOrDouble.SingleField;
-const SingleOrDouble DEFAULT_MODE_OUT = SingleOrDouble.DoubleField;
+const ModeOutIn DEFAULT_MODE_IN = ModeOutIn.Single;
+const ModeOutIn DEFAULT_MODE_OUT = ModeOutIn.Double;
 const bool DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE = false;
 const bool DEFAULT_SUDDEN_DEATH = false;
 const int DEFAULT_MAX_EXTRA_LEGS = 2;
@@ -286,3 +289,18 @@ const bool DEFAULT_AUTO_SUBMIT_POINTS = false;
 const bool DEFAULT_SHOW_MOST_SCORED_POINTS = false;
 const InputMethod DEFAULT_INPUT_METHOD = InputMethod.Round;
 const bool DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN = false;
+const bool DEFAULT_DRAW_MODE = false;
+
+const int DEFAULT_SETS_FIRST_TO_SETS_ENABLED = 3;
+const int DEFAULT_LEGS_FIRST_TO_SETS_ENABLED = 2;
+const int DEFAULT_SETS_BEST_OF_SETS_ENABLED = 5;
+const int DEFAULT_LEGS_BEST_OF_SETS_ENABLED = 3;
+const int DEFAULT_LEGS_FIRST_TO_NO_SETS = 5;
+const int DEFAULT_LEGS_BEST_OF_NO_SETS = 11;
+
+const int DEFAULT_LIST_TILE_NEGATIVE_MARGIN = -4;
+
+const double DIALOG_CONTENT_PADDING_TOP = 20.0;
+const double DIALOG_CONTENT_PADDING_RIGHT = 15.0;
+const double DIALOG_CONTENT_PADDING_LEFT = 15.0;
+const double DIALOG_CONTENT_PADDING_BOTTOM = 0.0;

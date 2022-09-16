@@ -38,6 +38,11 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
     barrierDismissible: false,
     context: context,
     builder: (context) => AlertDialog(
+      contentPadding: EdgeInsets.only(
+          bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+          top: DIALOG_CONTENT_PADDING_TOP,
+          left: DIALOG_CONTENT_PADDING_LEFT,
+          right: DIALOG_CONTENT_PADDING_RIGHT),
       title: gameX01.getGameSettings.getEnableCheckoutCounting
           ? Text('Checkout Counting')
           : Text('Finish Counting'),

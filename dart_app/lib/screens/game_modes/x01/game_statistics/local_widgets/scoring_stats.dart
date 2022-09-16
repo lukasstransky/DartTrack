@@ -20,7 +20,7 @@ class ScoringStats extends StatelessWidget {
           child: Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
             child: Text(
-              "Scoring",
+              'Scoring',
               style: TextStyle(
                   fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                   color: Theme.of(context).primaryColor),
@@ -37,7 +37,7 @@ class ScoringStats extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text("3-Dart Avg.",
+                    child: Text('3-Dart Avg.',
                         style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                   ),
                 ),
@@ -47,7 +47,7 @@ class ScoringStats extends StatelessWidget {
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
-                    stats.getAverage(game!, stats),
+                    stats.getAverage(stats),
                     style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                   ),
                 ),
@@ -64,7 +64,7 @@ class ScoringStats extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text("First Nine Avg.",
+                    child: Text('First Nine Avg.',
                         style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                   ),
                 ),
@@ -74,7 +74,7 @@ class ScoringStats extends StatelessWidget {
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
-                    (stats.getFirstNinveAvg(game)),
+                    (stats.getFirstNinveAvg()),
                     style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                   ),
                 ),
@@ -91,7 +91,7 @@ class ScoringStats extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text("Highest Score",
+                    child: Text('Highest Score',
                         style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                   ),
                 ),
@@ -103,7 +103,7 @@ class ScoringStats extends StatelessWidget {
                   child: Text(
                     stats.getHighestScore() != 0
                         ? stats.getHighestScore().toString()
-                        : "-",
+                        : '-',
                     style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                   ),
                 ),

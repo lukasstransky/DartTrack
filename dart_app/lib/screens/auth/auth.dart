@@ -38,6 +38,11 @@ class _AuthState extends State<Auth> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
+        contentPadding: EdgeInsets.only(
+            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+            top: DIALOG_CONTENT_PADDING_TOP,
+            left: DIALOG_CONTENT_PADDING_LEFT,
+            right: DIALOG_CONTENT_PADDING_RIGHT),
         title: Text('An Error Occurred!'),
         content: Text(message),
         actions: [
@@ -74,7 +79,7 @@ class _AuthState extends State<Auth> {
             .read<AuthService>()
             .login(_emailController.text, _passwordController.text);
 
-        msg = "Login Successfully!";
+        msg = 'Login Successfully!';
       } else {
         await context
             .read<AuthService>()
@@ -83,7 +88,7 @@ class _AuthState extends State<Auth> {
         await context.read<AuthService>().postUserToFirestore(
             _emailController.text, _usernameController.text);
 
-        msg = "Account Created Successfully!";
+        msg = 'Account Created Successfully!';
       }
 
       Fluttertoast.showToast(msg: msg);
@@ -157,17 +162,17 @@ class _AuthState extends State<Auth> {
                 Container(
                   width: deviceSize.width * 0.8,
                   child: TextFormField(
-                    key: Key("userNameInput"),
+                    key: Key('userNameInput'),
                     autofocus: false,
                     controller: _usernameController,
                     keyboardType: TextInputType.text,
                     textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value!.isEmpty) {
-                        return ("Username is Required!");
+                        return ('Username is Required!');
                       }
                       if (!_usernameValid) {
-                        return ("Username already exists!");
+                        return ('Username already exists!');
                       }
                       return null;
                     },
@@ -175,7 +180,7 @@ class _AuthState extends State<Auth> {
                       prefixIcon: Icon(
                         Icons.person,
                       ),
-                      hintText: "Username",
+                      hintText: 'Username',
                       filled: true,
                       hintStyle: TextStyle(color: Colors.grey),
                       border: OutlineInputBorder(
@@ -194,13 +199,13 @@ class _AuthState extends State<Auth> {
               Container(
                 width: deviceSize.width * 0.8,
                 child: TextFormField(
-                  key: Key("emailInput"),
+                  key: Key('emailInput'),
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return ("Email is Required!");
+                      return ('Email is Required!');
                     }
                     /*if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]")
                         .hasMatch(value)) {
@@ -212,7 +217,7 @@ class _AuthState extends State<Auth> {
                     prefixIcon: Icon(
                       Icons.mail,
                     ),
-                    hintText: "Email",
+                    hintText: 'Email',
                     filled: true,
                     hintStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
@@ -229,7 +234,7 @@ class _AuthState extends State<Auth> {
                 height: deviceSize.height * 0.01,
               ),
               Container(
-                key: Key("passwordInput"),
+                key: Key('passwordInput'),
                 width: deviceSize.width * 0.8,
                 child: TextFormField(
                   obscureText: !_passwordVisible,
@@ -238,7 +243,7 @@ class _AuthState extends State<Auth> {
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return ("Password is Required!");
+                      return ('Password is Required!');
                     }
                     /*if (!RegExp(
                             "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}\$") //Minimum eight characters, at least one letter and one number
@@ -261,7 +266,7 @@ class _AuthState extends State<Auth> {
                         });
                       },
                     ),
-                    hintText: "Password",
+                    hintText: 'Password',
                     filled: true,
                     hintStyle: TextStyle(color: Colors.grey),
                     border: OutlineInputBorder(
@@ -286,7 +291,7 @@ class _AuthState extends State<Auth> {
                     onTap: () =>
                         Navigator.of(context).pushNamed('/forgotPassword'),
                     child: Text(
-                      "Forgot Password?",
+                      'Forgot Password?',
                       style: TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                   ),
@@ -295,7 +300,7 @@ class _AuthState extends State<Auth> {
                 CircularProgressIndicator()
               else
                 Container(
-                  key: Key("loginRegisterBtn"),
+                  key: Key('loginRegisterBtn'),
                   width: deviceSize.width * 0.6,
                   child: TextButton(
                     child: Text(
@@ -324,7 +329,7 @@ class _AuthState extends State<Auth> {
                       ? 'Don\'t have an account? '
                       : 'Already have an account? '),
                   GestureDetector(
-                    key: Key("loginRegisterSwitch"),
+                    key: Key('loginRegisterSwitch'),
                     onTap: () => _switchAuthMode(),
                     child: Text(
                       _authMode == AuthMode.Login ? 'Register' : 'Login',
@@ -343,7 +348,7 @@ class _AuthState extends State<Auth> {
                 onTap: () async =>
                     await context.read<AuthService>().loginAnonymously(),
                 child: Text(
-                  "Proceed as Guest",
+                  'Proceed as Guest',
                   style: TextStyle(color: Colors.grey, fontSize: 12),
                 ),
               ),

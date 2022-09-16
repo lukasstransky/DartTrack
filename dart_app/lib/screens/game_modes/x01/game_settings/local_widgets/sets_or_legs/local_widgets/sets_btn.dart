@@ -9,21 +9,19 @@ import 'package:sizer/sizer.dart';
 class SetsBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
     return Expanded(
-      child: SizedBox(
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        child: Selector<GameSettingsX01, bool>(
-          selector: (_, gameSettingsX01) => gameSettingsX01.getSetsEnabled,
-          builder: (_, setsEnabled, __) => ElevatedButton(
+      child: Consumer<GameSettingsX01>(
+        builder: (_, gameSettingsX01, __) => Container(
+          height: Utils.getHeightForWidget(gameSettingsX01).h,
+          child: ElevatedButton(
             onPressed: () => gameSettingsX01.setsClicked(),
             child: FittedBox(
               fit: BoxFit.fitWidth,
               child: const Text('Sets'),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
@@ -31,7 +29,7 @@ class SetsBtn extends StatelessWidget {
                   ),
                 ),
               ),
-              backgroundColor: setsEnabled == true
+              backgroundColor: gameSettingsX01.getSetsEnabled
                   ? Utils.getColor(Theme.of(context).colorScheme.primary)
                   : Utils.getColor(Colors.grey),
             ),

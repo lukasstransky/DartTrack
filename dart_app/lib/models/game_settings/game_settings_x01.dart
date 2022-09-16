@@ -12,44 +12,42 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GameSettingsX01 extends GameSettings {
-  late SingleOrTeamEnum _singleOrTeam;
-  late BestOfOrFirstToEnum _mode;
-  late int _points;
-  late int _customPoints;
-  late int _legs;
-  late int _sets;
-  late bool _setsEnabled;
-  late SingleOrDouble _modeIn;
-  late SingleOrDouble _modeOut;
-  late bool _winByTwoLegsDifference;
-  late bool _suddenDeath;
-  late int _maxExtraLegs;
-  late bool _enableCheckoutCounting;
-  late bool
-      _checkoutCountingFinallyDisabled; //if user disables checkout counting in the in game settings -> cant be reversed (cause of inconsistent stats then)
-  late bool _showAverage;
-  late bool _showFinishWays;
-  late bool _showThrownDartsPerLeg;
-  late bool _showLastThrow;
-  late bool _callerEnabled;
-  late bool _vibrationFeedbackEnabled;
-  late bool _automaticallySubmitPoints;
-  late bool _showMostScoredPoints;
-  late InputMethod _inputMethod;
-  late bool _showInputMethodInGameScreen;
-  late List<int> _botNamingIds;
-  late List<int> _teamNamingIds;
+  SingleOrTeamEnum _singleOrTeam = DEFAULT_SINGLE_OR_TEAM;
+  BestOfOrFirstToEnum _mode = DEFAULT_MODE;
+  int _points = DEFAULT_POINTS;
+  int _customPoints = DEFAULT_CUSTOM_POINTS;
+  int _legs = DEFAULT_LEGS;
+  int _sets = DEFAULT_SETS;
+  bool _setsEnabled = DEFAULT_SETS_ENABLED;
+  ModeOutIn _modeIn = DEFAULT_MODE_IN;
+  ModeOutIn _modeOut = DEFAULT_MODE_OUT;
+  bool _winByTwoLegsDifference = DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE;
+  bool _suddenDeath = DEFAULT_SUDDEN_DEATH;
+  int _maxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
+  bool _enableCheckoutCounting = DEFAULT_ENABLE_CHECKOUT_COUNTING;
+  bool _checkoutCountingFinallyDisabled =
+      DEFAULT_CHECKOUT_COUNTING_FINALLY_DISABLED; //if user disables checkout counting in the in game settings -> cant be reversed (cause of inconsistent stats then)
+  bool _showAverage = DEFAULT_SHOW_AVG;
+  bool _showFinishWays = DEFAULT_SHOW_FINISH_WAYS;
+  bool _showThrownDartsPerLeg = DEFAULT_SHOW_THROWN_DARTS_PER_LEG;
+  bool _showLastThrow = DEFAULT_SHOW_LAST_THROW;
+  bool _callerEnabled = DEFAULT_CALLER_ENABLED;
+  bool _vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
+  bool _automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
+  bool _showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
+  InputMethod _inputMethod = DEFAULT_INPUT_METHOD;
+  bool _showInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
+  bool _drawMode = DEFAULT_DRAW_MODE;
+  List<int> _teamNamingIds = [];
 
-  GameSettingsX01() {
-    this.initValues();
-  }
+  GameSettingsX01() {}
 
   GameSettingsX01.firestore({
     required bool checkoutCounting,
     required int legs,
     required int sets,
-    required SingleOrDouble modeIn,
-    required SingleOrDouble modeOut,
+    required ModeOutIn modeIn,
+    required ModeOutIn modeOut,
     required int points,
     required SingleOrTeamEnum singleOrTeam,
     required bool winByTwoLegsDifference,
@@ -101,11 +99,11 @@ class GameSettingsX01 extends GameSettings {
   bool get getSetsEnabled => this._setsEnabled;
   set setSetsEnabled(bool setsEnabled) => this._setsEnabled = setsEnabled;
 
-  SingleOrDouble get getModeIn => this._modeIn;
-  set setModeIn(SingleOrDouble modeIn) => this._modeIn = modeIn;
+  ModeOutIn get getModeIn => this._modeIn;
+  set setModeIn(ModeOutIn modeIn) => this._modeIn = modeIn;
 
-  SingleOrDouble get getModeOut => this._modeOut;
-  set setModeOut(SingleOrDouble modeOut) => this._modeOut = modeOut;
+  ModeOutIn get getModeOut => this._modeOut;
+  set setModeOut(ModeOutIn modeOut) => this._modeOut = modeOut;
 
   bool get getWinByTwoLegsDifference => this._winByTwoLegsDifference;
   set setWinByTwoLegsDifference(bool winByTwoLegsDifference) =>
@@ -183,13 +181,13 @@ class GameSettingsX01 extends GameSettings {
     this._showInputMethodInGameScreen = showInputMethodInGameScreen;
   }
 
-  List<int> get getBotNamingIds => this._botNamingIds;
-  set setBotNamingIds(List<int> value) => this._botNamingIds = value;
+  bool get getDrawMode => this._drawMode;
+  set setDrawMode(bool value) => this._drawMode = value;
 
   List<int> get getTeamNamingIds => this._teamNamingIds;
   set setTeamNamingIds(List<int> value) => this._teamNamingIds = value;
 
-  void switchSingleOrTeamMode() async {
+  void switchSingleOrTeamMode(BuildContext context) async {
     if (_singleOrTeam == SingleOrTeamEnum.Single) {
       setSingleOrTeam = SingleOrTeamEnum.Team;
       /*await Future.delayed(const Duration(milliseconds: 100));
@@ -201,75 +199,86 @@ class GameSettingsX01 extends GameSettings {
               curve: Curves.fastOutSlowIn);
       });*/
     } else {
+      final int countOfBotPlayers = getCountOfBotPlayers();
+      final int countOfGuestPlayers = getPlayers.length - countOfBotPlayers;
+      if (countOfBotPlayers >= 1 && countOfGuestPlayers >= 2) {
+        const String loggedInUser = '';
+        // final String loggedInUser =
+        //     context.read<AuthService>().getPlayer!.getName;
+        List<Player> toRemove = [];
+
+        for (int i = 2; i < getPlayers.length; i++) {
+          if (getPlayers.elementAt(i).getName == loggedInUser) {
+            toRemove.add(getPlayers.elementAt(1));
+          } else {
+            toRemove.add(getPlayers.elementAt(i));
+          }
+        }
+
+        toRemove.forEach((player) =>
+            removePlayer(player, false)); //to avoid concurrency problem
+      }
+      if (countOfBotPlayers == 2) {
+        Player playerToRemove = getPlayers
+            .where((player) => player is Bot && player.getName == 'Bot2')
+            .first;
+        removePlayer(playerToRemove, false);
+      }
+
       setSingleOrTeam = SingleOrTeamEnum.Single;
     }
 
     notifyListeners();
   }
 
-  void switchSingleOrDoubleIn() {
-    if (_modeIn == SingleOrDouble.SingleField)
-      setModeIn = SingleOrDouble.DoubleField;
-    else
-      setModeIn = SingleOrDouble.SingleField;
-
-    notifyListeners();
-  }
-
-  void switchSingleOrDoubleOut() {
-    if (_modeOut == SingleOrDouble.SingleField)
-      setModeOut = SingleOrDouble.DoubleField;
-    else
-      setModeOut = SingleOrDouble.SingleField;
-
-    notifyListeners();
-  }
-
   void switchBestOfOrFirstTo() {
-    if (_mode == BestOfOrFirstToEnum.BestOf) {
+    if (getMode == BestOfOrFirstToEnum.BestOf) {
       setMode = BestOfOrFirstToEnum.FirstTo;
-      if (_setsEnabled) {
-        setLegs = 2;
-        setSets = 3;
+      if (getSetsEnabled) {
+        setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
+        setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
       } else
-        setLegs = 5;
+        setLegs = DEFAULT_LEGS_FIRST_TO_NO_SETS;
     } else {
       setMode = BestOfOrFirstToEnum.BestOf;
       setWinByTwoLegsDifference = false;
-      if (_setsEnabled) {
-        setSets = 5;
-        setLegs = 3;
+      if (getSetsEnabled) {
+        setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+        setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
       } else
-        setLegs = 11;
+        setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
     }
 
     notifyListeners();
   }
 
   void setsClicked() {
-    if (_mode == BestOfOrFirstToEnum.FirstTo) {
-      setSets = 3;
-      setLegs = 2;
+    if (getMode == BestOfOrFirstToEnum.FirstTo) {
+      setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
+      setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
     } else {
-      setSets = 5;
-      setLegs = 3;
+      setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+      setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
     }
 
-    setSetsEnabled = !_setsEnabled;
+    setSetsEnabled = !getSetsEnabled;
+    setWinByTwoLegsDifference = false;
+    setSuddenDeath = false;
+    setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
     notifyListeners();
   }
 
   void switchWinByTwoLegsDifference(bool value) {
-    setWinByTwoLegsDifference = value;
-    if (_winByTwoLegsDifference == true) {
+    if (getWinByTwoLegsDifference == true) {
       setSuddenDeath = false;
       setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
     }
+    setWinByTwoLegsDifference = value;
 
-    notifyListeners();
+    this.notify();
   }
 
-  void removePlayer(Player playerToRemove) {
+  void removePlayer(Player playerToRemove, bool removeTeam) {
     getPlayers.remove(playerToRemove);
 
     //remove player from team
@@ -277,9 +286,19 @@ class GameSettingsX01 extends GameSettings {
     for (Team team in getTeams) {
       for (Player player in team.getPlayers) {
         if (player == playerToRemove) {
-          //remove team if no other player is in it
-          if (team.getPlayers.length == 1) getTeams.remove(team);
+          if (playerToRemove is Bot &&
+              playerToRemove.getName == 'Bot1' &&
+              getCountOfBotPlayers() == 2) {
+            getPlayers
+                .where((player) => player is Bot && player.getName == 'Bot2')
+                .first
+                .setName = 'Bot1';
+          }
           team.getPlayers.remove(playerToRemove);
+          if (team.getPlayers.isEmpty && removeTeam) {
+            getTeams.remove(team);
+            checkTeamNamingIds(team);
+          }
           break outerLoop;
         }
       }
@@ -288,46 +307,15 @@ class GameSettingsX01 extends GameSettings {
     notifyListeners();
   }
 
-  void checkBotNamingIds(Player player) {
-    if (!(player is Bot)) return;
-
-    int botNamingId =
-        int.parse(player.getName.substring(player.getName.length - 1));
-    getBotNamingIds.remove(botNamingId);
-
-    if (getBotNamingIds.isEmpty || getBotNamingIds.last == botNamingId) return;
-
-    int idCounter = 1;
-    for (botNamingId in getBotNamingIds) {
-      if (botNamingId != idCounter) {
-        final int index = getBotNamingIds.indexOf(botNamingId);
-        getBotNamingIds[index] = idCounter;
-        _setNewBotNamingId(botNamingId, idCounter);
-      }
-      idCounter++;
-    }
-    notifyListeners();
-  }
-
-  void _setNewBotNamingId(int currentBotNamingId, int newBotNamingId) {
-    for (Player player in getPlayers) {
-      if (player is Bot) {
-        final int botNamingId =
-            int.parse(player.getName.substring(player.getName.length - 1));
-        if (botNamingId == currentBotNamingId) {
-          final String newBotName =
-              player.getName.substring(0, player.getName.length - 1) +
-                  newBotNamingId.toString();
-          player.setName = newBotName;
-        }
-      }
-    }
-    notifyListeners();
-  }
-
   void checkTeamNamingIds(Team team) {
-    int teamNamingId =
-        int.parse(team.getName.substring(team.getName.length - 1));
+    final String lastCharFromTeamName =
+        team.getName.substring(team.getName.length - 1);
+    if (!team.getName.startsWith('Team ') &&
+        int.tryParse(lastCharFromTeamName) == null) {
+      return;
+    }
+
+    int teamNamingId = int.parse(lastCharFromTeamName);
     getTeamNamingIds.remove(teamNamingId);
 
     if (getTeamNamingIds.isEmpty || getTeamNamingIds.last == teamNamingId)
@@ -363,7 +351,7 @@ class GameSettingsX01 extends GameSettings {
     getPlayers.add(player);
 
     //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
-    if (getTeams.isEmpty)
+    if (getTeams.isEmpty || getPlayers.length == 2)
       _createTeamAndAddPlayer(player);
     else {
       bool foundTeamWithLessTwoPlayers = false;
@@ -476,9 +464,6 @@ class GameSettingsX01 extends GameSettings {
   void deleteTeam(Team teamToDelete) {
     getTeams.remove(teamToDelete);
     for (Player playerToDelete in teamToDelete.getPlayers) {
-      final int botNamingId = int.parse(
-          playerToDelete.getName.substring(playerToDelete.getName.length - 1));
-      getBotNamingIds.remove(botNamingId);
       getPlayers.remove(playerToDelete);
     }
 
@@ -674,10 +659,10 @@ class GameSettingsX01 extends GameSettings {
     defaultSettingsX01.winByTwoLegsDifference = this.getWinByTwoLegsDifference;
     defaultSettingsX01.players = this.getPlayers;
     defaultSettingsX01.playersNames = [];
+    defaultSettingsX01.drawMode = this.getDrawMode;
     for (Player player in this.getPlayers) {
       defaultSettingsX01.playersNames.add(player.getName);
     }
-    defaultSettingsX01.botNamingIds = this.getBotNamingIds;
 
     this.notify();
   }
@@ -691,7 +676,6 @@ class GameSettingsX01 extends GameSettings {
     this.setCallerEnabled = defaultSettingsX01.callerEnabled;
     this.setCheckoutCountingFinallyDisabled =
         defaultSettingsX01.checkoutCountingFinallyDisabled;
-    this.setCustomPoints = defaultSettingsX01.customPoints;
     this.setEnableCheckoutCounting = defaultSettingsX01.enableCheckoutCounting;
     this.setInputMethod = defaultSettingsX01.inputMethod;
     this.setLegs = defaultSettingsX01.legs;
@@ -700,6 +684,7 @@ class GameSettingsX01 extends GameSettings {
     this.setModeIn = defaultSettingsX01.modeIn;
     this.setModeOut = defaultSettingsX01.modeOut;
     this.setPoints = defaultSettingsX01.points;
+    this.setCustomPoints = defaultSettingsX01.customPoints;
     this.setSets = defaultSettingsX01.sets;
     this.setSetsEnabled = defaultSettingsX01.setsEnabled;
     this.setShowAverage = defaultSettingsX01.showAverage;
@@ -714,8 +699,11 @@ class GameSettingsX01 extends GameSettings {
     this.setVibrationFeedbackEnabled =
         defaultSettingsX01.vibrationFeedbackEnabled;
     this.setWinByTwoLegsDifference = defaultSettingsX01.winByTwoLegsDifference;
+    this.setDrawMode = defaultSettingsX01.drawMode;
     this.setPlayers = defaultSettingsX01.players;
-    this.setBotNamingIds = defaultSettingsX01.botNamingIds;
+    //teams not supported for favourites
+    this.setTeamNamingIds = [];
+    this.setTeams = [];
   }
 
   bool defaultSettingsSelected(BuildContext context) {
@@ -754,7 +742,8 @@ class GameSettingsX01 extends GameSettings {
             this.getVibrationFeedbackEnabled &&
         defaultSettingsX01.winByTwoLegsDifference ==
             this.getWinByTwoLegsDifference &&
-        defaultSettingsX01.samePlayers(this.getPlayers)) {
+        defaultSettingsX01.drawMode == this.getDrawMode &&
+        defaultSettingsX01.samePlayers(this.getPlayers, context)) {
       return true;
     }
     return false;
@@ -787,41 +776,21 @@ class GameSettingsX01 extends GameSettings {
         this.getSuddenDeath == DEFAULT_SUDDEN_DEATH &&
         this.getVibrationFeedbackEnabled == DEFAULT_VIBRATION_FEEDBACK &&
         this.getWinByTwoLegsDifference == DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE &&
-        this.getPlayers.length == 0) {
+        this.getPlayers.length == 0 &&
+        this.getDrawMode == DEFAULT_DRAW_MODE) {
       return true;
     }
     return false;
   }
 
-  void initValues() {
-    setPlayers = [];
-    setBotNamingIds = [];
-    setTeamNamingIds = [];
+  int getCountOfBotPlayers() {
+    int count = 0;
+    for (Player player in getPlayers) {
+      if (player is Bot) {
+        count++;
+      }
+    }
 
-    setSingleOrTeam = DEFAULT_SINGLE_OR_TEAM;
-    setMode = DEFAULT_MODE;
-    setPoints = DEFAULT_POINTS;
-    setCustomPoints = DEFAULT_CUSTOM_POINTS;
-    setLegs = DEFAULT_LEGS;
-    setSets = DEFAULT_SETS;
-    setSetsEnabled = DEFAULT_SETS_ENABLED;
-    setModeIn = DEFAULT_MODE_IN;
-    setModeOut = DEFAULT_MODE_OUT;
-    setWinByTwoLegsDifference = DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE;
-    setSuddenDeath = DEFAULT_SUDDEN_DEATH;
-    setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
-    setEnableCheckoutCounting = DEFAULT_ENABLE_CHECKOUT_COUNTING;
-    setCheckoutCountingFinallyDisabled =
-        DEFAULT_CHECKOUT_COUNTING_FINALLY_DISABLED;
-    setShowAverage = DEFAULT_SHOW_AVG;
-    setShowFinishWays = DEFAULT_SHOW_FINISH_WAYS;
-    setShowThrownDartsPerLeg = DEFAULT_SHOW_THROWN_DARTS_PER_LEG;
-    setShowLastThrow = DEFAULT_SHOW_LAST_THROW;
-    setCallerEnabled = DEFAULT_CALLER_ENABLED;
-    setVibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
-    setAutomaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
-    setShowMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
-    setInputMethod = DEFAULT_INPUT_METHOD;
-    setShowInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
+    return count;
   }
 }

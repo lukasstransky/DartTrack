@@ -18,6 +18,16 @@ void newItemScrollController() {
   scrollController = ItemScrollController();
 }
 
+ScrollController newScrollControllerPlayers() {
+  scrollControllerPlayers = new ScrollController();
+  return scrollControllerPlayers;
+}
+
+ScrollController newScrollControllerTeams() {
+  scrollControllerTeams = new ScrollController();
+  return scrollControllerTeams;
+}
+
 void disposeScrollControllersForGamesettings() {
   scrollControllerPlayers.dispose();
   scrollControllerTeams.dispose();

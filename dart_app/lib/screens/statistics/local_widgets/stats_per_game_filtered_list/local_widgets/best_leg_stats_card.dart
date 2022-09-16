@@ -1,4 +1,5 @@
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -7,13 +8,13 @@ class BestLegStatsCard extends StatelessWidget {
       : super(key: key);
 
   final int bestLeg;
-  final Game game;
+  final GameX01 game;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, "/statisticsX01",
+        Navigator.pushNamed(context, '/statisticsX01',
             arguments: {'game': game});
       },
       child: Card(
@@ -51,7 +52,7 @@ class BestLegStatsCard extends StatelessWidget {
             Padding(
               padding: EdgeInsets.only(left: 10, bottom: 10),
               child: Text(
-                "Darts for Leg: " + bestLeg.toString(),
+                'Darts for Leg: ' + bestLeg.toString(),
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
               ),
             )

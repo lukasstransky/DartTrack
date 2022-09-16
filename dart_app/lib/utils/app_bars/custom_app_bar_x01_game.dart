@@ -1,6 +1,7 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,11 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
         barrierDismissible: false,
         context: context,
         builder: (context) => AlertDialog(
+          contentPadding: EdgeInsets.only(
+              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+              top: DIALOG_CONTENT_PADDING_TOP,
+              left: DIALOG_CONTENT_PADDING_LEFT,
+              right: DIALOG_CONTENT_PADDING_RIGHT),
           title: const Text('End Game'),
           content: const Text(
               'Would you like to save the game for finishing it later or end it completely?'),
@@ -36,7 +42,7 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
             TextButton(
               onPressed: () async => {
                 Navigator.of(context).pop(),
-                await context.read<FirestoreService>().postOpenGame(
+                await context.read<FirestoreServiceGames>().postOpenGame(
                     Provider.of<GameX01>(context, listen: false), context),
                 _resetValuesAndNavigateToHome(),
               },

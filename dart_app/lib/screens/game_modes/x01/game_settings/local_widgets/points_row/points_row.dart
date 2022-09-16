@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/custom_points.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/points_row/local_widgets/custom_points.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/points_row/local_widgets/points_btn.dart';
 
 import 'package:flutter/material.dart';

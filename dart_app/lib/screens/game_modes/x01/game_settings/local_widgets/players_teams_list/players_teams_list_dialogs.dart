@@ -4,9 +4,11 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class PlayersTeamsListDialogs {
@@ -17,7 +19,7 @@ class PlayersTeamsListDialogs {
       Player playerToEdit, GameSettingsX01 gameSettingsX01) {
     //store values as "backup" if user modifies the avg. or name & then clicks on cancel
     String cancelName = '';
-    double cancelAverage = 0.0;
+    int cancelAverage = 0;
 
     if (playerToEdit is Bot)
       cancelAverage = playerToEdit.getPreDefinedAverage;
@@ -30,36 +32,67 @@ class PlayersTeamsListDialogs {
       builder: (context) => Form(
         key: _formKeyEditPlayer,
         child: AlertDialog(
+          contentPadding: EdgeInsets.only(
+              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+              top: DIALOG_CONTENT_PADDING_TOP,
+              left: DIALOG_CONTENT_PADDING_LEFT,
+              right: DIALOG_CONTENT_PADDING_RIGHT),
           title: const Text('Edit'),
           content: StatefulBuilder(
             builder: (context, setState) {
               if (playerToEdit is Bot) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                        '${playerToEdit.getName} (${playerToEdit.getPreDefinedAverage - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage + BOT_AVG_SLIDER_VALUE_RANGE} avg.)'),
-                    SfSlider(
-                      min: 22,
-                      max: 118,
-                      value: playerToEdit.getPreDefinedAverage,
-                      stepSize: 4,
-                      interval: 100,
-                      showTicks: false,
-                      onChanged: (dynamic newValue) {
-                        setState(() {
-                          playerToEdit.setPreDefinedAverage = newValue;
-                        });
-                      },
-                    ),
-                  ],
+                return Container(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 30.w,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 5),
+                              child: Text(
+                                'Level ${playerToEdit.getLevel} Bot',
+                                style: TextStyle(
+                                  fontSize: 12.sp,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                              style: TextStyle(
+                                fontSize: 9.sp,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SfSlider(
+                        min: 22,
+                        max: 118,
+                        value: playerToEdit.getPreDefinedAverage,
+                        stepSize: 4,
+                        interval: 100,
+                        showTicks: false,
+                        onChanged: (dynamic newValue) {
+                          setState(() {
+                            playerToEdit.setPreDefinedAverage =
+                                newValue.round();
+                            playerToEdit.setLevel = int.parse(
+                                Utils.getLevelForBot(newValue.round()));
+                          });
+                        },
+                      ),
+                    ],
+                  ),
                 );
               } else {
                 return TextFormField(
                   controller: editPlayerController..text = playerToEdit.getName,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
-                    if (value!.isEmpty) return ('Please enter a Name!');
+                    if (value!.isEmpty) return ('Please enter a name!');
 
                     if (gameSettingsX01.checkIfPlayerNameExists(value))
                       return 'Playername already exists!';
@@ -121,6 +154,7 @@ class PlayersTeamsListDialogs {
 
     if (!(playerToEdit is Bot))
       playerToEdit.setName = editPlayerController.text;
+
     gameSettingsX01.notify();
 
     Navigator.of(context).pop();
@@ -137,6 +171,11 @@ class PlayersTeamsListDialogs {
         return Form(
           key: _formKeyEditTeam,
           child: AlertDialog(
+            contentPadding: EdgeInsets.only(
+                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+                top: DIALOG_CONTENT_PADDING_TOP,
+                left: DIALOG_CONTENT_PADDING_LEFT,
+                right: DIALOG_CONTENT_PADDING_RIGHT),
             title: const Text('Edit Team'),
             content: StatefulBuilder(
               builder: (context, setState) {
@@ -180,7 +219,7 @@ class PlayersTeamsListDialogs {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Want to delete this Team?',
+                          'Delete this Team?',
                           style: TextStyle(
                             color: Colors.red,
                           ),
@@ -189,9 +228,14 @@ class PlayersTeamsListDialogs {
                             icon: Icon(Icons.delete),
                             color: Colors.red,
                             onPressed: () {
-                              gameSettingsX01.checkTeamNamingIds(teamToEdit);
-                              gameSettingsX01.deleteTeam(teamToEdit);
                               Navigator.of(context).pop();
+                              if (teamToEdit.getPlayers.length > 0) {
+                                _showDialogForDeletingTeam(
+                                    context, gameSettingsX01, teamToEdit);
+                              } else {
+                                gameSettingsX01.checkTeamNamingIds(teamToEdit);
+                                gameSettingsX01.deleteTeam(teamToEdit);
+                              }
                             }),
                       ],
                     ),
@@ -219,6 +263,134 @@ class PlayersTeamsListDialogs {
     );
   }
 
+  static void _showDialogForDeletingTeam(
+      BuildContext context, GameSettingsX01 gameSettingsX01, Team teamToEdit) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.only(
+                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+                top: DIALOG_CONTENT_PADDING_TOP,
+                left: 24,
+                right: 24),
+            title: const Text('Info'),
+            content: const Text(
+                'All the players in this team will also be deleted.'),
+            actions: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          showDialogForEditingTeam(
+                              context, teamToEdit, gameSettingsX01);
+                        },
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            gameSettingsX01.checkTeamNamingIds(teamToEdit);
+                            gameSettingsX01.deleteTeam(teamToEdit);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Continue'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          );
+        });
+  }
+
+  static void showDialogForDeletingTeamAsLastPlayer(
+      BuildContext context,
+      Team teamToMaybeDelete,
+      GameSettingsX01 gameSettingsX01,
+      Player playerToDelete) {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            contentPadding: EdgeInsets.only(
+                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+                top: DIALOG_CONTENT_PADDING_TOP,
+                left: 24,
+                right: 24),
+            title: const Text('Delete Team'),
+            content: const Text('Do you also want to delete this Team?'),
+            actions: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 2.w),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Row(
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            gameSettingsX01.removePlayer(playerToDelete, false);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('No'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            gameSettingsX01
+                                .checkTeamNamingIds(teamToMaybeDelete);
+                            gameSettingsX01.getTeams.removeWhere(
+                                (team) => team == teamToMaybeDelete);
+                            gameSettingsX01.removePlayer(playerToDelete, true);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text('Yes'),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
   static void _submitEditedTeam(
       BuildContext context, GameSettingsX01 gameSettingsX01, Team teamToEdit) {
     if (!_formKeyEditTeam.currentState!.validate()) return;
@@ -244,6 +416,11 @@ class PlayersTeamsListDialogs {
         context: context,
         builder: (context) {
           return AlertDialog(
+            contentPadding: EdgeInsets.only(
+                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+                top: DIALOG_CONTENT_PADDING_TOP,
+                left: DIALOG_CONTENT_PADDING_LEFT,
+                right: DIALOG_CONTENT_PADDING_RIGHT),
             title: const Text('Swap Team'),
             content: StatefulBuilder(
               builder: (context, setState) {

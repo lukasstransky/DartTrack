@@ -8,12 +8,12 @@ class Player {
 
   Player({required String name}) : _name = name;
 
-  Player.clone({required Player player}) : _name = player.getName;
-
   factory Player.fromMap(map) {
     if (map.containsKey('preDefinedAverage')) {
       return new Bot(
-          name: map['name'], preDefinedAverage: map['preDefinedAverage']);
+          name: map['name'],
+          preDefinedAverage: map['preDefinedAverage'],
+          level: map['level']);
     } else {
       return new Player(name: map['name']);
     }
@@ -23,7 +23,8 @@ class Player {
     if (player is Bot) {
       return {
         'name': player.getName,
-        'preDefinedAverage': player.getPreDefinedAverage
+        'preDefinedAverage': player.getPreDefinedAverage,
+        'level': player.getLevel
       };
     } else {
       return {'name': player.getName};

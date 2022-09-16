@@ -17,15 +17,36 @@ class GameSettings with ChangeNotifier {
   GameSettings() {}
 
   factory GameSettings.fromMapX01(map) {
+    late ModeOutIn modeIn;
+    late ModeOutIn modeOut;
+    switch (map['modeIn']) {
+      case 'Single':
+        modeIn = ModeOutIn.Single;
+        break;
+      case 'Double':
+        modeIn = ModeOutIn.Double;
+        break;
+      case 'Master':
+        modeIn = ModeOutIn.Master;
+        break;
+    }
+    switch (map['modeOut']) {
+      case 'Single':
+        modeOut = ModeOutIn.Single;
+        break;
+      case 'Double':
+        modeOut = ModeOutIn.Double;
+        break;
+      case 'Master':
+        modeOut = ModeOutIn.Master;
+        break;
+    }
+
     return GameSettingsX01.firestore(
       checkoutCounting: map['checkoutCounting'],
       legs: map['legs'],
-      modeIn: map['modeIn'] == 'Single'
-          ? SingleOrDouble.SingleField
-          : SingleOrDouble.DoubleField,
-      modeOut: map['modeOut'] == 'Single'
-          ? SingleOrDouble.SingleField
-          : SingleOrDouble.DoubleField,
+      modeIn: modeIn,
+      modeOut: modeOut,
       points: map['points'],
       sets: map['sets'] == null ? 0 : map['sets'],
       setsEnabled: map['setsEnabled'],

@@ -4,33 +4,49 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class CheckoutCounting extends StatelessWidget {
+  bool _winByDiffWidgetIsPresent(GameSettingsX01 gameSettingsX01) {
+    return gameSettingsX01.getLegs > 1 &&
+        !gameSettingsX01.getSetsEnabled &&
+        !gameSettingsX01.getDrawMode;
+  }
+
+  bool _noWinByDiffWidgetIsPresent(GameSettingsX01 gameSettingsX01) {
+    if (gameSettingsX01.getLegs == 1 ||
+        gameSettingsX01.getSetsEnabled ||
+        gameSettingsX01.getDrawMode) {
+      return true;
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-
-    return Selector<GameSettingsX01, Tuple2<bool, SingleOrDouble>>(
-      selector: (_, gameSettingsX01) => Tuple2(
-          gameSettingsX01.getEnableCheckoutCounting,
-          gameSettingsX01.getModeOut),
-      builder: (_, tuple, __) {
-        if (tuple.item2 == SingleOrDouble.DoubleField) {
+    return Consumer<GameSettingsX01>(
+      builder: (_, gameSettingsX01, __) {
+        if (gameSettingsX01.getModeOut == ModeOutIn.Double) {
           return Container(
             width: WIDTH_GAMESETTINGS.w,
-            margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-            height: WIDGET_HEIGHT_GAMESETTINGS.h,
-            child: Row(
+            transform: Matrix4.translationValues(0.0,
+                _winByDiffWidgetIsPresent(gameSettingsX01) ? -1.5.h : 0.0, 0.0),
+            margin: EdgeInsets.only(
+                top: _noWinByDiffWidgetIsPresent(gameSettingsX01)
+                    ? MARGIN_GAMESETTINGS.h
+                    : 0),
+            child: Column(
               children: [
-                const Text('Counting of Checkout %'),
-                Switch(
-                  value: tuple.item1,
-                  onChanged: (value) {
-                    gameSettingsX01.setEnableCheckoutCounting = value;
-                    gameSettingsX01.notify();
-                  },
+                Row(
+                  children: [
+                    const Text('Counting of Checkout %'),
+                    Switch(
+                      value: gameSettingsX01.getEnableCheckoutCounting,
+                      onChanged: (value) {
+                        gameSettingsX01.setEnableCheckoutCounting = value;
+                        gameSettingsX01.notify();
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

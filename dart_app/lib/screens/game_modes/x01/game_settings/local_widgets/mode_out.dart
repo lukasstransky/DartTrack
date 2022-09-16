@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class BestOfOrFirstTo extends StatelessWidget {
+class ModeOut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -18,31 +18,25 @@ class BestOfOrFirstTo extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      right: BorderSide(width: 1.0, color: Colors.white),
-                    ),
-                    color: Colors.white,
-                  ),
+                child: SizedBox(
                   child: ElevatedButton(
-                    onPressed: () =>
-                        gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo
-                            ? gameSettingsX01.switchBestOfOrFirstTo()
-                            : null,
+                    onPressed: () => {
+                      gameSettingsX01.setModeOut = ModeOutIn.Single,
+                      gameSettingsX01.notify()
+                    },
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: const Text('Best Of'),
+                      child: const Text('Single Out'),
                     ),
                     style: ButtonStyle(
                       splashFactory:
-                          gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf
+                          gameSettingsX01.getModeOut == ModeOutIn.Single
                               ? NoSplash.splashFactory
                               : InkRipple.splashFactory,
                       shadowColor:
                           MaterialStateProperty.all(Colors.transparent),
                       overlayColor:
-                          gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf
+                          gameSettingsX01.getModeOut == ModeOutIn.Single
                               ? MaterialStateProperty.all(Colors.transparent)
                               : Utils.getDefaultOverlayColor(context),
                       shape: MaterialStateProperty.all(
@@ -54,7 +48,51 @@ class BestOfOrFirstTo extends StatelessWidget {
                         ),
                       ),
                       backgroundColor:
-                          gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf
+                          gameSettingsX01.getModeOut == ModeOutIn.Single
+                              ? Utils.getColor(
+                                  Theme.of(context).colorScheme.primary)
+                              : Utils.getColor(Colors.grey),
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border(
+                      left: BorderSide(width: 1.0, color: Colors.white),
+                      right: BorderSide(width: 1.0, color: Colors.white),
+                    ),
+                    color: Colors.white,
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () => {
+                      gameSettingsX01.setEnableCheckoutCounting = false,
+                      gameSettingsX01.setModeOut = ModeOutIn.Double,
+                      gameSettingsX01.notify()
+                    },
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: const Text('Double Out'),
+                    ),
+                    style: ButtonStyle(
+                      splashFactory:
+                          gameSettingsX01.getModeOut == ModeOutIn.Double
+                              ? NoSplash.splashFactory
+                              : InkRipple.splashFactory,
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor:
+                          gameSettingsX01.getModeOut == ModeOutIn.Double
+                              ? MaterialStateProperty.all(Colors.transparent)
+                              : Utils.getDefaultOverlayColor(context),
+                      shape: MaterialStateProperty.all(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.zero),
+                        ),
+                      ),
+                      backgroundColor:
+                          gameSettingsX01.getModeOut == ModeOutIn.Double
                               ? Utils.getColor(
                                   Theme.of(context).colorScheme.primary)
                               : Utils.getColor(Colors.grey),
@@ -65,23 +103,23 @@ class BestOfOrFirstTo extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   child: ElevatedButton(
-                    onPressed: () =>
-                        gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf
-                            ? gameSettingsX01.switchBestOfOrFirstTo()
-                            : null,
+                    onPressed: () => {
+                      gameSettingsX01.setModeOut = ModeOutIn.Master,
+                      gameSettingsX01.notify()
+                    },
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: const Text('First To'),
+                      child: const Text('Master Out'),
                     ),
                     style: ButtonStyle(
                       splashFactory:
-                          gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo
+                          gameSettingsX01.getModeOut == ModeOutIn.Master
                               ? NoSplash.splashFactory
                               : InkRipple.splashFactory,
                       shadowColor:
                           MaterialStateProperty.all(Colors.transparent),
                       overlayColor:
-                          gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo
+                          gameSettingsX01.getModeOut == ModeOutIn.Master
                               ? MaterialStateProperty.all(Colors.transparent)
                               : Utils.getDefaultOverlayColor(context),
                       shape: MaterialStateProperty.all(
@@ -93,7 +131,7 @@ class BestOfOrFirstTo extends StatelessWidget {
                         ),
                       ),
                       backgroundColor:
-                          gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo
+                          gameSettingsX01.getModeOut == ModeOutIn.Master
                               ? Utils.getColor(
                                   Theme.of(context).colorScheme.primary)
                               : Utils.getColor(Colors.grey),

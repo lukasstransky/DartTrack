@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 class LegAvgCompared extends StatelessWidget {
   const LegAvgCompared({Key? key, required this.game}) : super(key: key);
 
-  final Game? game;
+  final GameX01? game;
 
   @override
   Widget build(BuildContext context) {

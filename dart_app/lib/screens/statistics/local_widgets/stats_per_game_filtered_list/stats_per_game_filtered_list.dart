@@ -1,18 +1,18 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/best_leg_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/checkouts_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/stats_card_filtered.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class StatsPerGameFilteredList extends StatefulWidget {
-  static const routeName = "/statsPerGameFilteredList";
+  static const routeName = '/statsPerGameFilteredList';
 
   const StatsPerGameFilteredList({Key? key}) : super(key: key);
 
@@ -23,7 +23,7 @@ class StatsPerGameFilteredList extends StatefulWidget {
 
 class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   String? _type;
-  String _orderField = "";
+  String _orderField = '';
   bool _overallFilter = true;
   bool _ascendingOrder = true;
 
@@ -49,72 +49,71 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
 
     switch (this._type) {
       case BEST_AVG:
-        _orderField = "average";
+        _orderField = 'average';
         break;
       case WORST_AVG:
-        _orderField = "average";
+        _orderField = 'average';
         _ascendingOrder = false;
         break;
       case BEST_FIRST_NINE_AVG:
-        _orderField = "firstNineAverage";
+        _orderField = 'firstNineAverage';
         break;
       case WORST_FIRST_NINE_AVG:
-        _orderField = "firstNineAverage";
+        _orderField = 'firstNineAverage';
         _ascendingOrder = false;
         break;
       case BEST_CHECKOUT_QUOTE:
-        _orderField = "checkoutInPercent";
+        _orderField = 'checkoutInPercent';
         break;
       case WORST_CHECKOUT_QUOTE:
-        _orderField = "checkoutInPercent";
+        _orderField = 'checkoutInPercent';
         _ascendingOrder = false;
         break;
       case BEST_CHECKOUT_SCORE:
-        _orderField = "highestFinish";
+        _orderField = 'highestFinish';
         break;
       case WORST_CHECKOUT_SCORE:
-        _orderField = "highestFinish";
+        _orderField = 'highestFinish';
         _ascendingOrder = false;
         break;
       case BEST_DARTS_PER_LEG:
-        _orderField = "bestLeg";
+        _orderField = 'bestLeg';
         _ascendingOrder = false;
         break;
       case WORST_DARTS_PER_LEG:
-        _orderField = "bestLeg";
-
+        _orderField = 'bestLeg';
         break;
     }
 
     await context
-        .read<FirestoreService>()
+        .read<FirestoreServicePlayerStats>()
         .getFilteredPlayerGameStatistics(_orderField, _ascendingOrder, context);
   }
 
   String getAppBarTitle() {
     switch (this._type) {
       case BEST_AVG:
-        return "Best Averages";
+        return 'Best Averages';
       case WORST_AVG:
-        return "Worst Averages";
+        return 'Worst Averages';
       case BEST_FIRST_NINE_AVG:
-        return "Best First 9 Averages";
+        return 'Best First 9 Averages';
       case WORST_FIRST_NINE_AVG:
-        return "Worst First 9 Averages";
+        return 'Worst First 9 Averages';
       case BEST_CHECKOUT_QUOTE:
-        return "Best Checkout Quotes";
+        return 'Best Checkout Quotes';
       case WORST_CHECKOUT_QUOTE:
-        return "Worst Checkout Quotes";
+        return 'Worst Checkout Quotes';
       case BEST_CHECKOUT_SCORE:
-        return "Best Finishes";
+        return 'Best Finishes';
       case WORST_CHECKOUT_SCORE:
-        return "Worst Finishes";
+        return 'Worst Finishes';
       case BEST_DARTS_PER_LEG:
-        return "Best Legs";
+        return 'Best Legs';
       case WORST_DARTS_PER_LEG:
-        return "Worst Legs";
+        return 'Worst Legs';
     }
-    return "";
+    return '';
   }
 
   @override
@@ -149,7 +148,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                                           },
                                           child: FittedBox(
                                             fit: BoxFit.fitWidth,
-                                            child: const Text("Overall"),
+                                            child: const Text('Overall'),
                                           ),
                                           style: ButtonStyle(
                                             shape: MaterialStateProperty.all(
@@ -184,7 +183,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                                           },
                                           child: FittedBox(
                                             fit: BoxFit.fitWidth,
-                                            child: const Text("per Game"),
+                                            child: const Text('per Game'),
                                           ),
                                           style: ButtonStyle(
                                             shape: MaterialStateProperty.all(
@@ -220,7 +219,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                           child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                  "Click Card to view Details about a Game")),
+                                  'Click Card to view Details about a Game')),
                         ),
                         if (_orderField == 'highestFinish' &&
                             _overallFilter &&
@@ -233,10 +232,11 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                               finish: statisticsFirestore.checkoutWithGameId
                                   .elementAt(i)
                                   .item1,
-                              game: statisticsFirestore.getGameById(
-                                  statisticsFirestore.checkoutWithGameId
-                                      .elementAt(i)
-                                      .item2) as Game,
+                              game: GameX01.createGameX01(
+                                  statisticsFirestore.getGameById(
+                                      statisticsFirestore.checkoutWithGameId
+                                          .elementAt(i)
+                                          .item2)),
                             ),
                           ],
                         ] else if (_orderField == 'bestLeg' &&
@@ -252,16 +252,18 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                               bestLeg: statisticsFirestore.thrownDartsWithGameId
                                   .elementAt(i)
                                   .item1,
-                              game: statisticsFirestore.getGameById(
-                                  statisticsFirestore.thrownDartsWithGameId
-                                      .elementAt(i)
-                                      .item2) as Game,
+                              game: GameX01.createGameX01(
+                                  statisticsFirestore.getGameById(
+                                      statisticsFirestore.thrownDartsWithGameId
+                                          .elementAt(i)
+                                          .item2)),
                             ),
                           ],
                         ] else ...[
                           for (Game game in statisticsFirestore.games) ...[
                             StatsCardFiltered(
-                                game: game, orderField: _orderField),
+                                game: GameX01.createGameX01(game),
+                                orderField: _orderField),
                           ],
                         ]
                       ],

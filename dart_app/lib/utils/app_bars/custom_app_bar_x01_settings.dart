@@ -1,6 +1,7 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -22,6 +23,11 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.only(
+            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+            top: DIALOG_CONTENT_PADDING_TOP,
+            left: DIALOG_CONTENT_PADDING_LEFT,
+            right: DIALOG_CONTENT_PADDING_RIGHT),
         title: const Text('Info'),
         content: const Text('These settings are the general default settings!'),
         actions: [
@@ -39,12 +45,18 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         Provider.of<DefaultSettingsX01>(context, listen: false);
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
-    final FirestoreService firestoreService = context.read<FirestoreService>();
+    final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
+        context.read<FirestoreServiceDefaultSettings>();
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.only(
+            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+            top: DIALOG_CONTENT_PADDING_TOP,
+            left: DIALOG_CONTENT_PADDING_LEFT,
+            right: DIALOG_CONTENT_PADDING_RIGHT),
         title: const Text('Reset to general default settings'),
         content:
             const Text('Do you want to reset to the general default settings?'),
@@ -57,7 +69,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             onPressed: () => {
               defaultSettingsX01.isSelected = false,
               defaultSettingsX01.resetValues(),
-              firestoreService.postDefaultSettingsX01(context),
+              firestoreServiceDefaultSettings.postDefaultSettingsX01(context),
               gameSettingsX01.notify(),
               Navigator.of(context).pop(),
             },
@@ -68,19 +80,25 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
     );
   }
 
-  showDialogForDefaultSettings() {
+  showDialogForDefaultSettings() async {
     final defaultSettingsX01 =
         Provider.of<DefaultSettingsX01>(context, listen: false);
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
     final bool defaultSettingsSelected =
         gameSettingsX01.defaultSettingsSelected(context);
-    final FirestoreService firestoreService = context.read<FirestoreService>();
+    final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
+        context.read<FirestoreServiceDefaultSettings>();
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.only(
+            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+            top: DIALOG_CONTENT_PADDING_TOP,
+            left: DIALOG_CONTENT_PADDING_LEFT,
+            right: DIALOG_CONTENT_PADDING_RIGHT),
         title: defaultSettingsSelected
             ? Text('Undo default settings')
             : Text('Save settings as default'),
@@ -104,10 +122,32 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                   defaultSettingsX01.isSelected = true,
                   gameSettingsX01.setDefaultSettings(context),
                 },
-              firestoreService.postDefaultSettingsX01(context),
+              firestoreServiceDefaultSettings.postDefaultSettingsX01(context),
               gameSettingsX01.notify(),
               Navigator.of(context).pop(),
             },
+            child: const Text('Continue'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  showDialogForNoTeamModeSupported() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.only(
+            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+            top: DIALOG_CONTENT_PADDING_TOP,
+            left: DIALOG_CONTENT_PADDING_LEFT,
+            right: DIALOG_CONTENT_PADDING_RIGHT),
+        title: const Text('Info'),
+        content: const Text('Team mode for default settings is not supported!'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
             child: const Text('Continue'),
           ),
         ],
@@ -157,6 +197,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                   {
                     this.showDialogForResettingToGeneralDefaultSettings(),
                   }
+                else if (gameSettingsX01.getSingleOrTeam ==
+                    SingleOrTeamEnum.Team)
+                  {this.showDialogForNoTeamModeSupported()}
                 else
                   {
                     this.showDialogForDefaultSettings(),

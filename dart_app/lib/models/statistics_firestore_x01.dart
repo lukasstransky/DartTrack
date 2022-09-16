@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/services/firestore_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +36,7 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   int _countOfAllDarts = 0;
 
   FilterValue _currentFilterValue = FilterValue.Overall;
-  String _customDateFilterRange = "";
+  String _customDateFilterRange = '';
 
   Map<int, int> _roundedScoresEven = {
     0: 0,
@@ -198,7 +199,8 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
   loadStatistics(BuildContext context, FilterValue newFilterValue) async {
     currentFilterValue = newFilterValue;
-    await context.read<FirestoreService>().getStatistics(context);
+    await context.read<FirestoreServicePlayerStats>().getStatistics(context);
+    await context.read<FirestoreServiceGames>().getGames('X01', context);
   }
 
   DateTime getDateTimeFromCurrentFilterValue() {
@@ -222,13 +224,13 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   }
 
   DateTime getCustomStartDate() {
-    return DateFormat("dd-MM-yyyy")
-        .parse(customDateFilterRange.split(";").first);
+    return DateFormat('dd-MM-yyyy')
+        .parse(customDateFilterRange.split(';').first);
   }
 
   DateTime getCustomEndDate() {
-    return DateFormat("dd-MM-yyyy")
-        .parse(customDateFilterRange.split(";").last);
+    return DateFormat('dd-MM-yyyy')
+        .parse(customDateFilterRange.split(';').last);
   }
 
   resetValues() {
@@ -355,7 +357,7 @@ class StatisticsFirestoreX01 with ChangeNotifier {
         return tuple.item2;
       }
     }
-    return "";
+    return '';
   }
 
   _getKeyForBestLeg(int? bestLeg) {
@@ -364,13 +366,6 @@ class StatisticsFirestoreX01 with ChangeNotifier {
         return tuple.item2;
       }
     }
-    return "";
-  }
-
-  bool atLeastOneGamePlayed() {
-    if (games.isNotEmpty) {
-      return true;
-    }
-    return false;
+    return '';
   }
 }

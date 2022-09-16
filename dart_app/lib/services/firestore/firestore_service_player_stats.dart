@@ -1,130 +1,47 @@
 import 'dart:collection';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dart_app/models/open_games_firestore.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/models/statistics_firestore_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-class FirestoreService {
+class FirestoreServicePlayerStats {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _firebaseAuth;
 
-  FirestoreService(this._firestore, this._firebaseAuth);
-
-  Future<String> postGame(GameX01 gameX01) async {
-    Game gameToSave = Game.firestore(
-        name: gameX01.getName,
-        dateTime: gameX01.getDateTime,
-        gameSettings: gameX01.getGameSettings,
-        playerGameStatistics: []);
-
-    String gameId = '';
-    await _firestore
-        .collection('users/' + _firebaseAuth.currentUser!.uid + '/games')
-        .add(gameToSave.toMapX01(gameX01, false))
-        .then((value) => {
-              gameId = value.id,
-            });
-    return gameId;
-  }
-
-  Future<void> postOpenGame(GameX01 gameX01, BuildContext context) async {
-    Game gameToSave = Game.firestore(
-        gameId: gameX01.getGameId,
-        name: gameX01.getName,
-        dateTime: gameX01.getDateTime,
-        gameSettings: gameX01.getGameSettings,
-        playerGameStatistics: gameX01.getPlayerGameStatistics,
-        currentPlayerToThrow: gameX01.getCurrentPlayerToThrow);
-
-    final openGamesFirestore =
-        Provider.of<OpenGamesFirestore>(context, listen: false);
-    for (Game openGame in openGamesFirestore.openGames) {
-      if (openGame.getGameId == gameX01.getGameId) {
-        await deleteOpenGame(gameX01.getGameId, context);
-      }
-    }
-
-    await _firestore
-        .collection('users/' + _firebaseAuth.currentUser!.uid + '/openGames')
-        .add(gameToSave.toMapX01(gameX01, true))
-        .then((value) async => {
-              await _firestore
-                  .collection(
-                      'users/' + _firebaseAuth.currentUser!.uid + '/openGames')
-                  .doc(value.id)
-                  .update({'gameId': value.id})
-            });
-  }
-
-  Future<void> deleteOpenGame(String gameId, BuildContext context) async {
-    await _firestore
-        .collection('users/' + _firebaseAuth.currentUser!.uid + '/openGames')
-        .doc(gameId)
-        .delete()
-        .then((value) async => {
-              await getOpenGames(context),
-            });
-  }
-
-  Future<void> getOpenGames(BuildContext context) async {
-    CollectionReference collectionReference = _firestore
-        .collection('users/' + _firebaseAuth.currentUser!.uid + '/openGames');
-    final openGamesFirestore =
-        Provider.of<OpenGamesFirestore>(context, listen: false);
-    openGamesFirestore.reset();
-
-    await collectionReference.get().then((openGames) => {
-          openGames.docs.forEach((openGame) {
-            String mode = '';
-            if ((openGame.data() as Map<String, dynamic>)
-                .containsValue('X01')) {
-              mode = 'X01';
-            } else if ((openGame.data() as Map<String, dynamic>)
-                .containsValue('Cricket')) {
-              mode = 'Cricket';
-            }
-
-            Game game = Game.fromMap(openGame.data(), mode, openGame.id, true);
-
-            openGamesFirestore.openGames.add(game);
-            openGamesFirestore.notify();
-          })
-        });
-    openGamesFirestore.init = true;
-    openGamesFirestore.notify();
-  }
+  FirestoreServicePlayerStats(this._firestore, this._firebaseAuth);
 
   Future<void> postPlayerGameStatistics(
-      GameX01 gameX01, String gameId, BuildContext context) async {
+      Game game, String gameId, BuildContext context) async {
     List<String> playerGameStatsIds = [];
+    PlayerGameStatistics playerStatsToSave;
+    Map<String, dynamic> data = {};
 
-    for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
-      PlayerGameStatistics playerGameStatisticsToSave = PlayerGameStatistics(
+    for (PlayerGameStatistics playerStats in game.getPlayerGameStatistics) {
+      playerStatsToSave = PlayerGameStatistics(
           gameId: '',
-          player: stats.getPlayer,
-          mode: stats.getMode,
-          dateTime: stats.getDateTime);
+          player: playerStats.getPlayer,
+          mode: playerStats.getMode,
+          dateTime: playerStats.getDateTime);
+
+      if (playerStats is PlayerGameStatisticsX01) {
+        data = playerStatsToSave.toMapX01(
+            playerStats, GameX01.createGameX01(game), gameId, false);
+      }
+      //add other modes like cricket...
 
       //add playerGameStats
       await _firestore
-          .collection('users/' +
-              _firebaseAuth.currentUser!.uid +
-              '/playerGameStatistics')
-          .add(playerGameStatisticsToSave.toMapX01(
-              stats, gameX01, gameId, false))
+          .collection(this._getFirestorePlayerStatsPath())
+          .add(data)
           .then((value) => {
                 playerGameStatsIds.add(value.id),
               });
@@ -132,7 +49,7 @@ class FirestoreService {
 
     //set playerGameStatsIds + gameId for game
     await _firestore
-        .collection('users/' + _firebaseAuth.currentUser!.uid + '/games')
+        .collection(this._getFirestoreGamesPath())
         .doc(gameId)
         .update(
             {'playerGameStatisticsIds': playerGameStatsIds, 'gameId': gameId});
@@ -142,26 +59,28 @@ class FirestoreService {
     //todo comment out
     const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
-        'test';
+        'Strainski';
     final firestoreStats =
         Provider.of<StatisticsFirestoreX01>(context, listen: false);
+
     firestoreStats.resetValues();
 
-    double avg = 0;
+    int counter = 0;
+
+    double totalAvg = 0;
     double bestAvg = -1;
     double worstAvg = -1;
 
-    double firstNineAvg = 0;
+    double totalFirstNineAvg = 0;
     double bestFirstNineAvg = -1;
     double worstFirstNineAvg = -1;
-    int counter = 0;
 
-    double checkoutQuoteAvg = 0;
+    double totalCheckoutQuoteAvg = 0;
     double bestCheckoutQuote = -1;
     double worstCheckoutQuote = -1;
     int checkoutQuoteCounter = 0;
 
-    double checkoutScoreAvg = 0;
+    double totalCheckoutScoreAvg = 0;
     int bestCheckoutScore = -1;
     int worstCheckoutScore = -1;
     int checkoutScoreCounter = 0;
@@ -180,20 +99,20 @@ class FirestoreService {
     Map<String, dynamic> _preciseScores = {};
     Map<String, dynamic> _allScoresPerDartWithCount = {};
 
-    CollectionReference collectionReference = _firestore.collection(
-        'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics');
+    final CollectionReference collectionReference =
+        _firestore.collection(this._getFirestorePlayerStatsPath());
     Query query =
         collectionReference.where('player.name', isEqualTo: currentPlayerName);
 
     if (firestoreStats.currentFilterValue == FilterValue.Year ||
         firestoreStats.currentFilterValue == FilterValue.Month) {
-      query = query.where('dateTime',
+      query = query.where('dateTimeForFiltering',
           isGreaterThanOrEqualTo:
               firestoreStats.getDateTimeFromCurrentFilterValue());
     } else if (firestoreStats.currentFilterValue == FilterValue.Custom) {
-      query = query.where('dateTime',
+      query = query.where('dateTimeForFiltering',
           isGreaterThanOrEqualTo: firestoreStats.getCustomStartDate());
-      query = query.where('dateTime',
+      query = query.where('dateTimeForFiltering',
           isLessThanOrEqualTo: firestoreStats.getCustomEndDate());
     }
 
@@ -214,7 +133,7 @@ class FirestoreService {
                 if ((element.data() as Map<String, dynamic>)
                     .containsKey('checkoutInPercent'))
                   {
-                    checkoutQuoteAvg += element.get('checkoutInPercent'),
+                    totalCheckoutQuoteAvg += element.get('checkoutInPercent'),
                     checkoutQuoteCounter++,
                     if (element.get('checkoutInPercent') > bestCheckoutQuote)
                       {
@@ -233,7 +152,7 @@ class FirestoreService {
                   {
                     for (int checkoutScore in element.get('checkouts').values)
                       {
-                        checkoutScoreAvg += checkoutScore,
+                        totalCheckoutScoreAvg += checkoutScore,
                         checkoutScoreCounter++,
                         if (checkoutScore < worstCheckoutScore ||
                             worstCheckoutScore == -1)
@@ -243,6 +162,7 @@ class FirestoreService {
                       }
                   },
 
+                //highest finish
                 if ((element.data() as Map<String, dynamic>)
                     .containsKey('highestFinish'))
                   {
@@ -291,7 +211,7 @@ class FirestoreService {
                   },
 
                 //avg
-                avg += element.get('average'),
+                totalAvg += element.get('average'),
                 if (element.get('average') > bestAvg)
                   {
                     bestAvg = element.get('average'),
@@ -302,15 +222,15 @@ class FirestoreService {
                   },
 
                 //first nine avg
-                firstNineAvg += element.get('firstNineAverage'),
-                if (element.get('firstNineAverage') > bestFirstNineAvg)
+                totalFirstNineAvg += element.get('firstNineAvg'),
+                if (element.get('firstNineAvg') > bestFirstNineAvg)
                   {
-                    bestFirstNineAvg = element.get('firstNineAverage'),
+                    bestFirstNineAvg = element.get('firstNineAvg'),
                   },
-                if (element.get('firstNineAverage') < worstFirstNineAvg ||
+                if (element.get('firstNineAvg') < worstFirstNineAvg ||
                     worstFirstNineAvg == -1)
                   {
-                    worstFirstNineAvg = element.get('firstNineAverage'),
+                    worstFirstNineAvg = element.get('firstNineAvg'),
                   },
                 counter++,
 
@@ -375,24 +295,24 @@ class FirestoreService {
             ),
 
             //calc & set values
-            if (avg > 0)
+            if (totalAvg > 0)
               {
-                firestoreStats.avg = avg / counter,
+                firestoreStats.avg = totalAvg / counter,
               },
-            if (firstNineAvg > 0)
+            if (totalFirstNineAvg > 0)
               {
-                firestoreStats.firstNineAvg = firstNineAvg / counter,
+                firestoreStats.firstNineAvg = totalFirstNineAvg / counter,
               },
 
             if (checkoutQuoteCounter > 0)
               {
                 firestoreStats.checkoutQuoteAvg =
-                    checkoutQuoteAvg / checkoutQuoteCounter,
+                    totalCheckoutQuoteAvg / checkoutQuoteCounter,
               },
-            if (checkoutScoreAvg > 0)
+            if (totalCheckoutScoreAvg > 0)
               {
                 firestoreStats.checkoutScoreAvg =
-                    checkoutScoreAvg / checkoutScoreCounter,
+                    totalCheckoutScoreAvg / checkoutScoreCounter,
               },
             if (countOf180 > 0)
               {
@@ -431,61 +351,26 @@ class FirestoreService {
                     firestoreStats.allScoresPerDartAsStringCount),
           },
         );
+
     firestoreStats.avgBestWorstStatsLoaded = true;
     firestoreStats.notify();
   }
 
   Future<PlayerGameStatistics?> getPlayerGameStatisticById(
       String playerGameStatsId, String mode) async {
+    final CollectionReference collectionReference =
+        _firestore.collection(this._getFirestorePlayerStatsPath());
     PlayerGameStatistics? result;
-    CollectionReference collectionReference = _firestore.collection(
-        'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics');
 
     await collectionReference.doc(playerGameStatsId).get().then((value) => {
           if (mode == 'X01')
             {
               result = PlayerGameStatistics.fromMapX01(value.data()),
             },
+          //add other modes like cricket...
         });
+
     return result;
-  }
-
-  Future<void> getGames(String mode, BuildContext context) async {
-    late dynamic firestoreStats;
-    switch (mode) {
-      case 'X01':
-        firestoreStats =
-            Provider.of<StatisticsFirestoreX01>(context, listen: false);
-      //add other modes
-    }
-
-    CollectionReference collectionReference = _firestore
-        .collection('users/' + _firebaseAuth.currentUser!.uid + '/games');
-    Query query = collectionReference.where('name', isEqualTo: mode);
-
-    firestoreStats.resetGames();
-
-    QuerySnapshot<Object?> games = await query.get();
-    if (games.docs.isEmpty) {
-      firestoreStats.noGamesPlayed = true;
-      firestoreStats.notify();
-    } else {
-      firestoreStats.noGamesPlayed = false;
-      games.docs.forEach((element) async {
-        Game game = Game.fromMap(element.data(), mode, element.id, false);
-
-        for (String playerGameStatsId
-            in element.get('playerGameStatisticsIds')) {
-          PlayerGameStatistics? playerGameStatistics =
-              await getPlayerGameStatisticById(playerGameStatsId, mode);
-
-          game.getPlayerGameStatistics.add(playerGameStatistics);
-        }
-
-        firestoreStats.games.add(game);
-        firestoreStats.notify();
-      });
-    }
   }
 
   Future<void> getFilteredPlayerGameStatistics(
@@ -495,26 +380,25 @@ class FirestoreService {
     const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
         'Strainski';
-
-    CollectionReference collectionReference = _firestore.collection(
-        'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics');
-    Query query = collectionReference
+    final CollectionReference collectionReference =
+        _firestore.collection(this._getFirestorePlayerStatsPath());
+    final Query query = collectionReference
         .where('player.name', isEqualTo: currentPlayerName)
         .orderBy(orderField, descending: ascendingOrder);
-
     List<Game> temp = [];
+
     firestoreStats.resetOverallStats();
     firestoreStats.resetFilteredGames();
 
     await query.get().then((value) => {
           value.docs.forEach((element) async {
-            String gameId = element.get('gameId');
+            final String gameId = element.get('gameId');
 
             //for overall values -> checkouts + thrown darts per leg
             if (orderField == 'highestFinish' || orderField == 'bestLeg') {
-              SplayTreeMap<String, int> checkouts =
+              final SplayTreeMap<String, int> checkouts =
                   SplayTreeMap<String, int>.from(element.get('checkouts'));
-              SplayTreeMap<String, int> thrownDartsPerLeg =
+              final SplayTreeMap<String, int> thrownDartsPerLeg =
                   SplayTreeMap<String, int>.from(
                       element.get('thrownDartsPerLeg'));
 
@@ -539,37 +423,17 @@ class FirestoreService {
             }
           }),
         });
+
     firestoreStats.sortOverallStats(ascendingOrder);
     firestoreStats.filteredGames = temp;
     firestoreStats.notify();
   }
 
-  Future<void> postDefaultSettingsX01(BuildContext context) async {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
-    final CollectionReference ref = await _firestore.collection(
-        'users/' + _firebaseAuth.currentUser!.uid + '/defaultSettingsX01');
-    final QuerySnapshot<Object?> result = await ref.get();
-
-    if (result.docs.isNotEmpty) {
-      await ref.doc(defaultSettingsX01.id).delete();
-    }
-    await ref
-        .add(defaultSettingsX01.toMap())
-        .then((value) => defaultSettingsX01.id = value.id);
-    await ref.doc(defaultSettingsX01.id).update({'id': defaultSettingsX01.id});
+  String _getFirestorePlayerStatsPath() {
+    return 'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics';
   }
 
-  Future<void> getDefaultSettingsX01(BuildContext context) async {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
-    final QuerySnapshot<Object?> result = await _firestore
-        .collection(
-            'users/' + _firebaseAuth.currentUser!.uid + '/defaultSettingsX01')
-        .get();
-
-    if (result.docs.isNotEmpty) {
-      defaultSettingsX01.fromMap(result.docs[0].data());
-    }
+  String _getFirestoreGamesPath() {
+    return 'users/' + _firebaseAuth.currentUser!.uid + '/games';
   }
 }

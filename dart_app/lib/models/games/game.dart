@@ -8,7 +8,6 @@ import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dar
 
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 class Game with ChangeNotifier implements Comparable<Game> {
   String? _gameId;
@@ -49,7 +48,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
       if (openGame)
         'playerGameStatistics': _playerGameStatistics.map((item) {
           return item.toMapX01(
-              item as PlayerGameStatisticsX01, gameX01, "", openGame);
+              item as PlayerGameStatisticsX01, gameX01, '', openGame);
         }).toList(),
       if (openGame && gameX01.getCurrentPlayerToThrow is Bot)
         'currentPlayerToThrow': {
@@ -76,12 +75,12 @@ class Game with ChangeNotifier implements Comparable<Game> {
             .toString()
             .split('.')
             .last
-            .replaceAll("Field", ""),
+            .replaceAll('Field', ''),
         'modeOut': gameSettingsX01.getModeOut
             .toString()
             .split('.')
             .last
-            .replaceAll("Field", ""),
+            .replaceAll('Field', ''),
         'winByTwoLegsDifference': gameSettingsX01.getWinByTwoLegsDifference,
         if (gameSettingsX01.getWinByTwoLegsDifference)
           'suddenDeath': gameSettingsX01.getSuddenDeath,
@@ -96,9 +95,9 @@ class Game with ChangeNotifier implements Comparable<Game> {
   factory Game.fromMap(map, mode, gameId, openGame) {
     late GameSettings gameSettings;
     switch (mode) {
-      case "X01":
+      case 'X01':
         gameSettings = GameSettings.fromMapX01(map['gameSettings']);
-      //add other cases for other game modes...(other settings)
+      //add other cases like cricket...
     }
 
     if (openGame) {
@@ -112,7 +111,11 @@ class Game with ChangeNotifier implements Comparable<Game> {
               Player.fromMap(map['currentPlayerToThrow'])),
           playerGameStatistics:
               map['playerGameStatistics'].map<PlayerGameStatistics>((item) {
-            return PlayerGameStatistics.fromMapX01(item);
+            switch (mode) {
+              case 'X01':
+                return PlayerGameStatistics.fromMapX01(item);
+              //add other cases like cricket...
+            }
           }).toList());
     }
 
