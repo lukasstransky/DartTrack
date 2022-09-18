@@ -1,16 +1,35 @@
-import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerEntry extends StatelessWidget {
   const PlayerEntry(
-      {Key? key, required this.i, required this.game, required this.openGame})
+      {Key? key,
+      required this.i,
+      required this.gameX01,
+      required this.openGame})
       : super(key: key);
 
   final int i;
-  final Game game;
+  final GameX01 gameX01;
   final bool openGame;
+
+  bool _isGameDraw() {
+    for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
+      if (stats.getGameDraw) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _firstElementNoDrawOrOpenGame() {
+    return i == 0 && !_isGameDraw() && !openGame;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,44 +41,79 @@ class PlayerEntry extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(
-                bottom: i != game.getPlayerGameStatistics.length - 1 ? 0 : 10),
+                bottom:
+                    i != gameX01.getPlayerGameStatistics.length - 1 ? 0 : 10),
             child: Row(
               children: [
                 Container(
-                    width: 40.w,
-                    child: Row(
-                      children: [
-                        Text(
-                          (i + 1).toString() + '. ',
-                          style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: (i == 0 && !openGame)
-                                  ? FontWeight.bold
-                                  : null),
+                  width: 40.w,
+                  child: Row(
+                    children: [
+                      _isGameDraw()
+                          ? SizedBox.shrink()
+                          : Text(
+                              '${(i + 1)}.',
+                              style: TextStyle(
+                                  fontSize: _firstElementNoDrawOrOpenGame()
+                                      ? DEFAULT_FONTSIZE_BIG.sp
+                                      : DEFAULT_FONTSIZE.sp,
+                                  fontWeight: (i == 0 && !openGame)
+                                      ? FontWeight.bold
+                                      : null),
+                            ),
+                      if (_firstElementNoDrawOrOpenGame())
+                        Container(
+                          padding: const EdgeInsets.only(right: 5, left: 10),
+                          transform: Matrix4.translationValues(0.0, -2.0, 0.0),
+                          child: Icon(
+                            Entypo.trophy,
+                            size: DEFAULT_FONTSIZE.sp,
+                            color: Color(0xffFFD700),
+                          ),
                         ),
-                        if (!openGame) ...[
-                          if (i == 0)
-                            Padding(
-                              padding: EdgeInsets.only(
-                                right: 5,
+                      if (gameX01.getPlayerGameStatistics[i].getPlayer
+                          is Bot) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Lvl. ${gameX01.getPlayerGameStatistics[i].getPlayer.getLevel} Bot',
+                                style: TextStyle(
+                                  fontSize: _firstElementNoDrawOrOpenGame()
+                                      ? DEFAULT_FONTSIZE_BIG.sp
+                                      : DEFAULT_FONTSIZE.sp,
+                                ),
                               ),
-                              child: Icon(
-                                Entypo.trophy,
-                                size: 12.sp,
-                                color: Color(0xffFFD700),
+                              Text(
+                                ' (${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                style: TextStyle(
+                                  fontSize: 8.sp,
+                                ),
                               ),
-                            )
-                          else
-                            SizedBox.shrink(),
-                        ],
-                        Text(game.getPlayerGameStatistics[i].getPlayer.getName,
+                            ],
+                          ),
+                        ),
+                      ] else ...[
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: _isGameDraw() || openGame ? 10 : 0),
+                          child: Text(
+                            gameX01
+                                .getPlayerGameStatistics[i].getPlayer.getName,
                             style: TextStyle(
-                                fontSize: 14.sp,
-                                fontWeight: (i == 0 && !openGame)
+                                fontSize: _firstElementNoDrawOrOpenGame()
+                                    ? DEFAULT_FONTSIZE_BIG.sp
+                                    : DEFAULT_FONTSIZE.sp,
+                                fontWeight: _firstElementNoDrawOrOpenGame()
                                     ? FontWeight.bold
-                                    : null)),
-                      ],
-                    )),
+                                    : null),
+                          ),
+                        ),
+                      ]
+                    ],
+                  ),
+                ),
                 Padding(
                   padding: EdgeInsets.only(left: 15),
                   child: Container(
@@ -68,29 +122,18 @@ class PlayerEntry extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                            game.getGameSettings.getSetsEnabled
-                                ? 'Sets: ' +
-                                    game.getPlayerGameStatistics[i].getSetsWon
-                                        .toString()
-                                : 'Legs: ' +
-                                    game.getPlayerGameStatistics[i].getLegsWon
-                                        .toString(),
-                            style: TextStyle(fontSize: 12.sp)),
-                        if (!openGame) ...[
+                            gameX01.getGameSettings.getSetsEnabled
+                                ? 'Sets: ${gameX01.getPlayerGameStatistics[i].getSetsWon}'
+                                : 'Legs: ${gameX01.getPlayerGameStatistics[i].getLegsWon}',
+                            style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp)),
+                        Text(
+                            'Average: ${gameX01.getPlayerGameStatistics[i].getAverage()}',
+                            style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp)),
+                        if (gameX01.getGameSettings.getEnableCheckoutCounting)
                           Text(
-                              'Average: ' +
-                                  game.getPlayerGameStatistics[i].getAverage(
-                                      game.getPlayerGameStatistics[i]),
-                              style: TextStyle(fontSize: 12.sp)),
-                          if (game.getGameSettings.getEnableCheckoutCounting)
-                            Text(
-                              'Checkout: ' +
-                                  game.getPlayerGameStatistics[i]
-                                      .getCheckoutQuoteInPercent()
-                                      .toString(),
-                              style: TextStyle(fontSize: 12.sp),
-                            ),
-                        ],
+                            'Checkout: ${gameX01.getPlayerGameStatistics[i].getCheckoutQuoteInPercent()}',
+                            style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp),
+                          ),
                       ],
                     ),
                   ),

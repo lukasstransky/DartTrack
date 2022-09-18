@@ -19,6 +19,8 @@ class GameSettings with ChangeNotifier {
   factory GameSettings.fromMapX01(map) {
     late ModeOutIn modeIn;
     late ModeOutIn modeOut;
+    late BestOfOrFirstToEnum mode;
+
     switch (map['modeIn']) {
       case 'Single':
         modeIn = ModeOutIn.Single;
@@ -41,12 +43,21 @@ class GameSettings with ChangeNotifier {
         modeOut = ModeOutIn.Master;
         break;
     }
+    switch (map['mode']) {
+      case 'BestOf':
+        mode = BestOfOrFirstToEnum.BestOf;
+        break;
+      case 'FirstTo':
+        mode = BestOfOrFirstToEnum.FirstTo;
+        break;
+    }
 
     return GameSettingsX01.firestore(
       checkoutCounting: map['checkoutCounting'],
       legs: map['legs'],
       modeIn: modeIn,
       modeOut: modeOut,
+      mode: mode,
       points: map['points'],
       sets: map['sets'] == null ? 0 : map['sets'],
       setsEnabled: map['setsEnabled'],

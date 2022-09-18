@@ -62,6 +62,7 @@ class DefaultSettingsX01 with ChangeNotifier {
         modeOut = ModeOutIn.Master;
         break;
     }
+
     id = map['id'];
     singleOrTeam = map['singleOrTeam'] == 'Single'
         ? SingleOrTeamEnum.Single
@@ -132,6 +133,7 @@ class DefaultSettingsX01 with ChangeNotifier {
         modeOutResult = 'Master';
         break;
     }
+
     return {
       'id': id,
       'isSelected': isSelected,

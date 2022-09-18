@@ -21,6 +21,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   int _dartsForWonLegCount =
       0; //for statistics screen -> average darts for leg needed (count only won legs)
 
+  bool _gameDraw = false;
   bool _gameWon = false;
   int _legsWon = 0;
   int _legsWonTotal = 0; //for statistics screen (only for set mode)
@@ -108,7 +109,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       required Map<String, int> allScoresPerDartAsStringCount,
       required List<String> allScoresPerDartAsString,
       required List<int> allRemainingPoints,
-      required List<List<String>> allRemainingScoresPerDart})
+      required List<List<String>> allRemainingScoresPerDart,
+      required bool gameDraw})
       : super(gameId: gameId, dateTime: dateTime, mode: mode, player: player) {
     this._currentPoints = currentPoints;
     this._totalPoints = totalPoints;
@@ -141,6 +143,7 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._allScoresPerDartAsString = allScoresPerDartAsString;
     this._allRemainingPoints = allRemainingPoints;
     this._allRemainingScoresPerDart = allRemainingScoresPerDart;
+    this._gameDraw = gameDraw;
   }
 
   PlayerGameStatisticsX01(
@@ -176,6 +179,9 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   bool get getGameWon => this._gameWon;
   set setGameWon(bool gameWon) => this._gameWon = gameWon;
+
+  bool get getGameDraw => this._gameDraw;
+  set setGameDraw(bool gameDraw) => this._gameDraw = gameDraw;
 
   int get getLegsWon => this._legsWon;
   set setLegsWon(int legsWon) => this._legsWon = legsWon;
@@ -272,13 +278,12 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._amountOfFinishDarts = value;
 
   //calc average based on total points and all scores length
-  String getAverage(PlayerGameStatisticsX01 stats) {
-    if (stats.getTotalPoints == 0 && stats.getAllScores.length == 0) {
+  String getAverage() {
+    if (getTotalPoints == 0 && getAllScores.length == 0) {
       return '-';
     }
 
-    return ((stats.getTotalPoints / stats.getAllThrownDarts) * 3)
-        .toStringAsFixed(2);
+    return ((getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
   }
 
   String getLastThrow() {

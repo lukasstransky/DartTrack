@@ -212,9 +212,7 @@ class PlayerStatsInGame extends StatelessWidget {
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            'Average: ' +
-                                playerGameStatisticsX01!
-                                    .getAverage(playerGameStatisticsX01!),
+                            'Average: ' + playerGameStatisticsX01!.getAverage(),
                             style: TextStyle(
                               fontSize: 13.sp,
                             ),

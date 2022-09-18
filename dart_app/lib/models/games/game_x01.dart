@@ -33,7 +33,8 @@ class GameX01 extends Game {
 
   factory GameX01.createGameX01(Game? game) {
     GameX01 gameX01 = new GameX01();
-    gameX01.setGameId = game!.getGameId;
+    gameX01.setDateTime = game!.getDateTime;
+    gameX01.setGameId = game.getGameId;
     gameX01.setGameSettings = game.getGameSettings;
     gameX01.setPlayerGameStatistics = game.getPlayerGameStatistics;
     gameX01.setCurrentPlayerToThrow = game.getCurrentPlayerToThrow;
@@ -636,6 +637,8 @@ class GameX01 extends Game {
             sortPlayerStats();
             currentStats.setGameWon = true;
             isGameFinished = true;
+          } else if (gameDraw()) {
+            currentStats.setGameDraw = true;
           }
         }
       } else {
@@ -643,10 +646,12 @@ class GameX01 extends Game {
           sortPlayerStats();
           currentStats.setGameWon = true;
           isGameFinished = true;
+        } else if (gameDraw()) {
+          currentStats.setGameDraw = true;
         }
       }
 
-      if (isGameFinished) {
+      if (isGameFinished || currentStats.getGameDraw) {
         Navigator.of(context).pushNamed('/finishX01');
       } else {
         for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
@@ -1196,45 +1201,70 @@ class GameX01 extends Game {
     return false;
   }
 
+  bool _gameWonFirstToWithSets(PlayerGameStatisticsX01 stats) {
+    return getGameSettings.getMode == BestOfOrFirstToEnum.FirstTo &&
+        getGameSettings.getSetsEnabled &&
+        getGameSettings.getSets == stats.getSetsWon;
+  }
+
+  bool _gameWonFirstToWithLegs(PlayerGameStatisticsX01 stats) {
+    return getGameSettings.getMode == BestOfOrFirstToEnum.FirstTo &&
+        stats.getLegsWon >= getGameSettings.getLegs;
+  }
+
+  bool _gameWonBestOfWithSets(PlayerGameStatisticsX01 stats) {
+    return getGameSettings.getMode == BestOfOrFirstToEnum.BestOf &&
+        getGameSettings.getSetsEnabled &&
+        ((stats.getSetsWon * 2) - 1) == getGameSettings.getSets;
+  }
+
+  bool _gameWonBestOfWithLegs(PlayerGameStatisticsX01 stats) {
+    return getGameSettings.getMode == BestOfOrFirstToEnum.BestOf &&
+        ((stats.getLegsWon * 2) - 1) == getGameSettings.getLegs;
+  }
+
+  bool gameDraw() {
+    for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
+      if (getGameSettings.getSetsEnabled &&
+          !(stats.getSetsWon == (getGameSettings.getSets / 2))) {
+        return false;
+      } else if (!getGameSettings.getSetsEnabled &&
+          !(stats.getLegsWon == (getGameSettings.getLegs / 2))) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   bool isGameWon(PlayerGameStatisticsX01 stats) {
     if (getReachedSuddenDeath) {
       return true;
     }
 
-    if (getGameSettings.getMode == BestOfOrFirstToEnum.FirstTo &&
-        getGameSettings.getSets == stats.getSetsWon) {
-      //player won the game - set mode & first to
+    if (_gameWonFirstToWithSets(stats) ||
+        _gameWonBestOfWithSets(stats) ||
+        _gameWonBestOfWithLegs(stats)) {
       return true;
-    } else if (getGameSettings.getMode == BestOfOrFirstToEnum.BestOf &&
-        getGameSettings.getSets == ((stats.getSetsWon * 2) - 1)) {
-      //player won the game - set mode & best of
-      return true;
-    } else if (getGameSettings.getMode == BestOfOrFirstToEnum.FirstTo &&
-        stats.getLegsWon >= getGameSettings.getLegs) {
-      //check if win by two legs is enabled
-      if (getGameSettings.getWinByTwoLegsDifference) {
-        //suddean death reached
-        if (getGameSettings.getSuddenDeath && reachedSuddenDeath()) {
-          setReachedSuddenDeath = true;
-        }
-
-        //check if leg diff is at least 2
-        if (!checkLegDifference(stats)) {
-          return false;
-        }
+    } else if (_gameWonFirstToWithLegs(stats)) {
+      if (!getGameSettings.getWinByTwoLegsDifference) {
+        return true;
       }
-      //player won the game - leg mode & first to
-      return true;
-    } else if (getGameSettings.getMode == BestOfOrFirstToEnum.BestOf &&
-        getGameSettings.getLegs == ((stats.getLegsWon * 2) - 1)) {
-      //player won the game - leg mode & best of
-      return true;
+
+      //suddean death reached
+      if (getGameSettings.getSuddenDeath && reachedSuddenDeath()) {
+        setReachedSuddenDeath = true;
+      }
+
+      if (isLegDifferenceAtLeastTwo(stats)) {
+        return true;
+      }
     }
+
     return false;
   }
 
   //for win by two legs diff -> checks if leg won difference is at least 2 at each player -> return true (valid win)
-  bool checkLegDifference(PlayerGameStatisticsX01 playerToCheck) {
+  bool isLegDifferenceAtLeastTwo(PlayerGameStatisticsX01 playerToCheck) {
     for (PlayerGameStatisticsX01 stats in getPlayerGameStatistics) {
       if (stats != playerToCheck &&
           (playerToCheck.getLegsWon - 2) < stats.getLegsWon) {

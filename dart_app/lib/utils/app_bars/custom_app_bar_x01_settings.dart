@@ -18,16 +18,18 @@ class CustomAppBarX01Settings extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
-  showDialogForGenerelDefaultSettings() {
+  final _edgeInsets = EdgeInsets.only(
+      bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+      top: DIALOG_CONTENT_PADDING_TOP,
+      left: DIALOG_CONTENT_PADDING_LEFT,
+      right: DIALOG_CONTENT_PADDING_RIGHT);
+
+  _showDialogForGenerelDefaultSettings() {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: _edgeInsets,
         title: const Text('Info'),
         content: const Text('These settings are the general default settings!'),
         actions: [
@@ -40,92 +42,32 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
     );
   }
 
-  showDialogForResettingToGeneralDefaultSettings() {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-    final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
-        context.read<FirestoreServiceDefaultSettings>();
-
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => AlertDialog(
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
-        title: const Text('Reset to general default settings'),
-        content:
-            const Text('Do you want to reset to the general default settings?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () => {
-              defaultSettingsX01.isSelected = false,
-              defaultSettingsX01.resetValues(),
-              firestoreServiceDefaultSettings.postDefaultSettingsX01(context),
-              gameSettingsX01.notify(),
-              Navigator.of(context).pop(),
-            },
-            child: const Text('Continue'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  showDialogForDefaultSettings() async {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
+  _showDialogForDefaultSettings() async {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
     final bool defaultSettingsSelected =
         gameSettingsX01.defaultSettingsSelected(context);
-    final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
-        context.read<FirestoreServiceDefaultSettings>();
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: _edgeInsets,
         title: defaultSettingsSelected
-            ? Text('Undo default settings')
-            : Text('Save settings as default'),
+            ? const Text('Undo default settings')
+            : const Text('Save settings as default'),
         content: defaultSettingsSelected
-            ? Text('Do you want to reset to the general default settings?')
-            : Text('Do you want to set these settings as default?'),
+            ? const Text(
+                'Do you want to reset to the general default settings?')
+            : const Text('Do you want to set these settings as default?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () => {
-              if (defaultSettingsSelected)
-                {
-                  defaultSettingsX01.isSelected = false,
-                  defaultSettingsX01.resetValues(),
-                }
-              else
-                {
-                  defaultSettingsX01.isSelected = true,
-                  gameSettingsX01.setDefaultSettings(context),
-                },
-              firestoreServiceDefaultSettings.postDefaultSettingsX01(context),
-              gameSettingsX01.notify(),
-              Navigator.of(context).pop(),
-            },
+            onPressed: () => _setOrUndoDefaultSettings(
+                gameSettingsX01, defaultSettingsSelected),
             child: const Text('Continue'),
           ),
         ],
@@ -133,16 +75,12 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
     );
   }
 
-  showDialogForNoTeamModeSupported() {
+  _showDialogForNoTeamModeSupported() {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: _edgeInsets,
         title: const Text('Info'),
         content: const Text('Team mode for default settings is not supported!'),
         actions: [
@@ -155,11 +93,45 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  _setOrUndoDefaultSettings(
+      GameSettingsX01 gameSettingsX01, bool defaultSettingsSelected) {
     final defaultSettingsX01 =
         Provider.of<DefaultSettingsX01>(context, listen: false);
+    final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
+        context.read<FirestoreServiceDefaultSettings>();
 
+    if (defaultSettingsSelected) {
+      defaultSettingsX01.isSelected = false;
+      defaultSettingsX01.resetValues();
+    } else {
+      defaultSettingsX01.isSelected = true;
+      gameSettingsX01.setDefaultSettings(context);
+    }
+    gameSettingsX01.setSettingsFromDefault(context);
+    firestoreServiceDefaultSettings.postDefaultSettingsX01(context);
+
+    gameSettingsX01.notify();
+    Navigator.of(context).pop();
+  }
+
+  _defaultSettingsBtnClicked() {
+    final defaultSettingsX01 =
+        Provider.of<DefaultSettingsX01>(context, listen: false);
+    final gameSettingsX01 =
+        Provider.of<GameSettingsX01>(context, listen: false);
+
+    if (gameSettingsX01.generalDefaultSettingsSelected() &&
+        !defaultSettingsX01.isSelected) {
+      this._showDialogForGenerelDefaultSettings();
+    } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      this._showDialogForNoTeamModeSupported();
+    } else {
+      this._showDialogForDefaultSettings();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
       title: Column(
@@ -174,37 +146,17 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed('/home');
-            },
+            onPressed: () => Navigator.of(context).pushNamed('/home'),
             icon: Icon(Icons.arrow_back),
           )
         ],
       ),
       actions: [
         Padding(
-          padding: EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.only(right: 10),
           child: Consumer<GameSettingsX01>(
             builder: (_, gameSettingsX01, __) => IconButton(
-              onPressed: () async => {
-                if (gameSettingsX01.generalDefaultSettingsSelected() &&
-                    !defaultSettingsX01.isSelected)
-                  {
-                    this.showDialogForGenerelDefaultSettings(),
-                  }
-                else if (gameSettingsX01.generalDefaultSettingsSelected() &&
-                    defaultSettingsX01.isSelected)
-                  {
-                    this.showDialogForResettingToGeneralDefaultSettings(),
-                  }
-                else if (gameSettingsX01.getSingleOrTeam ==
-                    SingleOrTeamEnum.Team)
-                  {this.showDialogForNoTeamModeSupported()}
-                else
-                  {
-                    this.showDialogForDefaultSettings(),
-                  }
-              },
+              onPressed: () async => _defaultSettingsBtnClicked(),
               icon: gameSettingsX01.defaultSettingsSelected(context)
                   ? Icon(MdiIcons.cardsHeart)
                   : Icon(MdiIcons.heartOutline),

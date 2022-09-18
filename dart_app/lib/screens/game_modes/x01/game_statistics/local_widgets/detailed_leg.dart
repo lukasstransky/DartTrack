@@ -1,3 +1,4 @@
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
@@ -88,7 +89,9 @@ class _DetailedLegState extends State<DetailedLeg> {
                   child: Column(
                     children: [
                       Text(
-                        playerGameStatisticsX01.getPlayer.getName,
+                        playerGameStatisticsX01.getPlayer is Bot
+                            ? 'Bot'
+                            : playerGameStatisticsX01.getPlayer.getName,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 15.sp),
                       ),
@@ -108,7 +111,7 @@ class _DetailedLegState extends State<DetailedLeg> {
                                       child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      "Score",
+                                      'Score',
                                       style: TextStyle(fontSize: 11.sp),
                                     ),
                                   )),
@@ -118,7 +121,7 @@ class _DetailedLegState extends State<DetailedLeg> {
                                       child: FittedBox(
                                     fit: BoxFit.scaleDown,
                                     child: Text(
-                                      "Left",
+                                      'Left',
                                       style: TextStyle(fontSize: 11.sp),
                                     ),
                                   )),
@@ -169,7 +172,7 @@ class _DetailedLegState extends State<DetailedLeg> {
                             children: [
                               Expanded(
                                 child: Center(
-                                  child: Text(""),
+                                  child: Text(''),
                                 ),
                               ),
                             ],
@@ -186,12 +189,12 @@ class _DetailedLegState extends State<DetailedLeg> {
                         children: [
                           Expanded(
                             child: Center(
-                              child: Text("Avg."),
+                              child: Text('Avg.'),
                             ),
                           ),
                           Expanded(
                             child: Center(
-                              child: Text("Darts"),
+                              child: Text('Darts'),
                             ),
                           )
                         ],

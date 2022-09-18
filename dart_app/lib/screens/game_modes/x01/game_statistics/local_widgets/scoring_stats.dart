@@ -47,7 +47,7 @@ class ScoringStats extends StatelessWidget {
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
-                    stats.getAverage(stats),
+                    stats.getAverage(),
                     style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                   ),
                 ),

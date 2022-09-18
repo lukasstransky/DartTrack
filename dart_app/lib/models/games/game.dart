@@ -1,4 +1,3 @@
-import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
@@ -21,7 +20,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
     required String name,
     required DateTime dateTime,
   })  : this._name = name,
-        this._dateTime = DateTime.now();
+        this._dateTime = dateTime;
 
   //needed to save game to firestore
   Game.firestore(
@@ -50,16 +49,9 @@ class Game with ChangeNotifier implements Comparable<Game> {
           return item.toMapX01(
               item as PlayerGameStatisticsX01, gameX01, '', openGame);
         }).toList(),
-      if (openGame && gameX01.getCurrentPlayerToThrow is Bot)
-        'currentPlayerToThrow': {
-          'name': gameX01.getCurrentPlayerToThrow.getName,
-          'preDefinedAverage':
-              gameX01.getCurrentPlayerToThrow.getPreDefinedAverage
-        },
-      if (openGame && !(gameX01.getCurrentPlayerToThrow is Bot))
-        'currentPlayerToThrow': {
-          'name': gameX01.getCurrentPlayerToThrow.getName,
-        },
+      if (openGame)
+        'currentPlayerToThrow':
+            _currentPlayerToThrow!.toMap(_currentPlayerToThrow as Player),
       'gameSettings': {
         if (openGame)
           'players': gameX01.getGameSettings.getPlayers.map((player) {
@@ -100,29 +92,34 @@ class Game with ChangeNotifier implements Comparable<Game> {
       //add other cases like cricket...
     }
 
+    DateTime dateTime = DateTime.parse(map['dateTime'].toDate().toString());
+
     if (openGame) {
       return Game.firestore(
           gameId: gameId,
           name: map['name'],
-          dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
+          dateTime: dateTime,
           gameSettings: gameSettings,
           currentPlayerToThrow: Player.getPlayerFromList(
               gameSettings.getPlayers,
               Player.fromMap(map['currentPlayerToThrow'])),
-          playerGameStatistics:
-              map['playerGameStatistics'].map<PlayerGameStatistics>((item) {
-            switch (mode) {
-              case 'X01':
-                return PlayerGameStatistics.fromMapX01(item);
-              //add other cases like cricket...
-            }
-          }).toList());
+          playerGameStatistics: map['playerGameStatistics']
+              .map<PlayerGameStatistics?>((item) {
+                switch (mode) {
+                  case 'X01':
+                    return PlayerGameStatistics.fromMapX01(item);
+                  //add other cases like cricket...
+                }
+              })
+              .toList()
+              .whereType<PlayerGameStatistics>()
+              .toList());
     }
 
     return Game.firestore(
         gameId: gameId,
         name: map['name'],
-        dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
+        dateTime: dateTime,
         gameSettings: gameSettings,
         playerGameStatistics: []);
   }

@@ -49,7 +49,7 @@ class _OpenGamesState extends State<OpenGames> {
                             key: ValueKey(game.getGameId),
                             child: StatsCardX01(
                                 isFinishScreen: false,
-                                game: GameX01.createGameX01(game),
+                                gameX01: GameX01.createGameX01(game),
                                 openGame: true),
                             startActionPane: ActionPane(
                               dismissible: DismissiblePane(onDismissed: () {}),

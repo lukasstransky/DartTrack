@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -21,7 +22,7 @@ class LegAvgCompared extends StatelessWidget {
             padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS, bottom: 10),
             child: Center(
               child: Text(
-                "Averages per Leg",
+                'Averages per Leg',
                 style: TextStyle(
                     fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                     color: Theme.of(context).primaryColor),
@@ -40,7 +41,9 @@ class LegAvgCompared extends StatelessWidget {
                   padding: EdgeInsets.all(5),
                   child: Center(
                     child: Text(
-                      game!.getPlayerGameStatistics[i].getPlayer.getName,
+                      game!.getPlayerGameStatistics[i].getPlayer is Bot
+                          ? 'Bot'
+                          : game!.getPlayerGameStatistics[i].getPlayer.getName,
                     ),
                   ),
                 ),

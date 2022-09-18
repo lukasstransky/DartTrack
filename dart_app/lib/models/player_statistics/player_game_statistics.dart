@@ -1,6 +1,5 @@
 import 'dart:collection';
 
-import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
@@ -87,7 +86,8 @@ class PlayerGameStatistics {
             : map['allRemainingPoints'].cast<int>(),
         allRemainingScoresPerDart: map['allRemainingScoresPerDart'] == null
             ? []
-            : List<List<String>>.from(map['allRemainingScoresPerDart']));
+            : List<List<String>>.from(map['allRemainingScoresPerDart']),
+        gameDraw: map['gameDraw'] == null ? false : true);
   }
 
   Map<String, dynamic> toMapX01(PlayerGameStatisticsX01 playerGameStatisticsX01,
@@ -96,22 +96,13 @@ class PlayerGameStatistics {
 
     if (openGame) {
       return {
-        if (playerGameStatisticsX01.getPlayer is Bot)
-          'player': {
-            'name': playerGameStatisticsX01.getPlayer.getName,
-            'preDefinedAverage':
-                playerGameStatisticsX01.getPlayer.getPreDefinedAverage
-          },
-        if (!(playerGameStatisticsX01.getPlayer is Bot))
-          'player': {
-            'name': playerGameStatisticsX01.getPlayer.getName,
-          },
+        'player': playerGameStatisticsX01.getPlayer
+            .toMap(playerGameStatisticsX01.getPlayer),
         'mode': _mode,
         'gameId': gameId,
         'dateTime': _dateTime,
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-          'average': double.parse(
-              playerGameStatisticsX01.getAverage(playerGameStatisticsX01)),
+          'average': double.parse(playerGameStatisticsX01.getAverage()),
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
           'highestScore': playerGameStatisticsX01.getHighestScore(),
         if (gameX01.getGameSettings.getEnableCheckoutCounting &&
@@ -180,7 +171,8 @@ class PlayerGameStatistics {
           'allRemainingPoints': playerGameStatisticsX01.getAllRemainingPoints,
         if (playerGameStatisticsX01.getAllRemainingScoresPerDart.isNotEmpty)
           'allRemainingScoresPerDart':
-              playerGameStatisticsX01.getAllRemainingScoresPerDart
+              playerGameStatisticsX01.getAllRemainingScoresPerDart,
+        if (playerGameStatisticsX01.getGameDraw) 'gameDraw': true,
       };
     }
 
@@ -196,8 +188,7 @@ class PlayerGameStatistics {
       if (gameX01.getGameSettings.getSetsEnabled)
         'setsWon': playerGameStatisticsX01.getSetsWon,
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
-        'average': double.parse(
-            playerGameStatisticsX01.getAverage(playerGameStatisticsX01)),
+        'average': double.parse(playerGameStatisticsX01.getAverage()),
       if (playerGameStatisticsX01.getAllScores.isNotEmpty)
         'firstNineAvgPoints': playerGameStatisticsX01.getFirstNineAvgPoints,
       if (playerGameStatisticsX01.getFirstNineAvgCount > 0)
@@ -251,6 +242,7 @@ class PlayerGameStatistics {
           playerGameStatisticsX01.getAllScoresCountForRound,
       'totalPoints': playerGameStatisticsX01.getTotalPoints,
       'dartsForWonLegCount': playerGameStatisticsX01.getDartsForWonLegCount,
+      if (playerGameStatisticsX01.getGameDraw) 'gameDraw': true,
     };
   }
 

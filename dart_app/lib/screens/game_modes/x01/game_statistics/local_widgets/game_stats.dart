@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 
@@ -38,7 +39,7 @@ class GameStats extends StatelessWidget {
             children: [
               Container(
                 width: WIDTH_HEADINGS_STATISTICS.w,
-                child: Text(""),
+                child: Text(''),
               ),
               for (PlayerGameStatisticsX01 stats
                   in game!.getPlayerGameStatistics)
@@ -61,12 +62,36 @@ class GameStats extends StatelessWidget {
                                   color: Color(0xffFFD700),
                                 ),
                               ),
-                            Text(
-                              stats.getPlayer.getName,
-                              style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
+                            if (stats.getPlayer is Bot) ...[
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Bot',
+                                    style: TextStyle(
+                                        fontSize: FONTSIZE_STATISTICS.sp,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  Container(
+                                    transform: Matrix4.translationValues(
+                                        0.0, -1.0, 0.0),
+                                    child: Text(
+                                      ' (Lvl. ${stats.getPlayer.getLevel})',
+                                      style: TextStyle(
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              )
+                            ] else ...[
+                              Text(
+                                stats.getPlayer.getName,
+                                style: TextStyle(
+                                    fontSize: FONTSIZE_STATISTICS.sp,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ]
                           ],
                         ),
                       ),
@@ -81,7 +106,7 @@ class GameStats extends StatelessWidget {
           child: Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
             child: Text(
-              "Game",
+              'Game',
               style: TextStyle(
                   fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                   color: Theme.of(context).primaryColor),
@@ -100,8 +125,8 @@ class GameStats extends StatelessWidget {
                     fit: BoxFit.scaleDown,
                     child: Text(
                         game!.getGameSettings.getSetsEnabled
-                            ? "Sets Won"
-                            : "Legs Won",
+                            ? 'Sets Won'
+                            : 'Legs Won',
                         style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                   ),
                 ),
@@ -131,7 +156,7 @@ class GameStats extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text("Legs Won",
+                      child: Text('Legs Won',
                           style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                     ),
                   ),

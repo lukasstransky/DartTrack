@@ -6,7 +6,6 @@ import 'package:dart_app/utils/app_bars/custom_app_bar_x01_finished.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:developer';
 
 class Finish extends StatelessWidget {
   static const routeName = '/finishX01';
@@ -22,7 +21,7 @@ class Finish extends StatelessWidget {
             children: [
               StatsCardX01(
                 isFinishScreen: true,
-                game: Provider.of<GameX01>(context, listen: false),
+                gameX01: Provider.of<GameX01>(context, listen: false),
                 openGame: false,
               ),
               Buttons(),

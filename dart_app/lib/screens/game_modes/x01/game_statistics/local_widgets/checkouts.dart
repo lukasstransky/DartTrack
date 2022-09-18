@@ -21,7 +21,7 @@ class Checkouts extends StatelessWidget {
           child: Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
             child: Text(
-              "Checkouts",
+              'Checkouts',
               style: TextStyle(
                   fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                   color: Theme.of(context).primaryColor),
@@ -55,7 +55,7 @@ class Checkouts extends StatelessWidget {
                       Utils.getWinnerOfLeg(setLegString, game) ==
                               stats.getPlayer.getName
                           ? stats.getCheckouts[setLegString].toString()
-                          : "",
+                          : '',
                       style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                     ),
                   ),

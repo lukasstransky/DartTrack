@@ -87,7 +87,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                               if (_mode == 'X01')
                                 StatsCardX01(
                                     isFinishScreen: false,
-                                    game: GameX01.createGameX01(game),
+                                    gameX01: GameX01.createGameX01(game),
                                     openGame: false),
                               //add cards for other modes (StatsCardCricket)
                             ]

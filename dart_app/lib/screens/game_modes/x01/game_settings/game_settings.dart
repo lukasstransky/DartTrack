@@ -35,6 +35,9 @@ class _GameSettingsState extends State<GameSettings> {
     Provider.of<GameSettingsX01>(context, listen: false)
         .setSettingsFromDefault(context);
     addCurrentUserToPlayers();
+
+    /*Provider.of<GameSettingsX01>(context, listen: false)
+        .addPlayer(new Player(name: 'Strainski'));*/
   }
 
   @override

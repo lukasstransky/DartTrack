@@ -48,6 +48,7 @@ class GameSettingsX01 extends GameSettings {
     required int sets,
     required ModeOutIn modeIn,
     required ModeOutIn modeOut,
+    required BestOfOrFirstToEnum mode,
     required int points,
     required SingleOrTeamEnum singleOrTeam,
     required bool winByTwoLegsDifference,
@@ -59,6 +60,7 @@ class GameSettingsX01 extends GameSettings {
     this._sets = sets;
     this._modeIn = modeIn;
     this._modeOut = modeOut;
+    this._mode = mode;
     this._points = points;
     this._singleOrTeam = singleOrTeam;
     this._winByTwoLegsDifference = winByTwoLegsDifference;
@@ -234,37 +236,57 @@ class GameSettingsX01 extends GameSettings {
   void switchBestOfOrFirstTo() {
     if (getMode == BestOfOrFirstToEnum.BestOf) {
       setMode = BestOfOrFirstToEnum.FirstTo;
+
+      if (getDrawMode) {
+        setDrawMode = false;
+      }
+
       if (getSetsEnabled) {
         setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
         setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
-      } else
+      } else {
         setLegs = DEFAULT_LEGS_FIRST_TO_NO_SETS;
+      }
     } else {
       setMode = BestOfOrFirstToEnum.BestOf;
       setWinByTwoLegsDifference = false;
+
       if (getSetsEnabled) {
         setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
         setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
-      } else
+      } else {
         setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
+      }
     }
 
     notifyListeners();
   }
 
-  void setsClicked() {
-    if (getMode == BestOfOrFirstToEnum.FirstTo) {
-      setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
-      setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
-    } else {
-      setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
-      setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
-    }
-
+  void setsBtnClicked() {
     setSetsEnabled = !getSetsEnabled;
     setWinByTwoLegsDifference = false;
     setSuddenDeath = false;
     setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
+
+    if (getDrawMode) {
+      setSets = DEFAULT_SETS_DRAW_MODE;
+      setLegs = getSetsEnabled
+          ? DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED
+          : DEFAULT_LEGS_DRAW_MODE;
+    } else {
+      if (getMode == BestOfOrFirstToEnum.FirstTo) {
+        setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
+        setLegs = getSetsEnabled
+            ? DEFAULT_LEGS_FIRST_TO_SETS_ENABLED
+            : DEFAULT_LEGS_FIRST_TO_NO_SETS;
+      } else {
+        setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+        setLegs = getSetsEnabled
+            ? setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED
+            : setSets = DEFAULT_LEGS_BEST_OF_NO_SETS;
+      }
+    }
+
     notifyListeners();
   }
 
@@ -584,12 +606,12 @@ class GameSettingsX01 extends GameSettings {
         result += getPoints.toString() + ' / ';
     }
 
-    if (getModeIn == SingleOrDouble.SingleField)
+    if (getModeIn == ModeOutIn.Single)
       result += 'Single In / ';
     else
       result += 'Double In / ';
 
-    if (getModeOut == SingleOrDouble.SingleField)
+    if (getModeOut == ModeOutIn.Single)
       result += 'Single Out';
     else
       result += 'Double Out';

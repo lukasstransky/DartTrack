@@ -27,7 +27,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
       if (playerStats.getPlayer.getName == currentPlayerName) {
         switch (widget.orderField) {
           case 'average':
-            return playerStats.getAverage(playerStats);
+            return playerStats.getAverage();
           case 'firstNineAverage':
             return playerStats.getFirstNineAvgPoints.toString();
           case 'checkoutInPercent':

@@ -39,6 +39,30 @@ class DrawMode extends StatelessWidget {
         !gameSettingsX01.getDrawMode;
   }
 
+  void _drawModeSwitchPressed(GameSettingsX01 gameSettingsX01, bool value) {
+    if (value == false) {
+      gameSettingsX01.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+      if (gameSettingsX01.getSetsEnabled) {
+        gameSettingsX01.setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
+      } else {
+        gameSettingsX01.setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
+      }
+    } else {
+      gameSettingsX01.setMode = BestOfOrFirstToEnum.BestOf;
+      gameSettingsX01.setSets = DEFAULT_SETS_DRAW_MODE;
+
+      if (gameSettingsX01.getSetsEnabled) {
+        gameSettingsX01.setLegs = DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED;
+      } else {
+        gameSettingsX01.setLegs = DEFAULT_LEGS_DRAW_MODE;
+      }
+    }
+
+    gameSettingsX01.setDrawMode = value;
+
+    gameSettingsX01.notify();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<GameSettingsX01>(
@@ -60,8 +84,7 @@ class DrawMode extends StatelessWidget {
                     Switch(
                       value: gameSettingsX01.getDrawMode,
                       onChanged: (value) {
-                        gameSettingsX01.setDrawMode = value;
-                        gameSettingsX01.notify();
+                        _drawModeSwitchPressed(gameSettingsX01, value);
                       },
                     ),
                   ],

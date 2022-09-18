@@ -7,13 +7,65 @@ import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
 class LegsAmount extends StatefulWidget {
-  LegsAmount({Key? key}) : super(key: key);
-
   @override
   State<LegsAmount> createState() => _LegsAmountState();
 }
 
 class _LegsAmountState extends State<LegsAmount> {
+  _subtractBtnPressed(GameSettingsX01 gameSettingsX01, Tuple2 tuple) {
+    if (tuple.item2 <= MIN_LEGS) {
+      return;
+    }
+
+    //when draw mode is enabled -> prevent from legs being 0
+    if (tuple.item1 == BestOfOrFirstToEnum.BestOf &&
+        gameSettingsX01.getDrawMode &&
+        gameSettingsX01.getLegs == (MIN_LEGS + 1)) {
+      return;
+    }
+
+    if (tuple.item1 == BestOfOrFirstToEnum.BestOf) {
+      gameSettingsX01.setLegs = tuple.item2 - 2;
+    } else {
+      gameSettingsX01.setLegs = tuple.item2 - 1;
+    }
+
+    if (gameSettingsX01.getLegs == MIN_LEGS) {
+      gameSettingsX01.setWinByTwoLegsDifference = false;
+      gameSettingsX01.setSuddenDeath = false;
+      gameSettingsX01.setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
+    }
+
+    gameSettingsX01.notify();
+  }
+
+  _addBtnPressed(GameSettingsX01 gameSettingsX01, Tuple2 tuple) {
+    if (tuple.item2 >= MAX_LEGS) return;
+
+    //when draw mode is enabled -> prevent from being 1 more than max legs
+    if (gameSettingsX01.getDrawMode && tuple.item2 == (MAX_LEGS - 1)) {
+      return;
+    }
+
+    if (tuple.item1 == BestOfOrFirstToEnum.BestOf) {
+      gameSettingsX01.setLegs = tuple.item2 + 2;
+    } else {
+      gameSettingsX01.setLegs = tuple.item2 + 1;
+    }
+
+    gameSettingsX01.notify();
+  }
+
+  _shouldShowSubtractBtnGrey(int legs, GameSettingsX01 gameSettingsX01) {
+    return legs == MIN_LEGS ||
+        legs == (MIN_LEGS + 1) && gameSettingsX01.getDrawMode;
+  }
+
+  _shouldShowAddBtnGrey(int legs, GameSettingsX01 gameSettingsX01) {
+    return legs == MAX_LEGS ||
+        legs == (MAX_LEGS - 1) && gameSettingsX01.getDrawMode;
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameSettingsX01 =
@@ -42,30 +94,15 @@ class _LegsAmountState extends State<LegsAmount> {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onPressed: () {
-                      if (tuple.item2 <= 1) {
-                        return;
-                      }
-
-                      if (tuple.item1 == BestOfOrFirstToEnum.BestOf) {
-                        gameSettingsX01.setLegs = tuple.item2 - 2;
-                      } else {
-                        gameSettingsX01.setLegs = tuple.item2 - 1;
-                      }
-
-                      if (gameSettingsX01.getLegs == 1) {
-                        gameSettingsX01.setWinByTwoLegsDifference = false;
-                        gameSettingsX01.setSuddenDeath = false;
-                        gameSettingsX01.setMaxExtraLegs =
-                            DEFAULT_MAX_EXTRA_LEGS;
-                      }
-                      gameSettingsX01.notify();
+                      _subtractBtnPressed(gameSettingsX01, tuple);
                     },
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.remove,
-                        color: tuple.item2 != 1
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.grey),
+                        color: _shouldShowSubtractBtnGrey(
+                                tuple.item2, gameSettingsX01)
+                            ? Colors.grey
+                            : Theme.of(context).colorScheme.primary),
                   ),
                   Container(
                     width: 10.w,
@@ -80,20 +117,15 @@ class _LegsAmountState extends State<LegsAmount> {
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
                     onPressed: () {
-                      if (tuple.item2 >= MAX_LEGS) return;
-                      if (tuple.item1 == BestOfOrFirstToEnum.BestOf) {
-                        gameSettingsX01.setLegs = tuple.item2 + 2;
-                      } else {
-                        gameSettingsX01.setLegs = tuple.item2 + 1;
-                      }
-                      gameSettingsX01.notify();
+                      _addBtnPressed(gameSettingsX01, tuple);
                     },
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
                     icon: Icon(Icons.add,
-                        color: tuple.item2 != MAX_LEGS
-                            ? Theme.of(context).colorScheme.primary
-                            : Colors.grey),
+                        color:
+                            _shouldShowAddBtnGrey(tuple.item2, gameSettingsX01)
+                                ? Colors.grey
+                                : Theme.of(context).colorScheme.primary),
                   ),
                 ],
               ),

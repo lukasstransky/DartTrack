@@ -14,7 +14,7 @@ class SetsBtn extends StatelessWidget {
         builder: (_, gameSettingsX01, __) => Container(
           height: Utils.getHeightForWidget(gameSettingsX01).h,
           child: ElevatedButton(
-            onPressed: () => gameSettingsX01.setsClicked(),
+            onPressed: () => gameSettingsX01.setsBtnClicked(),
             child: FittedBox(
               fit: BoxFit.fitWidth,
               child: const Text('Sets'),

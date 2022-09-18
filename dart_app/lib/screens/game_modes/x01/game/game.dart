@@ -15,8 +15,6 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 class Game extends StatefulWidget {
   static const routeName = '/gameX01';
 
-  const Game({Key? key}) : super(key: key);
-
   @override
   GameState createState() => GameState();
 }
@@ -32,6 +30,7 @@ class GameState extends State<Game> {
   void didChangeDependencies() {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
+
     if (arguments.isNotEmpty && !arguments['openGame']) {
       Provider.of<GameX01>(context, listen: false)
           .init(Provider.of<GameSettingsX01>(context, listen: false));
@@ -71,23 +70,17 @@ contentPadding:
           children: [
             Container(
               height: 35.h,
-              child: Container(
-                height: 34.h,
-                child: ScrollablePositionedList.builder(
-                  itemScrollController: scrollController,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: gameSettingsX01.getPlayers.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (gameX01.getPlayerGameStatistics.length > 0) {
-                      return PlayerStatsInGame(
-                        playerGameStatisticsX01:
-                            gameX01.getPlayerGameStatistics[index],
-                      );
-                    }
-                    return SizedBox.shrink();
-                  },
-                ),
+              child: ScrollablePositionedList.builder(
+                itemScrollController: scrollController,
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: gameSettingsX01.getPlayers.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return PlayerStatsInGame(
+                    playerGameStatisticsX01:
+                        gameX01.getPlayerGameStatistics[index],
+                  );
+                },
               ),
             ),
             if (gameSettingsX01.getInputMethod == InputMethod.Round) ...[
