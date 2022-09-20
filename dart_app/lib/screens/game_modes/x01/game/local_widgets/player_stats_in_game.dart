@@ -1,3 +1,4 @@
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
@@ -73,7 +74,9 @@ class PlayerStatsInGame extends StatelessWidget {
                   style: TextStyle(fontSize: 50.sp),
                 ),
                 Text(
-                  playerGameStatisticsX01!.getPlayer.getName,
+                  playerGameStatisticsX01!.getPlayer is Bot
+                      ? 'Lvl. ${playerGameStatisticsX01!.getPlayer.getLevel} Bot'
+                      : playerGameStatisticsX01!.getPlayer.getName,
                   style: TextStyle(fontSize: 18.sp),
                 ),
                 if (gameSettingsX01.getSetsEnabled)

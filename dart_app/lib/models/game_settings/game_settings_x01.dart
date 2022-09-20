@@ -606,15 +606,29 @@ class GameSettingsX01 extends GameSettings {
         result += getPoints.toString() + ' / ';
     }
 
-    if (getModeIn == ModeOutIn.Single)
-      result += 'Single In / ';
-    else
-      result += 'Double In / ';
+    switch (getModeIn) {
+      case ModeOutIn.Single:
+        result += 'Single In / ';
+        break;
+      case ModeOutIn.Double:
+        result += 'Double In / ';
+        break;
+      case ModeOutIn.Master:
+        result += 'Master In / ';
+        break;
+    }
 
-    if (getModeOut == ModeOutIn.Single)
-      result += 'Single Out';
-    else
-      result += 'Double Out';
+    switch (getModeOut) {
+      case ModeOutIn.Single:
+        result += 'Single Out';
+        break;
+      case ModeOutIn.Double:
+        result += 'Double Out';
+        break;
+      case ModeOutIn.Master:
+        result += 'Master Out';
+        break;
+    }
 
     if (getSuddenDeath)
       result += ' / SD - after ' + getMaxExtraLegs.toString() + ' Legs';

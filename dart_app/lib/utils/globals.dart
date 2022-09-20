@@ -14,8 +14,9 @@ TextEditingController newTeamController = new TextEditingController();
 TextEditingController editTeamController = new TextEditingController();
 TextEditingController editPlayerController = new TextEditingController();
 
-void newItemScrollController() {
-  scrollController = ItemScrollController();
+ItemScrollController newItemScrollController() {
+  scrollController = new ItemScrollController();
+  return scrollController;
 }
 
 ScrollController newScrollControllerPlayers() {

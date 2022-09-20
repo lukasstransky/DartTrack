@@ -49,52 +49,53 @@ class GameStats extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        transform: Matrix4.translationValues(
-                            hasPlayerWonTheGame(stats) ? -25.0 : 0.0, 0.0, 0.0),
-                        child: Row(
-                          children: [
-                            if (hasPlayerWonTheGame(stats))
-                              Padding(
-                                padding: EdgeInsets.only(right: 5),
-                                child: Icon(
-                                  Entypo.trophy,
-                                  size: 14.sp,
-                                  color: Color(0xffFFD700),
-                                ),
-                              ),
-                            if (stats.getPlayer is Bot) ...[
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'Bot',
-                                    style: TextStyle(
-                                        fontSize: FONTSIZE_STATISTICS.sp,
-                                        fontWeight: FontWeight.bold),
+                          transform: Matrix4.translationValues(
+                              hasPlayerWonTheGame(stats) ? -25.0 : 0.0,
+                              0.0,
+                              0.0),
+                          child: Row(
+                            children: [
+                              if (hasPlayerWonTheGame(stats))
+                                Padding(
+                                  padding: EdgeInsets.only(right: 5),
+                                  child: Icon(
+                                    Entypo.trophy,
+                                    size: 14.sp,
+                                    color: Color(0xffFFD700),
                                   ),
-                                  Container(
-                                    transform: Matrix4.translationValues(
-                                        0.0, -1.0, 0.0),
-                                    child: Text(
-                                      ' (Lvl. ${stats.getPlayer.getLevel})',
+                                ),
+                              if (stats.getPlayer is Bot) ...[
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Bot',
                                       style: TextStyle(
-                                        fontSize: 10.sp,
-                                      ),
+                                          fontSize: FONTSIZE_STATISTICS.sp,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  )
-                                ],
-                              )
-                            ] else ...[
-                              Text(
-                                stats.getPlayer.getName,
-                                style: TextStyle(
-                                    fontSize: FONTSIZE_STATISTICS.sp,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            ]
-                          ],
-                        ),
-                      ),
+                                    Container(
+                                      transform: Matrix4.translationValues(
+                                          0.0, -1.0, 0.0),
+                                      child: Text(
+                                        ' (Lvl. ${stats.getPlayer.getLevel})',
+                                        style: TextStyle(
+                                          fontSize: 10.sp,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                )
+                              ] else ...[
+                                Text(
+                                  stats.getPlayer.getName,
+                                  style: TextStyle(
+                                      fontSize: FONTSIZE_STATISTICS.sp,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ]
+                            ],
+                          )),
                     ],
                   ),
                 ),

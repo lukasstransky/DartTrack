@@ -120,8 +120,7 @@ class _GameStatisticsState extends State<GameStatistics> {
                 Chip(
                   backgroundColor: Theme.of(context).colorScheme.primary,
                   label: Text(
-                    _game!.getGameSettings.getModeIn ==
-                            SingleOrDouble.SingleField
+                    _game!.getGameSettings.getModeIn == ModeOutIn.Single
                         ? 'Single In'
                         : 'Double In',
                     style: TextStyle(
@@ -134,8 +133,7 @@ class _GameStatisticsState extends State<GameStatistics> {
                   child: Chip(
                     backgroundColor: Theme.of(context).colorScheme.primary,
                     label: Text(
-                      _game!.getGameSettings.getModeOut ==
-                              SingleOrDouble.SingleField
+                      _game!.getGameSettings.getModeOut == ModeOutIn.Single
                           ? 'Single Out'
                           : 'Double Out',
                       style: TextStyle(

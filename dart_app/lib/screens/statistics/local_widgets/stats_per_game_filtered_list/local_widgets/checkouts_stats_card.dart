@@ -1,5 +1,4 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -35,8 +34,7 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      widget.game.getGameSettings.getModeOut ==
-                              SingleOrDouble.DoubleField
+                      widget.game.getGameSettings.getModeOut == ModeOutIn.Double
                           ? 'Double Out'
                           : 'Single Out',
                       style: TextStyle(fontSize: 12.sp),

@@ -88,6 +88,7 @@ class GameX01 extends Game {
   void init(GameSettingsX01 gameSettingsX01) {
     this.setGameSettings = gameSettingsX01;
     this.setCurrentPlayerToThrow = gameSettingsX01.getPlayers[0];
+    this.setPlayerGameStatistics = [];
 
     //if game is finished -> undo last throw -> will call init again
     if (getGameSettings.getPlayers.length != getPlayerGameStatistics.length) {
@@ -125,44 +126,44 @@ class GameX01 extends Game {
 
   bool checkIfPointBtnShouldBeDisabledRound(
       String btnValueToCheck, PlayerGameStatisticsX01 stats) {
-    //double in
-    if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
-        stats.getCurrentPoints == getGameSettings.getPointsOrCustom()) {
-      if (btnValueToCheck == 'delete') {
-        return true;
-      }
-      if (getCurrentPointsSelected == 'Points' ||
-          getCurrentPointsSelected.isEmpty) {
+    //DOUBLE IN
+    if (stats.getCurrentPoints == getGameSettings.getPointsOrCustom() &&
+        (getGameSettings.getModeIn == ModeOutIn.Double ||
+            getGameSettings.getModeIn == ModeOutIn.Master)) {
+      if (getCurrentPointsSelected == 'Points') {
         if (btnValueToCheck == '7' ||
             btnValueToCheck == '9' ||
             btnValueToCheck == '0') {
           return false;
         }
       } else {
-        int result = int.parse(getCurrentPointsSelected + btnValueToCheck);
+        final int result =
+            int.parse(getCurrentPointsSelected + btnValueToCheck);
 
-        return isDoubleField(result.toString());
+        if (getGameSettings.getModeIn == ModeOutIn.Double) {
+          return isDoubleField(result.toString());
+        }
+
+        return isDoubleField(result.toString()) || isTrippleField(result);
       }
     }
 
-    if (getCurrentPointsSelected == 'Points' ||
-        getCurrentPointsSelected.isEmpty) {
+    if (getCurrentPointsSelected == 'Points') {
       if (btnValueToCheck == '0' ||
-          btnValueToCheck == 'delete' ||
           int.parse(btnValueToCheck) > stats.getCurrentPoints) {
         return false;
       }
     } else {
-      if (btnValueToCheck != 'delete') {
-        int result = int.parse(getCurrentPointsSelected + btnValueToCheck);
-        if (result > 180 ||
-            result > stats.getCurrentPoints ||
-            noScoresPossible.contains(result) ||
-            stats.getCurrentPoints - result == 1) {
-          return false;
-        }
+      final int result = int.parse(getCurrentPointsSelected + btnValueToCheck);
+
+      if (result > 180 ||
+          result > stats.getCurrentPoints ||
+          noScoresPossible.contains(result) ||
+          stats.getCurrentPoints - result == 1) {
+        return false;
       }
     }
+
     return true;
   }
 
@@ -189,32 +190,47 @@ class GameX01 extends Game {
       result += points;
     }
 
-    //if double in -> only enable fields with D
-    if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
+    //if double or master in
+    if ((getGameSettings.getModeIn == ModeOutIn.Double ||
+            getGameSettings.getModeIn == ModeOutIn.Master) &&
         stats.getCurrentPoints == getGameSettings.getPointsOrCustom()) {
-      if (getCurrentPointType == PointType.Double) {
-        return true;
-      } else {
+      if (btnValueToCheck == '0') {
         return false;
       }
+
+      if (getGameSettings.getModeIn == ModeOutIn.Double) {
+        //only enable fields with D
+        return getCurrentPointType == PointType.Double ? true : false;
+      }
+
+      //only enable fields with D or T
+      return getCurrentPointType == PointType.Double ||
+              getCurrentPointType == PointType.Tripple
+          ? true
+          : false;
     }
 
-    //if double out -> only enable finsihes with D (e.g. 20 -> enable D10 but disable single 20)
-    if (getGameSettings.getModeOut == SingleOrDouble.DoubleField) {
-      if (stats.getCurrentPoints - result == 0) {
-        if (getCurrentPointType == PointType.Double) {
-          return true;
-        } else {
-          return false;
-        }
+    //if double or master out
+    if ((getGameSettings.getModeOut == ModeOutIn.Double ||
+            getGameSettings.getModeOut == ModeOutIn.Master) &&
+        (stats.getCurrentPoints - result == 0)) {
+      if (getGameSettings.getModeOut == ModeOutIn.Double) {
+        //only enable fields with D
+        return getCurrentPointType == PointType.Double ? true : false;
       }
+      //only enable fields with D or T
+      return getCurrentPointType == PointType.Double ||
+              getCurrentPointType == PointType.Tripple
+          ? true
+          : false;
     }
 
     if (result > stats.getCurrentPoints ||
         noScoresPossible.contains(result) ||
-        stats.getCurrentPoints - result == 1) {
+        (stats.getCurrentPoints - result) == 1) {
       return false;
     }
+
     return true;
   }
 
@@ -231,6 +247,7 @@ class GameX01 extends Game {
             btnValueToCheck, stats);
       }
     }
+
     return true;
   }
 
@@ -258,6 +275,11 @@ class GameX01 extends Game {
   void deleteCurrentPointsSelected() {
     setCurrentPointsSelected = getCurrentPointsSelected.substring(
         0, getCurrentPointsSelected.length - 1);
+
+    if (getCurrentPointsSelected.isEmpty) {
+      setCurrentPointsSelected = 'Points';
+    }
+
     notifyListeners();
   }
 
@@ -1080,24 +1102,45 @@ class GameX01 extends Game {
   }
 
   int getAmountOfCheckoutPossibilitiesForInputMethodRound(int thrownPoints) {
-    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
+    final PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
+    final int currentPoints = stats.getCurrentPoints;
+    final int result = currentPoints - thrownPoints;
 
-    int currentPoints = stats.getCurrentPoints;
-    //current points = double field
-    if (isDoubleField(currentPoints.toString())) {
-      return 3;
-    }
-
-    int result = currentPoints - thrownPoints;
-    if (result <= 50 && thrownPoints <= 60) {
-      return 2;
-    }
-
-    if (result <= 50 && thrownPoints > 60) {
-      if (possibleTwoDartFinish(thrownPoints)) {
+    //single out
+    if (getGameSettings.getModeOut == ModeOutIn.Single) {
+      if (isSingleField(currentPoints.toString())) {
+        return 3;
+      } else if (result <= 40 && thrownPoints >= 60) {
         return 2;
+      } else if (result <= 40 && thrownPoints > 60) {
+        return 1;
       }
-      return 1;
+    }
+
+    //double out
+    if (getGameSettings.getModeOut == ModeOutIn.Double) {
+      if (isDoubleField(currentPoints.toString())) {
+        return 3;
+      } else if (result <= 50 && thrownPoints <= 60) {
+        return 2;
+      } else if (result <= 50 && thrownPoints > 60) {
+        if (possibleTwoDartFinish(thrownPoints)) {
+          return 2;
+        }
+        return 1;
+      }
+    }
+
+    //master out
+    if (getGameSettings.getModeOut == ModeOutIn.Master) {
+      if (isDoubleField(currentPoints.toString()) ||
+          isTrippleField(currentPoints)) {
+        return 3;
+      } else if (result <= 60 && thrownPoints <= 60) {
+        return 2;
+      } else if (result <= 60 && thrownPoints >= 60) {
+        return 1;
+      }
     }
 
     return -1;
@@ -1177,8 +1220,19 @@ class GameX01 extends Game {
     return false;
   }
 
+  bool isSingleField(String pointsString) {
+    final int points = int.parse(pointsString);
+
+    if (points > 0 && points <= 20) {
+      return true;
+    }
+
+    return false;
+  }
+
   bool isDoubleField(String pointsString) {
-    int points = int.parse(pointsString);
+    final int points = int.parse(pointsString);
+
     if (((points <= 40 && points % 2 == 0) || points == 50) && points != 0) {
       return true;
     }
@@ -1186,18 +1240,21 @@ class GameX01 extends Game {
     return false;
   }
 
-  //checks if 1,3 or 5 is submitted -> invalid for double in (cant disable e.g. 1 because 10 is valid -> D5)
-  bool checkIfInvalidDoubleInPointsSubmitted(String pointsSelected) {
-    PlayerGameStatisticsX01 stats = getCurrentPlayerGameStatistics();
-
-    if (getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
-        stats.getCurrentPoints == getGameSettings.getPointsOrCustom()) {
-      if (pointsSelected == '1' ||
-          pointsSelected == '3' ||
-          pointsSelected == '5') {
-        return true;
-      }
+  bool isTrippleField(int points) {
+    if (points <= 60 && points % 3 == 0) {
+      return true;
     }
+
+    return false;
+  }
+
+  bool areInvalidDoubleInPoints(String pointsSelected) {
+    if (pointsSelected == '1' ||
+        pointsSelected == '3' ||
+        pointsSelected == '5') {
+      return true;
+    }
+
     return false;
   }
 

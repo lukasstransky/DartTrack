@@ -7,6 +7,24 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class ModeOut extends StatelessWidget {
+  _singleOutClicked(GameSettingsX01 gameSettingsX01) {
+    gameSettingsX01.setModeOut = ModeOutIn.Single;
+    gameSettingsX01.setEnableCheckoutCounting = false;
+    gameSettingsX01.notify();
+  }
+
+  _doubleOutClicked(GameSettingsX01 gameSettingsX01) {
+    gameSettingsX01.setEnableCheckoutCounting = false;
+    gameSettingsX01.setModeOut = ModeOutIn.Double;
+    gameSettingsX01.notify();
+  }
+
+  _masterOutClicked(GameSettingsX01 gameSettingsX01) {
+    gameSettingsX01.setModeOut = ModeOutIn.Master;
+    gameSettingsX01.setEnableCheckoutCounting = false;
+    gameSettingsX01.notify();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -20,10 +38,7 @@ class ModeOut extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   child: ElevatedButton(
-                    onPressed: () => {
-                      gameSettingsX01.setModeOut = ModeOutIn.Single,
-                      gameSettingsX01.notify()
-                    },
+                    onPressed: () => _singleOutClicked(gameSettingsX01),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: const Text('Single Out'),
@@ -66,11 +81,7 @@ class ModeOut extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: ElevatedButton(
-                    onPressed: () => {
-                      gameSettingsX01.setEnableCheckoutCounting = false,
-                      gameSettingsX01.setModeOut = ModeOutIn.Double,
-                      gameSettingsX01.notify()
-                    },
+                    onPressed: () => _doubleOutClicked(gameSettingsX01),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: const Text('Double Out'),
@@ -103,10 +114,7 @@ class ModeOut extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   child: ElevatedButton(
-                    onPressed: () => {
-                      gameSettingsX01.setModeOut = ModeOutIn.Master,
-                      gameSettingsX01.notify()
-                    },
+                    onPressed: () => _masterOutClicked(gameSettingsX01),
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: const Text('Master Out'),

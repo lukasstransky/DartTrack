@@ -22,17 +22,21 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
     selectedFinishCount = gameX01.getAmountOfDartsThrown();
   } else {
     if (gameX01.finishedLegSetOrGame(currentPointsSelected)) {
-      selectedFinishCount =
-          gameX01.isDoubleField(currentPointsSelected) ? 1 : 2;
+      if (gameX01.getGameSettings.getModeOut == ModeOutIn.Master) {
+        selectedFinishCount =
+            gameX01.isTrippleField(int.parse(currentPointsSelected)) ? 1 : 2;
+      } else {
+        selectedFinishCount =
+            gameX01.isDoubleField(currentPointsSelected) ? 1 : 2;
+      }
     }
   }
 
-  selectedCheckoutCount = gameX01.finishedLegSetOrGame(
-          gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts
-              ? threeDartsCalculated
-              : currentPointsSelected)
-      ? 1
-      : 0;
+  final String pointsThrown =
+      gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts
+          ? threeDartsCalculated
+          : currentPointsSelected;
+  selectedCheckoutCount = gameX01.finishedLegSetOrGame(pointsThrown) ? 1 : 0;
 
   showDialog(
     barrierDismissible: false,
@@ -226,7 +230,11 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                     child: Text('Darts for Finish:')),
                 Row(
                   children: [
-                    if (gameX01.isDoubleField(currentPointsSelected))
+                    if (gameX01.isDoubleField(currentPointsSelected) ||
+                        (gameX01.getGameSettings.getModeOut ==
+                                ModeOutIn.Master &&
+                            gameX01.isTrippleField(
+                                int.parse(currentPointsSelected))))
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.all(5),
@@ -383,9 +391,14 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
 
 submitPointsForInputMethodRound(
     GameX01 gameX01, String currentPointsSelected, BuildContext context) {
+  final PlayerGameStatisticsX01 stats =
+      gameX01.getCurrentPlayerGameStatistics();
+
   //double in -> check for 1, 3, 5 -> invalid
-  if (gameX01.getGameSettings.getModeIn == SingleOrDouble.DoubleField &&
-      gameX01.checkIfInvalidDoubleInPointsSubmitted(currentPointsSelected)) {
+  if ((gameX01.getGameSettings.getModeIn == ModeOutIn.Double ||
+          gameX01.getGameSettings.getModeIn == ModeOutIn.Master) &&
+      gameX01.areInvalidDoubleInPoints(currentPointsSelected) &&
+      stats.getCurrentPoints == gameX01.getGameSettings.getPointsOrCustom()) {
     Fluttertoast.showToast(msg: 'Invalid Score for Double In!');
     gameX01.setCurrentPointsSelected = 'Points';
     gameX01.notify();

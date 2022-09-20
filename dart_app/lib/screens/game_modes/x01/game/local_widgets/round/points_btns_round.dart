@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game/local_widgets/point_btn_round.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btn_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:developer';
 
 class PointsBtnsRound extends StatelessWidget {
   PointsBtnsRound({Key? key}) : super(key: key);
@@ -63,9 +62,9 @@ class PointsBtnsRound extends StatelessWidget {
                         right: MARGIN_GAMESETTINGS,
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("1")
-                          ? PointBtnRound(point: "1", activeBtn: true)
-                          : PointBtnRound(point: "1", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('1')
+                          ? PointBtnRound(point: '1', activeBtn: true)
+                          : PointBtnRound(point: '1', activeBtn: false),
                     ),
                   ),
                   Expanded(
@@ -74,9 +73,9 @@ class PointsBtnsRound extends StatelessWidget {
                         right: MARGIN_GAMESETTINGS,
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("2")
-                          ? PointBtnRound(point: "2", activeBtn: true)
-                          : PointBtnRound(point: "2", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('2')
+                          ? PointBtnRound(point: '2', activeBtn: true)
+                          : PointBtnRound(point: '2', activeBtn: false),
                     ),
                   ),
                   Expanded(
@@ -84,9 +83,9 @@ class PointsBtnsRound extends StatelessWidget {
                       margin: const EdgeInsets.only(
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("3")
-                          ? PointBtnRound(point: "3", activeBtn: true)
-                          : PointBtnRound(point: "3", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('3')
+                          ? PointBtnRound(point: '3', activeBtn: true)
+                          : PointBtnRound(point: '3', activeBtn: false),
                     ),
                   ),
                 ],
@@ -102,9 +101,9 @@ class PointsBtnsRound extends StatelessWidget {
                         right: MARGIN_GAMESETTINGS,
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("4")
-                          ? PointBtnRound(point: "4", activeBtn: true)
-                          : PointBtnRound(point: "4", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('4')
+                          ? PointBtnRound(point: '4', activeBtn: true)
+                          : PointBtnRound(point: '4', activeBtn: false),
                     ),
                   ),
                   Expanded(
@@ -113,9 +112,9 @@ class PointsBtnsRound extends StatelessWidget {
                         right: MARGIN_GAMESETTINGS,
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("5")
-                          ? PointBtnRound(point: "5", activeBtn: true)
-                          : PointBtnRound(point: "5", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('5')
+                          ? PointBtnRound(point: '5', activeBtn: true)
+                          : PointBtnRound(point: '5', activeBtn: false),
                     ),
                   ),
                   Expanded(
@@ -123,9 +122,9 @@ class PointsBtnsRound extends StatelessWidget {
                       margin: const EdgeInsets.only(
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("6")
-                          ? PointBtnRound(point: "6", activeBtn: true)
-                          : PointBtnRound(point: "6", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('6')
+                          ? PointBtnRound(point: '6', activeBtn: true)
+                          : PointBtnRound(point: '6', activeBtn: false),
                     ),
                   ),
                 ],
@@ -141,9 +140,9 @@ class PointsBtnsRound extends StatelessWidget {
                         right: MARGIN_GAMESETTINGS,
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("7")
-                          ? PointBtnRound(point: "7", activeBtn: true)
-                          : PointBtnRound(point: "7", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('7')
+                          ? PointBtnRound(point: '7', activeBtn: true)
+                          : PointBtnRound(point: '7', activeBtn: false),
                     ),
                   ),
                   Expanded(
@@ -152,9 +151,9 @@ class PointsBtnsRound extends StatelessWidget {
                         right: MARGIN_GAMESETTINGS,
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("8")
-                          ? PointBtnRound(point: "8", activeBtn: true)
-                          : PointBtnRound(point: "8", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('8')
+                          ? PointBtnRound(point: '8', activeBtn: true)
+                          : PointBtnRound(point: '8', activeBtn: false),
                     ),
                   ),
                   Expanded(
@@ -162,9 +161,9 @@ class PointsBtnsRound extends StatelessWidget {
                       margin: const EdgeInsets.only(
                         bottom: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("9")
-                          ? PointBtnRound(point: "9", activeBtn: true)
-                          : PointBtnRound(point: "9", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('9')
+                          ? PointBtnRound(point: '9', activeBtn: true)
+                          : PointBtnRound(point: '9', activeBtn: false),
                     ),
                   ),
                 ],
@@ -176,66 +175,51 @@ class PointsBtnsRound extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.only(
-                        right: MARGIN_GAMESETTINGS,
-                      ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("delete")
-                          ? ElevatedButton(
-                              style: ButtonStyle(
+                        margin: const EdgeInsets.only(
+                          right: MARGIN_GAMESETTINGS,
+                        ),
+                        child: ElevatedButton(
+                            style: ButtonStyle(
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.zero,
                                   ),
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary),
-                                overlayColor: Utils.getColorOrPressed(
-                                  Theme.of(context).colorScheme.primary,
-                                  Utils.darken(
-                                      Theme.of(context).colorScheme.primary,
-                                      15),
-                                ),
-                              ),
-                              child: Icon(
-                                FeatherIcons.delete,
-                                size: 30.sp,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {
-                                gameX01.deleteCurrentPointsSelected();
-                              })
-                          : ElevatedButton(
-                              style: ButtonStyle(
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.zero,
-                                  ),
-                                ),
-                                backgroundColor: MaterialStateProperty.all(
-                                    Utils.darken(
+                                backgroundColor: gameX01
+                                            .getCurrentPointsSelected ==
+                                        'Points'
+                                    ? MaterialStateProperty.all(Utils.darken(
                                         Theme.of(context).colorScheme.primary,
-                                        30)),
-                                overlayColor: MaterialStateProperty.all(
-                                    Colors.transparent),
-                              ),
-                              child: Icon(
-                                FeatherIcons.delete,
-                                size: 30.sp,
-                                color: Colors.black,
-                              ),
-                              onPressed: () {}),
-                    ),
+                                        25))
+                                    : MaterialStateProperty.all(
+                                        Theme.of(context).colorScheme.primary),
+                                overlayColor: gameX01
+                                            .getCurrentPointsSelected ==
+                                        'Points'
+                                    ? MaterialStateProperty.all(
+                                        Colors.transparent)
+                                    : Utils.getDefaultOverlayColor(context)),
+                            child: Icon(
+                              FeatherIcons.delete,
+                              size: 30.sp,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              if (gameX01.getCurrentPointsSelected !=
+                                  'Points') {
+                                gameX01.deleteCurrentPointsSelected();
+                              }
+                            })),
                   ),
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.only(
                         right: MARGIN_GAMESETTINGS,
                       ),
-                      child: gameX01.checkIfPointBtnShouldBeDisabled("0")
-                          ? PointBtnRound(point: "0", activeBtn: true)
-                          : PointBtnRound(point: "0", activeBtn: false),
+                      child: gameX01.checkIfPointBtnShouldBeDisabled('0')
+                          ? PointBtnRound(point: '0', activeBtn: true)
+                          : PointBtnRound(point: '0', activeBtn: false),
                     ),
                   ),
                   Expanded(
@@ -257,7 +241,7 @@ class PointsBtnsRound extends StatelessWidget {
                             ),
                           ),
                           child: Text(
-                            "Bust",
+                            'Bust',
                             style: TextStyle(
                               fontSize: 25.sp,
                               color: Colors.black,
@@ -268,10 +252,10 @@ class PointsBtnsRound extends StatelessWidget {
                                     .getEnableCheckoutCounting &&
                                 gameX01.checkoutPossible()) {
                               int count =
-                                  gameX01.getAmountOfCheckoutPossibilities("0");
+                                  gameX01.getAmountOfCheckoutPossibilities('0');
                               if (count != -1) {
                                 showDialogForCheckout(
-                                    gameX01, count, "0", context);
+                                    gameX01, count, '0', context);
                               } else {
                                 gameX01.bust(context);
                               }

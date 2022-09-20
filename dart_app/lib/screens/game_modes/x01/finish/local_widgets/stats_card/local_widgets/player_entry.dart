@@ -96,8 +96,7 @@ class PlayerEntry extends StatelessWidget {
                         ),
                       ] else ...[
                         Padding(
-                          padding: EdgeInsets.only(
-                              left: _isGameDraw() || openGame ? 10 : 0),
+                          padding: EdgeInsets.only(left: 10),
                           child: Text(
                             gameX01
                                 .getPlayerGameStatistics[i].getPlayer.getName,
