@@ -57,8 +57,8 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
             transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
             child: Text(
               widget.mostScoresPerDart
-                  ? "Most Frequent Scores Per Dart"
-                  : "Most Frequent Scores",
+                  ? 'Most Frequent Scores per Dart'
+                  : 'Most Frequent Scores',
               style: TextStyle(
                   fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                   color: Theme.of(context).primaryColor),
@@ -82,7 +82,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                               alignment: Alignment.centerLeft,
                               child: FittedBox(
                                 fit: BoxFit.scaleDown,
-                                child: Text((i + 1).toString() + ".",
+                                child: Text((i + 1).toString() + '.',
                                     style: TextStyle(
                                         fontSize: FONTSIZE_STATISTICS.sp)),
                               ),
@@ -119,7 +119,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                                                       .keys
                                                       .elementAt(i)
                                                       .toString()) +
-                                              " (" +
+                                              ' (' +
                                               (widget.mostScoresPerDart
                                                   ? Utils.sortMapStringIntByKey(
                                                           stats
@@ -133,14 +133,14 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                                                       .values
                                                       .elementAt(i)
                                                       .toString()) +
-                                              "x)",
+                                              'x)',
                                           style: TextStyle(
                                               fontSize:
                                                   FONTSIZE_STATISTICS.sp)),
                                     )
                                   : Align(
                                       alignment: Alignment.centerRight,
-                                      child: Text("-",
+                                      child: Text('-',
                                           style: TextStyle(
                                               fontSize:
                                                   FONTSIZE_STATISTICS.sp)),
@@ -170,7 +170,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                   color: Colors.black,
                 ),
                 label: Text(
-                  _showFirst10 ? "Show Less" : "Show More",
+                  _showFirst10 ? 'Show Less' : 'Show More',
                   style: TextStyle(color: Colors.black),
                 ),
               ),

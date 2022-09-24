@@ -20,7 +20,7 @@ class FinishingStats extends StatelessWidget {
           child: Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
             child: Text(
-              "Finishing",
+              'Finishing',
               style: TextStyle(
                   fontSize: FONTSIZE_HEADING_STATISTICS.sp,
                   color: Theme.of(context).primaryColor),
@@ -38,7 +38,7 @@ class FinishingStats extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text("Checkout %",
+                      child: Text('Checkout %',
                           style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                     ),
                   ),
@@ -64,7 +64,7 @@ class FinishingStats extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
-                      child: Text("Checkout Darts",
+                      child: Text('Checkout Darts',
                           style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                     ),
                   ),
@@ -72,18 +72,12 @@ class FinishingStats extends StatelessWidget {
                 for (PlayerGameStatisticsX01 stats
                     in game!.getPlayerGameStatistics)
                   Container(
-                    width: WIDTH_DATA_STATISTICS.w,
-                    child: stats.getCheckoutCount != 0
-                        ? Text(
-                            stats.getLegsWonTotal.toString() +
-                                "/" +
-                                stats.getCheckoutCount.toString(),
-                            style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp))
-                        : Text(
-                            "-",
-                            style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
-                          ),
-                  ),
+                      width: WIDTH_DATA_STATISTICS.w,
+                      child: Text(
+                          stats.getCheckoutCount != 0
+                              ? '${stats.getLegsWonTotal.toString()}/${stats.getCheckoutCount.toString()}'
+                              : '-',
+                          style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp))),
               ],
             ),
           ),
@@ -98,7 +92,7 @@ class FinishingStats extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text("Highest Finish",
+                    child: Text('Highest Finish',
                         style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                   ),
                 ),
@@ -110,7 +104,7 @@ class FinishingStats extends StatelessWidget {
                   child: Text(
                     stats.getHighestCheckout() != 0
                         ? stats.getHighestCheckout().toString()
-                        : "-",
+                        : '-',
                     style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                   ),
                 ),
@@ -127,7 +121,7 @@ class FinishingStats extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text("Best Leg",
+                    child: Text('Best Leg',
                         style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                   ),
                 ),
@@ -152,7 +146,7 @@ class FinishingStats extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text("Worst Leg",
+                    child: Text('Worst Leg',
                         style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
                   ),
                 ),

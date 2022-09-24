@@ -63,7 +63,7 @@ class PlayerEntry extends StatelessWidget {
                             ),
                       if (_firstElementNoDrawOrOpenGame())
                         Container(
-                          padding: const EdgeInsets.only(right: 5, left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           transform: Matrix4.translationValues(0.0, -2.0, 0.0),
                           child: Icon(
                             Entypo.trophy,
@@ -80,10 +80,12 @@ class PlayerEntry extends StatelessWidget {
                               Text(
                                 'Lvl. ${gameX01.getPlayerGameStatistics[i].getPlayer.getLevel} Bot',
                                 style: TextStyle(
-                                  fontSize: _firstElementNoDrawOrOpenGame()
-                                      ? DEFAULT_FONTSIZE_BIG.sp
-                                      : DEFAULT_FONTSIZE.sp,
-                                ),
+                                    fontSize: _firstElementNoDrawOrOpenGame()
+                                        ? DEFAULT_FONTSIZE_BIG.sp
+                                        : DEFAULT_FONTSIZE.sp,
+                                    fontWeight: _firstElementNoDrawOrOpenGame()
+                                        ? FontWeight.bold
+                                        : null),
                               ),
                               Text(
                                 ' (${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
@@ -96,7 +98,7 @@ class PlayerEntry extends StatelessWidget {
                         ),
                       ] else ...[
                         Padding(
-                          padding: EdgeInsets.only(left: 10),
+                          padding: const EdgeInsets.only(left: 10),
                           child: Text(
                             gameX01
                                 .getPlayerGameStatistics[i].getPlayer.getName,

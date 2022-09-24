@@ -1,4 +1,3 @@
-import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_leg.dart';
@@ -76,7 +75,8 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
                                   padding: EdgeInsets.only(left: 5),
                                   child: Text(
                                     Utils.getWinnerOfLeg(
-                                            item.value, widget.game) is Bot
+                                                item.value, widget.game)
+                                            .contains('Bot')
                                         ? 'Bot'
                                         : Utils.getWinnerOfLeg(
                                             item.value, widget.game),

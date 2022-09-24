@@ -4,11 +4,11 @@ import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 
 import 'package:dart_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class GameSettingsX01 extends GameSettings {
@@ -556,19 +556,15 @@ class GameSettingsX01 extends GameSettings {
   }
 
   void switchInputMethod(GameX01 gameX01) {
-    if (getInputMethod == InputMethod.Round)
+    if (getInputMethod == InputMethod.Round) {
       setInputMethod = InputMethod.ThreeDarts;
-    else {
-      setInputMethod = InputMethod.Round;
-
-      //in case user enters e.g. 1 or 2 darts in three dart mode -> switches to round mode
-      if (gameX01.getInit) {
-        PlayerGameStatisticsX01? stats =
-            gameX01.getCurrentPlayerGameStatistics();
-        final int currentPointsEntered =
-            int.parse(gameX01.getCurrentThreeDartsCalculated());
-        stats.setCurrentPoints = stats.getCurrentPoints + currentPointsEntered;
-        gameX01.resetCurrentThreeDarts();
+    } else {
+      if (gameX01.getAmountOfDartsThrown() != 0) {
+        Fluttertoast.showToast(
+            msg: 'In order to switch, please finish the round!',
+            toastLength: Toast.LENGTH_LONG);
+      } else {
+        setInputMethod = InputMethod.Round;
       }
     }
 

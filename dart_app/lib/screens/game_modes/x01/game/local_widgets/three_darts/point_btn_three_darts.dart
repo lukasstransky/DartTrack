@@ -1,12 +1,13 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:developer';
 
 class PointBtnThreeDart extends StatelessWidget {
   const PointBtnThreeDart({Key? key, this.point, this.activeBtn})
@@ -15,20 +16,135 @@ class PointBtnThreeDart extends StatelessWidget {
   final String? point;
   final bool? activeBtn;
 
-  @override
-  Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-
-    //append T or D (tripple, double)
-    String text = "";
-    if (point != "Bull" && point != "25" && point != "0") {
+  String _appendTrippleOrDouble(GameX01 gameX01) {
+    String text = '';
+    if (point != 'Bull' && point != '25' && point != '0') {
       if (gameX01.getCurrentPointType == PointType.Double) {
-        text = "D";
+        text = 'D';
       } else if (gameX01.getCurrentPointType == PointType.Tripple) {
-        text = "T";
+        text = 'T';
       }
     }
     text += point as String;
+
+    return text;
+  }
+
+  _pointBtnClicked(GameX01 gameX01, String pointBtnText, BuildContext context) {
+    if (activeBtn as bool && gameX01.getCanBePressed) {
+      gameX01.updateCurrentThreeDarts(pointBtnText);
+
+      if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' &&
+          gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+        gameX01.setCanBePressed = false;
+        _submitPointsForInputMethodThreeDarts(
+            gameX01, point as String, pointBtnText, context);
+        gameX01.setCanBePressed = true;
+      } else {
+        _submitPointsForInputMethodThreeDarts(
+            gameX01, point as String, pointBtnText, context);
+      }
+    }
+  }
+
+  //calculate points based on single, double, tripple
+  String _calculatePoints(String scoredPoint, GameX01 gameX01) {
+    int points;
+
+    if (scoredPoint == 'Bull') {
+      points = 50;
+    } else {
+      points = int.parse(scoredPoint);
+
+      if (gameX01.getCurrentPointType == PointType.Double)
+        points = points * 2;
+      else if (gameX01.getCurrentPointType == PointType.Tripple)
+        points = points * 3;
+    }
+
+    return points.toString();
+  }
+
+//scoredField -> e.g. 20
+//scoredFieldWithPointType -> e.g. T20
+  _submitPointsForInputMethodThreeDarts(GameX01 gameX01, String scoredField,
+      String scoredFieldWithPointType, BuildContext context) {
+    final PlayerGameStatisticsX01 stats =
+        gameX01.getCurrentPlayerGameStatistics();
+
+    if (stats.getPointsSelectedCount >= 3) return;
+
+    stats.setPointsSelectedCount = stats.getPointsSelectedCount + 1;
+
+    final String scoredPoints = _calculatePoints(scoredField, gameX01);
+    final int scoredPointsParsed = int.parse(scoredPoints);
+    final String currentThreeDarts = gameX01.getCurrentThreeDartsCalculated();
+    final bool finished = gameX01.finishedLegSetOrGame(currentThreeDarts);
+    final int amountOfDartsThrown = gameX01.getAmountOfDartsThrown();
+    bool submitAlreadyCalled = false;
+
+    gameX01.submitOnlyPointsForThreeDartsMode(
+        scoredPointsParsed, scoredFieldWithPointType);
+
+    if (gameX01.isCheckoutPossible()) {
+      //finished with 3 darts (high finish) -> show no dialog
+      if (amountOfDartsThrown == 3 &&
+          gameX01.finishedWithThreeDarts(currentThreeDarts)) {
+        if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+          checkoutCount = 1;
+        } else {
+          gameX01.submitPoints(scoredPoints, context, 3, 1);
+          submitAlreadyCalled = true;
+        }
+
+        //finished with first dart -> show no dialog
+      } else if (amountOfDartsThrown == 1 && finished) {
+        if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+          checkoutCount = 1;
+          thrownDarts = 1;
+        } else {
+          gameX01.submitPoints(scoredPoints, context, 1, 1);
+          submitAlreadyCalled = true;
+        }
+      } else {
+        //only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
+        if (gameX01.isCheckoutCountingEnabled()) {
+          final int count =
+              gameX01.getAmountOfCheckoutPossibilities(scoredPoints);
+
+          if (finished && count == 1) {
+            if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+              checkoutCount = 1;
+              thrownDarts = amountOfDartsThrown;
+            } else {
+              gameX01.submitPoints(
+                  scoredPoints, context, amountOfDartsThrown, 1);
+              submitAlreadyCalled = true;
+            }
+          } else if (finished) {
+            submitAlreadyCalled = true;
+            showDialogForCheckout(gameX01, count, scoredPoints, context);
+          } else if (gameX01.getAmountOfDartsThrown() == 3) {
+            if (count != -1) {
+              submitAlreadyCalled = true;
+              showDialogForCheckout(gameX01, count, scoredPoints, context);
+            }
+          }
+        }
+      }
+    }
+
+    //needed because in the dialog the submit method is called (otherwise submit would get called 2x)
+    if (!submitAlreadyCalled &&
+        gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+      gameX01.submitPoints(scoredField, context);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final gameX01 = Provider.of<GameX01>(context, listen: false);
+    final String pointBtnText = _appendTrippleOrDouble(gameX01);
 
     return ElevatedButton(
       style: ButtonStyle(
@@ -37,11 +153,14 @@ class PointBtnThreeDart extends StatelessWidget {
             borderRadius: BorderRadius.zero,
           ),
         ),
-        backgroundColor: activeBtn as bool
+        backgroundColor: activeBtn as bool &&
+                gameX01.getAmountOfDartsThrown() != 3
             ? MaterialStateProperty.all(Theme.of(context).colorScheme.primary)
             : MaterialStateProperty.all(
                 Utils.darken(Theme.of(context).colorScheme.primary, 25)),
-        overlayColor: activeBtn as bool && gameX01.getCanBePressed
+        overlayColor: activeBtn as bool &&
+                gameX01.getCanBePressed &&
+                gameX01.getAmountOfDartsThrown() != 3
             ? Utils.getColorOrPressed(
                 Theme.of(context).colorScheme.primary,
                 Utils.darken(Theme.of(context).colorScheme.primary, 15),
@@ -50,29 +169,14 @@ class PointBtnThreeDart extends StatelessWidget {
       ),
       child: FittedBox(
         child: Text(
-          text,
+          pointBtnText,
           style: TextStyle(
             fontSize: 16.sp,
             color: Colors.black,
           ),
         ),
       ),
-      onPressed: () {
-        if (activeBtn as bool && gameX01.getCanBePressed) {
-          gameX01.updateCurrentThreeDarts(text);
-
-          if (gameX01.getCurrentThreeDarts[2] != "Dart 3" &&
-              gameX01.getGameSettings.getAutomaticallySubmitPoints) {
-            gameX01.setCanBePressed = false;
-            submitPointsForInputMethodThreeDarts(
-                gameX01, point as String, text, context);
-            gameX01.setCanBePressed = true;
-          } else {
-            submitPointsForInputMethodThreeDarts(
-                gameX01, point as String, text, context);
-          }
-        }
-      },
+      onPressed: () => _pointBtnClicked(gameX01, pointBtnText, context),
     );
   }
 }

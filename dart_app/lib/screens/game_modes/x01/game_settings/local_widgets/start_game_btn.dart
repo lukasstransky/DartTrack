@@ -63,8 +63,8 @@ class StartGameBtn extends StatelessWidget {
     final List<Player> players = gameSettingsX01.getPlayers;
     Player? selectedPlayer = gameSettingsX01.getPlayers[0];
 
-    final List<Team> teams = gameSettingsX01.getTeams;
-    Team? selectedTeam = gameSettingsX01.getTeams[0];
+    // final List<Team> teams = gameSettingsX01.getTeams;
+    // Team? selectedTeam = gameSettingsX01.getTeams[0];
 
     showDialog(
       barrierDismissible: false,
@@ -126,31 +126,31 @@ class StartGameBtn extends StatelessWidget {
                   },
                 ),
               );
-            if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
-              return Container(
-                width: double.maxFinite,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: teams.length,
-                  reverse: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    final team = teams[index];
+            // if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
+            //   return Container(
+            //     width: double.maxFinite,
+            //     child: ListView.builder(
+            //       shrinkWrap: true,
+            //       itemCount: teams.length,
+            //       reverse: true,
+            //       itemBuilder: (BuildContext context, int index) {
+            //         final team = teams[index];
 
-                    return RadioListTile(
-                      title: Container(
-                        transform: Matrix4.translationValues(
-                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                        child: Text(team.getName),
-                      ),
-                      value: team,
-                      groupValue: selectedTeam,
-                      onChanged: (Team? value) {
-                        setState(() => selectedTeam = value);
-                      },
-                    );
-                  },
-                ),
-              );
+            //         return RadioListTile(
+            //           title: Container(
+            //             transform: Matrix4.translationValues(
+            //                 DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+            //             child: Text(team.getName),
+            //           ),
+            //           value: team,
+            //           groupValue: selectedTeam,
+            //           onChanged: (Team? value) {
+            //             setState(() => selectedTeam = value);
+            //           },
+            //         );
+            //       },
+            //     ),
+            //   );
             return SizedBox.shrink();
           }),
         ),
@@ -162,9 +162,9 @@ class StartGameBtn extends StatelessWidget {
           TextButton(
             onPressed: () => {
               if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single)
-                gameSettingsX01.setBeginnerPlayer(selectedPlayer)
-              else
-                gameSettingsX01.setBeginnerTeam(selectedTeam),
+                gameSettingsX01.setBeginnerPlayer(selectedPlayer),
+              // else
+              //   gameSettingsX01.setBeginnerTeam(selectedTeam),
               Navigator.of(context).pushNamed(
                 '/gameX01',
                 arguments: {'openGame': false},

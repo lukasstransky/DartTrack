@@ -34,19 +34,8 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
               'Would you like to save the game for finishing it later or end it completely?'),
           actions: [
             TextButton(
-              onPressed: () => {
-                Navigator.of(context).pop(),
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text('Continue'),
-            ),
-            TextButton(
-              onPressed: () async => {
-                Navigator.of(context).pop(),
-                await context.read<FirestoreServiceGames>().postOpenGame(
-                    Provider.of<GameX01>(context, listen: false), context),
-                _resetValuesAndNavigateToHome(),
-              },
-              child: const Text('Save'),
             ),
             TextButton(
               onPressed: () => {
@@ -54,6 +43,15 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
                 _resetValuesAndNavigateToHome(),
               },
               child: const Text('End'),
+            ),
+            TextButton(
+              onPressed: () async => {
+                Navigator.of(context, rootNavigator: true).pop(),
+                await context.read<FirestoreServiceGames>().postOpenGame(
+                    Provider.of<GameX01>(context, listen: false), context),
+                _resetValuesAndNavigateToHome(),
+              },
+              child: const Text('Save'),
             ),
           ],
         ),

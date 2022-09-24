@@ -1,5 +1,4 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts.dart';
@@ -26,7 +25,7 @@ class GameStatistics extends StatefulWidget {
 
 class _GameStatisticsState extends State<GameStatistics> {
   GameX01? _game;
-  final _padding = EdgeInsets.only(left: 20, bottom: 20);
+  final _padding = EdgeInsets.only(left: 20, bottom: 10);
   final _paddingLastItem = EdgeInsets.only(left: 20, bottom: 30);
   bool _roundedScoresOdd = false;
 
@@ -77,15 +76,6 @@ class _GameStatisticsState extends State<GameStatistics> {
         in _game!.getPlayerGameStatistics) {
       if (playerGameStatisticsX01.getLegsWon > 0 ||
           playerGameStatisticsX01.getSetsWon > 0) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool _showMostFrequentScoresPerDart() {
-    for (PlayerGameStatisticsX01 stats in _game!.getPlayerGameStatistics) {
-      if (stats.getAllScoresPerDart.isNotEmpty) {
         return true;
       }
     }
@@ -206,7 +196,8 @@ class _GameStatisticsState extends State<GameStatistics> {
                     child: MostFrequentScores(
                         game: _game, mostScoresPerDart: false),
                   ),
-                  if (_showMostFrequentScoresPerDart())
+                  if (_game!.getGameSettings.getInputMethod ==
+                      InputMethod.ThreeDarts)
                     Padding(
                       padding: _paddingLastItem,
                       child: MostFrequentScores(

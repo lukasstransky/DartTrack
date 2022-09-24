@@ -109,10 +109,14 @@ class FirestoreServiceGames {
         currentPlayerToThrow: game.getCurrentPlayerToThrow);
     final openGamesFirestore =
         Provider.of<OpenGamesFirestore>(context, listen: false);
+    final CollectionReference collectionReference =
+        _firestore.collection(this._getFirestoreOpenGamesPath());
 
+    bool openGameAlreadyExists = false;
     for (Game openGame in openGamesFirestore.openGames) {
       if (openGame.getGameId == game.getGameId) {
-        await deleteOpenGame(game.getGameId, context);
+        openGameAlreadyExists = true;
+        break;
       }
     }
 
@@ -122,15 +126,21 @@ class FirestoreServiceGames {
     }
     //add other modes like cricket...
 
-    await _firestore
-        .collection(this._getFirestoreOpenGamesPath())
-        .add(data)
-        .then((value) async => {
-              await _firestore
-                  .collection(this._getFirestoreOpenGamesPath())
-                  .doc(value.id)
-                  .update({'gameId': value.id})
-            });
+    //update (e.g. save game again that was already open)
+    if (openGameAlreadyExists) {
+      await collectionReference.doc(gameToSave.getGameId).update(data);
+    } else {
+      //create new one
+      await _firestore
+          .collection(this._getFirestoreOpenGamesPath())
+          .add(data)
+          .then((value) async => {
+                await _firestore
+                    .collection(this._getFirestoreOpenGamesPath())
+                    .doc(value.id)
+                    .update({'gameId': value.id})
+              });
+    }
   }
 
   Future<void> deleteOpenGame(String gameId, BuildContext context) async {

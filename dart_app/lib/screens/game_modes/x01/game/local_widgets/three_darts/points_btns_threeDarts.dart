@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/point_btn_three_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn.dart';
@@ -8,14 +9,33 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'dart:developer';
 
 class PointsBtnsThreeDarts extends StatelessWidget {
   const PointsBtnsThreeDarts({Key? key}) : super(key: key);
 
+  bool _isBustClickable(GameX01 gameX01) {
+    final PlayerGameStatisticsX01 stats =
+        gameX01.getCurrentPlayerGameStatistics();
+    final int currentPoints = stats.getCurrentPoints;
+
+    if (gameX01.getAmountOfDartsThrown() == 0) {
+      return true;
+    }
+
+    if (currentPoints <= 59 &&
+        gameX01.getAmountOfDartsThrown() != 3 &&
+        stats.getCurrentPoints != 0) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final gameX01 = Provider.of<GameX01>(context, listen: false);
+    final PlayerGameStatisticsX01 stats =
+        gameX01.getCurrentPlayerGameStatistics();
 
     return Expanded(
       child: Column(
@@ -147,14 +167,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('25')
+                    child: gameX01.shouldPointBtnBeDisabled('25')
                         ? PointBtnThreeDart(
                             point: '25',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '25',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -164,14 +184,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('Bull')
+                    child: gameX01.shouldPointBtnBeDisabled('Bull')
                         ? PointBtnThreeDart(
                             point: 'Bull',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: 'Bull',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -189,10 +209,18 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                             borderRadius: BorderRadius.zero,
                           ),
                         ),
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
+                        backgroundColor: _isBustClickable(gameX01)
+                            ? MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary)
+                            : MaterialStateProperty.all(Utils.darken(
+                                Theme.of(context).colorScheme.primary, 25)),
+                        overlayColor: _isBustClickable(gameX01)
+                            ? Utils.getColorOrPressed(
+                                Theme.of(context).colorScheme.primary,
+                                Utils.darken(
+                                    Theme.of(context).colorScheme.primary, 15),
+                              )
+                            : MaterialStateProperty.all(Colors.transparent),
                       ),
                       child: FittedBox(
                         child: Text(
@@ -203,8 +231,8 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onPressed: () {
-                        gameX01.bust(context);
+                      onPressed: () => {
+                        if (_isBustClickable(gameX01)) gameX01.bust(context)
                       },
                     ),
                   ),
@@ -215,14 +243,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('0')
+                    child: gameX01.shouldPointBtnBeDisabled('0')
                         ? PointBtnThreeDart(
                             point: '0',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '0',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -248,14 +276,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('1')
+                    child: gameX01.shouldPointBtnBeDisabled('1')
                         ? PointBtnThreeDart(
                             point: '1',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '1',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -265,14 +293,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('2')
+                    child: gameX01.shouldPointBtnBeDisabled('2')
                         ? PointBtnThreeDart(
                             point: '2',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '2',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -282,14 +310,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('3')
+                    child: gameX01.shouldPointBtnBeDisabled('3')
                         ? PointBtnThreeDart(
                             point: '3',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '3',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -299,14 +327,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('4')
+                    child: gameX01.shouldPointBtnBeDisabled('4')
                         ? PointBtnThreeDart(
                             point: '4',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '4',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -315,14 +343,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                     margin: const EdgeInsets.only(
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('5')
+                    child: gameX01.shouldPointBtnBeDisabled('5')
                         ? PointBtnThreeDart(
                             point: '5',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '5',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -339,14 +367,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('6')
+                    child: gameX01.shouldPointBtnBeDisabled('6')
                         ? PointBtnThreeDart(
                             point: '6',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '6',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -356,14 +384,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('7')
+                    child: gameX01.shouldPointBtnBeDisabled('7')
                         ? PointBtnThreeDart(
                             point: '7',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '7',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -373,14 +401,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('8')
+                    child: gameX01.shouldPointBtnBeDisabled('8')
                         ? PointBtnThreeDart(
                             point: '8',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '8',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -390,14 +418,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('9')
+                    child: gameX01.shouldPointBtnBeDisabled('9')
                         ? PointBtnThreeDart(
                             point: '9',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '9',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -406,14 +434,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                     margin: const EdgeInsets.only(
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('10')
+                    child: gameX01.shouldPointBtnBeDisabled('10')
                         ? PointBtnThreeDart(
                             point: '10',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '10',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -430,14 +458,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('11')
+                    child: gameX01.shouldPointBtnBeDisabled('11')
                         ? PointBtnThreeDart(
                             point: '11',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '11',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -447,14 +475,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('12')
+                    child: gameX01.shouldPointBtnBeDisabled('12')
                         ? PointBtnThreeDart(
                             point: '12',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '12',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -464,14 +492,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('13')
+                    child: gameX01.shouldPointBtnBeDisabled('13')
                         ? PointBtnThreeDart(
                             point: '13',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '13',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -481,14 +509,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('14')
+                    child: gameX01.shouldPointBtnBeDisabled('14')
                         ? PointBtnThreeDart(
                             point: '14',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '14',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -497,14 +525,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                     margin: const EdgeInsets.only(
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('15')
+                    child: gameX01.shouldPointBtnBeDisabled('15')
                         ? PointBtnThreeDart(
                             point: '15',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '15',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -521,14 +549,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('16')
+                    child: gameX01.shouldPointBtnBeDisabled('16')
                         ? PointBtnThreeDart(
                             point: '16',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '16',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -538,14 +566,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('17')
+                    child: gameX01.shouldPointBtnBeDisabled('17')
                         ? PointBtnThreeDart(
                             point: '17',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '17',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -555,14 +583,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('18')
+                    child: gameX01.shouldPointBtnBeDisabled('18')
                         ? PointBtnThreeDart(
                             point: '18',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '18',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -572,14 +600,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                       right: POINTS_BUTTON_MARGIN,
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('19')
+                    child: gameX01.shouldPointBtnBeDisabled('19')
                         ? PointBtnThreeDart(
                             point: '19',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '19',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -588,14 +616,14 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                     margin: const EdgeInsets.only(
                       bottom: POINTS_BUTTON_MARGIN,
                     ),
-                    child: gameX01.checkIfPointBtnShouldBeDisabled('20')
+                    child: gameX01.shouldPointBtnBeDisabled('20')
                         ? PointBtnThreeDart(
                             point: '20',
-                            activeBtn: true,
+                            activeBtn: false,
                           )
                         : PointBtnThreeDart(
                             point: '20',
-                            activeBtn: false,
+                            activeBtn: true,
                           ),
                   ),
                 ),
@@ -621,13 +649,17 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                           ),
                         ),
                         backgroundColor:
-                            gameX01.getCurrentPointType == PointType.Single
+                            gameX01.getCurrentPointType == PointType.Single ||
+                                    stats.getCurrentPoints == 0 ||
+                                    gameX01.getAmountOfDartsThrown() == 3
                                 ? MaterialStateProperty.all(Utils.darken(
                                     Theme.of(context).colorScheme.primary, 25))
                                 : MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.primary),
                         overlayColor: gameX01.getCurrentPointType ==
-                                PointType.Single
+                                    PointType.Single ||
+                                stats.getCurrentPoints == 0 ||
+                                gameX01.getAmountOfDartsThrown() == 3
                             ? MaterialStateProperty.all(Colors.transparent)
                             : Utils.getColorOrPressed(
                                 Theme.of(context).colorScheme.primary,
@@ -645,8 +677,11 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        gameX01.setCurrentPointType = PointType.Single;
-                        gameX01.notify();
+                        if (stats.getCurrentPoints != 0 &&
+                            gameX01.getAmountOfDartsThrown() != 3) {
+                          gameX01.setCurrentPointType = PointType.Single;
+                          gameX01.notify();
+                        }
                       },
                     ),
                   ),
@@ -666,13 +701,17 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                           ),
                         ),
                         backgroundColor:
-                            gameX01.getCurrentPointType == PointType.Double
+                            gameX01.getCurrentPointType == PointType.Double ||
+                                    stats.getCurrentPoints == 0 ||
+                                    gameX01.getAmountOfDartsThrown() == 3
                                 ? MaterialStateProperty.all(Utils.darken(
                                     Theme.of(context).colorScheme.primary, 25))
                                 : MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.primary),
                         overlayColor: gameX01.getCurrentPointType ==
-                                PointType.Double
+                                    PointType.Double ||
+                                stats.getCurrentPoints == 0 ||
+                                gameX01.getAmountOfDartsThrown() == 3
                             ? MaterialStateProperty.all(Colors.transparent)
                             : Utils.getColorOrPressed(
                                 Theme.of(context).colorScheme.primary,
@@ -690,8 +729,11 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        gameX01.setCurrentPointType = PointType.Double;
-                        gameX01.notify();
+                        if (stats.getCurrentPoints != 0 &&
+                            gameX01.getAmountOfDartsThrown() != 3) {
+                          gameX01.setCurrentPointType = PointType.Double;
+                          gameX01.notify();
+                        }
                       },
                     ),
                   ),
@@ -711,13 +753,17 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                           ),
                         ),
                         backgroundColor:
-                            gameX01.getCurrentPointType == PointType.Tripple
+                            gameX01.getCurrentPointType == PointType.Tripple ||
+                                    stats.getCurrentPoints == 0 ||
+                                    gameX01.getAmountOfDartsThrown() == 3
                                 ? MaterialStateProperty.all(Utils.darken(
                                     Theme.of(context).colorScheme.primary, 25))
                                 : MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.primary),
                         overlayColor: gameX01.getCurrentPointType ==
-                                PointType.Tripple
+                                    PointType.Tripple ||
+                                stats.getCurrentPoints == 0 ||
+                                gameX01.getAmountOfDartsThrown() == 3
                             ? MaterialStateProperty.all(Colors.transparent)
                             : Utils.getColorOrPressed(
                                 Theme.of(context).colorScheme.primary,
@@ -735,8 +781,11 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                         ),
                       ),
                       onPressed: () {
-                        gameX01.setCurrentPointType = PointType.Tripple;
-                        gameX01.notify();
+                        if (stats.getCurrentPoints != 0 &&
+                            gameX01.getAmountOfDartsThrown() != 3) {
+                          gameX01.setCurrentPointType = PointType.Tripple;
+                          gameX01.notify();
+                        }
                       },
                     ),
                   ),

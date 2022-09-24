@@ -1,10 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 //HERE ARE METHODS DEFINED THAT ARE NEEDED BY MULTIPLE WIDGETS
 //instead of defining & passing callbacks...
@@ -360,9 +359,10 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
             Navigator.of(context).pop();
             if (gameX01.getGameSettings.getInputMethod ==
                 InputMethod.ThreeDarts) {
-              int amount = gameX01.getAmountOfDartsThrown();
+              final int amount = gameX01.getAmountOfDartsThrown();
+
               gameX01.getCurrentThreeDarts[amount - 1] =
-                  'Dart ' + amount.toString();
+                  'Dart ${amount.toString()}';
               gameX01.revertSomeStats(int.parse(currentPointsSelected));
             } else {
               gameX01.setCurrentPointsSelected = 'Points';
@@ -374,129 +374,22 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
         ),
         TextButton(
           onPressed: () {
+            if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+              checkoutCount = selectedCheckoutCount;
+              thrownDarts = selectedFinishCount;
+            } else {
+              gameX01.submitPoints(
+                  currentPointsSelected,
+                  context,
+                  selectedFinishCount,
+                  selectedCheckoutCount); //submit is called because of the checkout dialog -> otherwise points would be immediately subtracted and shown on ui
+            }
+
             Navigator.of(context).pop();
-            //gameX01.addToCheckoutCount(selectedCheckoutCount);
-            gameX01.submitPoints(
-                currentPointsSelected,
-                context,
-                selectedFinishCount,
-                selectedCheckoutCount); //submit is called because of the checkout dialog -> otherwise points would be immediately subtracted and shown on ui
           },
           child: const Text('Submit'),
         ),
       ],
     ),
   );
-}
-
-submitPointsForInputMethodRound(
-    GameX01 gameX01, String currentPointsSelected, BuildContext context) {
-  final PlayerGameStatisticsX01 stats =
-      gameX01.getCurrentPlayerGameStatistics();
-
-  //double in -> check for 1, 3, 5 -> invalid
-  if ((gameX01.getGameSettings.getModeIn == ModeOutIn.Double ||
-          gameX01.getGameSettings.getModeIn == ModeOutIn.Master) &&
-      gameX01.areInvalidDoubleInPoints(currentPointsSelected) &&
-      stats.getCurrentPoints == gameX01.getGameSettings.getPointsOrCustom()) {
-    Fluttertoast.showToast(msg: 'Invalid Score for Double In!');
-    gameX01.setCurrentPointsSelected = 'Points';
-    gameX01.notify();
-  } else {
-    if (currentPointsSelected.isNotEmpty && currentPointsSelected != 'Points') {
-      if (gameX01.checkoutPossible()) {
-        if (gameX01.finishedWithThreeDarts(currentPointsSelected)) {
-          gameX01.submitPoints(currentPointsSelected, context, 3, 1);
-        } else {
-          if (gameX01.getGameSettings.getEnableCheckoutCounting &&
-              gameX01.getGameSettings.getCheckoutCountingFinallyDisabled ==
-                  false) {
-            int count =
-                gameX01.getAmountOfCheckoutPossibilities(currentPointsSelected);
-            if (count != -1) {
-              showDialogForCheckout(
-                  gameX01, count, currentPointsSelected, context);
-            } else {
-              gameX01.submitPoints(currentPointsSelected, context);
-            }
-          } else if (gameX01.finishedLegSetOrGame(currentPointsSelected)) {
-            showDialogForCheckout(gameX01, -1, currentPointsSelected, context);
-          } else {
-            gameX01.submitPoints(currentPointsSelected, context);
-          }
-        }
-      } else {
-        gameX01.submitPoints(currentPointsSelected, context);
-      }
-    }
-  }
-}
-
-submitPointsForInputMethodThreeDarts(GameX01 gameX01, String scoredPoint,
-    String scoredPointAsString, BuildContext context) {
-  PlayerGameStatisticsX01 stats = gameX01.getCurrentPlayerGameStatistics();
-  if (stats.getPointsSelectedCount < 3) {
-    stats.setPointsSelectedCount = stats.getPointsSelectedCount + 1;
-
-    //calculate points based on single, double, tripple
-    int parsedPoints;
-    if (scoredPoint == 'Bull') {
-      parsedPoints = 50;
-    } else {
-      parsedPoints = int.parse(scoredPoint);
-      if (gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-        if (gameX01.getCurrentPointType == PointType.Double)
-          parsedPoints = parsedPoints * 2;
-        else if (gameX01.getCurrentPointType == PointType.Tripple)
-          parsedPoints = parsedPoints * 3;
-      }
-    }
-
-    scoredPoint = parsedPoints.toString();
-    bool submitAlreadyCalled = false;
-    String currentThreeDarts = gameX01.getCurrentThreeDartsCalculated();
-    bool finished = gameX01.finishedLegSetOrGame(currentThreeDarts);
-    int amountOfDartsThrown = gameX01.getAmountOfDartsThrown();
-
-    if (!finished && gameX01.getAmountOfDartsThrown() != 3) {
-      gameX01.submitOnlyPoints(parsedPoints, scoredPointAsString);
-    } else {
-      gameX01.submitSomeStats(parsedPoints, scoredPointAsString);
-    }
-
-    if (gameX01.checkoutPossible()) {
-      //finished with 3 darts (only high finish) -> show no dialog
-      if (amountOfDartsThrown == 3 &&
-          gameX01.finishedWithThreeDarts(currentThreeDarts)) {
-        gameX01.submitPoints(scoredPoint, context, 3, 1);
-        submitAlreadyCalled = true;
-
-        //finished with first dart -> show no dialog
-      } else if (amountOfDartsThrown == 1 && finished) {
-        gameX01.submitPoints(scoredPoint, context, 1, 1);
-        submitAlreadyCalled = true;
-      } else {
-        //only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
-        if (gameX01.isCheckoutCountingEnabled()) {
-          int count = gameX01.getAmountOfCheckoutPossibilities(scoredPoint);
-          if (finished && count == 1) {
-            gameX01.submitPoints(scoredPoint, context, amountOfDartsThrown, 1);
-            submitAlreadyCalled = true;
-          } else if (finished) {
-            submitAlreadyCalled = true;
-            showDialogForCheckout(gameX01, count, scoredPoint, context);
-          } else if (gameX01.getAmountOfDartsThrown() == 3) {
-            if (count != -1) {
-              submitAlreadyCalled = true;
-              showDialogForCheckout(gameX01, count, scoredPoint, context);
-            }
-          }
-        }
-      }
-    }
-    //needed because in the dialog the submit method is called (otherwise submit would get called 2x)
-    if (!submitAlreadyCalled) {
-      gameX01.submitPoints(scoredPoint, context);
-    }
-  }
 }

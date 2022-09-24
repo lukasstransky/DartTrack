@@ -67,6 +67,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                     child: Center(
                       child: Container(
                         width: 90.w,
+                        padding: EdgeInsets.only(bottom: 20),
                         child: Column(
                           children: [
                             Padding(

@@ -37,3 +37,8 @@ void disposeScrollControllersForGamesettings() {
   editPlayerController.dispose();
   editTeamController.dispose();
 }
+
+//maybe not best solution
+//needed for input method three darts + don't auto submit points
+int thrownDarts = 0;
+int checkoutCount = 0;
