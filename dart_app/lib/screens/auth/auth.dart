@@ -27,14 +27,14 @@ class _AuthState extends State<Auth> {
   AuthMode _authMode = AuthMode.Login;
 
   @override
-  void dispose() {
+  dispose() {
     _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
-  void _showErrorDialog(String message) {
+  _showErrorDialog(String message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -118,7 +118,7 @@ class _AuthState extends State<Auth> {
     });
   }
 
-  void _switchAuthMode() {
+  _switchAuthMode() {
     if (_authMode == AuthMode.Login) {
       setState(() {
         _emailController.text = '';

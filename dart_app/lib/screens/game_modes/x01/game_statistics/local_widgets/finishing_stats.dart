@@ -10,6 +10,20 @@ class FinishingStats extends StatelessWidget {
 
   final Game? game;
 
+  String _getDartsPerLeg(PlayerGameStatisticsX01 stats) {
+    if (stats.getLegsWonTotal == 0) return '-';
+
+    int dartsPerLeg = 0;
+    int games = 0;
+
+    stats.getCheckouts.keys.forEach((key) {
+      dartsPerLeg += stats.getThrownDartsPerLeg[key] as int;
+      games++;
+    });
+
+    return (dartsPerLeg / games).toStringAsFixed(2);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -195,7 +209,7 @@ class FinishingStats extends StatelessWidget {
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
-                    stats.getDartsPerLeg(),
+                    _getDartsPerLeg(stats),
                     style: new TextStyle(
                       fontSize: FONTSIZE_STATISTICS.sp,
                     ),

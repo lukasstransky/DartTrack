@@ -17,12 +17,12 @@ class _CustomPointsState extends State<CustomPoints> {
   final GlobalKey<FormState> _formKeyCustomPoints = GlobalKey<FormState>();
 
   @override
-  void initState() {
+  initState() {
     _initTextController();
     super.initState();
   }
 
-  void _initTextController() {
+  _initTextController() {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
     _customPointsController = new TextEditingController(
@@ -84,7 +84,7 @@ class _CustomPointsState extends State<CustomPoints> {
         ),
       );
 
-  void _submitPoints(BuildContext context) {
+  _submitPoints(BuildContext context) {
     if (!_formKeyCustomPoints.currentState!.validate()) {
       return;
     }

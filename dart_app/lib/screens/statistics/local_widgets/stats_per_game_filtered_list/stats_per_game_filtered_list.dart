@@ -28,7 +28,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   bool _ascendingOrder = true;
 
   @override
-  void didChangeDependencies() {
+  didChangeDependencies() {
     super.didChangeDependencies();
 
     //_getGames();

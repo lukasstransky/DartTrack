@@ -148,13 +148,13 @@ class PlayerGameStatistics {
         //todo add _checkoutCountAtThrownDarts
         if (playerGameStatisticsX01.getRoundedScoresEven.isNotEmpty)
           'roundedScoresEven':
-              playerGameStatisticsX01.getRoundedScoresEvenWithStringKey(),
+              _getRoundedScoresEvenWithStringKey(playerGameStatisticsX01),
         if (playerGameStatisticsX01.getRoundedScoresOdd.isNotEmpty)
           'roundedScoresOdd':
-              playerGameStatisticsX01.getRoundedScoresOddWithStringKey(),
+              _getRoundedScoresOddWithStringKey(playerGameStatisticsX01),
         if (playerGameStatisticsX01.getPreciseScores.isNotEmpty)
           'preciseScores':
-              playerGameStatisticsX01.getPreciseScoresWithStringKey(),
+              _getPreciseScoresWithStringKey(playerGameStatisticsX01),
         if (playerGameStatisticsX01.getAllScores.isNotEmpty)
           'allScores': playerGameStatisticsX01.getAllScores,
         'allScoresCountForRound':
@@ -222,13 +222,13 @@ class PlayerGameStatistics {
         'allScoresPerDart': playerGameStatisticsX01.getAllScoresPerDart,
       if (playerGameStatisticsX01.getRoundedScoresEven.isNotEmpty)
         'roundedScoresEven':
-            playerGameStatisticsX01.getRoundedScoresEvenWithStringKey(),
+            _getRoundedScoresEvenWithStringKey(playerGameStatisticsX01),
       if (playerGameStatisticsX01.getRoundedScoresOdd.isNotEmpty)
         'roundedScoresOdd':
-            playerGameStatisticsX01.getRoundedScoresOddWithStringKey(),
+            _getRoundedScoresOddWithStringKey(playerGameStatisticsX01),
       if (playerGameStatisticsX01.getPreciseScores.isNotEmpty)
         'preciseScores':
-            playerGameStatisticsX01.getPreciseScoresWithStringKey(),
+            _getPreciseScoresWithStringKey(playerGameStatisticsX01),
       if (playerGameStatisticsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
         'allScoresPerDartWithCount':
             playerGameStatisticsX01.getAllScoresPerDartAsStringCount,
@@ -253,4 +253,34 @@ class PlayerGameStatistics {
   get getMode => this._mode;
 
   get getDateTime => this._dateTime;
+
+  Map<String, int> _getRoundedScoresOddWithStringKey(
+      PlayerGameStatisticsX01 stats) {
+    Map<String, int> result = {};
+    for (var entry in stats.getRoundedScoresOdd.entries) {
+      result[entry.key.toString()] = entry.value;
+    }
+
+    return result;
+  }
+
+  Map<String, int> _getRoundedScoresEvenWithStringKey(
+      PlayerGameStatisticsX01 stats) {
+    Map<String, int> result = {};
+    for (var entry in stats.getRoundedScoresEven.entries) {
+      result[entry.key.toString()] = entry.value;
+    }
+
+    return result;
+  }
+
+  Map<String, int> _getPreciseScoresWithStringKey(
+      PlayerGameStatisticsX01 stats) {
+    Map<String, int> result = {};
+    for (var entry in stats.getPreciseScores.entries) {
+      result[entry.key.toString()] = entry.value;
+    }
+
+    return result;
+  }
 }

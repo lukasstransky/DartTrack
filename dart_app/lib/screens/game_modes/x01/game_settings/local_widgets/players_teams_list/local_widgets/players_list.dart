@@ -16,7 +16,7 @@ class PlayersList extends StatefulWidget {
 
 class _PlayersListState extends State<PlayersList> {
   @override
-  void initState() {
+  initState() {
     super.initState();
     newScrollControllerPlayers();
   }

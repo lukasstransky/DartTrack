@@ -39,7 +39,7 @@ class DrawMode extends StatelessWidget {
         !gameSettingsX01.getDrawMode;
   }
 
-  void _drawModeSwitchPressed(GameSettingsX01 gameSettingsX01, bool value) {
+  _drawModeSwitchPressed(GameSettingsX01 gameSettingsX01, bool value) {
     if (value == false) {
       gameSettingsX01.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
       if (gameSettingsX01.getSetsEnabled) {

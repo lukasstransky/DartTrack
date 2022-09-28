@@ -39,7 +39,7 @@ class DefaultSettingsX01 with ChangeNotifier {
     this.resetValues();
   }
 
-  void fromMap(map) {
+  fromMap(map) {
     switch (map['modeIn']) {
       case 'Single':
         modeIn = ModeOutIn.Single;
@@ -294,7 +294,7 @@ class DefaultSettingsX01 with ChangeNotifier {
 
   set drawMode(value) => this._drawMode = value;
 
-  void resetValues() {
+  resetValues() {
     players = [];
     playersNames = [];
     botNamingIds = [];

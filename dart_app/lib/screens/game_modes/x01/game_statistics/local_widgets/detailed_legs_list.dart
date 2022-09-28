@@ -28,7 +28,7 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
   }
 
   @override
-  void initState() {
+  initState() {
     super.initState();
     _items = getItems();
   }

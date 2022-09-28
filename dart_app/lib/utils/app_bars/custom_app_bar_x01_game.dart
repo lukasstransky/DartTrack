@@ -14,12 +14,12 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
 
-    void _resetValuesAndNavigateToHome() {
+    _resetValuesAndNavigateToHome() {
       gameX01.reset();
       Navigator.of(context).pushNamed('/home');
     }
 
-    void _showDialogForSavingGame(BuildContext context) {
+    _showDialogForSavingGame(BuildContext context) {
       showDialog(
         barrierDismissible: false,
         context: context,
@@ -58,16 +58,84 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
       );
     }
 
+    String _getGameModeDetails(bool showPoints) {
+      String result = '';
+
+      if (showPoints) {
+        if (gameSettingsX01.getCustomPoints != -1)
+          result += '${gameSettingsX01.getCustomPoints.toString()} / ';
+        else
+          result += '${gameSettingsX01.getPoints.toString()} / ';
+      }
+
+      switch (gameSettingsX01.getModeIn) {
+        case ModeOutIn.Single:
+          result += 'Single In / ';
+          break;
+        case ModeOutIn.Double:
+          result += 'Double In / ';
+          break;
+        case ModeOutIn.Master:
+          result += 'Master In / ';
+          break;
+      }
+
+      switch (gameSettingsX01.getModeOut) {
+        case ModeOutIn.Single:
+          result += 'Single Out';
+          break;
+        case ModeOutIn.Double:
+          result += 'Double Out';
+          break;
+        case ModeOutIn.Master:
+          result += 'Master Out';
+          break;
+      }
+
+      if (gameSettingsX01.getSuddenDeath)
+        result +=
+            ' / SD - after ${gameSettingsX01.getMaxExtraLegs.toString()} Legs';
+
+      return result;
+    }
+
+    String _getGameMode() {
+      final gameSettingsX01 =
+          Provider.of<GameSettingsX01>(context, listen: false);
+      final int sets = gameSettingsX01.getSets;
+      final int legs = gameSettingsX01.getLegs;
+
+      String result = '';
+
+      if (gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf)
+        result += 'Best Of ';
+      else
+        result += 'First To ';
+
+      if (gameSettingsX01.getSetsEnabled) {
+        if (sets > 1)
+          result += '${sets.toString()} Sets - ';
+        else
+          result += '${sets.toString()} Set - ';
+      }
+      if (legs > 1)
+        result += '${legs.toString()} Legs';
+      else
+        result += '${legs.toString()} Leg';
+
+      return result;
+    }
+
     return AppBar(
       centerTitle: true,
       title: Column(
         children: [
           Text(
-            gameSettingsX01.getGameMode(),
+            _getGameMode(),
             style: TextStyle(fontSize: 12.sp),
           ),
           Text(
-            gameSettingsX01.getGameModeDetails(false),
+            _getGameModeDetails(false),
             style: TextStyle(
                 fontSize: gameSettingsX01.getSuddenDeath ? 8.sp : 10.sp),
           )

@@ -19,7 +19,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   final TextEditingController _emailController = new TextEditingController();
   bool _isLoading = false;
 
-  void _resetPassword(String email) async {
+  _resetPassword(String email) async {
     if (!_formKey.currentState!.validate()) {
       return;
     }

@@ -1,3 +1,4 @@
+import 'package:dart_app/models/games/helper/revert.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -7,15 +8,33 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class Buttons extends StatelessWidget {
-  saveGameX01ToFirestore(BuildContext context) async {
+  _saveGameX01ToFirestore(BuildContext context) async {
     gameId = await context
         .read<FirestoreServiceGames>()
         .postGame(Provider.of<GameX01>(context, listen: false));
   }
 
-  savePlayerGameStatisticsX01ToFirestore(BuildContext context) async {
+  _savePlayerGameStatisticsX01ToFirestore(BuildContext context) async {
     await context.read<FirestoreServicePlayerStats>().postPlayerGameStatistics(
         Provider.of<GameX01>(context, listen: false), gameId, context);
+  }
+
+  _newGameBtnClicked(BuildContext context, GameX01 gameX01) {
+    _saveGameX01ToFirestore(context);
+    _savePlayerGameStatisticsX01ToFirestore(context);
+    gameX01.reset();
+    Navigator.of(context).pushNamed(
+      '/gameX01',
+      arguments: {'openGame': false},
+    );
+  }
+
+  _undoLastThrowBtnClicked(BuildContext context) {
+    Navigator.of(context).pushNamed(
+      '/gameX01',
+      arguments: {'openGame': false},
+    );
+    Revert.revertPoints(context);
   }
 
   String gameId = '';
@@ -32,10 +51,8 @@ class Buttons extends StatelessWidget {
             width: 40.w,
             height: 6.h,
             child: ElevatedButton(
-              onPressed: () => Navigator.of(context).pushNamed('/statisticsX01',
-                  arguments: {
-                    'game': Provider.of<GameX01>(context, listen: false)
-                  }),
+              onPressed: () => Navigator.of(context)
+                  .pushNamed('/statisticsX01', arguments: {'game': gameX01}),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
@@ -63,15 +80,7 @@ class Buttons extends StatelessWidget {
             width: 40.w,
             height: 6.h,
             child: ElevatedButton(
-              onPressed: () => {
-                saveGameX01ToFirestore(context),
-                savePlayerGameStatisticsX01ToFirestore(context),
-                gameX01.reset(),
-                Navigator.of(context).pushNamed(
-                  '/gameX01',
-                  arguments: {'openGame': false},
-                ),
-              },
+              onPressed: () => _newGameBtnClicked(context, gameX01),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text('New Game', style: TextStyle(fontSize: 15.sp)),
@@ -96,13 +105,7 @@ class Buttons extends StatelessWidget {
             width: 40.w,
             height: 6.h,
             child: ElevatedButton(
-              onPressed: () => {
-                Navigator.of(context).pushNamed(
-                  '/gameX01',
-                  arguments: {'openGame': false},
-                ),
-                gameX01.revertPoints(),
-              },
+              onPressed: () => _undoLastThrowBtnClicked(context),
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child:

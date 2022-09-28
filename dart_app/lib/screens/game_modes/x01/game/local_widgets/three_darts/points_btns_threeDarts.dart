@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/helper/submit.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/point_btn_three_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
@@ -231,9 +232,8 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                           ),
                         ),
                       ),
-                      onPressed: () => {
-                        if (_isBustClickable(gameX01)) gameX01.bust(context)
-                      },
+                      onPressed: () =>
+                          {if (_isBustClickable(gameX01)) Submit.bust(context)},
                     ),
                   ),
                 ),

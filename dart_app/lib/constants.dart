@@ -67,7 +67,7 @@ const double THREE_DARTS_BUTTON_TEXT_SIZE = 18;
 
 enum PointType { Single, Double, Tripple }
 
-const List<int> noScoresPossible = [
+const List<int> NO_SCORES_POSSIBLE = [
   179,
   178,
   176,
@@ -78,12 +78,12 @@ const List<int> noScoresPossible = [
   166,
   163
 ];
-const List<int> bogeyNumbers = [169, 168, 166, 165, 163, 162, 159];
-const List<int> startPointsPossibilities = [301, 501, 701];
+const List<int> BOGEY_NUMBERS = [169, 168, 166, 165, 163, 162, 159];
+const List<int> START_POINT_POSSIBILITIES = [301, 501, 701];
 //needed for checkout counting -> if player finishes with an only three dart finish -> dont show dialog
 //these checkouts are possible with 3 darts & additionally with 2 darts (cause of bull)
-const List<int> threeDartFinishesWithBull = [110, 107, 104, 101];
-const Map<int, List<String>> finishWays = {
+const List<int> THREE_DART_FINISHES_WITH_BULL = [110, 107, 104, 101];
+const Map<int, List<String>> FINISH_WAYS = {
   170: ['T20 T20 BULL'],
   167: ['T20 T19 BULL'],
   164: ['T20 T18 BULL', 'T19 T19 BULL'],

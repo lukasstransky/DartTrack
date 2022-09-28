@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class StartGameBtn extends StatelessWidget {
-  void _showDialogNoUserInPlayerWarning(
+  _showDialogNoUserInPlayerWarning(
       BuildContext context, GameSettingsX01 gameSettingsX01) {
     String currentUserName = context.read<AuthService>().getPlayer!.getName;
 
@@ -58,7 +58,7 @@ class StartGameBtn extends StatelessWidget {
     );
   }
 
-  void _showDialogForBeginner(
+  _showDialogForBeginner(
       BuildContext context, GameSettingsX01 gameSettingsX01) {
     final List<Player> players = gameSettingsX01.getPlayers;
     Player? selectedPlayer = gameSettingsX01.getPlayers[0];
@@ -162,9 +162,9 @@ class StartGameBtn extends StatelessWidget {
           TextButton(
             onPressed: () => {
               if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single)
-                gameSettingsX01.setBeginnerPlayer(selectedPlayer),
+                _setBeginnerPlayer(selectedPlayer, context),
               // else
-              //   gameSettingsX01.setBeginnerTeam(selectedTeam),
+              //   _setBeginnerTeam(selectedTeam, context),
               Navigator.of(context).pushNamed(
                 '/gameX01',
                 arguments: {'openGame': false},
@@ -179,11 +179,10 @@ class StartGameBtn extends StatelessWidget {
 
   bool _onePlayerPerTeam(GameSettingsX01 gameSettingsX01) {
     for (Team team in gameSettingsX01.getTeams) {
-      if (team.getPlayers.length != 1) {
-        return false;
-      }
+      if (team.getPlayers.length != 1) return false;
     }
     gameSettingsX01.setSingleOrTeam = SingleOrTeamEnum.Single;
+
     return true;
   }
 
@@ -191,22 +190,53 @@ class StartGameBtn extends StatelessWidget {
     if (gameSettingsX01.getPlayers.length < 2) {
       return false;
     } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      if (_anyEmptyTeam(gameSettingsX01)) {
+      if (_anyEmptyTeam(gameSettingsX01))
         return false;
-      } else if (gameSettingsX01.getTeams.length < 2) {
-        return false;
-      }
+      else if (gameSettingsX01.getTeams.length < 2) return false;
     }
+
     return true;
   }
 
   bool _anyEmptyTeam(GameSettingsX01 gameSettingsX01) {
     for (Team team in gameSettingsX01.getTeams) {
-      if (team.getPlayers.isEmpty) {
-        return true;
-      }
+      if (team.getPlayers.isEmpty) return true;
     }
+
     return false;
+  }
+
+  _setBeginnerTeam(Team? teamToSet, BuildContext context) {
+    final List<Team> teams =
+        Provider.of<GameSettingsX01>(context, listen: false).getTeams;
+    int index = 0;
+
+    for (int i = 0; i < teams.length; i++) {
+      if (teams[i] == teamToSet) index = i;
+    }
+
+    //otherwise team is already first in list
+    if (index != 0) {
+      final Team temp = teams[0];
+      teams[0] = teamToSet as Team;
+      teams[index] = temp;
+    }
+  }
+
+  _setBeginnerPlayer(Player? playerToSet, BuildContext context) {
+    final List<Player> players =
+        Provider.of<GameSettingsX01>(context, listen: false).getPlayers;
+    int index = 0;
+
+    for (int i = 0; i < players.length; i++)
+      if (players[i] == playerToSet) index = i;
+
+    //otherwise player is already first in list
+    if (index != 0) {
+      final Player temp = players[0];
+      players[0] = playerToSet as Player;
+      players[index] = temp;
+    }
   }
 
   @override

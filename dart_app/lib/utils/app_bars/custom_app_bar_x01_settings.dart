@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/helper/default_settings.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
     final bool defaultSettingsSelected =
-        gameSettingsX01.defaultSettingsSelected(context);
+        DefaultSettingsHelper.defaultSettingsSelected(context);
 
     showDialog(
       barrierDismissible: false,
@@ -105,9 +106,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       defaultSettingsX01.resetValues();
     } else {
       defaultSettingsX01.isSelected = true;
-      gameSettingsX01.setDefaultSettings(context);
+      DefaultSettingsHelper.setDefaultSettings(context);
     }
-    gameSettingsX01.setSettingsFromDefault(context);
+    DefaultSettingsHelper.setSettingsFromDefault(context);
     firestoreServiceDefaultSettings.postDefaultSettingsX01(context);
 
     gameSettingsX01.notify();
@@ -120,7 +121,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
     final gameSettingsX01 =
         Provider.of<GameSettingsX01>(context, listen: false);
 
-    if (gameSettingsX01.generalDefaultSettingsSelected() &&
+    if (DefaultSettingsHelper.generalDefaultSettingsSelected(context) &&
         !defaultSettingsX01.isSelected) {
       this._showDialogForGenerelDefaultSettings();
     } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
@@ -157,7 +158,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           child: Consumer<GameSettingsX01>(
             builder: (_, gameSettingsX01, __) => IconButton(
               onPressed: () async => _defaultSettingsBtnClicked(),
-              icon: gameSettingsX01.defaultSettingsSelected(context)
+              icon: DefaultSettingsHelper.defaultSettingsSelected(context)
                   ? Icon(MdiIcons.cardsHeart)
                   : Icon(MdiIcons.heartOutline),
             ),

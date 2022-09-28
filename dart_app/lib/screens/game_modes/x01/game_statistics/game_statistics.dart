@@ -30,7 +30,7 @@ class _GameStatisticsState extends State<GameStatistics> {
   bool _roundedScoresOdd = false;
 
   @override
-  void didChangeDependencies() {
+  didChangeDependencies() {
     super.didChangeDependencies();
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;

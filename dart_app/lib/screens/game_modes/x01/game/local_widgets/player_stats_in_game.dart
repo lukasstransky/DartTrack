@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
@@ -13,6 +14,25 @@ class PlayerStatsInGame extends StatelessWidget {
       : super(key: key);
 
   final PlayerGameStatisticsX01? playerGameStatisticsX01;
+
+  //for showing finish ways -> if one player is in finish area and the other one not -> text widget not centered
+  bool _onePlayerInFinishArea(BuildContext context) {
+    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+
+    for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
+      if (stats.getCurrentPoints <= 170) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  String _getLastThrow(List<int> allScores) {
+    if (allScores.length == 0) return '-';
+
+    return allScores[allScores.length - 1].toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +73,17 @@ class PlayerStatsInGame extends StatelessWidget {
                     height: 6.h,
                   ),
                 if (gameSettingsX01.getShowFinishWays)
-                  if (playerGameStatisticsX01!.checkoutPossible()) ...[
-                    Text(playerGameStatisticsX01!.getFinishWay(),
+                  if (_checkoutPossible(
+                      playerGameStatisticsX01!.getCurrentPoints)) ...[
+                    Text(
+                        _getFinishWay(
+                            playerGameStatisticsX01!.getCurrentPoints),
                         style: TextStyle(
                             color: Theme.of(context).colorScheme.primary,
                             fontSize: 15.sp)),
-                  ] else if (gameX01.onePlayerInFinishArea())
-                    if (playerGameStatisticsX01!.isBogeyNumber())
+                  ] else if (_onePlayerInFinishArea(context))
+                    if (BOGEY_NUMBERS
+                        .contains(playerGameStatisticsX01!.getCurrentPoints))
                       Text('No Finish possible!',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
@@ -93,9 +117,7 @@ class PlayerStatsInGame extends StatelessWidget {
                                 child: FittedBox(
                                   fit: BoxFit.fitWidth,
                                   child: Text(
-                                      'Sets: ' +
-                                          playerGameStatisticsX01!.getSetsWon
-                                              .toString(),
+                                      'Sets: ${playerGameStatisticsX01!.getSetsWon.toString()}',
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 10.sp)),
@@ -122,9 +144,7 @@ class PlayerStatsInGame extends StatelessWidget {
                                   child: FittedBox(
                                     fit: BoxFit.fitWidth,
                                     child: Text(
-                                        'Legs: ' +
-                                            playerGameStatisticsX01!.getLegsWon
-                                                .toString(),
+                                        'Legs: ${playerGameStatisticsX01!.getLegsWon.toString()}',
                                         style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 10.sp)),
@@ -155,12 +175,7 @@ class PlayerStatsInGame extends StatelessWidget {
                               child: FittedBox(
                                 fit: BoxFit.fitWidth,
                                 child: Text(
-                                    'Sets: ' +
-                                        playerGameStatisticsX01!.getSetsWon
-                                            .toString() +
-                                        ' Legs: ' +
-                                        playerGameStatisticsX01!.getLegsWon
-                                            .toString(),
+                                    'Sets: ${playerGameStatisticsX01!.getSetsWon.toString()} Legs: ${playerGameStatisticsX01!.getLegsWon.toString()}',
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 10.sp)),
                               ),
@@ -188,8 +203,7 @@ class PlayerStatsInGame extends StatelessWidget {
                       child: FittedBox(
                         fit: BoxFit.fitWidth,
                         child: Text(
-                            'Legs: ' +
-                                playerGameStatisticsX01!.getLegsWon.toString(),
+                            'Legs: ${playerGameStatisticsX01!.getLegsWon.toString()}',
                             style: TextStyle(
                                 color: Colors.white, fontSize: 10.sp)),
                       ),
@@ -215,7 +229,7 @@ class PlayerStatsInGame extends StatelessWidget {
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            'Average: ' + playerGameStatisticsX01!.getAverage(),
+                            'Average: ${playerGameStatisticsX01!.getAverage()}',
                             style: TextStyle(
                               fontSize: 13.sp,
                             ),
@@ -225,8 +239,7 @@ class PlayerStatsInGame extends StatelessWidget {
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(
-                            'Last Throw: ' +
-                                playerGameStatisticsX01!.getLastThrow(),
+                            'Last Throw: ${_getLastThrow(playerGameStatisticsX01!.getAllScores)}',
                             style: TextStyle(
                               fontSize: 13.sp,
                             ),
@@ -237,10 +250,7 @@ class PlayerStatsInGame extends StatelessWidget {
                             ? FittedBox(
                                 fit: BoxFit.scaleDown,
                                 child: Text(
-                                  'Thrown Darts: ' +
-                                      playerGameStatisticsX01!
-                                          .getCurrentThrownDartsInLeg
-                                          .toString(),
+                                  'Thrown Darts: ${playerGameStatisticsX01!.getCurrentThrownDartsInLeg.toString()}',
                                   style: TextStyle(
                                     fontSize: 13.sp,
                                   ),
@@ -264,5 +274,18 @@ class PlayerStatsInGame extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getFinishWay(int currentPoints) {
+    if (currentPoints != 0) return FINISH_WAYS[currentPoints]![0];
+
+    return '';
+  }
+
+  bool _checkoutPossible(int currentPoints) {
+    if (currentPoints <= 170 && !BOGEY_NUMBERS.contains(currentPoints))
+      return true;
+
+    return false;
   }
 }

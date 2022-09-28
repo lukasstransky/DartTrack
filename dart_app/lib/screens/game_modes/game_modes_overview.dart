@@ -17,17 +17,17 @@ class GameModesOverView extends StatefulWidget {
 
 class _GameModesOverViewScreenState extends State<GameModesOverView> {
   @override
-  void initState() {
+  initState() {
     _getOpenGames();
     _getDefaultSettingsX01();
     super.initState();
   }
 
-  void _getOpenGames() async {
+  _getOpenGames() async {
     await context.read<FirestoreServiceGames>().getOpenGames(context);
   }
 
-  void _getDefaultSettingsX01() async {
+  _getDefaultSettingsX01() async {
     Provider.of<DefaultSettingsX01>(context, listen: false).resetValues();
     await context
         .read<FirestoreServiceDefaultSettings>()

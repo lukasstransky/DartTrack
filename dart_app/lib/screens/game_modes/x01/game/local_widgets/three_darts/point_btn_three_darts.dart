@@ -1,5 +1,7 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/helper/submit.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -32,7 +34,7 @@ class PointBtnThreeDart extends StatelessWidget {
 
   _pointBtnClicked(GameX01 gameX01, String pointBtnText, BuildContext context) {
     if (activeBtn as bool && gameX01.getCanBePressed) {
-      gameX01.updateCurrentThreeDarts(pointBtnText);
+      _updateCurrentThreeDarts(context, pointBtnText);
 
       if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' &&
           gameX01.getGameSettings.getAutomaticallySubmitPoints) {
@@ -45,6 +47,21 @@ class PointBtnThreeDart extends StatelessWidget {
             gameX01, point as String, pointBtnText, context);
       }
     }
+  }
+
+  _updateCurrentThreeDarts(BuildContext context, String points) {
+    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+    final List<String> currentThreeDarts = gameX01.getCurrentThreeDarts;
+
+    if (currentThreeDarts[0] == 'Dart 1') {
+      currentThreeDarts[0] = points;
+    } else if (currentThreeDarts[1] == 'Dart 2') {
+      currentThreeDarts[1] = points;
+    } else if (currentThreeDarts[2] == 'Dart 3') {
+      currentThreeDarts[2] = points;
+    }
+
+    gameX01.notify();
   }
 
   //calculate points based on single, double, tripple
@@ -83,8 +100,8 @@ class PointBtnThreeDart extends StatelessWidget {
     final int amountOfDartsThrown = gameX01.getAmountOfDartsThrown();
     bool submitAlreadyCalled = false;
 
-    gameX01.submitOnlyPointsForThreeDartsMode(
-        scoredPointsParsed, scoredFieldWithPointType);
+    Submit.submitStatsForThreeDartsMode(
+        context, scoredPointsParsed, scoredFieldWithPointType);
 
     if (gameX01.isCheckoutPossible()) {
       //finished with 3 darts (high finish) -> show no dialog
@@ -93,7 +110,7 @@ class PointBtnThreeDart extends StatelessWidget {
         if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
           checkoutCount = 1;
         } else {
-          gameX01.submitPoints(scoredPoints, context, 3, 1);
+          Submit.submitPoints(scoredPoints, context, 3, 1);
           submitAlreadyCalled = true;
         }
 
@@ -103,12 +120,12 @@ class PointBtnThreeDart extends StatelessWidget {
           checkoutCount = 1;
           thrownDarts = 1;
         } else {
-          gameX01.submitPoints(scoredPoints, context, 1, 1);
+          Submit.submitPoints(scoredPoints, context, 1, 1);
           submitAlreadyCalled = true;
         }
       } else {
         //only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
-        if (gameX01.isCheckoutCountingEnabled()) {
+        if (_isCheckoutCountingEnabled(gameX01.getGameSettings)) {
           final int count =
               gameX01.getAmountOfCheckoutPossibilities(scoredPoints);
 
@@ -117,7 +134,7 @@ class PointBtnThreeDart extends StatelessWidget {
               checkoutCount = 1;
               thrownDarts = amountOfDartsThrown;
             } else {
-              gameX01.submitPoints(
+              Submit.submitPoints(
                   scoredPoints, context, amountOfDartsThrown, 1);
               submitAlreadyCalled = true;
             }
@@ -137,8 +154,17 @@ class PointBtnThreeDart extends StatelessWidget {
     //needed because in the dialog the submit method is called (otherwise submit would get called 2x)
     if (!submitAlreadyCalled &&
         gameX01.getGameSettings.getAutomaticallySubmitPoints) {
-      gameX01.submitPoints(scoredField, context);
+      Submit.submitPoints(scoredField, context);
     }
+  }
+
+  bool _isCheckoutCountingEnabled(GameSettingsX01 gameSettingsX01) {
+    if (gameSettingsX01.getEnableCheckoutCounting &&
+        gameSettingsX01.getCheckoutCountingFinallyDisabled == false) {
+      return true;
+    }
+
+    return false;
   }
 
   @override

@@ -19,7 +19,7 @@ class AddPlayerTeamBtnDialogs {
 
   static int _selectedBotAvgValue = 0;
 
-  static void _resetBotAvgValue() {
+  static _resetBotAvgValue() {
     _selectedBotAvgValue = DEFAULT_BOT_AVG_SLIDER_VALUE;
   }
 
@@ -31,7 +31,7 @@ class AddPlayerTeamBtnDialogs {
         gameSettingsX01.getPlayers.length <= 1;
   }
 
-  static void showDialogForAddingPlayer(
+  static showDialogForAddingPlayer(
       GameSettingsX01 gameSettingsX01, BuildContext context) {
     NewPlayer? newPlayer =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
@@ -225,8 +225,8 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static void _submitNewPlayer(GameSettingsX01 gameSettingsX01,
-      BuildContext context, NewPlayer? newPlayer) async {
+  static _submitNewPlayer(GameSettingsX01 gameSettingsX01, BuildContext context,
+      NewPlayer? newPlayer) async {
     if (!_formKeyNewPlayer.currentState!.validate()) return;
     _formKeyNewPlayer.currentState!.save();
 
@@ -246,11 +246,11 @@ class AddPlayerTeamBtnDialogs {
     Navigator.of(context).pop();
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      Team? team = gameSettingsX01.checkIfMultipleTeamsToAdd();
+      final Team? team = _checkIfMultipleTeamsToAdd(gameSettingsX01.getTeams);
       if (team != null)
-        gameSettingsX01.addNewPlayerToSpecificTeam(playerToAdd, team);
+        _addNewPlayerToSpecificTeam(playerToAdd, team, gameSettingsX01);
       else
-        showDialogForSelectingTeam(
+        _showDialogForSelectingTeam(
             playerToAdd, gameSettingsX01.getTeams, gameSettingsX01, context);
     } else {
       gameSettingsX01.addPlayer(playerToAdd);
@@ -269,7 +269,7 @@ class AddPlayerTeamBtnDialogs {
     newPlayerController.clear();
   }
 
-  static void showDialogForAddingTeam(
+  static showDialogForAddingTeam(
       GameSettingsX01 gameSettingsX01, BuildContext context) {
     showDialog(
       barrierDismissible: false,
@@ -378,17 +378,26 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static void _submitNewTeam(
-      GameSettingsX01 gameSettingsX01, BuildContext context) {
+  static _submitNewTeam(GameSettingsX01 gameSettingsX01, BuildContext context) {
     if (!_formKeyNewTeam.currentState!.validate()) return;
 
     _formKeyNewTeam.currentState!.save();
 
-    gameSettingsX01.addNewTeam(newTeamController.text);
+    gameSettingsX01.getTeams.add(new Team(name: newTeamController.text));
+    gameSettingsX01.notify();
     Navigator.of(context).pop();
   }
 
-  static void showDialogForAddingPlayerOrTeam(
+  static _addNewPlayerToSpecificTeam(Player playerToAdd, Team? teamForNewPlayer,
+      GameSettingsX01 gameSettingsX01) {
+    gameSettingsX01.getPlayers.add(playerToAdd);
+    for (Team team in gameSettingsX01.getTeams)
+      if (team == teamForNewPlayer) team.getPlayers.add(playerToAdd);
+
+    gameSettingsX01.notify();
+  }
+
+  static showDialogForAddingPlayerOrTeam(
       GameSettingsX01 gameSettingsX01, BuildContext context) {
     String? teamOrPlayer = 'player';
 
@@ -467,7 +476,31 @@ class AddPlayerTeamBtnDialogs {
     return teamWithLeastPlayers;
   }
 
-  static void showDialogForSelectingTeam(Player playerToAdd, List<Team> teams,
+  //checks if player can be added to only one team -> return that team (prevent to show only 1 radio button in selecting team dialog)
+  static Team? _checkIfMultipleTeamsToAdd(List<Team> teams) {
+    int count = 0;
+    Team? team;
+
+    for (Team t in teams) {
+      if (t.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
+        count++;
+        team = t;
+      }
+    }
+
+    if (count == 1) return team;
+
+    return null;
+  }
+
+  static _submitNewTeamForPlayer(Player player, Team? selectedTeam,
+      GameSettingsX01 gameSettings, BuildContext context) {
+    _addNewPlayerToSpecificTeam(player, selectedTeam, gameSettings);
+
+    Navigator.of(context).pop();
+  }
+
+  static _showDialogForSelectingTeam(Player playerToAdd, List<Team> teams,
       GameSettingsX01 gameSettingsX01, BuildContext context) {
     Team? selectedTeam;
     if (teams.length >= 2) {
@@ -567,13 +600,6 @@ class AddPlayerTeamBtnDialogs {
         );
       },
     );
-  }
-
-  static void _submitNewTeamForPlayer(Player player, Team? selectedTeam,
-      GameSettingsX01 gameSettings, BuildContext context) {
-    gameSettings.addNewPlayerToSpecificTeam(player, selectedTeam);
-
-    Navigator.of(context).pop();
   }
 }
 

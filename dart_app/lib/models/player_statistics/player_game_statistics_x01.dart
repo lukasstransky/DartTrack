@@ -2,7 +2,6 @@ import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
 
 import 'dart:collection';
-import 'package:dart_app/constants.dart';
 import 'package:tuple/tuple.dart';
 
 class PlayerGameStatisticsX01 extends PlayerGameStatistics {
@@ -279,81 +278,49 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
 
   //calc average based on total points and all scores length
   String getAverage() {
-    if (getTotalPoints == 0 && getAllScores.length == 0) {
-      return '-';
-    }
+    if (getTotalPoints == 0 && getAllScores.length == 0) return '-';
 
     return ((getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
   }
 
-  String getLastThrow() {
-    if (getAllScores.length == 0) {
-      return '-';
-    }
-    return getAllScores[getAllScores.length - 1].toString();
-  }
-
   int getHighestScore() {
     int result = 0;
+
     for (int score in getAllScores) {
-      if (score > result) {
-        result = score;
-      }
+      if (score > result) result = score;
     }
+
     return result;
   }
 
   int getHighestCheckout() {
     int result = 0;
+
     for (int checkOut in getCheckouts.values) {
-      if (checkOut > result) {
-        result = checkOut;
-      }
+      if (checkOut > result) result = checkOut;
     }
+
     return result;
   }
 
   //returns only those rounded scores (140+: 4) that are included in the list
-  Map<int, int> getSpecificRoundedScores(List<int> specificRoundedScores) {
+  /*Map<int, int> getSpecificRoundedScores(List<int> specificRoundedScores) {
     Map<int, int> result = {};
     for (int score in specificRoundedScores) {
-      int value = getRoundedScoresEven[score]!.toInt();
+      final int value = getRoundedScoresEven[score]!.toInt();
       result[score] = value;
     }
     return result;
-  }
-
-  String getFinishWay() {
-    if (getCurrentPoints != 0) {
-      return finishWays[getCurrentPoints]![0];
-    }
-    return '';
-  }
-
-  bool checkoutPossible() {
-    if (getCurrentPoints <= 170 && !bogeyNumbers.contains(getCurrentPoints)) {
-      return true;
-    }
-    return false;
-  }
-
-  bool isBogeyNumber() {
-    if (bogeyNumbers.contains(getCurrentPoints)) {
-      return true;
-    }
-    return false;
-  }
+  }*/
 
   String getFirstNinveAvg() {
-    if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) {
-      return '-';
-    }
+    if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) return '-';
 
     return ((getFirstNineAvgPoints / getFirstNineAvgCount) * 3)
         .toStringAsFixed(2);
   }
 
-  Map<int, int> getPreciseScoresSorted() {
+  /*Map<int, int> getPreciseScoresSorted() {
     Map<dynamic, dynamic> mapToSort = getPreciseScores;
     return new SplayTreeMap<int, int>.from(
         mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
@@ -363,20 +330,18 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     Map<dynamic, dynamic> mapToSort = getAllScoresPerDartAsStringCount;
     return new SplayTreeMap<String, int>.from(
         mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
-  }
+  }*/
 
   String getCheckoutQuoteInPercent() {
-    if (getCheckoutCount == 0) {
-      return '-';
-    }
+    if (getCheckoutCount == 0) return '-';
+
     return ((getLegsWonTotal / getCheckoutCount) * 100).toStringAsFixed(2) +
         '%';
   }
 
   String getBestLeg() {
-    if (getLegsWonTotal == 0) {
-      return '-';
-    }
+    if (getLegsWonTotal == 0) return '-';
+
     int bestLeg = -1;
 
     _thrownDartsPerLeg.values.forEach((element) {
@@ -389,9 +354,8 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
   }
 
   String getWorstLeg() {
-    if (getLegsWonTotal == 0) {
-      return '-';
-    }
+    if (getLegsWonTotal == 0) return '-';
+
     int worstLeg = -1;
 
     _thrownDartsPerLeg.values.forEach((element) {
@@ -401,45 +365,5 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     });
 
     return worstLeg.toString();
-  }
-
-  String getDartsPerLeg() {
-    if (getLegsWonTotal == 0) {
-      return '-';
-    }
-
-    int dartsPerLeg = 0;
-    int games = 0;
-
-    _checkouts.keys.forEach((key) {
-      dartsPerLeg += _thrownDartsPerLeg[key] as int;
-      games++;
-    });
-
-    return (dartsPerLeg / games).toStringAsFixed(2);
-  }
-
-  Map<String, int> getPreciseScoresWithStringKey() {
-    Map<String, int> result = {};
-    for (var entry in getPreciseScores.entries) {
-      result[entry.key.toString()] = entry.value;
-    }
-    return result;
-  }
-
-  Map<String, int> getRoundedScoresEvenWithStringKey() {
-    Map<String, int> result = {};
-    for (var entry in getRoundedScoresEven.entries) {
-      result[entry.key.toString()] = entry.value;
-    }
-    return result;
-  }
-
-  Map<String, int> getRoundedScoresOddWithStringKey() {
-    Map<String, int> result = {};
-    for (var entry in getRoundedScoresOdd.entries) {
-      result[entry.key.toString()] = entry.value;
-    }
-    return result;
   }
 }

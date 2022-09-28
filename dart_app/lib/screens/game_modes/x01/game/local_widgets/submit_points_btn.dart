@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/helper/submit.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -46,9 +47,24 @@ class SubmitPointsBtn extends StatelessWidget {
           gameX01, gameX01.getCurrentPointsSelected, context);
     } else if (_shouldOnPressedBeEnabled(gameX01)) {
       thrownDarts = thrownDarts == 0 ? 3 : thrownDarts;
-      gameX01.submitPoints(
-          gameX01.getLastDartThrown(), context, thrownDarts, checkoutCount);
+      Submit.submitPoints(
+          _getLastDartThrown(gameX01), context, thrownDarts, checkoutCount);
     }
+  }
+
+  String _getLastDartThrown(GameX01 gameX01) {
+    final List<String> currentThreeDarts = gameX01.getCurrentThreeDarts;
+
+    for (int i = 0; i < currentThreeDarts.length; i++) {
+      if (currentThreeDarts[i].contains('Dart')) {
+        if (i == 0) {
+          return currentThreeDarts[0];
+        }
+        return currentThreeDarts[i - 1];
+      }
+    }
+
+    return currentThreeDarts[2];
   }
 
   _submitPointsForInputMethodRound(
@@ -59,7 +75,7 @@ class SubmitPointsBtn extends StatelessWidget {
     //double in -> check for 1, 3, 5 -> invalid
     if ((gameX01.getGameSettings.getModeIn == ModeOutIn.Double ||
             gameX01.getGameSettings.getModeIn == ModeOutIn.Master) &&
-        gameX01.areInvalidDoubleInPoints(currentPointsSelected) &&
+        _areInvalidDoubleInPoints(currentPointsSelected) &&
         stats.getCurrentPoints == gameX01.getGameSettings.getPointsOrCustom()) {
       Fluttertoast.showToast(msg: 'Invalid Score for Double In!');
       gameX01.setCurrentPointsSelected = 'Points';
@@ -69,7 +85,7 @@ class SubmitPointsBtn extends StatelessWidget {
           currentPointsSelected != 'Points') {
         if (gameX01.isCheckoutPossible()) {
           if (gameX01.finishedWithThreeDarts(currentPointsSelected)) {
-            gameX01.submitPoints(currentPointsSelected, context, 3, 1);
+            Submit.submitPoints(currentPointsSelected, context, 3, 1);
           } else {
             if (gameX01.getGameSettings.getEnableCheckoutCounting &&
                 gameX01.getGameSettings.getCheckoutCountingFinallyDisabled ==
@@ -80,20 +96,30 @@ class SubmitPointsBtn extends StatelessWidget {
                 showDialogForCheckout(
                     gameX01, count, currentPointsSelected, context);
               } else {
-                gameX01.submitPoints(currentPointsSelected, context);
+                Submit.submitPoints(currentPointsSelected, context);
               }
             } else if (gameX01.finishedLegSetOrGame(currentPointsSelected)) {
               showDialogForCheckout(
                   gameX01, -1, currentPointsSelected, context);
             } else {
-              gameX01.submitPoints(currentPointsSelected, context);
+              Submit.submitPoints(currentPointsSelected, context);
             }
           }
         } else {
-          gameX01.submitPoints(currentPointsSelected, context);
+          Submit.submitPoints(currentPointsSelected, context);
         }
       }
     }
+  }
+
+  bool _areInvalidDoubleInPoints(String pointsSelected) {
+    if (pointsSelected == '1' ||
+        pointsSelected == '3' ||
+        pointsSelected == '5') {
+      return true;
+    }
+
+    return false;
   }
 
   @override

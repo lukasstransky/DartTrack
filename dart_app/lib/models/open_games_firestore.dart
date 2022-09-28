@@ -12,11 +12,11 @@ class OpenGamesFirestore with ChangeNotifier {
   get init => this._init;
   set init(value) => this._init = value;
 
-  void notify() {
+  notify() {
     notifyListeners();
   }
 
-  void reset() {
+  reset() {
     _init = false;
     openGames = [];
   }

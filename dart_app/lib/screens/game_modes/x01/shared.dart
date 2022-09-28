@@ -1,5 +1,7 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/helper/revert.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/helper/submit.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -363,7 +365,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
 
               gameX01.getCurrentThreeDarts[amount - 1] =
                   'Dart ${amount.toString()}';
-              gameX01.revertSomeStats(int.parse(currentPointsSelected));
+              Revert.revertSomeStats(context, int.parse(currentPointsSelected));
             } else {
               gameX01.setCurrentPointsSelected = 'Points';
             }
@@ -378,7 +380,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
               checkoutCount = selectedCheckoutCount;
               thrownDarts = selectedFinishCount;
             } else {
-              gameX01.submitPoints(
+              Submit.submitPoints(
                   currentPointsSelected,
                   context,
                   selectedFinishCount,

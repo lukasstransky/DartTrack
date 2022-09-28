@@ -22,7 +22,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   String _mode = '';
 
   @override
-  void didChangeDependencies() {
+  didChangeDependencies() {
     super.didChangeDependencies();
     _getGames();
   }

@@ -21,7 +21,7 @@ class _StatisticsState extends State<Statistics> {
   bool _showMoreStats = false;
 
   @override
-  void initState() {
+  initState() {
     Provider.of<StatisticsFirestoreX01>(context, listen: false)
         .currentFilterValue = FilterValue.Overall;
     _getPlayerGameStatistics();

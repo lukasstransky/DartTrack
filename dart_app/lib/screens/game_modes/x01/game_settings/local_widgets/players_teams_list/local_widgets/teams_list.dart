@@ -18,7 +18,7 @@ class TeamsList extends StatefulWidget {
 
 class _TeamsListState extends State<TeamsList> {
   @override
-  void initState() {
+  initState() {
     super.initState();
     newScrollControllerTeams();
   }

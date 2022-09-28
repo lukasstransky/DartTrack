@@ -1,6 +1,8 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/points_btns_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/points_btns_threeDarts.dart';
@@ -21,19 +23,50 @@ class Game extends StatefulWidget {
 
 class GameState extends State<Game> {
   @override
-  void initState() {
+  initState() {
     super.initState();
     newItemScrollController();
   }
 
+  _init() {
+    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+    final GameSettingsX01 gameSettingsX01 =
+        Provider.of<GameSettingsX01>(context, listen: false);
+
+    gameX01.setGameSettings = gameSettingsX01;
+    gameX01.setCurrentPlayerToThrow = gameSettingsX01.getPlayers[0];
+    gameX01.setPlayerGameStatistics = [];
+
+    //if game is finished -> undo last throw -> will call init again
+    if (gameSettingsX01.getPlayers.length !=
+        gameX01.getPlayerGameStatistics.length) {
+      gameX01.setInit = true;
+      final int points = gameSettingsX01.getPointsOrCustom();
+
+      for (Player player in gameSettingsX01.getPlayers) {
+        gameX01.getPlayerGameStatistics.add(new PlayerGameStatisticsX01(
+            mode: 'X01',
+            player: player,
+            currentPoints: points,
+            dateTime: gameX01.getDateTime));
+      }
+
+      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts)
+        gameX01.setCurrentPointType = PointType.Single;
+    }
+
+    for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
+      stats.setStartingPoints = stats.getCurrentPoints;
+    }
+  }
+
   @override
-  void didChangeDependencies() {
+  didChangeDependencies() {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
 
     if (arguments.isNotEmpty && !arguments['openGame']) {
-      Provider.of<GameX01>(context, listen: false)
-          .init(Provider.of<GameSettingsX01>(context, listen: false));
+      _init();
     }
     super.didChangeDependencies();
   }

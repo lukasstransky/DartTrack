@@ -20,7 +20,7 @@ class _FilterBarState extends State<FilterBar> {
   String _customBtnDateRange = '';
   bool _showCustomBtnDateRange = false;
 
-  void _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+  _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
         _range = '${DateFormat('dd-MM-yyyy').format(args.value.startDate)};'

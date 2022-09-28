@@ -29,7 +29,7 @@ ScrollController newScrollControllerTeams() {
   return scrollControllerTeams;
 }
 
-void disposeScrollControllersForGamesettings() {
+disposeScrollControllersForGamesettings() {
   scrollControllerPlayers.dispose();
   scrollControllerTeams.dispose();
   newPlayerController.dispose();

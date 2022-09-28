@@ -20,7 +20,7 @@ class MostFrequentScores extends StatefulWidget {
 
 class _MostFrequentScoresState extends State<MostFrequentScores> {
   @override
-  void didChangeDependencies() {
+  didChangeDependencies() {
     super.didChangeDependencies();
     for (PlayerGameStatisticsX01 stats
         in widget.game!.getPlayerGameStatistics) {
@@ -31,7 +31,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
 
   bool _showFirst10 = false;
 
-  bool moreThanFiveScores() {
+  bool _moreThanFiveScores() {
     for (PlayerGameStatisticsX01 stats
         in widget.game!.getPlayerGameStatistics) {
       if (widget.mostScoresPerDart &&
@@ -154,7 +154,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
             ],
           ),
         ),
-        if (moreThanFiveScores())
+        if (_moreThanFiveScores())
           Container(
             width: 100.w,
             transform: Matrix4.translationValues(-5.w, 0.0, 0.0),

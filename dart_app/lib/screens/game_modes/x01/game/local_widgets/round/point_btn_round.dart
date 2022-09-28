@@ -12,10 +12,21 @@ class PointBtnRound extends StatelessWidget {
   final String? point;
   final bool? activeBtn;
 
+  _updateCurrentPointsSelected(BuildContext context, String newPoints) {
+    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+
+    if (gameX01.getCurrentPointsSelected == 'Points') {
+      gameX01.setCurrentPointsSelected = newPoints;
+    } else {
+      final String result = gameX01.getCurrentPointsSelected + newPoints;
+      gameX01.setCurrentPointsSelected = result;
+    }
+
+    gameX01.notify();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-
     return ElevatedButton(
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -45,7 +56,7 @@ class PointBtnRound extends StatelessWidget {
       ),
       onPressed: () {
         activeBtn as bool
-            ? gameX01.updateCurrentPointsSelected(point as String)
+            ? _updateCurrentPointsSelected(context, point as String)
             : null;
       },
     );

@@ -1,3 +1,4 @@
+import 'package:dart_app/models/games/helper/revert.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -26,10 +27,10 @@ class RevertBtn extends StatelessWidget {
               ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
               : MaterialStateProperty.all(Colors.transparent),
         ),
-        child: Icon(Icons.undo, color: Colors.black),
+        child: const Icon(Icons.undo, color: Colors.black),
         onPressed: () {
           if (gameX01.getRevertPossible) {
-            gameX01.revertPoints();
+            Revert.revertPoints(context);
           }
         });
   }

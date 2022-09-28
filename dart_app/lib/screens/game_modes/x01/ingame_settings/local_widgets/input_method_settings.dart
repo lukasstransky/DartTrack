@@ -3,11 +3,29 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class InputMethodSettings extends StatelessWidget {
   const InputMethodSettings({Key? key}) : super(key: key);
+
+  _switchInputMethod(
+      GameX01 gameX01, GameSettingsX01 gameSettingsX01, BuildContext context) {
+    if (gameSettingsX01.getInputMethod == InputMethod.Round) {
+      gameSettingsX01.setInputMethod = InputMethod.ThreeDarts;
+    } else {
+      if (gameX01.getAmountOfDartsThrown() != 0) {
+        Fluttertoast.showToast(
+            msg: 'In order to switch, please finish the round!',
+            toastLength: Toast.LENGTH_LONG);
+      } else {
+        gameSettingsX01.setInputMethod = InputMethod.Round;
+      }
+    }
+
+    gameSettingsX01.notify();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,10 +88,12 @@ class InputMethodSettings extends StatelessWidget {
                         child: SizedBox(
                           height: WIDGET_HEIGHT_GAMESETTINGS.h,
                           child: ElevatedButton(
-                            onPressed: () => gameSettingsX01.getInputMethod ==
-                                    InputMethod.ThreeDarts
-                                ? gameSettingsX01.switchInputMethod(gameX01)
-                                : null,
+                            onPressed: () => {
+                              if (gameSettingsX01.getInputMethod ==
+                                  InputMethod.ThreeDarts)
+                                _switchInputMethod(
+                                    gameX01, gameSettingsX01, context)
+                            },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
                               child: const Text('Round'),
@@ -101,10 +121,12 @@ class InputMethodSettings extends StatelessWidget {
                         child: SizedBox(
                           height: WIDGET_HEIGHT_GAMESETTINGS.h,
                           child: ElevatedButton(
-                            onPressed: () => gameSettingsX01.getInputMethod ==
-                                    InputMethod.Round
-                                ? gameSettingsX01.switchInputMethod(gameX01)
-                                : null,
+                            onPressed: () {
+                              if (gameSettingsX01.getInputMethod ==
+                                  InputMethod.Round)
+                                _switchInputMethod(
+                                    gameX01, gameSettingsX01, context);
+                            },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
                               child: const Text('3 Darts'),

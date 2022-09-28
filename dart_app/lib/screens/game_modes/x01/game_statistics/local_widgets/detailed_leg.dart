@@ -26,7 +26,7 @@ class _DetailedLegState extends State<DetailedLeg> {
   int _currentPoints = 0;
 
   @override
-  void initState() {
+  initState() {
     super.initState();
 
     _currentPoints = getPointsOrCustom();

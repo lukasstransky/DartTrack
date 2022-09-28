@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/helper/submit.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btn_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn.dart';
@@ -13,6 +14,20 @@ import 'package:sizer/sizer.dart';
 
 class PointsBtnsRound extends StatelessWidget {
   PointsBtnsRound({Key? key}) : super(key: key);
+
+  //deletes one char of the points
+  _deleteCurrentPointsSelected(BuildContext context) {
+    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+
+    gameX01.setCurrentPointsSelected = gameX01.getCurrentPointsSelected
+        .substring(0, gameX01.getCurrentPointsSelected.length - 1);
+
+    if (gameX01.getCurrentPointsSelected.isEmpty) {
+      gameX01.setCurrentPointsSelected = 'Points';
+    }
+
+    gameX01.notify();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +223,7 @@ class PointsBtnsRound extends StatelessWidget {
                             onPressed: () {
                               if (gameX01.getCurrentPointsSelected !=
                                   'Points') {
-                                gameX01.deleteCurrentPointsSelected();
+                                _deleteCurrentPointsSelected(context);
                               }
                             })),
                   ),
@@ -270,10 +285,10 @@ class PointsBtnsRound extends StatelessWidget {
                                 showDialogForCheckout(
                                     gameX01, count, '0', context);
                               } else {
-                                gameX01.bust(context);
+                                Submit.bust(context);
                               }
                             } else {
-                              gameX01.bust(context);
+                              Submit.bust(context);
                             }
                           }),
                     ),

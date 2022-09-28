@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 final GlobalKey<FormState> _formKeyLegDifference = GlobalKey<FormState>();
 
 class WinByTwoLegsDifference extends StatelessWidget {
-  void showDialogForSuddenDeath(
+  _showDialogForSuddenDeath(
       BuildContext context, GameSettingsX01 gameSettingsX01) {
     showDialog(
       barrierDismissible: false,
@@ -142,7 +142,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
           actions: [
             TextButton(
               onPressed: () => {
-                gameSettingsX01.switchWinByTwoLegsDifference(false),
+                _switchWinByTwoLegsDifference(false, gameSettingsX01),
                 gameSettingsX01.notify(),
                 Navigator.of(context).pop(),
               },
@@ -150,7 +150,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => {
-                gameSettingsX01.switchWinByTwoLegsDifference(true),
+                _switchWinByTwoLegsDifference(true, gameSettingsX01),
                 gameSettingsX01.notify(),
                 Navigator.of(context).pop(),
               },
@@ -160,6 +160,16 @@ class WinByTwoLegsDifference extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _switchWinByTwoLegsDifference(bool value, GameSettingsX01 gameSettingsX01) {
+    if (gameSettingsX01.getWinByTwoLegsDifference) {
+      gameSettingsX01.setSuddenDeath = false;
+      gameSettingsX01.setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
+    }
+    gameSettingsX01.setWinByTwoLegsDifference = value;
+
+    gameSettingsX01.notify();
   }
 
   @override
@@ -180,11 +190,10 @@ class WinByTwoLegsDifference extends StatelessWidget {
                     Switch(
                       value: gameSettingsX01.getWinByTwoLegsDifference,
                       onChanged: (value) {
-                        if (value) {
-                          showDialogForSuddenDeath(context, gameSettingsX01);
-                        } else {
-                          gameSettingsX01.switchWinByTwoLegsDifference(value);
-                        }
+                        if (value)
+                          _showDialogForSuddenDeath(context, gameSettingsX01);
+                        else
+                          _switchWinByTwoLegsDifference(value, gameSettingsX01);
                       },
                     ),
                   ],

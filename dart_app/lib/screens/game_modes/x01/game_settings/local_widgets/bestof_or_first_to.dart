@@ -7,6 +7,35 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class BestOfOrFirstTo extends StatelessWidget {
+  _switchBestOfOrFirstTo(BuildContext context, GameSettingsX01 gs) {
+    if (gs.getMode == BestOfOrFirstToEnum.BestOf) {
+      gs.setMode = BestOfOrFirstToEnum.FirstTo;
+
+      if (gs.getDrawMode) {
+        gs.setDrawMode = false;
+      }
+
+      if (gs.getSetsEnabled) {
+        gs.setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
+        gs.setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
+      } else {
+        gs.setLegs = DEFAULT_LEGS_FIRST_TO_NO_SETS;
+      }
+    } else {
+      gs.setMode = BestOfOrFirstToEnum.BestOf;
+      gs.setWinByTwoLegsDifference = false;
+
+      if (gs.getSetsEnabled) {
+        gs.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+        gs.setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
+      } else {
+        gs.setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
+      }
+    }
+
+    gs..notify();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -26,10 +55,11 @@ class BestOfOrFirstTo extends StatelessWidget {
                     color: Colors.white,
                   ),
                   child: ElevatedButton(
-                    onPressed: () =>
-                        gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo
-                            ? gameSettingsX01.switchBestOfOrFirstTo()
-                            : null,
+                    onPressed: () => {
+                      if (gameSettingsX01.getMode ==
+                          BestOfOrFirstToEnum.FirstTo)
+                        _switchBestOfOrFirstTo(context, gameSettingsX01)
+                    },
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: const Text('Best Of'),
@@ -65,10 +95,10 @@ class BestOfOrFirstTo extends StatelessWidget {
               Expanded(
                 child: SizedBox(
                   child: ElevatedButton(
-                    onPressed: () =>
-                        gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf
-                            ? gameSettingsX01.switchBestOfOrFirstTo()
-                            : null,
+                    onPressed: () {
+                      if (gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf)
+                        _switchBestOfOrFirstTo(context, gameSettingsX01);
+                    },
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: const Text('First To'),

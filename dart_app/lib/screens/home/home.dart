@@ -24,14 +24,14 @@ class _HomeState extends State<Home> {
     Settings(),
   ];
 
-  void onTabTapped(int index) {
+  onTabTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
 
   @override
-  void initState() {
+  initState() {
     super.initState();
   }
 
