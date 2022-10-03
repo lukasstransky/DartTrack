@@ -34,10 +34,22 @@ class PlayerStatsInGame extends StatelessWidget {
     return allScores[allScores.length - 1].toString();
   }
 
+  String _getFinishWay(int currentPoints) {
+    if (currentPoints != 0) return FINISH_WAYS[currentPoints]![0];
+
+    return '';
+  }
+
+  bool _checkoutPossible(int currentPoints) {
+    if (currentPoints <= 170 && !BOGEY_NUMBERS.contains(currentPoints))
+      return true;
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer2<GameX01, GameSettingsX01>(
-      //todo -> add selector
       builder: (_, gameX01, gameSettingsX01, __) => Container(
         color: Player.samePlayer(gameX01.getCurrentPlayerToThrow,
                 playerGameStatisticsX01!.getPlayer)
@@ -274,18 +286,5 @@ class PlayerStatsInGame extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _getFinishWay(int currentPoints) {
-    if (currentPoints != 0) return FINISH_WAYS[currentPoints]![0];
-
-    return '';
-  }
-
-  bool _checkoutPossible(int currentPoints) {
-    if (currentPoints <= 170 && !BOGEY_NUMBERS.contains(currentPoints))
-      return true;
-
-    return false;
   }
 }

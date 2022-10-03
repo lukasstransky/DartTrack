@@ -90,7 +90,7 @@ class SubmitPointsBtn extends StatelessWidget {
             if (gameX01.getGameSettings.getEnableCheckoutCounting &&
                 gameX01.getGameSettings.getCheckoutCountingFinallyDisabled ==
                     false) {
-              int count = gameX01
+              final int count = gameX01
                   .getAmountOfCheckoutPossibilities(currentPointsSelected);
               if (count != -1) {
                 showDialogForCheckout(
@@ -135,6 +135,7 @@ class SubmitPointsBtn extends StatelessWidget {
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
+                side: BorderSide(color: Colors.black, width: 2),
               ),
             ),
             backgroundColor: _colorResult,

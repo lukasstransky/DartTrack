@@ -3,6 +3,7 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/games/helper/submit.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btn_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/select_input_method.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -42,15 +43,17 @@ class PointsBtnsRound extends StatelessWidget {
                 children: [
                   Container(
                     width: 25.w,
-                    padding: const EdgeInsets.all(5),
                     child: RevertBtn(),
                   ),
                   Container(
                     width: 50.w,
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
                     child: Container(
                       decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black)),
+                        border: Border(
+                          top: BorderSide(width: 2, color: Colors.black),
+                          bottom: BorderSide(width: 2, color: Colors.black),
+                        ),
+                      ),
                       child: Center(
                         child: Text(
                           gameX01.getCurrentPointsSelected,
@@ -61,12 +64,13 @@ class PointsBtnsRound extends StatelessWidget {
                   ),
                   Container(
                     width: 25.w,
-                    padding: const EdgeInsets.all(5),
                     child: SubmitPointsBtn(),
                   ),
                 ],
               ),
             ),
+            if (gameX01.getGameSettings.getShowInputMethodInGameScreen)
+              SelectInputMethod(),
             Expanded(
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,

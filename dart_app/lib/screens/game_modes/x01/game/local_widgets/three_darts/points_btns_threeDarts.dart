@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/games/helper/submit.dart';
 import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/select_input_method.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/point_btn_three_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn.dart';
@@ -150,6 +151,8 @@ class PointsBtnsThreeDarts extends StatelessWidget {
               ],
             ),
           ),
+          if (gameX01.getGameSettings.getShowInputMethodInGameScreen)
+            SelectInputMethod(),
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,

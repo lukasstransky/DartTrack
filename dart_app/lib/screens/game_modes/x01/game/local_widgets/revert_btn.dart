@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/helper/revert.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -17,6 +18,12 @@ class RevertBtn extends StatelessWidget {
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
+              side: BorderSide(
+                  color: Colors.black,
+                  width: gameX01.getGameSettings.getInputMethod ==
+                          InputMethod.Round
+                      ? 2
+                      : 0),
             ),
           ),
           shadowColor: MaterialStateProperty.all(Colors.transparent),
