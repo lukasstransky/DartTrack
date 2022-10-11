@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/game_settings/helper/default_settings.dart';
+import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 
 import 'package:flutter/material.dart';

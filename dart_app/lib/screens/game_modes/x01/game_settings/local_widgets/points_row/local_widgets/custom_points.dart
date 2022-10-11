@@ -49,7 +49,7 @@ class _CustomPointsState extends State<CustomPoints> {
               controller: _customPointsController,
               validator: (value) {
                 if (value!.isEmpty) {
-                  return ('Please Enter Points!');
+                  return ('Please enter Points!');
                 }
                 if (int.parse(value) < CUSTOM_POINTS_MIN_NUMBER) {
                   return ('Minimum Points are 100!');

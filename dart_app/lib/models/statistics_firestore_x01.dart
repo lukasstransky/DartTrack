@@ -304,7 +304,6 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
   sortGames() {
     if (games.isNotEmpty) games.sort();
-    //games = games.reversed.toList();
   }
 
   Game? getGameById(String gameId) {

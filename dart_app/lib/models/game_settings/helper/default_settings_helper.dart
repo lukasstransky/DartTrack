@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -44,11 +45,16 @@ class DefaultSettingsHelper {
     defaultSettingsX01.winByTwoLegsDifference =
         settingsX01.getWinByTwoLegsDifference;
     defaultSettingsX01.players = settingsX01.getPlayers;
-    defaultSettingsX01.playersNames = [];
     defaultSettingsX01.drawMode = settingsX01.getDrawMode;
 
+    defaultSettingsX01.playersNames = [];
     for (Player player in settingsX01.getPlayers) {
       defaultSettingsX01.playersNames.add(player.getName);
+    }
+
+    defaultSettingsX01.mostScoredPoints = [];
+    for (String mostScoredPoint in settingsX01.getMostScoredPoints) {
+      defaultSettingsX01.mostScoredPoints.add(mostScoredPoint);
     }
 
     settingsX01.notify();
@@ -93,6 +99,8 @@ class DefaultSettingsHelper {
         defaultSettingsX01.winByTwoLegsDifference;
     settingsX01.setDrawMode = defaultSettingsX01.drawMode;
     settingsX01.setPlayers = defaultSettingsX01.players;
+    settingsX01.setMostScoredPoints = [...defaultSettingsX01.mostScoredPoints];
+
     //teams not supported for favourites
     settingsX01.setTeamNamingIds = [];
     settingsX01.setTeams = [];
@@ -136,6 +144,8 @@ class DefaultSettingsHelper {
         defaultSettingsX01.winByTwoLegsDifference ==
             settingsX01.getWinByTwoLegsDifference &&
         defaultSettingsX01.drawMode == settingsX01.getDrawMode &&
+        listEquals(defaultSettingsX01.mostScoredPoints,
+            settingsX01.getMostScoredPoints) &&
         defaultSettingsX01.samePlayers(settingsX01.getPlayers, context)) {
       return true;
     }
@@ -169,6 +179,8 @@ class DefaultSettingsHelper {
         settingsX01.getShowLastThrow == DEFAULT_SHOW_LAST_THROW &&
         settingsX01.getShowMostScoredPoints ==
             DEFAULT_SHOW_MOST_SCORED_POINTS &&
+        listEquals(
+            settingsX01.getMostScoredPoints, DEFAULT_MOST_SCORED_POINTS) &&
         settingsX01.getShowThrownDartsPerLeg ==
             DEFAULT_SHOW_THROWN_DARTS_PER_LEG &&
         settingsX01.getSingleOrTeam == DEFAULT_SINGLE_OR_TEAM &&

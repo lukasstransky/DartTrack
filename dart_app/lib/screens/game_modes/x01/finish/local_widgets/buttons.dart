@@ -1,4 +1,4 @@
-import 'package:dart_app/models/games/helper/revert.dart';
+import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';

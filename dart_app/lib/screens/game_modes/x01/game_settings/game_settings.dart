@@ -1,6 +1,6 @@
 import 'package:dart_app/models/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/game_settings/helper/default_settings.dart';
+import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/add_player_team_btn/add_player_team_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/advanced_settings.dart';
@@ -35,9 +35,6 @@ class _GameSettingsState extends State<GameSettings> {
     super.initState();
     DefaultSettingsHelper.setSettingsFromDefault(context);
     _addCurrentUserToPlayers();
-
-    /*Provider.of<GameSettingsX01>(context, listen: false)
-        .addPlayer(new Player(name: 'Strainski'));*/
   }
 
   @override

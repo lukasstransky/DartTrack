@@ -41,6 +41,22 @@ class FirestoreServiceGames {
     return gameId;
   }
 
+  Future<void> checkIfAtLeastOneX01GameIsPlayed(BuildContext context) async {
+    final QuerySnapshot<Object?> games = await _firestore
+        .collection(this._getFirestoreGamesPath())
+        .where('name', isEqualTo: 'X01')
+        .get();
+    final StatisticsFirestoreX01 statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01>();
+
+    statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
+    if (!statisticsFirestoreX01.noGamesPlayed) {
+      //todo not the best solution to load all statistics here (-> only precise scores are needed)
+      context.read<FirestoreServicePlayerStats>().getStatistics(context);
+    }
+    statisticsFirestoreX01.notify();
+  }
+
   Future<void> getGames(String mode, BuildContext context) async {
     late dynamic firestoreStats;
     switch (mode) {

@@ -31,6 +31,7 @@ class DefaultSettingsX01 with ChangeNotifier {
   late bool _vibrationFeedbackEnabled;
   late bool _automaticallySubmitPoints;
   late bool _showMostScoredPoints;
+  late List<String> _mostScoredPoints;
   late InputMethod _inputMethod;
   late bool _showInputMethodInGameScreen;
   late bool _drawMode;
@@ -89,10 +90,14 @@ class DefaultSettingsX01 with ChangeNotifier {
     vibrationFeedbackEnabled = map['vibrationFeedbackEnabled'];
     automaticallySubmitPoints = map['automaticallySubmitPoints'];
     showMostScoredPoints = map['showMostScoredPoints'];
+    mostScoredPoints = map['mostScoredPoints'] == null
+        ? []
+        : map['mostScoredPoints'].cast<String>();
     inputMethod = map['inputMethod'] == 'Round'
         ? InputMethod.Round
         : InputMethod.ThreeDarts;
     showInputMethodInGameScreen = map['showInputMethodInGameScreen'];
+
     players = map['players'] == null
         ? []
         : map['players'].map<Player>((item) {
@@ -160,6 +165,7 @@ class DefaultSettingsX01 with ChangeNotifier {
       'vibrationFeedbackEnabled': vibrationFeedbackEnabled,
       'automaticallySubmitPoints': automaticallySubmitPoints,
       'showMostScoredPoints': showMostScoredPoints,
+      'mostScoredPoints': mostScoredPoints,
       'inputMethod': inputMethod == InputMethod.Round ? 'Round' : 'Three Darts',
       'showInputMethodInGameScreen': showInputMethodInGameScreen,
       if (botNamingIds.isNotEmpty) 'botNamingIds': botNamingIds,
@@ -281,6 +287,10 @@ class DefaultSettingsX01 with ChangeNotifier {
 
   set showMostScoredPoints(value) => this._showMostScoredPoints = value;
 
+  List<String> get mostScoredPoints => this._mostScoredPoints;
+
+  set mostScoredPoints(List<String> value) => this._mostScoredPoints = value;
+
   get inputMethod => this._inputMethod;
 
   set inputMethod(value) => this._inputMethod = value;
@@ -322,6 +332,7 @@ class DefaultSettingsX01 with ChangeNotifier {
     vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
     automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
     showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
+    mostScoredPoints = DEFAULT_MOST_SCORED_POINTS;
     inputMethod = DEFAULT_INPUT_METHOD;
     showInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
     drawMode = DEFAULT_DRAW_MODE;

@@ -32,8 +32,10 @@ class GameSettingsX01 extends GameSettings {
   bool _vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
   bool _automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
   bool _showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
+  List<String> _mostScoredPoints = [];
   InputMethod _inputMethod = DEFAULT_INPUT_METHOD;
   bool _showInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
+
   bool _drawMode = DEFAULT_DRAW_MODE;
   List<int> _teamNamingIds = [];
 
@@ -170,6 +172,9 @@ class GameSettingsX01 extends GameSettings {
   set setShowMostScoredPoints(bool showMostScoredPoints) => {
         this._showMostScoredPoints = showMostScoredPoints,
       };
+
+  List<String> get getMostScoredPoints => this._mostScoredPoints;
+  set setMostScoredPoints(List<String> value) => this._mostScoredPoints = value;
 
   InputMethod get getInputMethod => this._inputMethod;
   set setInputMethod(InputMethod inputMethod) =>
@@ -329,5 +334,70 @@ class GameSettingsX01 extends GameSettings {
     }
 
     return count;
+  }
+
+  String getGameModeDetails(bool showPoints) {
+    String result = '';
+
+    if (showPoints) {
+      if (getCustomPoints != -1)
+        result += '${getCustomPoints.toString()} / ';
+      else
+        result += '${getPoints.toString()} / ';
+    }
+
+    switch (getModeIn) {
+      case ModeOutIn.Single:
+        result += 'Single In / ';
+        break;
+      case ModeOutIn.Double:
+        result += 'Double In / ';
+        break;
+      case ModeOutIn.Master:
+        result += 'Master In / ';
+        break;
+    }
+
+    switch (getModeOut) {
+      case ModeOutIn.Single:
+        result += 'Single Out';
+        break;
+      case ModeOutIn.Double:
+        result += 'Double Out';
+        break;
+      case ModeOutIn.Master:
+        result += 'Master Out';
+        break;
+    }
+
+    if (getSuddenDeath)
+      result += ' / SD - after ${getMaxExtraLegs.toString()} Legs';
+
+    return result;
+  }
+
+  String getGameMode() {
+    final int sets = getSets;
+    final int legs = getLegs;
+
+    String result = '';
+
+    if (getMode == BestOfOrFirstToEnum.BestOf)
+      result += 'Best Of ';
+    else
+      result += 'First To ';
+
+    if (getSetsEnabled) {
+      if (sets > 1)
+        result += '${sets.toString()} Sets - ';
+      else
+        result += '${sets.toString()} Set - ';
+    }
+    if (legs > 1)
+      result += '${legs.toString()} Legs';
+    else
+      result += '${legs.toString()} Leg';
+
+    return result;
   }
 }

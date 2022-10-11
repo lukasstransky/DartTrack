@@ -7,10 +7,12 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class PointBtnRound extends StatelessWidget {
-  const PointBtnRound({Key? key, this.point, this.activeBtn}) : super(key: key);
+  const PointBtnRound({this.point, this.activeBtn, this.mostScoredPointBtn});
 
   final String? point;
   final bool? activeBtn;
+  //todo eventually remove
+  final bool? mostScoredPointBtn;
 
   _updateCurrentPointsSelected(BuildContext context, String newPoints) {
     final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
@@ -25,6 +27,34 @@ class PointBtnRound extends StatelessWidget {
     gameX01.notify();
   }
 
+  _pointBtnRoundClicked(BuildContext context) {
+    this.activeBtn as bool
+        ? _updateCurrentPointsSelected(context, point as String)
+        : null;
+  }
+
+  _getBackgroundColor(BuildContext context) {
+    if (this.activeBtn as bool && this.mostScoredPointBtn as bool) {
+      return MaterialStateProperty.all(Theme.of(context).colorScheme.primary);
+    } else if (this.activeBtn as bool) {
+      return MaterialStateProperty.all(Theme.of(context).colorScheme.primary);
+    }
+
+    return MaterialStateProperty.all(
+        Utils.darken(Theme.of(context).colorScheme.primary, 25));
+  }
+
+  _getOverlayColor(BuildContext context) {
+    if (this.activeBtn as bool) {
+      return Utils.getColorOrPressed(
+        Theme.of(context).colorScheme.primary,
+        Utils.darken(Theme.of(context).colorScheme.primary, 15),
+      );
+    }
+
+    return MaterialStateProperty.all(Colors.transparent);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
@@ -34,16 +64,8 @@ class PointBtnRound extends StatelessWidget {
             borderRadius: BorderRadius.zero,
           ),
         ),
-        backgroundColor: activeBtn as bool
-            ? MaterialStateProperty.all(Theme.of(context).colorScheme.primary)
-            : MaterialStateProperty.all(
-                Utils.darken(Theme.of(context).colorScheme.primary, 25)),
-        overlayColor: activeBtn as bool
-            ? Utils.getColorOrPressed(
-                Theme.of(context).colorScheme.primary,
-                Utils.darken(Theme.of(context).colorScheme.primary, 15),
-              )
-            : MaterialStateProperty.all(Colors.transparent),
+        backgroundColor: _getBackgroundColor(context),
+        overlayColor: _getOverlayColor(context),
       ),
       child: FittedBox(
         child: Text(
@@ -54,11 +76,7 @@ class PointBtnRound extends StatelessWidget {
           ),
         ),
       ),
-      onPressed: () {
-        activeBtn as bool
-            ? _updateCurrentPointsSelected(context, point as String)
-            : null;
-      },
+      onPressed: () => _pointBtnRoundClicked(context),
     );
   }
 }

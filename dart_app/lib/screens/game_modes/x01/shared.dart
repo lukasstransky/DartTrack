@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/helper/revert.dart';
+import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/games/helper/submit.dart';
+import 'package:dart_app/models/games/helper/submit_helper.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -48,7 +48,8 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
           top: DIALOG_CONTENT_PADDING_TOP,
           left: DIALOG_CONTENT_PADDING_LEFT,
           right: DIALOG_CONTENT_PADDING_RIGHT),
-      title: gameX01.getGameSettings.getEnableCheckoutCounting
+      title: gameX01.getGameSettings.getEnableCheckoutCounting &&
+              !gameX01.getGameSettings.getCheckoutCountingFinallyDisabled
           ? Text('Checkout Counting')
           : Text('Finish Counting'),
       content: StatefulBuilder(
@@ -376,7 +377,9 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
         ),
         TextButton(
           onPressed: () {
-            if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+            if (!gameX01.getGameSettings.getAutomaticallySubmitPoints &&
+                gameX01.getGameSettings.getInputMethod ==
+                    InputMethod.ThreeDarts) {
               checkoutCount = selectedCheckoutCount;
               thrownDarts = selectedFinishCount;
             } else {
