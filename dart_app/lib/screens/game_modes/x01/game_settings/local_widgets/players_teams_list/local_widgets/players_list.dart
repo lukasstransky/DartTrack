@@ -23,8 +23,7 @@ class _PlayersListState extends State<PlayersList> {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
 
     return Selector<GameSettingsX01, List<Player>>(
       selector: (_, gameSettingsX01) => gameSettingsX01.getPlayers,

@@ -138,8 +138,9 @@ class AddPlayerTeamBtnDialogs {
                           if (value!.isEmpty) {
                             return ('Please enter a name!');
                           }
-                          if (gameSettingsX01.checkIfPlayerNameExists(value)) {
-                            return 'Playername already exists!';
+                          if (gameSettingsX01.checkIfPlayerNameExists(
+                              value, true)) {
+                            return 'Playername already existsssss!';
                           }
                           return null;
                         },
@@ -329,26 +330,26 @@ class AddPlayerTeamBtnDialogs {
             actions: [
               Row(
                 children: [
-                  Expanded(
-                    child: Container(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Icon(
-                            Icons.arrow_back,
-                            color: Theme.of(context).colorScheme.primary,
+                  if (gameSettingsX01.getTeams.isNotEmpty)
+                    Expanded(
+                      child: Container(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              showDialogForAddingPlayerOrTeam(
+                                  gameSettingsX01, context);
+                            },
                           ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-
-                            showDialogForAddingPlayerOrTeam(
-                                gameSettingsX01, context);
-                          },
                         ),
                       ),
                     ),
-                  ),
                   Expanded(
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -392,7 +393,8 @@ class AddPlayerTeamBtnDialogs {
       GameSettingsX01 gameSettingsX01) {
     gameSettingsX01.getPlayers.add(playerToAdd);
     for (Team team in gameSettingsX01.getTeams)
-      if (team == teamForNewPlayer) team.getPlayers.add(playerToAdd);
+      if (team == teamForNewPlayer)
+        team.getPlayers.add(Player.clone(playerToAdd));
 
     gameSettingsX01.notify();
   }
@@ -606,8 +608,7 @@ class AddPlayerTeamBtnDialogs {
 class GuestTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
 
     return TextFormField(
       controller: newPlayerController,
@@ -616,7 +617,7 @@ class GuestTextFormField extends StatelessWidget {
         if (value!.isEmpty) {
           return ('Please enter a name!');
         }
-        if (gameSettingsX01.checkIfPlayerNameExists(value)) {
+        if (gameSettingsX01.checkIfPlayerNameExists(value, false)) {
           return 'Playername already exists!';
         }
         return null;

@@ -1,7 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:sizer/sizer.dart';
@@ -19,10 +21,9 @@ class PlayerEntry extends StatelessWidget {
   final bool openGame;
 
   bool _isGameDraw() {
-    for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
-      if (stats.getGameDraw) {
-        return true;
-      }
+    for (PlayerOrTeamGameStatisticsX01 stats
+        in gameX01.getPlayerGameStatistics) {
+      if (stats.getGameDraw) return true;
     }
     return false;
   }
@@ -33,6 +34,8 @@ class PlayerEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
+
     return Padding(
       padding: EdgeInsets.only(
         left: 10,
@@ -41,8 +44,13 @@ class PlayerEntry extends StatelessWidget {
         children: [
           Padding(
             padding: EdgeInsets.only(
-                bottom:
-                    i != gameX01.getPlayerGameStatistics.length - 1 ? 0 : 10),
+                bottom: i !=
+                        Utils.getPlayersOrTeamStatsList(
+                                    gameX01, gameSettingsX01)
+                                .length -
+                            1
+                    ? 0
+                    : 10),
             child: Row(
               children: [
                 Container(
@@ -71,7 +79,22 @@ class PlayerEntry extends StatelessWidget {
                             color: Color(0xffFFD700),
                           ),
                         ),
-                      if (gameX01.getPlayerGameStatistics[i].getPlayer
+                      if (gameSettingsX01.getSingleOrTeam ==
+                          SingleOrTeamEnum.Team) ...[
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            gameX01.getTeamGameStatistics[i].getTeam.getName,
+                            style: TextStyle(
+                                fontSize: _firstElementNoDrawOrOpenGame()
+                                    ? DEFAULT_FONTSIZE_BIG.sp
+                                    : DEFAULT_FONTSIZE.sp,
+                                fontWeight: _firstElementNoDrawOrOpenGame()
+                                    ? FontWeight.bold
+                                    : null),
+                          ),
+                        ),
+                      ] else if (gameX01.getPlayerGameStatistics[i].getPlayer
                           is Bot) ...[
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
@@ -115,28 +138,28 @@ class PlayerEntry extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(
+                Container(
+                  width: 40.w,
                   padding: EdgeInsets.only(left: 15),
-                  child: Container(
-                    width: 40.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        gameSettingsX01.getSetsEnabled
+                            ? 'Sets: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getSetsWon}'
+                            : 'Legs: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getLegsWon}',
+                        style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp),
+                      ),
+                      Text(
+                        'Average: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getAverage()}',
+                        style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp),
+                      ),
+                      if (gameSettingsX01.getEnableCheckoutCounting)
                         Text(
-                            gameX01.getGameSettings.getSetsEnabled
-                                ? 'Sets: ${gameX01.getPlayerGameStatistics[i].getSetsWon}'
-                                : 'Legs: ${gameX01.getPlayerGameStatistics[i].getLegsWon}',
-                            style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp)),
-                        Text(
-                            'Average: ${gameX01.getPlayerGameStatistics[i].getAverage()}',
-                            style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp)),
-                        if (gameX01.getGameSettings.getEnableCheckoutCounting)
-                          Text(
-                            'Checkout: ${gameX01.getPlayerGameStatistics[i].getCheckoutQuoteInPercent()}',
-                            style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp),
-                          ),
-                      ],
-                    ),
+                          'Checkout: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getCheckoutQuoteInPercent()}',
+                          style: TextStyle(fontSize: DEFAULT_FONTSIZE.sp),
+                        ),
+                    ],
                   ),
                 ),
               ],

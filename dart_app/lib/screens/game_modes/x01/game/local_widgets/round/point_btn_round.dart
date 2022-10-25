@@ -15,7 +15,7 @@ class PointBtnRound extends StatelessWidget {
   final bool? mostScoredPointBtn;
 
   _updateCurrentPointsSelected(BuildContext context, String newPoints) {
-    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+    final GameX01 gameX01 = context.read<GameX01>();
 
     if (gameX01.getCurrentPointsSelected == 'Points') {
       gameX01.setCurrentPointsSelected = newPoints;

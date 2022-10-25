@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -12,11 +12,11 @@ class Revert {
   /************************************************************/
 
   static revertPoints(BuildContext context) {
-    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
-    final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
+    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
-    PlayerGameStatisticsX01 currentStats =
-        gameX01.getCurrentPlayerGameStatistics();
+    PlayerOrTeamGameStatisticsX01 currentStats =
+        gameX01.getCurrentPlayerGameStats();
 
     if (!_checkIfRevertPossible(context)) {
       return;
@@ -44,10 +44,10 @@ class Revert {
       }
 
       //start player index
-      gameX01.setPlayerLegStartIndex =
+      gameX01.setPlayerOrTeamLegStartIndex =
           gameSettingsX01.getPlayers.indexOf(gameX01.getCurrentPlayerToThrow);
 
-      currentStats = gameX01.getCurrentPlayerGameStatistics();
+      currentStats = gameX01.getCurrentPlayerGameStats();
 
       //get last points
       if (gameSettingsX01.getInputMethod == InputMethod.Round) {
@@ -69,7 +69,8 @@ class Revert {
           setReverted = true;
         }
 
-        for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
+        for (PlayerOrTeamGameStatisticsX01 stats
+            in gameX01.getPlayerGameStatistics) {
           if (stats.getAllRemainingPoints.isNotEmpty) {
             stats.setCurrentPoints = stats.getAllRemainingPoints.last;
             stats.getAllRemainingPoints.removeLast();
@@ -163,9 +164,9 @@ class Revert {
 
   //only for cancel button in add checkout count dialog
   static revertSomeStats(BuildContext context, int points) {
-    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
-    final PlayerGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStatistics();
+    final GameX01 gameX01 = context.read<GameX01>();
+    final PlayerOrTeamGameStatisticsX01 stats =
+        gameX01.getCurrentPlayerGameStats();
 
     stats.setCurrentPoints = stats.getCurrentPoints + points;
     stats.setTotalPoints = stats.getTotalPoints - points;
@@ -205,18 +206,16 @@ class Revert {
 
   //returns true if at least one player has a score left
   static bool _checkIfRevertPossible(BuildContext context) {
-    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
     bool result = false;
-    for (PlayerGameStatisticsX01 stats in gameX01.getPlayerGameStatistics) {
-      if (gameX01.getGameSettings.getInputMethod == InputMethod.Round) {
-        if (stats.getAllScores.length > 0) {
-          result = true;
-        }
+    for (PlayerOrTeamGameStatisticsX01 stats
+        in gameX01.getPlayerGameStatistics) {
+      if (gameSettingsX01.getInputMethod == InputMethod.Round) {
+        if (stats.getAllScores.length > 0) result = true;
       } else {
-        if (stats.getAllScoresPerDart.length > 0) {
-          result = true;
-        }
+        if (stats.getAllScoresPerDart.length > 0) result = true;
       }
     }
 
@@ -226,10 +225,10 @@ class Revert {
     return result;
   }
 
-  static _revertStats(BuildContext context, PlayerGameStatisticsX01 stats,
+  static _revertStats(BuildContext context, PlayerOrTeamGameStatisticsX01 stats,
       int points, bool legOrSetReverted, bool roundCompleted) {
-    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
-    final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
+    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
     int currentThrownDartsInLeg = 0; //needed to revert checkout count
 
@@ -295,7 +294,8 @@ class Revert {
       if (stats.getCheckoutCountAtThrownDarts.isNotEmpty) {
         Tuple3<String, int, int> tuple =
             stats.getCheckoutCountAtThrownDarts.last;
-        if (tuple.item1 == gameX01.getCurrentLegSetAsString() &&
+        if (tuple.item1 ==
+                gameX01.getCurrentLegSetAsString(gameX01, gameSettingsX01) &&
             tuple.item2 == currentThrownDartsInLeg) {
           stats.setCheckoutCount = stats.getCheckoutCount - tuple.item3;
           stats.getCheckoutCountAtThrownDarts.removeLast();

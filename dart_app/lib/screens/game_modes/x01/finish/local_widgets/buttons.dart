@@ -7,16 +7,22 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class Buttons extends StatelessWidget {
+class Buttons extends StatefulWidget {
+  @override
+  State<Buttons> createState() => _ButtonsState();
+}
+
+class _ButtonsState extends State<Buttons> {
   _saveGameX01ToFirestore(BuildContext context) async {
     gameId = await context
         .read<FirestoreServiceGames>()
-        .postGame(Provider.of<GameX01>(context, listen: false));
+        .postGame(context.read<GameX01>());
   }
 
   _savePlayerGameStatisticsX01ToFirestore(BuildContext context) async {
-    await context.read<FirestoreServicePlayerStats>().postPlayerGameStatistics(
-        Provider.of<GameX01>(context, listen: false), gameId, context);
+    await context
+        .read<FirestoreServicePlayerStats>()
+        .postPlayerGameStatistics(context.read<GameX01>(), gameId, context);
   }
 
   _newGameBtnClicked(BuildContext context, GameX01 gameX01) {
@@ -41,7 +47,7 @@ class Buttons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
+    final gameX01 = context.read<GameX01>();
 
     return Column(
       children: [

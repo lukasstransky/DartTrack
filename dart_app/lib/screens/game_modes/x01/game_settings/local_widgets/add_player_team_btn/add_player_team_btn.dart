@@ -32,22 +32,23 @@ class AddPlayerTeamBtn extends StatelessWidget {
   _addPlayerTeamBtnPressed(
       GameSettingsX01 gameSettingsX01, BuildContext context) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
-        gameSettingsX01.getTeams.length == MAX_TEAMS)
+        gameSettingsX01.getTeams.length == MAX_TEAMS) {
       AddPlayerTeamBtnDialogs.showDialogForAddingPlayer(
           gameSettingsX01, context);
+    }
     //case -> team full of players -> should not be possible to add a player, instead only allow to add team
     else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        !_possibleToAddPlayerToSomeTeam(gameSettingsX01.getTeams))
+        !_possibleToAddPlayerToSomeTeam(gameSettingsX01.getTeams)) {
       AddPlayerTeamBtnDialogs.showDialogForAddingTeam(gameSettingsX01, context);
-    else
+    } else {
       AddPlayerTeamBtnDialogs.showDialogForAddingPlayerOrTeam(
           gameSettingsX01, context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
 
     return Container(
       width: 10.w,

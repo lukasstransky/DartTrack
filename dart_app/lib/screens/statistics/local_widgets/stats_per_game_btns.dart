@@ -12,7 +12,7 @@ class StatsPerGameBtns extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(bottom: 10),
           child: Text(
-            "Stats per Game",
+            'Stats per Game',
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.bold,
@@ -24,11 +24,11 @@ class StatsPerGameBtns extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => {
               Navigator.of(context)
-                  .pushNamed("/statsPerGameList", arguments: {"mode": "X01"}),
+                  .pushNamed('/statsPerGameList', arguments: {'mode': 'X01'}),
             },
             child: FittedBox(
               fit: BoxFit.fitWidth,
-              child: const Text("X01"),
+              child: const Text('X01'),
             ),
             style: ButtonStyle(
               shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -52,12 +52,12 @@ class StatsPerGameBtns extends StatelessWidget {
           width: 40.w,
           child: ElevatedButton(
             onPressed: () => {
-              Navigator.of(context).pushNamed("/statsPerGameList",
-                  arguments: {"mode": "Cricket"}),
+              Navigator.of(context).pushNamed('/statsPerGameList',
+                  arguments: {'mode': 'Cricket'}),
             },
             child: FittedBox(
               fit: BoxFit.fitWidth,
-              child: const Text("Cricket"),
+              child: const Text('Cricket'),
             ),
             style: ButtonStyle(
               shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -81,12 +81,12 @@ class StatsPerGameBtns extends StatelessWidget {
           width: 40.w,
           child: ElevatedButton(
             onPressed: () => {
-              Navigator.of(context).pushNamed("/statsPerGameList",
-                  arguments: {"mode": "Singles Training"}),
+              Navigator.of(context).pushNamed('/statsPerGameList',
+                  arguments: {'mode': 'Singles Training'}),
             },
             child: FittedBox(
               fit: BoxFit.fitWidth,
-              child: const Text("Singles Training"),
+              child: const Text('Singles Training'),
             ),
             style: ButtonStyle(
               shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -110,12 +110,12 @@ class StatsPerGameBtns extends StatelessWidget {
           width: 40.w,
           child: ElevatedButton(
             onPressed: () => {
-              Navigator.of(context).pushNamed("/statsPerGameList",
-                  arguments: {"mode": "Doubles Training"}),
+              Navigator.of(context).pushNamed('/statsPerGameList',
+                  arguments: {'mode': 'Doubles Training'}),
             },
             child: FittedBox(
               fit: BoxFit.fitWidth,
-              child: const Text("Doubles Training"),
+              child: const Text('Doubles Training'),
             ),
             style: ButtonStyle(
               shadowColor: MaterialStateProperty.all(Colors.transparent),

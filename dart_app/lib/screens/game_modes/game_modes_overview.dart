@@ -1,5 +1,5 @@
-import 'package:dart_app/models/default_settings_x01.dart';
-import 'package:dart_app/models/open_games_firestore.dart';
+import 'package:dart_app/models/game_settings/default_settings_x01.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
@@ -28,7 +28,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   }
 
   _getDefaultSettingsX01() async {
-    Provider.of<DefaultSettingsX01>(context, listen: false).resetValues();
+    context.read<DefaultSettingsX01>().resetValues();
     await context
         .read<FirestoreServiceDefaultSettings>()
         .getDefaultSettingsX01(context);

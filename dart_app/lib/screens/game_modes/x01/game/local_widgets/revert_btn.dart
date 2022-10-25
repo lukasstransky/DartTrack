@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -11,7 +12,8 @@ class RevertBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
+    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
     return ElevatedButton(
         style: ButtonStyle(
@@ -20,8 +22,7 @@ class RevertBtn extends StatelessWidget {
               borderRadius: BorderRadius.zero,
               side: BorderSide(
                   color: Colors.black,
-                  width: gameX01.getGameSettings.getInputMethod ==
-                          InputMethod.Round
+                  width: gameSettingsX01.getInputMethod == InputMethod.Round
                       ? 2
                       : 0),
             ),

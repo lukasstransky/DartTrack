@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/default_settings_x01.dart';
+import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
@@ -44,8 +44,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   }
 
   _showDialogForDefaultSettings() async {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
     final bool defaultSettingsSelected =
         DefaultSettingsHelper.defaultSettingsSelected(context);
 
@@ -96,19 +95,18 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
 
   _setOrUndoDefaultSettings(
       GameSettingsX01 gameSettingsX01, bool defaultSettingsSelected) {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
+    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
     final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
         context.read<FirestoreServiceDefaultSettings>();
 
     if (defaultSettingsSelected) {
       defaultSettingsX01.isSelected = false;
       defaultSettingsX01.resetValues();
+      DefaultSettingsHelper.setSettingsFromDefault(context);
     } else {
       defaultSettingsX01.isSelected = true;
       DefaultSettingsHelper.setDefaultSettings(context);
     }
-    DefaultSettingsHelper.setSettingsFromDefault(context);
     firestoreServiceDefaultSettings.postDefaultSettingsX01(context);
 
     gameSettingsX01.notify();
@@ -116,10 +114,8 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   }
 
   _defaultSettingsBtnClicked() {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01>();
 
     if (DefaultSettingsHelper.generalDefaultSettingsSelected(context) &&
         !defaultSettingsX01.isSelected) {

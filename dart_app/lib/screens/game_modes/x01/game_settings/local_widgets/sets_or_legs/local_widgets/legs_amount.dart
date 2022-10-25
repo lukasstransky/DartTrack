@@ -68,8 +68,7 @@ class _LegsAmountState extends State<LegsAmount> {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
 
     return Expanded(
       child: Container(

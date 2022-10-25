@@ -53,6 +53,7 @@ class GameSettingsX01 extends GameSettings {
     required bool winByTwoLegsDifference,
     required bool setsEnabled,
     List<Player>? players,
+    List<Team>? teams,
   }) {
     this._enableCheckoutCounting = checkoutCounting;
     this._legs = legs;
@@ -66,6 +67,9 @@ class GameSettingsX01 extends GameSettings {
     this._setsEnabled = setsEnabled;
     if (players != null) {
       setPlayers = players;
+    }
+    if (teams != null) {
+      setTeams = teams;
     }
   }
 
@@ -192,7 +196,22 @@ class GameSettingsX01 extends GameSettings {
   set setTeamNamingIds(List<int> value) => this._teamNamingIds = value;
 
   removePlayer(Player playerToRemove, bool removeTeam) {
-    getPlayers.remove(playerToRemove);
+    getPlayers.removeWhere((p) => p.getName == playerToRemove.getName);
+
+    //remove also player from team -> not same references as in single players list
+    if (this.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      Team? emptyTeamToRemove;
+      for (Team team in this.getTeams) {
+        team.getPlayers.removeWhere((p) => p.getName == playerToRemove.getName);
+        if (team.getPlayers.isEmpty) {
+          emptyTeamToRemove = team;
+        }
+      }
+      if (emptyTeamToRemove != null) {
+        this.getTeams.remove(emptyTeamToRemove);
+        checkTeamNamingIds(emptyTeamToRemove);
+      }
+    }
 
     //remove player from team
     outerLoop:
@@ -265,30 +284,32 @@ class GameSettingsX01 extends GameSettings {
 
   addPlayer(Player player) {
     getPlayers.add(player);
+    assignOrCreateTeamForPlayer(player);
+    notifyListeners();
+  }
 
-    //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
+  //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
+  assignOrCreateTeamForPlayer(Player player) {
     if (getTeams.isEmpty || getPlayers.length == 2)
       _createTeamAndAddPlayer(player);
     else {
       bool foundTeamWithLessTwoPlayers = false;
       for (Team team in getTeams) {
         if (team.getPlayers.length < MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING) {
-          team.getPlayers.add(player);
+          team.getPlayers.add(Player.clone(player));
           foundTeamWithLessTwoPlayers = true;
           break;
         }
       }
       if (!foundTeamWithLessTwoPlayers) _createTeamAndAddPlayer(player);
     }
-
-    notifyListeners();
   }
 
   _createTeamAndAddPlayer(Player player) {
     final int teamNameId = getTeamNamingIds.length + 1;
     final Team team = new Team(name: 'Team $teamNameId');
 
-    team.getPlayers.add(player);
+    team.getPlayers.add(Player.clone(player));
     getTeams.add(team);
     getTeamNamingIds.add(teamNameId);
   }
@@ -300,7 +321,15 @@ class GameSettingsX01 extends GameSettings {
     return false;
   }
 
-  bool checkIfPlayerNameExists(String? playerNameToCheck) {
+  bool checkIfPlayerNameExists(
+      String? playerNameToCheck, bool checkTeamPlayers) {
+    if (checkTeamPlayers) {
+      for (Team team in this.getTeams) {
+        for (Player player in team.getPlayers)
+          if (player.getName == playerNameToCheck) return true;
+      }
+    }
+
     for (Player player in getPlayers)
       if (player.getName == playerNameToCheck) return true;
 
@@ -397,6 +426,40 @@ class GameSettingsX01 extends GameSettings {
       result += '${legs.toString()} Legs';
     else
       result += '${legs.toString()} Leg';
+
+    return result;
+  }
+
+  Player getPlayerFromTeam(String playerName) {
+    late Player result;
+    for (Team team in this.getTeams) {
+      for (Player player in team.getPlayers) {
+        if (player.getName == playerName) {
+          result = player;
+        }
+      }
+    }
+    return result;
+  }
+
+  Player? getPlayerFromSingles(String playerName) {
+    Player? result;
+    for (Player player in this.getPlayers) {
+      if (player.getName == playerName) {
+        result = player;
+      }
+    }
+    return result;
+  }
+
+  Team findTeamForPlayer(
+      String playerNameToFind, GameSettingsX01 gameSettingsX01) {
+    late Team result;
+    for (Team team in gameSettingsX01.getTeams) {
+      for (Player player in team.getPlayers) {
+        if (player.getName == playerNameToFind) result = team;
+      }
+    }
 
     return result;
   }

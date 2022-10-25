@@ -1,9 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/open_games_firestore.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
-import 'package:dart_app/models/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
+import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -18,11 +18,13 @@ class FirestoreServiceGames {
   FirestoreServiceGames(this._firestore, this._firebaseAuth);
 
   Future<String> postGame(Game game) async {
-    final Game gameToSave = Game.firestore(
+    final Game gameToSave = Game.Firestore(
         name: game.getName,
+        isGameFinished: true,
         dateTime: game.getDateTime,
         gameSettings: game.getGameSettings,
-        playerGameStatistics: []);
+        playerGameStatistics: [],
+        teamGameStatistics: []);
 
     Map<String, dynamic> data = {};
     if (game is GameX01) {
@@ -61,8 +63,7 @@ class FirestoreServiceGames {
     late dynamic firestoreStats;
     switch (mode) {
       case 'X01':
-        firestoreStats =
-            Provider.of<StatisticsFirestoreX01>(context, listen: false);
+        firestoreStats = context.read<StatisticsFirestoreX01>();
       //add other modes
     }
 
@@ -95,14 +96,21 @@ class FirestoreServiceGames {
       games.docs.forEach((element) async {
         final Game game = Game.fromMap(element.data(), mode, element.id, false);
 
-        PlayerGameStatistics? playerGameStatistics;
-        for (String playerGameStatsId
-            in element.get('playerGameStatisticsIds')) {
-          playerGameStatistics = await context
+        PlayerOrTeamGameStatistics? playerOrTeamGameStatistics;
+        for (String playerGameStatsId in element.get('playerGameStatsIds')) {
+          playerOrTeamGameStatistics = await context
               .read<FirestoreServicePlayerStats>()
-              .getPlayerGameStatisticById(playerGameStatsId, mode);
+              .getPlayerOrTeamGameStatisticById(playerGameStatsId, mode, false);
 
-          game.getPlayerGameStatistics.add(playerGameStatistics);
+          game.getPlayerGameStatistics.add(playerOrTeamGameStatistics);
+        }
+
+        for (String teamGameStatsId in element.get('teamGameStatsIds')) {
+          playerOrTeamGameStatistics = await context
+              .read<FirestoreServicePlayerStats>()
+              .getPlayerOrTeamGameStatisticById(teamGameStatsId, mode, true);
+
+          game.getTeamGameStatistics.add(playerOrTeamGameStatistics);
         }
 
         firestoreStats.games.add(game);
@@ -116,15 +124,16 @@ class FirestoreServiceGames {
   /************************************************************************************/
 
   Future<void> postOpenGame(Game game, BuildContext context) async {
-    final Game gameToSave = Game.firestore(
+    final Game gameToSave = Game.Firestore(
         gameId: game.getGameId,
         name: game.getName,
+        isGameFinished: false,
         dateTime: game.getDateTime,
         gameSettings: game.getGameSettings,
         playerGameStatistics: game.getPlayerGameStatistics,
+        teamGameStatistics: game.getTeamGameStatistics,
         currentPlayerToThrow: game.getCurrentPlayerToThrow);
-    final openGamesFirestore =
-        Provider.of<OpenGamesFirestore>(context, listen: false);
+    final openGamesFirestore = context.read<OpenGamesFirestore>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreOpenGamesPath());
 
@@ -172,8 +181,7 @@ class FirestoreServiceGames {
   Future<void> getOpenGames(BuildContext context) async {
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreOpenGamesPath());
-    final openGamesFirestore =
-        Provider.of<OpenGamesFirestore>(context, listen: false);
+    final openGamesFirestore = context.read<OpenGamesFirestore>();
 
     openGamesFirestore.reset();
 

@@ -1,4 +1,4 @@
-import 'package:dart_app/models/default_settings_x01.dart';
+import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
 import 'package:dart_app/models/player.dart';
@@ -45,10 +45,8 @@ class _GameSettingsState extends State<GameSettings> {
 
   _addCurrentUserToPlayers() {
     final Player? currentUserAsPlayer = context.read<AuthService>().getPlayer;
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
 
     if (currentUserAsPlayer != null)
       defaultSettingsX01.playersNames.add(currentUserAsPlayer.getName);

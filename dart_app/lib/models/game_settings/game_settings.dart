@@ -5,7 +5,7 @@ import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
 
 class GameSettings with ChangeNotifier {
-  List<Team> _teams = []; //todo
+  List<Team> _teams = [];
   List<Player> _players = [];
 
   List<Team> get getTeams => this._teams;
@@ -69,6 +69,11 @@ class GameSettings with ChangeNotifier {
           ? []
           : map['players'].map<Player>((item) {
               return Player.fromMap(item);
+            }).toList(),
+      teams: map['teams'] == null
+          ? []
+          : map['teams'].map<Team>((item) {
+              return Team.fromMap(item);
             }).toList(),
     );
   }

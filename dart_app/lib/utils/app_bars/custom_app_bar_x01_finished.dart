@@ -12,16 +12,16 @@ class CustomAppBarX01Finished extends StatelessWidget with PreferredSizeWidget {
   final String title;
 
   saveDataToFirestore(BuildContext context) async {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
     //todo comment out
     //if (gameSettingsX01.isCurrentUserInPlayers(context)) {
     String gameId = '';
     gameId = await context
         .read<FirestoreServiceGames>()
-        .postGame(Provider.of<GameX01>(context, listen: false));
-    await context.read<FirestoreServicePlayerStats>().postPlayerGameStatistics(
-        Provider.of<GameX01>(context, listen: false), gameId, context);
+        .postGame(context.read<GameX01>());
+    await context
+        .read<FirestoreServicePlayerStats>()
+        .postPlayerGameStatistics(context.read<GameX01>(), gameId, context);
     //}
   }
 

@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/games/helper/submit_helper.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -32,25 +32,28 @@ class PointBtnThreeDart extends StatelessWidget {
     return text;
   }
 
-  _pointBtnClicked(GameX01 gameX01, String pointBtnText, BuildContext context) {
+  _pointBtnClicked(String pointBtnText, BuildContext context) {
+    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+
     if (activeBtn as bool && gameX01.getCanBePressed) {
       _updateCurrentThreeDarts(context, pointBtnText);
 
       if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' &&
-          gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+          gameSettingsX01.getAutomaticallySubmitPoints) {
         gameX01.setCanBePressed = false;
         _submitPointsForInputMethodThreeDarts(
-            gameX01, point as String, pointBtnText, context);
+            point as String, pointBtnText, context);
         gameX01.setCanBePressed = true;
       } else {
         _submitPointsForInputMethodThreeDarts(
-            gameX01, point as String, pointBtnText, context);
+            point as String, pointBtnText, context);
       }
     }
   }
 
   _updateCurrentThreeDarts(BuildContext context, String points) {
-    final GameX01 gameX01 = Provider.of<GameX01>(context, listen: false);
+    final GameX01 gameX01 = context.read<GameX01>();
     final List<String> currentThreeDarts = gameX01.getCurrentThreeDarts;
 
     if (currentThreeDarts[0] == 'Dart 1') {
@@ -84,10 +87,12 @@ class PointBtnThreeDart extends StatelessWidget {
 
 //scoredField -> e.g. 20
 //scoredFieldWithPointType -> e.g. T20
-  _submitPointsForInputMethodThreeDarts(GameX01 gameX01, String scoredField,
+  _submitPointsForInputMethodThreeDarts(String scoredField,
       String scoredFieldWithPointType, BuildContext context) {
-    final PlayerGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStatistics();
+    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final PlayerOrTeamGameStatisticsX01 stats =
+        gameX01.getCurrentPlayerGameStats();
 
     if (stats.getPointsSelectedCount >= 3) return;
 
@@ -107,44 +112,44 @@ class PointBtnThreeDart extends StatelessWidget {
       //finished with 3 darts (high finish) -> show no dialog
       if (amountOfDartsThrown == 3 &&
           gameX01.finishedWithThreeDarts(currentThreeDarts)) {
-        if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+        if (!gameSettingsX01.getAutomaticallySubmitPoints) {
           checkoutCount = 1;
         } else {
-          Submit.submitPoints(scoredPoints, context, 3, 1);
+          Submit.submitPoints(scoredPoints, context, false, 3, 1);
           submitAlreadyCalled = true;
         }
 
         //finished with first dart -> show no dialog
       } else if (amountOfDartsThrown == 1 && finished) {
-        if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+        if (!gameSettingsX01.getAutomaticallySubmitPoints) {
           checkoutCount = 1;
           thrownDarts = 1;
         } else {
-          Submit.submitPoints(scoredPoints, context, 1, 1);
+          Submit.submitPoints(scoredPoints, context, false, 1, 1);
           submitAlreadyCalled = true;
         }
       } else {
         //only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
-        if (_isCheckoutCountingEnabled(gameX01.getGameSettings)) {
+        if (_isCheckoutCountingEnabled(gameSettingsX01)) {
           final int count =
               gameX01.getAmountOfCheckoutPossibilities(scoredPoints);
 
           if (finished && count == 1) {
-            if (!gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+            if (!gameSettingsX01.getAutomaticallySubmitPoints) {
               checkoutCount = 1;
               thrownDarts = amountOfDartsThrown;
             } else {
               Submit.submitPoints(
-                  scoredPoints, context, amountOfDartsThrown, 1);
+                  scoredPoints, context, false, amountOfDartsThrown, 1);
               submitAlreadyCalled = true;
             }
           } else if (finished) {
             submitAlreadyCalled = true;
-            showDialogForCheckout(gameX01, count, scoredPoints, context);
+            showDialogForCheckout(count, scoredPoints, context);
           } else if (gameX01.getAmountOfDartsThrown() == 3) {
             if (count != -1) {
               submitAlreadyCalled = true;
-              showDialogForCheckout(gameX01, count, scoredPoints, context);
+              showDialogForCheckout(count, scoredPoints, context);
             }
           }
         }
@@ -152,8 +157,7 @@ class PointBtnThreeDart extends StatelessWidget {
     }
 
     //needed because in the dialog the submit method is called (otherwise submit would get called 2x)
-    if (!submitAlreadyCalled &&
-        gameX01.getGameSettings.getAutomaticallySubmitPoints) {
+    if (!submitAlreadyCalled && gameSettingsX01.getAutomaticallySubmitPoints) {
       Submit.submitPoints(scoredField, context);
     }
   }
@@ -169,7 +173,7 @@ class PointBtnThreeDart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
+    final gameX01 = context.read<GameX01>();
     final String pointBtnText = _appendTrippleOrDouble(gameX01);
 
     return ElevatedButton(
@@ -202,7 +206,7 @@ class PointBtnThreeDart extends StatelessWidget {
           ),
         ),
       ),
-      onPressed: () => _pointBtnClicked(gameX01, pointBtnText, context),
+      onPressed: () => _pointBtnClicked(pointBtnText, context),
     );
   }
 }

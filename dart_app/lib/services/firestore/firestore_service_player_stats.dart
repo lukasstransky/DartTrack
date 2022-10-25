@@ -2,11 +2,12 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
-import 'package:dart_app/models/statistics_firestore_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,20 +22,24 @@ class FirestoreServicePlayerStats {
 
   Future<void> postPlayerGameStatistics(
       Game game, String gameId, BuildContext context) async {
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+
     List<String> playerGameStatsIds = [];
-    PlayerGameStatistics playerStatsToSave;
+    List<String> teamGameStatsIds = [];
+    PlayerOrTeamGameStatistics playerOrTeamStatsToSave;
     Map<String, dynamic> data = {};
 
-    for (PlayerGameStatistics playerStats in game.getPlayerGameStatistics) {
-      playerStatsToSave = PlayerGameStatistics(
+    for (PlayerOrTeamGameStatistics playerStats
+        in game.getPlayerGameStatistics) {
+      playerOrTeamStatsToSave = PlayerOrTeamGameStatistics.Player(
           gameId: '',
           player: playerStats.getPlayer,
           mode: playerStats.getMode,
           dateTime: playerStats.getDateTime);
 
-      if (playerStats is PlayerGameStatisticsX01) {
-        data = playerStatsToSave.toMapX01(
-            playerStats, GameX01.createGameX01(game), gameId, false);
+      if (playerStats is PlayerOrTeamGameStatisticsX01) {
+        data = playerOrTeamStatsToSave.toMapX01(playerStats,
+            GameX01.createGameX01(game), gameSettingsX01, gameId, false);
       }
       //add other modes like cricket...
 
@@ -47,12 +52,37 @@ class FirestoreServicePlayerStats {
               });
     }
 
+    if (game.getTeamGameStatistics.isNotEmpty) {
+      for (PlayerOrTeamGameStatistics teamStats in game.getTeamGameStatistics) {
+        playerOrTeamStatsToSave = PlayerOrTeamGameStatistics.Team(
+            gameId: '',
+            team: teamStats.getTeam,
+            mode: teamStats.getMode,
+            dateTime: teamStats.getDateTime);
+
+        if (teamStats is PlayerOrTeamGameStatisticsX01) {
+          data = playerOrTeamStatsToSave.toMapX01(teamStats,
+              GameX01.createGameX01(game), gameSettingsX01, gameId, false);
+        }
+
+        await _firestore
+            .collection(this._getFirestoreTeamStatsPath())
+            .add(data)
+            .then((value) => {
+                  teamGameStatsIds.add(value.id),
+                });
+      }
+    }
+
     //set playerGameStatsIds + gameId for game
     await _firestore
         .collection(this._getFirestoreGamesPath())
         .doc(gameId)
-        .update(
-            {'playerGameStatisticsIds': playerGameStatsIds, 'gameId': gameId});
+        .update({
+      'playerGameStatsIds': playerGameStatsIds,
+      'teamGameStatsIds': teamGameStatsIds,
+      'gameId': gameId
+    });
   }
 
   Future<void> getStatistics(BuildContext context) async {
@@ -60,8 +90,7 @@ class FirestoreServicePlayerStats {
     const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
         'Strainski';
-    final firestoreStats =
-        Provider.of<StatisticsFirestoreX01>(context, listen: false);
+    final firestoreStats = context.read<StatisticsFirestoreX01>();
 
     firestoreStats.resetValues();
 
@@ -295,42 +324,30 @@ class FirestoreServicePlayerStats {
             ),
 
             //calc & set values
-            if (totalAvg > 0)
-              {
-                firestoreStats.avg = totalAvg / counter,
-              },
+            if (totalAvg > 0) firestoreStats.avg = totalAvg / counter,
+
             if (totalFirstNineAvg > 0)
-              {
-                firestoreStats.firstNineAvg = totalFirstNineAvg / counter,
-              },
+              firestoreStats.firstNineAvg = totalFirstNineAvg / counter,
 
             if (checkoutQuoteCounter > 0)
-              {
-                firestoreStats.checkoutQuoteAvg =
-                    totalCheckoutQuoteAvg / checkoutQuoteCounter,
-              },
+              firestoreStats.checkoutQuoteAvg =
+                  totalCheckoutQuoteAvg / checkoutQuoteCounter,
+
             if (totalCheckoutScoreAvg > 0)
-              {
-                firestoreStats.checkoutScoreAvg =
-                    totalCheckoutScoreAvg / checkoutScoreCounter,
-              },
-            if (countOf180 > 0)
-              {
-                firestoreStats.countOf180 = countOf180,
-              },
+              firestoreStats.checkoutScoreAvg =
+                  totalCheckoutScoreAvg / checkoutScoreCounter,
+
+            if (countOf180 > 0) firestoreStats.countOf180 = countOf180,
+
             if (countOfGamesWon > 0)
-              {
-                firestoreStats.countOfGamesWon = countOfGamesWon,
-              },
+              firestoreStats.countOfGamesWon = countOfGamesWon,
+
             if (countOfAllDarts > 0)
-              {
-                firestoreStats.countOfAllDarts = countOfAllDarts,
-              },
+              firestoreStats.countOfAllDarts = countOfAllDarts,
+
             if (legsWonTotal > 0)
-              {
-                firestoreStats.dartsPerLegAvg =
-                    dartsForWonLegCount / legsWonTotal,
-              },
+              firestoreStats.dartsPerLegAvg =
+                  dartsForWonLegCount / legsWonTotal,
 
             firestoreStats.bestAvg = bestAvg,
             firestoreStats.worstAvg = worstAvg,
@@ -356,27 +373,33 @@ class FirestoreServicePlayerStats {
     firestoreStats.notify();
   }
 
-  Future<PlayerGameStatistics?> getPlayerGameStatisticById(
-      String playerGameStatsId, String mode) async {
-    final CollectionReference collectionReference =
-        _firestore.collection(this._getFirestorePlayerStatsPath());
-    PlayerGameStatistics? result;
+  Future<PlayerOrTeamGameStatistics?> getPlayerOrTeamGameStatisticById(
+      String playerOrTeamGameStatsId,
+      String mode,
+      bool loadTeamGameStats) async {
+    final CollectionReference collectionReference = _firestore.collection(
+        loadTeamGameStats
+            ? this._getFirestoreTeamStatsPath()
+            : this._getFirestorePlayerStatsPath());
+    PlayerOrTeamGameStatistics? result;
 
-    await collectionReference.doc(playerGameStatsId).get().then((value) => {
-          if (mode == 'X01')
-            {
-              result = PlayerGameStatistics.fromMapX01(value.data()),
-            },
-          //add other modes like cricket...
-        });
+    await collectionReference
+        .doc(playerOrTeamGameStatsId)
+        .get()
+        .then((value) => {
+              if (mode == 'X01')
+                {
+                  result = PlayerOrTeamGameStatistics.fromMapX01(value.data()),
+                },
+              //add other modes like cricket...
+            });
 
     return result;
   }
 
   Future<void> getFilteredPlayerGameStatistics(
       String orderField, bool ascendingOrder, BuildContext context) async {
-    final firestoreStats =
-        Provider.of<StatisticsFirestoreX01>(context, listen: false);
+    final firestoreStats = context.read<StatisticsFirestoreX01>();
     const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
         'Strainski';
@@ -413,7 +436,7 @@ class FirestoreServicePlayerStats {
             }
 
             for (Game game in firestoreStats.games) {
-              for (PlayerGameStatistics playerGameStatistics
+              for (PlayerOrTeamGameStatistics playerGameStatistics
                   in game.getPlayerGameStatistics) {
                 if (playerGameStatistics.getGameId == gameId) {
                   temp.add(game);
@@ -431,6 +454,10 @@ class FirestoreServicePlayerStats {
 
   String _getFirestorePlayerStatsPath() {
     return 'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics';
+  }
+
+  String _getFirestoreTeamStatsPath() {
+    return 'users/' + _firebaseAuth.currentUser!.uid + '/teamGameStatistics';
   }
 
   String _getFirestoreGamesPath() {

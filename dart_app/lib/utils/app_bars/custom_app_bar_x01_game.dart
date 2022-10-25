@@ -41,8 +41,9 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
           TextButton(
             onPressed: () async => {
               Navigator.of(context, rootNavigator: true).pop(),
-              await context.read<FirestoreServiceGames>().postOpenGame(
-                  Provider.of<GameX01>(context, listen: false), context),
+              await context
+                  .read<FirestoreServiceGames>()
+                  .postOpenGame(context.read<GameX01>(), context),
               _resetValuesAndNavigateToHome(context, gameX01),
             },
             child: const Text('Save'),
@@ -54,9 +55,8 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameX01 = context.read<GameX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01>();
 
     return AppBar(
       centerTitle: true,
@@ -88,7 +88,7 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
         IconButton(
           onPressed: () => {
             Navigator.of(context).pushNamed('/statisticsX01', arguments: {
-              'game': Provider.of<GameX01>(context, listen: false),
+              'game': context.read<GameX01>(),
             }),
           },
           icon: Icon(Icons.bar_chart_rounded),

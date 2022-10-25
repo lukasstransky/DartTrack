@@ -1,8 +1,8 @@
-import 'package:dart_app/models/default_settings_x01.dart';
+import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/open_games_firestore.dart';
-import 'package:dart_app/models/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/auth/auth.dart';
 import 'package:dart_app/screens/auth/forgot_password.dart';
 import 'package:dart_app/screens/game_modes/x01/open_games/open_games.dart';

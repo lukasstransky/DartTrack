@@ -1,4 +1,4 @@
-import 'package:dart_app/models/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,9 +19,9 @@ class OtherStats extends StatelessWidget {
                           children: [
                             Text(statisticsFirestore.countOf180 > 0
                                 ? statisticsFirestore.countOf180.toString()
-                                : "-"),
+                                : '-'),
                             const Text(
-                              "180",
+                              '180',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -34,9 +34,9 @@ class OtherStats extends StatelessWidget {
                           children: [
                             Text(statisticsFirestore.countOfAllDarts > 0
                                 ? statisticsFirestore.countOfAllDarts.toString()
-                                : "-"),
+                                : '-'),
                             const Text(
-                              "Darts",
+                              'Darts',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -49,9 +49,9 @@ class OtherStats extends StatelessWidget {
                           children: [
                             Text(statisticsFirestore.countOfGames > 0
                                 ? statisticsFirestore.countOfGames.toString()
-                                : "-"),
+                                : '-'),
                             const Text(
-                              "Games",
+                              'Games',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -64,9 +64,9 @@ class OtherStats extends StatelessWidget {
                           children: [
                             Text(statisticsFirestore.countOfGamesWon > 0
                                 ? statisticsFirestore.countOfGamesWon.toString()
-                                : "-"),
+                                : '-'),
                             const Text(
-                              "Games Won",
+                              'Games Won',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),

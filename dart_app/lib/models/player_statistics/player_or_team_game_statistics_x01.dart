@@ -1,10 +1,11 @@
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
+import 'package:dart_app/models/team.dart';
 
 import 'dart:collection';
 import 'package:tuple/tuple.dart';
 
-class PlayerGameStatisticsX01 extends PlayerGameStatistics {
+class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
   int _currentPoints = 0;
   int _totalPoints = 0; //for average
   int _startingPoints = 0; //for input method -> three darts
@@ -76,12 +77,15 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       []; //all remainging points after each throw -> for reverting
   List<List<String>> _allRemainingScoresPerDart =
       []; //for reverting -> input method three darts (e.g. 20 D15, 20 10 D20, D10)
+  Map<String, String> _playersWithCheckoutInLeg =
+      {}; // for team mode -> displaying checkouts of players
 
-  PlayerGameStatisticsX01.firestore(
+  PlayerOrTeamGameStatisticsX01.Firestore(
       {required String gameId,
       required DateTime dateTime,
       required String mode,
-      required Player player,
+      required Player? player,
+      required Team? team,
       required int currentPoints,
       required int totalPoints,
       required int startingPoints,
@@ -109,8 +113,11 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       required List<String> allScoresPerDartAsString,
       required List<int> allRemainingPoints,
       required List<List<String>> allRemainingScoresPerDart,
-      required bool gameDraw})
-      : super(gameId: gameId, dateTime: dateTime, mode: mode, player: player) {
+      required bool gameDraw,
+      required Map<String, String> playersWithCheckoutInLeg})
+      : super(gameId: gameId, dateTime: dateTime, mode: mode) {
+    this.setTeam = team;
+    this.setPlayer = player;
     this._currentPoints = currentPoints;
     this._totalPoints = totalPoints;
     this._startingPoints = startingPoints;
@@ -143,15 +150,25 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
     this._allRemainingPoints = allRemainingPoints;
     this._allRemainingScoresPerDart = allRemainingScoresPerDart;
     this._gameDraw = gameDraw;
+    this._playersWithCheckoutInLeg = playersWithCheckoutInLeg;
   }
 
-  PlayerGameStatisticsX01(
+  PlayerOrTeamGameStatisticsX01.Team(
+      {required Team team,
+      required String mode,
+      required int currentPoints,
+      required DateTime dateTime})
+      : this._currentPoints = currentPoints,
+        super.Team(gameId: '', team: team, mode: mode, dateTime: dateTime);
+
+  PlayerOrTeamGameStatisticsX01(
       {required Player player,
       required String mode,
       required int currentPoints,
       required DateTime dateTime})
       : this._currentPoints = currentPoints,
-        super(gameId: '', player: player, mode: mode, dateTime: dateTime);
+        super.Player(
+            gameId: '', player: player, mode: mode, dateTime: dateTime);
 
   int get getCurrentPoints => this._currentPoints;
   set setCurrentPoints(int currentPoints) =>
@@ -275,6 +292,11 @@ class PlayerGameStatisticsX01 extends PlayerGameStatistics {
       this._amountOfFinishDarts;
   set setAmountOfFinishDarts(SplayTreeMap<String, int> value) =>
       this._amountOfFinishDarts = value;
+
+  Map<String, String> get getPlayersWithCheckoutInLeg =>
+      this._playersWithCheckoutInLeg;
+  set setPlayersWithCheckoutInLeg(Map<String, String> value) =>
+      this._playersWithCheckoutInLeg = value;
 
   //calc average based on total points and all scores length
   String getAverage() {

@@ -15,6 +15,30 @@ class PlayersTeamsListDialogs {
   static final GlobalKey<FormState> _formKeyEditPlayer = GlobalKey<FormState>();
   static final GlobalKey<FormState> _formKeyEditTeam = GlobalKey<FormState>();
 
+  static _editBotAvg(
+      GameSettingsX01 gameSettingsX01, Bot botToEdit, dynamic newValue) {
+    // player from team is not the same refernce as in the single players list, therefore also needs to be updated and vice versa
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      Player? playerFromSingles =
+          gameSettingsX01.getPlayerFromSingles(botToEdit.getName);
+      if (playerFromSingles != null) {
+        playerFromSingles = playerFromSingles as Bot;
+        playerFromSingles.setPreDefinedAverage = newValue.round();
+        playerFromSingles.setLevel =
+            int.parse(Utils.getLevelForBot(newValue.round()));
+      }
+    } else {
+      Bot playerFromTeam =
+          gameSettingsX01.getPlayerFromTeam(botToEdit.getName) as Bot;
+      playerFromTeam.setPreDefinedAverage = newValue.round();
+      playerFromTeam.setLevel =
+          int.parse(Utils.getLevelForBot(newValue.round()));
+    }
+
+    botToEdit.setPreDefinedAverage = newValue.round();
+    botToEdit.setLevel = int.parse(Utils.getLevelForBot(newValue.round()));
+  }
+
   static showDialogForEditingPlayer(BuildContext context, Player playerToEdit,
       GameSettingsX01 gameSettingsX01) {
     //store values as "backup" if user modifies the avg. or name & then clicks on cancel
@@ -41,51 +65,45 @@ class PlayersTeamsListDialogs {
           content: StatefulBuilder(
             builder: (context, setState) {
               if (playerToEdit is Bot) {
-                return Container(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 30.w,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 5),
-                              child: Text(
-                                'Level ${playerToEdit.getLevel} Bot',
-                                style: TextStyle(
-                                  fontSize: 12.sp,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 30.w,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: Text(
+                              'Level ${playerToEdit.getLevel} Bot',
                               style: TextStyle(
-                                fontSize: 9.sp,
+                                fontSize: 12.sp,
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                          Text(
+                            ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                            style: TextStyle(
+                              fontSize: 9.sp,
+                            ),
+                          ),
+                        ],
                       ),
-                      SfSlider(
-                        min: 22,
-                        max: 118,
-                        value: playerToEdit.getPreDefinedAverage,
-                        stepSize: 4,
-                        interval: 100,
-                        showTicks: false,
-                        onChanged: (dynamic newValue) {
-                          setState(() {
-                            playerToEdit.setPreDefinedAverage =
-                                newValue.round();
-                            playerToEdit.setLevel = int.parse(
-                                Utils.getLevelForBot(newValue.round()));
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                    ),
+                    SfSlider(
+                      min: 22,
+                      max: 118,
+                      value: playerToEdit.getPreDefinedAverage,
+                      stepSize: 4,
+                      interval: 100,
+                      showTicks: false,
+                      onChanged: (dynamic newValue) {
+                        setState(() => _editBotAvg(
+                            gameSettingsX01, playerToEdit, newValue));
+                      },
+                    ),
+                  ],
                 );
               } else {
                 return TextFormField(
@@ -94,7 +112,7 @@ class PlayersTeamsListDialogs {
                   validator: (value) {
                     if (value!.isEmpty) return ('Please enter a name!');
 
-                    if (gameSettingsX01.checkIfPlayerNameExists(value))
+                    if (gameSettingsX01.checkIfPlayerNameExists(value, false))
                       return 'Playername already exists!';
 
                     return null;
@@ -385,8 +403,20 @@ class PlayersTeamsListDialogs {
 
     _formKeyEditPlayer.currentState!.save();
 
-    if (!(playerToEdit is Bot))
+    if (!(playerToEdit is Bot)) {
+      // player from team is not the same refernce as in the single players list, therefore also needs to be updated and vice versa
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        Player? playerFromSingles =
+            gameSettingsX01.getPlayerFromSingles(playerToEdit.getName);
+        if (playerFromSingles != null) {
+          playerFromSingles.setName = editPlayerController.text;
+        }
+      }
+      Player playerFromTeam =
+          gameSettingsX01.getPlayerFromTeam(playerToEdit.getName);
+      playerFromTeam.setName = editPlayerController.text;
       playerToEdit.setName = editPlayerController.text;
+    }
 
     gameSettingsX01.notify();
 
@@ -416,7 +446,7 @@ class PlayersTeamsListDialogs {
 
     gameSettingsX01.notify();
 
-    Navigator.of(context).pop();
+    if (gameSettingsX01.getTeams.length > 2) Navigator.of(context).pop();
   }
 
   static _deleteTeam(Team teamToDelete, GameSettingsX01 gameSettingsX01) {
@@ -474,63 +504,64 @@ class PlayersTeamsListDialogs {
   static _showDialogForDeletingTeam(
       BuildContext context, GameSettingsX01 gameSettingsX01, Team teamToEdit) {
     showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            contentPadding: EdgeInsets.only(
-                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-                top: DIALOG_CONTENT_PADDING_TOP,
-                left: 24,
-                right: 24),
-            title: const Text('Info'),
-            content: const Text(
-                'All the players in this team will also be deleted.'),
-            actions: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: IconButton(
-                        padding: EdgeInsets.zero,
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          contentPadding: EdgeInsets.only(
+              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+              top: DIALOG_CONTENT_PADDING_TOP,
+              left: 24,
+              right: 24),
+          title: const Text('Info'),
+          content:
+              const Text('All the players in this team will also be deleted.'),
+          actions: [
+            Row(
+              children: [
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: Icon(
+                        Icons.arrow_back,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        showDialogForEditingTeam(
+                            context, teamToEdit, gameSettingsX01);
+                      },
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
-                          showDialogForEditingTeam(
-                              context, teamToEdit, gameSettingsX01);
                         },
+                        child: const Text('Cancel'),
                       ),
-                    ),
+                      TextButton(
+                        onPressed: () {
+                          gameSettingsX01.checkTeamNamingIds(teamToEdit);
+                          _deleteTeam(teamToEdit, gameSettingsX01);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Continue'),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            gameSettingsX01.checkTeamNamingIds(teamToEdit);
-                            _deleteTeam(teamToEdit, gameSettingsX01);
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Continue'),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            ],
-          );
-        });
+                ),
+              ],
+            )
+          ],
+        );
+      },
+    );
   }
 }

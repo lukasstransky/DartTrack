@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/more_stats.dart';
@@ -22,8 +22,8 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   initState() {
-    Provider.of<StatisticsFirestoreX01>(context, listen: false)
-        .currentFilterValue = FilterValue.Overall;
+    context.read<StatisticsFirestoreX01>().currentFilterValue =
+        FilterValue.Overall;
     _getPlayerGameStatistics();
     _getGames();
     super.initState();

@@ -23,10 +23,19 @@ class _TeamsListState extends State<TeamsList> {
     newScrollControllerTeams();
   }
 
+  _deleteIconClicked(
+      Team team, Player player, GameSettingsX01 gameSettingsX01) {
+    if (team.getPlayers.length == 1) {
+      PlayersTeamsListDialogs.showDialogForDeletingTeamAsLastPlayer(
+          context, team, gameSettingsX01, player);
+    } else {
+      gameSettingsX01.removePlayer(player, true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
 
     return Selector<GameSettingsX01, Tuple2<List<Team>, List<Player>>>(
       selector: (_, gameSettingsX01) =>
@@ -69,41 +78,34 @@ class _TeamsListState extends State<TeamsList> {
                         children: [
                           Container(
                             width: 39.w,
-                            child: player is Bot
-                                ? FittedBox(
-                                    alignment: Alignment.centerLeft,
-                                    fit: BoxFit.scaleDown,
-                                    child: Container(
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                          Text(
-                                            'Level ${player.getLevel} Bot',
+                            child: FittedBox(
+                              alignment: Alignment.centerLeft,
+                              fit: BoxFit.scaleDown,
+                              child: player is Bot
+                                  ? Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        Text(
+                                          'Level ${player.getLevel} Bot',
+                                          style: TextStyle(
+                                            fontSize: 11.sp,
+                                          ),
+                                        ),
+                                        Container(
+                                          transform: Matrix4.translationValues(
+                                              0.0, -0.5.w, 0.0),
+                                          child: Text(
+                                            ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                                             style: TextStyle(
-                                              fontSize: 11.sp,
+                                              fontSize: 7.sp,
                                             ),
                                           ),
-                                          Container(
-                                            transform:
-                                                Matrix4.translationValues(
-                                                    0.0, -0.5.w, 0.0),
-                                            child: Text(
-                                              ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                                              style: TextStyle(
-                                                fontSize: 7.sp,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  )
-                                : FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(player.getName),
-                                  ),
+                                        ),
+                                      ],
+                                    )
+                                  : Text(player.getName),
+                            ),
                           ),
                           Container(
                             width: 39.w,
@@ -127,11 +129,9 @@ class _TeamsListState extends State<TeamsList> {
                                       Icons.swap_vert,
                                       color: Colors.grey,
                                     ),
-                                    onPressed: () => {
-                                      PlayersTeamsListDialogs
-                                          .showDialogForSwitchingTeam(
-                                              context, player, gameSettingsX01)
-                                    },
+                                    onPressed: () => PlayersTeamsListDialogs
+                                        .showDialogForSwitchingTeam(
+                                            context, player, gameSettingsX01),
                                   ),
                                 IconButton(
                                   padding: EdgeInsets.zero,
@@ -139,22 +139,8 @@ class _TeamsListState extends State<TeamsList> {
                                     Icons.highlight_remove,
                                     color: Colors.grey,
                                   ),
-                                  onPressed: () => {
-                                    if (team.getPlayers.length == 1)
-                                      {
-                                        PlayersTeamsListDialogs
-                                            .showDialogForDeletingTeamAsLastPlayer(
-                                                context,
-                                                team,
-                                                gameSettingsX01,
-                                                player),
-                                      }
-                                    else
-                                      {
-                                        gameSettingsX01.removePlayer(
-                                            player, true),
-                                      }
-                                  },
+                                  onPressed: () => _deleteIconClicked(
+                                      team, player, gameSettingsX01),
                                 ),
                               ],
                             ),

@@ -63,8 +63,8 @@ class StartGameBtn extends StatelessWidget {
     final List<Player> players = gameSettingsX01.getPlayers;
     Player? selectedPlayer = gameSettingsX01.getPlayers[0];
 
-    // final List<Team> teams = gameSettingsX01.getTeams;
-    // Team? selectedTeam = gameSettingsX01.getTeams[0];
+    final List<Team> teams = gameSettingsX01.getTeams;
+    Team? selectedTeam = gameSettingsX01.getTeams[0];
 
     showDialog(
       barrierDismissible: false,
@@ -126,45 +126,46 @@ class StartGameBtn extends StatelessWidget {
                   },
                 ),
               );
-            // if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
-            //   return Container(
-            //     width: double.maxFinite,
-            //     child: ListView.builder(
-            //       shrinkWrap: true,
-            //       itemCount: teams.length,
-            //       reverse: true,
-            //       itemBuilder: (BuildContext context, int index) {
-            //         final team = teams[index];
 
-            //         return RadioListTile(
-            //           title: Container(
-            //             transform: Matrix4.translationValues(
-            //                 DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-            //             child: Text(team.getName),
-            //           ),
-            //           value: team,
-            //           groupValue: selectedTeam,
-            //           onChanged: (Team? value) {
-            //             setState(() => selectedTeam = value);
-            //           },
-            //         );
-            //       },
-            //     ),
-            //   );
-            return SizedBox.shrink();
+            return Container(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: teams.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final team = teams[index];
+
+                  return RadioListTile(
+                    title: Container(
+                      transform: Matrix4.translationValues(
+                          DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                      child: Text(team.getName),
+                    ),
+                    value: team,
+                    groupValue: selectedTeam,
+                    onChanged: (Team? value) {
+                      setState(() => selectedTeam = value);
+                    },
+                  );
+                },
+              ),
+            );
           }),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => {
+              gameSettingsX01.notify(),
+              Navigator.of(context).pop(),
+            },
             child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () => {
               if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single)
-                _setBeginnerPlayer(selectedPlayer, context),
-              // else
-              //   _setBeginnerTeam(selectedTeam, context),
+                _setBeginnerPlayer(selectedPlayer, gameSettingsX01.getPlayers)
+              else
+                _setBeginnerTeam(selectedTeam, gameSettingsX01.getTeams),
               Navigator.of(context).pushNamed(
                 '/gameX01',
                 arguments: {'openGame': false},
@@ -179,8 +180,9 @@ class StartGameBtn extends StatelessWidget {
 
   bool _onePlayerPerTeam(GameSettingsX01 gameSettingsX01) {
     for (Team team in gameSettingsX01.getTeams) {
-      if (team.getPlayers.length != 1) return false;
+      if (team.getPlayers.length > 1) return false;
     }
+
     gameSettingsX01.setSingleOrTeam = SingleOrTeamEnum.Single;
 
     return true;
@@ -199,21 +201,16 @@ class StartGameBtn extends StatelessWidget {
   }
 
   bool _anyEmptyTeam(GameSettingsX01 gameSettingsX01) {
-    for (Team team in gameSettingsX01.getTeams) {
+    for (Team team in gameSettingsX01.getTeams)
       if (team.getPlayers.isEmpty) return true;
-    }
 
     return false;
   }
 
-  _setBeginnerTeam(Team? teamToSet, BuildContext context) {
-    final List<Team> teams =
-        Provider.of<GameSettingsX01>(context, listen: false).getTeams;
+  _setBeginnerTeam(Team? teamToSet, List<Team> teams) {
     int index = 0;
 
-    for (int i = 0; i < teams.length; i++) {
-      if (teams[i] == teamToSet) index = i;
-    }
+    for (int i = 0; i < teams.length; i++) if (teams[i] == teamToSet) index = i;
 
     //otherwise team is already first in list
     if (index != 0) {
@@ -223,9 +220,7 @@ class StartGameBtn extends StatelessWidget {
     }
   }
 
-  _setBeginnerPlayer(Player? playerToSet, BuildContext context) {
-    final List<Player> players =
-        Provider.of<GameSettingsX01>(context, listen: false).getPlayers;
+  _setBeginnerPlayer(Player? playerToSet, List<Player> players) {
     int index = 0;
 
     for (int i = 0; i < players.length; i++)

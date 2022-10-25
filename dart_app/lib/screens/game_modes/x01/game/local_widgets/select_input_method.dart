@@ -10,28 +10,28 @@ import 'package:sizer/sizer.dart';
 class SelectInputMethod extends StatelessWidget {
   const SelectInputMethod({Key? key}) : super(key: key);
 
-  _roundBtnClicked(BuildContext context, GameX01 gameX01) {
+  _roundBtnClicked(
+      BuildContext context, GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     final int amountOfThrownDarts = gameX01.getAmountOfDartsThrown();
 
     for (int i = 0; i < amountOfThrownDarts; i++) {
       Revert.revertPoints(context);
     }
 
-    gameX01.getGameSettings.setInputMethod = InputMethod.Round;
-    gameX01.getGameSettings.notify();
+    gameSettingsX01.setInputMethod = InputMethod.Round;
+    gameSettingsX01.notify();
   }
 
-  _threeDartsBtnClicked(GameX01 gameX01) {
+  _threeDartsBtnClicked(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     gameX01.setCurrentPointsSelected = 'Points';
-    gameX01.getGameSettings.setInputMethod = InputMethod.ThreeDarts;
-    gameX01.getGameSettings.notify();
+    gameSettingsX01.setInputMethod = InputMethod.ThreeDarts;
+    gameSettingsX01.notify();
   }
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 =
-        Provider.of<GameSettingsX01>(context, listen: false);
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
+    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameX01 = context.read<GameX01>();
 
     return Container(
       height: 4.h,
@@ -49,7 +49,8 @@ class SelectInputMethod extends StatelessWidget {
                 'Round',
                 style: TextStyle(fontSize: 14.sp, color: Colors.black),
               ),
-              onPressed: () => _roundBtnClicked(context, gameX01),
+              onPressed: () =>
+                  _roundBtnClicked(context, gameX01, gameSettingsX01),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
@@ -84,7 +85,7 @@ class SelectInputMethod extends StatelessWidget {
                 '3-Darts',
                 style: TextStyle(fontSize: 14.sp, color: Colors.black),
               ),
-              onPressed: () => _threeDartsBtnClicked(gameX01),
+              onPressed: () => _threeDartsBtnClicked(gameX01, gameSettingsX01),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(

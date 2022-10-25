@@ -3,8 +3,10 @@ import 'dart:collection';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class Utils {
   static MaterialStateProperty<Color> getDefaultOverlayColor(
@@ -95,16 +97,35 @@ class Utils {
         mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
   }
 
-  static String getWinnerOfLeg(String setLegString, Game? game) {
+  static String getWinnerOfLeg(
+      String setLegString, Game? game, BuildContext context) {
+    final bool isSingleMode =
+        game!.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single;
+
     int currentPoints;
-    for (PlayerGameStatisticsX01 playerGameStatistics
-        in game!.getPlayerGameStatistics) {
-      currentPoints = game.getGameSettings.getPointsOrCustom();
-      for (int score in playerGameStatistics.getAllScoresPerLeg[setLegString]) {
-        currentPoints -= score;
+    for (PlayerOrTeamGameStatisticsX01 playerOrTeamStats
+        in Utils.getPlayersOrTeamStatsList(
+            game as GameX01, game.getGameSettings)) {
+      if (Utils.playerStatsDisplayedInTeamMode(game, game.getGameSettings)) {
+        PlayerOrTeamGameStatisticsX01 teamStats =
+            (game).getTeamStatsFromPlayer(playerOrTeamStats.getPlayer.getName);
+        if (teamStats.getPlayersWithCheckoutInLeg.containsKey(setLegString))
+          return teamStats.getPlayersWithCheckoutInLeg[setLegString] as String;
       }
+
+      currentPoints = game.getGameSettings.getPointsOrCustom();
+
+      if (!playerOrTeamStats.getAllScoresPerLeg.containsKey(setLegString))
+        return '';
+
+      for (int score in playerOrTeamStats.getAllScoresPerLeg[setLegString])
+        currentPoints -= score;
+
       if (currentPoints == 0) {
-        return playerGameStatistics.getPlayer.getName;
+        if (isSingleMode)
+          return playerOrTeamStats.getPlayer.getName;
+        else
+          return playerOrTeamStats.getTeam.getName;
       }
     }
 
@@ -112,14 +133,19 @@ class Utils {
   }
 
   static String getAverageForLeg(
-      PlayerGameStatisticsX01 playerGameStatisticsX01, String setLegString) {
+      PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01,
+      String setLegString) {
+    if (playerOrTeamGameStatsX01.getAllScoresPerLeg.isEmpty ||
+        !playerOrTeamGameStatsX01.getAllScoresPerLeg.containsKey(setLegString))
+      return '0';
+
     double result = 0;
     for (int score
-        in playerGameStatisticsX01.getAllScoresPerLeg[setLegString]) {
+        in playerOrTeamGameStatsX01.getAllScoresPerLeg[setLegString]) {
       result += score;
     }
 
-    result /= (playerGameStatisticsX01.getThrownDartsPerLeg[setLegString] / 3);
+    result /= (playerOrTeamGameStatsX01.getThrownDartsPerLeg[setLegString] / 3);
 
     return result.toStringAsFixed(2);
   }
@@ -296,5 +322,51 @@ class Utils {
       return WIDGET_HEIGHT_GAMESETTINGS_TEAM;
     }
     return WIDGET_HEIGHT_GAMESETTINGS;
+  }
+
+  static dynamic getPlayersOrTeamStatsList(
+      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        gameX01.getAreTeamStatsDisplayed) return gameX01.getTeamGameStatistics;
+
+    return gameX01.getPlayerGameStatistics;
+  }
+
+  static bool teamStatsDisplayed(
+      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        gameX01.getAreTeamStatsDisplayed;
+  }
+
+  static bool playerStatsDisplayedInTeamMode(
+      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        !gameX01.getAreTeamStatsDisplayed;
+  }
+
+  static Row setLegStrings(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+    return Row(
+      children: [
+        SizedBox(
+          width: 20.w,
+        ),
+        for (String setLegString in gameX01.getAllLegSetStringsExceptCurrentOne(
+            gameX01, gameSettingsX01))
+          Container(
+            width: 25.w,
+            child: Padding(
+              padding: EdgeInsets.all(5),
+              child: Center(
+                child: Text(setLegString),
+              ),
+            ),
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(width: 1.0, color: Colors.black),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }

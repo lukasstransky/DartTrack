@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/games/helper/submit_helper.dart';
@@ -6,24 +7,28 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //HERE ARE METHODS DEFINED THAT ARE NEEDED BY MULTIPLE WIDGETS
 //instead of defining & passing callbacks...
 
 //shows a dialog for selecting the amount of checkout possibilities for the current throw
 //finishCount is only transfered when the input method is three darts (there I know the finish count)
-showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
-    String currentPointsSelected, BuildContext context) {
+showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
+    BuildContext context) {
+  final GameX01 gameX01 = context.read<GameX01>();
+  final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+
   String threeDartsCalculated = '';
   int selectedCheckoutCount = 0;
   int selectedFinishCount = 3;
 
-  if (gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+  if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
     threeDartsCalculated = gameX01.getCurrentThreeDartsCalculated();
     selectedFinishCount = gameX01.getAmountOfDartsThrown();
   } else {
     if (gameX01.finishedLegSetOrGame(currentPointsSelected)) {
-      if (gameX01.getGameSettings.getModeOut == ModeOutIn.Master) {
+      if (gameSettingsX01.getModeOut == ModeOutIn.Master) {
         selectedFinishCount =
             gameX01.isTrippleField(int.parse(currentPointsSelected)) ? 1 : 2;
       } else {
@@ -34,7 +39,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
   }
 
   final String pointsThrown =
-      gameX01.getGameSettings.getInputMethod == InputMethod.ThreeDarts
+      gameSettingsX01.getInputMethod == InputMethod.ThreeDarts
           ? threeDartsCalculated
           : currentPointsSelected;
   selectedCheckoutCount = gameX01.finishedLegSetOrGame(pointsThrown) ? 1 : 0;
@@ -48,8 +53,8 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
           top: DIALOG_CONTENT_PADDING_TOP,
           left: DIALOG_CONTENT_PADDING_LEFT,
           right: DIALOG_CONTENT_PADDING_RIGHT),
-      title: gameX01.getGameSettings.getEnableCheckoutCounting &&
-              !gameX01.getGameSettings.getCheckoutCountingFinallyDisabled
+      title: gameSettingsX01.getEnableCheckoutCounting &&
+              !gameSettingsX01.getCheckoutCountingFinallyDisabled
           ? Text('Checkout Counting')
           : Text('Finish Counting'),
       content: StatefulBuilder(
@@ -57,9 +62,8 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
           return Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (gameX01.getGameSettings.getEnableCheckoutCounting &&
-                  gameX01.getGameSettings.getCheckoutCountingFinallyDisabled ==
-                      false)
+              if (gameSettingsX01.getEnableCheckoutCounting &&
+                  gameSettingsX01.getCheckoutCountingFinallyDisabled == false)
                 Align(
                     alignment: Alignment.centerLeft,
                     child: Text('Darts on Double:')),
@@ -67,13 +71,11 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  if (gameX01.getGameSettings.getEnableCheckoutCounting &&
-                      gameX01.getGameSettings
-                              .getCheckoutCountingFinallyDisabled ==
+                  if (gameSettingsX01.getEnableCheckoutCounting &&
+                      gameSettingsX01.getCheckoutCountingFinallyDisabled ==
                           false) ...[
                     if (!gameX01.finishedLegSetOrGame(
-                        gameX01.getGameSettings.getInputMethod ==
-                                InputMethod.ThreeDarts
+                        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts
                             ? threeDartsCalculated
                             : currentPointsSelected))
                       Expanded(
@@ -225,7 +227,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                   ],
                 ],
               ),
-              if (gameX01.getGameSettings.getInputMethod == InputMethod.Round &&
+              if (gameSettingsX01.getInputMethod == InputMethod.Round &&
                   gameX01.finishedLegSetOrGame(currentPointsSelected)) ...[
                 Align(
                     alignment: Alignment.centerLeft,
@@ -233,8 +235,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
                 Row(
                   children: [
                     if (gameX01.isDoubleField(currentPointsSelected) ||
-                        (gameX01.getGameSettings.getModeOut ==
-                                ModeOutIn.Master &&
+                        (gameSettingsX01.getModeOut == ModeOutIn.Master &&
                             gameX01.isTrippleField(
                                 int.parse(currentPointsSelected))))
                       Expanded(
@@ -360,8 +361,7 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
-            if (gameX01.getGameSettings.getInputMethod ==
-                InputMethod.ThreeDarts) {
+            if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
               final int amount = gameX01.getAmountOfDartsThrown();
 
               gameX01.getCurrentThreeDarts[amount - 1] =
@@ -377,15 +377,15 @@ showDialogForCheckout(GameX01 gameX01, int checkoutPossibilities,
         ),
         TextButton(
           onPressed: () {
-            if (!gameX01.getGameSettings.getAutomaticallySubmitPoints &&
-                gameX01.getGameSettings.getInputMethod ==
-                    InputMethod.ThreeDarts) {
+            if (!gameSettingsX01.getAutomaticallySubmitPoints &&
+                gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
               checkoutCount = selectedCheckoutCount;
               thrownDarts = selectedFinishCount;
             } else {
               Submit.submitPoints(
                   currentPointsSelected,
                   context,
+                  false,
                   selectedFinishCount,
                   selectedCheckoutCount); //submit is called because of the checkout dialog -> otherwise points would be immediately subtracted and shown on ui
             }

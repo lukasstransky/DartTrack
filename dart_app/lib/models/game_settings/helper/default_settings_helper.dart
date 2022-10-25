@@ -1,16 +1,16 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/default_settings_x01.dart';
+import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+//teams not supported
 class DefaultSettingsHelper {
   static setDefaultSettings(BuildContext context) {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
-    final settingsX01 = Provider.of<GameSettingsX01>(context, listen: false);
+    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+    final settingsX01 = context.read<GameSettingsX01>();
 
     defaultSettingsX01.automaticallySubmitPoints =
         settingsX01.getAutomaticallySubmitPoints;
@@ -61,9 +61,8 @@ class DefaultSettingsHelper {
   }
 
   static setSettingsFromDefault(BuildContext context) {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
-    final settingsX01 = Provider.of<GameSettingsX01>(context, listen: false);
+    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+    final settingsX01 = context.read<GameSettingsX01>();
 
     settingsX01.setAutomaticallySubmitPoints =
         defaultSettingsX01.automaticallySubmitPoints;
@@ -98,18 +97,20 @@ class DefaultSettingsHelper {
     settingsX01.setWinByTwoLegsDifference =
         defaultSettingsX01.winByTwoLegsDifference;
     settingsX01.setDrawMode = defaultSettingsX01.drawMode;
-    settingsX01.setPlayers = defaultSettingsX01.players;
     settingsX01.setMostScoredPoints = [...defaultSettingsX01.mostScoredPoints];
 
-    //teams not supported for favourites
     settingsX01.setTeamNamingIds = [];
     settingsX01.setTeams = [];
+    settingsX01.setPlayers = [];
+    for (Player player in [...defaultSettingsX01.players]) {
+      settingsX01.getPlayers.add(player);
+      settingsX01.assignOrCreateTeamForPlayer(player);
+    }
   }
 
   static bool defaultSettingsSelected(BuildContext context) {
-    final defaultSettingsX01 =
-        Provider.of<DefaultSettingsX01>(context, listen: false);
-    final settingsX01 = Provider.of<GameSettingsX01>(context, listen: false);
+    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+    final settingsX01 = context.read<GameSettingsX01>();
 
     if (defaultSettingsX01.automaticallySubmitPoints ==
             settingsX01.getAutomaticallySubmitPoints &&
@@ -146,7 +147,7 @@ class DefaultSettingsHelper {
         defaultSettingsX01.drawMode == settingsX01.getDrawMode &&
         listEquals(defaultSettingsX01.mostScoredPoints,
             settingsX01.getMostScoredPoints) &&
-        defaultSettingsX01.samePlayers(settingsX01.getPlayers, context)) {
+        listEquals(defaultSettingsX01.players, settingsX01.getPlayers)) {
       return true;
     }
 
@@ -154,7 +155,7 @@ class DefaultSettingsHelper {
   }
 
   static bool generalDefaultSettingsSelected(BuildContext context) {
-    final settingsX01 = Provider.of<GameSettingsX01>(context, listen: false);
+    final settingsX01 = context.read<GameSettingsX01>();
 
     if (settingsX01.getAutomaticallySubmitPoints == DEFAULT_AUTO_SUBMIT_POINTS &&
         settingsX01.getCallerEnabled == DEFAULT_CALLER_ENABLED &&

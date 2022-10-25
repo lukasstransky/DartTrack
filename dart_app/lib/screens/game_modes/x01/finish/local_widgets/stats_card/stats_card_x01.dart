@@ -1,6 +1,8 @@
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -21,20 +23,20 @@ class StatsCardX01 extends StatefulWidget {
 }
 
 class _StatsCardX01State extends State<StatsCardX01> {
-  bool _showAllPlayers = false;
+  bool _showAllPlayersOrTeams = false;
 
   bool _isGameDraw() {
-    for (PlayerGameStatisticsX01 stats
+    for (PlayerOrTeamGameStatisticsX01 stats
         in widget.gameX01.getPlayerGameStatistics) {
-      if (stats.getGameDraw) {
-        return true;
-      }
+      if (stats.getGameDraw) return true;
     }
     return false;
   }
 
   @override
   Widget build(BuildContext context) {
+    final GameSettingsX01 gameSettingsX01 = widget.gameX01.getGameSettings;
+
     return Padding(
       padding: EdgeInsets.only(top: widget.isFinishScreen ? 100 : 5),
       child: GestureDetector(
@@ -57,8 +59,8 @@ class _StatsCardX01State extends State<StatsCardX01> {
                       fit: BoxFit.scaleDown,
                       child: Text(
                         _isGameDraw()
-                            ? 'Draw - ${widget.gameX01.getGameSettings.getGameMode()}'
-                            : '${widget.gameX01.getGameSettings.getGameMode()}',
+                            ? 'Draw - ${gameSettingsX01.getGameMode()}'
+                            : '${gameSettingsX01.getGameMode()}',
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 12.sp),
                       ),
@@ -76,8 +78,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
               ),
               Padding(
                 padding: EdgeInsets.only(left: 10, bottom: 10),
-                child: Text(
-                    'X01 (${widget.gameX01.getGameSettings.getGameModeDetails(true)})',
+                child: Text('X01 (${gameSettingsX01.getGameModeDetails(true)})',
                     style: TextStyle(fontSize: 12.sp)),
               ),
               for (int i = 0; i < 2; i++) ...[
@@ -92,8 +93,11 @@ class _StatsCardX01State extends State<StatsCardX01> {
                     color: Colors.black,
                   ),
               ],
-              if (widget.gameX01.getPlayerGameStatistics.length > 2) ...[
-                if (_showAllPlayers) ...[
+              if (Utils.getPlayersOrTeamStatsList(
+                          widget.gameX01, gameSettingsX01)
+                      .length >
+                  2) ...[
+                if (_showAllPlayersOrTeams) ...[
                   Divider(
                     height: 20,
                     thickness: 1,
@@ -102,13 +106,20 @@ class _StatsCardX01State extends State<StatsCardX01> {
                     color: Colors.black,
                   ),
                   for (int i = 2;
-                      i < widget.gameX01.getPlayerGameStatistics.length;
+                      i <
+                          Utils.getPlayersOrTeamStatsList(
+                                  widget.gameX01, gameSettingsX01)
+                              .length;
                       i++) ...[
                     PlayerEntry(
                         i: i,
                         gameX01: widget.gameX01,
                         openGame: widget.openGame),
-                    if (i != widget.gameX01.getPlayerGameStatistics.length - 1)
+                    if (i !=
+                        Utils.getPlayersOrTeamStatsList(
+                                    widget.gameX01, gameSettingsX01)
+                                .length -
+                            1)
                       Divider(
                         height: 20,
                         thickness: 1,
@@ -122,11 +133,13 @@ class _StatsCardX01State extends State<StatsCardX01> {
                   child: TextButton.icon(
                     onPressed: () {
                       setState(() {
-                        _showAllPlayers = !_showAllPlayers;
+                        _showAllPlayersOrTeams = !_showAllPlayersOrTeams;
                       });
                     },
                     icon: Icon(
-                      _showAllPlayers ? Icons.expand_less : Icons.expand_more,
+                      _showAllPlayersOrTeams
+                          ? Icons.expand_less
+                          : Icons.expand_more,
                       color: Colors.black,
                     ),
                     label: const Text(

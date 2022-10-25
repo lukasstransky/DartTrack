@@ -1,5 +1,5 @@
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,7 +22,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
         //await context.read<AuthService>().getPlayer!.getName;
         'Strainski';
 
-    for (PlayerGameStatisticsX01 playerStats
+    for (PlayerOrTeamGameStatisticsX01 playerStats
         in widget.game!.getPlayerGameStatistics) {
       if (playerStats.getPlayer.getName == currentPlayerName) {
         switch (widget.orderField) {

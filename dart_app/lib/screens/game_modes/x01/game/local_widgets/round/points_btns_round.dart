@@ -426,7 +426,7 @@ class PointsBtnsRound extends StatelessWidget {
                         gameX01.getAmountOfCheckoutPossibilities('0');
 
                     if (count != -1) {
-                      showDialogForCheckout(gameX01, count, '0', context);
+                      showDialogForCheckout(count, '0', context);
                     } else {
                       Submit.bust(context);
                     }

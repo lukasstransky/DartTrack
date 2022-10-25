@@ -337,19 +337,4 @@ class DefaultSettingsX01 with ChangeNotifier {
     showInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
     drawMode = DEFAULT_DRAW_MODE;
   }
-
-  bool samePlayers(List<Player> players, BuildContext context) {
-    int count = 0;
-    for (Player player in players) {
-      if (this.playersNames.contains(player.getName)) {
-        count++;
-      }
-    }
-
-    if (count == players.length &&
-        !(this.playersNames.length > 0 && this.players.length == 0)) {
-      return true;
-    }
-    return false;
-  }
 }

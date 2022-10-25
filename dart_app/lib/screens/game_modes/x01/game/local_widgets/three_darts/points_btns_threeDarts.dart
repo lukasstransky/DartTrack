@@ -1,7 +1,8 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/games/helper/submit_helper.dart';
-import 'package:dart_app/models/player_statistics/player_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/select_input_method.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/point_btn_three_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
@@ -16,8 +17,8 @@ class PointsBtnsThreeDarts extends StatelessWidget {
   const PointsBtnsThreeDarts({Key? key}) : super(key: key);
 
   bool _isBustClickable(GameX01 gameX01) {
-    final PlayerGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStatistics();
+    final PlayerOrTeamGameStatisticsX01 stats =
+        gameX01.getCurrentPlayerGameStats();
     final int currentPoints = stats.getCurrentPoints;
 
     if (gameX01.getAmountOfDartsThrown() == 0) {
@@ -35,9 +36,10 @@ class PointsBtnsThreeDarts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = Provider.of<GameX01>(context, listen: false);
-    final PlayerGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStatistics();
+    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final PlayerOrTeamGameStatisticsX01 stats =
+        gameX01.getCurrentPlayerGameStats();
 
     return Expanded(
       child: Column(
@@ -151,7 +153,7 @@ class PointsBtnsThreeDarts extends StatelessWidget {
               ],
             ),
           ),
-          if (gameX01.getGameSettings.getShowInputMethodInGameScreen)
+          if (gameSettingsX01.getShowInputMethodInGameScreen)
             SelectInputMethod(),
           Expanded(
             child: Row(
@@ -257,7 +259,7 @@ class PointsBtnsThreeDarts extends StatelessWidget {
                           ),
                   ),
                 ),
-                if (!gameX01.getGameSettings.getAutomaticallySubmitPoints)
+                if (!gameSettingsX01.getAutomaticallySubmitPoints)
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.only(

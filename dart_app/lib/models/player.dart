@@ -8,6 +8,17 @@ class Player {
 
   Player({required String name}) : _name = name;
 
+  factory Player.clone(Player otherPlayer) {
+    if (otherPlayer is Bot) {
+      return new Bot(
+          name: otherPlayer.getName,
+          preDefinedAverage: otherPlayer.getPreDefinedAverage,
+          level: otherPlayer.getLevel);
+    }
+
+    return new Player(name: otherPlayer.getName);
+  }
+
   factory Player.fromMap(map) {
     if (map.containsKey('preDefinedAverage')) {
       return new Bot(
@@ -26,21 +37,21 @@ class Player {
         'preDefinedAverage': player.getPreDefinedAverage,
         'level': player.getLevel
       };
-    } else {
+    } else
       return {'name': player.getName};
-    }
   }
 
   static bool samePlayer(Player? playerA, Player playerB) {
-    if (playerA != null && playerA.getName == playerB.getName) {
-      if (playerA is Bot && playerB is Bot) {
-        if (playerA.getPreDefinedAverage == playerB.getPreDefinedAverage) {
-          return true;
-        }
-      } else if (!(playerA is Bot) && !(playerB is Bot)) {
+    if (playerA == null || playerA.getName != playerB.getName) return false;
+
+    if (playerA is Bot && playerB is Bot) {
+      if (playerA.getPreDefinedAverage == playerB.getPreDefinedAverage) {
         return true;
       }
+    } else if (!(playerA is Bot) && !(playerB is Bot)) {
+      return true;
     }
+
     return false;
   }
 
