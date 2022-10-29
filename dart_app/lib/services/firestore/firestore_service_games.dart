@@ -1,4 +1,3 @@
-import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
@@ -69,20 +68,7 @@ class FirestoreServiceGames {
 
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreGamesPath());
-    Query query = collectionReference.where('name', isEqualTo: mode);
-
-    if (firestoreStats.currentFilterValue == FilterValue.Year ||
-        firestoreStats.currentFilterValue == FilterValue.Month) {
-      query = query.where('dateTimeForFiltering',
-          isGreaterThanOrEqualTo:
-              firestoreStats.getDateTimeFromCurrentFilterValue());
-    } else if (firestoreStats.currentFilterValue == FilterValue.Custom) {
-      query = query.where('dateTimeForFiltering',
-          isGreaterThanOrEqualTo: firestoreStats.getCustomStartDate());
-      query = query.where('dateTimeForFiltering',
-          isLessThanOrEqualTo: firestoreStats.getCustomEndDate());
-    }
-
+    final Query query = collectionReference.where('name', isEqualTo: mode);
     final QuerySnapshot<Object?> games = await query.get();
 
     firestoreStats.resetGames();

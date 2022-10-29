@@ -1,6 +1,5 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -63,12 +62,14 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   };
   Map<int, int> _preciseScores = {};
   Map<String, int> _allScoresPerDartAsStringCount = {};
-  List<Game> _games = [];
-  List<Game> _filteredGames = [];
-  bool _noGamesPlayed = false;
 
   List<Tuple2<int?, String>> _checkoutWithGameId = [];
   List<Tuple2<int?, String>> _thrownDartsWithGameId = [];
+
+  bool _noGamesPlayed = false;
+
+  List<Game> _games = [];
+  List<Game> _filteredGames = [];
 
   get countOfGamesWon => this._countOfGamesWon;
 
@@ -175,13 +176,13 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   set allScoresPerDartAsStringCount(value) =>
       this._allScoresPerDartAsStringCount = value;
 
-  get games => this._games;
+  List<Game> get games => this._games;
 
-  set games(value) => this._games = value;
+  set games(List<Game> value) => this._games = value;
 
-  get filteredGames => this._filteredGames;
+  List<Game> get filteredGames => this._filteredGames;
 
-  set filteredGames(value) => this._filteredGames = value;
+  set filteredGames(List<Game> value) => this._filteredGames = value;
 
   get noGamesPlayed => this._noGamesPlayed;
 
@@ -197,14 +198,15 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   set thrownDartsWithGameId(thrownDartsWithGameId) =>
       this._thrownDartsWithGameId = thrownDartsWithGameId;
 
-  loadStatistics(BuildContext context, FilterValue newFilterValue) async {
+  filterGamesAndStatsByDate(
+      BuildContext context, FilterValue newFilterValue) async {
     currentFilterValue = newFilterValue;
-    await context.read<FirestoreServicePlayerStats>().getStatistics(context);
-    await context.read<FirestoreServiceGames>().getGames('X01', context);
+    /* await context.read<FirestoreServicePlayerStats>().getStatistics(context);
+    await context.read<FirestoreServiceGames>().getGames('X01', context); */
   }
 
   DateTime getDateTimeFromCurrentFilterValue() {
-    DateTime now = new DateTime.now();
+    final DateTime now = new DateTime.now();
     DateTime result = new DateTime.now();
 
     switch (currentFilterValue) {
@@ -221,16 +223,6 @@ class StatisticsFirestoreX01 with ChangeNotifier {
     }
 
     return result;
-  }
-
-  DateTime getCustomStartDate() {
-    return DateFormat('dd-MM-yyyy')
-        .parse(customDateFilterRange.split(';').first);
-  }
-
-  DateTime getCustomEndDate() {
-    return DateFormat('dd-MM-yyyy')
-        .parse(customDateFilterRange.split(';').last);
   }
 
   resetValues() {
@@ -359,12 +351,90 @@ class StatisticsFirestoreX01 with ChangeNotifier {
     return '';
   }
 
-  _getKeyForBestLeg(int? bestLeg) {
+  String _getKeyForBestLeg(int? bestLeg) {
     for (Tuple2<int?, String> tuple in _thrownDartsWithGameId) {
       if (tuple.item1 == bestLeg) {
         return tuple.item2;
       }
     }
     return '';
+  }
+
+  DateTime getCustomStartDate() {
+    if (customDateFilterRange == '') {
+      DateTime now = new DateTime.now();
+      DateTime test = new DateTime(now.year, now.month, now.day);
+      return new DateTime(now.year, now.month, now.day);
+    }
+
+    return DateFormat('dd-MM-yyyy')
+        .parse(customDateFilterRange.split(';').first);
+  }
+
+  DateTime getCustomEndDate() {
+    if (customDateFilterRange == '') {
+      DateTime now = new DateTime.now();
+      return new DateTime(now.year, now.month, now.day);
+    }
+
+    return DateFormat('dd-MM-yyyy')
+        .parse(customDateFilterRange.split(';').last);
+  }
+
+  filterGamesByDate(FilterValue newFilterValue, BuildContext context) async {
+    this.currentFilterValue = newFilterValue;
+    this.resetFilteredGames();
+
+    if (this.currentFilterValue == FilterValue.Month) {
+      final DateTime toCompare =
+          new DateTime.now().subtract(new Duration(days: 30));
+
+      for (Game game in this.games) {
+        if (game.getDateTime.isAfter(toCompare)) {
+          this.filteredGames.add(game);
+        }
+      }
+    } else if (this.currentFilterValue == FilterValue.Year) {
+      final DateTime toCompare =
+          new DateTime.now().subtract(new Duration(days: 365));
+
+      for (Game game in this.games) {
+        if (game.getDateTime.isAfter(toCompare)) {
+          this.filteredGames.add(game);
+        }
+      }
+    } else if (this.currentFilterValue == FilterValue.Custom) {
+      final DateTime customStartDate = this.getCustomStartDate();
+      final DateTime customEndDate = this.getCustomEndDate();
+
+      for (Game game in this.games) {
+        if (game.getDateTime.isSameDate(customStartDate, customEndDate) ||
+            (game.getDateTime.isAfter(customStartDate) &&
+                game.getDateTime.isBefore(customEndDate))) {
+          this.filteredGames.add(game);
+        }
+      }
+    } else if (this.currentFilterValue == FilterValue.Overall) {
+      this.filteredGames = this.games;
+    }
+
+    if (this.filteredGames.isEmpty) {
+      this.noGamesPlayed = true;
+    }
+
+    await context.read<FirestoreServicePlayerStats>().getStatistics(context);
+
+    this.notify();
+  }
+}
+
+extension DateOnlyCompare on DateTime {
+  bool isSameDate(DateTime first, DateTime second) {
+    return year == first.year &&
+        month == first.month &&
+        day == first.day &&
+        year == second.year &&
+        month == second.month &&
+        day == second.day;
   }
 }

@@ -31,14 +31,8 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   didChangeDependencies() {
     super.didChangeDependencies();
 
-    //_getGames();
     _getSortedPlayerStats();
   }
-
-  //todo cant load games before playerstats
-  /*_getGames() async {
-    await context.read<FirestoreService>().getGames("X01", context);
-  }*/
 
   _getSortedPlayerStats() async {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
@@ -56,10 +50,10 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
         _ascendingOrder = false;
         break;
       case BEST_FIRST_NINE_AVG:
-        _orderField = 'firstNineAverage';
+        _orderField = 'firstNineAvg';
         break;
       case WORST_FIRST_NINE_AVG:
-        _orderField = 'firstNineAverage';
+        _orderField = 'firstNineAvg';
         _ascendingOrder = false;
         break;
       case BEST_CHECKOUT_QUOTE:
@@ -253,14 +247,16 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                                   .elementAt(i)
                                   .item1,
                               game: GameX01.createGameX01(
-                                  statisticsFirestore.getGameById(
-                                      statisticsFirestore.thrownDartsWithGameId
-                                          .elementAt(i)
-                                          .item2)),
+                                statisticsFirestore.getGameById(
+                                    statisticsFirestore.thrownDartsWithGameId
+                                        .elementAt(i)
+                                        .item2),
+                              ),
                             ),
                           ],
                         ] else ...[
-                          for (Game game in statisticsFirestore.games) ...[
+                          for (Game game
+                              in statisticsFirestore.filteredGames) ...[
                             StatsCardFiltered(
                                 game: GameX01.createGameX01(game),
                                 orderField: _orderField),

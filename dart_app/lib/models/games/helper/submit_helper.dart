@@ -308,9 +308,23 @@ class Submit {
       _sortPlayerStats(gameX01, gameSettingsX01);
       currentStats.setGameWon = true;
       isGameFinished = true;
+
+      // set game won also for other players in team -> for correct stats
+      if (shouldSubmitTeamStats) {
+        for (Player player in currentStats.getTeam.getPlayers) {
+          _getPlayerStatsByName(player.getName, gameX01).setGameWon = true;
+        }
+      }
     } else if (_gameDraw(gameX01, gameSettingsX01)) {
       currentStats.setGameDraw = true;
       isGameFinished = true;
+
+      // set game draw also for other players in team -> for correct stats
+      if (shouldSubmitTeamStats) {
+        for (Player player in currentStats.getTeam.getPlayers) {
+          _getPlayerStatsByName(player.getName, gameX01).setGameDraw = true;
+        }
+      }
     }
 
     if (isGameFinished || currentStats.getGameDraw)
@@ -336,7 +350,22 @@ class Submit {
       gameX01.resetCurrentThreeDarts();
   }
 
-//in order to show the right order in the finish screen
+  static PlayerOrTeamGameStatisticsX01 _getPlayerStatsByName(
+      String name, GameX01 gameX01) {
+    late PlayerOrTeamGameStatisticsX01 result;
+
+    for (PlayerOrTeamGameStatisticsX01 playerStats
+        in gameX01.getPlayerGameStatistics) {
+      if (playerStats.getPlayer.getName == name) {
+        result = playerStats;
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  // to show the right order in the finish screen
   static _sortPlayerStats(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     //convert playerGameStatistics to playerOrTeamGameStatsX01 -> otherwise cant sort
     List<PlayerOrTeamGameStatisticsX01> temp = [];

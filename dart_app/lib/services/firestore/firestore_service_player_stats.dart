@@ -399,15 +399,17 @@ class FirestoreServicePlayerStats {
 
   Future<void> getFilteredPlayerGameStatistics(
       String orderField, bool ascendingOrder, BuildContext context) async {
-    final firestoreStats = context.read<StatisticsFirestoreX01>();
     const String currentPlayerName =
+        //todo change
         //await context.read<AuthService>().getPlayer!.getName;
         'Strainski';
+    final firestoreStats = context.read<StatisticsFirestoreX01>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestorePlayerStatsPath());
     final Query query = collectionReference
         .where('player.name', isEqualTo: currentPlayerName)
         .orderBy(orderField, descending: ascendingOrder);
+
     List<Game> temp = [];
 
     firestoreStats.resetOverallStats();
@@ -415,7 +417,7 @@ class FirestoreServicePlayerStats {
 
     await query.get().then((value) => {
           value.docs.forEach((element) async {
-            final String gameId = element.get('gameId');
+            final String currentGameId = element.get('gameId');
 
             //for overall values -> checkouts + thrown darts per leg
             if (orderField == 'highestFinish' || orderField == 'bestLeg') {
@@ -427,22 +429,26 @@ class FirestoreServicePlayerStats {
 
               checkouts.entries.forEach((element) {
                 firestoreStats.checkoutWithGameId
-                    .add(new Tuple2(element.value, gameId));
+                    .add(new Tuple2(element.value, currentGameId));
               });
               checkouts.entries.forEach((element) {
-                firestoreStats.thrownDartsWithGameId
-                    .add(new Tuple2(thrownDartsPerLeg[element.key], gameId));
+                firestoreStats.thrownDartsWithGameId.add(
+                    new Tuple2(thrownDartsPerLeg[element.key], currentGameId));
               });
             }
 
             for (Game game in firestoreStats.games) {
-              for (PlayerOrTeamGameStatistics playerGameStatistics
+              if (game.getGameId == currentGameId) {
+                temp.add(game);
+                break;
+              }
+              /*  for (PlayerOrTeamGameStatistics playerGameStatistics
                   in game.getPlayerGameStatistics) {
-                if (playerGameStatistics.getGameId == gameId) {
+                if (playerGameStatistics.getGameId == currentGameId) {
                   temp.add(game);
                   break;
                 }
-              }
+              } */
             }
           }),
         });

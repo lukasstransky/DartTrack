@@ -1,6 +1,8 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:sizer/sizer.dart';
 
 class StatsCardFiltered extends StatefulWidget {
@@ -28,8 +30,8 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
         switch (widget.orderField) {
           case 'average':
             return playerStats.getAverage();
-          case 'firstNineAverage':
-            return playerStats.getFirstNineAvgPoints.toString();
+          case 'firstNineAvg':
+            return playerStats.getFirstNinveAvg();
           case 'checkoutInPercent':
             return playerStats.getCheckoutQuoteInPercent();
           case 'highestFinish':
@@ -43,14 +45,32 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
     return '';
   }
 
+  bool _isGameWonByCurrentPlayer() {
+    //todo change
+    const String currentPlayerName =
+        //await context.read<AuthService>().getPlayer!.getName;
+        'Strainski';
+
+    for (PlayerOrTeamGameStatisticsX01 playerStats
+        in widget.game!.getPlayerGameStatistics) {
+      if (playerStats.getPlayer.getName == currentPlayerName) {
+        if (playerStats.getGameWon) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
   String _getField() {
     String result = '';
     switch (widget.orderField) {
       case 'average':
         result += 'Average: ';
         break;
-      case 'firstNineAverage':
-        result += 'First Nine Average: ';
+      case 'firstNineAvg':
+        result += 'First Nine Avg.: ';
         break;
       case 'checkoutInPercent':
         result += 'Checkout in Percent: ';
@@ -83,12 +103,25 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      widget.game!.getGameSettings.getGameMode(),
-                      style: TextStyle(fontSize: 12.sp),
-                    ),
+                  Row(
+                    children: [
+                      if (_isGameWonByCurrentPlayer())
+                        Padding(
+                          padding: EdgeInsets.only(right: 5),
+                          child: Icon(
+                            Entypo.trophy,
+                            size: DEFAULT_FONTSIZE.sp,
+                            color: Color(0xffFFD700),
+                          ),
+                        ),
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          widget.game!.getGameSettings.getGameMode(),
+                          style: TextStyle(fontSize: 12.sp),
+                        ),
+                      ),
+                    ],
                   ),
                   Spacer(),
                   FittedBox(
@@ -102,9 +135,21 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
               ),
             ),
             Padding(
+              padding: EdgeInsets.only(left: 10, bottom: 5),
+              child: Text(
+                widget.game!.getGameSettings.getGameModeDetails(true),
+                style: TextStyle(fontSize: 12.sp),
+              ),
+            ),
+            Padding(
               padding: EdgeInsets.only(left: 10, bottom: 10),
-              child: Text(widget.game!.getGameSettings.getGameModeDetails(true),
-                  style: TextStyle(fontSize: 12.sp)),
+              child: Text(
+                widget.game!.getGameSettings.getSingleOrTeam ==
+                        SingleOrTeamEnum.Single
+                    ? 'Single Mode'
+                    : 'Team Mode',
+                style: TextStyle(fontSize: 12.sp),
+              ),
             ),
             Padding(
               padding: EdgeInsets.only(left: 10, bottom: 10),

@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
@@ -77,9 +78,20 @@ class _StatsCardX01State extends State<StatsCardX01> {
                 ),
               ),
               Padding(
+                padding: EdgeInsets.only(left: 10, bottom: 5),
+                child: Text(
+                  'X01 (${gameSettingsX01.getGameModeDetails(true)})',
+                  style: TextStyle(fontSize: 12.sp),
+                ),
+              ),
+              Padding(
                 padding: EdgeInsets.only(left: 10, bottom: 10),
-                child: Text('X01 (${gameSettingsX01.getGameModeDetails(true)})',
-                    style: TextStyle(fontSize: 12.sp)),
+                child: Text(
+                  gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+                      ? 'Single Mode'
+                      : 'Team Mode',
+                  style: TextStyle(fontSize: 12.sp),
+                ),
               ),
               for (int i = 0; i < 2; i++) ...[
                 PlayerEntry(

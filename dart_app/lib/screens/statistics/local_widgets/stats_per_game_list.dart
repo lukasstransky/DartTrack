@@ -3,7 +3,6 @@ import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
-import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -24,15 +23,14 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   @override
   didChangeDependencies() {
     super.didChangeDependencies();
-    _getGames();
+    _getMode();
   }
 
-  _getGames() async {
+  _getMode() async {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
             <String, dynamic>{})
         as Map; //extract arguments that are passed into in order to get game mode (X01, Cricket...)
     _mode = arguments.entries.first.value.toString();
-    await context.read<FirestoreServiceGames>().getGames(_mode, context);
   }
 
   String _getMessage(StatisticsFirestoreX01 statisticsFirestoreX01) {
@@ -57,55 +55,61 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
   @override
   Widget build(BuildContext context) {
+    final StatisticsFirestoreX01 statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01>();
+    final List<Game> games =
+        statisticsFirestoreX01.currentFilterValue != FilterValue.Overall
+            ? statisticsFirestoreX01.filteredGames
+            : statisticsFirestoreX01.games;
+
     return Scaffold(
       appBar: CustomAppBar(true, _mode + ' Games'),
       body: Consumer<StatisticsFirestoreX01>(
-        builder: (_, statisticsFirestore, __) =>
-            statisticsFirestore.games.length > 0
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Center(
-                      child: Container(
-                        width: 90.w,
-                        padding: EdgeInsets.only(bottom: 20),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                top: 10,
-                                left: 5,
-                              ),
-                              child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                      'Click Card to view Details about a Game')),
-                            ),
-                            if (statisticsFirestore.games.isNotEmpty)
-                              statisticsFirestore.sortGames() == null
-                                  ? SizedBox.shrink()
-                                  : SizedBox.shrink(),
-                            for (Game game in statisticsFirestore.games) ...[
-                              if (_mode == 'X01')
-                                StatsCardX01(
-                                    isFinishScreen: false,
-                                    gameX01: GameX01.createGameX01(game),
-                                    openGame: false),
-                              //add cards for other modes (StatsCardCricket)
-                            ]
-                          ],
+        builder: (_, statisticsFirestore, __) => games.length > 0
+            ? SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Center(
+                  child: Container(
+                    width: 90.w,
+                    padding: EdgeInsets.only(bottom: 20),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 10,
+                            left: 5,
+                          ),
+                          child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                  'Click Card to view Details about a Game')),
                         ),
-                      ),
+                        if (games.isNotEmpty)
+                          statisticsFirestore.sortGames() == null
+                              ? SizedBox.shrink()
+                              : SizedBox.shrink(),
+                        for (Game game in games) ...[
+                          if (_mode == 'X01')
+                            StatsCardX01(
+                                isFinishScreen: false,
+                                gameX01: GameX01.createGameX01(game),
+                                openGame: false),
+                          //add cards for other modes (StatsCardCricket)
+                        ]
+                      ],
                     ),
-                  )
-                : Center(
-                    child: statisticsFirestore.noGamesPlayed
-                        ? Text('No ' +
-                            _mode +
-                            ' Games ' +
-                            _getMessage(statisticsFirestore) +
-                            '!')
-                        : CircularProgressIndicator(),
                   ),
+                ),
+              )
+            : Center(
+                child: statisticsFirestore.noGamesPlayed
+                    ? Text('No ' +
+                        _mode +
+                        ' Games ' +
+                        _getMessage(statisticsFirestore) +
+                        '!')
+                    : CircularProgressIndicator(),
+              ),
       ),
     );
   }

@@ -20,6 +20,17 @@ class _FilterBarState extends State<FilterBar> {
   String _customBtnDateRange = '';
   bool _showCustomBtnDateRange = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _setCurrentDate();
+  }
+
+  _setCurrentDate() {
+    DateTime now = new DateTime.now();
+    _customBtnDateRange = DateFormat('dd-MM-yyyy').format(now);
+  }
+
   _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
     setState(() {
       if (args.value is PickerDateRange) {
@@ -57,8 +68,8 @@ class _FilterBarState extends State<FilterBar> {
                     onPressed: () => {
                       _showDatePicker = false,
                       _showCustomBtnDateRange = false,
-                      statisticsFirestore.loadStatistics(
-                          context, FilterValue.Overall),
+                      statisticsFirestore.filterGamesByDate(
+                          FilterValue.Overall, context),
                     },
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
@@ -102,8 +113,8 @@ class _FilterBarState extends State<FilterBar> {
                       onPressed: () => {
                         _showDatePicker = false,
                         _showCustomBtnDateRange = false,
-                        statisticsFirestore.loadStatistics(
-                            context, FilterValue.Month),
+                        statisticsFirestore.filterGamesByDate(
+                            FilterValue.Month, context),
                       },
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
@@ -140,8 +151,8 @@ class _FilterBarState extends State<FilterBar> {
                     onPressed: () => {
                       _showDatePicker = false,
                       _showCustomBtnDateRange = false,
-                      statisticsFirestore.loadStatistics(
-                          context, FilterValue.Year),
+                      statisticsFirestore.filterGamesByDate(
+                          FilterValue.Year, context),
                     },
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
@@ -184,6 +195,7 @@ class _FilterBarState extends State<FilterBar> {
                         setState(
                           () {
                             _showDatePicker = true;
+                            _showCustomBtnDateRange = true;
                             statisticsFirestore.currentFilterValue =
                                 FilterValue.Custom;
                           },
@@ -227,6 +239,7 @@ class _FilterBarState extends State<FilterBar> {
             ),
             if (_showDatePicker == true)
               SfDateRangePicker(
+                maxDate: DateTime.now(),
                 onSelectionChanged: _onSelectionChanged,
                 selectionMode: DateRangePickerSelectionMode.range,
                 initialSelectedRange:
@@ -234,8 +247,8 @@ class _FilterBarState extends State<FilterBar> {
                 showActionButtons: true,
                 onSubmit: (p0) async {
                   statisticsFirestore.customDateFilterRange = _range;
-                  statisticsFirestore.loadStatistics(
-                      context, FilterValue.Custom);
+                  statisticsFirestore.filterGamesByDate(
+                      FilterValue.Custom, context);
                   _showCustomBtnDateRange = true;
                   Future.delayed(const Duration(milliseconds: 300), () {
                     setState(() {
@@ -246,8 +259,8 @@ class _FilterBarState extends State<FilterBar> {
                 onCancel: () {
                   _showDatePicker = false;
                   _showCustomBtnDateRange = false;
-                  statisticsFirestore.loadStatistics(
-                      context, FilterValue.Overall);
+                  statisticsFirestore.filterGamesByDate(
+                      FilterValue.Overall, context);
                 },
                 showTodayButton: true,
               ),
