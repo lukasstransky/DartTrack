@@ -17,6 +17,10 @@ class SubmitPointsBtn extends StatelessWidget {
   bool _shouldSubmitBtnBeEnabled(BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    // for bug -> when saving an open game
+    if (gameX01.getPlayerGameStatistics.isEmpty) {
+      return false;
+    }
     final PlayerOrTeamGameStatisticsX01 stats =
         gameX01.getCurrentPlayerGameStats();
 

@@ -400,11 +400,20 @@ class Submit {
   static _setNextTeamAndPlayer(PlayerOrTeamGameStatisticsX01 stats,
       GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     final List<Team> teams = gameSettingsX01.getTeams;
-    final int indexOfCurrentTeam = teams.indexOf(gameX01.getCurrentTeamToThrow);
+    int indexOfCurrentTeam = -1;
+    for (int i = 0; i < teams.length; i++) {
+      if (teams[i].getName == gameX01.getCurrentTeamToThrow.getName) {
+        indexOfCurrentTeam = i;
+      }
+    }
 
     final List<Player> players = gameX01.getCurrentTeamToThrow.getPlayers;
-    final int indexOfCurrentPlayerInCurrentTeam =
-        players.indexOf(gameX01.getCurrentPlayerToThrow);
+    int indexOfCurrentPlayerInCurrentTeam = -1;
+    for (int i = 0; i < players.length; i++) {
+      if (players[i].getName == gameX01.getCurrentPlayerToThrow.getName) {
+        indexOfCurrentPlayerInCurrentTeam = i;
+      }
+    }
 
     if (_shouldSetNextPlayerOrTeam(gameX01, gameSettingsX01, stats)) {
       // set next player of current team

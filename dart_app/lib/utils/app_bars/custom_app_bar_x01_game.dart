@@ -17,7 +17,7 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context1) => AlertDialog(
         contentPadding: EdgeInsets.only(
             bottom: DIALOG_CONTENT_PADDING_BOTTOM,
             top: DIALOG_CONTENT_PADDING_TOP,

@@ -20,6 +20,7 @@ class FirestoreServiceGames {
     final Game gameToSave = Game.Firestore(
         name: game.getName,
         isGameFinished: true,
+        isOpenGame: false,
         dateTime: game.getDateTime,
         gameSettings: game.getGameSettings,
         playerGameStatistics: [],
@@ -114,11 +115,13 @@ class FirestoreServiceGames {
         gameId: game.getGameId,
         name: game.getName,
         isGameFinished: false,
+        isOpenGame: true,
         dateTime: game.getDateTime,
         gameSettings: game.getGameSettings,
         playerGameStatistics: game.getPlayerGameStatistics,
         teamGameStatistics: game.getTeamGameStatistics,
-        currentPlayerToThrow: game.getCurrentPlayerToThrow);
+        currentPlayerToThrow: game.getCurrentPlayerToThrow,
+        currentTeamToThrow: game.getCurrentTeamToThrow);
     final openGamesFirestore = context.read<OpenGamesFirestore>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreOpenGamesPath());

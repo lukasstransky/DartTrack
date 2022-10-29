@@ -19,6 +19,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
   List<PlayerOrTeamGameStatistics> _teamGameStatistics = [];
   Player? _currentPlayerToThrow;
   Team? _currentTeamToThrow;
+  bool _isOpenGame = false;
   bool _isGameFinished =
       false; // for team mode -> needed for weird behaviour when clicking the show players/teams btn in the stats tab
 
@@ -33,41 +34,53 @@ class Game with ChangeNotifier implements Comparable<Game> {
       {String? gameId,
       required String name,
       required bool isGameFinished,
+      required bool isOpenGame,
       required DateTime dateTime,
       required GameSettings gameSettings,
       required List<PlayerOrTeamGameStatistics> playerGameStatistics,
       required List<PlayerOrTeamGameStatistics> teamGameStatistics,
-      Player? currentPlayerToThrow})
+      Player? currentPlayerToThrow,
+      Team? currentTeamToThrow})
       : this._gameId = gameId,
         this._name = name,
         this._isGameFinished = isGameFinished,
+        this._isOpenGame = isOpenGame,
         this._dateTime = dateTime,
         this._gameSettings = gameSettings,
         this._playerGameStatistics = playerGameStatistics,
         this._teamGameStatistics = teamGameStatistics,
-        this._currentPlayerToThrow = currentPlayerToThrow;
+        this._currentPlayerToThrow = currentPlayerToThrow,
+        this._currentTeamToThrow = currentTeamToThrow;
 
   Map<String, dynamic> toMapX01(GameX01 gameX01, bool openGame) {
     GameSettingsX01 gameSettingsX01 = getGameSettings as GameSettingsX01;
 
     return {
-      'gameId': _gameId,
-      'name': _name,
-      'dateTime': _dateTime,
+      'gameId': getGameId,
+      'name': getName,
+      'dateTime': getDateTime,
       if (!openGame) 'isGameFinished': true,
+      if (openGame) 'isOpenGame': true,
       if (openGame)
-        'playerGameStatistics': _playerGameStatistics.map((item) {
+        'playerGameStatistics': getPlayerGameStatistics.map((item) {
+          return item.toMapX01(item as PlayerOrTeamGameStatisticsX01, gameX01,
+              gameSettingsX01, '', openGame);
+        }).toList(),
+      if (openGame && gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
+        'teamGameStatistics': getTeamGameStatistics.map((item) {
           return item.toMapX01(item as PlayerOrTeamGameStatisticsX01, gameX01,
               gameSettingsX01, '', openGame);
         }).toList(),
       if (openGame)
         'currentPlayerToThrow':
-            _currentPlayerToThrow!.toMap(_currentPlayerToThrow as Player),
+            getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player),
+      if (openGame && gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
+        'currentTeamToThrow':
+            getCurrentTeamToThrow!.toMap(getCurrentTeamToThrow as Team),
       'gameSettings': {
-        if (openGame)
-          'players': gameSettingsX01.getPlayers.map((player) {
-            return player.toMap(player);
-          }).toList(),
+        'players': gameSettingsX01.getPlayers.map((player) {
+          return player.toMap(player);
+        }).toList(),
         if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
           'teams': gameSettingsX01.getTeams.map((team) {
             return team.toMap(team);
@@ -114,11 +127,9 @@ class Game with ChangeNotifier implements Comparable<Game> {
           gameId: gameId,
           name: map['name'],
           isGameFinished: false,
+          isOpenGame: true,
           dateTime: dateTime,
           gameSettings: gameSettings,
-          currentPlayerToThrow: Player.getPlayerFromList(
-              gameSettings.getPlayers,
-              Player.fromMap(map['currentPlayerToThrow'])),
           playerGameStatistics: map['playerGameStatistics']
               .map<PlayerOrTeamGameStatistics?>((item) {
                 switch (mode) {
@@ -130,23 +141,32 @@ class Game with ChangeNotifier implements Comparable<Game> {
               .toList()
               .whereType<PlayerOrTeamGameStatistics>()
               .toList(),
-          teamGameStatistics: map['teamGameStatistics']
-              .map<PlayerOrTeamGameStatistics?>((item) {
-                switch (mode) {
-                  case 'X01':
-                    return PlayerOrTeamGameStatistics.fromMapX01(item);
-                  //add other cases like cricket...
-                }
-              })
-              .toList()
-              .whereType<PlayerOrTeamGameStatistics>()
-              .toList());
+          teamGameStatistics: map['teamGameStatistics'] != null
+              ? map['teamGameStatistics']
+                  .map<PlayerOrTeamGameStatistics?>((item) {
+                    switch (mode) {
+                      case 'X01':
+                        return PlayerOrTeamGameStatistics.fromMapX01(item);
+                      //add other cases like cricket...
+                    }
+                  })
+                  .toList()
+                  .whereType<PlayerOrTeamGameStatistics>()
+                  .toList()
+              : [],
+          currentPlayerToThrow: Player.getPlayerFromList(
+              gameSettings.getPlayers,
+              Player.fromMap(map['currentPlayerToThrow'])),
+          currentTeamToThrow: map['currentTeamToThrow'] != null
+              ? Team.fromMap(map['currentTeamToThrow'])
+              : null);
     }
 
     return Game.Firestore(
         gameId: gameId,
         name: map['name'],
         isGameFinished: true,
+        isOpenGame: false,
         dateTime: dateTime,
         gameSettings: gameSettings,
         playerGameStatistics: [],
@@ -181,6 +201,9 @@ class Game with ChangeNotifier implements Comparable<Game> {
 
   get getCurrentTeamToThrow => this._currentTeamToThrow;
   set setCurrentTeamToThrow(value) => this._currentTeamToThrow = value;
+
+  bool get getIsOpenGame => this._isOpenGame;
+  set setIsOpenGame(bool value) => this._isOpenGame = value;
 
   bool get getIsGameFinished => this._isGameFinished;
   set setIsGameFinished(bool value) => this._isGameFinished = value;

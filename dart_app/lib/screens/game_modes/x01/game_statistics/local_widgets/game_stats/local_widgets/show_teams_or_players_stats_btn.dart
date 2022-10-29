@@ -27,7 +27,7 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
             context.read<GameX01>().notify();
 
             // only for stats tab
-            if (gameX01.getIsGameFinished) {
+            if (gameX01.getIsGameFinished || gameX01.getIsOpenGame) {
               gameX01.setAreTeamStatsDisplayed =
                   !gameX01.getAreTeamStatsDisplayed;
               gameX01.notify();

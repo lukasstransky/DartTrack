@@ -35,6 +35,7 @@ class _OpenGamesState extends State<OpenGames> {
         openGameSettings.getWinByTwoLegsDifference;
     settingsX01.setSuddenDeath = openGameSettings.getSuddenDeath;
     settingsX01.setPlayers = openGameSettings.getPlayers;
+    settingsX01.setTeams = openGameSettings.getTeams;
 
     if (START_POINT_POSSIBILITIES.contains(openGameSettings.getPoints))
       settingsX01.setPoints = openGameSettings.getPoints;
@@ -45,12 +46,17 @@ class _OpenGamesState extends State<OpenGames> {
   _setNewGameValuesFromOpenGame(Game game, BuildContext context) {
     _setNewGameSettingsFromOpenGame(game.getGameSettings as GameSettingsX01);
 
-    game.setPlayerGameStatistics = game.getPlayerGameStatistics;
-    game.setDateTime = game.getDateTime;
-    game.setGameId = game.getGameId;
-    game.setName = game.getName;
-    game.setGameSettings = game.getGameSettings;
-    game.setCurrentPlayerToThrow = game.getCurrentPlayerToThrow;
+    final gameX01 = context.read<GameX01>();
+
+    gameX01.setPlayerGameStatistics = game.getPlayerGameStatistics;
+    gameX01.setTeamGameStatistics = game.getTeamGameStatistics;
+    gameX01.setDateTime = game.getDateTime;
+    gameX01.setGameId = game.getGameId;
+    gameX01.setName = game.getName;
+    gameX01.setGameSettings = game.getGameSettings;
+    gameX01.setCurrentPlayerToThrow = game.getCurrentPlayerToThrow;
+    gameX01.setCurrentTeamToThrow = game.getCurrentTeamToThrow;
+    gameX01.setIsOpenGame = game.getIsOpenGame;
   }
 
   @override

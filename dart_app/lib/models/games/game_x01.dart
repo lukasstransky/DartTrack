@@ -36,7 +36,9 @@ class GameX01 extends Game {
     gameX01.setPlayerGameStatistics = game.getPlayerGameStatistics;
     gameX01.setTeamGameStatistics = game.getTeamGameStatistics;
     gameX01.setCurrentPlayerToThrow = game.getCurrentPlayerToThrow;
+    gameX01.setCurrentTeamToThrow = game.getCurrentTeamToThrow;
     gameX01.setIsGameFinished = game.getIsGameFinished;
+    gameX01.setIsOpenGame = game.getIsOpenGame;
 
     return gameX01;
   }
@@ -92,13 +94,19 @@ class GameX01 extends Game {
     setCurrentPointsSelected = 'Points';
     setPlayerOrTeamLegStartIndex = 0;
     setRevertPossible = false;
-    setPlayerGameStatistics = [];
-    setTeamGameStatistics = [];
     setInit = false;
     setReachedSuddenDeath = false;
+    setCurrentPointType = PointType.Single;
+    resetCurrentThreeDarts();
+    setCanBePressed = true;
+    setAreTeamStatsDisplayed = true;
+
+    setPlayerGameStatistics = [];
+    setTeamGameStatistics = [];
     setCurrentPlayerToThrow = null;
     setCurrentTeamToThrow = null;
-    resetCurrentThreeDarts();
+    setIsOpenGame = false;
+    setIsGameFinished = false;
   }
 
   //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
