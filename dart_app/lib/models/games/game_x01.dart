@@ -11,7 +11,7 @@ class GameX01 extends Game {
 
   String _currentPointsSelected = 'Points';
   int _playerOrTeamLegStartIndex =
-      0; //to determine which player should begin next leg
+      0; //to determine which player/team should begin next leg
   bool _revertPossible = false;
   bool _init = false;
   bool _reachedSuddenDeath = false;
@@ -175,15 +175,19 @@ class GameX01 extends Game {
   }
 
   //for checkout counting dialog -> to show the amount of darts for finising the leg, set or game -> in order to calc average correctly
-  bool finishedLegSetOrGame(String points) {
-    final PlayerOrTeamGameStatisticsX01 stats = getCurrentPlayerGameStats();
+  bool finishedLegSetOrGame(String scoredPoints) {
+    final PlayerOrTeamGameStatisticsX01 currentStats =
+        getCurrentPlayerGameStats();
 
-    int currentPoints = stats.getCurrentPoints;
     if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-      currentPoints = stats.getStartingPoints;
+      if (currentStats.getCurrentPoints == 0) {
+        return true;
+      }
+      return false;
     }
 
-    if ((currentPoints - int.parse(points)) == 0) {
+    int currentPoints = currentStats.getCurrentPoints - int.parse(scoredPoints);
+    if (currentPoints == 0) {
       return true;
     }
 

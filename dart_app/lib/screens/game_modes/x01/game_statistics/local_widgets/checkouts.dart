@@ -15,10 +15,20 @@ class Checkouts extends StatelessWidget {
   String _getPlayerOrTeamName(bool isSingleMode, GameX01 gameX01,
       GameSettingsX01 gameSettingsX01, PlayerOrTeamGameStatisticsX01 stats) {
     if (isSingleMode ||
-        Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01))
+        Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01)) {
       return stats.getPlayer.getName;
+    }
 
     return stats.getTeam.getName;
+  }
+
+  bool _isSetLegFinished(String setLegString, GameSettingsX01 gameSettingsX01) {
+    if (setLegString !=
+        gameX01.getCurrentLegSetAsString(gameX01, gameSettingsX01)) {
+      return true;
+    }
+
+    return false;
   }
 
   @override
@@ -26,6 +36,11 @@ class Checkouts extends StatelessWidget {
     final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
     final bool isSingleMode =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+    final List<String> allSetLegStrings =
+        Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[0]
+            .getAllScoresPerLeg
+            .keys
+            .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,42 +55,40 @@ class Checkouts extends StatelessWidget {
                 color: Theme.of(context).primaryColor),
           ),
         ),
-        for (String setLegString
-            in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[0]
-                .getAllScoresPerLeg
-                .keys)
-          Padding(
-            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
-            child: Row(
-              children: [
-                Container(
-                  width: WIDTH_HEADINGS_STATISTICS.w,
-                  alignment: Alignment.centerLeft,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      setLegString,
-                      style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
-                    ),
-                  ),
-                ),
-                for (PlayerOrTeamGameStatisticsX01 stats
-                    in Utils.getPlayersOrTeamStatsList(
-                        gameX01, gameSettingsX01))
+        for (String setLegString in allSetLegStrings)
+          if (_isSetLegFinished(setLegString, gameSettingsX01))
+            Padding(
+              padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+              child: Row(
+                children: [
                   Container(
-                    width: WIDTH_DATA_STATISTICS.w,
-                    child: Text(
-                      Utils.getWinnerOfLeg(setLegString, gameX01, context) ==
-                              _getPlayerOrTeamName(
-                                  isSingleMode, gameX01, gameSettingsX01, stats)
-                          ? stats.getCheckouts[setLegString].toString()
-                          : '',
-                      style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                    width: WIDTH_HEADINGS_STATISTICS.w,
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        setLegString,
+                        style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                      ),
                     ),
                   ),
-              ],
+                  for (PlayerOrTeamGameStatisticsX01 stats
+                      in Utils.getPlayersOrTeamStatsList(
+                          gameX01, gameSettingsX01))
+                    Container(
+                      width: WIDTH_DATA_STATISTICS.w,
+                      child: Text(
+                        Utils.getWinnerOfLeg(setLegString, gameX01, context) ==
+                                _getPlayerOrTeamName(isSingleMode, gameX01,
+                                    gameSettingsX01, stats)
+                            ? stats.getCheckouts[setLegString].toString()
+                            : '',
+                        style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                      ),
+                    ),
+                ],
+              ),
             ),
-          ),
       ],
     );
   }

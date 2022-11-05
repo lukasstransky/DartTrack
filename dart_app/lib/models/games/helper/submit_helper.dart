@@ -21,32 +21,37 @@ class Submit {
   static submitPoints(String scoredFieldString, BuildContext context,
       [bool shouldSubmitTeamStats = false,
       int thrownDarts = 3,
-      checkoutCount = 0]) {
+      int checkoutCount = 0]) {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
-    if (!_shouldSubmit(scoredFieldString, gameSettingsX01, gameX01)) return;
+    if (!_shouldSubmit(scoredFieldString, gameSettingsX01, gameX01)) {
+      return;
+    }
 
     final bool isBust = scoredFieldString == 'Bust' ? true : false;
     final int scoredPoints =
         isBust ? 0 : gameX01.getValueOfSpecificDart(scoredFieldString);
 
     late final PlayerOrTeamGameStatisticsX01 currentStats;
-    if (shouldSubmitTeamStats)
+    if (shouldSubmitTeamStats) {
       currentStats = gameX01.getCurrentTeamGameStats();
-    else
+    } else {
       currentStats = gameX01.getCurrentPlayerGameStats();
+    }
 
     gameX01.setRevertPossible = true;
 
     if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
-      if (isBust) _submitBusted(currentStats, gameX01);
+      if (isBust) {
+        _submitBusted(currentStats, gameX01);
+      }
 
       _setAllRemainingScoresPerDart(currentStats, gameX01);
     } else {
       currentStats.setTotalPoints = currentStats.getTotalPoints + scoredPoints;
 
-      // update current points for each player in team (to store e.g. finishes for specific player)
+      // update current points for each player in team
       if (_shouldUpdateStatsForPlayersOfSameTeam(
           shouldSubmitTeamStats, gameSettingsX01)) {
         for (PlayerOrTeamGameStatisticsX01 stats
@@ -65,13 +70,28 @@ class Submit {
                 gameSettingsX01.getAutomaticallySubmitPoints
             ? 800
             : 0;
+
     Future.delayed(Duration(milliseconds: milliseconds), () {
       currentStats.setPointsSelectedCount = 0;
-      currentStats.setStartingPoints = currentStats.getCurrentPoints;
       gameX01.setCurrentPointsSelected = 'Points';
 
+      // set starting points (3-darts-mode)
+      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+        if (_shouldUpdateStatsForPlayersOfSameTeam(
+            shouldSubmitTeamStats, gameSettingsX01)) {
+          for (PlayerOrTeamGameStatisticsX01 stats
+              in _getPlayerStatsFromSameTeam(gameX01, gameSettingsX01)) {
+            stats.setStartingPoints = currentStats.getCurrentPoints;
+          }
+        } else {
+          currentStats.setStartingPoints = currentStats.getCurrentPoints;
+        }
+      }
+
+      late int totalPoints;
       if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
         gameX01.setCurrentPointType = PointType.Single;
+        totalPoints = int.parse(gameX01.getCurrentThreeDartsCalculated());
       } else {
         currentStats.setCurrentThrownDartsInLeg =
             currentStats.getCurrentThrownDartsInLeg + thrownDarts;
@@ -84,43 +104,75 @@ class Submit {
           currentStats.setFirstNineAvgCount =
               currentStats.getFirstNineAvgCount + thrownDarts;
         }
-      }
 
-      _setCheckoutCountAtThrownDarts(
-          currentStats, checkoutCount, gameX01, gameSettingsX01);
-
-      final int totalPoints =
-          gameSettingsX01.getInputMethod == InputMethod.Round
-              ? scoredPoints
-              : int.parse(gameX01.getCurrentThreeDartsCalculated());
-
-      currentStats.getAllScores.add(totalPoints);
-
-      if (gameSettingsX01.getInputMethod == InputMethod.Round)
         currentStats.setAllScoresCountForRound =
             currentStats.getAllScoresCountForRound + 1;
 
+        totalPoints = scoredPoints;
+      }
+
+      currentStats.getAllScores.add(totalPoints);
+
+      _setCheckoutCountAtThrownDarts(
+          currentStats, checkoutCount, gameX01, gameSettingsX01);
       _setScores(currentStats, totalPoints, gameX01, gameSettingsX01);
-      _legSetOrGameFinished(currentStats, context, totalPoints, thrownDarts,
-          gameX01, shouldSubmitTeamStats);
+      final bool legSetOrGameFinsihed = _legSetOrGameFinished(currentStats,
+          context, totalPoints, thrownDarts, gameX01, shouldSubmitTeamStats);
 
-      if (shouldSubmitTeamStats)
-        _setNextTeamAndPlayer(currentStats, gameX01, gameSettingsX01);
-      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single)
-        _setNextPlayer(currentStats, gameX01, gameSettingsX01);
+      if (!legSetOrGameFinsihed) {
+        if (shouldSubmitTeamStats) {
+          _setNextTeamAndPlayer(currentStats, gameX01, gameSettingsX01);
+        } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
+          _setNextPlayer(currentStats, gameX01, gameSettingsX01);
+        }
+      }
 
-      if (gameX01.getCurrentThreeDarts[2] != 'Dart 3')
-        gameX01.resetCurrentThreeDarts();
+      // reset current 3 darts for 3-darts-mode
+      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+        if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+          if ((gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
+                  legSetOrGameFinsihed) &&
+              shouldSubmitTeamStats) {
+            gameX01.resetCurrentThreeDarts();
+          }
+        } else {
+          if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
+              legSetOrGameFinsihed) {
+            gameX01.resetCurrentThreeDarts();
+          }
+        }
+      }
+
+      // reset current points & starting points, if leg, set, game won
+      if (legSetOrGameFinsihed) {
+        if (shouldSubmitTeamStats) {
+          for (PlayerOrTeamGameStatisticsX01 stats
+              in gameX01.getTeamGameStatistics) {
+            stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
+            stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
+          }
+        }
+
+        if (!shouldSubmitTeamStats) {
+          for (PlayerOrTeamGameStatisticsX01 stats
+              in gameX01.getPlayerGameStatistics) {
+            stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
+            stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
+          }
+        }
+      }
 
       gameX01.notify();
     });
 
     // submit team stats
     if (!shouldSubmitTeamStats &&
-        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
       submitPoints(
           scoredFieldString, context, true, thrownDarts, checkoutCount);
+    }
 
+    // update sets, legs for players from same team
     if (shouldSubmitTeamStats) {
       for (PlayerOrTeamGameStatisticsX01 stats
           in _getPlayerStatsFromSameTeam(gameX01, gameSettingsX01)) {
@@ -135,41 +187,56 @@ class Submit {
     submitPoints('Bust', context);
   }
 
+  // stats that need to be submitted immediately after the first dart in order to show it properly in the ui
   static submitStatsForThreeDartsMode(
-      BuildContext context, int scoredPoints, String scoredFieldWithPointType) {
-    final GameX01 gameX01 = context.read<GameX01>();
-    final PlayerOrTeamGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStats();
-
+      GameX01 gameX01,
+      GameSettingsX01 gameSettingsX01,
+      int scoredPoints,
+      String scoredFieldWithPointType,
+      bool shouldSubmitTeamStats,
+      PlayerOrTeamGameStatisticsX01 currentStats) {
     gameX01.setRevertPossible = true;
 
-    //set points
-    stats.setCurrentPoints = stats.getCurrentPoints - scoredPoints;
-
-    //set all scores per dart
-    stats.getAllScoresPerDart.add(scoredPoints);
-
-    //add to total Points -> to calc avg.
-    stats.setTotalPoints = stats.getTotalPoints + scoredPoints;
-
-    //set thrown darts
-    stats.setCurrentThrownDartsInLeg = stats.getCurrentThrownDartsInLeg + 1;
-    stats.setAllThrownDarts = stats.getAllThrownDarts + 1;
-
-    //set first nine avg
-    if (stats.getCurrentThrownDartsInLeg <= 9) {
-      stats.setFirstNineAvgPoints = stats.getFirstNineAvgPoints + scoredPoints;
-      stats.setFirstNineAvgCount = stats.getFirstNineAvgCount + 1;
+    // update current points
+    if (_shouldUpdateStatsForPlayersOfSameTeam(
+        shouldSubmitTeamStats, gameSettingsX01)) {
+      for (PlayerOrTeamGameStatisticsX01 stats
+          in _getPlayerStatsFromSameTeam(gameX01, gameSettingsX01)) {
+        stats.setCurrentPoints = stats.getCurrentPoints - scoredPoints;
+      }
+    } else {
+      currentStats.setCurrentPoints =
+          currentStats.getCurrentPoints - scoredPoints;
     }
 
-    //all scores per dart as string + count
-    if (stats.getAllScoresPerDartAsStringCount
-        .containsKey(scoredFieldWithPointType))
-      stats.getAllScoresPerDartAsStringCount[scoredFieldWithPointType] += 1;
-    else
-      stats.getAllScoresPerDartAsStringCount[scoredFieldWithPointType] = 1;
+    // all scores per dart
+    currentStats.getAllScoresPerDart.add(scoredPoints);
 
-    stats.getAllScoresPerDartAsString.add(scoredFieldWithPointType);
+    if (currentStats.getAllScoresPerDartAsStringCount
+        .containsKey(scoredFieldWithPointType)) {
+      currentStats.getAllScoresPerDartAsStringCount[scoredFieldWithPointType] +=
+          1;
+    } else {
+      currentStats.getAllScoresPerDartAsStringCount[scoredFieldWithPointType] =
+          1;
+    }
+
+    currentStats.getAllScoresPerDartAsString.add(scoredFieldWithPointType);
+
+    // total Points
+    currentStats.setTotalPoints = currentStats.getTotalPoints + scoredPoints;
+
+    // thrown darts
+    currentStats.setCurrentThrownDartsInLeg =
+        currentStats.getCurrentThrownDartsInLeg + 1;
+    currentStats.setAllThrownDarts = currentStats.getAllThrownDarts + 1;
+
+    // first nine avg
+    if (currentStats.getCurrentThrownDartsInLeg <= 9) {
+      currentStats.setFirstNineAvgPoints =
+          currentStats.getFirstNineAvgPoints + scoredPoints;
+      currentStats.setFirstNineAvgCount = currentStats.getFirstNineAvgCount + 1;
+    }
   }
 
   /************************************************************/
@@ -178,12 +245,14 @@ class Submit {
 
   static _setScores(PlayerOrTeamGameStatisticsX01 stats, int totalPoints,
       GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
-    if (stats.getPreciseScores.containsKey(totalPoints))
+    // set precise scores
+    if (stats.getPreciseScores.containsKey(totalPoints)) {
       stats.getPreciseScores[totalPoints] += 1;
-    else
+    } else {
       stats.getPreciseScores[totalPoints] = 1;
+    }
 
-    //set rounded score even
+    // set rounded score even
     List<int> keys = stats.getRoundedScoresEven.keys.toList();
     if (totalPoints == 180) {
       stats.getRoundedScoresEven[keys[keys.length - 1]] += 1;
@@ -195,7 +264,7 @@ class Submit {
       }
     }
 
-    //set rounded scores odd
+    // set rounded scores odd
     keys = stats.getRoundedScoresOdd.keys.toList();
     if (totalPoints >= 170) {
       stats.getRoundedScoresOdd[keys[keys.length - 1]] += 1;
@@ -240,20 +309,22 @@ class Submit {
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team;
   }
 
-  static _legSetOrGameFinished(
+  static bool _legSetOrGameFinished(
       PlayerOrTeamGameStatisticsX01 currentStats,
       BuildContext context,
       int totalPoints,
       int thrownDarts,
       GameX01 gameX01,
       bool shouldSubmitTeamStats) {
-    if (currentStats.getCurrentPoints != 0) return;
+    if (currentStats.getCurrentPoints != 0) {
+      return false;
+    }
 
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
     final String currentLeg =
         gameX01.getCurrentLegSetAsString(gameX01, gameSettingsX01);
 
-    //set thrown darts per leg & reset points
+    // set thrown darts per leg & reset points
     for (PlayerOrTeamGameStatisticsX01 stats in (shouldSubmitTeamStats
         ? gameX01.getTeamGameStatistics
         : gameX01.getPlayerGameStatistics)) {
@@ -267,12 +338,9 @@ class Submit {
       } else {
         stats.getAllRemainingPoints.add(stats.getCurrentPoints);
       }
-
-      stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
-      stats.setStartingPoints = stats.getCurrentPoints;
     }
 
-    //add checkout to list
+    // add checkout to list
     currentStats.getCheckouts[currentLeg] = totalPoints;
 
     if (shouldSubmitTeamStats) {
@@ -281,29 +349,10 @@ class Submit {
           currentStats.getTeam.getCurrPlayerToThrow.getName;
     }
 
-    //update won legs
-    currentStats.setLegsWon = currentStats.getLegsWon + 1;
-    currentStats.setLegsWonTotal = currentStats.getLegsWonTotal + 1;
+    _updateLegsSets(
+        currentStats, gameSettingsX01, gameX01, shouldSubmitTeamStats);
 
     bool isGameFinished = false;
-    if (gameSettingsX01.getSetsEnabled) {
-      if (gameSettingsX01.getLegs == currentStats.getLegsWon) {
-        //save leg count of each player -> in case a user wants to revert a set
-        for (PlayerOrTeamGameStatisticsX01 stats in gameX01
-            .getPlayerGameStatistics) stats.getLegsCount.add(stats.getLegsWon);
-        if (shouldSubmitTeamStats) {
-          for (PlayerOrTeamGameStatisticsX01 stats in gameX01
-              .getTeamGameStatistics) stats.getLegsCount.add(stats.getLegsWon);
-        }
-
-        //update won sets
-        if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-          currentStats.setLegsWon = currentStats.getLegsWon + 1;
-          currentStats.setSetsWon = currentStats.getSetsWon + 1;
-        }
-      }
-    }
-
     if (_isGameWon(currentStats, gameX01, gameSettingsX01)) {
       _sortPlayerStats(gameX01, gameSettingsX01);
       currentStats.setGameWon = true;
@@ -315,7 +364,7 @@ class Submit {
           _getPlayerStatsByName(player.getName, gameX01).setGameWon = true;
         }
       }
-    } else if (_gameDraw(gameX01, gameSettingsX01)) {
+    } else if (_isGameDraw(gameX01, gameSettingsX01, shouldSubmitTeamStats)) {
       currentStats.setGameDraw = true;
       isGameFinished = true;
 
@@ -327,27 +376,83 @@ class Submit {
       }
     }
 
-    if (isGameFinished || currentStats.getGameDraw)
+    if (isGameFinished || currentStats.getGameDraw) {
       Navigator.of(context).pushNamed('/finishX01');
-    else {
-      for (PlayerOrTeamGameStatisticsX01 stats in gameX01
-          .getPlayerGameStatistics) stats.setCurrentThrownDartsInLeg = 0;
+    } else {
+      for (PlayerOrTeamGameStatisticsX01 stats
+          in gameX01.getPlayerGameStatistics) {
+        stats.setCurrentThrownDartsInLeg = 0;
+      }
       if (shouldSubmitTeamStats) {
-        for (PlayerOrTeamGameStatisticsX01 stats in gameX01
-            .getTeamGameStatistics) stats.setCurrentThrownDartsInLeg = 0;
+        for (PlayerOrTeamGameStatisticsX01 stats
+            in gameX01.getTeamGameStatistics) {
+          stats.setCurrentThrownDartsInLeg = 0;
+        }
       }
     }
 
-    // set player or team who will begin next leg (for icon)
-    if (gameX01.getPlayerOrTeamLegStartIndex ==
-        gameSettingsX01.getPlayers.length - 1)
+    // set player or team who will begin next leg
+    if (shouldSubmitTeamStats) {
+      return true;
+    }
+
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single &&
+        gameX01.getPlayerOrTeamLegStartIndex ==
+            gameSettingsX01.getPlayers.length - 1) {
       gameX01.setPlayerOrTeamLegStartIndex = 0;
-    else
+    } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        gameX01.getPlayerOrTeamLegStartIndex ==
+            gameSettingsX01.getTeams.length - 1) {
+      gameX01.setPlayerOrTeamLegStartIndex = 0;
+    } else {
       gameX01.setPlayerOrTeamLegStartIndex =
           gameX01.getPlayerOrTeamLegStartIndex + 1;
+    }
 
-    if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts)
-      gameX01.resetCurrentThreeDarts();
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      gameX01.setCurrentTeamToThrow = gameSettingsX01.getTeams
+          .elementAt(gameX01.getPlayerOrTeamLegStartIndex);
+      gameX01.setCurrentPlayerToThrow =
+          gameX01.getCurrentTeamToThrow.getPlayers.first;
+    } else {
+      gameX01.setCurrentPlayerToThrow = gameSettingsX01.getPlayers
+          .elementAt(gameX01.getPlayerOrTeamLegStartIndex);
+    }
+
+    return true;
+  }
+
+  static _updateLegsSets(
+      PlayerOrTeamGameStatisticsX01 currentStats,
+      GameSettingsX01 gameSettingsX01,
+      GameX01 gameX01,
+      bool shouldSubmitTeamStats) {
+    // update won legs
+    currentStats.setLegsWon = currentStats.getLegsWon + 1;
+    currentStats.setLegsWonTotal = currentStats.getLegsWonTotal + 1;
+
+    if (!gameSettingsX01.getSetsEnabled) {
+      return;
+    }
+
+    // update won sets
+    if (gameSettingsX01.getLegs == currentStats.getLegsWon) {
+      // save leg count of each player -> in case a user wants to revert a set
+      for (PlayerOrTeamGameStatisticsX01 stats
+          in gameX01.getPlayerGameStatistics) {
+        stats.getLegsCount.add(stats.getLegsWon);
+      }
+
+      if (shouldSubmitTeamStats) {
+        for (PlayerOrTeamGameStatisticsX01 stats
+            in gameX01.getTeamGameStatistics) {
+          stats.getLegsCount.add(stats.getLegsWon);
+        }
+      }
+
+      currentStats.setSetsWon = currentStats.getSetsWon + 1;
+      currentStats.setLegsWon = 0;
+    }
   }
 
   static PlayerOrTeamGameStatisticsX01 _getPlayerStatsByName(
@@ -382,9 +487,15 @@ class Submit {
     gameX01.setPlayerGameStatistics = temp;
   }
 
-  static bool _gameDraw(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in gameX01.getPlayerGameStatistics) {
+  static bool _isGameDraw(GameX01 gameX01, GameSettingsX01 gameSettingsX01,
+      bool shouldSubmitTeamStats) {
+    if (!gameSettingsX01.getDrawMode) {
+      return false;
+    }
+
+    for (PlayerOrTeamGameStatisticsX01 stats in (shouldSubmitTeamStats
+        ? gameX01.getTeamGameStatistics
+        : gameX01.getPlayerGameStatistics)) {
       if (gameSettingsX01.getSetsEnabled &&
           !(stats.getSetsWon == (gameSettingsX01.getSets / 2))) {
         return false;
@@ -439,8 +550,9 @@ class Submit {
       gameX01.setCurrentPlayerToThrow =
           gameX01.getCurrentTeamToThrow.getCurrPlayerToThrow;
 
-      if (scrollController.isAttached)
+      if (scrollController.isAttached) {
         scrollController.jumpTo(index: jumpToIndex);
+      }
     }
   }
 
@@ -461,8 +573,9 @@ class Submit {
         jumpToIndex = indexOfCurrentPlayer + 1;
       }
 
-      if (scrollController.isAttached)
+      if (scrollController.isAttached) {
         scrollController.jumpTo(index: jumpToIndex);
+      }
     }
   }
 
@@ -471,10 +584,17 @@ class Submit {
   // case 3 -> input method is three darts -> 1 or 2 darts entered & finished leg/set/game
   static bool _shouldSetNextPlayerOrTeam(GameX01 gameX01,
       GameSettingsX01 gameSettingsX01, PlayerOrTeamGameStatisticsX01 stats) {
-    return (gameSettingsX01.getInputMethod == InputMethod.Round) ||
-        (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
-            (gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
-                stats.getCurrentPoints == gameSettingsX01.getPointsOrCustom()));
+    if (gameSettingsX01.getInputMethod == InputMethod.Round) {
+      return true;
+    } else if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+      if (gameX01.getCurrentThreeDarts[2] != 'Dart 3') {
+        return true;
+      } else if (stats.getCurrentPoints == 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   static _setAllRemainingScoresPerDart(
@@ -513,9 +633,12 @@ class Submit {
   static bool _shouldSubmit(
       String thrownPoints, GameSettingsX01 gameSettingsX01, GameX01 gameX01) {
     if (thrownPoints == 'Bust' ||
-        gameSettingsX01.getInputMethod == InputMethod.Round ||
-        (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
-                (gameX01.getAmountOfDartsThrown() == 3) ||
+        gameSettingsX01.getInputMethod == InputMethod.Round) {
+      return true;
+    }
+
+    if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
+        (gameX01.getAmountOfDartsThrown() == 3 ||
             gameX01.finishedLegSetOrGame(
                 gameX01.getCurrentThreeDartsCalculated()))) {
       return true;
@@ -612,22 +735,29 @@ class Submit {
 
   static bool _isGameWon(PlayerOrTeamGameStatisticsX01 stats, GameX01 gameX01,
       GameSettingsX01 gameSettingsX01) {
-    if (gameX01.getReachedSuddenDeath) return true;
+    if (gameX01.getReachedSuddenDeath) {
+      return true;
+    }
 
     if (_gameWonFirstToWithSets(stats.getSetsWon, gameSettingsX01) ||
         _gameWonBestOfWithSets(stats.getSetsWon, gameSettingsX01) ||
         _gameWonBestOfWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
       return true;
-    } else if (_gameWonFirstToWithLegs(
-        stats.getLegsWonTotal, gameSettingsX01)) {
-      if (!gameSettingsX01.getWinByTwoLegsDifference) return true;
+    } else if (!gameSettingsX01.getSetsEnabled &&
+        _gameWonFirstToWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
+      if (!gameSettingsX01.getWinByTwoLegsDifference) {
+        return true;
+      }
 
       //suddean death reached
       if (gameSettingsX01.getSuddenDeath &&
-          _reachedSuddenDeath(gameX01, gameSettingsX01))
+          _reachedSuddenDeath(gameX01, gameSettingsX01)) {
         gameX01.setReachedSuddenDeath = true;
+      }
 
-      if (_isLegDifferenceAtLeastTwo(stats, gameX01)) return true;
+      if (_isLegDifferenceAtLeastTwo(stats, gameX01)) {
+        return true;
+      }
     }
 
     return false;

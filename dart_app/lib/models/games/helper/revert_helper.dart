@@ -11,21 +11,26 @@ class Revert {
   /********              PUBLIC METHODS                ********/
   /************************************************************/
 
-  static revertPoints(BuildContext context) {
+  static revertPoints(BuildContext context,
+      [bool shouldRevertTeamStats = false]) {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
-    PlayerOrTeamGameStatisticsX01 currentStats =
-        gameX01.getCurrentPlayerGameStats();
+    late PlayerOrTeamGameStatisticsX01 currentStats;
+    if (shouldRevertTeamStats) {
+      currentStats = gameX01.getCurrentTeamGameStats();
+    } else {
+      currentStats = gameX01.getCurrentPlayerGameStats();
+    }
 
-    if (!_checkIfRevertPossible(context)) {
+    if (!_isRevertPossible(context)) {
       return;
     }
 
     bool alreadyReverted = false;
     int lastPoints = 0;
     bool legOrSetReverted = false;
-    bool roundCompleted = false; //in order to revert only 1 dart or full round
+    bool roundCompleted = false; // in order to revert only 1 dart or full round
 
     if (gameSettingsX01.getInputMethod == InputMethod.Round ||
         (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
@@ -158,8 +163,13 @@ class Revert {
     }
 
     gameX01.setCurrentPointsSelected = 'Points';
-    _checkIfRevertPossible(
+    _isRevertPossible(
         context); //if 1 score is left -> enters this if & removes last score -> without this call the revert btn is still highlighted
+
+    if (!shouldRevertTeamStats &&
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      revertPoints(context, true);
+    }
   }
 
   //only for cancel button in add checkout count dialog
@@ -205,7 +215,7 @@ class Revert {
   }
 
   //returns true if at least one player has a score left
-  static bool _checkIfRevertPossible(BuildContext context) {
+  static bool _isRevertPossible(BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
@@ -213,9 +223,13 @@ class Revert {
     for (PlayerOrTeamGameStatisticsX01 stats
         in gameX01.getPlayerGameStatistics) {
       if (gameSettingsX01.getInputMethod == InputMethod.Round) {
-        if (stats.getAllScores.length > 0) result = true;
+        if (stats.getAllScores.length > 0) {
+          result = true;
+        }
       } else {
-        if (stats.getAllScoresPerDart.length > 0) result = true;
+        if (stats.getAllScoresPerDart.length > 0) {
+          result = true;
+        }
       }
     }
 

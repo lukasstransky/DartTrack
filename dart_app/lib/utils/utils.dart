@@ -327,7 +327,9 @@ class Utils {
   static dynamic getPlayersOrTeamStatsList(
       GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        gameX01.getAreTeamStatsDisplayed) return gameX01.getTeamGameStatistics;
+        gameX01.getAreTeamStatsDisplayed) {
+      return gameX01.getTeamGameStatistics;
+    }
 
     return gameX01.getPlayerGameStatistics;
   }

@@ -37,7 +37,7 @@ class PointBtnThreeDart extends StatelessWidget {
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
     if (activeBtn as bool && gameX01.getCanBePressed) {
-      _updateCurrentThreeDarts(context, pointBtnText);
+      _updateCurrentThreeDarts(gameX01, pointBtnText);
 
       if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' &&
           gameSettingsX01.getAutomaticallySubmitPoints) {
@@ -52,8 +52,7 @@ class PointBtnThreeDart extends StatelessWidget {
     }
   }
 
-  _updateCurrentThreeDarts(BuildContext context, String points) {
-    final GameX01 gameX01 = context.read<GameX01>();
+  _updateCurrentThreeDarts(GameX01 gameX01, String points) {
     final List<String> currentThreeDarts = gameX01.getCurrentThreeDarts;
 
     if (currentThreeDarts[0] == 'Dart 1') {
@@ -85,31 +84,49 @@ class PointBtnThreeDart extends StatelessWidget {
     return points.toString();
   }
 
-//scoredField -> e.g. 20
-//scoredFieldWithPointType -> e.g. T20
-  _submitPointsForInputMethodThreeDarts(String scoredField,
-      String scoredFieldWithPointType, BuildContext context) {
+  // scoredField -> e.g. 20
+  // scoredFieldWithPointType -> e.g. T20
+  _submitPointsForInputMethodThreeDarts(
+      String scoredField, String scoredFieldWithPointType, BuildContext context,
+      [bool shouldSubmitTeamStats = false]) {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
-    final PlayerOrTeamGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStats();
 
-    if (stats.getPointsSelectedCount >= 3) return;
+    late final PlayerOrTeamGameStatisticsX01 currentStats;
+    if (shouldSubmitTeamStats) {
+      currentStats = gameX01.getCurrentTeamGameStats();
+    } else {
+      currentStats = gameX01.getCurrentPlayerGameStats();
+    }
 
-    stats.setPointsSelectedCount = stats.getPointsSelectedCount + 1;
+    if (currentStats.getPointsSelectedCount >= 3) {
+      return;
+    }
+
+    currentStats.setPointsSelectedCount =
+        currentStats.getPointsSelectedCount + 1;
 
     final String scoredPoints = _calculatePoints(scoredField, gameX01);
     final int scoredPointsParsed = int.parse(scoredPoints);
-    final String currentThreeDarts = gameX01.getCurrentThreeDartsCalculated();
-    final bool finished = gameX01.finishedLegSetOrGame(currentThreeDarts);
-    final int amountOfDartsThrown = gameX01.getAmountOfDartsThrown();
-    bool submitAlreadyCalled = false;
 
     Submit.submitStatsForThreeDartsMode(
-        context, scoredPointsParsed, scoredFieldWithPointType);
+        gameX01,
+        gameSettingsX01,
+        scoredPointsParsed,
+        scoredFieldWithPointType,
+        shouldSubmitTeamStats,
+        currentStats);
 
-    if (gameX01.isCheckoutPossible()) {
-      //finished with 3 darts (high finish) -> show no dialog
+    final String currentThreeDarts = gameX01.getCurrentThreeDartsCalculated();
+    final int amountOfDartsThrown = gameX01.getAmountOfDartsThrown();
+    final bool finished = gameX01.finishedLegSetOrGame(currentThreeDarts);
+
+    bool submitAlreadyCalled = false;
+    if (!shouldSubmitTeamStats) {
+      checkoutCount = 0;
+    }
+    if (gameX01.isCheckoutPossible() && !shouldSubmitTeamStats) {
+      // finished with 3 darts (high finish) -> show no dialog
       if (amountOfDartsThrown == 3 &&
           gameX01.finishedWithThreeDarts(currentThreeDarts)) {
         if (!gameSettingsX01.getAutomaticallySubmitPoints) {
@@ -119,7 +136,7 @@ class PointBtnThreeDart extends StatelessWidget {
           submitAlreadyCalled = true;
         }
 
-        //finished with first dart -> show no dialog
+        // finished with first dart -> show no dialog
       } else if (amountOfDartsThrown == 1 && finished) {
         if (!gameSettingsX01.getAutomaticallySubmitPoints) {
           checkoutCount = 1;
@@ -128,8 +145,10 @@ class PointBtnThreeDart extends StatelessWidget {
           Submit.submitPoints(scoredPoints, context, false, 1, 1);
           submitAlreadyCalled = true;
         }
+
+        // 2 dart finish or 3 (no high finish)
       } else {
-        //only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
+        // only show dialog if checkout counting is enabled -> to select darts on finish is not needed in three darts method
         if (_isCheckoutCountingEnabled(gameSettingsX01)) {
           final int count =
               gameX01.getAmountOfCheckoutPossibilities(scoredPoints);
@@ -156,9 +175,17 @@ class PointBtnThreeDart extends StatelessWidget {
       }
     }
 
-    //needed because in the dialog the submit method is called (otherwise submit would get called 2x)
-    if (!submitAlreadyCalled && gameSettingsX01.getAutomaticallySubmitPoints) {
+    // needed because in the dialog the submit method is called (otherwise submit would get called 2x)
+    if (!submitAlreadyCalled &&
+        gameSettingsX01.getAutomaticallySubmitPoints &&
+        !shouldSubmitTeamStats) {
       Submit.submitPoints(scoredField, context);
+    }
+
+    if (!shouldSubmitTeamStats &&
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      _submitPointsForInputMethodThreeDarts(
+          scoredField, scoredFieldWithPointType, context, true);
     }
   }
 

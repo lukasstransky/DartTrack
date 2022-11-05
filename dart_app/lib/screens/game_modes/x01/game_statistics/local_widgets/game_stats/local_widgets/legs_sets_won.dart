@@ -4,7 +4,6 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class LegSetsWon extends StatelessWidget {
@@ -14,10 +13,13 @@ class LegSetsWon extends StatelessWidget {
 
   String _getLegsSetsWon(GameX01 gameX01, bool shouldReturnSets,
       PlayerOrTeamGameStatisticsX01 stats, GameSettingsX01 gameSettingsX01) {
-    if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01))
+    if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01)) {
       stats = gameX01.getTeamStatsFromPlayer(stats.getPlayer.getName);
+    }
 
-    if (shouldReturnSets) return stats.getSetsWon.toString();
+    if (shouldReturnSets) {
+      return stats.getSetsWon.toString();
+    }
 
     return stats.getLegsWonTotal.toString();
   }
