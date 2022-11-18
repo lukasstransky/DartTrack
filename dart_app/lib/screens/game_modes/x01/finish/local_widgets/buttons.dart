@@ -13,6 +13,8 @@ class Buttons extends StatefulWidget {
 }
 
 class _ButtonsState extends State<Buttons> {
+  String gameId = '';
+
   _saveGameX01ToFirestore(BuildContext context) async {
     gameId = await context
         .read<FirestoreServiceGames>()
@@ -42,8 +44,6 @@ class _ButtonsState extends State<Buttons> {
     );
     Revert.revertPoints(context);
   }
-
-  String gameId = '';
 
   @override
   Widget build(BuildContext context) {

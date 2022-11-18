@@ -61,11 +61,17 @@ class _DetailedLegState extends State<DetailedLeg> {
     int mostDarts = 0;
     for (PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
-      if (playerOrTeamGameStatsX01
-              .getAllScoresPerLeg[widget.setLegString].length >
-          mostDarts) {
-        mostDarts = playerOrTeamGameStatsX01
-            .getAllScoresPerLeg[widget.setLegString].length;
+      final bool isValueForKeyAvailable = playerOrTeamGameStatsX01
+          .getAllScoresPerLeg
+          .containsKey(widget.setLegString);
+
+      if (isValueForKeyAvailable) {
+        if (playerOrTeamGameStatsX01
+                .getAllScoresPerLeg[widget.setLegString].length >
+            mostDarts) {
+          mostDarts = playerOrTeamGameStatsX01
+              .getAllScoresPerLeg[widget.setLegString].length;
+        }
       }
     }
 
@@ -108,8 +114,12 @@ class _DetailedLegState extends State<DetailedLeg> {
                     ),
                     for (int i = 0;
                         i <
-                            playerOrTeamGameStatsX01
-                                .getAllScoresPerLeg[widget.setLegString].length;
+                            (playerOrTeamGameStatsX01.getAllScoresPerLeg
+                                    .containsKey(widget.setLegString)
+                                ? playerOrTeamGameStatsX01
+                                    .getAllScoresPerLeg[widget.setLegString]
+                                    .length
+                                : 0);
                         i++) ...[
                       if (i == 0)
                         Padding(

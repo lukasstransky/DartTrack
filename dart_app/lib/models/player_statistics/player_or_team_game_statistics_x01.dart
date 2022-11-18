@@ -79,6 +79,8 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
       []; //for reverting -> input method three darts (e.g. 20 D15, 20 10 D20, D10)
   Map<String, String> _playersWithCheckoutInLeg =
       {}; // for team mode -> displaying checkouts of players
+  Map<String, String> _setLegWithPlayerOrTeamWhoFinishedIt =
+      {}; // for reverting -> to set correct previous player/team
 
   PlayerOrTeamGameStatisticsX01.Firestore(
       {required String gameId,
@@ -298,6 +300,11 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
   set setPlayersWithCheckoutInLeg(Map<String, String> value) =>
       this._playersWithCheckoutInLeg = value;
 
+  Map<String, String> get getLegSetWithPlayerOrTeamWhoFinishedIt =>
+      this._setLegWithPlayerOrTeamWhoFinishedIt;
+  set setLegSetWithPlayerOrTeamWhoFinishedIt(Map<String, String> value) =>
+      this._setLegWithPlayerOrTeamWhoFinishedIt = value;
+
   //calc average based on total points and all scores length
   String getAverage() {
     if (getTotalPoints == 0 && getAllScores.length == 0) return '-';
@@ -325,34 +332,12 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
     return result;
   }
 
-  //returns only those rounded scores (140+: 4) that are included in the list
-  /*Map<int, int> getSpecificRoundedScores(List<int> specificRoundedScores) {
-    Map<int, int> result = {};
-    for (int score in specificRoundedScores) {
-      final int value = getRoundedScoresEven[score]!.toInt();
-      result[score] = value;
-    }
-    return result;
-  }*/
-
   String getFirstNinveAvg() {
     if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) return '-';
 
     return ((getFirstNineAvgPoints / getFirstNineAvgCount) * 3)
         .toStringAsFixed(2);
   }
-
-  /*Map<int, int> getPreciseScoresSorted() {
-    Map<dynamic, dynamic> mapToSort = getPreciseScores;
-    return new SplayTreeMap<int, int>.from(
-        mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
-  }
-
-  Map<String, int> getAllScoresPerDartAsStringCountSorted() {
-    Map<dynamic, dynamic> mapToSort = getAllScoresPerDartAsStringCount;
-    return new SplayTreeMap<String, int>.from(
-        mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
-  }*/
 
   String getCheckoutQuoteInPercent() {
     if (getCheckoutCount == 0) return '-';

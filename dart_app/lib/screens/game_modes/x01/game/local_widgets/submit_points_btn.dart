@@ -136,13 +136,15 @@ class SubmitPointsBtn extends StatelessWidget {
             ? MaterialStateProperty.all(Colors.green)
             : MaterialStateProperty.all(Utils.darken(Colors.green, 25));
 
-    return Consumer<GameX01>(
-      builder: (_, gameX01, __) => ElevatedButton(
+    return Consumer2<GameX01, GameSettingsX01>(
+      builder: (_, gameX01, gameSettingsX01, __) => ElevatedButton(
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
-                side: BorderSide(color: Colors.black, width: 2),
+                side: gameSettingsX01.getInputMethod == InputMethod.Round
+                    ? BorderSide(color: Colors.black, width: 2)
+                    : BorderSide.none,
               ),
             ),
             backgroundColor: _colorResult,

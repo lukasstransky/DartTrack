@@ -46,20 +46,20 @@ class GameState extends State<Game> {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
-    gameX01.setGameSettings = gameSettingsX01;
-    gameX01.setPlayerGameStatistics = [];
-
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      gameX01.setCurrentPlayerToThrow = gameSettingsX01.getPlayers.first;
-    } else {
-      gameX01.setCurrentTeamToThrow = gameSettingsX01.getTeams.first;
-      gameX01.setCurrentPlayerToThrow =
-          gameSettingsX01.getTeams.first.getPlayers.first;
-    }
-
-    //if game is finished -> undo last throw -> will call init again
+    // if game is finished -> undo last throw will call init again
     if (gameSettingsX01.getPlayers.length !=
         gameX01.getPlayerGameStatistics.length) {
+      gameX01.setGameSettings = gameSettingsX01;
+      gameX01.setPlayerGameStatistics = [];
+
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
+        gameX01.setCurrentPlayerToThrow = gameSettingsX01.getPlayers.first;
+      } else {
+        gameX01.setCurrentTeamToThrow = gameSettingsX01.getTeams.first;
+        gameX01.setCurrentPlayerToThrow =
+            gameSettingsX01.getTeams.first.getPlayers.first;
+      }
+
       gameX01.setInit = true;
       final int points = gameSettingsX01.getPointsOrCustom();
 
@@ -79,12 +79,12 @@ class GameState extends State<Game> {
                   mode: 'X01',
                   currentPoints: points,
                   dateTime: gameX01.getDateTime));
-          team.setCurrPlayerToThrow = team.getPlayers.first;
+          team.setCurrentPlayerToThrow = team.getPlayers.first;
         }
 
         for (PlayerOrTeamGameStatistics teamStats
             in gameX01.getTeamGameStatistics) {
-          teamStats.getTeam.setCurrPlayerToThrow =
+          teamStats.getTeam.setCurrentPlayerToThrow =
               teamStats.getTeam.getPlayers.first;
         }
 

@@ -74,9 +74,9 @@ class Utils {
     int currentValueToSkip = -1;
     for (int value in sortedMapByValues.values) {
       if (value != currentValueToSkip) {
-        List<String> keysWithValue =
+        final List<String> keysWithValue =
             getStringKeysWithValueSorted(sortedMapByValues, value);
-        Map<String, int> sortedMap =
+        final Map<String, int> sortedMap =
             getSortedMapStringInt(sortedMapByValues, keysWithValue);
         result.addAll(sortedMap);
       }
@@ -199,6 +199,8 @@ class Utils {
         tripples.add(int.parse(key.substring(1)));
       } else if (key[0] == 'D') {
         doubles.add(int.parse(key.substring(1)));
+      } else if (key == 'Bull') {
+        singles.add(50);
       } else {
         singles.add(int.parse(key));
       }
@@ -223,7 +225,11 @@ class Utils {
     result.addAll(temp);
     temp = [];
     for (int single in singles) {
-      temp.add(single.toString());
+      if (single == 50) {
+        temp.add('Bull');
+      } else {
+        temp.add(single.toString());
+      }
     }
     result.addAll(temp);
 

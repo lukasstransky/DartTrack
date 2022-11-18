@@ -88,11 +88,11 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
                 style: TextStyle(fontSize: 16.sp),
               ),
               Text(
-                currPlayerOrTeamGameStatsX01!.getTeam.getCurrPlayerToThrow
+                currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow
                         is Bot
-                    ? 'Lvl. ${currPlayerOrTeamGameStatsX01!.getTeam.getCurrPlayerToThrow.getLevel} Bot'
+                    ? 'Lvl. ${currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow.getLevel} Bot'
                     : currPlayerOrTeamGameStatsX01!
-                        .getTeam.getCurrPlayerToThrow.getName,
+                        .getTeam.getCurrentPlayerToThrow.getName,
                 style: TextStyle(fontSize: 13.sp),
               ),
             ],

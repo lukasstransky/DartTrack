@@ -4,6 +4,7 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/utils.dart';
 
 class GameX01 extends Game {
@@ -26,6 +27,10 @@ class GameX01 extends Game {
       true; //only for input type -> three darts + automatically submit points (to disable buttons when delay is active)
   bool _areTeamStatsDisplayed =
       true; // only for team mode -> to determine if team or player stats should be displayed in game stats
+  Map<String, List<String>> _currentPlayerOfTeamsBeforeLegFinish =
+      {}; // for reverting -> save current player whose turn it was before leg was finished for each team (e.g.: Leg 1; 'Strainski', 'a')
+  Map<String, String> _setLegWithPlayerOrTeamWhoFinishedIt =
+      {}; // for reverting -> to set correct previous player/team
 
   factory GameX01.createGameX01(Game? game) {
     GameX01 gameX01 = new GameX01();
@@ -84,6 +89,16 @@ class GameX01 extends Game {
   bool get getAreTeamStatsDisplayed => this._areTeamStatsDisplayed;
   set setAreTeamStatsDisplayed(bool value) =>
       this._areTeamStatsDisplayed = value;
+
+  Map<String, List<String>> get getCurrentPlayerOfTeamsBeforeLegFinish =>
+      this._currentPlayerOfTeamsBeforeLegFinish;
+  set setCurrentPlayerOfTeamsBeforeLegFinish(Map<String, List<String>> value) =>
+      this._currentPlayerOfTeamsBeforeLegFinish = value;
+
+  Map<String, String> get getLegSetWithPlayerOrTeamWhoFinishedIt =>
+      this._setLegWithPlayerOrTeamWhoFinishedIt;
+  set setLegSetWithPlayerOrTeamWhoFinishedIt(Map<String, String> value) =>
+      this._setLegWithPlayerOrTeamWhoFinishedIt = value;
 
   /************************************************************/
   /********                 METHDODS                   ********/
@@ -239,7 +254,7 @@ class GameX01 extends Game {
 
   //needed for allScoresPerLeg + CheckoutCountAtThrownDarts
   //returns e.g. 'Leg 1' or 'Set 1 Leg 2'
-  String getCurrentLegSetAsString(
+  String getCurrentSetLegAsString(
       GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     final int currentLeg = _getCurrentLeg(gameX01, gameSettingsX01);
 
@@ -313,7 +328,7 @@ class GameX01 extends Game {
   List<String> getAllLegSetStringsExceptCurrentOne(
       GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     final String currentSetLegString =
-        getCurrentLegSetAsString(gameX01, gameSettingsX01);
+        getCurrentSetLegAsString(gameX01, gameSettingsX01);
 
     List<String> result = [];
     for (String key
@@ -332,7 +347,7 @@ class GameX01 extends Game {
 
   bool _shouldPointBtnBeDisabledRound(
       String btnValueToCheck, PlayerOrTeamGameStatisticsX01 stats) {
-    //DOUBLE IN
+    // DOUBLE IN
     if (stats.getCurrentPoints == getGameSettings.getPointsOrCustom() &&
         (getGameSettings.getModeIn == ModeOutIn.Double ||
             getGameSettings.getModeIn == ModeOutIn.Master)) {
@@ -367,6 +382,13 @@ class GameX01 extends Game {
           NO_SCORES_POSSIBLE.contains(result) ||
           stats.getCurrentPoints - result == 1) {
         return true;
+      }
+
+      // double out (prevent from finishing with 171, 174, 180)
+      if (getGameSettings.getModeOut == ModeOutIn.Double) {
+        if (result >= 171 && stats.getCurrentPoints <= 180) {
+          return true;
+        }
       }
     }
 
@@ -423,8 +445,11 @@ class GameX01 extends Game {
             getGameSettings.getModeOut == ModeOutIn.Master) &&
         (stats.getCurrentPoints - result == 0)) {
       if (getGameSettings.getModeOut == ModeOutIn.Double) {
-        //only enable fields with D
-        return getCurrentPointType == PointType.Double ? false : true;
+        //only enable fields with D and bull
+        return (getCurrentPointType == PointType.Double ||
+                btnValueToCheck == 'Bull')
+            ? false
+            : true;
       }
       //only enable fields with D or T
       return getCurrentPointType == PointType.Double ||
@@ -470,16 +495,13 @@ class GameX01 extends Game {
     final int currentPoints = stats.getCurrentPoints;
     final int result = currentPoints - thrownPoints;
 
-    //double out
+    // double out
     if (getGameSettings.getModeOut == ModeOutIn.Double) {
       if (isDoubleField(currentPoints.toString())) {
         return 3;
       } else if (result <= 50 && thrownPoints <= 60) {
         return 2;
       } else if (result <= 50 && thrownPoints > 60) {
-        if (_possibleTwoDartFinish(thrownPoints)) {
-          return 2;
-        }
         return 1;
       }
     }
@@ -487,32 +509,22 @@ class GameX01 extends Game {
     return -1;
   }
 
-  //determine if its possible to score with 1 dart in order to leave a double field -> 2 darts on double instead of 1
-  bool _possibleTwoDartFinish(int thrownPoints) {
-    for (int i = 20; i > 0; i--) {
-      final int tripple = i * 3;
-      final int result = thrownPoints - tripple;
-
-      if (isDoubleField(result.toString())) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   //needed to set all scores per leg
   int _getCurrentLeg(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     int result = 1;
 
-    if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01)) {
-      for (PlayerOrTeamGameStatisticsX01 stats in this.getTeamGameStatistics)
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      for (PlayerOrTeamGameStatisticsX01 stats
+          in this.getPlayerGameStatistics) {
         result += stats.getLegsWon;
+      }
+    } else {
+      for (PlayerOrTeamGameStatisticsX01 stats in this.getTeamGameStatistics) {
+        result += stats.getLegsWon;
+      }
+
       return result;
     }
-
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
-      result += stats.getLegsWon;
 
     return result;
   }
@@ -547,6 +559,23 @@ class GameX01 extends Game {
         in this.getTeamGameStatistics) {
       for (Player player in teamStats.getTeam.getPlayers) {
         if (player.getName == playerName) result = teamStats;
+      }
+    }
+
+    return result;
+  }
+
+  dynamic getPlayerStatsFromCurrentTeamToThrow(
+      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+    List<PlayerOrTeamGameStatisticsX01> result = [];
+
+    for (PlayerOrTeamGameStatisticsX01 stats
+        in gameX01.getPlayerGameStatistics) {
+      final Team teamOfPlayer = gameSettingsX01.findTeamForPlayer(
+          stats.getPlayer.getName, gameSettingsX01);
+
+      if (teamOfPlayer.getName == gameX01.getCurrentTeamToThrow.getName) {
+        result.add(stats);
       }
     }
 

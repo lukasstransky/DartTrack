@@ -9,11 +9,11 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-//HERE ARE METHODS DEFINED THAT ARE NEEDED BY MULTIPLE WIDGETS
-//instead of defining & passing callbacks...
+// HERE ARE METHODS DEFINED THAT ARE NEEDED BY MULTIPLE WIDGETS
+// instead of defining & passing callbacks...
 
-//shows a dialog for selecting the amount of checkout possibilities for the current throw
-//finishCount is only transfered when the input method is three darts (there I know the finish count)
+// shows a dialog for selecting the amount of checkout possibilities for the current throw
+// finishCount is only transfered when the input method is three darts (there I know the finish count)
 showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
     BuildContext context) {
   final GameX01 gameX01 = context.read<GameX01>();
@@ -43,6 +43,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
           ? threeDartsCalculated
           : currentPointsSelected;
   selectedCheckoutCount = gameX01.finishedLegSetOrGame(pointsThrown) ? 1 : 0;
+  final bool isDoubleField = gameX01.isDoubleField(pointsThrown);
 
   showDialog(
     barrierDismissible: false,
@@ -78,6 +79,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                         gameSettingsX01.getInputMethod == InputMethod.ThreeDarts
                             ? threeDartsCalculated
                             : currentPointsSelected))
+                      // button 0 for checkout darts
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.all(5),
@@ -113,6 +115,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           ),
                         ),
                       ),
+                    // button 1 for checkout darts
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.all(5),
@@ -147,15 +150,21 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       ),
                     ),
                     if (checkoutPossibilities >= 2)
+                      // button 2 for checkout darts
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.all(5),
                           child: ElevatedButton(
                             onPressed: () {
-                              setState(() => selectedCheckoutCount = 2);
-                              if (selectedFinishCount < 2) {
-                                selectedFinishCount = 2;
-                              }
+                              setState(() {
+                                selectedCheckoutCount = 2;
+                                if (!isDoubleField) {
+                                  selectedFinishCount = 3;
+                                }
+                                if (selectedFinishCount < 2) {
+                                  selectedFinishCount = 2;
+                                }
+                              });
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
@@ -186,6 +195,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                         ),
                       ),
                     if (checkoutPossibilities == 3)
+                      // button 3 for checkout darts
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.all(5),
@@ -230,14 +240,16 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
               if (gameSettingsX01.getInputMethod == InputMethod.Round &&
                   gameX01.finishedLegSetOrGame(currentPointsSelected)) ...[
                 Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Darts for Finish:')),
+                  alignment: Alignment.centerLeft,
+                  child: Text('Darts for Finish:'),
+                ),
                 Row(
                   children: [
                     if (gameX01.isDoubleField(currentPointsSelected) ||
                         (gameSettingsX01.getModeOut == ModeOutIn.Master &&
                             gameX01.isTrippleField(
                                 int.parse(currentPointsSelected))))
+                      // button 1 for finish darts
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.all(5),
@@ -278,13 +290,16 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           ),
                         ),
                       ),
+                    // button 2 for finish darts
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.all(5),
                         child: ElevatedButton(
                           onPressed: () {
-                            if (selectedCheckoutCount <= 2)
+                            if (selectedCheckoutCount < 2 ||
+                                selectedCheckoutCount == 2 && isDoubleField) {
                               setState(() => selectedFinishCount = 2);
+                            }
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
@@ -298,7 +313,9 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 ),
                               ),
                             ),
-                            backgroundColor: selectedCheckoutCount > 2
+                            backgroundColor: selectedCheckoutCount > 2 ||
+                                    (selectedCheckoutCount == 2 &&
+                                        !isDoubleField)
                                 ? MaterialStateProperty.all(
                                     Utils.darken(Colors.grey, 25))
                                 : selectedFinishCount == 2
@@ -309,7 +326,9 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             shadowColor:
                                 MaterialStateProperty.all(Colors.transparent),
                             overlayColor: selectedFinishCount == 2 ||
-                                    selectedCheckoutCount > 2
+                                    selectedCheckoutCount > 2 ||
+                                    (selectedCheckoutCount == 2 &&
+                                        !isDoubleField)
                                 ? MaterialStateProperty.all(Colors.transparent)
                                 : MaterialStateProperty.all(
                                     Theme.of(context).colorScheme.primary),
@@ -317,6 +336,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                         ),
                       ),
                     ),
+                    // button 3 for finish darts
                     Expanded(
                       child: Container(
                         margin: EdgeInsets.all(5),

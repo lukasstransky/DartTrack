@@ -3,7 +3,7 @@ import 'package:dart_app/models/player.dart';
 class Team {
   String _name;
   List<Player> _players = [];
-  late Player _currPlayerToThrow;
+  late Player _currentPlayerToThrow;
 
   Team({required String name}) : _name = name;
 
@@ -13,7 +13,7 @@ class Team {
       required Player currentPlayerToThrow})
       : _name = name,
         _players = players,
-        _currPlayerToThrow = currentPlayerToThrow;
+        _currentPlayerToThrow = currentPlayerToThrow;
 
   factory Team.fromMap(map) {
     return new Team.Firestore(
@@ -34,7 +34,7 @@ class Team {
         return item.toMap(item);
       }).toList(),
       'currentPlayerToThrow':
-          team.getCurrPlayerToThrow.toMap(team.getCurrPlayerToThrow),
+          team.getCurrentPlayerToThrow.toMap(team.getCurrentPlayerToThrow),
     };
   }
 
@@ -44,6 +44,7 @@ class Team {
   List<Player> get getPlayers => this._players;
   set setPlayers(List<Player> value) => this._players = value;
 
-  Player get getCurrPlayerToThrow => this._currPlayerToThrow;
-  set setCurrPlayerToThrow(Player value) => this._currPlayerToThrow = value;
+  Player get getCurrentPlayerToThrow => this._currentPlayerToThrow;
+  set setCurrentPlayerToThrow(Player value) =>
+      this._currentPlayerToThrow = value;
 }

@@ -32,6 +32,8 @@ class Submit {
     final bool isBust = scoredFieldString == 'Bust' ? true : false;
     final int scoredPoints =
         isBust ? 0 : gameX01.getValueOfSpecificDart(scoredFieldString);
+    final bool isInputMethodThreeDarts =
+        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts ? true : false;
 
     late final PlayerOrTeamGameStatisticsX01 currentStats;
     if (shouldSubmitTeamStats) {
@@ -42,7 +44,7 @@ class Submit {
 
     gameX01.setRevertPossible = true;
 
-    if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+    if (isInputMethodThreeDarts) {
       if (isBust) {
         _submitBusted(currentStats, gameX01);
       }
@@ -54,8 +56,8 @@ class Submit {
       // update current points for each player in team
       if (_shouldUpdateStatsForPlayersOfSameTeam(
           shouldSubmitTeamStats, gameSettingsX01)) {
-        for (PlayerOrTeamGameStatisticsX01 stats
-            in _getPlayerStatsFromSameTeam(gameX01, gameSettingsX01)) {
+        for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+            .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
           stats.setCurrentPoints = stats.getCurrentPoints - scoredPoints;
         }
       } else {
@@ -66,44 +68,45 @@ class Submit {
 
     //add delay for last dart for three darts input method
     final int milliseconds =
-        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
-                gameSettingsX01.getAutomaticallySubmitPoints
+        isInputMethodThreeDarts && gameSettingsX01.getAutomaticallySubmitPoints
             ? 800
             : 0;
+
+    // set starting points (3-darts-mode)
+    if (isInputMethodThreeDarts) {
+      if (_shouldUpdateStatsForPlayersOfSameTeam(
+          shouldSubmitTeamStats, gameSettingsX01)) {
+        for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+            .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
+          stats.setStartingPoints = currentStats.getCurrentPoints;
+        }
+      } else {
+        currentStats.setStartingPoints = currentStats.getCurrentPoints;
+      }
+    }
 
     Future.delayed(Duration(milliseconds: milliseconds), () {
       currentStats.setPointsSelectedCount = 0;
       gameX01.setCurrentPointsSelected = 'Points';
 
-      // set starting points (3-darts-mode)
-      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
-        if (_shouldUpdateStatsForPlayersOfSameTeam(
-            shouldSubmitTeamStats, gameSettingsX01)) {
-          for (PlayerOrTeamGameStatisticsX01 stats
-              in _getPlayerStatsFromSameTeam(gameX01, gameSettingsX01)) {
-            stats.setStartingPoints = currentStats.getCurrentPoints;
-          }
-        } else {
-          currentStats.setStartingPoints = currentStats.getCurrentPoints;
-        }
-      }
-
       late int totalPoints;
-      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+      if (isInputMethodThreeDarts) {
         gameX01.setCurrentPointType = PointType.Single;
         totalPoints = int.parse(gameX01.getCurrentThreeDartsCalculated());
       } else {
-        currentStats.setCurrentThrownDartsInLeg =
-            currentStats.getCurrentThrownDartsInLeg + thrownDarts;
-        currentStats.setAllThrownDarts =
-            currentStats.getAllThrownDarts + thrownDarts;
-
-        if (currentStats.getCurrentThrownDartsInLeg <= 9) {
+        // first nine avg
+        if (currentStats.getCurrentThrownDartsInLeg < 9) {
           currentStats.setFirstNineAvgPoints =
               currentStats.getFirstNineAvgPoints + scoredPoints;
           currentStats.setFirstNineAvgCount =
               currentStats.getFirstNineAvgCount + thrownDarts;
         }
+
+        // thrown darts
+        currentStats.setCurrentThrownDartsInLeg =
+            currentStats.getCurrentThrownDartsInLeg + thrownDarts;
+        currentStats.setAllThrownDarts =
+            currentStats.getAllThrownDarts + thrownDarts;
 
         currentStats.setAllScoresCountForRound =
             currentStats.getAllScoresCountForRound + 1;
@@ -128,7 +131,7 @@ class Submit {
       }
 
       // reset current 3 darts for 3-darts-mode
-      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+      if (isInputMethodThreeDarts) {
         if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
           if ((gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
                   legSetOrGameFinsihed) &&
@@ -174,8 +177,8 @@ class Submit {
 
     // update sets, legs for players from same team
     if (shouldSubmitTeamStats) {
-      for (PlayerOrTeamGameStatisticsX01 stats
-          in _getPlayerStatsFromSameTeam(gameX01, gameSettingsX01)) {
+      for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+          .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
         stats.setLegsWon = currentStats.getLegsWon;
         stats.setLegsWonTotal = currentStats.getLegsWonTotal;
         stats.setSetsWon = currentStats.getSetsWon;
@@ -200,8 +203,8 @@ class Submit {
     // update current points
     if (_shouldUpdateStatsForPlayersOfSameTeam(
         shouldSubmitTeamStats, gameSettingsX01)) {
-      for (PlayerOrTeamGameStatisticsX01 stats
-          in _getPlayerStatsFromSameTeam(gameX01, gameSettingsX01)) {
+      for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+          .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
         stats.setCurrentPoints = stats.getCurrentPoints - scoredPoints;
       }
     } else {
@@ -226,17 +229,17 @@ class Submit {
     // total Points
     currentStats.setTotalPoints = currentStats.getTotalPoints + scoredPoints;
 
-    // thrown darts
-    currentStats.setCurrentThrownDartsInLeg =
-        currentStats.getCurrentThrownDartsInLeg + 1;
-    currentStats.setAllThrownDarts = currentStats.getAllThrownDarts + 1;
-
     // first nine avg
-    if (currentStats.getCurrentThrownDartsInLeg <= 9) {
+    if (currentStats.getCurrentThrownDartsInLeg < 9) {
       currentStats.setFirstNineAvgPoints =
           currentStats.getFirstNineAvgPoints + scoredPoints;
       currentStats.setFirstNineAvgCount = currentStats.getFirstNineAvgCount + 1;
     }
+
+    // thrown darts
+    currentStats.setCurrentThrownDartsInLeg =
+        currentStats.getCurrentThrownDartsInLeg + 1;
+    currentStats.setAllThrownDarts = currentStats.getAllThrownDarts + 1;
   }
 
   /************************************************************/
@@ -252,7 +255,7 @@ class Submit {
       stats.getPreciseScores[totalPoints] = 1;
     }
 
-    // set rounded score even
+    // rounded score even
     List<int> keys = stats.getRoundedScoresEven.keys.toList();
     if (totalPoints == 180) {
       stats.getRoundedScoresEven[keys[keys.length - 1]] += 1;
@@ -264,7 +267,7 @@ class Submit {
       }
     }
 
-    // set rounded scores odd
+    // rounded scores odd
     keys = stats.getRoundedScoresOdd.keys.toList();
     if (totalPoints >= 170) {
       stats.getRoundedScoresOdd[keys[keys.length - 1]] += 1;
@@ -278,7 +281,7 @@ class Submit {
 
     //set all scores per leg
     final String key =
-        gameX01.getCurrentLegSetAsString(gameX01, gameSettingsX01);
+        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01);
     if (stats.getAllScoresPerLeg.containsKey(key)) {
       //add to value list
       stats.getAllScoresPerLeg[key].add(totalPoints);
@@ -286,21 +289,6 @@ class Submit {
       //create new pair in map
       stats.getAllScoresPerLeg[key] = [totalPoints];
     }
-  }
-
-  static dynamic _getPlayerStatsFromSameTeam(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
-    List<PlayerOrTeamGameStatisticsX01> result = [];
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in gameX01.getPlayerGameStatistics) {
-      final Team teamOfPlayer = gameSettingsX01.findTeamForPlayer(
-          stats.getPlayer.getName, gameSettingsX01);
-
-      if (teamOfPlayer.getName == gameX01.getCurrentTeamToThrow.getName)
-        result.add(stats);
-    }
-
-    return result;
   }
 
   static bool _shouldUpdateStatsForPlayersOfSameTeam(
@@ -321,32 +309,70 @@ class Submit {
     }
 
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
-    final String currentLeg =
-        gameX01.getCurrentLegSetAsString(gameX01, gameSettingsX01);
+    final String currentSetLeg =
+        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01);
+    final bool isSingleMode =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+            ? true
+            : false;
+
+    // set amount of finish darts
+    currentStats.getAmountOfFinishDarts[currentSetLeg] = thrownDarts;
 
     // set thrown darts per leg & reset points
     for (PlayerOrTeamGameStatisticsX01 stats in (shouldSubmitTeamStats
         ? gameX01.getTeamGameStatistics
         : gameX01.getPlayerGameStatistics)) {
-      stats.getThrownDartsPerLeg[currentLeg] = stats.getCurrentThrownDartsInLeg;
-      stats.getAmountOfFinishDarts[currentLeg] = thrownDarts;
+      stats.getThrownDartsPerLeg[currentSetLeg] =
+          stats.getCurrentThrownDartsInLeg;
 
       if (currentStats == stats) {
         stats.setDartsForWonLegCount =
             stats.getDartsForWonLegCount + stats.getCurrentThrownDartsInLeg;
         stats.getAllRemainingPoints.add(totalPoints);
       } else {
-        stats.getAllRemainingPoints.add(stats.getCurrentPoints);
+        if (!isSingleMode && stats.getCurrentPoints == 0) {
+          stats.getAllRemainingPoints.add(totalPoints);
+        } else {
+          stats.getAllRemainingPoints.add(stats.getCurrentPoints);
+        }
+      }
+
+      // set player or team who finished current leg
+      if (!shouldSubmitTeamStats) {
+        stats.getLegSetWithPlayerOrTeamWhoFinishedIt[currentSetLeg] =
+            gameX01.getCurrentPlayerToThrow.getName;
       }
     }
 
-    // add checkout to list
-    currentStats.getCheckouts[currentLeg] = totalPoints;
+    // set player or team who finished current leg (on game level)
+    if (!shouldSubmitTeamStats) {
+      String playerOrTeamName = gameX01.getCurrentPlayerToThrow.getName;
+      if (!isSingleMode) {
+        playerOrTeamName = gameX01.getCurrentTeamToThrow.getName;
+      }
+      gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt[currentSetLeg] =
+          playerOrTeamName;
+    }
 
-    if (shouldSubmitTeamStats) {
-      currentStats.getPlayersWithCheckoutInLeg[
-              gameX01.getCurrentLegSetAsString(gameX01, gameSettingsX01)] =
-          currentStats.getTeam.getCurrPlayerToThrow.getName;
+    // add checkout to list
+    currentStats.getCheckouts[currentSetLeg] = totalPoints;
+
+    // set player of team who finished leg
+    if (!isSingleMode && !shouldSubmitTeamStats) {
+      final String currentPlayerName = gameX01.getCurrentPlayerToThrow.getName;
+      final PlayerOrTeamGameStatisticsX01 teamStats =
+          gameX01.getTeamStatsFromPlayer(currentPlayerName);
+      teamStats.getPlayersWithCheckoutInLeg[currentSetLeg] = currentPlayerName;
+    }
+
+    // set current player of teams before leg finish
+    if (!shouldSubmitTeamStats && !isSingleMode) {
+      List<String> players = [];
+      for (Team team in gameSettingsX01.getTeams) {
+        players.add(team.getCurrentPlayerToThrow.getName);
+      }
+      gameX01.getCurrentPlayerOfTeamsBeforeLegFinish[currentSetLeg] = players;
     }
 
     _updateLegsSets(
@@ -396,11 +422,12 @@ class Submit {
       return true;
     }
 
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single &&
+    // set player leg start index
+    if (isSingleMode &&
         gameX01.getPlayerOrTeamLegStartIndex ==
             gameSettingsX01.getPlayers.length - 1) {
       gameX01.setPlayerOrTeamLegStartIndex = 0;
-    } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+    } else if (!isSingleMode &&
         gameX01.getPlayerOrTeamLegStartIndex ==
             gameSettingsX01.getTeams.length - 1) {
       gameX01.setPlayerOrTeamLegStartIndex = 0;
@@ -409,9 +436,13 @@ class Submit {
           gameX01.getPlayerOrTeamLegStartIndex + 1;
     }
 
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+    // set team/player
+    if (!isSingleMode) {
       gameX01.setCurrentTeamToThrow = gameSettingsX01.getTeams
           .elementAt(gameX01.getPlayerOrTeamLegStartIndex);
+      for (Team team in gameSettingsX01.getTeams) {
+        team.setCurrentPlayerToThrow = team.getPlayers.first;
+      }
       gameX01.setCurrentPlayerToThrow =
           gameX01.getCurrentTeamToThrow.getPlayers.first;
     } else {
@@ -438,20 +469,21 @@ class Submit {
     // update won sets
     if (gameSettingsX01.getLegs == currentStats.getLegsWon) {
       // save leg count of each player -> in case a user wants to revert a set
-      for (PlayerOrTeamGameStatisticsX01 stats
-          in gameX01.getPlayerGameStatistics) {
-        stats.getLegsCount.add(stats.getLegsWon);
-      }
-
       if (shouldSubmitTeamStats) {
         for (PlayerOrTeamGameStatisticsX01 stats
             in gameX01.getTeamGameStatistics) {
           stats.getLegsCount.add(stats.getLegsWon);
+          stats.setLegsWon = 0;
+        }
+      } else {
+        for (PlayerOrTeamGameStatisticsX01 stats
+            in gameX01.getPlayerGameStatistics) {
+          stats.getLegsCount.add(stats.getLegsWon);
+          stats.setLegsWon = 0;
         }
       }
 
       currentStats.setSetsWon = currentStats.getSetsWon + 1;
-      currentStats.setLegsWon = 0;
     }
   }
 
@@ -530,9 +562,9 @@ class Submit {
       // set next player of current team
       if (indexOfCurrentPlayerInCurrentTeam + 1 == players.length) {
         // round of all players finished -> restart from beginning
-        gameX01.getCurrentTeamToThrow.setCurrPlayerToThrow = players[0];
+        gameX01.getCurrentTeamToThrow.setCurrentPlayerToThrow = players[0];
       } else {
-        gameX01.getCurrentTeamToThrow.setCurrPlayerToThrow =
+        gameX01.getCurrentTeamToThrow.setCurrentPlayerToThrow =
             players[indexOfCurrentPlayerInCurrentTeam + 1];
       }
 
@@ -548,7 +580,7 @@ class Submit {
 
       // set next player of next team
       gameX01.setCurrentPlayerToThrow =
-          gameX01.getCurrentTeamToThrow.getCurrPlayerToThrow;
+          gameX01.getCurrentTeamToThrow.getCurrentPlayerToThrow;
 
       if (scrollController.isAttached) {
         scrollController.jumpTo(index: jumpToIndex);
@@ -622,7 +654,7 @@ class Submit {
     }
 
     final Tuple3<String, int, int> tuple = Tuple3<String, int, int>(
-        gameX01.getCurrentLegSetAsString(gameX01, gameSettingsX01),
+        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01),
         stats.getCurrentThrownDartsInLeg,
         checkoutCount);
 
