@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
@@ -18,22 +19,26 @@ class Submit {
   // thrownDarts -> selected from checkout dialog (only for input method -> round)
   // checkout count needed in order to revert checkout count
   // shouldSubmitTeamStats -> for team mode, to submit stats for team
-  static submitPoints(String scoredFieldString, BuildContext context,
+  static submitPoints(String scoredPointsString, BuildContext context,
       [bool shouldSubmitTeamStats = false,
       int thrownDarts = 3,
       int checkoutCount = 0]) {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
-    if (!_shouldSubmit(scoredFieldString, gameSettingsX01, gameX01)) {
+    bool isInputMethodThreeDarts =
+        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts ? true : false;
+    if (gameX01.getCurrentPlayerToThrow is Bot) {
+      isInputMethodThreeDarts = false;
+    }
+
+    if (!_shouldSubmit(scoredPointsString, gameSettingsX01, gameX01)) {
       return;
     }
 
-    final bool isBust = scoredFieldString == 'Bust' ? true : false;
+    final bool isBust = scoredPointsString == 'Bust' ? true : false;
     final int scoredPoints =
-        isBust ? 0 : gameX01.getValueOfSpecificDart(scoredFieldString);
-    final bool isInputMethodThreeDarts =
-        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts ? true : false;
+        isBust ? 0 : gameX01.getValueOfSpecificDart(scoredPointsString);
 
     late final PlayerOrTeamGameStatisticsX01 currentStats;
     if (shouldSubmitTeamStats) {
@@ -66,12 +71,6 @@ class Submit {
       }
     }
 
-    //add delay for last dart for three darts input method
-    final int milliseconds =
-        isInputMethodThreeDarts && gameSettingsX01.getAutomaticallySubmitPoints
-            ? 800
-            : 0;
-
     // set starting points (3-darts-mode)
     if (isInputMethodThreeDarts) {
       if (_shouldUpdateStatsForPlayersOfSameTeam(
@@ -84,6 +83,12 @@ class Submit {
         currentStats.setStartingPoints = currentStats.getCurrentPoints;
       }
     }
+
+    //add delay for last dart for three darts input method
+    final int milliseconds =
+        isInputMethodThreeDarts && gameSettingsX01.getAutomaticallySubmitPoints
+            ? 800
+            : 0;
 
     Future.delayed(Duration(milliseconds: milliseconds), () {
       currentStats.setPointsSelectedCount = 0;
@@ -172,7 +177,7 @@ class Submit {
     if (!shouldSubmitTeamStats &&
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
       submitPoints(
-          scoredFieldString, context, true, thrownDarts, checkoutCount);
+          scoredPointsString, context, true, thrownDarts, checkoutCount);
     }
 
     // update sets, legs for players from same team
@@ -338,6 +343,10 @@ class Submit {
         }
       }
 
+      if (stats.getPlayer is Bot) {
+        stats.getPlayer.setStarterDoubleAlreadySet = false;
+      }
+
       // set player or team who finished current leg
       if (!shouldSubmitTeamStats) {
         stats.getLegSetWithPlayerOrTeamWhoFinishedIt[currentSetLeg] =
@@ -448,6 +457,10 @@ class Submit {
     } else {
       gameX01.setCurrentPlayerToThrow = gameSettingsX01.getPlayers
           .elementAt(gameX01.getPlayerOrTeamLegStartIndex);
+    }
+
+    if (gameX01.getCurrentPlayerToThrow is Bot) {
+      gameX01.botSubmittedPoints = false;
     }
 
     return true;
@@ -582,6 +595,10 @@ class Submit {
       gameX01.setCurrentPlayerToThrow =
           gameX01.getCurrentTeamToThrow.getCurrentPlayerToThrow;
 
+      if (gameX01.getCurrentPlayerToThrow is Bot) {
+        gameX01.setBotSubmittedPoints = false;
+      }
+
       if (scrollController.isAttached) {
         scrollController.jumpTo(index: jumpToIndex);
       }
@@ -605,6 +622,10 @@ class Submit {
         jumpToIndex = indexOfCurrentPlayer + 1;
       }
 
+      if (gameX01.getCurrentPlayerToThrow is Bot) {
+        gameX01.setBotSubmittedPoints = false;
+      }
+
       if (scrollController.isAttached) {
         scrollController.jumpTo(index: jumpToIndex);
       }
@@ -619,9 +640,9 @@ class Submit {
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       return true;
     } else if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
-      if (gameX01.getCurrentThreeDarts[2] != 'Dart 3') {
-        return true;
-      } else if (stats.getCurrentPoints == 0) {
+      if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
+          stats.getCurrentPoints == 0 ||
+          gameX01.getCurrentPlayerToThrow is Bot) {
         return true;
       }
     }
@@ -672,7 +693,8 @@ class Submit {
     if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
         (gameX01.getAmountOfDartsThrown() == 3 ||
             gameX01.finishedLegSetOrGame(
-                gameX01.getCurrentThreeDartsCalculated()))) {
+                gameX01.getCurrentThreeDartsCalculated()) ||
+            gameX01.getCurrentPlayerToThrow is Bot)) {
       return true;
     }
 

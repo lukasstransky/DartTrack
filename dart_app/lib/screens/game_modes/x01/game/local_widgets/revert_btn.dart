@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/models/games/game_x01.dart';
@@ -39,6 +40,10 @@ class RevertBtn extends StatelessWidget {
         onPressed: () {
           if (gameX01.getRevertPossible) {
             Revert.revertPoints(context);
+
+            if (gameX01.getCurrentPlayerToThrow is Bot) {
+              Revert.revertPoints(context);
+            }
           }
         });
   }

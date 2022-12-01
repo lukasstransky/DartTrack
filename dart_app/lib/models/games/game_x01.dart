@@ -31,6 +31,8 @@ class GameX01 extends Game {
       {}; // for reverting -> save current player whose turn it was before leg was finished for each team (e.g.: Leg 1; 'Strainski', 'a')
   Map<String, String> _setLegWithPlayerOrTeamWhoFinishedIt =
       {}; // for reverting -> to set correct previous player/team
+  bool botSubmittedPoints =
+      false; // bug when playing against bot -> ending game -> starting new one (index for listview builder is not able to use)
 
   factory GameX01.createGameX01(Game? game) {
     GameX01 gameX01 = new GameX01();
@@ -100,6 +102,10 @@ class GameX01 extends Game {
   set setLegSetWithPlayerOrTeamWhoFinishedIt(Map<String, String> value) =>
       this._setLegWithPlayerOrTeamWhoFinishedIt = value;
 
+  bool get getBotSubmittedPoints => this.botSubmittedPoints;
+  set setBotSubmittedPoints(bool botSubmittedPoints) =>
+      this.botSubmittedPoints = botSubmittedPoints;
+
   /************************************************************/
   /********                 METHDODS                   ********/
   /************************************************************/
@@ -115,6 +121,8 @@ class GameX01 extends Game {
     resetCurrentThreeDarts();
     setCanBePressed = true;
     setAreTeamStatsDisplayed = true;
+    setCurrentPlayerOfTeamsBeforeLegFinish = {};
+    setLegSetWithPlayerOrTeamWhoFinishedIt = {};
 
     setPlayerGameStatistics = [];
     setTeamGameStatistics = [];

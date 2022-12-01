@@ -1,6 +1,8 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/helper/submit_helper.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
@@ -15,6 +17,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:tuple/tuple.dart';
 
 class Game extends StatefulWidget {
   static const routeName = '/gameX01';
@@ -100,15 +103,19 @@ class GameState extends State<Game> {
             (a.getTeam as Team).getName.compareTo((b.getTeam as Team).getName));
       }
 
-      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts)
+      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
         gameX01.setCurrentPointType = PointType.Single;
+      }
     }
 
-    for (PlayerOrTeamGameStatisticsX01 stats in gameX01.getPlayerGameStatistics)
+    for (PlayerOrTeamGameStatisticsX01 stats
+        in gameX01.getPlayerGameStatistics) {
       stats.setStartingPoints = stats.getCurrentPoints;
+    }
 
-    for (PlayerOrTeamGameStatisticsX01 stats in gameX01.getTeamGameStatistics)
+    for (PlayerOrTeamGameStatisticsX01 stats in gameX01.getTeamGameStatistics) {
       stats.setStartingPoints = stats.getCurrentPoints;
+    }
   }
 
   _showDialogForSuddenDeath() {
@@ -139,6 +146,7 @@ class GameState extends State<Game> {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameX01 gameX01 = context.read<GameX01>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -159,14 +167,21 @@ class GameState extends State<Game> {
                   itemCount: playerStats.length,
                   itemBuilder: (BuildContext context, int index) {
                     // todo: weird bug -> when starting single game -> end -> start as team game -> enter points -> error
-                    if (gameSettingsX01.getSingleOrTeam ==
-                        SingleOrTeamEnum.Single) {
-                      return PlayerOrTeamStatsInGame(
-                        currPlayerOrTeamGameStatsX01:
-                            playerStats[index] as PlayerOrTeamGameStatisticsX01,
-                      );
+                    if (!gameX01.getBotSubmittedPoints &&
+                        gameX01.getCurrentPlayerToThrow is Bot) {
+                      final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
+                      final Tuple3<String, int, int> tuple =
+                          bot.getNextScoredValue(gameX01);
+
+                      Submit.submitPoints(tuple.item1, context, false,
+                          tuple.item2, tuple.item3);
+                      gameX01.setBotSubmittedPoints = true;
                     }
-                    return SizedBox.shrink();
+
+                    return PlayerOrTeamStatsInGame(
+                      currPlayerOrTeamGameStatsX01:
+                          playerStats[index] as PlayerOrTeamGameStatisticsX01,
+                    );
                   },
                 ),
               ),
@@ -183,6 +198,17 @@ class GameState extends State<Game> {
                   scrollDirection: Axis.horizontal,
                   itemCount: teamStats.length,
                   itemBuilder: (BuildContext context, int index) {
+                    if (!gameX01.getBotSubmittedPoints &&
+                        gameX01.getCurrentPlayerToThrow is Bot) {
+                      final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
+                      final Tuple3<String, int, int> tuple =
+                          bot.getNextScoredValue(gameX01);
+
+                      Submit.submitPoints(tuple.item1, context, false,
+                          tuple.item2, tuple.item3);
+                      gameX01.setBotSubmittedPoints = true;
+                    }
+
                     return PlayerOrTeamStatsInGame(
                       currPlayerOrTeamGameStatsX01:
                           teamStats[index] as PlayerOrTeamGameStatisticsX01,

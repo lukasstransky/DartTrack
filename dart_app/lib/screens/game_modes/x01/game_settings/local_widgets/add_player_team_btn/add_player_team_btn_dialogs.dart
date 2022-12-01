@@ -24,9 +24,6 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static bool showBotOption(GameSettingsX01 gameSettingsX01) {
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      return gameSettingsX01.getCountOfBotPlayers() < 2;
-    }
     return !(gameSettingsX01.getCountOfBotPlayers() >= 1) &&
         gameSettingsX01.getPlayers.length <= 1;
   }

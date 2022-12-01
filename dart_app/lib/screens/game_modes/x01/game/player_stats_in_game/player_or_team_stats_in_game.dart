@@ -45,6 +45,11 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
     final bool isSingleMode =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+/* 
+    if (gameX01.getCurrentPlayerToThrow is Bot) {
+      final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
+      Submit.submitPoints(bot.getNextScoredValue(gameX01), context);
+    } */
 
     return Container(
       color: _getBackgroundColor(gameX01, gameSettingsX01),

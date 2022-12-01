@@ -54,6 +54,7 @@ class SubmitPointsBtn extends StatelessWidget {
       _submitPointsForInputMethodRound(
           gameX01.getCurrentPointsSelected, context);
     } else if (_shouldOnPressedBeEnabled(gameSettingsX01)) {
+      // if input method is three darts and points are not auto submitted (btn needs to be pressed)
       thrownDarts = thrownDarts == 0 ? 3 : thrownDarts;
       Submit.submitPoints(_getLastDartThrown(gameX01), context, false,
           thrownDarts, checkoutCount);
