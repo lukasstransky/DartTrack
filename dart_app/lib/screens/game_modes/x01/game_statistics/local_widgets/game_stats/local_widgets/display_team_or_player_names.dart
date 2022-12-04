@@ -16,16 +16,43 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
 
   bool _hasPlayerOrTeamWonTheGame(PlayerOrTeamGameStatisticsX01 stats,
       GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
-    if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01))
+    if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01)) {
       return false;
+    }
 
     if (gameSettingsX01.getSetsEnabled) {
-      if (gameSettingsX01.getSets == stats.getSetsWon) return true;
+      if (gameSettingsX01.getSets == stats.getSetsWon) {
+        return true;
+      }
     } else {
-      if (gameSettingsX01.getLegs == stats.getLegsWon) return true;
+      if (gameSettingsX01.getLegs == stats.getLegsWon) {
+        return true;
+      }
     }
 
     return false;
+  }
+
+  Row _getBotWithLevel(int level) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Text(
+          'Bot',
+          style: TextStyle(
+              fontSize: FONTSIZE_STATISTICS.sp, fontWeight: FontWeight.bold),
+        ),
+        Container(
+          transform: Matrix4.translationValues(0.0, -1.0, 0.0),
+          child: Text(
+            ' (Lvl. ${level})',
+            style: TextStyle(
+              fontSize: 10.sp,
+            ),
+          ),
+        )
+      ],
+    );
   }
 
   @override
@@ -63,55 +90,48 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
                             color: Color(0xffFFD700),
                           ),
                         ),
-                      if (stats.getPlayer is Bot) ...[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                      if (Utils.playerStatsDisplayedInTeamMode(
+                          gameX01, gameSettingsX01)) ...[
+                        Column(
                           children: [
-                            Text(
-                              'Bot',
-                              style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Container(
-                              transform:
-                                  Matrix4.translationValues(0.0, -1.0, 0.0),
-                              child: Text(
-                                ' (Lvl. ${stats.getPlayer.getLevel})',
-                                style: TextStyle(
-                                  fontSize: 10.sp,
-                                ),
-                              ),
-                            )
-                          ],
-                        )
-                      ] else ...[
-                        if (Utils.playerStatsDisplayedInTeamMode(
-                            gameX01, gameSettingsX01))
-                          Column(
-                            children: [
+                            if (stats.getPlayer is Bot) ...[
+                              _getBotWithLevel(stats.getPlayer.getLevel)
+                            ] else ...[
                               Text(
                                 stats.getPlayer.getName,
                                 style: TextStyle(
                                     fontSize: FONTSIZE_STATISTICS.sp,
                                     fontWeight: FontWeight.bold),
                               ),
-                              Text(
-                                '${gameSettingsX01.findTeamForPlayer(stats.getPlayer.getName, gameSettingsX01).getName}',
-                                style: TextStyle(fontSize: 11.sp),
-                              )
                             ],
-                          )
-                        else
+                            Text(
+                              '${gameSettingsX01.findTeamForPlayer(stats.getPlayer.getName, gameSettingsX01).getName}',
+                              style: TextStyle(fontSize: 11.sp),
+                            )
+                          ],
+                        )
+                      ] else ...[
+                        if (Utils.teamStatsDisplayed(
+                            gameX01, gameSettingsX01)) ...[
                           Text(
-                            Utils.teamStatsDisplayed(gameX01, gameSettingsX01)
-                                ? stats.getTeam.getName
-                                : stats.getPlayer.getName,
+                            stats.getTeam.getName,
                             style: TextStyle(
                                 fontSize: FONTSIZE_STATISTICS.sp,
                                 fontWeight: FontWeight.bold),
                           ),
-                      ]
+                        ] else ...[
+                          if (stats.getPlayer is Bot) ...[
+                            _getBotWithLevel(stats.getPlayer.getLevel)
+                          ] else ...[
+                            Text(
+                              stats.getPlayer.getName,
+                              style: TextStyle(
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ],
+                      ],
                     ],
                   ),
                 ),

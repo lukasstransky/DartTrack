@@ -26,6 +26,10 @@ class Bot extends Player {
   int get getLevel => this.level;
   set setLevel(int level) => this.level = level;
 
+  int get getIndexForGeneratedScores => this.indexForGeneratedScores;
+  set setIndexForGeneratedScores(int indexForGeneratedScores) =>
+      this.indexForGeneratedScores = indexForGeneratedScores;
+
   bool get getStarterDoubleAlreadySet => this.starterDoubleAlreadySet;
   set setStarterDoubleAlreadySet(bool starterDoubleAlreadySet) =>
       this.starterDoubleAlreadySet = starterDoubleAlreadySet;
@@ -41,6 +45,10 @@ class Bot extends Player {
 
     // 0 -> when starting the game
     if (indexForGeneratedScores == 0) {
+      shouldGenerateRandomScores = true;
+      starterDoubleAlreadySet = false;
+      generatedScores = List.filled(AMOUNT_OF_GENERATED_SCORES, '');
+
       onePercentOfBaseValue = preDefinedAverage / 100;
       scoreRangeLowerLimit =
           onePercentOfBaseValue * BASE_VALUE_PERCENTAGE_LOWER_LIMIT;

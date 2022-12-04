@@ -190,10 +190,11 @@ class WinByTwoLegsDifference extends StatelessWidget {
                     Switch(
                       value: gameSettingsX01.getWinByTwoLegsDifference,
                       onChanged: (value) {
-                        if (value)
+                        if (value) {
                           _showDialogForSuddenDeath(context, gameSettingsX01);
-                        else
+                        } else {
                           _switchWinByTwoLegsDifference(value, gameSettingsX01);
+                        }
                       },
                     ),
                   ],
@@ -204,7 +205,10 @@ class WinByTwoLegsDifference extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        '(Sudden Death Leg after max. ${gameSettingsX01.getMaxExtraLegs} additional Legs)',
+                        '(Sudden Death Leg after max. ${gameSettingsX01.getMaxExtraLegs} additional ' +
+                            (gameSettingsX01.getMaxExtraLegs == 1
+                                ? 'Leg)'
+                                : 'Legs)'),
                         style: TextStyle(fontSize: 8.sp),
                       ),
                     ),

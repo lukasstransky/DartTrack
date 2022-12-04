@@ -80,7 +80,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
               Padding(
                 padding: EdgeInsets.only(left: 10, bottom: 5),
                 child: Text(
-                  'X01 (${gameSettingsX01.getGameModeDetails(true)})',
+                  'X01 (${gameSettingsX01.getGameModeDetails(true)}',
                   style: TextStyle(fontSize: 12.sp),
                 ),
               ),

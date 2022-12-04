@@ -1,9 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -12,14 +12,14 @@ class SelectInputMethod extends StatelessWidget {
 
   _roundBtnClicked(
       BuildContext context, GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
-    final int amountOfThrownDarts = gameX01.getAmountOfDartsThrown();
-
-    for (int i = 0; i < amountOfThrownDarts; i++) {
-      Revert.revertPoints(context);
+    if (gameX01.getAmountOfDartsThrown() != 0) {
+      Fluttertoast.showToast(
+          msg: 'In order to switch, please finish the round!',
+          toastLength: Toast.LENGTH_LONG);
+    } else {
+      gameSettingsX01.setInputMethod = InputMethod.Round;
+      gameSettingsX01.notify();
     }
-
-    gameSettingsX01.setInputMethod = InputMethod.Round;
-    gameSettingsX01.notify();
   }
 
   _threeDartsBtnClicked(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
@@ -66,7 +66,8 @@ class SelectInputMethod extends StatelessWidget {
                     : MaterialStateProperty.all(
                         Theme.of(context).colorScheme.primary),
                 overlayColor: gameSettingsX01.getInputMethod ==
-                        InputMethod.Round
+                            InputMethod.Round ||
+                        gameX01.getAmountOfDartsThrown() != 0
                     ? MaterialStateProperty.all(Colors.transparent)
                     : Utils.getColorOrPressed(
                         Theme.of(context).colorScheme.primary,

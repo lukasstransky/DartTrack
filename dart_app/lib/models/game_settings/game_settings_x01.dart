@@ -369,10 +369,11 @@ class GameSettingsX01 extends GameSettings {
     String result = '';
 
     if (showPoints) {
-      if (getCustomPoints != -1)
+      if (getCustomPoints != -1) {
         result += '${getCustomPoints.toString()} / ';
-      else
+      } else {
         result += '${getPoints.toString()} / ';
+      }
     }
 
     switch (getModeIn) {
@@ -399,8 +400,14 @@ class GameSettingsX01 extends GameSettings {
         break;
     }
 
-    if (getSuddenDeath)
-      result += ' / SD - after ${getMaxExtraLegs.toString()} Legs';
+    result += ')';
+
+    if (getSuddenDeath) {
+      result += '\nSudden Death - after max. ${getMaxExtraLegs.toString()} Leg';
+      if (getMaxExtraLegs > 1) {
+        result += 's';
+      }
+    }
 
     return result;
   }

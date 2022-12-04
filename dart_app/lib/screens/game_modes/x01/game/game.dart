@@ -42,6 +42,7 @@ class GameState extends State<Game> {
     if (arguments.isNotEmpty && !arguments['openGame']) {
       _init();
     }
+    newItemScrollController();
     super.didChangeDependencies();
   }
 
@@ -116,31 +117,6 @@ class GameState extends State<Game> {
     for (PlayerOrTeamGameStatisticsX01 stats in gameX01.getTeamGameStatistics) {
       stats.setStartingPoints = stats.getCurrentPoints;
     }
-  }
-
-  _showDialogForSuddenDeath() {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => AlertDialog(
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
-        title: Text('Sudden Death'),
-        content: Text(
-            "The 'Sudden Death' leg is reached. The player who wins this leg also wins the game."),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Got It'),
-          ),
-        ],
-      ),
-    );
   }
 
   @override

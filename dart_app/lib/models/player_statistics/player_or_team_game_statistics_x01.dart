@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
 import 'package:dart_app/models/team.dart';
@@ -81,6 +82,8 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
       {}; // for team mode -> displaying checkouts of players
   Map<String, String> _setLegWithPlayerOrTeamWhoFinishedIt =
       {}; // for reverting -> to set correct previous player/team
+  List<InputMethod> _inputMethodForRounds =
+      []; // keep track which input method (round, 3-darts) was used for each score -> for reverting (enter score with round -> enter with 3-darts -> revert)
 
   PlayerOrTeamGameStatisticsX01.Firestore(
       {required String gameId,
@@ -304,6 +307,10 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
       this._setLegWithPlayerOrTeamWhoFinishedIt;
   set setLegSetWithPlayerOrTeamWhoFinishedIt(Map<String, String> value) =>
       this._setLegWithPlayerOrTeamWhoFinishedIt = value;
+
+  List<InputMethod> get getInputMethodForRounds => this._inputMethodForRounds;
+  set setInputMethodForRounds(List<InputMethod> value) =>
+      this._inputMethodForRounds = value;
 
   //calc average based on total points and all scores length
   String getAverage() {

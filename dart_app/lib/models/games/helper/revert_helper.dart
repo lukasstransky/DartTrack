@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
@@ -33,6 +34,22 @@ class Revert {
     } else {
       _setPreviousPlayerOrTeam(gameX01, gameSettingsX01, legSetOrGameReverted);
       currentStats = gameX01.getCurrentPlayerGameStats();
+    }
+
+    if (currentStats.getInputMethodForRounds.isNotEmpty) {
+      final InputMethod lastInputMethod =
+          currentStats.getInputMethodForRounds.removeLast();
+
+      if (gameSettingsX01.getInputMethod != lastInputMethod) {
+        gameSettingsX01.setInputMethod = lastInputMethod;
+        gameSettingsX01.notify();
+      }
+    }
+
+    if (currentStats.getPlayer is Bot &&
+        currentStats.getPlayer.getIndexForGeneratedScores != 0) {
+      currentStats.getPlayer.setIndexForGeneratedScores =
+          currentStats.getPlayer.getIndexForGeneratedScores - 1;
     }
 
     final int lastPoints = gameSettingsX01.getInputMethod == InputMethod.Round
@@ -393,7 +410,8 @@ class Revert {
     }
 
     // all scores per dart
-    if (currentStats.getAllScoresPerDart.isNotEmpty) {
+    if (currentStats.getAllScoresPerDart.isNotEmpty &&
+        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
       currentStats.getAllScoresPerDart.removeLast();
     }
 
@@ -401,7 +419,8 @@ class Revert {
     currentStats.setTotalPoints = currentStats.getTotalPoints - points;
 
     // all scores per dart as string count
-    if (currentStats.getAllScoresPerDartAsString.isNotEmpty) {
+    if (currentStats.getAllScoresPerDartAsString.isNotEmpty &&
+        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
       final String point = currentStats.getAllScoresPerDartAsString.last;
 
       currentStats.getAllScoresPerDartAsString.removeLast();
@@ -493,7 +512,8 @@ class Revert {
       }
 
       // all remaining scores per dart
-      if (currentStats.getAllRemainingScoresPerDart.isNotEmpty) {
+      if (currentStats.getAllRemainingScoresPerDart.isNotEmpty &&
+          gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
         currentStats.getAllRemainingScoresPerDart.removeLast();
       }
     }

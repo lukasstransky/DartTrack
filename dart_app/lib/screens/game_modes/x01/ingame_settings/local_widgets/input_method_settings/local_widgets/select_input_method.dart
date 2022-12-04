@@ -31,6 +31,7 @@ class SelectInputMethod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final inputMethod = context.read<GameSettingsX01>().getInputMethod;
+    final gameX01 = context.read<GameX01>();
 
     return Column(
       children: [
@@ -62,7 +63,8 @@ class SelectInputMethod extends StatelessWidget {
                         ? MaterialStateProperty.all(
                             Theme.of(context).colorScheme.primary)
                         : MaterialStateProperty.all<Color>(Colors.grey),
-                    overlayColor: inputMethod == InputMethod.Round
+                    overlayColor: inputMethod == InputMethod.Round ||
+                            gameX01.getAmountOfDartsThrown() != 0
                         ? MaterialStateProperty.all<Color>(Colors.transparent)
                         : MaterialStateProperty.all(
                             Theme.of(context).colorScheme.primary),

@@ -49,6 +49,13 @@ class Submit {
 
     gameX01.setRevertPossible = true;
 
+    if (gameSettingsX01.getInputMethod == InputMethod.Round) {
+      currentStats.getInputMethodForRounds.add(gameSettingsX01.getInputMethod);
+    } else if (currentStats.getPlayer is Bot &&
+        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+      currentStats.getInputMethodForRounds.add(InputMethod.Round);
+    }
+
     if (isInputMethodThreeDarts) {
       if (isBust) {
         _submitBusted(currentStats, gameX01);
@@ -79,9 +86,9 @@ class Submit {
             .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
           stats.setStartingPoints = currentStats.getCurrentPoints;
         }
-      } else {
-        currentStats.setStartingPoints = currentStats.getCurrentPoints;
       }
+    } else {
+      currentStats.setStartingPoints = currentStats.getCurrentPoints;
     }
 
     //add delay for last dart for three darts input method
@@ -204,6 +211,8 @@ class Submit {
       bool shouldSubmitTeamStats,
       PlayerOrTeamGameStatisticsX01 currentStats) {
     gameX01.setRevertPossible = true;
+
+    currentStats.getInputMethodForRounds.add(InputMethod.ThreeDarts);
 
     // update current points
     if (_shouldUpdateStatsForPlayersOfSameTeam(
@@ -388,7 +397,7 @@ class Submit {
         currentStats, gameSettingsX01, gameX01, shouldSubmitTeamStats);
 
     bool isGameFinished = false;
-    if (_isGameWon(currentStats, gameX01, gameSettingsX01)) {
+    if (_isGameWon(currentStats, gameX01, gameSettingsX01, context)) {
       _sortPlayerStats(gameX01, gameSettingsX01);
       currentStats.setGameWon = true;
       isGameFinished = true;
@@ -787,8 +796,33 @@ class Submit {
         ((legsWon * 2) - 1) == gameSettingsX01.getLegs;
   }
 
+  static _showDialogForSuddenDeath(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        contentPadding: EdgeInsets.only(
+            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+            top: DIALOG_CONTENT_PADDING_TOP,
+            left: DIALOG_CONTENT_PADDING_LEFT,
+            right: DIALOG_CONTENT_PADDING_RIGHT),
+        title: Text('Sudden Death'),
+        content: Text(
+            "The 'Sudden Death' leg is reached. The player who wins this leg also wins the game."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Continue'),
+          ),
+        ],
+      ),
+    );
+  }
+
   static bool _isGameWon(PlayerOrTeamGameStatisticsX01 stats, GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01) {
+      GameSettingsX01 gameSettingsX01, BuildContext context) {
     if (gameX01.getReachedSuddenDeath) {
       return true;
     }
@@ -803,9 +837,10 @@ class Submit {
         return true;
       }
 
-      //suddean death reached
+      // suddean death reached
       if (gameSettingsX01.getSuddenDeath &&
           _reachedSuddenDeath(gameX01, gameSettingsX01)) {
+        _showDialogForSuddenDeath(context);
         gameX01.setReachedSuddenDeath = true;
       }
 
@@ -839,6 +874,7 @@ class Submit {
         in gameX01.getPlayerGameStatistics) {
       final int legs =
           gameSettingsX01.getLegs + gameSettingsX01.getMaxExtraLegs;
+
       if (stats.getLegsWon != legs) {
         result = false;
       }

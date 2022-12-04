@@ -88,6 +88,19 @@ class _GameStatisticsState extends State<GameStatistics> {
     return false;
   }
 
+  bool _oneScorePerDartAtLeast() {
+    for (PlayerOrTeamGameStatisticsX01 stats
+        in (_game!.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single
+            ? _game!.getPlayerGameStatistics
+            : _game!.getTeamGameStatistics)) {
+      if (stats.getAllScoresPerDart.isNotEmpty) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -204,8 +217,7 @@ class _GameStatisticsState extends State<GameStatistics> {
                       child: MostFrequentScores(
                           mostScoresPerDart: false, gameX01: _game as GameX01),
                     ),
-                    if (_game!.getGameSettings.getInputMethod ==
-                        InputMethod.ThreeDarts)
+                    if (_oneScorePerDartAtLeast())
                       Padding(
                         padding: _paddingLastItem,
                         child: MostFrequentScores(

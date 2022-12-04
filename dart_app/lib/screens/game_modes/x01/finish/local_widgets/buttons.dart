@@ -27,9 +27,9 @@ class _ButtonsState extends State<Buttons> {
         .postPlayerGameStatistics(context.read<GameX01>(), gameId, context);
   }
 
-  _newGameBtnClicked(BuildContext context, GameX01 gameX01) {
-    _saveGameX01ToFirestore(context);
-    _savePlayerGameStatisticsX01ToFirestore(context);
+  _newGameBtnClicked(BuildContext context, GameX01 gameX01) async {
+    await _saveGameX01ToFirestore(context);
+    await _savePlayerGameStatisticsX01ToFirestore(context);
     gameX01.reset();
     Navigator.of(context).pushNamed(
       '/gameX01',

@@ -74,7 +74,7 @@ class FirestoreServicePlayerStats {
       }
     }
 
-    //set playerGameStatsIds + gameId for game
+    // set playerGameStatsIds + gameId for game
     await _firestore
         .collection(this._getFirestoreGamesPath())
         .doc(gameId)
