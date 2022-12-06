@@ -68,8 +68,10 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
   bool _noGamesPlayed = false;
 
-  List<Game> _games = [];
+  List<Game> _games = []; // allGames
   List<Game> _filteredGames = [];
+  List<Game> _favouriteGames = [];
+  bool _showFavouriteGames = false;
 
   get countOfGamesWon => this._countOfGamesWon;
 
@@ -198,12 +200,13 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   set thrownDartsWithGameId(thrownDartsWithGameId) =>
       this._thrownDartsWithGameId = thrownDartsWithGameId;
 
-  filterGamesAndStatsByDate(
-      BuildContext context, FilterValue newFilterValue) async {
-    currentFilterValue = newFilterValue;
-    /* await context.read<FirestoreServicePlayerStats>().getStatistics(context);
-    await context.read<FirestoreServiceGames>().getGames('X01', context); */
-  }
+  bool get showFavouriteGames => this._showFavouriteGames;
+
+  set showFavouriteGames(bool value) => this._showFavouriteGames = value;
+
+  List<Game> get favouriteGames => this._favouriteGames;
+
+  set favouriteGames(List<Game> value) => this._favouriteGames = value;
 
   DateTime getDateTimeFromCurrentFilterValue() {
     final DateTime now = new DateTime.now();

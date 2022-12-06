@@ -12,6 +12,7 @@ import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/ro
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/rounded_scorse_odd.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/scoring_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -104,7 +105,12 @@ class _GameStatisticsState extends State<GameStatistics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(true, 'Statistics'),
+      appBar: _game!.getIsGameFinished
+          ? CustomAppBarWithHeart(
+              title: 'Statistics',
+              isFavouriteGame: _game!.getIsFavouriteGame,
+              gameId: _game!.getGameId)
+          : CustomAppBar(true, 'Statistics'),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

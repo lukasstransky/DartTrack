@@ -155,7 +155,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             builder: (_, gameSettingsX01, __) => IconButton(
               onPressed: () async => _defaultSettingsBtnClicked(),
               icon: DefaultSettingsHelper.defaultSettingsSelected(context)
-                  ? Icon(MdiIcons.cardsHeart)
+                  ? Icon(MdiIcons.heart)
                   : Icon(MdiIcons.heartOutline),
             ),
           ),

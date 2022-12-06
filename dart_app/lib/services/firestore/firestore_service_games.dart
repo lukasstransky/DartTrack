@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
@@ -5,7 +6,6 @@ import 'package:dart_app/models/player_statistics/player_or_team_game_statistics
 import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,11 +16,16 @@ class FirestoreServiceGames {
 
   FirestoreServiceGames(this._firestore, this._firebaseAuth);
 
+  /************************************************************************************/
+  /*****************************          GAMES            ****************************/
+  /************************************************************************************/
+
   Future<String> postGame(Game game) async {
     final Game gameToSave = Game.Firestore(
         name: game.getName,
         isGameFinished: true,
         isOpenGame: false,
+        isFavouriteGame: false,
         dateTime: game.getDateTime,
         gameSettings: game.getGameSettings,
         playerGameStatistics: [],
@@ -41,6 +46,13 @@ class FirestoreServiceGames {
             });
 
     return gameId;
+  }
+
+  Future<void> deleteGame(String gameId) async {
+    await _firestore
+        .collection(this._getFirestoreGamesPath())
+        .doc(gameId)
+        .delete();
   }
 
   Future<void> checkIfAtLeastOneX01GameIsPlayed(BuildContext context) async {
@@ -100,6 +112,10 @@ class FirestoreServiceGames {
           game.getTeamGameStatistics.add(playerOrTeamGameStatistics);
         }
 
+        if (game.getIsFavouriteGame) {
+          firestoreStats.favouriteGames.add(game);
+        }
+
         firestoreStats.games.add(game);
         firestoreStats.notify();
       });
@@ -107,7 +123,7 @@ class FirestoreServiceGames {
   }
 
   /************************************************************************************/
-  /***************************         OPEN GAMES            **************************/
+  /****************************        OPEN GAMES            **************************/
   /************************************************************************************/
 
   Future<void> postOpenGame(Game game, BuildContext context) async {
@@ -116,6 +132,7 @@ class FirestoreServiceGames {
         name: game.getName,
         isGameFinished: false,
         isOpenGame: true,
+        isFavouriteGame: false,
         dateTime: game.getDateTime,
         gameSettings: game.getGameSettings,
         playerGameStatistics: game.getPlayerGameStatistics,
@@ -194,6 +211,17 @@ class FirestoreServiceGames {
 
     openGamesFirestore.init = true;
     openGamesFirestore.notify();
+  }
+
+  /************************************************************************************/
+  /***********************         FAVOUTIRE GAMES            *************************/
+  /************************************************************************************/
+
+  Future<void> changeFavouriteStateOfGame(String gameId, bool state) async {
+    await _firestore
+        .collection(_getFirestoreGamesPath())
+        .doc(gameId)
+        .update({'isFavouriteGame': state});
   }
 
   String _getFirestoreGamesPath() {

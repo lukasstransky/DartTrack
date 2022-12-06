@@ -442,13 +442,6 @@ class FirestoreServicePlayerStats {
                 temp.add(game);
                 break;
               }
-              /*  for (PlayerOrTeamGameStatistics playerGameStatistics
-                  in game.getPlayerGameStatistics) {
-                if (playerGameStatistics.getGameId == currentGameId) {
-                  temp.add(game);
-                  break;
-                }
-              } */
             }
           }),
         });
@@ -456,6 +449,21 @@ class FirestoreServicePlayerStats {
     firestoreStats.sortOverallStats(ascendingOrder);
     firestoreStats.filteredGames = temp;
     firestoreStats.notify();
+  }
+
+  Future<void> deletePlayerStats(String gameId) async {
+    await _firestore
+        .collection(this._getFirestorePlayerStatsPath())
+        .where('gameId', isEqualTo: gameId)
+        .get()
+        .then((playerStats) => {
+              playerStats.docs.forEach((playerStat) {
+                _firestore
+                    .collection(this._getFirestorePlayerStatsPath())
+                    .doc(playerStat.id)
+                    .delete();
+              })
+            });
   }
 
   String _getFirestorePlayerStatsPath() {

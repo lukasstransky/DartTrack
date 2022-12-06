@@ -22,6 +22,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
   bool _isOpenGame = false;
   bool _isGameFinished =
       false; // for team mode -> needed for weird behaviour when clicking the show players/teams btn in the stats tab
+  bool _isFavouriteGame = false;
 
   Game({
     required String name,
@@ -35,6 +36,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
       required String name,
       required bool isGameFinished,
       required bool isOpenGame,
+      required bool isFavouriteGame,
       required DateTime dateTime,
       required GameSettings gameSettings,
       required List<PlayerOrTeamGameStatistics> playerGameStatistics,
@@ -45,6 +47,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
         this._name = name,
         this._isGameFinished = isGameFinished,
         this._isOpenGame = isOpenGame,
+        this._isFavouriteGame = isFavouriteGame,
         this._dateTime = dateTime,
         this._gameSettings = gameSettings,
         this._playerGameStatistics = playerGameStatistics,
@@ -59,6 +62,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
       'gameId': getGameId,
       'name': getName,
       'dateTime': getDateTime,
+      'isFavouriteGame': getIsFavouriteGame,
       if (!openGame) 'isGameFinished': true,
       if (openGame) 'isOpenGame': true,
       if (openGame)
@@ -128,6 +132,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
           name: map['name'],
           isGameFinished: false,
           isOpenGame: true,
+          isFavouriteGame: false,
           dateTime: dateTime,
           gameSettings: gameSettings,
           playerGameStatistics: map['playerGameStatistics']
@@ -167,6 +172,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
         name: map['name'],
         isGameFinished: true,
         isOpenGame: false,
+        isFavouriteGame: map['isFavouriteGame'],
         dateTime: dateTime,
         gameSettings: gameSettings,
         playerGameStatistics: [],
@@ -208,6 +214,9 @@ class Game with ChangeNotifier implements Comparable<Game> {
   bool get getIsGameFinished => this._isGameFinished;
   set setIsGameFinished(bool value) => this._isGameFinished = value;
 
+  bool get getIsFavouriteGame => this._isFavouriteGame;
+  set setIsFavouriteGame(bool value) => this._isFavouriteGame = value;
+
   @override
   int compareTo(Game other) {
     if (!getDateTime.isBefore(other.getDateTime)) {
@@ -221,6 +230,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
 
   String getFormattedDateTime() {
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
+
     return formatter.format(getDateTime);
   }
 }

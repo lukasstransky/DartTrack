@@ -2,6 +2,7 @@ import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,23 +14,7 @@ class Buttons extends StatefulWidget {
 }
 
 class _ButtonsState extends State<Buttons> {
-  String gameId = '';
-
-  _saveGameX01ToFirestore(BuildContext context) async {
-    gameId = await context
-        .read<FirestoreServiceGames>()
-        .postGame(context.read<GameX01>());
-  }
-
-  _savePlayerGameStatisticsX01ToFirestore(BuildContext context) async {
-    await context
-        .read<FirestoreServicePlayerStats>()
-        .postPlayerGameStatistics(context.read<GameX01>(), gameId, context);
-  }
-
   _newGameBtnClicked(BuildContext context, GameX01 gameX01) async {
-    await _saveGameX01ToFirestore(context);
-    await _savePlayerGameStatisticsX01ToFirestore(context);
     gameX01.reset();
     Navigator.of(context).pushNamed(
       '/gameX01',
@@ -37,7 +22,12 @@ class _ButtonsState extends State<Buttons> {
     );
   }
 
-  _undoLastThrowBtnClicked(BuildContext context) {
+  _undoLastThrowBtnClicked(BuildContext context) async {
+    await context
+        .read<FirestoreServicePlayerStats>()
+        .deletePlayerStats(g_gameId);
+    await context.read<FirestoreServiceGames>().deleteGame(g_gameId);
+
     Navigator.of(context).pushNamed(
       '/gameX01',
       arguments: {'openGame': false},
@@ -47,7 +37,7 @@ class _ButtonsState extends State<Buttons> {
 
   @override
   Widget build(BuildContext context) {
-    final gameX01 = context.read<GameX01>();
+    final GameX01 gameX01 = context.read<GameX01>();
 
     return Column(
       children: [

@@ -123,14 +123,14 @@ class PointBtnThreeDart extends StatelessWidget {
 
     bool submitAlreadyCalled = false;
     if (!shouldSubmitTeamStats) {
-      checkoutCount = 0;
+      g_checkoutCount = 0;
     }
     if (gameX01.isCheckoutPossible() && !shouldSubmitTeamStats) {
       // finished with 3 darts (high finish) -> show no dialog
       if (amountOfDartsThrown == 3 &&
           gameX01.finishedWithThreeDarts(currentThreeDarts)) {
         if (!gameSettingsX01.getAutomaticallySubmitPoints) {
-          checkoutCount = 1;
+          g_checkoutCount = 1;
         } else {
           Submit.submitPoints(scoredPoints, context, false, 3, 1);
           submitAlreadyCalled = true;
@@ -139,8 +139,8 @@ class PointBtnThreeDart extends StatelessWidget {
         // finished with first dart -> show no dialog
       } else if (amountOfDartsThrown == 1 && finished) {
         if (!gameSettingsX01.getAutomaticallySubmitPoints) {
-          checkoutCount = 1;
-          thrownDarts = 1;
+          g_checkoutCount = 1;
+          g_thrownDarts = 1;
         } else {
           Submit.submitPoints(scoredPoints, context, false, 1, 1);
           submitAlreadyCalled = true;
@@ -155,8 +155,8 @@ class PointBtnThreeDart extends StatelessWidget {
 
           if (finished && count == 1) {
             if (!gameSettingsX01.getAutomaticallySubmitPoints) {
-              checkoutCount = 1;
-              thrownDarts = amountOfDartsThrown;
+              g_checkoutCount = 1;
+              g_thrownDarts = amountOfDartsThrown;
             } else {
               Submit.submitPoints(
                   scoredPoints, context, false, amountOfDartsThrown, 1);

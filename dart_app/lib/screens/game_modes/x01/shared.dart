@@ -399,8 +399,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
           onPressed: () {
             if (!gameSettingsX01.getAutomaticallySubmitPoints &&
                 gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
-              checkoutCount = selectedCheckoutCount;
-              thrownDarts = selectedFinishCount;
+              g_checkoutCount = selectedCheckoutCount;
+              g_thrownDarts = selectedFinishCount;
             } else {
               Submit.submitPoints(
                   currentPointsSelected,

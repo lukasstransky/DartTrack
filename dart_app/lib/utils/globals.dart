@@ -38,7 +38,10 @@ disposeScrollControllersForGamesettings() {
   editTeamController.dispose();
 }
 
-//maybe not best solution
-//needed for input method three darts + don't auto submit points
-int thrownDarts = 0;
-int checkoutCount = 0;
+// maybe not best solution
+// needed for input method three darts + don't auto submit points
+int g_thrownDarts = 0;
+int g_checkoutCount = 0;
+
+// for favouriteGames saving
+String g_gameId = '';

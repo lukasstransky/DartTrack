@@ -15,7 +15,8 @@ class InputMethodSettings extends StatelessWidget {
 
   int _calcCardHeight(BuildContext context, InputMethod inputMethod,
       bool showMostScoredPoints) {
-    final statisticsFirestoreX01 = context.read<StatisticsFirestoreX01>();
+    final StatisticsFirestoreX01 statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01>();
 
     if (inputMethod == InputMethod.Round && showMostScoredPoints) {
       if (!statisticsFirestoreX01.noGamesPlayed) {

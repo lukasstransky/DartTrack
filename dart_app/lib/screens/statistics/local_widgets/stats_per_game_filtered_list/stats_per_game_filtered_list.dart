@@ -211,9 +211,10 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                             left: 5,
                           ),
                           child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                  'Click Card to view Details about a Game')),
+                            alignment: Alignment.centerLeft,
+                            child:
+                                Text('Click card to view details about a game'),
+                          ),
                         ),
                         if (_orderField == 'highestFinish' &&
                             _overallFilter &&

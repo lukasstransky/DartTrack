@@ -46,6 +46,7 @@ class GameX01 extends Game {
     gameX01.setCurrentTeamToThrow = game.getCurrentTeamToThrow;
     gameX01.setIsGameFinished = game.getIsGameFinished;
     gameX01.setIsOpenGame = game.getIsOpenGame;
+    gameX01.setIsFavouriteGame = game.getIsFavouriteGame;
 
     return gameX01;
   }
