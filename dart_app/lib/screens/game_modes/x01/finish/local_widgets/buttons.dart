@@ -24,9 +24,8 @@ class _ButtonsState extends State<Buttons> {
 
   _undoLastThrowBtnClicked(BuildContext context) async {
     await context
-        .read<FirestoreServicePlayerStats>()
-        .deletePlayerStats(g_gameId);
-    await context.read<FirestoreServiceGames>().deleteGame(g_gameId);
+        .read<FirestoreServiceGames>()
+        .deleteGame(context.read<GameX01>(), context);
 
     Navigator.of(context).pushNamed(
       '/gameX01',

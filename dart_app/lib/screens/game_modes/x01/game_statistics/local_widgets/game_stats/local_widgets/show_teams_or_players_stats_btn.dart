@@ -19,7 +19,7 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
       return Container(
         width: WIDTH_HEADINGS_STATISTICS.w,
         padding: EdgeInsets.only(left: 5.w, right: 5.w),
-        transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+        transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
         child: ElevatedButton(
           onPressed: () {
             context.read<GameX01>().setAreTeamStatsDisplayed =

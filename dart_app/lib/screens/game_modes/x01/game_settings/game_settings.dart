@@ -45,8 +45,9 @@ class _GameSettingsState extends State<GameSettings> {
 
   _addCurrentUserToPlayers() {
     final Player? currentUserAsPlayer = context.read<AuthService>().getPlayer;
-    final gameSettingsX01 = context.read<GameSettingsX01>();
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final DefaultSettingsX01 defaultSettingsX01 =
+        context.read<DefaultSettingsX01>();
 
     if (currentUserAsPlayer != null)
       defaultSettingsX01.playersNames.add(currentUserAsPlayer.getName);

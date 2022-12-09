@@ -387,6 +387,7 @@ class StatisticsFirestoreX01 with ChangeNotifier {
   filterGamesByDate(FilterValue newFilterValue, BuildContext context) async {
     this.currentFilterValue = newFilterValue;
     this.resetFilteredGames();
+    this.favouriteGames = [];
 
     if (this.currentFilterValue == FilterValue.Month) {
       final DateTime toCompare =
@@ -394,6 +395,9 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
       for (Game game in this.games) {
         if (game.getDateTime.isAfter(toCompare)) {
+          if (game.getIsFavouriteGame) {
+            this.favouriteGames.add(game);
+          }
           this.filteredGames.add(game);
         }
       }
@@ -403,6 +407,9 @@ class StatisticsFirestoreX01 with ChangeNotifier {
 
       for (Game game in this.games) {
         if (game.getDateTime.isAfter(toCompare)) {
+          if (game.getIsFavouriteGame) {
+            this.favouriteGames.add(game);
+          }
           this.filteredGames.add(game);
         }
       }
@@ -414,11 +421,20 @@ class StatisticsFirestoreX01 with ChangeNotifier {
         if (game.getDateTime.isSameDate(customStartDate, customEndDate) ||
             (game.getDateTime.isAfter(customStartDate) &&
                 game.getDateTime.isBefore(customEndDate))) {
+          if (game.getIsFavouriteGame) {
+            this.favouriteGames.add(game);
+          }
           this.filteredGames.add(game);
         }
       }
     } else if (this.currentFilterValue == FilterValue.Overall) {
       this.filteredGames = this.games;
+
+      for (Game game in this.games) {
+        if (game.getIsFavouriteGame) {
+          this.favouriteGames.add(game);
+        }
+      }
     }
 
     if (this.filteredGames.isEmpty) {

@@ -420,7 +420,7 @@ class Submit {
       }
     }
 
-    if (isGameFinished || currentStats.getGameDraw) {
+    if ((isGameFinished || currentStats.getGameDraw) && shouldSubmitTeamStats) {
       Navigator.of(context).pushNamed('/finishX01');
     } else {
       for (PlayerOrTeamGameStatisticsX01 stats

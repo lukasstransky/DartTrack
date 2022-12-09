@@ -42,9 +42,11 @@ class PointBtnThreeDart extends StatelessWidget {
       if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' &&
           gameSettingsX01.getAutomaticallySubmitPoints) {
         gameX01.setCanBePressed = false;
+        gameX01.notify();
         _submitPointsForInputMethodThreeDarts(
             point as String, pointBtnText, context);
         gameX01.setCanBePressed = true;
+        gameX01.notify();
       } else {
         _submitPointsForInputMethodThreeDarts(
             point as String, pointBtnText, context);

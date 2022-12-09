@@ -12,9 +12,9 @@ import 'package:intl/intl.dart';
 
 class Game with ChangeNotifier implements Comparable<Game> {
   String? _gameId;
-  String _name; //e.g. X01 or Cricket
-  DateTime _dateTime; //when game was played
-  GameSettings? _gameSettings; //there are different settings for each game
+  String _name; // e.g. X01 or Cricket
+  DateTime _dateTime; // when game was played
+  GameSettings? _gameSettings; // there are different settings for each game
   List<PlayerOrTeamGameStatistics> _playerGameStatistics = [];
   List<PlayerOrTeamGameStatistics> _teamGameStatistics = [];
   Player? _currentPlayerToThrow;
@@ -59,7 +59,6 @@ class Game with ChangeNotifier implements Comparable<Game> {
     GameSettingsX01 gameSettingsX01 = getGameSettings as GameSettingsX01;
 
     return {
-      'gameId': getGameId,
       'name': getName,
       'dateTime': getDateTime,
       'isFavouriteGame': getIsFavouriteGame,

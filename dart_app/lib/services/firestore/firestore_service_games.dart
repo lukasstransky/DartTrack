@@ -48,10 +48,19 @@ class FirestoreServiceGames {
     return gameId;
   }
 
-  Future<void> deleteGame(String gameId) async {
+  Future<void> deleteGame(Game game, BuildContext context) async {
+    final FirestoreServicePlayerStats firestoreServicePlayerStats =
+        context.read<FirestoreServicePlayerStats>();
+
+    // delete playerStats or teamStats
+    await firestoreServicePlayerStats.deletePlayerOrTeamStats(
+        game.getGameId, true);
+    await firestoreServicePlayerStats.deletePlayerOrTeamStats(
+        game.getGameId, false);
+
     await _firestore
         .collection(this._getFirestoreGamesPath())
-        .doc(gameId)
+        .doc(game.getGameId)
         .delete();
   }
 
@@ -94,22 +103,26 @@ class FirestoreServiceGames {
 
       games.docs.forEach((element) async {
         final Game game = Game.fromMap(element.data(), mode, element.id, false);
+        final FirestoreServicePlayerStats firestoreServicePlayerStats =
+            context.read<FirestoreServicePlayerStats>();
 
         PlayerOrTeamGameStatistics? playerOrTeamGameStatistics;
+
         for (String playerGameStatsId in element.get('playerGameStatsIds')) {
-          playerOrTeamGameStatistics = await context
-              .read<FirestoreServicePlayerStats>()
+          playerOrTeamGameStatistics = await firestoreServicePlayerStats
               .getPlayerOrTeamGameStatisticById(playerGameStatsId, mode, false);
 
           game.getPlayerGameStatistics.add(playerOrTeamGameStatistics);
         }
 
-        for (String teamGameStatsId in element.get('teamGameStatsIds')) {
-          playerOrTeamGameStatistics = await context
-              .read<FirestoreServicePlayerStats>()
-              .getPlayerOrTeamGameStatisticById(teamGameStatsId, mode, true);
+        if ((element.data() as Map<String, dynamic>)
+            .containsKey('teamGameStatsIds')) {
+          for (String teamGameStatsId in element.get('teamGameStatsIds')) {
+            playerOrTeamGameStatistics = await firestoreServicePlayerStats
+                .getPlayerOrTeamGameStatisticById(teamGameStatsId, mode, true);
 
-          game.getTeamGameStatistics.add(playerOrTeamGameStatistics);
+            game.getTeamGameStatistics.add(playerOrTeamGameStatistics);
+          }
         }
 
         if (game.getIsFavouriteGame) {

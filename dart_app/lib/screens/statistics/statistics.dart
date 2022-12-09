@@ -22,8 +22,8 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   initState() {
-    final statisticsFirestore = context.read<StatisticsFirestoreX01>();
-    statisticsFirestore.currentFilterValue = FilterValue.Overall;
+    context.read<StatisticsFirestoreX01>().currentFilterValue =
+        FilterValue.Overall;
     _getPlayerGameStatistics();
     _getGames();
     super.initState();

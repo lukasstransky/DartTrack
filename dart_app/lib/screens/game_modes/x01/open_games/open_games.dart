@@ -81,7 +81,7 @@ class _OpenGamesState extends State<OpenGames> {
                               child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                      'Swipe left for Actions (Play & Delete)')),
+                                      'Swipe left for actions (play & delete)')),
                             ),
                             for (Game game in openGamesFirestore.openGames) ...[
                               Slidable(

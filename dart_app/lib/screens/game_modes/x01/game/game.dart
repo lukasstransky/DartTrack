@@ -50,6 +50,8 @@ class GameState extends State<Game> {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
+    gameX01.reset();
+
     // if game is finished -> undo last throw will call init again
     if (gameSettingsX01.getPlayers.length !=
         gameX01.getPlayerGameStatistics.length) {

@@ -86,7 +86,6 @@ class GameX01 extends Game {
   bool get getCanBePressed => this._canBePressed;
   set setCanBePressed(bool canBePressed) {
     this._canBePressed = canBePressed;
-    notifyListeners();
   }
 
   bool get getAreTeamStatsDisplayed => this._areTeamStatsDisplayed;

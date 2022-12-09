@@ -43,7 +43,7 @@ class FirestoreServicePlayerStats {
       }
       //add other modes like cricket...
 
-      //add playerGameStats
+      // save playerGameStats to firestore
       await _firestore
           .collection(this._getFirestorePlayerStatsPath())
           .add(data)
@@ -75,14 +75,19 @@ class FirestoreServicePlayerStats {
     }
 
     // set playerGameStatsIds + gameId for game
+    Map<String, dynamic> firestoreMap = {
+      'gameId': gameId,
+    };
+    if (playerGameStatsIds.isNotEmpty) {
+      firestoreMap['playerGameStatsIds'] = playerGameStatsIds;
+    }
+    if (teamGameStatsIds.isNotEmpty) {
+      firestoreMap['teamGameStatsIds'] = teamGameStatsIds;
+    }
     await _firestore
         .collection(this._getFirestoreGamesPath())
         .doc(gameId)
-        .update({
-      'playerGameStatsIds': playerGameStatsIds,
-      'teamGameStatsIds': teamGameStatsIds,
-      'gameId': gameId
-    });
+        .update(firestoreMap);
   }
 
   Future<void> getStatistics(BuildContext context) async {
@@ -451,17 +456,19 @@ class FirestoreServicePlayerStats {
     firestoreStats.notify();
   }
 
-  Future<void> deletePlayerStats(String gameId) async {
+  Future<void> deletePlayerOrTeamStats(
+      String gameId, bool shouldDeletePlayerStats) async {
+    final String path = shouldDeletePlayerStats
+        ? _getFirestorePlayerStatsPath()
+        : _getFirestoreTeamStatsPath();
+
     await _firestore
-        .collection(this._getFirestorePlayerStatsPath())
+        .collection(path)
         .where('gameId', isEqualTo: gameId)
         .get()
         .then((playerStats) => {
               playerStats.docs.forEach((playerStat) {
-                _firestore
-                    .collection(this._getFirestorePlayerStatsPath())
-                    .doc(playerStat.id)
-                    .delete();
+                _firestore.collection(path).doc(playerStat.id).delete();
               })
             });
   }
