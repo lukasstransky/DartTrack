@@ -34,7 +34,6 @@ class FirestoreServiceDefaultSettings {
             'users/' + _firebaseAuth.currentUser!.uid + '/defaultSettingsX01')
         .get();
 
-    defaultSettingsX01.playersNames = [];
     if (result.docs.isNotEmpty) {
       defaultSettingsX01.fromMap(result.docs[0].data());
     }

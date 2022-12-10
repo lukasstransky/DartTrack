@@ -52,6 +52,7 @@ class GameSettingsX01 extends GameSettings {
     required SingleOrTeamEnum singleOrTeam,
     required bool winByTwoLegsDifference,
     required bool setsEnabled,
+    required InputMethod inputMethod,
     List<Player>? players,
     List<Team>? teams,
   }) {
@@ -65,6 +66,7 @@ class GameSettingsX01 extends GameSettings {
     this._singleOrTeam = singleOrTeam;
     this._winByTwoLegsDifference = winByTwoLegsDifference;
     this._setsEnabled = setsEnabled;
+    this._inputMethod = inputMethod;
     if (players != null) {
       setPlayers = players;
     }

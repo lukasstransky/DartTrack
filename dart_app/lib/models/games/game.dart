@@ -56,7 +56,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
         this._currentTeamToThrow = currentTeamToThrow;
 
   Map<String, dynamic> toMapX01(GameX01 gameX01, bool openGame) {
-    GameSettingsX01 gameSettingsX01 = getGameSettings as GameSettingsX01;
+    final GameSettingsX01 gameSettingsX01 = getGameSettings as GameSettingsX01;
 
     return {
       'name': getName,
@@ -81,6 +81,9 @@ class Game with ChangeNotifier implements Comparable<Game> {
         'currentTeamToThrow':
             getCurrentTeamToThrow!.toMap(getCurrentTeamToThrow as Team),
       'gameSettings': {
+        if (openGame)
+          'inputMethod':
+              gameSettingsX01.getInputMethod.toString().split('.').last,
         'players': gameSettingsX01.getPlayers.map((player) {
           return player.toMap(player);
         }).toList(),

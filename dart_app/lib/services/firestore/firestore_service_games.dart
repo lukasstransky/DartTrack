@@ -64,6 +64,15 @@ class FirestoreServiceGames {
         .delete();
   }
 
+  Future<void> resetStatistics(BuildContext context) async {
+    final StatisticsFirestoreX01 statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01>();
+
+    for (Game game in statisticsFirestoreX01.games) {
+      deleteGame(game, context);
+    }
+  }
+
   Future<void> checkIfAtLeastOneX01GameIsPlayed(BuildContext context) async {
     final QuerySnapshot<Object?> games = await _firestore
         .collection(this._getFirestoreGamesPath())

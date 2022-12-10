@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
@@ -44,17 +45,16 @@ class DefaultSettingsHelper {
         settingsX01.getVibrationFeedbackEnabled;
     defaultSettingsX01.winByTwoLegsDifference =
         settingsX01.getWinByTwoLegsDifference;
-    defaultSettingsX01.players = settingsX01.getPlayers;
     defaultSettingsX01.drawMode = settingsX01.getDrawMode;
-
-    defaultSettingsX01.playersNames = [];
-    for (Player player in settingsX01.getPlayers) {
-      defaultSettingsX01.playersNames.add(player.getName);
-    }
 
     defaultSettingsX01.mostScoredPoints = [];
     for (String mostScoredPoint in settingsX01.getMostScoredPoints) {
       defaultSettingsX01.mostScoredPoints.add(mostScoredPoint);
+    }
+
+    defaultSettingsX01.players = [];
+    for (Player player in settingsX01.getPlayers) {
+      defaultSettingsX01.players.add(Player.clone(player));
     }
 
     settingsX01.notify();
@@ -102,8 +102,8 @@ class DefaultSettingsHelper {
     settingsX01.setTeamNamingIds = [];
     settingsX01.setTeams = [];
     settingsX01.setPlayers = [];
-    for (Player player in [...defaultSettingsX01.players]) {
-      settingsX01.getPlayers.add(player);
+    for (Player player in defaultSettingsX01.players) {
+      settingsX01.getPlayers.add(Player.clone(player));
       settingsX01.assignOrCreateTeamForPlayer(player);
     }
   }
@@ -147,11 +147,41 @@ class DefaultSettingsHelper {
         defaultSettingsX01.drawMode == settingsX01.getDrawMode &&
         listEquals(defaultSettingsX01.mostScoredPoints,
             settingsX01.getMostScoredPoints) &&
-        listEquals(defaultSettingsX01.players, settingsX01.getPlayers)) {
+        _checkIfPlayersAreEqual(
+            defaultSettingsX01.players, settingsX01.getPlayers)) {
       return true;
     }
 
     return false;
+  }
+
+  static bool _checkIfPlayersAreEqual(
+      List<Player> defaultSettingsPlayers, List<Player> currentPlayers) {
+    if (defaultSettingsPlayers.length != currentPlayers.length) {
+      return false;
+    }
+
+    for (Player player in currentPlayers) {
+      int length = 0;
+      for (Player defaultPlayer in defaultSettingsPlayers) {
+        length++;
+        if (player is Bot && defaultPlayer is Bot) {
+          if (player.getLevel == defaultPlayer.getLevel) {
+            break;
+          }
+        } else {
+          if (player.getName == defaultPlayer.getName) {
+            break;
+          }
+        }
+
+        if (length == defaultSettingsPlayers.length) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 
   static bool generalDefaultSettingsSelected(BuildContext context) {

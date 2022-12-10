@@ -20,6 +20,7 @@ class GameSettings with ChangeNotifier {
     late ModeOutIn modeIn;
     late ModeOutIn modeOut;
     late BestOfOrFirstToEnum mode;
+    late InputMethod inputMethod;
 
     switch (map['modeIn']) {
       case 'Single':
@@ -32,6 +33,7 @@ class GameSettings with ChangeNotifier {
         modeIn = ModeOutIn.Master;
         break;
     }
+
     switch (map['modeOut']) {
       case 'Single':
         modeOut = ModeOutIn.Single;
@@ -43,6 +45,7 @@ class GameSettings with ChangeNotifier {
         modeOut = ModeOutIn.Master;
         break;
     }
+
     switch (map['mode']) {
       case 'BestOf':
         mode = BestOfOrFirstToEnum.BestOf;
@@ -50,6 +53,19 @@ class GameSettings with ChangeNotifier {
       case 'FirstTo':
         mode = BestOfOrFirstToEnum.FirstTo;
         break;
+    }
+
+    if (map['inputMethod'] == null) {
+      inputMethod = InputMethod.Round;
+    } else {
+      switch (map['inputMethod']) {
+        case 'Round':
+          inputMethod = InputMethod.Round;
+          break;
+        case 'ThreeDarts':
+          inputMethod = InputMethod.ThreeDarts;
+          break;
+      }
     }
 
     return GameSettingsX01.firestore(
@@ -65,6 +81,7 @@ class GameSettings with ChangeNotifier {
           ? SingleOrTeamEnum.Single
           : SingleOrTeamEnum.Team,
       winByTwoLegsDifference: map['winByTwoLegsDifference'],
+      inputMethod: inputMethod,
       players: map['players'] == null
           ? []
           : map['players'].map<Player>((item) {

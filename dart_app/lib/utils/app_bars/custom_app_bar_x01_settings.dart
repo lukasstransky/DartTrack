@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 
 import 'package:flutter/material.dart';
@@ -101,7 +102,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
 
     if (defaultSettingsSelected) {
       defaultSettingsX01.isSelected = false;
-      defaultSettingsX01.resetValues();
+      defaultSettingsX01.resetValues(context.read<AuthService>().getPlayer);
       DefaultSettingsHelper.setSettingsFromDefault(context);
     } else {
       defaultSettingsX01.isSelected = true;

@@ -21,6 +21,8 @@ class MostFrequentScores extends StatefulWidget {
 }
 
 class _MostFrequentScoresState extends State<MostFrequentScores> {
+  bool _showFirst10 = false;
+
   @override
   didChangeDependencies() {
     super.didChangeDependencies();
@@ -30,8 +32,6 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
       Utils.sortMapStringInt(stats.getAllScoresPerDartAsStringCount);
     }
   }
-
-  bool _showFirst10 = false;
 
   bool _moreThanFiveScores(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
     for (PlayerOrTeamGameStatisticsX01 stats
@@ -47,9 +47,22 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
     return false;
   }
 
+  bool _atLeastOneRoundPlayedWithThreeDartsMode(
+      GameSettingsX01 gameSettingsX01) {
+    for (PlayerOrTeamGameStatisticsX01 stats
+        in Utils.getPlayersOrTeamStatsList(widget.gameX01, gameSettingsX01)) {
+      if (stats.getAllScoresPerDart.isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01 gameSettingsX01 = widget.gameX01.getGameSettings;
+    final bool atLeastOneRoundPlayedWithThreeDartsMode =
+        _atLeastOneRoundPlayedWithThreeDartsMode(gameSettingsX01);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,84 +80,120 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                 color: Theme.of(context).primaryColor),
           ),
         ),
+        if (widget.mostScoresPerDart &&
+            atLeastOneRoundPlayedWithThreeDartsMode) ...[
+          Padding(
+            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+            child: Row(
+              children: [
+                Container(
+                  width: 40.w,
+                  padding: EdgeInsets.only(top: 5),
+                  alignment: Alignment.centerLeft,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      '3-dart-mode rounds',
+                      style: TextStyle(fontSize: 10.sp),
+                    ),
+                  ),
+                ),
+                for (PlayerOrTeamGameStatisticsX01 stats
+                    in Utils.getPlayersOrTeamStatsList(
+                        widget.gameX01, gameSettingsX01))
+                  Container(
+                    width: 30.w,
+                    padding: EdgeInsets.only(top: 5),
+                    alignment: Alignment.centerLeft,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '${stats.getThreeDartModeRoundsCount}/${stats.getTotalRoundsCount}',
+                        style: TextStyle(fontSize: 10.sp),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
         Padding(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
-          child: Row(
+          padding: EdgeInsets.only(
+              top: atLeastOneRoundPlayedWithThreeDartsMode &&
+                      widget.mostScoresPerDart
+                  ? 0
+                  : PADDING_TOP_STATISTICS),
+          child: Column(
             children: [
-              Column(
-                children: [
-                  for (int i = 0; i < (_showFirst10 ? 10 : 5); i++)
-                    Row(
-                      children: [
-                        Container(
-                          width: 20.w,
-                          padding: EdgeInsets.only(top: 5),
-                          alignment: Alignment.centerLeft,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              '${i + 1}.',
-                              style:
-                                  TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
-                            ),
-                          ),
+              for (int i = 0; i < (_showFirst10 ? 10 : 5); i++)
+                Row(
+                  children: [
+                    Container(
+                      width: 20.w,
+                      padding: EdgeInsets.only(top: 5),
+                      alignment: Alignment.centerLeft,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          '${i + 1}.',
+                          style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
                         ),
-                        for (PlayerOrTeamGameStatisticsX01 stats
-                            in Utils.getPlayersOrTeamStatsList(
-                                widget.gameX01, gameSettingsX01))
-                          Container(
-                            width: 30.w,
-                            padding: EdgeInsets.only(top: 5),
-                            child: (widget.mostScoresPerDart
-                                        ? stats.getAllScoresPerDartAsStringCount
-                                            .keys.length
-                                        : stats.getPreciseScores.keys.length) >
-                                    i
-                                ? Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
+                      ),
+                    ),
+                    for (PlayerOrTeamGameStatisticsX01 stats
+                        in Utils.getPlayersOrTeamStatsList(
+                            widget.gameX01, gameSettingsX01))
+                      Container(
+                        width: 30.w,
+                        padding: EdgeInsets.only(top: 5),
+                        child: (widget.mostScoresPerDart
+                                    ? stats.getAllScoresPerDartAsStringCount
+                                        .keys.length
+                                    : stats.getPreciseScores.keys.length) >
+                                i
+                            ? Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
+                                  (widget.mostScoresPerDart
+                                          ? Utils.sortMapStringIntByKey(stats
+                                                  .getAllScoresPerDartAsStringCount)
+                                              .keys
+                                              .elementAt(i)
+                                              .toString()
+                                          : Utils.sortMapIntIntByKey(
+                                                  stats.getPreciseScores)
+                                              .keys
+                                              .elementAt(i)
+                                              .toString()) +
+                                      ' (' +
                                       (widget.mostScoresPerDart
-                                              ? Utils.sortMapStringIntByKey(stats
-                                                      .getAllScoresPerDartAsStringCount)
-                                                  .keys
-                                                  .elementAt(i)
-                                                  .toString()
-                                              : Utils.sortMapIntIntByKey(
-                                                      stats.getPreciseScores)
-                                                  .keys
-                                                  .elementAt(i)
-                                                  .toString()) +
-                                          ' (' +
-                                          (widget.mostScoresPerDart
-                                              ? Utils.sortMapStringIntByKey(stats
-                                                      .getAllScoresPerDartAsStringCount)
-                                                  .values
-                                                  .elementAt(i)
-                                                  .toString()
-                                              : Utils.sortMapIntIntByKey(
-                                                      stats.getPreciseScores)
-                                                  .values
-                                                  .elementAt(i)
-                                                  .toString()) +
-                                          'x)',
-                                      style: TextStyle(
-                                          fontSize: FONTSIZE_STATISTICS.sp),
-                                    ),
-                                  )
-                                : Container(
-                                    alignment: Alignment.centerRight,
-                                    padding: EdgeInsets.only(right: 7.w),
-                                    child: Text(
-                                      '-',
-                                      style: TextStyle(
-                                          fontSize: FONTSIZE_STATISTICS.sp),
-                                    ),
-                                  ),
-                          ),
-                      ],
-                    )
-                ],
-              ),
+                                          ? Utils.sortMapStringIntByKey(stats
+                                                  .getAllScoresPerDartAsStringCount)
+                                              .values
+                                              .elementAt(i)
+                                              .toString()
+                                          : Utils.sortMapIntIntByKey(
+                                                  stats.getPreciseScores)
+                                              .values
+                                              .elementAt(i)
+                                              .toString()) +
+                                      'x)',
+                                  style: TextStyle(
+                                      fontSize: FONTSIZE_STATISTICS.sp),
+                                ),
+                              )
+                            : Container(
+                                alignment: Alignment.centerRight,
+                                padding: EdgeInsets.only(right: 7.w),
+                                child: Text(
+                                  '-',
+                                  style: TextStyle(
+                                      fontSize: FONTSIZE_STATISTICS.sp),
+                                ),
+                              ),
+                      ),
+                  ],
+                )
             ],
           ),
         ),

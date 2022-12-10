@@ -7,8 +7,6 @@ class DefaultSettingsX01 with ChangeNotifier {
   bool _isSelected = false;
 
   late List<Player> _players;
-  late List<String> _playersNames;
-  late List<int> _botNamingIds;
   late SingleOrTeamEnum _singleOrTeam;
   late BestOfOrFirstToEnum _mode;
   late int _points;
@@ -37,7 +35,7 @@ class DefaultSettingsX01 with ChangeNotifier {
   late bool _drawMode;
 
   DefaultSettingsX01() {
-    this.resetValues();
+    this.resetValues(null);
   }
 
   fromMap(map) {
@@ -103,13 +101,7 @@ class DefaultSettingsX01 with ChangeNotifier {
         : map['players'].map<Player>((item) {
             return Player.fromMap(item);
           }).toList();
-    if (players.isNotEmpty) {
-      for (Player player in this.players) {
-        this.playersNames.add(player.getName);
-      }
-    }
-    botNamingIds =
-        map['botNamingIds'] == null ? [] : map['botNamingIds'].cast<int>();
+
     drawMode = map['drawMode'];
   }
 
@@ -168,7 +160,6 @@ class DefaultSettingsX01 with ChangeNotifier {
       'mostScoredPoints': mostScoredPoints,
       'inputMethod': inputMethod == InputMethod.Round ? 'Round' : 'Three Darts',
       'showInputMethodInGameScreen': showInputMethodInGameScreen,
-      if (botNamingIds.isNotEmpty) 'botNamingIds': botNamingIds,
       if (players.isNotEmpty)
         'players': players.map((player) {
           return player.toMap(player);
@@ -188,14 +179,6 @@ class DefaultSettingsX01 with ChangeNotifier {
   List<Player> get players => this._players;
 
   set players(List<Player> value) => this._players = value;
-
-  List<String> get playersNames => this._playersNames;
-
-  set playersNames(List<String> value) => this._playersNames = value;
-
-  List<int> get botNamingIds => this._botNamingIds;
-
-  set botNamingIds(List<int> value) => this._botNamingIds = value;
 
   get singleOrTeam => this._singleOrTeam;
 
@@ -304,10 +287,12 @@ class DefaultSettingsX01 with ChangeNotifier {
 
   set drawMode(value) => this._drawMode = value;
 
-  resetValues() {
-    players = [];
-    playersNames = [];
-    botNamingIds = [];
+  resetValues(Player? currentUserAsPlayer) {
+    if (currentUserAsPlayer != null) {
+      players = [Player.clone(currentUserAsPlayer)];
+    } else {
+      players = [];
+    }
 
     singleOrTeam = DEFAULT_SINGLE_OR_TEAM;
     mode = DEFAULT_MODE;

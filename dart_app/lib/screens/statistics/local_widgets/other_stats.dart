@@ -5,6 +5,28 @@ import 'package:provider/provider.dart';
 class OtherStats extends StatelessWidget {
   const OtherStats({Key? key}) : super(key: key);
 
+  String _getGamesWonString(StatisticsFirestoreX01 statisticsFirestore) {
+    if (statisticsFirestore.countOfGames == 0) {
+      return '-';
+    }
+    if (statisticsFirestore.countOfGames > 0 &&
+        statisticsFirestore.countOfGamesWon == 0) {
+      return '0 (0%)';
+    }
+
+    String winPercentage =
+        ((100 * (statisticsFirestore.countOfGamesWon as int)) /
+                statisticsFirestore.countOfGames)
+            .toString();
+    // remove .00 after comma if present
+    final List<String> parts = winPercentage.toString().split('.');
+    if (parts[1] == '0') {
+      winPercentage = parts[0];
+    }
+
+    return '${statisticsFirestore.countOfGamesWon} (${winPercentage}%)';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<StatisticsFirestoreX01>(
@@ -62,9 +84,7 @@ class OtherStats extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(statisticsFirestore.countOfGamesWon > 0
-                          ? statisticsFirestore.countOfGamesWon.toString()
-                          : '-'),
+                      Text(_getGamesWonString(statisticsFirestore)),
                       const Text(
                         'Games Won',
                         style: TextStyle(

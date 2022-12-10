@@ -517,6 +517,14 @@ class Revert {
         currentStats.getAllRemainingScoresPerDart.removeLast();
       }
     }
+
+    if (roundCompleted) {
+      currentStats.setTotalRoundsCount = currentStats.getTotalRoundsCount - 1;
+      if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+        currentStats.setThreeDartModeRoundsCount =
+            currentStats.getThreeDartModeRoundsCount - 1;
+      }
+    }
   }
 
   static bool _allPlayersTeamsHaveStartPoints(

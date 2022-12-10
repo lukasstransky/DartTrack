@@ -112,7 +112,12 @@ class PlayerOrTeamGameStatistics {
         allRemainingScoresPerDart: map['allRemainingScoresPerDart'] == null
             ? []
             : List<List<String>>.from(map['allRemainingScoresPerDart']),
-        gameDraw: map['gameDraw'] == null ? false : true);
+        gameDraw: map['gameDraw'] == null ? false : true,
+        threeDartModeRoundsCount: map['threeDartModeRoundsCount'] == null
+            ? 0
+            : map['threeDartModeRoundsCount'],
+        totalRoundsCount:
+            map['totalRoundsCount'] == null ? 0 : map['totalRoundsCount']);
   }
 
   Map<String, dynamic> toMapX01(
@@ -211,6 +216,9 @@ class PlayerOrTeamGameStatistics {
         if (playerOrTeamGameStatsX01.getPlayersWithCheckoutInLeg.isNotEmpty)
           'playersWithCheckoutInLeg':
               playerOrTeamGameStatsX01.getPlayersWithCheckoutInLeg,
+        'threeDartModeRoundsCount':
+            playerOrTeamGameStatsX01.getThreeDartModeRoundsCount,
+        'totalRoundsCount': playerOrTeamGameStatsX01.getTotalRoundsCount,
       };
     }
 
@@ -272,8 +280,11 @@ class PlayerOrTeamGameStatistics {
         'preciseScores':
             _getPreciseScoresWithStringKey(playerOrTeamGameStatsX01),
       if (playerOrTeamGameStatsX01.getAllScoresPerDartAsStringCount.isNotEmpty)
-        'allScoresPerDartWithCount':
+        'allScoresPerDartAsStringCount':
             playerOrTeamGameStatsX01.getAllScoresPerDartAsStringCount,
+      if (playerOrTeamGameStatsX01.getAllScoresPerDartAsString.isNotEmpty)
+        'allScoresPerDartAsString':
+            playerOrTeamGameStatsX01.getAllScoresPerDartAsString,
       if (playerOrTeamGameStatsX01.getThrownDartsPerLeg.isNotEmpty)
         'thrownDartsPerLeg': playerOrTeamGameStatsX01.getThrownDartsPerLeg,
       'legsWonTotal': playerOrTeamGameStatsX01.getLegsWonTotal,
@@ -288,6 +299,9 @@ class PlayerOrTeamGameStatistics {
       if (playerOrTeamGameStatsX01.getPlayersWithCheckoutInLeg.isNotEmpty)
         'playersWithCheckoutInLeg':
             playerOrTeamGameStatsX01.getPlayersWithCheckoutInLeg,
+      'threeDartModeRoundsCount':
+          playerOrTeamGameStatsX01.getThreeDartModeRoundsCount,
+      'totalRoundsCount': playerOrTeamGameStatsX01.getTotalRoundsCount,
     };
   }
 

@@ -49,8 +49,9 @@ class _GameSettingsState extends State<GameSettings> {
     final DefaultSettingsX01 defaultSettingsX01 =
         context.read<DefaultSettingsX01>();
 
-    if (currentUserAsPlayer != null)
-      defaultSettingsX01.playersNames.add(currentUserAsPlayer.getName);
+    if (currentUserAsPlayer != null) {
+      defaultSettingsX01.players.add(Player.clone(currentUserAsPlayer));
+    }
 
     //check if user already inserted -> in case of switching between other screen -> would get inserted multiple times
     if (currentUserAsPlayer != null &&

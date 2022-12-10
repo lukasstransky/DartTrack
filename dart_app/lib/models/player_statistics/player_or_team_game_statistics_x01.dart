@@ -84,6 +84,8 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
       {}; // for reverting -> to set correct previous player/team
   List<InputMethod> _inputMethodForRounds =
       []; // keep track which input method (round, 3-darts) was used for each score -> for reverting (enter score with round -> enter with 3-darts -> revert)
+  int _threeDartModeRoundsCount = 0;
+  int _totalRoundsCount = 0;
 
   PlayerOrTeamGameStatisticsX01.Firestore(
       {required String gameId,
@@ -119,7 +121,9 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
       required List<int> allRemainingPoints,
       required List<List<String>> allRemainingScoresPerDart,
       required bool gameDraw,
-      required Map<String, String> playersWithCheckoutInLeg})
+      required Map<String, String> playersWithCheckoutInLeg,
+      required int threeDartModeRoundsCount,
+      required int totalRoundsCount})
       : super(gameId: gameId, dateTime: dateTime, mode: mode) {
     this.setTeam = team;
     this.setPlayer = player;
@@ -156,6 +160,8 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
     this._allRemainingScoresPerDart = allRemainingScoresPerDart;
     this._gameDraw = gameDraw;
     this._playersWithCheckoutInLeg = playersWithCheckoutInLeg;
+    this._threeDartModeRoundsCount = threeDartModeRoundsCount;
+    this._totalRoundsCount = totalRoundsCount;
   }
 
   PlayerOrTeamGameStatisticsX01.Team(
@@ -311,6 +317,13 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
   List<InputMethod> get getInputMethodForRounds => this._inputMethodForRounds;
   set setInputMethodForRounds(List<InputMethod> value) =>
       this._inputMethodForRounds = value;
+
+  int get getThreeDartModeRoundsCount => this._threeDartModeRoundsCount;
+  set setThreeDartModeRoundsCount(int value) =>
+      this._threeDartModeRoundsCount = value;
+
+  int get getTotalRoundsCount => this._totalRoundsCount;
+  set setTotalRoundsCount(int value) => this._totalRoundsCount = value;
 
   //calc average based on total points and all scores length
   String getAverage() {

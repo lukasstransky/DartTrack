@@ -306,10 +306,10 @@ class FirestoreServicePlayerStats {
 
                 //all scores per dart with count
                 if ((element.data() as Map<String, dynamic>)
-                    .containsKey('allScoresPerDartWithCount'))
+                    .containsKey('allScoresPerDartAsStringCount'))
                   {
                     _allScoresPerDartWithCount =
-                        element.get('allScoresPerDartWithCount'),
+                        element.get('allScoresPerDartAsStringCount'),
                     for (String key in _allScoresPerDartWithCount.keys)
                       {
                         if (firestoreStats.allScoresPerDartAsStringCount

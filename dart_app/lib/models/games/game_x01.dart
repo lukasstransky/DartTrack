@@ -377,7 +377,8 @@ class GameX01 extends Game {
       }
     }
 
-    if (getCurrentPointsSelected == 'Points') {
+    if (getCurrentPointsSelected == 'Points' &&
+        getGameSettings.getInputMethod == InputMethod.Round) {
       if (btnValueToCheck == '0' ||
           int.parse(btnValueToCheck) > stats.getCurrentPoints) {
         return true;

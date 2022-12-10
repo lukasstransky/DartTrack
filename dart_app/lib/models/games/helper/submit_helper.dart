@@ -254,6 +254,14 @@ class Submit {
     currentStats.setCurrentThrownDartsInLeg =
         currentStats.getCurrentThrownDartsInLeg + 1;
     currentStats.setAllThrownDarts = currentStats.getAllThrownDarts + 1;
+
+    // three darts mode round count
+    if (gameX01.getAmountOfDartsThrown() == 3 ||
+        gameX01
+            .finishedLegSetOrGame(gameX01.getCurrentThreeDartsCalculated())) {
+      currentStats.setThreeDartModeRoundsCount =
+          currentStats.getThreeDartModeRoundsCount + 1;
+    }
   }
 
   /************************************************************/
@@ -293,16 +301,18 @@ class Submit {
       }
     }
 
-    //set all scores per leg
+    // set all scores per leg
     final String key =
         gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01);
     if (stats.getAllScoresPerLeg.containsKey(key)) {
-      //add to value list
+      // add to value list
       stats.getAllScoresPerLeg[key].add(totalPoints);
     } else {
       //create new pair in map
       stats.getAllScoresPerLeg[key] = [totalPoints];
     }
+
+    stats.setTotalRoundsCount = stats.getTotalRoundsCount + 1;
   }
 
   static bool _shouldUpdateStatsForPlayersOfSameTeam(
@@ -420,8 +430,9 @@ class Submit {
       }
     }
 
-    if ((isGameFinished || currentStats.getGameDraw) && shouldSubmitTeamStats) {
-      Navigator.of(context).pushNamed('/finishX01');
+    if ((isGameFinished || currentStats.getGameDraw)) {
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
+          shouldSubmitTeamStats) Navigator.of(context).pushNamed('/finishX01');
     } else {
       for (PlayerOrTeamGameStatisticsX01 stats
           in gameX01.getPlayerGameStatistics) {
@@ -737,7 +748,6 @@ class Submit {
           .containsKey(scorePerDartString)) {
         stats.getAllScoresPerDartAsStringCount[scorePerDartString] -= 1;
 
-        //if amount of precise scores is 0 -> remove it from map
         if (stats.getAllScoresPerDartAsStringCount[scorePerDartString] == 0) {
           stats.getAllScoresPerDartAsStringCount
               .removeWhere((key, value) => key == scorePerDartString);
