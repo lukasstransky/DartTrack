@@ -110,7 +110,7 @@ class _GameStatisticsState extends State<GameStatistics> {
               title: 'Statistics',
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId)
-          : CustomAppBar(true, 'Statistics'),
+          : CustomAppBar(title: 'Statistics'),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

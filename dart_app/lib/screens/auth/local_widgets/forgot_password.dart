@@ -1,0 +1,115 @@
+import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
+import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+
+import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
+
+class ForgotPassword extends StatefulWidget {
+  static const routeName = '/forgotPassword';
+
+  const ForgotPassword({Key? key}) : super(key: key);
+
+  @override
+  _ForgotPasswordState createState() => _ForgotPasswordState();
+}
+
+class _ForgotPasswordState extends State<ForgotPassword> {
+  final GlobalKey<FormState> _forgotPasswordFormKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return LoaderOverlay(
+      child: Scaffold(
+        appBar: CustomAppBar(title: 'Reset password'),
+        resizeToAvoidBottomInset: false,
+        body: Form(
+          key: _forgotPasswordFormKey,
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Forgot password',
+                  style:
+                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  width: 80.w,
+                  padding: EdgeInsets.only(bottom: 1.h, top: 1.h),
+                  child: Text(
+                      'Please provide your email to receive a link for resetting your password.'),
+                ),
+                EmailInput(isForgotPasswordScreen: true),
+                ResetPasswordBtn(forgotPasswordFormKey: _forgotPasswordFormKey),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ResetPasswordBtn extends StatelessWidget {
+  const ResetPasswordBtn({
+    Key? key,
+    required this.forgotPasswordFormKey,
+  }) : super(key: key);
+
+  final GlobalKey<FormState> forgotPasswordFormKey;
+
+  resetPassword(String email, BuildContext context) async {
+    final Auth auth = context.read<Auth>();
+
+    auth.setEmailAlreadyExists = await context
+        .read<AuthService>()
+        .emailAlreadyExists(auth.getEmailController.text);
+
+    if (!forgotPasswordFormKey.currentState!.validate()) {
+      return;
+    }
+    forgotPasswordFormKey.currentState!.save();
+
+    // show loading spinner
+    context.loaderOverlay.show();
+    auth.notify();
+
+    await context.read<AuthService>().resetPassword(email.trim());
+
+    auth.getPasswordController.clear();
+    Navigator.of(context).pop();
+
+    // hide loading spinner
+    context.loaderOverlay.hide();
+    auth.notify();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(top: 1.h),
+      width: 60.w,
+      child: TextButton(
+        child: Text(
+          'Reset password',
+          style: TextStyle(color: Colors.white),
+        ),
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18.0),
+            ),
+          ),
+          backgroundColor:
+              MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+        ),
+        onPressed: () => resetPassword(
+            context.read<Auth>().getEmailController.text, context),
+      ),
+    );
+  }
+}

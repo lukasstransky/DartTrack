@@ -62,7 +62,7 @@ class _OpenGamesState extends State<OpenGames> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(true, 'Open Games'),
+      appBar: CustomAppBar(title: 'Open Games'),
       body: Consumer<OpenGamesFirestore>(
         builder: (_, openGamesFirestore, __) =>
             openGamesFirestore.openGames.length != 0

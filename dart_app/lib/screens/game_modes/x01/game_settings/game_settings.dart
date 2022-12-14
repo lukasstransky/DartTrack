@@ -1,4 +1,3 @@
-import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
 import 'package:dart_app/models/player.dart';
@@ -46,31 +45,15 @@ class _GameSettingsState extends State<GameSettings> {
   _addCurrentUserToPlayers() {
     final Player? currentUserAsPlayer = context.read<AuthService>().getPlayer;
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
-    final DefaultSettingsX01 defaultSettingsX01 =
-        context.read<DefaultSettingsX01>();
 
+    gameSettingsX01.setPlayers = [];
     if (currentUserAsPlayer != null) {
-      defaultSettingsX01.players.add(Player.clone(currentUserAsPlayer));
-    }
-
-    //check if user already inserted -> in case of switching between other screen -> would get inserted multiple times
-    if (currentUserAsPlayer != null &&
-        !_checkIfPlayerAlreadyInserted(
-            currentUserAsPlayer, gameSettingsX01.getPlayers)) {
       final Player toAdd = new Player(name: currentUserAsPlayer.getName);
 
       Future.delayed(Duration.zero, () {
         gameSettingsX01.addPlayer(toAdd);
       });
     }
-  }
-
-  bool _checkIfPlayerAlreadyInserted(
-      Player playerToInsert, List<Player> players) {
-    for (Player player in players)
-      if (player.getName == playerToInsert.getName) return true;
-
-    return false;
   }
 
   @override

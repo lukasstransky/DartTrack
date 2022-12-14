@@ -27,7 +27,7 @@ class InGameSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(true, 'Game Settings'),
+      appBar: CustomAppBar(title: 'Game Settings'),
       body: Column(
         children: [
           Expanded(

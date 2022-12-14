@@ -113,7 +113,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(true, this.getAppBarTitle()),
+      appBar: CustomAppBar(title: this.getAppBarTitle()),
       body: Consumer<StatisticsFirestoreX01>(
         builder: (_, statisticsFirestore, __) => statisticsFirestore
                     .filteredGames.length >

@@ -40,7 +40,7 @@ class _StatisticsState extends State<Statistics> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(false, 'Statistics'),
+      appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
       body: Consumer<StatisticsFirestoreX01>(
         builder: (_, statisticsFirestore, __) =>
             statisticsFirestore.avgBestWorstStatsLoaded

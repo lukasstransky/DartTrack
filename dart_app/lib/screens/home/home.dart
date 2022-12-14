@@ -1,10 +1,13 @@
+import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/game_modes/game_modes_overview.dart';
 import 'package:dart_app/screens/settings/settings.dart';
 import 'package:dart_app/screens/statistics/statistics.dart';
+import 'package:dart_app/services/auth_service.dart';
 
 import 'package:flutter/material.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   static const routeName = '/home';
@@ -31,8 +34,21 @@ class _HomeState extends State<Home> {
   }
 
   @override
-  initState() {
-    super.initState();
+  void didChangeDependencies() {
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+
+    // lead to some errors in the submit method (login_register_btn.dart)
+    if (arguments.isNotEmpty) {
+      final Auth auth = context.read<Auth>();
+      if (arguments['isLogin']) {
+        context.read<AuthService>().createPlayerOfCurrentUser();
+      } else {
+        context.read<AuthService>().postUserToFirestore(
+            auth.getEmailController.text, auth.getUsernameController.text);
+      }
+    }
+    super.didChangeDependencies();
   }
 
   @override
@@ -45,15 +61,15 @@ class _HomeState extends State<Home> {
         items: [
           BottomNavigationBarItem(
             icon: Icon(IcoFontIcons.dart),
-            label: "Play",
+            label: 'Play',
           ),
           BottomNavigationBarItem(
             icon: Icon(FontAwesomeIcons.chartBar),
-            label: "Statistics",
+            label: 'Statistics',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: "Settings",
+            label: 'Settings',
           ),
         ],
         selectedFontSize: 20,

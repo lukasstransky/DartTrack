@@ -1,10 +1,11 @@
+import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
-import 'package:dart_app/screens/auth/auth.dart';
-import 'package:dart_app/screens/auth/forgot_password.dart';
+import 'package:dart_app/screens/auth/login_register_page.dart';
+import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
 import 'package:dart_app/screens/game_modes/x01/open_games/open_games.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/finish.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game.dart';
@@ -83,6 +84,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => DefaultSettingsX01(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => Auth(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -92,7 +96,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
               colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)),
           routes: {
-            Auth.routeName: (ctx) => Auth(),
+            LoginRegisterPage.routeName: (ctx) => LoginRegisterPage(),
             Home.routeName: (ctx) => Home(),
             ForgotPassword.routeName: (ctx) => ForgotPassword(),
             GameSettings.routeName: (ctx) => GameSettings(),
@@ -122,6 +126,6 @@ class AuthWrapper extends StatelessWidget {
     if (firebaseUser != null) {
       return Home();
     }
-    return Auth();
+    return LoginRegisterPage();
   }
 }

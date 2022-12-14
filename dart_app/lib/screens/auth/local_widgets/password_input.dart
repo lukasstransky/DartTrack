@@ -1,0 +1,63 @@
+import 'package:dart_app/models/auth.dart';
+
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
+
+class PasswordInput extends StatelessWidget {
+  const PasswordInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Auth auth = context.read<Auth>();
+
+    return Container(
+      key: Key('passwordInput'),
+      padding: EdgeInsets.only(top: 1.h),
+      width: 80.w,
+      child: Selector<Auth, bool>(
+        selector: (_, auth) => auth.getPasswordVisible,
+        builder: (_, passwordVisible, __) => TextFormField(
+          obscureText: !passwordVisible,
+          controller: auth.getPasswordController,
+          keyboardType: TextInputType.text,
+          textInputAction: TextInputAction.done,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return ('Password is required!');
+            }
+            /*if (!RegExp(
+                              "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}\$") //Minimum eight characters, at least one letter and one number
+                          .hasMatch(value)) {
+                        return ("Please enter a valid password!");
+                      }*/
+            return null;
+          },
+          decoration: InputDecoration(
+            prefixIcon: Icon(
+              Icons.lock,
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                  passwordVisible ? Icons.visibility : Icons.visibility_off),
+              onPressed: () {
+                auth.setPasswordVisible = !passwordVisible;
+                auth.notify();
+              },
+            ),
+            hintText: 'Password',
+            filled: true,
+            hintStyle: TextStyle(color: Colors.grey),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(20),
+              borderSide: BorderSide(
+                width: 0,
+                style: BorderStyle.none,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

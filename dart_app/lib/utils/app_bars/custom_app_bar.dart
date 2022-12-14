@@ -1,24 +1,31 @@
+import 'package:dart_app/models/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
-  final bool _showBackBtn;
-  final String _title;
+  final bool showBackBtn;
+  final String title;
 
-  const CustomAppBar(this._showBackBtn, this._title);
+  const CustomAppBar({this.showBackBtn = true, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(_title),
+      title: Text(title),
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (_showBackBtn)
+          if (showBackBtn)
             IconButton(
               onPressed: () {
                 var route = ModalRoute.of(context);
                 if (route != null) {
                   Navigator.of(context).pop();
+                }
+
+                if (ModalRoute.of(context)!.settings.name ==
+                    '/forgotPassword') {
+                  context.read<Auth>().getEmailController.clear();
                 }
               },
               icon: Icon(Icons.arrow_back),

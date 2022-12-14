@@ -40,7 +40,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(false, 'Game Modes'),
+      appBar: CustomAppBar(showBackBtn: false, title: 'Game Modes'),
       body: Consumer<OpenGamesFirestore>(
         builder: (_, openGamesFirestore, __) => openGamesFirestore.init
             ? Column(

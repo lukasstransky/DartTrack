@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
@@ -43,8 +44,10 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Auth auth = context.read<Auth>();
+
     return Scaffold(
-        appBar: CustomAppBar(false, 'Settings'),
+        appBar: CustomAppBar(showBackBtn: false, title: 'Settings'),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -64,8 +67,13 @@ class Settings extends StatelessWidget {
                       Theme.of(context).colorScheme.primary),
                 ),
                 onPressed: () async => {
-                  Navigator.of(context).pushNamed('/auth'),
-                  await context.read<AuthService>().logout()
+                  auth.getEmailController.clear(),
+                  auth.getPasswordController.clear(),
+                  auth.getUsernameController.clear(),
+                  auth.setAuthMode = AuthMode.Login,
+                  auth.setPasswordVisible = false,
+                  Navigator.of(context).pushNamed('/loginRegister'),
+                  await context.read<AuthService>().logout(),
                 },
               ),
               TextButton(
