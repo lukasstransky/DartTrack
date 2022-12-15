@@ -110,7 +110,6 @@ class GameX01 extends Game {
   /********                 METHDODS                   ********/
   /************************************************************/
 
-  //gets called when user goes back to settings from game screen
   reset() {
     setCurrentPointsSelected = 'Points';
     setPlayerOrTeamLegStartIndex = 0;
@@ -589,5 +588,14 @@ class GameX01 extends Game {
     }
 
     return result;
+  }
+
+  bool isGameDraw() {
+    for (PlayerOrTeamGameStatisticsX01 stats in getPlayerGameStatistics) {
+      if (stats.getGameDraw) {
+        return true;
+      }
+    }
+    return false;
   }
 }

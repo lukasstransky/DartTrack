@@ -12,15 +12,12 @@ import 'package:sizer/sizer.dart';
 
 class LoginRegisterBtn extends StatelessWidget {
   const LoginRegisterBtn(
-      {Key? key,
-      required GlobalKey<FormState> this.loginRegisterPageFormKey,
-      required BuildContext this.context})
+      {Key? key, required GlobalKey<FormState> this.loginRegisterPageFormKey})
       : super(key: key);
 
   final GlobalKey<FormState> loginRegisterPageFormKey;
-  final BuildContext context;
 
-  Future<void> submit(bool isLogin) async {
+  Future<void> submit(bool isLogin, BuildContext context) async {
     final AuthService authService = context.read<AuthService>();
     final Auth auth = context.read<Auth>();
 
@@ -82,16 +79,16 @@ class LoginRegisterBtn extends StatelessWidget {
         auth.getPasswordController.clear();
       }
 
-      _showErrorDialog(errorMessage);
+      _showErrorDialog(errorMessage, context);
     } catch (error) {
       const String errorMessage =
           'Could not authenticate you. Please try again later.';
 
-      _showErrorDialog(errorMessage);
+      _showErrorDialog(errorMessage, context);
     }
   }
 
-  _showErrorDialog(String message) {
+  _showErrorDialog(String message, BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -140,7 +137,7 @@ class LoginRegisterBtn extends StatelessWidget {
               backgroundColor: MaterialStateProperty.all(
                   Theme.of(context).colorScheme.primary),
             ),
-            onPressed: () => submit(isLogin),
+            onPressed: () => submit(isLogin, context),
           ),
         ),
         LoginRegisterSwitch(),

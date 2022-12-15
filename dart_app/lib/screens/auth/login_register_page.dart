@@ -50,8 +50,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                 PasswordInput(),
                 if (authMode == AuthMode.Login) ForgotPasswordLink(),
                 LoginRegisterBtn(
-                    loginRegisterPageFormKey: _loginRegisterPageFormKey,
-                    context: context),
+                    loginRegisterPageFormKey: _loginRegisterPageFormKey),
               ],
             ),
           ),

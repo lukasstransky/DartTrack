@@ -110,7 +110,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                           padding: EdgeInsets.only(right: 5),
                           child: Icon(
                             Entypo.trophy,
-                            size: DEFAULT_FONTSIZE.sp,
+                            size: 12.sp,
                             color: Color(0xffFFD700),
                           ),
                         ),

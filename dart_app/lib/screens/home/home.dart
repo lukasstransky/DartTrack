@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
       final Auth auth = context.read<Auth>();
       if (arguments['isLogin']) {
         context.read<AuthService>().createPlayerOfCurrentUser();
-      } else {
+      } else if (!arguments['isLogin']) {
         context.read<AuthService>().postUserToFirestore(
             auth.getEmailController.text, auth.getUsernameController.text);
       }

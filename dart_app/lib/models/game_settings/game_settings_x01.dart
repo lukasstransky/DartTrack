@@ -352,8 +352,11 @@ class GameSettingsX01 extends GameSettings {
     final String currentPlayerName =
         context.read<AuthService>().getPlayer!.getName;
 
-    for (Player player in getPlayers)
-      if (player.getName == currentPlayerName) return true;
+    for (Player player in getPlayers) {
+      if (player.getName == currentPlayerName) {
+        return true;
+      }
+    }
 
     return false;
   }
@@ -415,26 +418,26 @@ class GameSettingsX01 extends GameSettings {
   }
 
   String getGameMode() {
-    final int sets = getSets;
-    final int legs = getLegs;
-
     String result = '';
 
-    if (getMode == BestOfOrFirstToEnum.BestOf)
+    if (getMode == BestOfOrFirstToEnum.BestOf) {
       result += 'Best Of ';
-    else
+    } else {
       result += 'First To ';
+    }
 
     if (getSetsEnabled) {
-      if (sets > 1)
-        result += '${sets.toString()} Sets - ';
-      else
-        result += '${sets.toString()} Set - ';
+      if (getSets > 1) {
+        result += '${getSets.toString()} Sets - ';
+      } else {
+        result += '${getSets.toString()} Set - ';
+      }
     }
-    if (legs > 1)
-      result += '${legs.toString()} Legs';
-    else
-      result += '${legs.toString()} Leg';
+    if (getLegs > 1) {
+      result += '${getLegs.toString()} Legs';
+    } else {
+      result += '${getLegs.toString()} Leg';
+    }
 
     return result;
   }

@@ -13,11 +13,13 @@ class CustomAppBarWithHeart extends StatefulWidget with PreferredSizeWidget {
       {required this.title,
       this.gameId,
       this.isFinishScreen = false,
-      this.isFavouriteGame = false});
+      this.isFavouriteGame = false,
+      this.showHeart = true});
 
   final String title;
   final String? gameId; // optional, passed from game.statistics
   final bool isFinishScreen;
+  final bool showHeart;
   bool isFavouriteGame;
 
   @override
@@ -127,14 +129,15 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
               icon: Icon(Icons.arrow_back),
             ),
       actions: [
-        IconButton(
-          onPressed: () async => {
-            _showDialogForFavouriteGame(context),
-          },
-          icon: widget.isFavouriteGame
-              ? Icon(MdiIcons.heart)
-              : Icon(MdiIcons.heartOutline),
-        ),
+        if (widget.showHeart)
+          IconButton(
+            onPressed: () async => {
+              _showDialogForFavouriteGame(context),
+            },
+            icon: widget.isFavouriteGame
+                ? Icon(MdiIcons.heart)
+                : Icon(MdiIcons.heartOutline),
+          ),
         if (widget.isFinishScreen)
           IconButton(
             onPressed: () => {

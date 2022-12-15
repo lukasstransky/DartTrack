@@ -78,7 +78,12 @@ class _PlayersListState extends State<PlayersList> {
                         : FittedBox(
                             fit: BoxFit.scaleDown,
                             alignment: Alignment.centerLeft,
-                            child: Text(player.getName),
+                            child: Text(
+                              player.getName,
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                              ),
+                            ),
                           ),
                   ),
                   Container(
