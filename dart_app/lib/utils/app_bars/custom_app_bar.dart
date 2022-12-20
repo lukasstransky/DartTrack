@@ -14,7 +14,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       elevation: 0,
       title: Text(
         title,
-        style: TextStyle(color: Colors.black),
+        style: TextStyle(color: Colors.white),
       ),
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,

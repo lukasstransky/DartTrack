@@ -60,6 +60,7 @@ class _PlayersListState extends State<PlayersList> {
                                     'Level ${player.getLevel} Bot',
                                     style: TextStyle(
                                       fontSize: 12.sp,
+                                      color: Colors.white,
                                     ),
                                   ),
                                   Container(
@@ -69,6 +70,7 @@ class _PlayersListState extends State<PlayersList> {
                                       ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                                       style: TextStyle(
                                         fontSize: 8.sp,
+                                        color: Colors.white,
                                       ),
                                     ),
                                   ),

@@ -232,7 +232,7 @@ class OpenGames extends StatelessWidget {
                 children: [
                   Text(
                     'Open Games: ',
-                    style: TextStyle(fontSize: 14.sp),
+                    style: TextStyle(fontSize: 14.sp, color: Colors.white),
                   ),
                   ElevatedButton(
                     child: Text(

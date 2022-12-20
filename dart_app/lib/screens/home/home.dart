@@ -77,7 +77,11 @@ class _HomeState extends State<Home> {
         selectedFontSize: 20,
         selectedIconTheme: IconThemeData(
             color: Theme.of(context).colorScheme.secondary, size: 35),
+        /*  unselectedIconTheme: IconThemeData(
+          color: Utils.getPrimaryColorDarken(context),
+        ), */
         selectedItemColor: Theme.of(context).colorScheme.secondary,
+        /* unselectedItemColor: Utils.getPrimaryColorDarken(context), */
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
     );

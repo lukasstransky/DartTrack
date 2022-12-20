@@ -45,12 +45,16 @@ class AddPlayerTeamBtnDialogs {
       builder: (context) => Form(
         key: _formKeyNewPlayer,
         child: AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: EdgeInsets.only(
               bottom: DIALOG_CONTENT_PADDING_BOTTOM,
               top: DIALOG_CONTENT_PADDING_TOP,
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
-          title: const Text('Add New Player'),
+          title: Text(
+            'Add new player',
+            style: TextStyle(color: Colors.white),
+          ),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Column(
@@ -68,38 +72,52 @@ class AddPlayerTeamBtnDialogs {
                               children: [
                                 if (newPlayer == NewPlayer.Bot) ...[
                                   Text(
-                                      'Level ${Utils.getLevelForBot(_selectedBotAvgValue)} Bot'),
+                                    'Level ${Utils.getLevelForBot(_selectedBotAvgValue)} Bot',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                   Container(
                                     transform: Matrix4.translationValues(
                                         -1.w, 0.0, 0.0),
                                     child: Text(
                                       ' (${_selectedBotAvgValue - BOT_AVG_SLIDER_VALUE_RANGE}-${_selectedBotAvgValue + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                                      style: TextStyle(fontSize: 10.sp),
+                                      style: TextStyle(
+                                          fontSize: 10.sp, color: Colors.white),
                                     ),
                                   ),
                                 ] else ...[
-                                  const Text('Bot')
+                                  Text(
+                                    'Bot',
+                                    style: TextStyle(color: Colors.white),
+                                  )
                                 ]
                               ],
                             )
                           ],
                         ),
                       ),
-                      leading: Radio<NewPlayer>(
-                        value: NewPlayer.Bot,
-                        groupValue: newPlayer,
-                        onChanged: (value) => {
-                          setState(
-                            () {
-                              newPlayerController.text = '';
-                              newPlayer = value;
-                            },
-                          ),
-                        },
+                      leading: Theme(
+                        data: Theme.of(context).copyWith(
+                            unselectedWidgetColor:
+                                Utils.getPrimaryColorDarken(context)),
+                        child: Radio<NewPlayer>(
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          value: NewPlayer.Bot,
+                          groupValue: newPlayer,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                newPlayerController.text = '';
+                                newPlayer = value;
+                              },
+                            ),
+                          },
+                        ),
                       ),
                     ),
                     if (newPlayer == NewPlayer.Bot)
                       SfSlider(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        inactiveColor: Utils.getPrimaryColorDarken(context),
                         min: 22,
                         max: 118,
                         value: _selectedBotAvgValue,
@@ -116,55 +134,31 @@ class AddPlayerTeamBtnDialogs {
                       title: Container(
                           transform: Matrix4.translationValues(
                               DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: const Text('Guest')),
-                      leading: Radio<NewPlayer>(
-                        value: NewPlayer.Guest,
-                        groupValue: newPlayer,
-                        onChanged: (value) => {
-                          setState(
-                            () {
-                              _resetBotAvgValue();
-                              newPlayer = value;
-                            },
-                          ),
-                        },
-                      ),
-                    ),
-                    if (newPlayer == NewPlayer.Guest)
-                      TextFormField(
-                        controller: newPlayerController,
-                        textInputAction: TextInputAction.done,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return ('Please enter a name!');
-                          }
-                          if (gameSettingsX01.checkIfPlayerNameExists(
-                              value, true)) {
-                            return 'Playername already existsssss!';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.text,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                        ],
-                        decoration: InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.person,
-                          ),
-                          hintText: 'Name',
-                          filled: true,
-                          hintStyle: TextStyle(color: Colors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                          child: Text(
+                            'Guest',
+                            style: TextStyle(color: Colors.white),
+                          )),
+                      leading: Theme(
+                        data: Theme.of(context).copyWith(
+                          unselectedWidgetColor:
+                              Utils.getPrimaryColorDarken(context),
+                        ),
+                        child: Radio<NewPlayer>(
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          value: NewPlayer.Guest,
+                          groupValue: newPlayer,
+                          onChanged: (value) => {
+                            setState(
+                              () {
+                                _resetBotAvgValue();
+                                newPlayer = value;
+                              },
                             ),
-                          ),
+                          },
                         ),
                       ),
+                    ),
+                    if (newPlayer == NewPlayer.Guest) GuestTextFormField(),
                   ] else ...[
                     GuestTextFormField(),
                   ]
@@ -178,22 +172,20 @@ class AddPlayerTeamBtnDialogs {
                 gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
                         gameSettingsX01.getTeams.length < 4
                     ? Expanded(
-                        child: Container(
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-
-                                showDialogForAddingPlayerOrTeam(
-                                    gameSettingsX01, context);
-                              },
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: Icon(
+                              Icons.arrow_back,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+
+                              showDialogForAddingPlayerOrTeam(
+                                  gameSettingsX01, context);
+                            },
                           ),
                         ),
                       )
@@ -202,19 +194,37 @@ class AddPlayerTeamBtnDialogs {
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        _resetBotAvgValue();
-                        newPlayerController.clear();
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Cancel'),
+                    Padding(
+                      padding: EdgeInsets.only(right: 3.w),
+                      child: TextButton(
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
+                        onPressed: () {
+                          _resetBotAvgValue();
+                          newPlayerController.clear();
+                          Navigator.of(context).pop();
+                        },
+                        style: ButtonStyle(
+                          backgroundColor:
+                              Utils.getPrimaryMaterialStateColorDarken(context),
+                        ),
+                      ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        _submitNewPlayer(gameSettingsX01, context, newPlayer);
-                      },
-                      child: const Text('Submit'),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                      onPressed: () =>
+                          _submitNewPlayer(gameSettingsX01, context, newPlayer),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            Utils.getPrimaryMaterialStateColorDarken(context),
+                      ),
                     ),
                   ],
                 ))
@@ -279,12 +289,16 @@ class AddPlayerTeamBtnDialogs {
         return Form(
           key: _formKeyNewTeam,
           child: AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: EdgeInsets.only(
                 bottom: DIALOG_CONTENT_PADDING_BOTTOM,
                 top: DIALOG_CONTENT_PADDING_TOP,
                 left: DIALOG_CONTENT_PADDING_LEFT,
                 right: DIALOG_CONTENT_PADDING_RIGHT),
-            title: const Text('Add Team'),
+            title: Text(
+              'Add Team',
+              style: TextStyle(color: Colors.white),
+            ),
             content: StatefulBuilder(
               builder: (context, setState) {
                 return Column(
@@ -294,11 +308,12 @@ class AddPlayerTeamBtnDialogs {
                       controller: newTeamController,
                       textInputAction: TextInputAction.done,
                       validator: (value) {
-                        if (value!.isEmpty)
+                        if (value!.isEmpty) {
                           return ('Please enter a Team name!');
-
-                        if (gameSettingsX01.checkIfTeamNameExists(value))
+                        }
+                        if (gameSettingsX01.checkIfTeamNameExists(value)) {
                           return 'Teamname already exists!';
+                        }
 
                         return null;
                       },
@@ -307,13 +322,18 @@ class AddPlayerTeamBtnDialogs {
                         LengthLimitingTextInputFormatter(
                             MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
                       ],
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
+                        fillColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
                         prefixIcon: Icon(
                           Icons.group,
+                          color: Utils.getPrimaryColorDarken(context),
                         ),
                         hintText: 'Team',
                         filled: true,
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: TextStyle(
+                            color: Utils.getPrimaryColorDarken(context)),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(
@@ -332,43 +352,64 @@ class AddPlayerTeamBtnDialogs {
                 children: [
                   if (gameSettingsX01.getTeams.isNotEmpty)
                     Expanded(
-                      child: Container(
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: IconButton(
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              Icons.arrow_back,
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                              showDialogForAddingPlayerOrTeam(
-                                  gameSettingsX01, context);
-                            },
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            showDialogForAddingPlayerOrTeam(
+                                gameSettingsX01, context);
+                          },
                         ),
                       ),
                     ),
                   Expanded(
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 3.w),
+                          child: TextButton(
                             onPressed: () => {
                               newTeamController.clear(),
                               Navigator.of(context).pop(),
                             },
-                            child: const Text('Cancel'),
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  Utils.getPrimaryMaterialStateColorDarken(
+                                      context),
+                            ),
                           ),
-                          TextButton(
-                            onPressed: () => {
-                              _submitNewTeam(gameSettingsX01, context),
-                              newTeamController.clear(),
-                            },
-                            child: const Text('Submit'),
+                        ),
+                        TextButton(
+                          onPressed: () => {
+                            _submitNewTeam(gameSettingsX01, context),
+                            newTeamController.clear(),
+                          },
+                          child: Text(
+                            'Submit',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
                           ),
-                        ]),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                Utils.getPrimaryMaterialStateColorDarken(
+                                    context),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -408,40 +449,66 @@ class AddPlayerTeamBtnDialogs {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: EdgeInsets.only(
               bottom: DIALOG_CONTENT_PADDING_BOTTOM,
               top: DIALOG_CONTENT_PADDING_TOP,
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
-          title: const Text('Add Team or Player?'),
+          title: Text(
+            'Add team or player?',
+            style: TextStyle(color: Colors.white),
+          ),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   if (gameSettingsX01.getTeams.length < MAX_TEAMS)
-                    RadioListTile(
-                      title: Container(
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                        unselectedWidgetColor:
+                            Utils.getPrimaryColorDarken(context),
+                      ),
+                      child: RadioListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Container(
                           transform: Matrix4.translationValues(
                               DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: const Text('Team')),
-                      value: 'team',
-                      groupValue: teamOrPlayer,
-                      onChanged: (String? value) {
-                        setState(() => teamOrPlayer = value);
-                      },
+                          child: Text(
+                            'Team',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        value: 'team',
+                        groupValue: teamOrPlayer,
+                        onChanged: (String? value) {
+                          setState(() => teamOrPlayer = value);
+                        },
+                      ),
                     ),
                   if (gameSettingsX01.getTeams.length > 0)
-                    RadioListTile(
-                      title: Container(
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                        unselectedWidgetColor:
+                            Utils.getPrimaryColorDarken(context),
+                      ),
+                      child: RadioListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Container(
                           transform: Matrix4.translationValues(
                               DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: const Text('Player')),
-                      value: 'player',
-                      groupValue: teamOrPlayer,
-                      onChanged: (String? value) {
-                        setState(() => teamOrPlayer = value);
-                      },
+                          child: Text(
+                            'Player',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        value: 'player',
+                        groupValue: teamOrPlayer,
+                        onChanged: (String? value) {
+                          setState(() => teamOrPlayer = value);
+                        },
+                      ),
                     ),
                 ],
               );
@@ -449,18 +516,38 @@ class AddPlayerTeamBtnDialogs {
           ),
           actions: [
             TextButton(
+              child: Text(
+                'Cancel',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
             TextButton(
+              child: Text(
+                'Continue',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
               onPressed: () => {
                 Navigator.of(context).pop(),
                 if (teamOrPlayer == 'team')
-                  showDialogForAddingTeam(gameSettingsX01, context)
+                  {
+                    showDialogForAddingTeam(gameSettingsX01, context),
+                  }
                 else
-                  showDialogForAddingPlayer(gameSettingsX01, context),
+                  {
+                    showDialogForAddingPlayer(gameSettingsX01, context),
+                  }
               },
-              child: const Text('Continue'),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
           ],
         );
@@ -490,7 +577,9 @@ class AddPlayerTeamBtnDialogs {
       }
     }
 
-    if (count == 1) return team;
+    if (count == 1) {
+      return team;
+    }
 
     return null;
   }
@@ -516,12 +605,16 @@ class AddPlayerTeamBtnDialogs {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: EdgeInsets.only(
               bottom: DIALOG_CONTENT_PADDING_BOTTOM,
               top: DIALOG_CONTENT_PADDING_TOP,
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
-          title: const Text('Which Team?'),
+          title: Text(
+            'Which team?',
+            style: TextStyle(color: Colors.white),
+          ),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Container(
@@ -534,20 +627,32 @@ class AddPlayerTeamBtnDialogs {
                       itemCount: teams.length,
                       reverse: true,
                       itemBuilder: (BuildContext context, int index) {
-                        final team = teams[index];
+                        final Team team = teams[index];
 
                         if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM) {
-                          return RadioListTile(
-                            title: Container(
+                          return Theme(
+                            data: Theme.of(context).copyWith(
+                              unselectedWidgetColor:
+                                  Utils.getPrimaryColorDarken(context),
+                            ),
+                            child: RadioListTile(
+                              activeColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              title: Container(
                                 transform: Matrix4.translationValues(
                                     DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w,
                                     0.0,
                                     0.0),
-                                child: Text(team.getName)),
-                            value: team,
-                            groupValue: selectedTeam,
-                            onChanged: (Team? value) =>
-                                setState(() => selectedTeam = value),
+                                child: Text(
+                                  team.getName,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ),
+                              value: team,
+                              groupValue: selectedTeam,
+                              onChanged: (Team? value) =>
+                                  setState(() => selectedTeam = value),
+                            ),
                           );
                         } else
                           return SizedBox.shrink();
@@ -568,7 +673,7 @@ class AddPlayerTeamBtnDialogs {
                       padding: EdgeInsets.zero,
                       icon: Icon(
                         Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -581,18 +686,33 @@ class AddPlayerTeamBtnDialogs {
                     child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: const Text('Cancel'),
+                    Padding(
+                      padding: EdgeInsets.only(right: 3.w),
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              Utils.getPrimaryMaterialStateColorDarken(context),
+                        ),
+                      ),
                     ),
                     TextButton(
-                      onPressed: () {
-                        _submitNewTeamForPlayer(playerToAdd, selectedTeam,
-                            gameSettingsX01, context);
-                      },
-                      child: const Text('Submit'),
+                      onPressed: () => _submitNewTeamForPlayer(
+                          playerToAdd, selectedTeam, gameSettingsX01, context),
+                      child: Text(
+                        'Submit',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            Utils.getPrimaryMaterialStateColorDarken(context),
+                      ),
                     ),
                   ],
                 ))
@@ -617,7 +737,7 @@ class GuestTextFormField extends StatelessWidget {
         if (value!.isEmpty) {
           return ('Please enter a name!');
         }
-        if (gameSettingsX01.checkIfPlayerNameExists(value, false)) {
+        if (gameSettingsX01.checkIfPlayerNameExists(value, true)) {
           return 'Playername already exists!';
         }
         return null;
@@ -626,13 +746,18 @@ class GuestTextFormField extends StatelessWidget {
       inputFormatters: [
         LengthLimitingTextInputFormatter(MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
       ],
+      style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         prefixIcon: Icon(
           Icons.person,
+          color: Utils.getPrimaryColorDarken(context),
         ),
         hintText: 'Name',
+        fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         filled: true,
-        hintStyle: TextStyle(color: Colors.grey),
+        hintStyle: TextStyle(
+          color: Utils.getPrimaryColorDarken(context),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(

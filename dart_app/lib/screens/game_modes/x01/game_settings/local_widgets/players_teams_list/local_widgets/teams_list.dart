@@ -48,7 +48,7 @@ class _TeamsListState extends State<TeamsList> {
           controller: newScrollControllerTeams(),
           itemCount: tuple.item1.length,
           itemBuilder: (BuildContext context, int index) {
-            final team = tuple.item1[index];
+            final Team team = tuple.item1[index];
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,8 +58,10 @@ class _TeamsListState extends State<TeamsList> {
                       context, team, gameSettingsX01),
                   child: Text(
                     team.getName,
-                    style:
-                        TextStyle(fontSize: 12.sp, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
                 ListView.builder(
@@ -68,7 +70,7 @@ class _TeamsListState extends State<TeamsList> {
                   itemCount: team.getPlayers.length,
                   physics: ClampingScrollPhysics(),
                   itemBuilder: (BuildContext context, int index) {
-                    final player = team.getPlayers[index];
+                    final Player player = team.getPlayers[index];
 
                     return Container(
                       padding: EdgeInsets.only(left: 2.w),
@@ -89,8 +91,8 @@ class _TeamsListState extends State<TeamsList> {
                                         Text(
                                           'Level ${player.getLevel} Bot',
                                           style: TextStyle(
-                                            fontSize: 11.sp,
-                                          ),
+                                              fontSize: 10.sp,
+                                              color: Colors.white),
                                         ),
                                         Container(
                                           transform: Matrix4.translationValues(
@@ -98,13 +100,17 @@ class _TeamsListState extends State<TeamsList> {
                                           child: Text(
                                             ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                                             style: TextStyle(
-                                              fontSize: 7.sp,
-                                            ),
+                                                fontSize: 7.sp,
+                                                color: Colors.white),
                                           ),
                                         ),
                                       ],
                                     )
-                                  : Text(player.getName),
+                                  : Text(
+                                      player.getName,
+                                      style: TextStyle(
+                                          fontSize: 10.sp, color: Colors.white),
+                                    ),
                             ),
                           ),
                           Container(
@@ -116,7 +122,8 @@ class _TeamsListState extends State<TeamsList> {
                                   padding: EdgeInsets.zero,
                                   icon: Icon(
                                     Icons.edit,
-                                    color: Colors.grey,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                   onPressed: () => PlayersTeamsListDialogs
                                       .showDialogForEditingPlayer(
@@ -127,7 +134,9 @@ class _TeamsListState extends State<TeamsList> {
                                     padding: EdgeInsets.zero,
                                     icon: Icon(
                                       Icons.swap_vert,
-                                      color: Colors.grey,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
                                     ),
                                     onPressed: () => PlayersTeamsListDialogs
                                         .showDialogForSwitchingTeam(
@@ -137,7 +146,8 @@ class _TeamsListState extends State<TeamsList> {
                                   padding: EdgeInsets.zero,
                                   icon: Icon(
                                     Icons.highlight_remove,
-                                    color: Colors.grey,
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
                                   ),
                                   onPressed: () => _deleteIconClicked(
                                       team, player, gameSettingsX01),

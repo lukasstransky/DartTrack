@@ -45,10 +45,11 @@ class PlayersTeamsListDialogs {
     String cancelName = '';
     int cancelAverage = 0;
 
-    if (playerToEdit is Bot)
+    if (playerToEdit is Bot) {
       cancelAverage = playerToEdit.getPreDefinedAverage;
-    else
+    } else {
       cancelName = playerToEdit.getName;
+    }
 
     showDialog(
       barrierDismissible: false,
@@ -56,12 +57,16 @@ class PlayersTeamsListDialogs {
       builder: (context) => Form(
         key: _formKeyEditPlayer,
         child: AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: EdgeInsets.only(
               bottom: DIALOG_CONTENT_PADDING_BOTTOM,
               top: DIALOG_CONTENT_PADDING_TOP,
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
-          title: const Text('Edit'),
+          title: Text(
+            'Edit',
+            style: TextStyle(color: Colors.white),
+          ),
           content: StatefulBuilder(
             builder: (context, setState) {
               if (playerToEdit is Bot) {
@@ -78,20 +83,20 @@ class PlayersTeamsListDialogs {
                             child: Text(
                               'Level ${playerToEdit.getLevel} Bot',
                               style: TextStyle(
-                                fontSize: 12.sp,
-                              ),
+                                  fontSize: 12.sp, color: Colors.white),
                             ),
                           ),
                           Text(
                             ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                            style: TextStyle(
-                              fontSize: 9.sp,
-                            ),
+                            style:
+                                TextStyle(fontSize: 9.sp, color: Colors.white),
                           ),
                         ],
                       ),
                     ),
                     SfSlider(
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveColor: Utils.getPrimaryColorDarken(context),
                       min: 22,
                       max: 118,
                       value: playerToEdit.getPreDefinedAverage,
@@ -110,10 +115,12 @@ class PlayersTeamsListDialogs {
                   controller: editPlayerController..text = playerToEdit.getName,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
-                    if (value!.isEmpty) return ('Please enter a name!');
-
-                    if (gameSettingsX01.checkIfPlayerNameExists(value, false))
+                    if (value!.isEmpty) {
+                      return ('Please enter a name!');
+                    }
+                    if (gameSettingsX01.checkIfPlayerNameExists(value, false)) {
                       return 'Playername already exists!';
+                    }
 
                     return null;
                   },
@@ -122,13 +129,18 @@ class PlayersTeamsListDialogs {
                     LengthLimitingTextInputFormatter(
                         MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
                   ],
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.person,
+                      color: Utils.getPrimaryColorDarken(context),
                     ),
                     hintText: 'Name',
                     filled: true,
-                    hintStyle: TextStyle(color: Colors.grey),
+                    fillColor:
+                        Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                    hintStyle:
+                        TextStyle(color: Utils.getPrimaryColorDarken(context)),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide(
@@ -145,17 +157,37 @@ class PlayersTeamsListDialogs {
             TextButton(
               onPressed: () => {
                 if (playerToEdit is Bot)
-                  playerToEdit.setPreDefinedAverage = cancelAverage
+                  {
+                    playerToEdit.setPreDefinedAverage = cancelAverage,
+                  }
                 else
-                  playerToEdit.setName = cancelName,
+                  {
+                    playerToEdit.setName = cancelName,
+                  },
                 Navigator.of(context).pop(),
               },
-              child: const Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
             TextButton(
               onPressed: () =>
                   _saveEdit(context, gameSettingsX01, playerToEdit),
-              child: const Text('Submit'),
+              child: Text(
+                'Submit',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
           ],
         ),
@@ -174,12 +206,16 @@ class PlayersTeamsListDialogs {
         return Form(
           key: _formKeyEditTeam,
           child: AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: EdgeInsets.only(
                 bottom: DIALOG_CONTENT_PADDING_BOTTOM,
                 top: DIALOG_CONTENT_PADDING_TOP,
                 left: DIALOG_CONTENT_PADDING_LEFT,
                 right: DIALOG_CONTENT_PADDING_RIGHT),
-            title: const Text('Edit Team'),
+            title: Text(
+              'Edit team',
+              style: TextStyle(color: Colors.white),
+            ),
             content: StatefulBuilder(
               builder: (context, setState) {
                 return Column(
@@ -190,11 +226,12 @@ class PlayersTeamsListDialogs {
                       controller: editTeamController..text = teamToEdit.getName,
                       textInputAction: TextInputAction.done,
                       validator: (value) {
-                        if (value!.isEmpty)
-                          return ('Please enter a valid Name!');
-
-                        if (gameSettingsX01.checkIfTeamNameExists(value))
-                          return 'Teamname already exists!';
+                        if (value!.isEmpty) {
+                          return ('Please enter a valid name!');
+                        }
+                        if (gameSettingsX01.checkIfTeamNameExists(value)) {
+                          return 'Team name already exists!';
+                        }
 
                         return null;
                       },
@@ -203,12 +240,19 @@ class PlayersTeamsListDialogs {
                         LengthLimitingTextInputFormatter(
                             MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
                       ],
+                      style: TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.group,
+                          color: Utils.getPrimaryColorDarken(context),
                         ),
                         filled: true,
-                        hintStyle: TextStyle(color: Colors.grey),
+                        fillColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
+                        hintStyle: TextStyle(
+                          color: Utils.getPrimaryColorDarken(context),
+                        ),
+                        hintText: 'Team',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(
@@ -252,12 +296,28 @@ class PlayersTeamsListDialogs {
                   teamToEdit.setName = cancelName;
                   Navigator.of(context).pop();
                 },
-                child: const Text('Cancel'),
+                child: Text(
+                  'Cancel',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      Utils.getPrimaryMaterialStateColorDarken(context),
+                ),
               ),
               TextButton(
                 onPressed: () =>
                     _submitEditedTeam(context, gameSettingsX01, teamToEdit),
-                child: const Text('Submit'),
+                child: Text(
+                  'Submit',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      Utils.getPrimaryMaterialStateColorDarken(context),
+                ),
               ),
             ],
           ),
@@ -276,26 +336,37 @@ class PlayersTeamsListDialogs {
         context: context,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: EdgeInsets.only(
                 bottom: DIALOG_CONTENT_PADDING_BOTTOM,
                 top: DIALOG_CONTENT_PADDING_TOP,
                 left: 24,
                 right: 24),
-            title: const Text('Delete Team'),
-            content: const Text('Do you also want to delete this Team?'),
+            title: Text(
+              'Delete team',
+              style: TextStyle(color: Colors.white),
+            ),
+            content: Text(
+              'Do you also want to delete this team?',
+              style: TextStyle(color: Colors.white),
+            ),
             actions: [
               Row(
                 children: [
                   Expanded(
-                    child: Align(
+                    child: Container(
+                      padding: EdgeInsets.only(left: 3.w),
                       alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: EdgeInsets.only(left: 2.w),
-                        child: TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('Cancel'),
+                      child: TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              Utils.getPrimaryMaterialStateColorDarken(context),
                         ),
                       ),
                     ),
@@ -303,12 +374,26 @@ class PlayersTeamsListDialogs {
                   Expanded(
                     child: Row(
                       children: [
-                        TextButton(
-                          onPressed: () {
-                            gameSettingsX01.removePlayer(playerToDelete, false);
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('No'),
+                        Padding(
+                          padding: EdgeInsets.only(right: 3.w),
+                          child: TextButton(
+                            onPressed: () {
+                              gameSettingsX01.removePlayer(
+                                  playerToDelete, false);
+                              Navigator.of(context).pop();
+                            },
+                            child: Text(
+                              'No',
+                              style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary),
+                            ),
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  Utils.getPrimaryMaterialStateColorDarken(
+                                      context),
+                            ),
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -319,7 +404,16 @@ class PlayersTeamsListDialogs {
                             gameSettingsX01.removePlayer(playerToDelete, true);
                             Navigator.of(context).pop();
                           },
-                          child: const Text('Yes'),
+                          child: Text(
+                            'Yes',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                Utils.getPrimaryMaterialStateColorDarken(
+                                    context),
+                          ),
                         ),
                       ],
                     ),
@@ -508,14 +602,20 @@ class PlayersTeamsListDialogs {
       context: context,
       builder: (context) {
         return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: EdgeInsets.only(
               bottom: DIALOG_CONTENT_PADDING_BOTTOM,
               top: DIALOG_CONTENT_PADDING_TOP,
               left: 24,
               right: 24),
-          title: const Text('Info'),
-          content:
-              const Text('All the players in this team will also be deleted.'),
+          title: const Text(
+            'Info',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'All the players in this team will also be deleted.',
+            style: TextStyle(color: Colors.white),
+          ),
           actions: [
             Row(
               children: [
@@ -526,7 +626,7 @@ class PlayersTeamsListDialogs {
                       padding: EdgeInsets.zero,
                       icon: Icon(
                         Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.primary,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -540,11 +640,21 @@ class PlayersTeamsListDialogs {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Cancel'),
+                      Padding(
+                        padding: EdgeInsets.only(right: 3.w),
+                        child: TextButton(
+                          onPressed: () => Navigator.of(context).pop(),
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor:
+                                Utils.getPrimaryMaterialStateColorDarken(
+                                    context),
+                          ),
+                        ),
                       ),
                       TextButton(
                         onPressed: () {
@@ -552,7 +662,15 @@ class PlayersTeamsListDialogs {
                           _deleteTeam(teamToEdit, gameSettingsX01);
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Continue'),
+                        child: Text(
+                          'Continue',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              Utils.getPrimaryMaterialStateColorDarken(context),
+                        ),
                       ),
                     ],
                   ),
