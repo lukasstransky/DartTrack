@@ -20,12 +20,23 @@ class PointsBtn extends StatelessWidget {
       child: Consumer<GameSettingsX01>(
         builder: (_, gameSettingsX01, __) => Container(
           height: Utils.getHeightForWidget(gameSettingsX01).h,
-          decoration: BoxDecoration(
-            border: Border(
-              right: BorderSide(width: 1.0, color: Colors.white),
-            ),
-            color: Colors.white,
-          ),
+          decoration: points != 301
+              ? BoxDecoration(
+                  border: Border(
+                    left: points == 701
+                        ? BorderSide(
+                            color: Utils.getPrimaryColorDarken(context),
+                            width: GAME_SETTINGS_BTN_BORDER_WITH)
+                        : BorderSide.none,
+                    top: BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GAME_SETTINGS_BTN_BORDER_WITH),
+                    bottom: BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GAME_SETTINGS_BTN_BORDER_WITH),
+                  ),
+                )
+              : null,
           child: ElevatedButton(
             onPressed: () => {
               gameSettingsX01.setPoints = points,
@@ -35,32 +46,38 @@ class PointsBtn extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 points.toString(),
+                style: TextStyle(
+                  color: Utils.getTextColorForGameSettingsBtn(
+                      gameSettingsX01.getPoints == points &&
+                          gameSettingsX01.getCustomPoints == -1,
+                      context),
+                ),
               ),
             ),
             style: ButtonStyle(
-              splashFactory: gameSettingsX01.getPoints == points &&
-                      gameSettingsX01.getCustomPoints == -1
-                  ? NoSplash.splashFactory
-                  : InkRipple.splashFactory,
+              splashFactory: NoSplash.splashFactory,
               shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: gameSettingsX01.getPoints == points &&
-                      gameSettingsX01.getCustomPoints == -1
-                  ? MaterialStateProperty.all(Colors.transparent)
-                  : Utils.getDefaultOverlayColor(context),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: points != 301
-                      ? BorderRadius.zero
-                      : BorderRadius.only(
+                  side: points == 301
+                      ? BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GAME_SETTINGS_BTN_BORDER_WITH,
+                        )
+                      : BorderSide.none,
+                  borderRadius: points == 301
+                      ? BorderRadius.only(
                           topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
                           bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
-                        ),
+                        )
+                      : BorderRadius.zero,
                 ),
               ),
               backgroundColor: gameSettingsX01.getPoints == points &&
                       gameSettingsX01.getCustomPoints == -1
-                  ? Utils.getColor(Theme.of(context).colorScheme.primary)
-                  : Utils.getColor(Colors.grey),
+                  ? Utils.getPrimaryMaterialStateColorDarken(context)
+                  : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),
           ),
         ),

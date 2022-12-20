@@ -7,7 +7,7 @@ import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
-import 'package:dart_app/screens/game_modes/x01/game/player_stats_in_game/player_or_team_stats_in_game.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/player_or_team_stats_in_game.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/points_btns_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/points_btns_threeDarts.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_x01_game.dart';
@@ -35,7 +35,7 @@ class GameState extends State<Game> {
 
   @override
   didChangeDependencies() {
-    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+    final Map arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
 
     // only init game for new game, not for open game
@@ -123,78 +123,16 @@ class GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
-    final GameX01 gameX01 = context.read<GameX01>();
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBarX01Game(),
       body: Column(
         children: [
-          if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single)
-            Container(
-              height: 35.h,
-              child: Selector<GameX01, List<PlayerOrTeamGameStatistics>>(
-                selector: (_, gameX01) => gameX01.getPlayerGameStatistics,
-                shouldRebuild: (previous, next) => true,
-                builder: (_, playerStats, __) =>
-                    ScrollablePositionedList.builder(
-                  itemScrollController: newItemScrollController(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: playerStats.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    // todo: weird bug -> when starting single game -> end -> start as team game -> enter points -> error
-                    if (!gameX01.getBotSubmittedPoints &&
-                        gameX01.getCurrentPlayerToThrow is Bot) {
-                      final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
-                      final Tuple3<String, int, int> tuple =
-                          bot.getNextScoredValue(gameX01);
-
-                      Submit.submitPoints(tuple.item1, context, false,
-                          tuple.item2, tuple.item3);
-                      gameX01.setBotSubmittedPoints = true;
-                    }
-
-                    return PlayerOrTeamStatsInGame(
-                      currPlayerOrTeamGameStatsX01:
-                          playerStats[index] as PlayerOrTeamGameStatisticsX01,
-                    );
-                  },
-                ),
-              ),
-            )
+          if (context.read<GameSettingsX01>().getSingleOrTeam ==
+              SingleOrTeamEnum.Single)
+            SinglePlayersList()
           else
-            Container(
-              height: 35.h,
-              child: Selector<GameX01, List<PlayerOrTeamGameStatistics>>(
-                selector: (_, gameX01) => gameX01.getTeamGameStatistics,
-                shouldRebuild: (previous, next) => true,
-                builder: (_, teamStats, __) => ScrollablePositionedList.builder(
-                  itemScrollController: newItemScrollController(),
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: teamStats.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (!gameX01.getBotSubmittedPoints &&
-                        gameX01.getCurrentPlayerToThrow is Bot) {
-                      final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
-                      final Tuple3<String, int, int> tuple =
-                          bot.getNextScoredValue(gameX01);
-
-                      Submit.submitPoints(tuple.item1, context, false,
-                          tuple.item2, tuple.item3);
-                      gameX01.setBotSubmittedPoints = true;
-                    }
-
-                    return PlayerOrTeamStatsInGame(
-                      currPlayerOrTeamGameStatsX01:
-                          teamStats[index] as PlayerOrTeamGameStatisticsX01,
-                    );
-                  },
-                ),
-              ),
-            ),
+            TeamPlayersList(),
           Selector<GameSettingsX01, InputMethod>(
             selector: (_, gameX01) => gameX01.getInputMethod,
             builder: (_, inputMethod, __) => inputMethod == InputMethod.Round
@@ -202,6 +140,86 @@ class GameState extends State<Game> {
                 : PointsBtnsThreeDarts(),
           )
         ],
+      ),
+    );
+  }
+}
+
+class TeamPlayersList extends StatelessWidget {
+  const TeamPlayersList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final GameX01 gameX01 = context.read<GameX01>();
+
+    return Container(
+      height: 35.h,
+      child: Selector<GameX01, List<PlayerOrTeamGameStatistics>>(
+        selector: (_, gameX01) => gameX01.getTeamGameStatistics,
+        shouldRebuild: (previous, next) => true,
+        builder: (_, teamStats, __) => ScrollablePositionedList.builder(
+          itemScrollController: newItemScrollController(),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: teamStats.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (!gameX01.getBotSubmittedPoints &&
+                gameX01.getCurrentPlayerToThrow is Bot) {
+              final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
+              final Tuple3<String, int, int> tuple =
+                  bot.getNextScoredValue(gameX01);
+
+              Submit.submitPoints(
+                  tuple.item1, context, false, tuple.item2, tuple.item3);
+              gameX01.setBotSubmittedPoints = true;
+            }
+
+            return PlayerOrTeamStatsInGame(
+              currPlayerOrTeamGameStatsX01:
+                  teamStats[index] as PlayerOrTeamGameStatisticsX01,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class SinglePlayersList extends StatelessWidget {
+  const SinglePlayersList({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final GameX01 gameX01 = context.read<GameX01>();
+
+    return Container(
+      height: 35.h,
+      child: Selector<GameX01, List<PlayerOrTeamGameStatistics>>(
+        selector: (_, gameX01) => gameX01.getPlayerGameStatistics,
+        shouldRebuild: (previous, next) => true,
+        builder: (_, playerStats, __) => ScrollablePositionedList.builder(
+          itemScrollController: newItemScrollController(),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: playerStats.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (!gameX01.getBotSubmittedPoints &&
+                gameX01.getCurrentPlayerToThrow is Bot) {
+              final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
+              final Tuple3<String, int, int> tuple =
+                  bot.getNextScoredValue(gameX01);
+
+              Submit.submitPoints(
+                  tuple.item1, context, false, tuple.item2, tuple.item3);
+              gameX01.setBotSubmittedPoints = true;
+            }
+
+            return PlayerOrTeamStatsInGame(
+              currPlayerOrTeamGameStatsX01:
+                  playerStats[index] as PlayerOrTeamGameStatisticsX01,
+            );
+          },
+        ),
       ),
     );
   }

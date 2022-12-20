@@ -16,9 +16,9 @@ class PointsRow extends StatelessWidget {
         margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
         child: Row(
           children: [
-            PointsBtn(points: 301, key: Key('points301Btn')),
-            PointsBtn(points: 501, key: Key('points501Btn')),
-            PointsBtn(points: 701, key: Key('points701Btn')),
+            PointsBtn(points: 301),
+            PointsBtn(points: 501),
+            PointsBtn(points: 701),
             CustomPoints(),
           ],
         ),

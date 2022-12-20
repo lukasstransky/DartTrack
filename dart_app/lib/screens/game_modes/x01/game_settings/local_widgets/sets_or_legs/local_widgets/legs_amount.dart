@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -71,66 +72,63 @@ class _LegsAmountState extends State<LegsAmount> {
     final gameSettingsX01 = context.read<GameSettingsX01>();
 
     return Expanded(
-      child: Container(
-        child: Column(
-          children: [
-            Container(
-              width: 10.w,
-              child: Center(
-                child: Text(
-                  '(Legs)',
-                  style: TextStyle(fontSize: 8.sp),
-                ),
+      child: Column(
+        children: [
+          Container(
+            width: 10.w,
+            alignment: Alignment.center,
+            child: Text(
+              '(Legs)',
+              style: TextStyle(
+                fontSize: 8.sp,
+                color: Utils.getTextColorForGameSettingsPage(),
               ),
             ),
-            Selector<GameSettingsX01, Tuple2<BestOfOrFirstToEnum, int>>(
-              selector: (_, gameSettingsX01) =>
-                  Tuple2(gameSettingsX01.getMode, gameSettingsX01.getLegs),
-              builder: (_, tuple, __) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      _subtractBtnPressed(gameSettingsX01, tuple);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.remove,
-                        color: _shouldShowSubtractBtnGrey(
-                                tuple.item2, gameSettingsX01)
-                            ? Colors.grey
-                            : Theme.of(context).colorScheme.primary),
-                  ),
-                  Container(
-                    width: 10.w,
-                    child: Center(
-                      child: Text(
-                        tuple.item2.toString(),
-                        style: TextStyle(fontSize: 18.sp),
-                      ),
+          ),
+          Selector<GameSettingsX01, Tuple2<BestOfOrFirstToEnum, int>>(
+            selector: (_, gameSettingsX01) =>
+                Tuple2(gameSettingsX01.getMode, gameSettingsX01.getLegs),
+            builder: (_, tuple, __) => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onPressed: () => _subtractBtnPressed(gameSettingsX01, tuple),
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.remove,
+                      color: _shouldShowSubtractBtnGrey(
+                              tuple.item2, gameSettingsX01)
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondary),
+                ),
+                Container(
+                  width: 10.w,
+                  alignment: Alignment.center,
+                  child: Text(
+                    tuple.item2.toString(),
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      color: Utils.getTextColorForGameSettingsPage(),
                     ),
                   ),
-                  IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {
-                      _addBtnPressed(gameSettingsX01, tuple);
-                    },
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                    icon: Icon(Icons.add,
-                        color:
-                            _shouldShowAddBtnGrey(tuple.item2, gameSettingsX01)
-                                ? Colors.grey
-                                : Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-              ),
+                ),
+                IconButton(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onPressed: () => _addBtnPressed(gameSettingsX01, tuple),
+                  padding: EdgeInsets.zero,
+                  constraints: BoxConstraints(),
+                  icon: Icon(Icons.add,
+                      color: _shouldShowAddBtnGrey(tuple.item2, gameSettingsX01)
+                          ? Theme.of(context).colorScheme.primary
+                          : Theme.of(context).colorScheme.secondary),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

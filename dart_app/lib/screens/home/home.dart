@@ -56,6 +56,8 @@ class _HomeState extends State<Home> {
     return Scaffold(
       body: _pages[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 0,
         onTap: onTabTapped,
         currentIndex: _currentIndex,
         items: [
@@ -73,8 +75,9 @@ class _HomeState extends State<Home> {
           ),
         ],
         selectedFontSize: 20,
-        selectedIconTheme: IconThemeData(color: Colors.blue, size: 35),
-        selectedItemColor: Colors.blue,
+        selectedIconTheme: IconThemeData(
+            color: Theme.of(context).colorScheme.secondary, size: 35),
+        selectedItemColor: Theme.of(context).colorScheme.secondary,
         selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
       ),
     );

@@ -7,32 +7,32 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SetsBtn extends StatelessWidget {
-  _setsBtnClicked(GameSettingsX01 gs) {
-    gs.setSetsEnabled = !gs.getSetsEnabled;
-    gs.setWinByTwoLegsDifference = false;
-    gs.setSuddenDeath = false;
-    gs.setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
+  _setsBtnClicked(GameSettingsX01 gameSettingsX01) {
+    gameSettingsX01.setSetsEnabled = !gameSettingsX01.getSetsEnabled;
+    gameSettingsX01.setWinByTwoLegsDifference = false;
+    gameSettingsX01.setSuddenDeath = false;
+    gameSettingsX01.setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
 
-    if (gs.getDrawMode) {
-      gs.setSets = DEFAULT_SETS_DRAW_MODE;
-      gs.setLegs = gs.getSetsEnabled
+    if (gameSettingsX01.getDrawMode) {
+      gameSettingsX01.setSets = DEFAULT_SETS_DRAW_MODE;
+      gameSettingsX01.setLegs = gameSettingsX01.getSetsEnabled
           ? DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED
           : DEFAULT_LEGS_DRAW_MODE;
     } else {
-      if (gs.getMode == BestOfOrFirstToEnum.FirstTo) {
-        gs.setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
-        gs.setLegs = gs.getSetsEnabled
+      if (gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo) {
+        gameSettingsX01.setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
+        gameSettingsX01.setLegs = gameSettingsX01.getSetsEnabled
             ? DEFAULT_LEGS_FIRST_TO_SETS_ENABLED
             : DEFAULT_LEGS_FIRST_TO_NO_SETS;
       } else {
-        gs.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
-        gs.setLegs = gs.getSetsEnabled
-            ? gs.setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED
-            : gs.setSets = DEFAULT_LEGS_BEST_OF_NO_SETS;
+        gameSettingsX01.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+        gameSettingsX01.setLegs = gameSettingsX01.getSetsEnabled
+            ? gameSettingsX01.setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED
+            : gameSettingsX01.setSets = DEFAULT_LEGS_BEST_OF_NO_SETS;
       }
     }
 
-    gs.notify();
+    gameSettingsX01.notify();
   }
 
   @override
@@ -44,22 +44,32 @@ class SetsBtn extends StatelessWidget {
           child: ElevatedButton(
             onPressed: () => _setsBtnClicked(gameSettingsX01),
             child: FittedBox(
-              fit: BoxFit.fitWidth,
-              child: const Text('Sets'),
-            ),
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'Sets',
+                  style: TextStyle(
+                    color: Utils.getTextColorForGameSettingsBtn(
+                        gameSettingsX01.getSetsEnabled, context),
+                  ),
+                )),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
               shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               shape: MaterialStateProperty.all(
                 RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GAME_SETTINGS_BTN_BORDER_WITH,
+                  ),
                   borderRadius: BorderRadius.all(
                     Radius.circular(BUTTON_BORDER_RADIUS),
                   ),
                 ),
               ),
               backgroundColor: gameSettingsX01.getSetsEnabled
-                  ? Utils.getColor(Theme.of(context).colorScheme.primary)
-                  : Utils.getColor(Colors.grey),
+                  ? Utils.getPrimaryMaterialStateColorDarken(context)
+                  : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),
           ),
         ),

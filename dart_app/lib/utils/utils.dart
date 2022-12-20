@@ -377,4 +377,26 @@ class Utils {
       ],
     );
   }
+
+  static Color getPrimaryColorDarken(BuildContext context) {
+    return darken(Theme.of(context).colorScheme.primary, 35);
+  }
+
+  static MaterialStateProperty<Color> getPrimaryMaterialStateColorDarken(
+      BuildContext context) {
+    return getColor(darken(Theme.of(context).colorScheme.primary, 35));
+  }
+
+  static Color getTextColorForGameSettingsBtn(
+      bool value, BuildContext context) {
+    return value ? Theme.of(context).colorScheme.secondary : Colors.white;
+  }
+
+  static Color getColorForClickBtns() {
+    return Color.fromARGB(255, 222, 176, 134);
+  }
+
+  static Color getTextColorForGameSettingsPage() {
+    return Colors.white;
+  }
 }

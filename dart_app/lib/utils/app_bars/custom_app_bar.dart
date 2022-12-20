@@ -11,7 +11,11 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
+      elevation: 0,
+      title: Text(
+        title,
+        style: TextStyle(color: Colors.black),
+      ),
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

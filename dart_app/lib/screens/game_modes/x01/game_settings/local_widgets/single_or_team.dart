@@ -29,19 +29,21 @@ class SingleOrTeam extends StatelessWidget {
 
       if (countOfBotPlayers >= 1 && countOfGuestPlayers >= 2) {
         const String loggedInUser = '';
+        //todo comment out
         // final String loggedInUser =
         //     context.read<AuthService>().getPlayer!.getName;
         List<Player> toRemove = [];
 
         for (int i = 2; i < players.length; i++) {
-          if (players.elementAt(i).getName == loggedInUser)
+          if (players.elementAt(i).getName == loggedInUser) {
             toRemove.add(players.elementAt(1));
-          else
+          } else {
             toRemove.add(players.elementAt(i));
+          }
         }
 
         toRemove.forEach((player) => gameSettingsX01.removePlayer(
-            player, false)); //to avoid concurrency problem
+            player, false)); // to avoid concurrency problem
       }
       if (countOfBotPlayers == 2) {
         final Player playerToRemove = players
@@ -67,92 +69,117 @@ class SingleOrTeam extends StatelessWidget {
               top: MARGIN_GAMESETTINGS.h, bottom: MARGIN_GAMESETTINGS.h),
           child: Row(
             children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border(
-                      right: BorderSide(width: 1.0, color: Colors.white),
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () =>
-                        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team
-                            ? _switchSingleOrTeamMode(context, gameSettingsX01)
-                            : null,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: const Text('Single'),
-                    ),
-                    style: ButtonStyle(
-                      splashFactory: gameSettingsX01.getSingleOrTeam ==
-                              SingleOrTeamEnum.Single
-                          ? NoSplash.splashFactory
-                          : InkRipple.splashFactory,
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: gameSettingsX01.getSingleOrTeam ==
-                              SingleOrTeamEnum.Single
-                          ? MaterialStateProperty.all(Colors.transparent)
-                          : Utils.getDefaultOverlayColor(context),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
-                            bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
-                          ),
-                        ),
-                      ),
-                      backgroundColor: gameSettingsX01.getSingleOrTeam ==
-                              SingleOrTeamEnum.Single
-                          ? Utils.getColor(
-                              Theme.of(context).colorScheme.primary)
-                          : Utils.getColor(Colors.grey),
-                    ),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  child: ElevatedButton(
-                    onPressed: () => gameSettingsX01.getSingleOrTeam ==
-                            SingleOrTeamEnum.Single
-                        ? _switchSingleOrTeamMode(context, gameSettingsX01)
-                        : null,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: const Text('Teams'),
-                    ),
-                    style: ButtonStyle(
-                      splashFactory: gameSettingsX01.getSingleOrTeam ==
-                              SingleOrTeamEnum.Team
-                          ? NoSplash.splashFactory
-                          : InkRipple.splashFactory,
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: gameSettingsX01.getSingleOrTeam ==
-                              SingleOrTeamEnum.Team
-                          ? MaterialStateProperty.all(Colors.transparent)
-                          : Utils.getDefaultOverlayColor(context),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(BUTTON_BORDER_RADIUS),
-                            bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
-                          ),
-                        ),
-                      ),
-                      backgroundColor: gameSettingsX01.getSingleOrTeam ==
-                              SingleOrTeamEnum.Team
-                          ? Utils.getColor(
-                              Theme.of(context).colorScheme.primary)
-                          : Utils.getColor(Colors.grey),
-                    ),
-                  ),
-                ),
-              ),
+              SingleBtn(switchSingleOrTeamMode: _switchSingleOrTeamMode),
+              TeamBtn(switchSingleOrTeamMode: _switchSingleOrTeamMode),
             ],
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class SingleBtn extends StatelessWidget {
+  const SingleBtn({Key? key, required Function this.switchSingleOrTeamMode})
+      : super(key: key);
+
+  final Function switchSingleOrTeamMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final bool isSingle =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () => {
+          if (!isSingle)
+            {
+              switchSingleOrTeamMode(context, gameSettingsX01),
+            }
+        },
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            'Single',
+            style: TextStyle(
+              color: Utils.getTextColorForGameSettingsBtn(isSingle, context),
+            ),
+          ),
+        ),
+        style: ButtonStyle(
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              side: BorderSide(
+                color: Utils.getPrimaryColorDarken(context),
+                width: GAME_SETTINGS_BTN_BORDER_WITH,
+              ),
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+                bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+              ),
+            ),
+          ),
+          backgroundColor: isSingle
+              ? Utils.getPrimaryMaterialStateColorDarken(context)
+              : Utils.getColor(Theme.of(context).colorScheme.primary),
+        ),
+      ),
+    );
+  }
+}
+
+class TeamBtn extends StatelessWidget {
+  const TeamBtn({Key? key, required Function this.switchSingleOrTeamMode})
+      : super(key: key);
+
+  final Function switchSingleOrTeamMode;
+
+  @override
+  Widget build(BuildContext context) {
+    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final bool isTeam =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team;
+
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () {
+          if (!isTeam) {
+            switchSingleOrTeamMode(context, gameSettingsX01);
+          }
+        },
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            'Team',
+            style: TextStyle(
+              color: Utils.getTextColorForGameSettingsBtn(isTeam, context),
+            ),
+          ),
+        ),
+        style: ButtonStyle(
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              side: BorderSide(
+                color: Utils.getPrimaryColorDarken(context),
+                width: GAME_SETTINGS_BTN_BORDER_WITH,
+              ),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(BUTTON_BORDER_RADIUS),
+                bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
+              ),
+            ),
+          ),
+          backgroundColor: isTeam
+              ? Utils.getPrimaryMaterialStateColorDarken(context)
+              : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
       ),
     );

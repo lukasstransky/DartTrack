@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -80,12 +81,21 @@ class DrawMode extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text('Draw Mode'),
+                    Text(
+                      'Draw Mode',
+                      style: TextStyle(
+                        color: Utils.getTextColorForGameSettingsPage(),
+                      ),
+                    ),
                     Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
                       value: gameSettingsX01.getDrawMode,
-                      onChanged: (value) {
-                        _drawModeSwitchPressed(gameSettingsX01, value);
-                      },
+                      onChanged: (value) =>
+                          _drawModeSwitchPressed(gameSettingsX01, value),
                     ),
                   ],
                 ),

@@ -29,8 +29,14 @@ class PlayerEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(
-        left: 5.w,
-      ),
+          left: 5.w,
+          bottom:
+              Utils.getPlayersOrTeamStatsList(gameX01, gameX01.getGameSettings)
+                              .length -
+                          1 ==
+                      i
+                  ? 1.h
+                  : 0),
       child: Column(
         children: [
           Row(

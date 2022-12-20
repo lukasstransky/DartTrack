@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                             constraints: BoxConstraints(),
                             icon: Icon(Icons.remove,
                                 color: gameSettingsX01.getMaxExtraLegs > 1
-                                    ? Theme.of(context).colorScheme.primary
+                                    ? Theme.of(context).colorScheme.secondary
                                     : Colors.grey),
                           ),
                         ),
@@ -130,7 +131,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                           icon: Icon(Icons.add,
                               color: gameSettingsX01.getMaxExtraLegs !=
                                       MAX_EXTRA_LEGS
-                                  ? Theme.of(context).colorScheme.primary
+                                  ? Theme.of(context).colorScheme.secondary
                                   : Colors.grey),
                         ),
                       ],
@@ -186,8 +187,18 @@ class WinByTwoLegsDifference extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text('Win by Two Legs Difference'),
+                    Text(
+                      'Win by Two Legs Difference',
+                      style: TextStyle(
+                        color: Utils.getTextColorForGameSettingsPage(),
+                      ),
+                    ),
                     Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
                       value: gameSettingsX01.getWinByTwoLegsDifference,
                       onChanged: (value) {
                         if (value) {
@@ -202,15 +213,13 @@ class WinByTwoLegsDifference extends StatelessWidget {
                 if (gameSettingsX01.getSuddenDeath)
                   Container(
                     transform: Matrix4.translationValues(0.0, -1.h, 0.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        '(Sudden Death Leg after max. ${gameSettingsX01.getMaxExtraLegs} additional ' +
-                            (gameSettingsX01.getMaxExtraLegs == 1
-                                ? 'Leg)'
-                                : 'Legs)'),
-                        style: TextStyle(fontSize: 8.sp),
-                      ),
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '(Sudden Death Leg after max. ${gameSettingsX01.getMaxExtraLegs} additional ' +
+                          (gameSettingsX01.getMaxExtraLegs == 1
+                              ? 'Leg)'
+                              : 'Legs)'),
+                      style: TextStyle(fontSize: 8.sp),
                     ),
                   ),
               ],

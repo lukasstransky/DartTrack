@@ -144,7 +144,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             overlayColor: selectedCheckoutCount == 1
                                 ? MaterialStateProperty.all(Colors.transparent)
                                 : MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary),
+                                    Theme.of(context).colorScheme.secondary),
                           ),
                         ),
                       ),

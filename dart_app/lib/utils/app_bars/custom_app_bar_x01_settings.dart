@@ -4,6 +4,7 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -131,12 +132,15 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 0,
       centerTitle: true,
       title: Column(
         children: [
           Text(
             'Game Settings',
-            style: TextStyle(fontSize: 14.sp),
+            style: TextStyle(
+                fontSize: 14.sp,
+                color: Utils.getTextColorForGameSettingsPage()),
           ),
         ],
       ),
@@ -145,7 +149,8 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         children: [
           IconButton(
             onPressed: () => Navigator.of(context).pushNamed('/home'),
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.arrow_back,
+                color: Theme.of(context).colorScheme.secondary),
           )
         ],
       ),
@@ -156,8 +161,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             builder: (_, gameSettingsX01, __) => IconButton(
               onPressed: () async => _defaultSettingsBtnClicked(),
               icon: DefaultSettingsHelper.defaultSettingsSelected(context)
-                  ? Icon(MdiIcons.heart)
-                  : Icon(MdiIcons.heartOutline),
+                  ? Icon(MdiIcons.heart,
+                      color: Theme.of(context).colorScheme.secondary)
+                  : Icon(MdiIcons.heartOutline,
+                      color: Theme.of(context).colorScheme.secondary),
             ),
           ),
         ),

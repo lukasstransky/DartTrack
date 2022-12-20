@@ -4,10 +4,10 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game/player_stats_in_game/local_widgets/finish_ways.dart';
-import 'package:dart_app/screens/game_modes/x01/game/player_stats_in_game/local_widgets/game_stats.dart';
-import 'package:dart_app/screens/game_modes/x01/game/player_stats_in_game/local_widgets/leg_beginner_asset.dart';
-import 'package:dart_app/screens/game_modes/x01/game/player_stats_in_game/local_widgets/sets_legs_score.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/finish_ways.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/game_stats.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/leg_beginner_asset.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/sets_legs_score.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';

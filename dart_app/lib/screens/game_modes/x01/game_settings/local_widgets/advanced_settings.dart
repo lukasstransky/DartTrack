@@ -52,14 +52,14 @@ class AdvancedSettings extends StatelessWidget {
           child: Align(
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
-              onPressed: () {
-                Navigator.of(context).pushNamed('/inGameSettingsX01');
-              },
-              icon: Icon(
-                Icons.settings,
-              ),
-              label: const Text(
+              onPressed: () =>
+                  Navigator.of(context).pushNamed('/inGameSettingsX01'),
+              icon: Icon(Icons.settings,
+                  color: Theme.of(context).colorScheme.secondary),
+              label: Text(
                 'Advanced Setttings',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

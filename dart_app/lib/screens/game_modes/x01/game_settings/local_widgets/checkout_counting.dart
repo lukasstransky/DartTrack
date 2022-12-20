@@ -38,8 +38,16 @@ class CheckoutCounting extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text('Counting of Checkout %'),
+                    Text(
+                      'Counting of Checkout %',
+                      style: TextStyle(color: Colors.white),
+                    ),
                     Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
                       value: gameSettingsX01.getEnableCheckoutCounting,
                       onChanged: (value) {
                         gameSettingsX01.setEnableCheckoutCounting = value;

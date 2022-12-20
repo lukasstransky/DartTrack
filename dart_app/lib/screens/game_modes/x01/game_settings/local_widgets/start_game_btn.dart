@@ -244,27 +244,25 @@ class StartGameBtn extends StatelessWidget {
             width: 60.w,
             height: Utils.getHeightForWidget(gameSettingsX01).h,
             child: TextButton(
-              child: const Text(
-                'Start Game',
-                style: TextStyle(color: Colors.white),
+              child: Text(
+                'Start game',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
               ),
               style: ButtonStyle(
-                overlayColor: _activateStartGameBtn(gameSettingsX01)
-                    ? Utils.getDefaultOverlayColor(context)
-                    : MaterialStateProperty.all(Colors.transparent),
-                splashFactory: _activateStartGameBtn(gameSettingsX01)
-                    ? InkRipple.splashFactory
-                    : NoSplash.splashFactory,
+                splashFactory: NoSplash.splashFactory,
                 shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                 ),
                 backgroundColor: _activateStartGameBtn(gameSettingsX01)
-                    ? Utils.getColor(Theme.of(context).colorScheme.primary)
+                    ? Utils.getPrimaryMaterialStateColorDarken(context)
                     : Utils.getColor(Utils.darken(
-                        Theme.of(context).colorScheme.primary, 30)),
+                        Theme.of(context).colorScheme.primary, 60)),
               ),
               onPressed: () => {
                 if (_activateStartGameBtn(gameSettingsX01))

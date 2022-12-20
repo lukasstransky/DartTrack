@@ -47,13 +47,15 @@ class _GameSettingsState extends State<GameSettings> {
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
     gameSettingsX01.setPlayers = [];
-    if (currentUserAsPlayer != null) {
+    gameSettingsX01.getPlayers.add(new Player(name: 'Strainski'));
+    //todo comment out
+    /* if (currentUserAsPlayer != null) {
       final Player toAdd = new Player(name: currentUserAsPlayer.getName);
 
       Future.delayed(Duration.zero, () {
         gameSettingsX01.addPlayer(toAdd);
       });
-    }
+    } */
   }
 
   @override

@@ -11,40 +11,43 @@ import 'package:provider/provider.dart';
 class RevertBtn extends StatelessWidget {
   const RevertBtn({Key? key}) : super(key: key);
 
+  _revertBtnPressed(GameX01 gameX01, BuildContext context) {
+    if (gameX01.getRevertPossible) {
+      Revert.revertPoints(context);
+
+      if (gameX01.getCurrentPlayerToThrow is Bot) {
+        Revert.revertPoints(context);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
     return ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-              side: BorderSide(
-                  color: Colors.black,
-                  width: gameSettingsX01.getInputMethod == InputMethod.Round
-                      ? 2
-                      : 0),
-            ),
+      style: ButtonStyle(
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(
+                color: Colors.black,
+                width: context.read<GameSettingsX01>().getInputMethod ==
+                        InputMethod.Round
+                    ? 2
+                    : 0),
           ),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          backgroundColor: gameX01.getRevertPossible
-              ? MaterialStateProperty.all(Colors.red)
-              : MaterialStateProperty.all(Utils.darken(Colors.red, 25)),
-          overlayColor: gameX01.getRevertPossible
-              ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
-              : MaterialStateProperty.all(Colors.transparent),
         ),
-        child: const Icon(Icons.undo, color: Colors.black),
-        onPressed: () {
-          if (gameX01.getRevertPossible) {
-            Revert.revertPoints(context);
-
-            if (gameX01.getCurrentPlayerToThrow is Bot) {
-              Revert.revertPoints(context);
-            }
-          }
-        });
+        shadowColor: MaterialStateProperty.all(Colors.transparent),
+        backgroundColor: gameX01.getRevertPossible
+            ? MaterialStateProperty.all(Colors.red)
+            : MaterialStateProperty.all(Utils.darken(Colors.red, 25)),
+        overlayColor: gameX01.getRevertPossible
+            ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
+            : MaterialStateProperty.all(Colors.transparent),
+      ),
+      child: const Icon(Icons.undo, color: Colors.black),
+      onPressed: () => _revertBtnPressed(gameX01, context),
+    );
   }
 }

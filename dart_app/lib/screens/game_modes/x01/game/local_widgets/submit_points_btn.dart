@@ -17,12 +17,11 @@ class SubmitPointsBtn extends StatelessWidget {
   bool _shouldSubmitBtnBeEnabled(BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+
     // for bug -> when saving an open game
     if (gameX01.getPlayerGameStatistics.isEmpty) {
       return false;
     }
-    final PlayerOrTeamGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStats();
 
     final bool round = gameSettingsX01.getInputMethod == InputMethod.Round &&
         gameX01.getCurrentPointsSelected.isNotEmpty &&
@@ -30,7 +29,7 @@ class SubmitPointsBtn extends StatelessWidget {
     final bool threeDarts =
         gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
             (gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
-                stats.getCurrentPoints == 0);
+                gameX01.getCurrentPlayerGameStats().getCurrentPoints == 0);
 
     if (round || threeDarts) {
       return true;

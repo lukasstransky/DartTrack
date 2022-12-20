@@ -19,6 +19,7 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -42,6 +43,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color color = Color.fromARGB(255, 49, 89, 136);
+
     return MultiProvider(
       providers: [
         Provider<AuthService>(
@@ -94,7 +97,18 @@ class MyApp extends StatelessWidget {
           navigatorKey: navigatorKey,
           title: 'Dart',
           theme: ThemeData(
-              colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)),
+            /* colorScheme: ColorScheme.fromSwatch(
+              primarySwatch: Colors.blue,
+              accentColor: Colors.green,
+            ), */
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+              primary: color,
+              secondary: Color.fromARGB(255, 222, 176, 134),
+
+              // secondary: Color.fromARGB(255, 7, 56, 96),
+            ),
+            scaffoldBackgroundColor: color,
+          ),
           routes: {
             LoginRegisterPage.routeName: (ctx) => LoginRegisterPage(),
             Home.routeName: (ctx) => Home(),

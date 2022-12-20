@@ -332,3 +332,19 @@ const int BASE_VALUE_PERCENTAGE_UPPER_LIMIT = 80;
 const int BASE_VALUE_PERCENTAGE_LOWER_LIMIT = 70;
 const List<int> STARTER_DOUBLES_FOR_FINISH = [16, 20, 24, 32, 36, 40];
 const double PROBABILITY_TO_SUBMIT_ZERO_FOR_FINISH_CHANCE = 0.33;
+
+/************************************************************************************/
+/***********************          styling constants            **********************/
+/************************************************************************************/
+
+// general
+const int GENERAL_DARKEN = 35;
+
+// game modes overview
+const int GAME_MOES_OVERVIEW_WIDTH = 60;
+const int GAME_MOES_OVERVIEW_HEIGHT = 6;
+const int GAME_MOES_OVERVIEW_FONTSIZE = 16;
+const int GAME_MOES_OVERVIEW_PADDING = 2;
+
+// game settings
+const double GAME_SETTINGS_BTN_BORDER_WITH = 2;

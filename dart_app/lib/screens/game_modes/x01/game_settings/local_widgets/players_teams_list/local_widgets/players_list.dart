@@ -4,6 +4,7 @@ import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/players_teams_list_dialogs.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ class _PlayersListState extends State<PlayersList> {
         child: ListView.builder(
           shrinkWrap: true,
           controller: newScrollControllerPlayers(),
-          reverse: true, //show new added player on top
+          reverse: true, // show new added player on top
           scrollDirection: Axis.vertical,
           itemCount: gameSettingsX01.getPlayers.length,
           itemBuilder: (BuildContext context, int index) {
@@ -82,6 +83,7 @@ class _PlayersListState extends State<PlayersList> {
                               player.getName,
                               style: TextStyle(
                                 fontSize: 12.sp,
+                                color: Utils.getTextColorForGameSettingsPage(),
                               ),
                             ),
                           ),
@@ -95,7 +97,7 @@ class _PlayersListState extends State<PlayersList> {
                           padding: EdgeInsets.zero,
                           icon: Icon(
                             Icons.edit,
-                            color: Colors.grey,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                           onPressed: () => PlayersTeamsListDialogs
                               .showDialogForEditingPlayer(
@@ -105,7 +107,7 @@ class _PlayersListState extends State<PlayersList> {
                           padding: EdgeInsets.zero,
                           icon: Icon(
                             Icons.highlight_remove,
-                            color: Colors.grey,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                           onPressed: () => {
                             gameSettingsX01.removePlayer(player, true),
