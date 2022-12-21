@@ -133,7 +133,7 @@ class SelectInputMethod extends StatelessWidget {
                     text: TextSpan(
                       style: new TextStyle(
                         fontSize: 11.0.sp,
-                        color: Colors.white,
+                        color: Colors.white70,
                       ),
                       children: <TextSpan>[
                         new TextSpan(
@@ -153,7 +153,7 @@ class SelectInputMethod extends StatelessWidget {
                     text: TextSpan(
                       style: new TextStyle(
                         fontSize: 11.0.sp,
-                        color: Colors.white,
+                        color: Colors.white70,
                       ),
                       children: <TextSpan>[
                         new TextSpan(

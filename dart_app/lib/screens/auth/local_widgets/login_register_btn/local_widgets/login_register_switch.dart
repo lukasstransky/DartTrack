@@ -12,27 +12,31 @@ class LoginRegisterSwitch extends StatelessWidget {
   Widget build(BuildContext context) {
     final Auth auth = context.read<Auth>();
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          auth.getAuthMode == AuthMode.Login
-              ? 'Don\'t have an account? '
-              : 'Already have an account? ',
-          style: TextStyle(fontSize: 12.sp),
-        ),
-        GestureDetector(
-          key: Key('loginRegisterSwitch'),
-          onTap: () => auth.switchAuthMode(),
-          child: Text(
-            auth.getAuthMode == AuthMode.Login ? 'Register' : 'Login',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 12.sp,
+    return Padding(
+      padding: EdgeInsets.only(top: 1.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            auth.getAuthMode == AuthMode.Login
+                ? 'Don\'t have an account? '
+                : 'Already have an account? ',
+            style: TextStyle(fontSize: 12.sp, color: Colors.white),
+          ),
+          GestureDetector(
+            key: Key('loginRegisterSwitch'),
+            onTap: () => auth.switchAuthMode(),
+            child: Text(
+              auth.getAuthMode == AuthMode.Login ? 'Register' : 'Login',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 12.sp,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

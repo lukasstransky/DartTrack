@@ -1,4 +1,5 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,21 +34,29 @@ class PasswordInput extends StatelessWidget {
                       }*/
             return null;
           },
+          style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
             prefixIcon: Icon(
               Icons.lock,
+              color: Utils.getPrimaryColorDarken(context),
             ),
             suffixIcon: IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               icon: Icon(
                   passwordVisible ? Icons.visibility : Icons.visibility_off),
+              color: Utils.getPrimaryColorDarken(context),
               onPressed: () {
                 auth.setPasswordVisible = !passwordVisible;
                 auth.notify();
               },
             ),
-            hintText: 'Password',
             filled: true,
-            hintStyle: TextStyle(color: Colors.grey),
+            fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            hintText: 'Password',
+            hintStyle: TextStyle(
+              color: Utils.getPrimaryColorDarken(context),
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: BorderSide(

@@ -3,6 +3,7 @@ import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_widgets/login_register_switch.dart';
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_widgets/proceed_as_guest_link.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -121,21 +122,26 @@ class LoginRegisterBtn extends StatelessWidget {
       children: [
         Container(
           key: Key('loginRegisterBtn'),
-          width: 60.w,
+          width: 40.w,
           padding: EdgeInsets.only(top: isLogin ? 0 : 1.h),
           child: TextButton(
             child: Text(
               isLogin ? 'Login' : 'Register',
-              style: TextStyle(fontSize: 12.sp, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(18.0),
                 ),
               ),
-              backgroundColor: MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
             ),
             onPressed: () => submit(isLogin, context),
           ),

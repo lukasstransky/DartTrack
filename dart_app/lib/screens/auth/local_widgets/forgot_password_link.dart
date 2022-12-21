@@ -21,7 +21,7 @@ class ForgotPasswordLink extends StatelessWidget {
         },
         child: Text(
           'Forgot password?',
-          style: TextStyle(color: Colors.grey, fontSize: 11.sp),
+          style: TextStyle(color: Colors.white38, fontSize: 11.sp),
         ),
       ),
     );

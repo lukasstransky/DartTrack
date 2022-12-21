@@ -39,8 +39,10 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                   padding: EdgeInsets.only(bottom: 1.h),
                   child: Text(
                     authMode == AuthMode.Login ? 'Login' : 'Register',
-                    style:
-                        TextStyle(fontSize: 18.sp, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
                   ),
                 ),
                 if (authMode == AuthMode.Register) UsernameInput(),

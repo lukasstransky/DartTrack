@@ -32,7 +32,7 @@ class ProceedAsGuestLink extends StatelessWidget {
         onTap: () async => _clickProceedAsGuest(context),
         child: Text(
           'Proceed as guest',
-          style: TextStyle(color: Colors.grey, fontSize: 11.sp),
+          style: TextStyle(color: Colors.white38, fontSize: 11.sp),
         ),
       ),
     );

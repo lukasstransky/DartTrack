@@ -1,4 +1,5 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,13 +42,18 @@ class EmailInput extends StatelessWidget {
           }
           return null;
         },
+        style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.mail,
+            color: Utils.getPrimaryColorDarken(context),
           ),
           hintText: 'Email',
+          hintStyle: TextStyle(
+            color: Utils.getPrimaryColorDarken(context),
+          ),
           filled: true,
-          hintStyle: TextStyle(color: Colors.grey),
+          fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide(

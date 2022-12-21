@@ -2,6 +2,7 @@ import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -34,14 +35,18 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               children: [
                 Text(
                   'Forgot password',
-                  style:
-                      TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white),
                 ),
                 Container(
                   width: 80.w,
                   padding: EdgeInsets.only(bottom: 1.h, top: 1.h),
                   child: Text(
-                      'Please provide your email to receive a link for resetting your password.'),
+                    'Please provide your email to receive a link for resetting your password.',
+                    style: TextStyle(color: Colors.white70),
+                  ),
                 ),
                 EmailInput(isForgotPasswordScreen: true),
                 ResetPasswordBtn(forgotPasswordFormKey: _forgotPasswordFormKey),
@@ -92,20 +97,22 @@ class ResetPasswordBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(top: 1.h),
-      width: 60.w,
+      width: 40.w,
       child: TextButton(
         child: Text(
           'Reset password',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
         ),
         style: ButtonStyle(
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
             ),
           ),
-          backgroundColor:
-              MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+          backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
         ),
         onPressed: () => resetPassword(
             context.read<Auth>().getEmailController.text, context),
