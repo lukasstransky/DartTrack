@@ -71,11 +71,10 @@ class BestOfBtn extends StatelessWidget {
 
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => {
-          if (!isBestOfMode)
-            {
-              switchBestOfOrFirstTo(context, gameSettingsX01),
-            }
+        onPressed: () {
+          if (!isBestOfMode) {
+            switchBestOfOrFirstTo(context, gameSettingsX01);
+          }
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,

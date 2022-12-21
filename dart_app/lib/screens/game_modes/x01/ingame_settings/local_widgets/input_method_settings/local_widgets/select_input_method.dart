@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
@@ -30,8 +31,10 @@ class SelectInputMethod extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final inputMethod = context.read<GameSettingsX01>().getInputMethod;
-    final gameX01 = context.read<GameX01>();
+    final bool isInputMethodRound =
+        context.read<GameSettingsX01>().getInputMethod == InputMethod.Round
+            ? true
+            : false;
 
     return Column(
       children: [
@@ -42,70 +45,79 @@ class SelectInputMethod extends StatelessWidget {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () => {
-                    if (inputMethod == InputMethod.ThreeDarts)
-                      _switchInputMethod(context)
+                  onPressed: () {
+                    if (!isInputMethodRound) {
+                      _switchInputMethod(context);
+                    }
                   },
                   child: FittedBox(
                     fit: BoxFit.fitWidth,
-                    child: const Text('Round'),
+                    child: Text(
+                      'Round',
+                      style: TextStyle(
+                        color: Utils.getTextColorForGameSettingsBtn(
+                            isInputMethodRound, context),
+                      ),
+                    ),
                   ),
                   style: ButtonStyle(
+                    splashFactory: NoSplash.splashFactory,
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GAME_SETTINGS_BTN_BORDER_WITH,
+                        ),
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
+                          topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+                          bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
                         ),
                       ),
                     ),
-                    backgroundColor: inputMethod == InputMethod.Round
-                        ? MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary)
-                        : MaterialStateProperty.all<Color>(Colors.grey),
-                    overlayColor: inputMethod == InputMethod.Round ||
-                            gameX01.getAmountOfDartsThrown() != 0
-                        ? MaterialStateProperty.all<Color>(Colors.transparent)
-                        : MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary),
-                    splashFactory: inputMethod == InputMethod.Round
-                        ? NoSplash.splashFactory
-                        : InkRipple.splashFactory,
-                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    backgroundColor: isInputMethodRound
+                        ? Utils.getPrimaryMaterialStateColorDarken(context)
+                        : Utils.getColor(Theme.of(context).colorScheme.primary),
                   ),
                 ),
               ),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    if (inputMethod == InputMethod.Round)
+                    if (isInputMethodRound) {
                       _switchInputMethod(context);
+                    }
                   },
                   child: FittedBox(
                     fit: BoxFit.fitWidth,
-                    child: const Text('3 Darts'),
+                    child: Text(
+                      '3 Darts',
+                      style: TextStyle(
+                        color: Utils.getTextColorForGameSettingsBtn(
+                            !isInputMethodRound, context),
+                      ),
+                    ),
                   ),
                   style: ButtonStyle(
+                    splashFactory: NoSplash.splashFactory,
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     shape: MaterialStateProperty.all(
                       RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GAME_SETTINGS_BTN_BORDER_WITH,
+                        ),
                         borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(10.0),
-                          bottomRight: Radius.circular(10.0),
+                          topRight: Radius.circular(BUTTON_BORDER_RADIUS),
+                          bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
                         ),
                       ),
                     ),
-                    backgroundColor: inputMethod == InputMethod.ThreeDarts
-                        ? MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary)
-                        : MaterialStateProperty.all<Color>(Colors.grey),
-                    overlayColor: inputMethod == InputMethod.ThreeDarts
-                        ? MaterialStateProperty.all<Color>(Colors.transparent)
-                        : MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.primary),
-                    splashFactory: inputMethod == InputMethod.ThreeDarts
-                        ? NoSplash.splashFactory
-                        : InkRipple.splashFactory,
-                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    backgroundColor: !isInputMethodRound
+                        ? Utils.getPrimaryMaterialStateColorDarken(context)
+                        : Utils.getColor(Theme.of(context).colorScheme.primary),
                   ),
                 ),
               ),
@@ -115,21 +127,22 @@ class SelectInputMethod extends StatelessWidget {
         Container(
           height: 6.h,
           padding: EdgeInsets.only(left: 2.5.w),
-          child: inputMethod == InputMethod.Round
+          child: isInputMethodRound
               ? Center(
                   child: RichText(
                     text: TextSpan(
                       style: new TextStyle(
                         fontSize: 11.0.sp,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                       children: <TextSpan>[
                         new TextSpan(
                             text:
                                 'Enter a complete round. This approach provides '),
                         new TextSpan(
-                            text: 'less',
-                            style: new TextStyle(fontWeight: FontWeight.bold)),
+                          text: 'less',
+                          style: new TextStyle(fontWeight: FontWeight.bold),
+                        ),
                         new TextSpan(text: ' statistics.'),
                       ],
                     ),
@@ -140,7 +153,7 @@ class SelectInputMethod extends StatelessWidget {
                     text: TextSpan(
                       style: new TextStyle(
                         fontSize: 11.0.sp,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                       children: <TextSpan>[
                         new TextSpan(

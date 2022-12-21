@@ -4,6 +4,7 @@ import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/auto_submit_scored_points_switch.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/select_input_method.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/show_input_method_switch.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,13 +21,13 @@ class InputMethodSettings extends StatelessWidget {
 
     if (inputMethod == InputMethod.Round && showMostScoredPoints) {
       if (!statisticsFirestoreX01.noGamesPlayed) {
-        return 47;
+        return 49;
       } else {
-        return 41;
+        return 43;
       }
     }
 
-    return 26;
+    return 28;
   }
 
   @override
@@ -37,10 +38,11 @@ class InputMethodSettings extends StatelessWidget {
           gameSettingsX01.getShowMostScoredPoints),
       builder: (_, t, __) => Container(
         height: _calcCardHeight(context, t.item1, t.item2).h,
-        padding: EdgeInsets.only(top: 1.0.h, left: 0.5.h, right: 0.5.h),
+        padding: EdgeInsets.only(top: 2.0.h, left: 0.5.h, right: 0.5.h),
         child: Card(
           margin: EdgeInsets.all(0), //card adds 1.h per default
           elevation: 5,
+          color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
           child: Column(
             children: [
               Container(
@@ -51,7 +53,8 @@ class InputMethodSettings extends StatelessWidget {
                   'Input Method',
                   style: TextStyle(
                       fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
-                      color: Theme.of(context).colorScheme.primary),
+                      color: Utils.getPrimaryColorDarken(context),
+                      fontWeight: FontWeight.bold),
                 ),
               ),
               ShowInputMethodSwitch(),

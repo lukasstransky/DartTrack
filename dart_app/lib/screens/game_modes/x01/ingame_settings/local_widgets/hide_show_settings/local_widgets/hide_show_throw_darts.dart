@@ -18,7 +18,8 @@ class HideShowThrownDarts extends StatelessWidget {
         children: [
           Text(
             'Thrown Darts per Leg',
-            style: TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
+            style: TextStyle(
+                fontSize: FONTSIZE_IN_GAME_SETTINGS.sp, color: Colors.white),
           ),
           Spacer(),
           Selector<GameSettingsX01, bool>(
@@ -30,6 +31,10 @@ class HideShowThrownDarts extends StatelessWidget {
                 gameSettingsX01.setShowThrownDartsPerLeg = value;
                 gameSettingsX01.notify();
               },
+              thumbColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.secondary),
+              activeColor: Theme.of(context).colorScheme.secondary,
+              inactiveThumbColor: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ],

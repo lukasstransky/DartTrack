@@ -32,13 +32,15 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                   context.read<Auth>().getEmailController.clear();
                 }
               },
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             )
           else
-            Container(),
+            SizedBox.shrink(),
         ],
       ),
-      actions: [],
     );
   }
 

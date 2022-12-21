@@ -23,7 +23,8 @@ class ShowInputMethodSwitch extends StatelessWidget {
         children: [
           Text(
             'Show in Game Screen',
-            style: TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
+            style: TextStyle(
+                fontSize: FONTSIZE_IN_GAME_SETTINGS.sp, color: Colors.white),
           ),
           Spacer(),
           Selector<GameSettingsX01, bool>(
@@ -32,6 +33,10 @@ class ShowInputMethodSwitch extends StatelessWidget {
             builder: (_, showInputMethodInGameScreen, __) => Switch(
               value: showInputMethodInGameScreen,
               onChanged: (value) => _switchBtnPressed(gameSettingsX01, value),
+              thumbColor: MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.secondary),
+              activeColor: Theme.of(context).colorScheme.secondary,
+              inactiveThumbColor: Theme.of(context).colorScheme.secondary,
             ),
           ),
         ],

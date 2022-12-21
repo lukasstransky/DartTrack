@@ -270,7 +270,9 @@ class _AutoSubmitOrScoredPointsSwitchState
                 fit: BoxFit.scaleDown,
                 child: Text(
                   'Most Scored Points',
-                  style: TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
+                  style: TextStyle(
+                      fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
+                      color: Colors.white),
                 ),
               ),
               Spacer(),
@@ -281,6 +283,10 @@ class _AutoSubmitOrScoredPointsSwitchState
 
                   gameSettingsX01.notify();
                 },
+                thumbColor: MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.secondary),
+                activeColor: Theme.of(context).colorScheme.secondary,
+                inactiveThumbColor: Theme.of(context).colorScheme.secondary,
               ),
             ],
           ),
@@ -296,7 +302,9 @@ class _AutoSubmitOrScoredPointsSwitchState
                 fit: BoxFit.scaleDown,
                 child: Text(
                   'Automatically Submit Points',
-                  style: TextStyle(fontSize: FONTSIZE_IN_GAME_SETTINGS.sp),
+                  style: TextStyle(
+                      fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
+                      color: Colors.white),
                 ),
               ),
               Spacer(),
@@ -310,6 +318,10 @@ class _AutoSubmitOrScoredPointsSwitchState
 
                     gameSettingsX01.notify();
                   },
+                  thumbColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.secondary),
+                  activeColor: Theme.of(context).colorScheme.secondary,
+                  inactiveThumbColor: Theme.of(context).colorScheme.secondary,
                 ),
               ),
             ],
