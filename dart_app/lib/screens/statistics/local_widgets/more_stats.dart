@@ -43,10 +43,9 @@ class _MoreStatsState extends State<MoreStats> {
                     child: Text(
                       'Rounded Scores',
                       style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
+                          fontSize: 14.sp,
+                          color: Utils.getTextColorDarken(context),
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -58,8 +57,8 @@ class _MoreStatsState extends State<MoreStats> {
                           : 'Precise Scores',
                       style: TextStyle(
                         fontSize: 14.sp,
+                        color: Utils.getTextColorDarken(context),
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -92,12 +91,13 @@ class _MoreStatsState extends State<MoreStats> {
                                         : i.toString(),
                                     style: TextStyle(
                                       fontSize: 12.sp,
+                                      fontWeight: FontWeight.bold,
                                       color: _highlightRoundedScore(
                                               statisticsFirestore, i)
                                           ? Theme.of(context)
                                               .colorScheme
                                               .secondary
-                                          : Colors.black,
+                                          : Utils.getTextColorDarken(context),
                                     ),
                                   ),
                                 ),
@@ -124,7 +124,7 @@ class _MoreStatsState extends State<MoreStats> {
                                           ? Theme.of(context)
                                               .colorScheme
                                               .secondary
-                                          : Colors.black,
+                                          : Colors.white,
                                     ),
                                   ),
                                 ),
@@ -160,11 +160,12 @@ class _MoreStatsState extends State<MoreStats> {
                                       i.toString() + '.',
                                       style: TextStyle(
                                         fontSize: 12.sp,
+                                        fontWeight: FontWeight.bold,
                                         color: i == 1
                                             ? Theme.of(context)
                                                 .colorScheme
                                                 .secondary
-                                            : Colors.black,
+                                            : Utils.getTextColorDarken(context),
                                       ),
                                     ),
                                   ),
@@ -206,7 +207,7 @@ class _MoreStatsState extends State<MoreStats> {
                                                   ? Theme.of(context)
                                                       .colorScheme
                                                       .secondary
-                                                  : Colors.black,
+                                                  : Colors.white,
                                             ),
                                           )
                                         : Text(
@@ -234,7 +235,7 @@ class _MoreStatsState extends State<MoreStats> {
                                                   ? Theme.of(context)
                                                       .colorScheme
                                                       .secondary
-                                                  : Colors.black,
+                                                  : Colors.white,
                                             ),
                                           ),
                                   ),
@@ -258,7 +259,7 @@ class _MoreStatsState extends State<MoreStats> {
                   Text(
                     'Show All Scores per Dart',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.white,
                     ),
                   ),
                   Switch(
@@ -286,7 +287,7 @@ class _MoreStatsState extends State<MoreStats> {
                     Text(
                       'Show Odd Rounded Scores',
                       style: TextStyle(
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     ),
                     Switch(

@@ -399,4 +399,8 @@ class Utils {
   static Color getTextColorForGameSettingsPage() {
     return Colors.white;
   }
+
+  static Color getTextColorDarken(BuildContext context) {
+    return darken(Theme.of(context).colorScheme.primary, 55);
+  }
 }

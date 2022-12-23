@@ -70,12 +70,16 @@ class StartGameBtn extends StatelessWidget {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: EdgeInsets.only(
             bottom: DIALOG_CONTENT_PADDING_BOTTOM,
             top: DIALOG_CONTENT_PADDING_TOP,
             left: DIALOG_CONTENT_PADDING_LEFT,
             right: DIALOG_CONTENT_PADDING_RIGHT),
-        title: const Text('Who will begin?'),
+        title: Text(
+          'Who will begin?',
+          style: TextStyle(color: Colors.white),
+        ),
         content: StatefulBuilder(
           builder: ((context, setState) {
             if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
@@ -89,39 +93,51 @@ class StartGameBtn extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     final player = players[index];
 
-                    return RadioListTile(
-                      title: Container(
-                        transform: Matrix4.translationValues(
-                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                        child: player is Bot
-                            ? Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(
-                                    'Level ${player.getLevel} Bot',
-                                    style: TextStyle(
-                                      fontSize: 12.sp,
-                                    ),
-                                  ),
-                                  Container(
-                                    transform: Matrix4.translationValues(
-                                        0.0, -0.5.w, 0.0),
-                                    child: Text(
-                                      ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                    return Theme(
+                      data: Theme.of(context).copyWith(
+                        unselectedWidgetColor:
+                            Utils.getPrimaryColorDarken(context),
+                      ),
+                      child: RadioListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Container(
+                          transform: Matrix4.translationValues(
+                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                          child: player is Bot
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Level ${player.getLevel} Bot',
                                       style: TextStyle(
-                                        fontSize: 8.sp,
+                                        fontSize: 12.sp,
+                                        color: Colors.white,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            : Text(player.getName),
+                                    Container(
+                                      transform: Matrix4.translationValues(
+                                          0.0, -0.5.w, 0.0),
+                                      child: Text(
+                                        ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                        style: TextStyle(
+                                          fontSize: 8.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  player.getName,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                        ),
+                        value: player,
+                        groupValue: selectedPlayer,
+                        onChanged: (Player? value) {
+                          setState(() => selectedPlayer = value);
+                        },
                       ),
-                      value: player,
-                      groupValue: selectedPlayer,
-                      onChanged: (Player? value) {
-                        setState(() => selectedPlayer = value);
-                      },
                     );
                   },
                 ),
@@ -139,7 +155,12 @@ class StartGameBtn extends StatelessWidget {
                     title: Container(
                       transform: Matrix4.translationValues(
                           DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                      child: Text(team.getName),
+                      child: Text(
+                        team.getName,
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                     value: team,
                     groupValue: selectedTeam,
@@ -158,7 +179,14 @@ class StartGameBtn extends StatelessWidget {
               gameSettingsX01.notify(),
               Navigator.of(context).pop(),
             },
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
           TextButton(
             onPressed: () => {
@@ -171,7 +199,14 @@ class StartGameBtn extends StatelessWidget {
                 arguments: {'openGame': false},
               ),
             },
-            child: const Text('Start Game'),
+            child: Text(
+              'Start Game',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
         ],
       ),

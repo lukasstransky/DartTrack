@@ -8,6 +8,7 @@ import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns.da
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -78,7 +79,10 @@ class _StatisticsState extends State<Statistics> {
         ),
         label: Text(
           _showMoreStats ? 'Less Stats' : 'More Stats',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(
+            color: Utils.getTextColorDarken(context),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

@@ -118,7 +118,9 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                                'Click card to view the details about a game'),
+                              'Click card to view the details about a game',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
                         Padding(
@@ -127,7 +129,12 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                           ),
                           child: Align(
                             alignment: Alignment.centerLeft,
-                            child: Text('(Swipe left to delete a game)'),
+                            child: Text(
+                              '(Swipe left to delete a game)',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                         if ((statisticsFirestore.showFavouriteGames

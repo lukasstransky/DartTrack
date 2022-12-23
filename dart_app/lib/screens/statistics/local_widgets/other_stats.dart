@@ -1,4 +1,5 @@
 import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,6 +30,7 @@ class OtherStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color color = Utils.getTextColorDarken(context);
     return Consumer<StatisticsFirestoreX01>(
       builder: (_, statisticsFirestore, __) => Column(
         children: [
@@ -44,14 +46,14 @@ class OtherStats extends StatelessWidget {
                             ? statisticsFirestore.countOf180.toString()
                             : '-',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                       Text(
                         '180',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                     ],
@@ -65,14 +67,14 @@ class OtherStats extends StatelessWidget {
                             ? statisticsFirestore.countOfAllDarts.toString()
                             : '-',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                       Text(
                         'Darts',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                     ],
@@ -86,14 +88,14 @@ class OtherStats extends StatelessWidget {
                             ? statisticsFirestore.countOfGames.toString()
                             : '-',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                       Text(
                         'Games',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                     ],
@@ -105,14 +107,14 @@ class OtherStats extends StatelessWidget {
                       Text(
                         _getGamesWonString(statisticsFirestore),
                         style: TextStyle(
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                       Text(
                         'Games Won',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: color,
                         ),
                       ),
                     ],

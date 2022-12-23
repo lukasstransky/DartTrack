@@ -280,31 +280,42 @@ class _FilterBarState extends State<FilterBar> {
               ],
             ),
             if (_showDatePicker == true)
-              SfDateRangePicker(
-                maxDate: DateTime.now(),
-                onSelectionChanged: _onSelectionChanged,
-                selectionMode: DateRangePickerSelectionMode.range,
-                initialSelectedRange:
-                    PickerDateRange(DateTime.now(), DateTime.now()),
-                showActionButtons: true,
-                onSubmit: (p0) async {
-                  statisticsFirestore.customDateFilterRange = _range;
-                  statisticsFirestore.filterGamesByDate(
-                      FilterValue.Custom, context);
-                  _showCustomBtnDateRange = true;
-                  Future.delayed(const Duration(milliseconds: 300), () {
-                    setState(() {
-                      _showDatePicker = false;
+              Theme(
+                data: ThemeData(),
+                child: SfDateRangePicker(
+                  confirmText: 'Ok',
+                  cancelText: 'Cancel',
+                  todayHighlightColor: Colors.white,
+                  rangeSelectionColor:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 20),
+                  endRangeSelectionColor: Utils.getPrimaryColorDarken(context),
+                  startRangeSelectionColor:
+                      Utils.getPrimaryColorDarken(context),
+                  maxDate: DateTime.now(),
+                  onSelectionChanged: _onSelectionChanged,
+                  selectionMode: DateRangePickerSelectionMode.range,
+                  initialSelectedRange:
+                      PickerDateRange(DateTime.now(), DateTime.now()),
+                  showActionButtons: true,
+                  onSubmit: (p0) async {
+                    statisticsFirestore.customDateFilterRange = _range;
+                    statisticsFirestore.filterGamesByDate(
+                        FilterValue.Custom, context);
+                    _showCustomBtnDateRange = true;
+                    Future.delayed(const Duration(milliseconds: 300), () {
+                      setState(() {
+                        _showDatePicker = false;
+                      });
                     });
-                  });
-                },
-                onCancel: () {
-                  _showDatePicker = false;
-                  _showCustomBtnDateRange = false;
-                  statisticsFirestore.filterGamesByDate(
-                      FilterValue.Overall, context);
-                },
-                showTodayButton: true,
+                  },
+                  onCancel: () {
+                    _showDatePicker = false;
+                    _showCustomBtnDateRange = false;
+                    statisticsFirestore.filterGamesByDate(
+                        FilterValue.Overall, context);
+                  },
+                  showTodayButton: true,
+                ),
               ),
           ],
         ),

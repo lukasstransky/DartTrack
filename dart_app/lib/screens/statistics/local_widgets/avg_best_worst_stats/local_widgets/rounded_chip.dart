@@ -35,12 +35,7 @@ class RoundedChip extends StatelessWidget {
           ),
           style: ButtonStyle(
             shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: this.value != '-' && this.type != ''
-                ? Utils.getColorOrPressed(
-                    Theme.of(context).colorScheme.primary,
-                    Utils.darken(Theme.of(context).colorScheme.primary, 15),
-                  )
-                : MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -48,9 +43,8 @@ class RoundedChip extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: MaterialStateProperty.all(this.type != ''
-                ? Theme.of(context).colorScheme.primary
-                : Utils.darken(Theme.of(context).colorScheme.primary, 20)),
+            backgroundColor: MaterialStateProperty.all(
+                Utils.darken(Theme.of(context).colorScheme.primary, 15)),
           ),
         ),
       ),

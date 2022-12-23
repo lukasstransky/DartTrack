@@ -49,12 +49,16 @@ class PlayerEntry extends StatelessWidget {
                         : Text(
                             '${(i + 1)}.',
                             style: TextStyle(
-                                fontSize: _firstElementNoDrawOrOpenGame(gameX01)
-                                    ? 14.sp
-                                    : 12.sp,
-                                fontWeight: (i == 0 && !openGame)
-                                    ? FontWeight.bold
-                                    : null),
+                              fontSize: _firstElementNoDrawOrOpenGame(gameX01)
+                                  ? 14.sp
+                                  : 12.sp,
+                              fontWeight: (i == 0 && !openGame)
+                                  ? FontWeight.bold
+                                  : null,
+                              color: i == 0
+                                  ? Utils.getTextColorDarken(context)
+                                  : Colors.white,
+                            ),
                           ),
                     if (_firstElementNoDrawOrOpenGame(gameX01))
                       Container(
@@ -104,6 +108,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
           gameX01.getTeamGameStatistics[i].getTeam.getName,
           style: TextStyle(
               fontSize: firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
+              color: i == 0 ? Utils.getTextColorDarken(context) : Colors.white,
               fontWeight: firstElementNoDrawOrOpenGame(gameX01)
                   ? FontWeight.bold
                   : null),
@@ -119,6 +124,8 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
               style: TextStyle(
                   fontSize:
                       firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
+                  color:
+                      i == 0 ? Utils.getTextColorDarken(context) : Colors.white,
                   fontWeight: firstElementNoDrawOrOpenGame(gameX01)
                       ? FontWeight.bold
                       : null),
@@ -127,6 +134,8 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
               ' (${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
               style: TextStyle(
                 fontSize: 8.sp,
+                color:
+                    i == 0 ? Utils.getTextColorDarken(context) : Colors.white,
               ),
             ),
           ],
@@ -139,6 +148,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
           gameX01.getPlayerGameStatistics[i].getPlayer.getName,
           style: TextStyle(
               fontSize: firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
+              color: i == 0 ? Utils.getTextColorDarken(context) : Colors.white,
               fontWeight: firstElementNoDrawOrOpenGame(gameX01)
                   ? FontWeight.bold
                   : null),
@@ -171,16 +181,25 @@ class PlayerStats extends StatelessWidget {
             gameSettingsX01.getSetsEnabled
                 ? 'Sets: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getSetsWon}'
                 : 'Legs: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getLegsWon}',
-            style: TextStyle(fontSize: 12.sp),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.white,
+            ),
           ),
           Text(
             'Average: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getAverage()}',
-            style: TextStyle(fontSize: 12.sp),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.white,
+            ),
           ),
           if (gameSettingsX01.getEnableCheckoutCounting)
             Text(
               'Checkout: ${Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[i].getCheckoutQuoteInPercent()}',
-              style: TextStyle(fontSize: 12.sp),
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+              ),
             ),
         ],
       ),

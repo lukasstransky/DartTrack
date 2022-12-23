@@ -39,6 +39,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
                 arguments: {'game': widget.gameX01});
         },
         child: Card(
+          color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -108,11 +109,10 @@ class ListDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
-      height: 20,
-      thickness: 1,
-      endIndent: 10,
-      indent: 10,
-      color: Colors.black,
-    );
+        height: 20,
+        thickness: 1,
+        endIndent: 10,
+        indent: 10,
+        color: Utils.getTextColorDarken(context));
   }
 }

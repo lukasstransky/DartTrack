@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -28,8 +29,11 @@ class GameDetails extends StatelessWidget {
                   gameX01.isGameDraw()
                       ? 'Draw - ${gameSettingsX01.getGameMode()}'
                       : '${gameSettingsX01.getGameMode()}',
-                  style:
-                      TextStyle(fontWeight: FontWeight.bold, fontSize: 12.sp),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.sp,
+                    color: Utils.getTextColorDarken(context),
+                  ),
                 ),
               ),
               Spacer(),
@@ -37,7 +41,10 @@ class GameDetails extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   gameX01.getFormattedDateTime(),
-                  style: TextStyle(fontSize: 10.sp),
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
@@ -47,7 +54,10 @@ class GameDetails extends StatelessWidget {
           padding: EdgeInsets.only(left: 2.w, bottom: 0.5.h),
           child: Text(
             'X01 (${gameSettingsX01.getGameModeDetails(true)}',
-            style: TextStyle(fontSize: 12.sp),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.white,
+            ),
           ),
         ),
         Padding(
@@ -56,7 +66,10 @@ class GameDetails extends StatelessWidget {
             gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
                 ? 'Single Mode'
                 : 'Team Mode',
-            style: TextStyle(fontSize: 12.sp),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.white,
+            ),
           ),
         ),
       ],

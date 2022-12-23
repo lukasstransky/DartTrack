@@ -22,6 +22,7 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
     final statisticsFirestore = context.read<StatisticsFirestoreX01>();
 
     return AppBar(
+      elevation: 0,
       centerTitle: true,
       title: Column(
         children: [
@@ -41,7 +42,10 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
                 Navigator.of(context).pop();
               }
             },
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           ),
         ],
       ),
@@ -64,8 +68,14 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
               }
           },
           icon: statisticsFirestore.showFavouriteGames
-              ? Icon(MdiIcons.heart)
-              : Icon(MdiIcons.heartOutline),
+              ? Icon(
+                  MdiIcons.heart,
+                  color: Theme.of(context).colorScheme.secondary,
+                )
+              : Icon(
+                  MdiIcons.heartOutline,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
         ),
       ],
     );
