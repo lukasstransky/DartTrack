@@ -39,13 +39,19 @@ class OtherStats extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(statisticsFirestore.countOf180 > 0
-                          ? statisticsFirestore.countOf180.toString()
-                          : '-'),
-                      const Text(
+                      Text(
+                        statisticsFirestore.countOf180 > 0
+                            ? statisticsFirestore.countOf180.toString()
+                            : '-',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
                         '180',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -54,13 +60,19 @@ class OtherStats extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(statisticsFirestore.countOfAllDarts > 0
-                          ? statisticsFirestore.countOfAllDarts.toString()
-                          : '-'),
-                      const Text(
+                      Text(
+                        statisticsFirestore.countOfAllDarts > 0
+                            ? statisticsFirestore.countOfAllDarts.toString()
+                            : '-',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
                         'Darts',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -69,13 +81,19 @@ class OtherStats extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(statisticsFirestore.countOfGames > 0
-                          ? statisticsFirestore.countOfGames.toString()
-                          : '-'),
-                      const Text(
+                      Text(
+                        statisticsFirestore.countOfGames > 0
+                            ? statisticsFirestore.countOfGames.toString()
+                            : '-',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
                         'Games',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ],
@@ -84,11 +102,17 @@ class OtherStats extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(_getGamesWonString(statisticsFirestore)),
-                      const Text(
+                      Text(
+                        _getGamesWonString(statisticsFirestore),
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
                         'Games Won',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
                     ],

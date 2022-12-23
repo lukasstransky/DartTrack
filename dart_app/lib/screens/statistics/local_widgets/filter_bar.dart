@@ -52,7 +52,8 @@ class _FilterBarState extends State<FilterBar> {
 
   @override
   Widget build(BuildContext context) {
-    final statisticsFirestore = context.read<StatisticsFirestoreX01>();
+    final StatisticsFirestoreX01 statisticsFirestore =
+        context.read<StatisticsFirestoreX01>();
 
     return Selector<StatisticsFirestoreX01, FilterValue>(
       selector: (_, statisticsFirestore) =>
@@ -64,50 +65,69 @@ class _FilterBarState extends State<FilterBar> {
             Row(
               children: [
                 Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => {
-                      _showDatePicker = false,
-                      _showCustomBtnDateRange = false,
-                      statisticsFirestore.filterGamesByDate(
-                          FilterValue.Overall, context),
-                    },
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Overall',
-                        style: TextStyle(fontSize: 9.sp),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColorOrPressed(
-                        Theme.of(context).colorScheme.primary,
-                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(10.0),
-                            bottomLeft: Radius.circular(10.0),
+                  child: Container(
+                    height: 4.h,
+                    child: ElevatedButton(
+                      onPressed: () => {
+                        _showDatePicker = false,
+                        _showCustomBtnDateRange = false,
+                        statisticsFirestore.filterGamesByDate(
+                            FilterValue.Overall, context),
+                      },
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Overall',
+                          style: TextStyle(
+                            fontSize: 9.sp,
+                            color: Utils.getTextColorForGameSettingsBtn(
+                                currentFilterValue == FilterValue.Overall,
+                                context),
                           ),
                         ),
                       ),
-                      backgroundColor: currentFilterValue == FilterValue.Overall
-                          ? MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primary)
-                          : MaterialStateProperty.all<Color>(Colors.grey),
+                      style: ButtonStyle(
+                        splashFactory: NoSplash.splashFactory,
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: Utils.getPrimaryColorDarken(context),
+                              width: GAME_SETTINGS_BTN_BORDER_WITH,
+                            ),
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10.0),
+                              bottomLeft: Radius.circular(10.0),
+                            ),
+                          ),
+                        ),
+                        backgroundColor: currentFilterValue ==
+                                FilterValue.Overall
+                            ? Utils.getPrimaryMaterialStateColorDarken(context)
+                            : Utils.getColor(
+                                Theme.of(context).colorScheme.primary),
+                      ),
                     ),
                   ),
                 ),
                 Expanded(
                   child: Container(
+                    height: 4.h,
                     decoration: BoxDecoration(
                       border: Border(
-                        left: BorderSide(width: 1.0, color: Colors.white),
-                        right: BorderSide(width: 1.0, color: Colors.white),
+                        top: BorderSide(
+                            color: Utils.getPrimaryColorDarken(context),
+                            width: 2),
+                        bottom: BorderSide(
+                            color: Utils.getPrimaryColorDarken(context),
+                            width: 2),
+                        right: BorderSide(
+                            color: Utils.getPrimaryColorDarken(context),
+                            width: 2),
                       ),
-                      color: Colors.white,
                     ),
                     child: ElevatedButton(
                       onPressed: () => {
@@ -120,17 +140,20 @@ class _FilterBarState extends State<FilterBar> {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           'Last 30 Days',
-                          style: TextStyle(fontSize: 7.sp),
+                          style: TextStyle(
+                            fontSize: 7.sp,
+                            color: Utils.getTextColorForGameSettingsBtn(
+                                currentFilterValue == FilterValue.Month,
+                                context),
+                          ),
                         ),
                       ),
                       style: ButtonStyle(
+                        splashFactory: NoSplash.splashFactory,
                         shadowColor:
                             MaterialStateProperty.all(Colors.transparent),
-                        overlayColor: Utils.getColorOrPressed(
-                          Theme.of(context).colorScheme.primary,
-                          Utils.darken(
-                              Theme.of(context).colorScheme.primary, 15),
-                        ),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
@@ -139,57 +162,69 @@ class _FilterBarState extends State<FilterBar> {
                           ),
                         ),
                         backgroundColor: currentFilterValue == FilterValue.Month
-                            ? MaterialStateProperty.all(
-                                Theme.of(context).colorScheme.primary)
-                            : MaterialStateProperty.all<Color>(Colors.grey),
+                            ? Utils.getPrimaryMaterialStateColorDarken(context)
+                            : Utils.getColor(
+                                Theme.of(context).colorScheme.primary),
                       ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () => {
-                      _showDatePicker = false,
-                      _showCustomBtnDateRange = false,
-                      statisticsFirestore.filterGamesByDate(
-                          FilterValue.Year, context),
-                    },
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Last 365 Days',
-                        style: TextStyle(fontSize: 7.sp),
-                      ),
-                    ),
-                    style: ButtonStyle(
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor: Utils.getColorOrPressed(
-                        Theme.of(context).colorScheme.primary,
-                        Utils.darken(Theme.of(context).colorScheme.primary, 15),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.zero,
-                          ),
-                        ),
-                      ),
-                      backgroundColor: currentFilterValue == FilterValue.Year
-                          ? MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.primary)
-                          : MaterialStateProperty.all<Color>(Colors.grey),
                     ),
                   ),
                 ),
                 Expanded(
                   child: Container(
+                    height: 4.h,
                     decoration: BoxDecoration(
                       border: Border(
-                        left: BorderSide(width: 1.0, color: Colors.white),
+                        top: BorderSide(
+                            color: Utils.getPrimaryColorDarken(context),
+                            width: 2),
+                        bottom: BorderSide(
+                            color: Utils.getPrimaryColorDarken(context),
+                            width: 2),
                       ),
-                      color: Colors.white,
                     ),
+                    child: ElevatedButton(
+                      onPressed: () => {
+                        _showDatePicker = false,
+                        _showCustomBtnDateRange = false,
+                        statisticsFirestore.filterGamesByDate(
+                            FilterValue.Year, context),
+                      },
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Last 365 Days',
+                          style: TextStyle(
+                            fontSize: 7.sp,
+                            color: Utils.getTextColorForGameSettingsBtn(
+                                currentFilterValue == FilterValue.Year,
+                                context),
+                          ),
+                        ),
+                      ),
+                      style: ButtonStyle(
+                        splashFactory: NoSplash.splashFactory,
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        shape: MaterialStateProperty.all(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.zero,
+                            ),
+                          ),
+                        ),
+                        backgroundColor: currentFilterValue == FilterValue.Year
+                            ? Utils.getPrimaryMaterialStateColorDarken(context)
+                            : Utils.getColor(
+                                Theme.of(context).colorScheme.primary),
+                      ),
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 4.h,
                     child: ElevatedButton(
                       onPressed: () => {
                         setState(
@@ -207,30 +242,37 @@ class _FilterBarState extends State<FilterBar> {
                           _showCustomBtnDateRange
                               ? _customBtnDateRange
                               : 'Custom',
-                          style: TextStyle(fontSize: 9.sp),
+                          style: TextStyle(
+                            fontSize: 9.sp,
+                            color: Utils.getTextColorForGameSettingsBtn(
+                                currentFilterValue == FilterValue.Custom,
+                                context),
+                          ),
                         ),
                       ),
                       style: ButtonStyle(
+                        splashFactory: NoSplash.splashFactory,
                         shadowColor:
                             MaterialStateProperty.all(Colors.transparent),
-                        overlayColor: Utils.getColorOrPressed(
-                          Theme.of(context).colorScheme.primary,
-                          Utils.darken(
-                              Theme.of(context).colorScheme.primary, 15),
-                        ),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
+                            side: BorderSide(
+                              color: Utils.getPrimaryColorDarken(context),
+                              width: GAME_SETTINGS_BTN_BORDER_WITH,
+                            ),
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10.0),
                               bottomRight: Radius.circular(10.0),
                             ),
                           ),
                         ),
-                        backgroundColor:
-                            currentFilterValue == FilterValue.Custom
-                                ? MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary)
-                                : MaterialStateProperty.all<Color>(Colors.grey),
+                        backgroundColor: currentFilterValue ==
+                                FilterValue.Custom
+                            ? Utils.getPrimaryMaterialStateColorDarken(context)
+                            : Utils.getColor(
+                                Theme.of(context).colorScheme.primary),
                       ),
                     ),
                   ),

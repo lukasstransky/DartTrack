@@ -1,4 +1,3 @@
-import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +10,7 @@ class AvgBestWorstStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color color = Colors.black;
     return Consumer<StatisticsFirestoreX01>(
         builder: (_, statisticsFirestore, __) => Column(
               children: [
@@ -27,7 +27,10 @@ class AvgBestWorstStats extends StatelessWidget {
                           child: Text(
                             'Avg.',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14.sp),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.sp,
+                              color: color,
+                            ),
                           ),
                         ),
                       ),
@@ -36,7 +39,10 @@ class AvgBestWorstStats extends StatelessWidget {
                           child: Text(
                             'Best',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14.sp),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.sp,
+                              color: color,
+                            ),
                           ),
                         ),
                       ),
@@ -45,7 +51,10 @@ class AvgBestWorstStats extends StatelessWidget {
                           child: Text(
                             'Worst',
                             style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 14.sp),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.sp,
+                              color: color,
+                            ),
                           ),
                         ),
                       ),
@@ -60,7 +69,10 @@ class AvgBestWorstStats extends StatelessWidget {
                         width: 30.w,
                         child: Text(
                           'X01 Avg.',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
                         ),
                       ),
                       Expanded(
@@ -76,7 +88,7 @@ class AvgBestWorstStats extends StatelessWidget {
                           value: statisticsFirestore.bestAvg != -1
                               ? statisticsFirestore.bestAvg.toStringAsFixed(2)
                               : '-',
-                          type: BEST_AVG,
+                          type: '',
                         ),
                       ),
                       Expanded(
@@ -84,7 +96,7 @@ class AvgBestWorstStats extends StatelessWidget {
                           value: statisticsFirestore.worstAvg != -1
                               ? statisticsFirestore.worstAvg.toStringAsFixed(2)
                               : '-',
-                          type: WORST_AVG,
+                          type: '',
                         ),
                       ),
                     ],
@@ -98,7 +110,10 @@ class AvgBestWorstStats extends StatelessWidget {
                         width: 30.w,
                         child: Text(
                           'First Nine Avg.',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
                         ),
                       ),
                       Expanded(
@@ -116,7 +131,7 @@ class AvgBestWorstStats extends StatelessWidget {
                               ? statisticsFirestore.bestFirstNineAvg
                                   .toStringAsFixed(2)
                               : '-',
-                          type: BEST_FIRST_NINE_AVG,
+                          type: '',
                         ),
                       ),
                       Expanded(
@@ -125,7 +140,7 @@ class AvgBestWorstStats extends StatelessWidget {
                               ? statisticsFirestore.worstFirstNineAvg
                                   .toStringAsFixed(2)
                               : '-',
-                          type: WORST_FIRST_NINE_AVG,
+                          type: '',
                         ),
                       ),
                     ],
@@ -139,7 +154,10 @@ class AvgBestWorstStats extends StatelessWidget {
                         width: 30.w,
                         child: Text(
                           'Checkout %',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
                         ),
                       ),
                       Expanded(
@@ -157,7 +175,7 @@ class AvgBestWorstStats extends StatelessWidget {
                               ? statisticsFirestore.bestCheckoutQuote
                                   .toStringAsFixed(2)
                               : '-',
-                          type: BEST_CHECKOUT_QUOTE,
+                          type: '',
                         ),
                       ),
                       Expanded(
@@ -166,7 +184,7 @@ class AvgBestWorstStats extends StatelessWidget {
                               ? statisticsFirestore.worstCheckoutQuote
                                   .toStringAsFixed(2)
                               : '-',
-                          type: WORST_CHECKOUT_QUOTE,
+                          type: '',
                         ),
                       ),
                     ],
@@ -180,7 +198,10 @@ class AvgBestWorstStats extends StatelessWidget {
                         width: 30.w,
                         child: Text(
                           'Checkouts',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
                         ),
                       ),
                       Expanded(
@@ -197,7 +218,7 @@ class AvgBestWorstStats extends StatelessWidget {
                           value: statisticsFirestore.bestCheckoutScore != -1
                               ? statisticsFirestore.bestCheckoutScore.toString()
                               : '-',
-                          type: BEST_CHECKOUT_SCORE,
+                          type: '',
                         ),
                       ),
                       Expanded(
@@ -206,7 +227,7 @@ class AvgBestWorstStats extends StatelessWidget {
                               ? statisticsFirestore.worstCheckoutScore
                                   .toString()
                               : '-',
-                          type: WORST_CHECKOUT_SCORE,
+                          type: '',
                         ),
                       ),
                     ],
@@ -220,7 +241,10 @@ class AvgBestWorstStats extends StatelessWidget {
                         width: 30.w,
                         child: Text(
                           'Legs',
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: color,
+                          ),
                         ),
                       ),
                       Expanded(
@@ -237,7 +261,7 @@ class AvgBestWorstStats extends StatelessWidget {
                           value: statisticsFirestore.bestLeg != -1
                               ? statisticsFirestore.bestLeg.toString()
                               : '-',
-                          type: BEST_DARTS_PER_LEG,
+                          type: '',
                         ),
                       ),
                       Expanded(
@@ -245,7 +269,7 @@ class AvgBestWorstStats extends StatelessWidget {
                           value: statisticsFirestore.worstLeg != -1
                               ? statisticsFirestore.worstLeg.toString()
                               : '-',
-                          type: WORST_DARTS_PER_LEG,
+                          type: '',
                         ),
                       ),
                     ],

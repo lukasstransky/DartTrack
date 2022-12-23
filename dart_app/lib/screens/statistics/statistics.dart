@@ -74,7 +74,7 @@ class _StatisticsState extends State<Statistics> {
         },
         icon: Icon(
           _showMoreStats ? Icons.expand_less : Icons.expand_more,
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.secondary,
         ),
         label: Text(
           _showMoreStats ? 'Less Stats' : 'More Stats',

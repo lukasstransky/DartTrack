@@ -15,6 +15,20 @@ class _MoreStatsState extends State<MoreStats> {
   bool _showAllScoesPerDartWithCount = false;
   bool _roundedScoresOdd = false;
 
+  bool _highlightRoundedScore(
+      StatisticsFirestoreX01 statisticsFirestore, int i) {
+    return statisticsFirestore.countOfGames > 0 &&
+        statisticsFirestore.countOfGames > 0 &&
+        (!_roundedScoresOdd
+                ? statisticsFirestore.roundedScoresEven[i]
+                : statisticsFirestore.roundedScoresOdd[i]) ==
+            (!_roundedScoresOdd
+                ? Utils.getMostOccurringValue(
+                    statisticsFirestore.roundedScoresEven)
+                : Utils.getMostOccurringValue(
+                    statisticsFirestore.roundedScoresOdd));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Consumer<StatisticsFirestoreX01>(
@@ -31,6 +45,7 @@ class _MoreStatsState extends State<MoreStats> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -44,6 +59,7 @@ class _MoreStatsState extends State<MoreStats> {
                       style: TextStyle(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
+                        color: Colors.black,
                       ),
                     ),
                   ),
@@ -67,79 +83,48 @@ class _MoreStatsState extends State<MoreStats> {
                           Row(
                             children: [
                               Expanded(
-                                child: Padding(
+                                child: Container(
+                                  alignment: Alignment.centerRight,
                                   padding: EdgeInsets.only(top: 5),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      i != 180
-                                          ? i.toString() + '+'
-                                          : i.toString(),
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: statisticsFirestore
-                                                          .countOfGames >
-                                                      0 &&
-                                                  (!_roundedScoresOdd
-                                                          ? statisticsFirestore
-                                                                  .roundedScoresEven[
-                                                              i]
-                                                          : statisticsFirestore
-                                                                  .roundedScoresOdd[
-                                                              i]) ==
-                                                      (!_roundedScoresOdd
-                                                          ? Utils.getMostOccurringValue(
-                                                              statisticsFirestore
-                                                                  .roundedScoresEven)
-                                                          : Utils.getMostOccurringValue(
-                                                              statisticsFirestore
-                                                                  .roundedScoresOdd))
-                                              ? FontWeight.bold
-                                              : FontWeight.normal),
+                                  child: Text(
+                                    i != 180
+                                        ? i.toString() + '+'
+                                        : i.toString(),
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: _highlightRoundedScore(
+                                              statisticsFirestore, i)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Colors.black,
                                     ),
                                   ),
                                 ),
                               ),
                               Expanded(
-                                child: Padding(
+                                child: Container(
+                                  alignment: Alignment.centerRight,
                                   padding: EdgeInsets.only(
                                     top: 5,
                                     right: 10,
                                   ),
-                                  child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Text(
-                                      !_roundedScoresOdd
-                                          ? statisticsFirestore
-                                              .roundedScoresEven[i]
-                                              .toString()
-                                          : statisticsFirestore
-                                              .roundedScoresOdd[i]
-                                              .toString(),
-                                      style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: statisticsFirestore
-                                                          .countOfGames >
-                                                      0 &&
-                                                  statisticsFirestore
-                                                          .countOfGames >
-                                                      0 &&
-                                                  (!_roundedScoresOdd
-                                                          ? statisticsFirestore
-                                                                  .roundedScoresEven[
-                                                              i]
-                                                          : statisticsFirestore
-                                                                  .roundedScoresOdd[
-                                                              i]) ==
-                                                      (!_roundedScoresOdd
-                                                          ? Utils.getMostOccurringValue(
-                                                              statisticsFirestore
-                                                                  .roundedScoresEven)
-                                                          : Utils.getMostOccurringValue(
-                                                              statisticsFirestore
-                                                                  .roundedScoresOdd))
-                                              ? FontWeight.bold
-                                              : FontWeight.normal),
+                                  child: Text(
+                                    !_roundedScoresOdd
+                                        ? statisticsFirestore
+                                            .roundedScoresEven[i]
+                                            .toString()
+                                        : statisticsFirestore
+                                            .roundedScoresOdd[i]
+                                            .toString(),
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: _highlightRoundedScore(
+                                              statisticsFirestore, i)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Colors.black,
                                     ),
                                   ),
                                 ),
@@ -174,13 +159,13 @@ class _MoreStatsState extends State<MoreStats> {
                                     child: Text(
                                       i.toString() + '.',
                                       style: TextStyle(
-                                          fontSize: 12.sp,
-                                          fontWeight: statisticsFirestore
-                                                          .countOfGames >
-                                                      0 &&
-                                                  (i == 1 || i == 2 || i == 3)
-                                              ? FontWeight.bold
-                                              : FontWeight.normal),
+                                        fontSize: 12.sp,
+                                        color: i == 1
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .secondary
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -213,15 +198,16 @@ class _MoreStatsState extends State<MoreStats> {
                                                         .toString() +
                                                     'x)',
                                             style: TextStyle(
-                                                fontSize: 12.sp,
-                                                fontWeight: statisticsFirestore
-                                                                .countOfGames >
-                                                            0 &&
-                                                        (i == 1 ||
-                                                            i == 2 ||
-                                                            i == 3)
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal),
+                                              fontSize: 12.sp,
+                                              color: statisticsFirestore
+                                                              .countOfGames >
+                                                          0 &&
+                                                      i == 1
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary
+                                                  : Colors.black,
+                                            ),
                                           )
                                         : Text(
                                             statisticsFirestore
@@ -243,15 +229,13 @@ class _MoreStatsState extends State<MoreStats> {
                                                         .toString() +
                                                     'x)',
                                             style: TextStyle(
-                                                fontSize: 12.sp,
-                                                fontWeight: statisticsFirestore
-                                                                .countOfGames >
-                                                            0 &&
-                                                        (i == 1 ||
-                                                            i == 2 ||
-                                                            i == 3)
-                                                    ? FontWeight.bold
-                                                    : FontWeight.normal),
+                                              fontSize: 12.sp,
+                                              color: i == 1
+                                                  ? Theme.of(context)
+                                                      .colorScheme
+                                                      .secondary
+                                                  : Colors.black,
+                                            ),
                                           ),
                                   ),
                                 ),
@@ -271,8 +255,17 @@ class _MoreStatsState extends State<MoreStats> {
               padding: EdgeInsets.only(left: 5.w, top: 5),
               child: Row(
                 children: [
-                  const Text('Show All Scores per Dart'),
+                  Text(
+                    'Show All Scores per Dart',
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                   Switch(
+                    thumbColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.secondary),
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
                     value: _showAllScoesPerDartWithCount,
                     onChanged: (value) {
                       setState(() {
@@ -290,8 +283,18 @@ class _MoreStatsState extends State<MoreStats> {
                 padding: EdgeInsets.only(left: 5.w),
                 child: Row(
                   children: [
-                    const Text('Show Odd Rounded Scores'),
+                    Text(
+                      'Show Odd Rounded Scores',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                     Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
                       value: _roundedScoresOdd,
                       onChanged: (value) {
                         setState(() {

@@ -6,7 +6,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerEntry extends StatelessWidget {
@@ -68,13 +67,14 @@ class PlayerEntry extends StatelessWidget {
                         ),
                       ),
                     DisplayTeamOrPlayerName(
+                        gameX01: gameX01,
                         i: i,
                         firstElementNoDrawOrOpenGame:
                             _firstElementNoDrawOrOpenGame),
                   ],
                 ),
               ),
-              PlayerStats(i: i),
+              PlayerStats(gameX01: gameX01, i: i),
             ],
           ),
         ],
@@ -85,18 +85,19 @@ class PlayerEntry extends StatelessWidget {
 
 class DisplayTeamOrPlayerName extends StatelessWidget {
   const DisplayTeamOrPlayerName(
-      {Key? key, required this.i, required this.firstElementNoDrawOrOpenGame})
+      {Key? key,
+      required this.gameX01,
+      required this.i,
+      required this.firstElementNoDrawOrOpenGame})
       : super(key: key);
 
+  final GameX01 gameX01;
   final int i;
   final Function firstElementNoDrawOrOpenGame;
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
-    final GameX01 gameX01 = context.read<GameX01>();
-
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
+    if (gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team)
       return Padding(
         padding: EdgeInsets.only(left: 3.w),
         child: Text(
@@ -149,15 +150,16 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
 class PlayerStats extends StatelessWidget {
   const PlayerStats({
     Key? key,
+    required this.gameX01,
     required this.i,
   }) : super(key: key);
 
+  final GameX01 gameX01;
   final int i;
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
 
     return Container(
       width: 40.w,

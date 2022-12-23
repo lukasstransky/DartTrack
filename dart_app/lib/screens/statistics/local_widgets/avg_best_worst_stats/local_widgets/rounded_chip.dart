@@ -28,7 +28,10 @@ class RoundedChip extends StatelessWidget {
           },
           child: FittedBox(
             fit: BoxFit.fitWidth,
-            child: Text(value),
+            child: Text(
+              value,
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           style: ButtonStyle(
             shadowColor: MaterialStateProperty.all(Colors.transparent),
