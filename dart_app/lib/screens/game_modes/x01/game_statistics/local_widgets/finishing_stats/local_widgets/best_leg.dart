@@ -26,7 +26,11 @@ class BestLeg extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 'Best Leg',
-                style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Utils.getTextColorDarken(context),
+                ),
               ),
             ),
           ),
@@ -40,7 +44,10 @@ class BestLeg extends StatelessWidget {
                         .getTeamStatsFromPlayer(stats.getPlayer.getName)
                         .getBestLeg()
                     : stats.getBestLeg(),
-                style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
         ],

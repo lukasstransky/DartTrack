@@ -119,21 +119,28 @@ class _GameStatisticsState extends State<GameStatistics> {
               padding: EdgeInsets.only(top: 10),
               child: Text(
                 _getHeader(),
-                style: TextStyle(fontSize: 16.sp),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
             Padding(
               padding: EdgeInsets.only(top: 5),
               child: Text(
                 _game!.getFormattedDateTime(),
-                style: TextStyle(fontSize: 12.sp),
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Utils.getTextColorDarken(context),
+                ),
               ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Chip(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: Utils.getPrimaryColorDarken(context),
                   label: Text(
                     _game!.getGameSettings.getModeIn == ModeOutIn.Single
                         ? 'Single In'
@@ -146,7 +153,7 @@ class _GameStatisticsState extends State<GameStatistics> {
                 Padding(
                   padding: EdgeInsets.only(left: 5),
                   child: Chip(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
+                    backgroundColor: Utils.getPrimaryColorDarken(context),
                     label: Text(
                       _game!.getGameSettings.getModeOut == ModeOutIn.Single
                           ? 'Single Out'
@@ -206,8 +213,19 @@ class _GameStatisticsState extends State<GameStatistics> {
                       padding: EdgeInsets.only(left: 20),
                       child: Row(
                         children: [
-                          const Text('Show Odd Rounded Scores'),
+                          const Text(
+                            'Show Odd Rounded Scores',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                           Switch(
+                            thumbColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.secondary),
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            inactiveThumbColor:
+                                Theme.of(context).colorScheme.secondary,
                             value: _roundedScoresOdd,
                             onChanged: (value) {
                               setState(() {

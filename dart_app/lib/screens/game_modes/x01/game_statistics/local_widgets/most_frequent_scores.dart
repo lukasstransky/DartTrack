@@ -76,8 +76,9 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                 ? 'Most Frequent Scores per Dart'
                 : 'Most Frequent Scores',
             style: TextStyle(
-                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
-                color: Theme.of(context).primaryColor),
+              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              color: Colors.white,
+            ),
           ),
         ),
         if (widget.mostScoresPerDart &&
@@ -94,7 +95,11 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                     fit: BoxFit.scaleDown,
                     child: Text(
                       '3-dart-mode rounds',
-                      style: TextStyle(fontSize: 10.sp),
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Utils.getTextColorDarken(context),
+                      ),
                     ),
                   ),
                 ),
@@ -109,7 +114,10 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                       fit: BoxFit.scaleDown,
                       child: Text(
                         '${stats.getThreeDartModeRoundsCount}/${stats.getTotalRoundsCount}',
-                        style: TextStyle(fontSize: 10.sp),
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
@@ -136,7 +144,11 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           '${i + 1}.',
-                          style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                          style: TextStyle(
+                            fontSize: FONTSIZE_STATISTICS.sp,
+                            fontWeight: FontWeight.bold,
+                            color: Utils.getTextColorDarken(context),
+                          ),
                         ),
                       ),
                     ),
@@ -153,33 +165,34 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                                 i
                             ? Align(
                                 alignment: Alignment.centerRight,
-                                child: Text(
-                                  (widget.mostScoresPerDart
-                                          ? Utils.sortMapStringIntByKey(stats
-                                                  .getAllScoresPerDartAsStringCount)
-                                              .keys
-                                              .elementAt(i)
-                                              .toString()
-                                          : Utils.sortMapIntIntByKey(
-                                                  stats.getPreciseScores)
-                                              .keys
-                                              .elementAt(i)
-                                              .toString()) +
-                                      ' (' +
-                                      (widget.mostScoresPerDart
-                                          ? Utils.sortMapStringIntByKey(stats
-                                                  .getAllScoresPerDartAsStringCount)
-                                              .values
-                                              .elementAt(i)
-                                              .toString()
-                                          : Utils.sortMapIntIntByKey(
-                                                  stats.getPreciseScores)
-                                              .values
-                                              .elementAt(i)
-                                              .toString()) +
-                                      'x)',
-                                  style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp),
+                                child: RichText(
+                                  text: TextSpan(
+                                    text: (widget.mostScoresPerDart
+                                        ? Utils.sortMapStringIntByKey(stats
+                                                .getAllScoresPerDartAsStringCount)
+                                            .keys
+                                            .elementAt(i)
+                                            .toString()
+                                        : Utils.sortMapIntIntByKey(
+                                                stats.getPreciseScores)
+                                            .keys
+                                            .elementAt(i)
+                                            .toString()),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: FONTSIZE_STATISTICS.sp,
+                                    ),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text:
+                                            ' (${(widget.mostScoresPerDart ? Utils.sortMapStringIntByKey(stats.getAllScoresPerDartAsStringCount).values.elementAt(i).toString() : Utils.sortMapIntIntByKey(stats.getPreciseScores).values.elementAt(i).toString())}x)',
+                                        style: TextStyle(
+                                          color: Colors.white70,
+                                          fontSize: 11.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               )
                             : Container(

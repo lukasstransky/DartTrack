@@ -31,8 +31,11 @@ class StartGameBtn extends StatelessWidget {
             style: DefaultTextStyle.of(context).style,
             children: <TextSpan>[
               TextSpan(
-                  text: '\'$currentUserName\'',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                text: '\'$currentUserName\'',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               TextSpan(
                   text: ' is present, therefore the game will not be stored.'),
               TextSpan(

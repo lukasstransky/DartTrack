@@ -43,7 +43,11 @@ class LegSetsWon extends StatelessWidget {
                   fit: BoxFit.scaleDown,
                   child: Text(
                     setsEnabled ? 'Sets Won' : 'Legs Won',
-                    style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                    style: TextStyle(
+                      fontSize: FONTSIZE_STATISTICS.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Utils.getTextColorDarken(context),
+                    ),
                   ),
                 ),
               ),
@@ -54,7 +58,10 @@ class LegSetsWon extends StatelessWidget {
                   child: Text(
                     _getLegsSetsWon(
                         gameX01, setsEnabled, stats, gameSettingsX01),
-                    style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                    style: TextStyle(
+                      fontSize: FONTSIZE_STATISTICS.sp,
+                      color: Colors.white,
+                    ),
                   ),
                 ),
             ],
@@ -70,8 +77,14 @@ class LegSetsWon extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text('Legs Won',
-                        style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
+                    child: Text(
+                      'Legs Won',
+                      style: TextStyle(
+                        fontSize: FONTSIZE_STATISTICS.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Utils.getTextColorDarken(context),
+                      ),
+                    ),
                   ),
                 ),
                 for (PlayerOrTeamGameStatisticsX01 stats
@@ -81,7 +94,10 @@ class LegSetsWon extends StatelessWidget {
                     width: WIDTH_DATA_STATISTICS.w,
                     child: Text(
                       _getLegsSetsWon(gameX01, false, stats, gameSettingsX01),
-                      style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                      style: TextStyle(
+                        fontSize: FONTSIZE_STATISTICS.sp,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
               ],

@@ -4,7 +4,6 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class CheckoutDarts extends StatelessWidget {
@@ -25,8 +24,14 @@ class CheckoutDarts extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text('Checkout Darts',
-                  style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
+              child: Text(
+                'Checkout Darts',
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Utils.getTextColorDarken(context),
+                ),
+              ),
             ),
           ),
           for (PlayerOrTeamGameStatisticsX01 stats
@@ -37,7 +42,10 @@ class CheckoutDarts extends StatelessWidget {
                 stats.getCheckoutCount != 0
                     ? '${stats.getLegsWonTotal.toString()}/${stats.getCheckoutCount.toString()}'
                     : '-',
-                style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
         ],

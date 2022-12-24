@@ -26,8 +26,9 @@ class LegAvgCompared extends StatelessWidget {
           child: Text(
             'Averages per Leg',
             style: TextStyle(
-                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
-                color: Theme.of(context).primaryColor),
+              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              color: Colors.white,
+            ),
           ),
         ),
         for (PlayerOrTeamGameStatisticsX01 stats
@@ -39,15 +40,28 @@ class LegAvgCompared extends StatelessWidget {
                 padding: EdgeInsets.all(5),
                 alignment: Alignment.center,
                 child: Utils.teamStatsDisplayed(gameX01, gameSettingsX01)
-                    ? Text(stats.getTeam.getName)
+                    ? Text(
+                        stats.getTeam.getName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Utils.getTextColorDarken(context),
+                        ),
+                      )
                     : Text(
                         stats.getPlayer is Bot
                             ? 'Bot'
                             : stats.getPlayer.getName,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Utils.getTextColorDarken(context),
+                        ),
                       ),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(width: 1.0, color: Colors.black),
+                    bottom: BorderSide(
+                      width: 1.5,
+                      color: Utils.getTextColorDarken(context),
+                    ),
                   ),
                 ),
               ),
@@ -60,17 +74,26 @@ class LegAvgCompared extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     Utils.getAverageForLeg(stats, setLegString),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                   decoration: BoxDecoration(
                     border: Border(
-                      left: BorderSide(width: 1.0, color: Colors.black),
-                      bottom: BorderSide(width: 1.0, color: Colors.black),
+                      left: BorderSide(
+                        width: 1.5,
+                        color: Utils.getTextColorDarken(context),
+                      ),
+                      bottom: BorderSide(
+                        width: 1.5,
+                        color: Utils.getTextColorDarken(context),
+                      ),
                     ),
                   ),
                 ),
             ],
           ),
-        Utils.setLegStrings(gameX01, gameSettingsX01),
+        Utils.setLegStrings(gameX01, gameSettingsX01, context),
       ],
     );
   }

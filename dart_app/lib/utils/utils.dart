@@ -352,7 +352,8 @@ class Utils {
         !gameX01.getAreTeamStatsDisplayed;
   }
 
-  static Row setLegStrings(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+  static Row setLegStrings(
+      GameX01 gameX01, GameSettingsX01 gameSettingsX01, BuildContext context) {
     return Row(
       children: [
         SizedBox(
@@ -365,12 +366,22 @@ class Utils {
             child: Padding(
               padding: EdgeInsets.all(5),
               child: Center(
-                child: Text(setLegString),
+                child: Text(
+                  setLegString,
+                  style: TextStyle(
+                    color: getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10.sp,
+                  ),
+                ),
               ),
             ),
             decoration: BoxDecoration(
               border: Border(
-                left: BorderSide(width: 1.0, color: Colors.black),
+                left: BorderSide(
+                  width: 1.5,
+                  color: getTextColorDarken(context),
+                ),
               ),
             ),
           ),

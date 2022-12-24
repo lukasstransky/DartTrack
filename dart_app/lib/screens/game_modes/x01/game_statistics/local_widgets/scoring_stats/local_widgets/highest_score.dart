@@ -4,7 +4,6 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class HighestScore extends StatelessWidget {
@@ -25,8 +24,14 @@ class HighestScore extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text('Highest Score',
-                  style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
+              child: Text(
+                'Highest Score',
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           for (PlayerOrTeamGameStatisticsX01 stats
@@ -37,7 +42,10 @@ class HighestScore extends StatelessWidget {
                 stats.getHighestScore() != 0
                     ? stats.getHighestScore().toString()
                     : '-',
-                style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
         ],

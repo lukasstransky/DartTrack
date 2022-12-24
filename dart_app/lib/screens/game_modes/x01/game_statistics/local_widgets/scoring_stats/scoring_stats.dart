@@ -28,8 +28,9 @@ class _ScoringStatsState extends State<ScoringStats> {
           child: Text(
             'Scoring',
             style: TextStyle(
-                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
-                color: Theme.of(context).primaryColor),
+              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              color: Colors.white,
+            ),
           ),
         ),
         ThreeDartAvg(gameX01: widget.gameX01),

@@ -4,7 +4,6 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class FirstNineAvg extends StatelessWidget {
@@ -25,8 +24,14 @@ class FirstNineAvg extends StatelessWidget {
             alignment: Alignment.centerLeft,
             child: FittedBox(
               fit: BoxFit.scaleDown,
-              child: Text('First Nine Avg.',
-                  style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp)),
+              child: Text(
+                'First Nine Avg.',
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           for (PlayerOrTeamGameStatisticsX01 stats
@@ -35,7 +40,10 @@ class FirstNineAvg extends StatelessWidget {
               width: WIDTH_DATA_STATISTICS.w,
               child: Text(
                 (stats.getFirstNinveAvg()),
-                style: TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
         ],

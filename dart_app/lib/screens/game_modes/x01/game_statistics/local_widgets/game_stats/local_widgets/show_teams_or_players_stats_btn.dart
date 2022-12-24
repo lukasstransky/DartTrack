@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -37,7 +38,10 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               gameX01.getAreTeamStatsDisplayed ? 'Show Players' : 'Show Teams',
-              style: TextStyle(fontSize: 10.sp),
+              style: TextStyle(
+                fontSize: 10.sp,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ),
           style: ButtonStyle(
@@ -48,8 +52,7 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: MaterialStateProperty.all(
-                Theme.of(context).colorScheme.primary),
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
             overlayColor: MaterialStateProperty.all(
                 Theme.of(context).colorScheme.primary),
           ),

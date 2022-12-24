@@ -24,8 +24,9 @@ class RoundedScoresOdd extends StatelessWidget {
           child: Text(
             'Rounded Scores',
             style: TextStyle(
-                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
-                color: Theme.of(context).primaryColor),
+              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              color: Colors.white,
+            ),
           ),
         ),
         Padding(
@@ -49,6 +50,8 @@ class RoundedScoresOdd extends StatelessWidget {
                                 '${i}+',
                                 style: TextStyle(
                                   fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Utils.getTextColorDarken(context),
                                 ),
                               ),
                             ),
@@ -70,6 +73,12 @@ class RoundedScoresOdd extends StatelessWidget {
                           stats.getRoundedScoresOdd[i].toString(),
                           style: TextStyle(
                               fontSize: FONTSIZE_STATISTICS.sp,
+                              color: stats.getHighestScore() >= 10 &&
+                                      Utils.getMostOccurringValue(
+                                              stats.getRoundedScoresOdd) ==
+                                          stats.getRoundedScoresOdd[i]
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Colors.white,
                               fontWeight: stats.getHighestScore() >= 10 &&
                                       Utils.getMostOccurringValue(
                                               stats.getRoundedScoresOdd) ==

@@ -32,8 +32,9 @@ class RoundedScoresEven extends StatelessWidget {
           child: Text(
             'Rounded Scores',
             style: TextStyle(
-                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
-                color: Theme.of(context).primaryColor),
+              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              color: Colors.white,
+            ),
           ),
         ),
         Padding(
@@ -55,8 +56,11 @@ class RoundedScoresEven extends StatelessWidget {
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 i == 180 ? '180' : '${i}+',
-                                style:
-                                    TextStyle(fontSize: FONTSIZE_STATISTICS.sp),
+                                style: TextStyle(
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Utils.getTextColorDarken(context),
+                                ),
                               ),
                             ),
                           )
@@ -77,6 +81,12 @@ class RoundedScoresEven extends StatelessWidget {
                           stats.getRoundedScoresEven[i].toString(),
                           style: TextStyle(
                               fontSize: FONTSIZE_STATISTICS.sp,
+                              color: _atLeastOneRoundedScoreValue(stats) &&
+                                      Utils.getMostOccurringValue(
+                                              stats.getRoundedScoresEven) ==
+                                          stats.getRoundedScoresEven[i]
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Colors.white,
                               fontWeight: _atLeastOneRoundedScoreValue(stats) &&
                                       Utils.getMostOccurringValue(
                                               stats.getRoundedScoresEven) ==

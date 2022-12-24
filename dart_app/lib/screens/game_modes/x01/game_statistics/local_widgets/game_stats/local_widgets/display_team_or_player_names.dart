@@ -33,14 +33,17 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
     return false;
   }
 
-  Row _getBotWithLevel(int level) {
+  Row _getBotWithLevel(int level, BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Text(
           'Bot',
           style: TextStyle(
-              fontSize: FONTSIZE_STATISTICS.sp, fontWeight: FontWeight.bold),
+            fontSize: FONTSIZE_STATISTICS.sp,
+            fontWeight: FontWeight.bold,
+            color: Utils.getTextColorDarken(context),
+          ),
         ),
         Container(
           transform: Matrix4.translationValues(0.0, -1.0, 0.0),
@@ -48,6 +51,8 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
             ' (Lvl. ${level})',
             style: TextStyle(
               fontSize: 10.sp,
+              fontWeight: FontWeight.bold,
+              color: Utils.getTextColorDarken(context),
             ),
           ),
         )
@@ -95,18 +100,24 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
                         Column(
                           children: [
                             if (stats.getPlayer is Bot) ...[
-                              _getBotWithLevel(stats.getPlayer.getLevel)
+                              _getBotWithLevel(
+                                  stats.getPlayer.getLevel, context)
                             ] else ...[
                               Text(
                                 stats.getPlayer.getName,
                                 style: TextStyle(
-                                    fontSize: FONTSIZE_STATISTICS.sp,
-                                    fontWeight: FontWeight.bold),
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Utils.getTextColorDarken(context),
+                                ),
                               ),
                             ],
                             Text(
                               '${gameSettingsX01.findTeamForPlayer(stats.getPlayer.getName, gameSettingsX01).getName}',
-                              style: TextStyle(fontSize: 11.sp),
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                color: Utils.getTextColorDarken(context),
+                              ),
                             )
                           ],
                         )
@@ -116,18 +127,22 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
                           Text(
                             stats.getTeam.getName,
                             style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
-                                fontWeight: FontWeight.bold),
+                              fontSize: FONTSIZE_STATISTICS.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Utils.getTextColorDarken(context),
+                            ),
                           ),
                         ] else ...[
                           if (stats.getPlayer is Bot) ...[
-                            _getBotWithLevel(stats.getPlayer.getLevel)
+                            _getBotWithLevel(stats.getPlayer.getLevel, context)
                           ] else ...[
                             Text(
                               stats.getPlayer.getName,
                               style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
-                                  fontWeight: FontWeight.bold),
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Utils.getTextColorDarken(context),
+                              ),
                             ),
                           ],
                         ],

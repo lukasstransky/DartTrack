@@ -51,6 +51,10 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
         children: _items
             .map<ExpansionPanel>(
               (item) => ExpansionPanel(
+                backgroundColor: Utils.darken(
+                  Theme.of(context).colorScheme.primary,
+                  20,
+                ),
                 canTapOnHeader: true,
                 headerBuilder: (_, isExpanded) => ListTile(
                   title: Container(
@@ -60,7 +64,10 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
                           width: gameSettingsX01.getSets != 0 ? 32.w : 20.w,
                           child: Text(
                             item.value,
-                            style: TextStyle(fontSize: 14.sp),
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                         Expanded(
@@ -81,7 +88,9 @@ class _DetailedLegsListState extends State<DetailedLegsList> {
                                       : Utils.getWinnerOfLeg(
                                           item.value, widget.gameX01, context),
                                   style: TextStyle(
-                                      color: Colors.black, fontSize: 14.sp),
+                                    color: Colors.white,
+                                    fontSize: 14.sp,
+                                  ),
                                 ),
                               ),
                             ],

@@ -110,7 +110,9 @@ class _DetailedLegState extends State<DetailedLeg> {
                       _getPlayerOrTeamName(playerOrTeamGameStatsX01,
                           widget.gameX01, gameSettingsX01),
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 15.sp),
+                        fontSize: 15.sp,
+                        color: Colors.white,
+                      ),
                     ),
                     for (int i = 0;
                         i <
@@ -132,7 +134,12 @@ class _DetailedLegState extends State<DetailedLeg> {
                                     fit: BoxFit.scaleDown,
                                     child: Text(
                                       'Score',
-                                      style: TextStyle(fontSize: 11.sp),
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color:
+                                            Utils.getTextColorDarken(context),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -143,7 +150,12 @@ class _DetailedLegState extends State<DetailedLeg> {
                                     fit: BoxFit.scaleDown,
                                     child: Text(
                                       'Left',
-                                      style: TextStyle(fontSize: 11.sp),
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color:
+                                            Utils.getTextColorDarken(context),
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -161,6 +173,9 @@ class _DetailedLegState extends State<DetailedLeg> {
                                       .getAllScoresPerLeg[widget.setLegString]
                                       .elementAt(i)
                                       .toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
@@ -176,6 +191,9 @@ class _DetailedLegState extends State<DetailedLeg> {
                                           .elementAt(i),
                                       i,
                                       playerOrTeamGameStatsX01),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
@@ -203,23 +221,35 @@ class _DetailedLegState extends State<DetailedLeg> {
                           ],
                         ),
                     ],
-                    const Divider(
+                    Divider(
                       height: 15,
-                      thickness: 1,
+                      thickness: 1.5,
                       indent: 10,
                       endIndent: 10,
-                      color: Colors.black,
+                      color: Utils.getTextColorDarken(context),
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: Center(
-                            child: Text('Avg.'),
+                            child: Text(
+                              'Avg.',
+                              style: TextStyle(
+                                color: Utils.getTextColorDarken(context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ),
                         Expanded(
                           child: Center(
-                            child: Text('Darts'),
+                            child: Text(
+                              'Darts',
+                              style: TextStyle(
+                                color: Utils.getTextColorDarken(context),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         )
                       ],
@@ -231,6 +261,9 @@ class _DetailedLegState extends State<DetailedLeg> {
                             child: Text(
                               Utils.getAverageForLeg(playerOrTeamGameStatsX01,
                                   widget.setLegString),
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -238,6 +271,9 @@ class _DetailedLegState extends State<DetailedLeg> {
                           child: Center(
                             child: Text(
                               _getThrownDartsForLeg(playerOrTeamGameStatsX01),
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),

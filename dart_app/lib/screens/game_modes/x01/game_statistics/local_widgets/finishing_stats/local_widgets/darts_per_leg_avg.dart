@@ -4,7 +4,6 @@ import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class DartsPerLegAvg extends StatelessWidget {
@@ -46,12 +45,19 @@ class DartsPerLegAvg extends StatelessWidget {
                 text: TextSpan(
                   style: new TextStyle(
                     fontSize: FONTSIZE_STATISTICS.sp,
-                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    color: Utils.getTextColorDarken(context),
                   ),
                   children: <TextSpan>[
                     new TextSpan(text: 'Darts/Leg'),
                     new TextSpan(
-                        text: ' (Avg.)', style: new TextStyle(fontSize: 8.sp)),
+                      text: ' (Avg.)',
+                      style: new TextStyle(
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Utils.getTextColorDarken(context),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -65,6 +71,7 @@ class DartsPerLegAvg extends StatelessWidget {
                 _getDartsPerLeg(stats, gameX01, gameSettingsX01),
                 style: new TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
+                  color: Colors.white,
                 ),
               ),
             ),

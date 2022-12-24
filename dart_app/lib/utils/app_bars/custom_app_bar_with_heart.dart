@@ -1,4 +1,3 @@
-import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -47,73 +46,41 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         .first;
   }
 
-  _showDialogForFavouriteGame(BuildContext context) {
+  _addGameToFavourites() {
     final StatisticsFirestoreX01 statisticsFirestoreX01 =
         context.read<StatisticsFirestoreX01>();
     final String gameId =
         widget.gameId != null ? widget.gameId as String : g_gameId;
 
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => AlertDialog(
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
-        title: Text(widget.isFavouriteGame
-            ? 'Remove from favourite games'
-            : 'Add to favourite games'),
-        content: Text(widget.isFavouriteGame
-            ? 'Do you want to remove this game from your favourites?'
-            : 'Do you want to add this game to your favourites?'),
-        actions: [
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context).pop();
-            },
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () async {
-              if (widget.isFavouriteGame) {
-                _changeFavouriteStateOfGame(gameId, false);
+    if (widget.isFavouriteGame) {
+      _changeFavouriteStateOfGame(gameId, false);
 
-                if (!widget.isFinishScreen) {
-                  final Game game =
-                      _getGameById(gameId, statisticsFirestoreX01);
-                  game.setIsFavouriteGame = false;
+      if (!widget.isFinishScreen) {
+        final Game game = _getGameById(gameId, statisticsFirestoreX01);
+        game.setIsFavouriteGame = false;
 
-                  // remove game from the favourites
-                  statisticsFirestoreX01.favouriteGames.remove(game);
-                }
-              } else {
-                _changeFavouriteStateOfGame(gameId, true);
+        // remove game from the favourites
+        statisticsFirestoreX01.favouriteGames.remove(game);
+      }
+    } else {
+      _changeFavouriteStateOfGame(gameId, true);
 
-                if (!widget.isFinishScreen) {
-                  final Game game =
-                      _getGameById(gameId, statisticsFirestoreX01);
-                  game.setIsFavouriteGame = true;
+      if (!widget.isFinishScreen) {
+        final Game game = _getGameById(gameId, statisticsFirestoreX01);
+        game.setIsFavouriteGame = true;
 
-                  // add game to the favourites
-                  statisticsFirestoreX01.favouriteGames.add(game);
-                }
-              }
+        // add game to the favourites
+        statisticsFirestoreX01.favouriteGames.add(game);
+      }
+    }
 
-              statisticsFirestoreX01.notify();
-              Navigator.of(context).pop();
-            },
-            child: const Text('Yes'),
-          ),
-        ],
-      ),
-    );
+    statisticsFirestoreX01.notify();
   }
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      elevation: 0,
       centerTitle: true,
       automaticallyImplyLeading: false,
       title: Text(widget.title),
@@ -126,17 +93,26 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
                   Navigator.of(context).pop();
                 }
               },
-              icon: Icon(Icons.arrow_back),
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
       actions: [
         if (widget.showHeart)
           IconButton(
             onPressed: () async => {
-              _showDialogForFavouriteGame(context),
+              _addGameToFavourites(),
             },
             icon: widget.isFavouriteGame
-                ? Icon(MdiIcons.heart)
-                : Icon(MdiIcons.heartOutline),
+                ? Icon(
+                    MdiIcons.heart,
+                    color: Theme.of(context).colorScheme.secondary,
+                  )
+                : Icon(
+                    MdiIcons.heartOutline,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
           ),
         if (widget.isFinishScreen)
           IconButton(
