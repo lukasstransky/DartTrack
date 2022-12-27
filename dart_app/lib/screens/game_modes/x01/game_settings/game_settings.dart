@@ -46,7 +46,6 @@ class _GameSettingsState extends State<GameSettings> {
     final Player? currentUserAsPlayer = context.read<AuthService>().getPlayer;
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
-    gameSettingsX01.setPlayers = [];
     gameSettingsX01.getPlayers.add(new Player(name: 'Strainski'));
     //todo comment out
     /* if (currentUserAsPlayer != null) {

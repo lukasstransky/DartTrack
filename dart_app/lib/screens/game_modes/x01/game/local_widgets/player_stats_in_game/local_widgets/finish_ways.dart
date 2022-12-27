@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -45,7 +46,9 @@ class FinishWays extends StatelessWidget {
   SizedBox _getTextWidget(BuildContext context) {
     final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
 
-    if (!gameSettingsX01.getShowFinishWays) return SizedBox.shrink();
+    if (!gameSettingsX01.getShowFinishWays) {
+      return SizedBox.shrink();
+    }
 
     if (_checkoutPossible(
         this.currPlayerOrTeamGameStatsX01!.getCurrentPoints)) {
@@ -54,7 +57,10 @@ class FinishWays extends StatelessWidget {
         child: Text(
           _getFinishWay(currPlayerOrTeamGameStatsX01!.getCurrentPoints),
           style: TextStyle(
-              color: Theme.of(context).colorScheme.primary, fontSize: 13.sp),
+            color: Utils.getTextColorDarken(context),
+            fontSize: 13.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       );
     }
@@ -66,7 +72,10 @@ class FinishWays extends StatelessWidget {
         child: Text(
           'No Finish possible!',
           style: TextStyle(
-              color: Theme.of(context).colorScheme.primary, fontSize: 13.sp),
+            color: Utils.getTextColorDarken(context),
+            fontSize: 13.sp,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       );
     } else {

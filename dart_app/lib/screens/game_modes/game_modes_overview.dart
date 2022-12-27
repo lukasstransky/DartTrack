@@ -122,6 +122,9 @@ class SinglesTrainingBtn extends StatelessWidget {
           ),
           onPressed: () => null,
           style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: MaterialStateProperty.all(
               Utils.darken(
                   Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
@@ -161,6 +164,9 @@ class CricketBtn extends StatelessWidget {
           ),
           onPressed: () => null,
           style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: MaterialStateProperty.all(
               Utils.darken(
                   Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
@@ -200,6 +206,9 @@ class X01Btn extends StatelessWidget {
           ),
           onPressed: () => Navigator.of(context).pushNamed('/settingsX01'),
           style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: MaterialStateProperty.all(
               Utils.darken(
                   Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
@@ -232,7 +241,10 @@ class OpenGames extends StatelessWidget {
                 children: [
                   Text(
                     'Open Games: ',
-                    style: TextStyle(fontSize: 14.sp, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      color: Colors.white,
+                    ),
                   ),
                   ElevatedButton(
                     child: Text(
@@ -244,6 +256,11 @@ class OpenGames extends StatelessWidget {
                     onPressed: () =>
                         Navigator.of(context).pushNamed('/openGames'),
                     style: ButtonStyle(
+                      splashFactory: NoSplash.splashFactory,
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor:
+                          MaterialStateProperty.all(Colors.transparent),
                       backgroundColor: MaterialStateProperty.all(
                         Utils.darken(Theme.of(context).colorScheme.primary,
                             GENERAL_DARKEN),

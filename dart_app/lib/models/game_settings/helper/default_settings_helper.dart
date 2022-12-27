@@ -3,6 +3,7 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/default_settings_x01.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +55,9 @@ class DefaultSettingsHelper {
 
     defaultSettingsX01.players = [];
     for (Player player in settingsX01.getPlayers) {
-      defaultSettingsX01.players.add(Player.clone(player));
+      if (context.read<AuthService>().getPlayer!.getName != player.getName) {
+        defaultSettingsX01.players.add(Player.clone(player));
+      }
     }
 
     settingsX01.notify();
@@ -148,40 +151,11 @@ class DefaultSettingsHelper {
         listEquals(defaultSettingsX01.mostScoredPoints,
             settingsX01.getMostScoredPoints) &&
         _checkIfPlayersAreEqual(
-            defaultSettingsX01.players, settingsX01.getPlayers)) {
+            defaultSettingsX01.players, settingsX01.getPlayers, context)) {
       return true;
     }
 
     return false;
-  }
-
-  static bool _checkIfPlayersAreEqual(
-      List<Player> defaultSettingsPlayers, List<Player> currentPlayers) {
-    if (defaultSettingsPlayers.length != currentPlayers.length) {
-      return false;
-    }
-
-    for (Player player in currentPlayers) {
-      int length = 0;
-      for (Player defaultPlayer in defaultSettingsPlayers) {
-        length++;
-        if (player is Bot && defaultPlayer is Bot) {
-          if (player.getLevel == defaultPlayer.getLevel) {
-            break;
-          }
-        } else {
-          if (player.getName == defaultPlayer.getName) {
-            break;
-          }
-        }
-
-        if (length == defaultSettingsPlayers.length) {
-          return false;
-        }
-      }
-    }
-
-    return true;
   }
 
   static bool generalDefaultSettingsSelected(BuildContext context) {
@@ -219,11 +193,68 @@ class DefaultSettingsHelper {
         settingsX01.getVibrationFeedbackEnabled == DEFAULT_VIBRATION_FEEDBACK &&
         settingsX01.getWinByTwoLegsDifference ==
             DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE &&
-        settingsX01.getPlayers.length == 0 &&
+        _checkIfDefaultPlayersAreSelected(settingsX01, context) &&
         settingsX01.getDrawMode == DEFAULT_DRAW_MODE) {
       return true;
     }
 
     return false;
+  }
+
+  static bool _checkIfDefaultPlayersAreSelected(
+      GameSettingsX01 settingsX01, BuildContext context) {
+    return settingsX01.getPlayers.length == 1 &&
+        settingsX01.getPlayers[0].getName ==
+            context.read<AuthService>().getPlayer!.getName;
+  }
+
+  static bool _isCurrentUserInPlayers(
+      List<Player> defaultSettingsPlayers, BuildContext context) {
+    for (Player player in defaultSettingsPlayers) {
+      if (player.getName == context.read<AuthService>().getPlayer!.getName) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  static bool _checkIfPlayersAreEqual(List<Player> defaultSettingsPlayers,
+      List<Player> currentPlayers, BuildContext context) {
+    //todo comment out
+    /* final Player? currentPlayer = context.read<AuthService>().getPlayer;
+    if (!_isCurrentUserInPlayers(defaultSettingsPlayers, context)) {
+      defaultSettingsPlayers.add(currentPlayer!);
+    } */
+
+    if (defaultSettingsPlayers.length != currentPlayers.length) {
+      return false;
+    }
+
+    for (Player player in currentPlayers) {
+      int length = 0;
+      for (Player defaultPlayer in defaultSettingsPlayers) {
+        length++;
+        //todo comment out
+        /* if (player.getName == currentPlayer!.getName) {
+          break;
+        } */
+        if (player is Bot && defaultPlayer is Bot) {
+          if (player.getLevel == defaultPlayer.getLevel) {
+            break;
+          }
+        } else {
+          if (player.getName == defaultPlayer.getName) {
+            break;
+          }
+        }
+
+        if (length == defaultSettingsPlayers.length) {
+          return false;
+        }
+      }
+    }
+
+    return true;
   }
 }

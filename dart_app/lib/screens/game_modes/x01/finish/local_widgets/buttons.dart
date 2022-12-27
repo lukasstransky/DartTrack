@@ -1,6 +1,7 @@
 import 'package:dart_app/models/games/helper/revert_helper.dart';
 import 'package:dart_app/models/games/game_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,7 +39,10 @@ class StatisticsBtn extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               'Statistics',
-              style: TextStyle(fontSize: 12.sp),
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
           ),
           style: ButtonStyle(
@@ -49,8 +53,7 @@ class StatisticsBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: MaterialStateProperty.all(
-                Theme.of(context).colorScheme.primary),
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
           ),
         ),
       ),
@@ -80,7 +83,13 @@ class NewGameBtn extends StatelessWidget {
           onPressed: () => _newGameBtnClicked(context),
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('New Game', style: TextStyle(fontSize: 12.sp)),
+            child: Text(
+              'New Game',
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ),
           ),
           style: ButtonStyle(
             shape: MaterialStateProperty.all(
@@ -90,8 +99,7 @@ class NewGameBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: MaterialStateProperty.all(
-                Theme.of(context).colorScheme.primary),
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
           ),
         ),
       ),
@@ -125,7 +133,12 @@ class UndoLastThrowBtn extends StatelessWidget {
           onPressed: () => _undoLastThrowBtnClicked(context),
           child: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text('Undo Last Throw', style: TextStyle(fontSize: 12.sp)),
+            child: Text(
+              'Undo Last Throw',
+              style: TextStyle(
+                fontSize: 12.sp,
+              ),
+            ),
           ),
           style: ButtonStyle(
             shape: MaterialStateProperty.all(
@@ -136,7 +149,7 @@ class UndoLastThrowBtn extends StatelessWidget {
               ),
             ),
             backgroundColor: MaterialStateProperty.all(
-              Colors.red,
+              Color.fromARGB(255, 207, 87, 78),
             ),
           ),
         ),

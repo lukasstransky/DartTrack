@@ -132,7 +132,13 @@ class _OpenGamesState extends State<OpenGames> {
                     ),
                   )
                 : Center(
-                    child: Text('Currently there are no Open Games!'),
+                    child: Text(
+                      'Currently there are no Open Games!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.sp,
+                      ),
+                    ),
                   ),
       ),
     );

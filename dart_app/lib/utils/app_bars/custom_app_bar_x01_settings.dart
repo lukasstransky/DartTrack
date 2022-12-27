@@ -32,13 +32,27 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: _edgeInsets,
-        title: const Text('Info'),
-        content: const Text('These settings are the general default settings!'),
+        title: Text(
+          'Info',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          'These settings are the general default settings!',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Continue'),
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
         ],
       ),
@@ -54,23 +68,43 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: _edgeInsets,
-        title: defaultSettingsSelected
-            ? const Text('Undo default settings')
-            : const Text('Save settings as default'),
-        content: defaultSettingsSelected
-            ? const Text(
-                'Do you want to reset to the general default settings?')
-            : const Text('Do you want to set these settings as default?'),
+        title: Text(
+          defaultSettingsSelected
+              ? 'Undo default settings'
+              : 'Save settings as default',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          defaultSettingsSelected
+              ? 'Do you want to reset to the general default settings?'
+              : 'Do you want to set these settings as default?',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
           TextButton(
             onPressed: () => _setOrUndoDefaultSettings(
                 gameSettingsX01, defaultSettingsSelected),
-            child: const Text('Continue'),
+            child: Text(
+              'Save',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
         ],
       ),

@@ -121,6 +121,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
             },
             icon: Icon(
               Icons.home,
+              color: Theme.of(context).colorScheme.secondary,
             ),
           ),
       ],
