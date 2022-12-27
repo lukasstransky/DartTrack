@@ -43,17 +43,33 @@ class RoundBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameSettingsX01 = context.read<GameSettingsX01>();
+    final bool isRoundSelected =
+        gameSettingsX01.getInputMethod == InputMethod.Round ? true : false;
 
     return Container(
       width: 50.w - 0.5,
-      margin: const EdgeInsets.only(
-        bottom: MARGIN_GAMESETTINGS,
-        right: MARGIN_GAMESETTINGS,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Utils.getPrimaryColorDarken(context),
+            width: 3,
+          ),
+          right: BorderSide(
+            color: Utils.getPrimaryColorDarken(context),
+            width: 3,
+          ),
+        ),
       ),
       child: ElevatedButton(
         child: Text(
           'Round',
-          style: TextStyle(fontSize: 14.sp, color: Colors.black),
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: isRoundSelected
+                ? Theme.of(context).colorScheme.secondary
+                : Utils.getTextColorDarken(context),
+            fontWeight: FontWeight.bold,
+          ),
         ),
         onPressed: () => _roundBtnClicked(context, gameSettingsX01),
         style: ButtonStyle(
@@ -64,17 +80,17 @@ class RoundBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: gameSettingsX01.getInputMethod == InputMethod.Round
+          backgroundColor: isRoundSelected
               ? MaterialStateProperty.all(
                   Utils.darken(Theme.of(context).colorScheme.primary, 25))
               : MaterialStateProperty.all(
                   Theme.of(context).colorScheme.primary),
-          overlayColor: gameSettingsX01.getInputMethod == InputMethod.Round ||
+          overlayColor: isRoundSelected ||
                   context.read<GameX01>().getAmountOfDartsThrown() != 0
               ? MaterialStateProperty.all(Colors.transparent)
               : Utils.getColorOrPressed(
                   Theme.of(context).colorScheme.primary,
-                  Utils.darken(Theme.of(context).colorScheme.primary, 15),
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
                 ),
         ),
       ),
@@ -94,16 +110,29 @@ class ThreeDartsBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameSettingsX01 = context.read<GameSettingsX01>();
+    final bool isThreeDartsSelected =
+        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts ? true : false;
 
     return Container(
       width: 50.w - 0.5,
-      margin: const EdgeInsets.only(
-        bottom: MARGIN_GAMESETTINGS,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Utils.getPrimaryColorDarken(context),
+            width: 3,
+          ),
+        ),
       ),
       child: ElevatedButton(
         child: Text(
           '3-Darts',
-          style: TextStyle(fontSize: 14.sp, color: Colors.black),
+          style: TextStyle(
+            fontSize: 14.sp,
+            color: isThreeDartsSelected
+                ? Theme.of(context).colorScheme.secondary
+                : Utils.getTextColorDarken(context),
+            fontWeight: FontWeight.bold,
+          ),
         ),
         onPressed: () =>
             _threeDartsBtnClicked(context.read<GameX01>(), gameSettingsX01),
@@ -115,17 +144,16 @@ class ThreeDartsBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor:
-              gameSettingsX01.getInputMethod == InputMethod.ThreeDarts
-                  ? MaterialStateProperty.all(
-                      Utils.darken(Theme.of(context).colorScheme.primary, 25))
-                  : MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.primary),
-          overlayColor: gameSettingsX01.getInputMethod == InputMethod.ThreeDarts
+          backgroundColor: isThreeDartsSelected
+              ? MaterialStateProperty.all(
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25))
+              : MaterialStateProperty.all(
+                  Theme.of(context).colorScheme.primary),
+          overlayColor: isThreeDartsSelected
               ? MaterialStateProperty.all(Colors.transparent)
               : Utils.getColorOrPressed(
                   Theme.of(context).colorScheme.primary,
-                  Utils.darken(Theme.of(context).colorScheme.primary, 15),
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
                 ),
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -12,9 +13,7 @@ class SetsLegsScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
-
-    if (gameSettingsX01.getSetsEnabled) {
+    if (context.read<GameSettingsX01>().getSetsEnabled) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -38,9 +37,12 @@ class SetsLegsScore extends StatelessWidget {
           fit: BoxFit.fitWidth,
           child: Text(
             showLegs
-                ? 'Legs: ${this.currPlayerOrTeamGameStatsX01!.getLegsWon.toString()}'
+                ? 'Legs: ${currPlayerOrTeamGameStatsX01!.getLegsWon.toString()}'
                 : 'Sets: ${currPlayerOrTeamGameStatsX01!.getSetsWon.toString()}',
-            style: TextStyle(color: Colors.white, fontSize: 10.sp),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 10.sp,
+            ),
           ),
         ),
         style: ButtonStyle(
@@ -51,8 +53,7 @@ class SetsLegsScore extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor:
-              MaterialStateProperty.all(Theme.of(context).colorScheme.primary),
+          backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
         ),
       ),
     );

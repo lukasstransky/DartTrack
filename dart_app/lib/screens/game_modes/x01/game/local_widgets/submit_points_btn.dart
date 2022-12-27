@@ -134,25 +134,42 @@ class SubmitPointsBtn extends StatelessWidget {
     final MaterialStateProperty<Color> _colorResult =
         _shouldSubmitBtnBeEnabled(context)
             ? MaterialStateProperty.all(Colors.green)
-            : MaterialStateProperty.all(Utils.darken(Colors.green, 25));
+            : MaterialStateProperty.all(
+                Utils.darken(Colors.green, 25),
+              );
 
     return Consumer2<GameX01, GameSettingsX01>(
-      builder: (_, gameX01, gameSettingsX01, __) => ElevatedButton(
+      builder: (_, gameX01, gameSettingsX01, __) => Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: 3,
+            ),
+            left: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: 3,
+            ),
+          ),
+        ),
+        child: ElevatedButton(
           style: ButtonStyle(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.zero,
-                side: gameSettingsX01.getInputMethod == InputMethod.Round
-                    ? BorderSide(color: Colors.black, width: 2)
-                    : BorderSide.none,
               ),
             ),
             backgroundColor: _colorResult,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
             overlayColor: _colorResult,
           ),
-          child: const Icon(Icons.arrow_forward, color: Colors.black),
-          onPressed: () => _submitPointsBtnClicked(context)),
+          child: Icon(
+            Icons.arrow_forward,
+            color: Utils.getTextColorDarken(context),
+          ),
+          onPressed: () => _submitPointsBtnClicked(context),
+        ),
+      ),
     );
   }
 }

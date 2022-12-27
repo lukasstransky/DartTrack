@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -44,23 +45,30 @@ class _AutoSubmitOrScoredPointsSwitchState
       builder: (context) => Form(
         key: _formKeyMostScoredPoint,
         child: AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: EdgeInsets.only(
               bottom: DIALOG_CONTENT_PADDING_BOTTOM,
               top: DIALOG_CONTENT_PADDING_TOP,
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
-          title: const Text('Enter Value'),
+          title: const Text(
+            'Enter Value',
+            style: TextStyle(color: Colors.white),
+          ),
           content: Container(
             margin: EdgeInsets.only(left: 10.w, right: 10.w),
             child: TextFormField(
               controller: _mostScoredPointController,
               validator: (value) {
-                if (value!.isEmpty) return ('Please enter a value!');
-
-                if (int.parse(value) > 180) return ('Maximal value is 180!');
-
-                if (gameSettingsX01.getMostScoredPoints.contains(value))
+                if (value!.isEmpty) {
+                  return ('Please enter a value!');
+                }
+                if (int.parse(value) > 180) {
+                  return ('Maximal value is 180!');
+                }
+                if (gameSettingsX01.getMostScoredPoints.contains(value)) {
                   return ('Value is already defined!');
+                }
 
                 return null;
               },
@@ -70,12 +78,26 @@ class _AutoSubmitOrScoredPointsSwitchState
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(3),
               ],
+              style: TextStyle(
+                color: Utils.getTextColorDarken(context),
+              ),
               decoration: InputDecoration(
-                contentPadding: const EdgeInsets.symmetric(horizontal: 10.0),
-                focusedBorder: UnderlineInputBorder(
+                prefixIcon: Icon(
+                  Icons.numbers,
+                  color: Utils.getPrimaryColorDarken(context),
+                ),
+                hintText: 'Value',
+                fillColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                filled: true,
+                hintStyle: TextStyle(
+                  color: Utils.getPrimaryColorDarken(context),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
                   borderSide: BorderSide(
-                    color: Colors.black,
-                    width: 1.0,
+                    width: 0,
+                    style: BorderStyle.none,
                   ),
                 ),
               ),
@@ -84,12 +106,28 @@ class _AutoSubmitOrScoredPointsSwitchState
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
             TextButton(
               onPressed: () =>
                   _submitMostScoredPoint(context, i, gameSettingsX01),
-              child: const Text('Submit'),
+              child: Text(
+                'Submit',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
           ],
         ),
@@ -199,11 +237,20 @@ class _AutoSubmitOrScoredPointsSwitchState
       margin: EdgeInsets.only(top: 5.w, left: 5.w, right: 5.w),
       alignment: Alignment.centerLeft,
       child: ElevatedButton(
-        child: Text('Fetch from Stats'),
+        child: Text(
+          'Fetch from statistics',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
         onPressed: () => {
           _fetchFromStatsBtnPressed(gameSettingsX01, statisticsFirestoreX01),
         },
         style: ButtonStyle(
+          backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
@@ -230,7 +277,10 @@ class _AutoSubmitOrScoredPointsSwitchState
             child: Center(
               child: Text(
                 '${i + 1}.',
-                style: TextStyle(fontSize: 14.sp),
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -239,12 +289,24 @@ class _AutoSubmitOrScoredPointsSwitchState
               alignment: Alignment.center,
               height: 4.h,
               child: ElevatedButton(
-                child: Text(gameSettingsX01.getMostScoredPoints[i]),
+                child: Text(
+                  gameSettingsX01.getMostScoredPoints[i],
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
                 onPressed: () => _showDialogForMostScoredPointInput(
                     context, gameSettingsX01, i),
                 style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
+                      side: BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: 2,
+                      ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0),
                       ),

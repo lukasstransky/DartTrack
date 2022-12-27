@@ -1,5 +1,6 @@
 import 'package:dart_app/models/game_settings/game_settings_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -32,6 +33,8 @@ class GameStats extends StatelessWidget {
                 'Average: ${currPlayerOrTeamGameStatsX01!.getAverage()}',
                 style: TextStyle(
                   fontSize: 13.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -42,6 +45,8 @@ class GameStats extends StatelessWidget {
                 'Last Throw: ${_getLastThrow(currPlayerOrTeamGameStatsX01!.getAllScores)}',
                 style: TextStyle(
                   fontSize: 13.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -53,6 +58,8 @@ class GameStats extends StatelessWidget {
                       'Thrown Darts: ${currPlayerOrTeamGameStatsX01!.getCurrentThrownDartsInLeg.toString()}',
                       style: TextStyle(
                         fontSize: 13.sp,
+                        color: Utils.getTextColorDarken(context),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   )
@@ -62,6 +69,8 @@ class GameStats extends StatelessWidget {
                       'Thrown Darts: -',
                       style: TextStyle(
                         fontSize: 13.sp,
+                        color: Utils.getTextColorDarken(context),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),

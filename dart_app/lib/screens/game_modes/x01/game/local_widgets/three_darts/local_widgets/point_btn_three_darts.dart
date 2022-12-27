@@ -200,42 +200,113 @@ class PointBtnThreeDart extends StatelessWidget {
     return false;
   }
 
+  _getBorder(BuildContext context) {
+    const double borderWidth = 3;
+
+    return Border(
+      right: [
+        '1',
+        '2',
+        '3',
+        '4',
+        '6',
+        '7',
+        '8',
+        '9',
+        '11',
+        '12',
+        '13',
+        '14',
+        '16',
+        '17',
+        '18',
+        '19',
+        '25',
+        'Bull'
+      ].contains(point)
+          ? BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: borderWidth,
+            )
+          : BorderSide.none,
+      bottom: [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20'
+      ].contains(point)
+          ? BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: borderWidth,
+            )
+          : BorderSide.none,
+      top: ['0', '1', '2', '3', '4', '5', '25', 'Bull'].contains(point)
+          ? BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: borderWidth,
+            )
+          : BorderSide.none,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final gameX01 = context.read<GameX01>();
+    final GameX01 gameX01 = context.read<GameX01>();
     final String pointBtnText = _appendTrippleOrDouble(gameX01);
 
-    return ElevatedButton(
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
+    return Container(
+      decoration: BoxDecoration(
+        border: _getBorder(context),
+      ),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+          backgroundColor: activeBtn as bool &&
+                  gameX01.getAmountOfDartsThrown() != 3
+              ? MaterialStateProperty.all(Theme.of(context).colorScheme.primary)
+              : MaterialStateProperty.all(
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25)),
+          overlayColor: activeBtn as bool &&
+                  gameX01.getCanBePressed &&
+                  gameX01.getAmountOfDartsThrown() != 3
+              ? Utils.getColorOrPressed(
+                  Theme.of(context).colorScheme.primary,
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                )
+              : MaterialStateProperty.all(Colors.transparent),
+        ),
+        child: FittedBox(
+          child: Text(
+            pointBtnText,
+            style: TextStyle(
+              fontSize: 16.sp,
+              color: Utils.getTextColorDarken(context),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        backgroundColor: activeBtn as bool &&
-                gameX01.getAmountOfDartsThrown() != 3
-            ? MaterialStateProperty.all(Theme.of(context).colorScheme.primary)
-            : MaterialStateProperty.all(
-                Utils.darken(Theme.of(context).colorScheme.primary, 25)),
-        overlayColor: activeBtn as bool &&
-                gameX01.getCanBePressed &&
-                gameX01.getAmountOfDartsThrown() != 3
-            ? Utils.getColorOrPressed(
-                Theme.of(context).colorScheme.primary,
-                Utils.darken(Theme.of(context).colorScheme.primary, 15),
-              )
-            : MaterialStateProperty.all(Colors.transparent),
+        onPressed: () => _pointBtnClicked(pointBtnText, context),
       ),
-      child: FittedBox(
-        child: Text(
-          pointBtnText,
-          style: TextStyle(
-            fontSize: 16.sp,
-            color: Colors.black,
-          ),
-        ),
-      ),
-      onPressed: () => _pointBtnClicked(pointBtnText, context),
     );
   }
 }

@@ -371,7 +371,7 @@ class GameSettingsX01 extends GameSettings {
   }
 
   String getGameModeDetails(bool showPoints) {
-    String result = '';
+    String result = '(';
 
     if (showPoints) {
       if (getCustomPoints != -1) {
