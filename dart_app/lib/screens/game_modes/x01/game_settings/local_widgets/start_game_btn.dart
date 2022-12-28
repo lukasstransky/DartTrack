@@ -13,22 +13,27 @@ import 'package:sizer/sizer.dart';
 class StartGameBtn extends StatelessWidget {
   _showDialogNoUserInPlayerWarning(
       BuildContext context, GameSettingsX01 gameSettingsX01) {
-    String currentUserName = context.read<AuthService>().getPlayer!.getName;
+    final String currentUserName =
+        context.read<AuthService>().getPlayer!.getName;
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: EdgeInsets.only(
             bottom: DIALOG_CONTENT_PADDING_BOTTOM,
             top: DIALOG_CONTENT_PADDING_TOP,
             left: DIALOG_CONTENT_PADDING_LEFT,
             right: DIALOG_CONTENT_PADDING_RIGHT),
-        title: const Text('Game will not be stored for Statistics!'),
+        title: Text(
+          'Game will not be stored for Statistics!',
+          style: TextStyle(color: Colors.white),
+        ),
         content: RichText(
           text: TextSpan(
             text: 'No player with the current username ',
-            style: DefaultTextStyle.of(context).style,
+            style: TextStyle(color: Colors.white),
             children: <TextSpan>[
               TextSpan(
                 text: '\'$currentUserName\'',
@@ -37,24 +42,42 @@ class StartGameBtn extends StatelessWidget {
                 ),
               ),
               TextSpan(
-                  text: ' is present, therefore the game will not be stored.'),
+                text: ' is present, therefore the game will not be stored.',
+                style: TextStyle(color: Colors.white),
+              ),
               TextSpan(
-                  text:
-                      '\n\n(In order to store the game, change the name of one player to \'$currentUserName\')'),
+                text:
+                    '\n\n(In order to store the game, change the name of one player to \'$currentUserName\')',
+                style: TextStyle(color: Colors.white),
+              ),
             ],
           ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
           TextButton(
             onPressed: () => {
               Navigator.of(context).pop(),
               _showDialogForBeginner(context, gameSettingsX01),
             },
-            child: const Text('Continue anyways'),
+            child: Text(
+              'Continue anyways',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
         ],
       ),

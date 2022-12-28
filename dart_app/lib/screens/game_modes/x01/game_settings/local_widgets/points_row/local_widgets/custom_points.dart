@@ -38,33 +38,46 @@ class _CustomPointsState extends State<CustomPoints> {
         builder: (context) => Form(
           key: _formKeyCustomPoints,
           child: AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: EdgeInsets.only(
                 bottom: DIALOG_CONTENT_PADDING_BOTTOM,
                 top: DIALOG_CONTENT_PADDING_TOP,
                 left: DIALOG_CONTENT_PADDING_LEFT,
                 right: DIALOG_CONTENT_PADDING_RIGHT),
-            title: const Text('Enter points'),
-            content: TextFormField(
-              controller: _customPointsController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return ('Please enter some points!');
-                }
-                if (int.parse(value) < CUSTOM_POINTS_MIN_NUMBER) {
-                  return ('Minimum points are 100!');
-                }
-                return null;
-              },
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(MAX_NUMBERS_POINTS),
-              ],
-              decoration: InputDecoration(
-                hintText: 'max 9999',
-                filled: true,
-                hintStyle: TextStyle(color: Colors.grey),
+            title: Text(
+              'Enter points',
+              style: TextStyle(color: Colors.white),
+            ),
+            content: Container(
+              margin: EdgeInsets.only(left: 15.w, right: 15.w),
+              child: TextFormField(
+                controller: _customPointsController,
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return ('Please enter some points!');
+                  }
+                  if (int.parse(value) < CUSTOM_POINTS_MIN_NUMBER) {
+                    return ('Minimum points are 100!');
+                  }
+                  return null;
+                },
+                autofocus: true,
+                keyboardType: TextInputType.number,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  LengthLimitingTextInputFormatter(MAX_NUMBERS_POINTS),
+                ],
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'max. 9999',
+                  fillColor:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                  filled: true,
+                  hintStyle: TextStyle(
+                    color: Utils.getPrimaryColorDarken(context),
+                  ),
+                  border: InputBorder.none,
+                ),
               ),
             ),
             actions: [
@@ -72,11 +85,27 @@ class _CustomPointsState extends State<CustomPoints> {
                 onPressed: () => {
                   Navigator.of(context).pop(),
                 },
-                child: const Text('Cancel'),
+                child: Text(
+                  'Cancel',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      Utils.getPrimaryMaterialStateColorDarken(context),
+                ),
               ),
               TextButton(
                 onPressed: () => _submitPoints(context),
-                child: const Text('Submit'),
+                child: Text(
+                  'Submit',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      Utils.getPrimaryMaterialStateColorDarken(context),
+                ),
               ),
             ],
           ),

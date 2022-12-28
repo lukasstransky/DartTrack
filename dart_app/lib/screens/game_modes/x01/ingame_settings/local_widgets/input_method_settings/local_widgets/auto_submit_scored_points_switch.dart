@@ -56,7 +56,7 @@ class _AutoSubmitOrScoredPointsSwitchState
             style: TextStyle(color: Colors.white),
           ),
           content: Container(
-            margin: EdgeInsets.only(left: 10.w, right: 10.w),
+            margin: EdgeInsets.only(left: 20.w, right: 20.w),
             child: TextFormField(
               controller: _mostScoredPointController,
               validator: (value) {
@@ -78,14 +78,10 @@ class _AutoSubmitOrScoredPointsSwitchState
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(3),
               ],
-              style: TextStyle(
-                color: Utils.getTextColorDarken(context),
-              ),
+              textAlignVertical: TextAlignVertical.center,
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                prefixIcon: Icon(
-                  Icons.numbers,
-                  color: Utils.getPrimaryColorDarken(context),
-                ),
                 hintText: 'Value',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),

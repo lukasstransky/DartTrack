@@ -17,12 +17,16 @@ class WinByTwoLegsDifference extends StatelessWidget {
       builder: (context) => Form(
         key: _formKeyLegDifference,
         child: AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: EdgeInsets.only(
               bottom: DIALOG_CONTENT_PADDING_BOTTOM,
               top: DIALOG_CONTENT_PADDING_TOP,
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
-          title: const Text('Sudden Death'),
+          title: const Text(
+            'Sudden Death',
+            style: TextStyle(color: Colors.white),
+          ),
           content: StatefulBuilder(
             builder: (context, setState) {
               return Column(
@@ -35,7 +39,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                         child: Tooltip(
                           child: Icon(
                             Icons.info_outline,
-                            color: Colors.grey,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -49,8 +53,16 @@ class WinByTwoLegsDifference extends StatelessWidget {
                           preferBelow: false,
                         ),
                       ),
-                      const Text('enable Sudden Death'),
+                      const Text(
+                        'enable Sudden Death',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       Switch(
+                        thumbColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.secondary),
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        inactiveThumbColor:
+                            Theme.of(context).colorScheme.secondary,
                         value: gameSettingsX01.getSuddenDeath,
                         onChanged: (value) {
                           setState(() {
@@ -68,7 +80,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                           child: Tooltip(
                             child: Icon(
                               Icons.info_outline,
-                              color: Colors.grey,
+                              color: Theme.of(context).colorScheme.secondary,
                             ),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
@@ -82,7 +94,10 @@ class WinByTwoLegsDifference extends StatelessWidget {
                             preferBelow: false,
                           ),
                         ),
-                        const Text('after max. Legs'),
+                        const Text(
+                          'after max. Legs',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         Padding(
                           padding: EdgeInsets.only(left: 3.w),
                           child: IconButton(
@@ -102,7 +117,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                             icon: Icon(Icons.remove,
                                 color: gameSettingsX01.getMaxExtraLegs > 1
                                     ? Theme.of(context).colorScheme.secondary
-                                    : Colors.grey),
+                                    : Theme.of(context).colorScheme.primary),
                           ),
                         ),
                         Container(
@@ -110,7 +125,10 @@ class WinByTwoLegsDifference extends StatelessWidget {
                           child: Center(
                             child: Text(
                               gameSettingsX01.getMaxExtraLegs.toString(),
-                              style: TextStyle(fontSize: 18.sp),
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
@@ -132,7 +150,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
                               color: gameSettingsX01.getMaxExtraLegs !=
                                       MAX_EXTRA_LEGS
                                   ? Theme.of(context).colorScheme.secondary
-                                  : Colors.grey),
+                                  : Theme.of(context).colorScheme.primary),
                         ),
                       ],
                     ),
@@ -147,7 +165,15 @@ class WinByTwoLegsDifference extends StatelessWidget {
                 gameSettingsX01.notify(),
                 Navigator.of(context).pop(),
               },
-              child: const Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
             TextButton(
               onPressed: () => {
@@ -155,7 +181,15 @@ class WinByTwoLegsDifference extends StatelessWidget {
                 gameSettingsX01.notify(),
                 Navigator.of(context).pop(),
               },
-              child: const Text('Submit'),
+              child: Text(
+                'Submit',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+              ),
             ),
           ],
         ),
@@ -219,7 +253,10 @@ class WinByTwoLegsDifference extends StatelessWidget {
                           (gameSettingsX01.getMaxExtraLegs == 1
                               ? 'Leg)'
                               : 'Legs)'),
-                      style: TextStyle(fontSize: 8.sp),
+                      style: TextStyle(
+                        fontSize: 8.sp,
+                        color: Colors.white70,
+                      ),
                     ),
                   ),
               ],

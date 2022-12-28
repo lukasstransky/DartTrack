@@ -55,9 +55,13 @@ class DefaultSettingsHelper {
 
     defaultSettingsX01.players = [];
     for (Player player in settingsX01.getPlayers) {
-      if (context.read<AuthService>().getPlayer!.getName != player.getName) {
+      //todo comment out
+      //if (context.read<AuthService>().getPlayer!.getName != player.getName) {
+      if (player.getName != 'Strainski') {
         defaultSettingsX01.players.add(Player.clone(player));
       }
+
+      //}
     }
 
     settingsX01.notify();

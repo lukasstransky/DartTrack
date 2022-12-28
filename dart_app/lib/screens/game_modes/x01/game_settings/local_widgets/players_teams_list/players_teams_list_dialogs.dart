@@ -439,12 +439,16 @@ class PlayersTeamsListDialogs {
         context: context,
         builder: (context) {
           return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: EdgeInsets.only(
                 bottom: DIALOG_CONTENT_PADDING_BOTTOM,
                 top: DIALOG_CONTENT_PADDING_TOP,
                 left: DIALOG_CONTENT_PADDING_LEFT,
                 right: DIALOG_CONTENT_PADDING_RIGHT),
-            title: const Text('Swap Team'),
+            title: Text(
+              'Swap Team',
+              style: TextStyle(color: Colors.white),
+            ),
             content: StatefulBuilder(
               builder: (context, setState) {
                 return Container(
@@ -453,10 +457,14 @@ class PlayersTeamsListDialogs {
                     shrinkWrap: true,
                     itemCount: possibleTeamsToSwap.length,
                     itemBuilder: (BuildContext context, int index) {
-                      final team = possibleTeamsToSwap[index];
+                      final Team team = possibleTeamsToSwap[index];
 
                       return RadioListTile(
-                        title: Text(team.getName),
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Text(
+                          team.getName,
+                          style: TextStyle(color: Colors.white),
+                        ),
                         value: team,
                         groupValue: selectedTeam,
                         onChanged: (Team? value) {
@@ -471,12 +479,28 @@ class PlayersTeamsListDialogs {
             actions: [
               TextButton(
                 onPressed: () => Navigator.of(context).pop(),
-                child: const Text('Cancel'),
+                child: Text(
+                  'Cancel',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      Utils.getPrimaryMaterialStateColorDarken(context),
+                ),
               ),
               TextButton(
                 onPressed: () => _swapTeam(
                     context, playerToSwap, selectedTeam, gameSettingsX01),
-                child: const Text('Submit'),
+                child: Text(
+                  'Submit',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                style: ButtonStyle(
+                  backgroundColor:
+                      Utils.getPrimaryMaterialStateColorDarken(context),
+                ),
               ),
             ],
           );

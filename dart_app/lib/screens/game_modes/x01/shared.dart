@@ -49,15 +49,19 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
     barrierDismissible: false,
     context: context,
     builder: (context) => AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.primary,
       contentPadding: EdgeInsets.only(
           bottom: DIALOG_CONTENT_PADDING_BOTTOM,
           top: DIALOG_CONTENT_PADDING_TOP,
           left: DIALOG_CONTENT_PADDING_LEFT,
           right: DIALOG_CONTENT_PADDING_RIGHT),
-      title: gameSettingsX01.getEnableCheckoutCounting &&
-              !gameSettingsX01.getCheckoutCountingFinallyDisabled
-          ? Text('Checkout Counting')
-          : Text('Finish Counting'),
+      title: Text(
+        gameSettingsX01.getEnableCheckoutCounting &&
+                !gameSettingsX01.getCheckoutCountingFinallyDisabled
+            ? 'Checkout Counting'
+            : 'Finish Counting',
+        style: TextStyle(color: Colors.white),
+      ),
       content: StatefulBuilder(
         builder: (context, setState) {
           return Column(
@@ -66,8 +70,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
               if (gameSettingsX01.getEnableCheckoutCounting &&
                   gameSettingsX01.getCheckoutCountingFinallyDisabled == false)
                 Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text('Darts on Double:')),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Darts on Double:',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -89,27 +97,36 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text('0'),
+                              child: Text(
+                                '0',
+                                style: TextStyle(
+                                  color: selectedCheckoutCount == 0
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.white,
+                                ),
+                              ),
                             ),
                             style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Utils.getPrimaryColorDarken(context),
+                                    width: 2,
+                                  ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
                                   ),
                                 ),
                               ),
                               backgroundColor: selectedCheckoutCount == 0
-                                  ? MaterialStateProperty.all(
-                                      Theme.of(context).colorScheme.primary)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.grey),
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              overlayColor: selectedCheckoutCount == 0
-                                  ? MaterialStateProperty.all(
-                                      Colors.transparent)
-                                  : MaterialStateProperty.all(
+                                  ? Utils.getPrimaryMaterialStateColorDarken(
+                                      context)
+                                  : Utils.getColor(
                                       Theme.of(context).colorScheme.primary),
                             ),
                           ),
@@ -125,26 +142,37 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
-                            child: const Text('1'),
+                            child: Text(
+                              '1',
+                              style: TextStyle(
+                                color: selectedCheckoutCount == 1
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
                           style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: Utils.getPrimaryColorDarken(context),
+                                  width: 2,
+                                ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
                                 ),
                               ),
                             ),
                             backgroundColor: selectedCheckoutCount == 1
-                                ? MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary)
-                                : MaterialStateProperty.all<Color>(Colors.grey),
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor: selectedCheckoutCount == 1
-                                ? MaterialStateProperty.all(Colors.transparent)
-                                : MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.secondary),
+                                ? Utils.getPrimaryMaterialStateColorDarken(
+                                    context)
+                                : Utils.getColor(
+                                    Theme.of(context).colorScheme.primary),
                           ),
                         ),
                       ),
@@ -168,27 +196,36 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text('2'),
+                              child: Text(
+                                '2',
+                                style: TextStyle(
+                                  color: selectedCheckoutCount == 2
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.white,
+                                ),
+                              ),
                             ),
                             style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Utils.getPrimaryColorDarken(context),
+                                    width: 2,
+                                  ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
                                   ),
                                 ),
                               ),
                               backgroundColor: selectedCheckoutCount == 2
-                                  ? MaterialStateProperty.all(
-                                      Theme.of(context).colorScheme.primary)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.grey),
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              overlayColor: selectedCheckoutCount == 2
-                                  ? MaterialStateProperty.all(
-                                      Colors.transparent)
-                                  : MaterialStateProperty.all(
+                                  ? Utils.getPrimaryMaterialStateColorDarken(
+                                      context)
+                                  : Utils.getColor(
                                       Theme.of(context).colorScheme.primary),
                             ),
                           ),
@@ -208,27 +245,36 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text('3'),
+                              child: Text(
+                                '3',
+                                style: TextStyle(
+                                  color: selectedCheckoutCount == 0
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.white,
+                                ),
+                              ),
                             ),
                             style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Utils.getPrimaryColorDarken(context),
+                                    width: 2,
+                                  ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
                                   ),
                                 ),
                               ),
                               backgroundColor: selectedCheckoutCount == 3
-                                  ? MaterialStateProperty.all(
-                                      Theme.of(context).colorScheme.primary)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.grey),
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              overlayColor: selectedCheckoutCount == 3
-                                  ? MaterialStateProperty.all(
-                                      Colors.transparent)
-                                  : MaterialStateProperty.all(
+                                  ? Utils.getPrimaryMaterialStateColorDarken(
+                                      context)
+                                  : Utils.getColor(
                                       Theme.of(context).colorScheme.primary),
                             ),
                           ),
@@ -241,7 +287,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                   gameX01.finishedLegSetOrGame(currentPointsSelected)) ...[
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: Text('Darts for Finish:'),
+                  child: Text(
+                    'Darts for Finish:',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
                 Row(
                   children: [
@@ -260,11 +309,27 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
-                              child: const Text('1'),
+                              child: Text(
+                                '1',
+                                style: TextStyle(
+                                  color: selectedFinishCount == 1
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.white,
+                                ),
+                              ),
                             ),
                             style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
                               shape: MaterialStateProperty.all(
                                 RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Utils.getPrimaryColorDarken(context),
+                                    width: 2,
+                                  ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
                                   ),
@@ -274,18 +339,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   ? MaterialStateProperty.all(
                                       Utils.darken(Colors.grey, 25))
                                   : selectedFinishCount == 1
-                                      ? MaterialStateProperty.all(
-                                          Theme.of(context).colorScheme.primary)
-                                      : MaterialStateProperty.all<Color>(
-                                          Colors.grey),
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              overlayColor: selectedFinishCount == 1 ||
-                                      selectedCheckoutCount > 1
-                                  ? MaterialStateProperty.all(
-                                      Colors.transparent)
-                                  : MaterialStateProperty.all(
-                                      Theme.of(context).colorScheme.primary),
+                                      ? Utils
+                                          .getPrimaryMaterialStateColorDarken(
+                                              context)
+                                      : Utils.getColor(Theme.of(context)
+                                          .colorScheme
+                                          .primary),
                             ),
                           ),
                         ),
@@ -303,11 +362,32 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
-                            child: const Text('2'),
+                            child: Text(
+                              '2',
+                              style: TextStyle(
+                                color: selectedFinishCount == 2
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
                           style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
+                                side: selectedCheckoutCount > 2 ||
+                                        (selectedCheckoutCount == 2 &&
+                                            !isDoubleField)
+                                    ? BorderSide.none
+                                    : BorderSide(
+                                        color: Utils.getPrimaryColorDarken(
+                                            context),
+                                        width: 2,
+                                      ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
                                 ),
@@ -319,19 +399,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 ? MaterialStateProperty.all(
                                     Utils.darken(Colors.grey, 25))
                                 : selectedFinishCount == 2
-                                    ? MaterialStateProperty.all(
-                                        Theme.of(context).colorScheme.primary)
-                                    : MaterialStateProperty.all<Color>(
-                                        Colors.grey),
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor: selectedFinishCount == 2 ||
-                                    selectedCheckoutCount > 2 ||
-                                    (selectedCheckoutCount == 2 &&
-                                        !isDoubleField)
-                                ? MaterialStateProperty.all(Colors.transparent)
-                                : MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary),
+                                    ? Utils.getPrimaryMaterialStateColorDarken(
+                                        context)
+                                    : Utils.getColor(
+                                        Theme.of(context).colorScheme.primary),
                           ),
                         ),
                       ),
@@ -346,25 +417,36 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           },
                           child: FittedBox(
                             fit: BoxFit.fitWidth,
-                            child: const Text('3'),
+                            child: Text(
+                              '3',
+                              style: TextStyle(
+                                color: selectedFinishCount == 3
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Colors.white,
+                              ),
+                            ),
                           ),
                           style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
+                                side: BorderSide(
+                                  color: Utils.getPrimaryColorDarken(context),
+                                  width: 2,
+                                ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
                                 ),
                               ),
                             ),
                             backgroundColor: selectedFinishCount == 3
-                                ? MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.primary)
-                                : MaterialStateProperty.all<Color>(Colors.grey),
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor: selectedFinishCount == 3
-                                ? MaterialStateProperty.all(Colors.transparent)
-                                : MaterialStateProperty.all(
+                                ? Utils.getPrimaryMaterialStateColorDarken(
+                                    context)
+                                : Utils.getColor(
                                     Theme.of(context).colorScheme.primary),
                           ),
                         ),
@@ -393,7 +475,13 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
 
             gameX01.notify();
           },
-          child: const Text('Cancel'),
+          child: Text(
+            'Cancel',
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          style: ButtonStyle(
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          ),
         ),
         TextButton(
           onPressed: () {
@@ -412,7 +500,13 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
 
             Navigator.of(context).pop();
           },
-          child: const Text('Submit'),
+          child: Text(
+            'Submit',
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          style: ButtonStyle(
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          ),
         ),
       ],
     ),

@@ -7,6 +7,7 @@ import 'package:dart_app/models/player_statistics/player_or_team_game_statistics
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -811,20 +812,31 @@ class Submit {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: EdgeInsets.only(
             bottom: DIALOG_CONTENT_PADDING_BOTTOM,
             top: DIALOG_CONTENT_PADDING_TOP,
             left: DIALOG_CONTENT_PADDING_LEFT,
             right: DIALOG_CONTENT_PADDING_RIGHT),
-        title: Text('Sudden Death'),
+        title: Text(
+          'Sudden Death',
+          style: TextStyle(color: Colors.white),
+        ),
         content: Text(
-            "The 'Sudden Death' leg is reached. The player who wins this leg also wins the game."),
+          "The 'Sudden Death' leg is reached. The player who wins this leg also wins the game.",
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Continue'),
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
         ],
       ),

@@ -116,13 +116,27 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: _edgeInsets,
-        title: const Text('Info'),
-        content: const Text('Team mode for default settings is not supported!'),
+        title: const Text(
+          'Info',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'Team mode for default settings is not supported!',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Continue'),
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
           ),
         ],
       ),
