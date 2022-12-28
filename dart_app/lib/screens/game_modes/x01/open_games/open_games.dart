@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -21,8 +21,8 @@ class OpenGames extends StatefulWidget {
 }
 
 class _OpenGamesState extends State<OpenGames> {
-  _setNewGameSettingsFromOpenGame(GameSettingsX01 openGameSettings) {
-    final settingsX01 = context.read<GameSettingsX01>();
+  _setNewGameSettingsFromOpenGame(GameSettingsX01_P openGameSettings) {
+    final settingsX01 = context.read<GameSettingsX01_P>();
 
     settingsX01.setEnableCheckoutCounting =
         openGameSettings.getEnableCheckoutCounting;
@@ -44,7 +44,7 @@ class _OpenGamesState extends State<OpenGames> {
   }
 
   _setNewGameValuesFromOpenGame(Game game, BuildContext context) {
-    _setNewGameSettingsFromOpenGame(game.getGameSettings as GameSettingsX01);
+    _setNewGameSettingsFromOpenGame(game.getGameSettings as GameSettingsX01_P);
 
     final gameX01 = context.read<GameX01>();
 

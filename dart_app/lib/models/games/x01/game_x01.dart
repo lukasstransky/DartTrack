@@ -1,9 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -262,7 +262,7 @@ class GameX01 extends Game {
   //needed for allScoresPerLeg + CheckoutCountAtThrownDarts
   //returns e.g. 'Leg 1' or 'Set 1 Leg 2'
   String getCurrentSetLegAsString(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     final int currentLeg = _getCurrentLeg(gameX01, gameSettingsX01);
 
     int currentSet = -1;
@@ -333,7 +333,7 @@ class GameX01 extends Game {
   }
 
   List<String> getAllLegSetStringsExceptCurrentOne(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     final String currentSetLegString =
         getCurrentSetLegAsString(gameX01, gameSettingsX01);
 
@@ -518,7 +518,7 @@ class GameX01 extends Game {
   }
 
   //needed to set all scores per leg
-  int _getCurrentLeg(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+  int _getCurrentLeg(GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     int result = 1;
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
@@ -538,7 +538,7 @@ class GameX01 extends Game {
   }
 
   //needed to set all scores per leg
-  int _getCurrentSet(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+  int _getCurrentSet(GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     int result = 1;
 
     for (PlayerOrTeamGameStatisticsX01 stats
@@ -574,7 +574,7 @@ class GameX01 extends Game {
   }
 
   dynamic getPlayerStatsFromCurrentTeamToThrow(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     List<PlayerOrTeamGameStatisticsX01> result = [];
 
     for (PlayerOrTeamGameStatisticsX01 stats

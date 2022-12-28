@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/default_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
@@ -32,7 +32,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
 
   _getDefaultSettingsX01() async {
     context
-        .read<DefaultSettingsX01>()
+        .read<DefaultSettingsX01_P>()
         .resetValues(context.read<AuthService>().getPlayer);
     await context
         .read<FirestoreServiceDefaultSettings>()
@@ -56,11 +56,46 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                   CricketBtn(),
                   SinglesTrainingBtn(),
                   DoublesTrainingBtn(),
+                  ScoresTrainingBtn(),
                 ],
               ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class ScoresTrainingBtn extends StatelessWidget {
+  const ScoresTrainingBtn({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: GAME_MOES_OVERVIEW_WIDTH.w,
+      height: GAME_MOES_OVERVIEW_HEIGHT.h,
+      child: ElevatedButton(
+        child: Text(
+          'Scores Training',
+          style: TextStyle(
+              fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
+              color: Theme.of(context).colorScheme.secondary),
+        ),
+        onPressed: () =>
+            Navigator.of(context).pushNamed('/settingsScoreTraining'),
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            Utils.darken(Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
+          ),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -73,25 +108,29 @@ class DoublesTrainingBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: GAME_MOES_OVERVIEW_WIDTH.w,
-      height: GAME_MOES_OVERVIEW_HEIGHT.h,
-      child: ElevatedButton(
-        child: Text(
-          'Doubles Training',
-          style: TextStyle(
-              fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
-              color: Theme.of(context).colorScheme.secondary),
-        ),
-        onPressed: () => null,
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(
-            Utils.darken(Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
+    return Padding(
+      padding: EdgeInsets.only(bottom: GAME_MOES_OVERVIEW_PADDING.h),
+      child: Container(
+        width: GAME_MOES_OVERVIEW_WIDTH.w,
+        height: GAME_MOES_OVERVIEW_HEIGHT.h,
+        child: ElevatedButton(
+          child: Text(
+            'Doubles Training',
+            style: TextStyle(
+                fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
+                color: Theme.of(context).colorScheme.secondary),
           ),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
+          onPressed: () => null,
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              Utils.darken(
+                  Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
+            ),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(10.0),
+                ),
               ),
             ),
           ),

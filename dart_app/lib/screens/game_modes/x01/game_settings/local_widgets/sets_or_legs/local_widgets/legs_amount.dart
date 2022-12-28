@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class LegsAmount extends StatefulWidget {
 }
 
 class _LegsAmountState extends State<LegsAmount> {
-  _subtractBtnPressed(GameSettingsX01 gameSettingsX01, Tuple2 tuple) {
+  _subtractBtnPressed(GameSettingsX01_P gameSettingsX01, Tuple2 tuple) {
     if (tuple.item2 <= MIN_LEGS) {
       return;
     }
@@ -40,7 +40,7 @@ class _LegsAmountState extends State<LegsAmount> {
     gameSettingsX01.notify();
   }
 
-  _addBtnPressed(GameSettingsX01 gameSettingsX01, Tuple2 tuple) {
+  _addBtnPressed(GameSettingsX01_P gameSettingsX01, Tuple2 tuple) {
     if (tuple.item2 >= MAX_LEGS) return;
 
     //when draw mode is enabled -> prevent from being 1 more than max legs
@@ -57,19 +57,19 @@ class _LegsAmountState extends State<LegsAmount> {
     gameSettingsX01.notify();
   }
 
-  _shouldShowSubtractBtnGrey(int legs, GameSettingsX01 gameSettingsX01) {
+  _shouldShowSubtractBtnGrey(int legs, GameSettingsX01_P gameSettingsX01) {
     return legs == MIN_LEGS ||
         legs == (MIN_LEGS + 1) && gameSettingsX01.getDrawMode;
   }
 
-  _shouldShowAddBtnGrey(int legs, GameSettingsX01 gameSettingsX01) {
+  _shouldShowAddBtnGrey(int legs, GameSettingsX01_P gameSettingsX01) {
     return legs == MAX_LEGS ||
         legs == (MAX_LEGS - 1) && gameSettingsX01.getDrawMode;
   }
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Expanded(
       child: Column(
@@ -85,7 +85,7 @@ class _LegsAmountState extends State<LegsAmount> {
               ),
             ),
           ),
-          Selector<GameSettingsX01, Tuple2<BestOfOrFirstToEnum, int>>(
+          Selector<GameSettingsX01_P, Tuple2<BestOfOrFirstToEnum, int>>(
             selector: (_, gameSettingsX01) =>
                 Tuple2(gameSettingsX01.getMode, gameSettingsX01.getLegs),
             builder: (_, tuple, __) => Row(

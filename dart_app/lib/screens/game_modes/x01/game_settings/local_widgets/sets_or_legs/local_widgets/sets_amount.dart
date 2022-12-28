@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
 class SetsAmount extends StatelessWidget {
-  _subtractBtnPressed(Tuple2 tuple, GameSettingsX01 gameSettingsX01) {
+  _subtractBtnPressed(Tuple2 tuple, GameSettingsX01_P gameSettingsX01) {
     if (tuple.item2 <= MIN_SETS) return;
 
     //when draw mode is enabled -> prevent from sets being 0
@@ -25,7 +25,7 @@ class SetsAmount extends StatelessWidget {
     gameSettingsX01.notify();
   }
 
-  _addBtnPressed(Tuple2 tuple, GameSettingsX01 gameSettingsX01) {
+  _addBtnPressed(Tuple2 tuple, GameSettingsX01_P gameSettingsX01) {
     if (tuple.item2 >= MAX_SETS) return;
 
     //when draw mode is enabled -> prevent from being 1 more than max sets
@@ -42,19 +42,19 @@ class SetsAmount extends StatelessWidget {
     gameSettingsX01.notify();
   }
 
-  _shouldShowSubtractBtnGrey(int sets, GameSettingsX01 gameSettingsX01) {
+  _shouldShowSubtractBtnGrey(int sets, GameSettingsX01_P gameSettingsX01) {
     return sets == MIN_SETS ||
         sets == (MIN_SETS + 1) && gameSettingsX01.getDrawMode;
   }
 
-  _shouldShowAddBtnGrey(int sets, GameSettingsX01 gameSettingsX01) {
+  _shouldShowAddBtnGrey(int sets, GameSettingsX01_P gameSettingsX01) {
     return sets == MAX_SETS ||
         sets == (MAX_SETS - 1) && gameSettingsX01.getDrawMode;
   }
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Expanded(
       child: Column(
@@ -67,7 +67,7 @@ class SetsAmount extends StatelessWidget {
                   color: Utils.getTextColorForGameSettingsPage()),
             ),
           ),
-          Selector<GameSettingsX01, Tuple2<BestOfOrFirstToEnum, int>>(
+          Selector<GameSettingsX01_P, Tuple2<BestOfOrFirstToEnum, int>>(
             selector: (_, gameSettingsX01) =>
                 Tuple2(gameSettingsX01.getMode, gameSettingsX01.getSets),
             builder: (_, tuple, __) => Row(

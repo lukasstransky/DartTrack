@@ -1,5 +1,5 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/disable_checkout_counting.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/general_settings/general_settings.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/hide_show.dart';
@@ -16,7 +16,7 @@ class InGameSettings extends StatelessWidget {
   static const routeName = '/inGameSettingsX01';
 
   _showDisableCheckoutCounting(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
     final gameX01 = context.read<GameX01>();
 
     return gameX01.getInit &&

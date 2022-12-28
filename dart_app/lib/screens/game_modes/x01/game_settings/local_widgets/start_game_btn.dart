@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -12,7 +12,7 @@ import 'package:sizer/sizer.dart';
 
 class StartGameBtn extends StatelessWidget {
   _showDialogNoUserInPlayerWarning(
-      BuildContext context, GameSettingsX01 gameSettingsX01) {
+      BuildContext context, GameSettingsX01_P gameSettingsX01) {
     final String currentUserName =
         context.read<AuthService>().getPlayer!.getName;
 
@@ -85,7 +85,7 @@ class StartGameBtn extends StatelessWidget {
   }
 
   _showDialogForBeginner(
-      BuildContext context, GameSettingsX01 gameSettingsX01) {
+      BuildContext context, GameSettingsX01_P gameSettingsX01) {
     final List<Player> players = gameSettingsX01.getPlayers;
     Player? selectedPlayer = gameSettingsX01.getPlayers[0];
 
@@ -239,7 +239,7 @@ class StartGameBtn extends StatelessWidget {
     );
   }
 
-  bool _onePlayerPerTeam(GameSettingsX01 gameSettingsX01) {
+  bool _onePlayerPerTeam(GameSettingsX01_P gameSettingsX01) {
     for (Team team in gameSettingsX01.getTeams) {
       if (team.getPlayers.length > 1) return false;
     }
@@ -249,7 +249,7 @@ class StartGameBtn extends StatelessWidget {
     return true;
   }
 
-  bool _activateStartGameBtn(GameSettingsX01 gameSettingsX01) {
+  bool _activateStartGameBtn(GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getPlayers.length < 2) {
       return false;
     } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
@@ -261,7 +261,7 @@ class StartGameBtn extends StatelessWidget {
     return true;
   }
 
-  bool _anyEmptyTeam(GameSettingsX01 gameSettingsX01) {
+  bool _anyEmptyTeam(GameSettingsX01_P gameSettingsX01) {
     for (Team team in gameSettingsX01.getTeams)
       if (team.getPlayers.isEmpty) return true;
 
@@ -300,7 +300,7 @@ class StartGameBtn extends StatelessWidget {
     return Expanded(
       child: Align(
         alignment: Alignment.bottomCenter,
-        child: Consumer<GameSettingsX01>(builder: (_, gameSettingsX01, __) {
+        child: Consumer<GameSettingsX01_P>(builder: (_, gameSettingsX01, __) {
           return Container(
             width: 60.w,
             height: Utils.getHeightForWidget(gameSettingsX01).h,

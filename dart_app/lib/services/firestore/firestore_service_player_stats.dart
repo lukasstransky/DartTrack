@@ -2,12 +2,12 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class FirestoreServicePlayerStats {
 
   Future<void> postPlayerGameStatistics(
       Game game, String gameId, BuildContext context) async {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     List<String> playerGameStatsIds = [];
     List<String> teamGameStatsIds = [];
@@ -95,7 +95,7 @@ class FirestoreServicePlayerStats {
     const String currentPlayerName =
         //await context.read<AuthService>().getPlayer!.getName;
         'Strainski';
-    final firestoreStats = context.read<StatisticsFirestoreX01>();
+    final firestoreStats = context.read<StatisticsFirestoreX01_P>();
 
     firestoreStats.resetValues();
 
@@ -408,7 +408,7 @@ class FirestoreServicePlayerStats {
         //todo change
         //await context.read<AuthService>().getPlayer!.getName;
         'Strainski';
-    final firestoreStats = context.read<StatisticsFirestoreX01>();
+    final firestoreStats = context.read<StatisticsFirestoreX01_P>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestorePlayerStatsPath());
     final Query query = collectionReference

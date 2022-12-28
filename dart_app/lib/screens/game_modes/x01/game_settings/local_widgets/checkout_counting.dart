@@ -1,18 +1,18 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class CheckoutCounting extends StatelessWidget {
-  bool _winByDiffWidgetIsPresent(GameSettingsX01 gameSettingsX01) {
+  bool _winByDiffWidgetIsPresent(GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getLegs > 1 &&
         !gameSettingsX01.getSetsEnabled &&
         !gameSettingsX01.getDrawMode;
   }
 
-  bool _noWinByDiffWidgetIsPresent(GameSettingsX01 gameSettingsX01) {
+  bool _noWinByDiffWidgetIsPresent(GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getLegs == 1 ||
         gameSettingsX01.getSetsEnabled ||
         gameSettingsX01.getDrawMode) {
@@ -23,7 +23,7 @@ class CheckoutCounting extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01>(
+    return Consumer<GameSettingsX01_P>(
       builder: (_, gameSettingsX01, __) {
         if (gameSettingsX01.getModeOut == ModeOutIn.Double) {
           return Container(

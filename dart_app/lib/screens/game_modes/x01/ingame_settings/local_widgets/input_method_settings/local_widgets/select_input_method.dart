@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -12,7 +12,7 @@ class SelectInputMethod extends StatelessWidget {
 
   _switchInputMethod(BuildContext context) {
     final gameX01 = context.read<GameX01>();
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       gameSettingsX01.setInputMethod = InputMethod.ThreeDarts;
@@ -32,7 +32,7 @@ class SelectInputMethod extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isInputMethodRound =
-        context.read<GameSettingsX01>().getInputMethod == InputMethod.Round
+        context.read<GameSettingsX01_P>().getInputMethod == InputMethod.Round
             ? true
             : false;
 

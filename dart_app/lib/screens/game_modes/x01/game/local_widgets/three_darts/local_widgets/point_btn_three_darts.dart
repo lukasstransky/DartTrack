@@ -1,8 +1,8 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/games/helper/submit_helper.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/helper/submit_helper.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -34,7 +34,7 @@ class PointBtnThreeDart extends StatelessWidget {
 
   _pointBtnClicked(String pointBtnText, BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     if (activeBtn as bool && gameX01.getCanBePressed) {
       _updateCurrentThreeDarts(gameX01, pointBtnText);
@@ -92,7 +92,7 @@ class PointBtnThreeDart extends StatelessWidget {
       String scoredField, String scoredFieldWithPointType, BuildContext context,
       [bool shouldSubmitTeamStats = false]) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     late final PlayerOrTeamGameStatisticsX01 currentStats;
     if (shouldSubmitTeamStats) {
@@ -191,7 +191,7 @@ class PointBtnThreeDart extends StatelessWidget {
     }
   }
 
-  bool _isCheckoutCountingEnabled(GameSettingsX01 gameSettingsX01) {
+  bool _isCheckoutCountingEnabled(GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getEnableCheckoutCounting &&
         gameSettingsX01.getCheckoutCountingFinallyDisabled == false) {
       return true;

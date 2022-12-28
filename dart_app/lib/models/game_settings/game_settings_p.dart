@@ -1,10 +1,10 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
 
-class GameSettings with ChangeNotifier {
+class GameSettings_P with ChangeNotifier {
   List<Team> _teams = [];
   List<Player> _players = [];
 
@@ -14,9 +14,9 @@ class GameSettings with ChangeNotifier {
   List<Player> get getPlayers => this._players;
   set setPlayers(List<Player> value) => this._players = value;
 
-  GameSettings() {}
+  GameSettings_P() {}
 
-  factory GameSettings.fromMapX01(map) {
+  factory GameSettings_P.fromMapX01(map) {
     late ModeOutIn modeIn;
     late ModeOutIn modeOut;
     late BestOfOrFirstToEnum mode;
@@ -68,7 +68,7 @@ class GameSettings with ChangeNotifier {
       }
     }
 
-    return GameSettingsX01.firestore(
+    return GameSettingsX01_P.firestore(
       checkoutCounting: map['checkoutCounting'],
       legs: map['legs'],
       modeIn: modeIn,

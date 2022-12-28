@@ -1,10 +1,10 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -25,7 +25,7 @@ class Submit {
       int thrownDarts = 3,
       int checkoutCount = 0]) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     bool isInputMethodThreeDarts =
         gameSettingsX01.getInputMethod == InputMethod.ThreeDarts ? true : false;
@@ -206,7 +206,7 @@ class Submit {
   // stats that need to be submitted immediately after the first dart in order to show it properly in the ui
   static submitStatsForThreeDartsMode(
       GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01,
+      GameSettingsX01_P gameSettingsX01,
       int scoredPoints,
       String scoredFieldWithPointType,
       bool shouldSubmitTeamStats,
@@ -270,7 +270,7 @@ class Submit {
   /************************************************************/
 
   static _setScores(PlayerOrTeamGameStatisticsX01 stats, int totalPoints,
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     // set precise scores
     if (stats.getPreciseScores.containsKey(totalPoints)) {
       stats.getPreciseScores[totalPoints] += 1;
@@ -317,7 +317,7 @@ class Submit {
   }
 
   static bool _shouldUpdateStatsForPlayersOfSameTeam(
-      bool shouldSubmitTeamStats, GameSettingsX01 gameSettingsX01) {
+      bool shouldSubmitTeamStats, GameSettingsX01_P gameSettingsX01) {
     return !shouldSubmitTeamStats &&
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team;
   }
@@ -333,7 +333,7 @@ class Submit {
       return false;
     }
 
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final String currentSetLeg =
         gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01);
     final bool isSingleMode =
@@ -489,7 +489,7 @@ class Submit {
 
   static _updateLegsSets(
       PlayerOrTeamGameStatisticsX01 currentStats,
-      GameSettingsX01 gameSettingsX01,
+      GameSettingsX01_P gameSettingsX01,
       GameX01 gameX01,
       bool shouldSubmitTeamStats) {
     // update won legs
@@ -537,7 +537,7 @@ class Submit {
   }
 
   // to show the right order in the finish screen
-  static _sortPlayerStats(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+  static _sortPlayerStats(GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     //convert playerGameStatistics to playerOrTeamGameStatsX01 -> otherwise cant sort
     List<PlayerOrTeamGameStatisticsX01> temp = [];
     for (PlayerOrTeamGameStatistics stats in gameX01.getPlayerGameStatistics) {
@@ -553,7 +553,7 @@ class Submit {
     gameX01.setPlayerGameStatistics = temp;
   }
 
-  static bool _isGameDraw(GameX01 gameX01, GameSettingsX01 gameSettingsX01,
+  static bool _isGameDraw(GameX01 gameX01, GameSettingsX01_P gameSettingsX01,
       bool shouldSubmitTeamStats) {
     if (!gameSettingsX01.getDrawMode) {
       return false;
@@ -575,7 +575,7 @@ class Submit {
   }
 
   static _setNextTeamAndPlayer(PlayerOrTeamGameStatisticsX01 stats,
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     final List<Team> teams = gameSettingsX01.getTeams;
     int indexOfCurrentTeam = -1;
     for (int i = 0; i < teams.length; i++) {
@@ -627,7 +627,7 @@ class Submit {
   }
 
   static _setNextPlayer(PlayerOrTeamGameStatisticsX01 stats, GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01) {
+      GameSettingsX01_P gameSettingsX01) {
     final List<Player> players = gameSettingsX01.getPlayers;
 
     if (_shouldSetNextPlayerOrTeam(gameX01, gameSettingsX01, stats)) {
@@ -657,7 +657,7 @@ class Submit {
   // case 2 -> input method is three darts -> 3 darts entered
   // case 3 -> input method is three darts -> 1 or 2 darts entered & finished leg/set/game
   static bool _shouldSetNextPlayerOrTeam(GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01, PlayerOrTeamGameStatisticsX01 stats) {
+      GameSettingsX01_P gameSettingsX01, PlayerOrTeamGameStatisticsX01 stats) {
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       return true;
     } else if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
@@ -690,7 +690,7 @@ class Submit {
   }
 
   static _setCheckoutCountAtThrownDarts(PlayerOrTeamGameStatisticsX01 stats,
-      int checkoutCount, GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      int checkoutCount, GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     if (checkoutCount == 0) {
       return;
     }
@@ -705,7 +705,7 @@ class Submit {
   }
 
   static bool _shouldSubmit(
-      String thrownPoints, GameSettingsX01 gameSettingsX01, GameX01 gameX01) {
+      String thrownPoints, GameSettingsX01_P gameSettingsX01, GameX01 gameX01) {
     if (thrownPoints == 'Bust' ||
         gameSettingsX01.getInputMethod == InputMethod.Round) {
       return true;
@@ -782,27 +782,27 @@ class Submit {
   }
 
   static bool _gameWonFirstToWithSets(
-      int setsWon, GameSettingsX01 gameSettingsX01) {
+      int setsWon, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
         gameSettingsX01.getSetsEnabled &&
         gameSettingsX01.getSets == setsWon;
   }
 
   static bool _gameWonFirstToWithLegs(
-      int legsWon, GameSettingsX01 gameSettingsX01) {
+      int legsWon, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
         legsWon >= gameSettingsX01.getLegs;
   }
 
   static bool _gameWonBestOfWithSets(
-      int setsWon, GameSettingsX01 gameSettingsX01) {
+      int setsWon, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
         gameSettingsX01.getSetsEnabled &&
         ((setsWon * 2) - 1) == gameSettingsX01.getSets;
   }
 
   static bool _gameWonBestOfWithLegs(
-      int legsWon, GameSettingsX01 gameSettingsX01) {
+      int legsWon, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
         ((legsWon * 2) - 1) == gameSettingsX01.getLegs;
   }
@@ -844,7 +844,7 @@ class Submit {
   }
 
   static bool _isGameWon(PlayerOrTeamGameStatisticsX01 stats, GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01, BuildContext context) {
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
     if (gameX01.getReachedSuddenDeath) {
       return true;
     }
@@ -889,7 +889,7 @@ class Submit {
   }
 
   static bool _reachedSuddenDeath(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = true;
 
     for (PlayerOrTeamGameStatisticsX01 stats

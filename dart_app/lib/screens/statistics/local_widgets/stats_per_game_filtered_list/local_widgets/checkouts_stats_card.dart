@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 

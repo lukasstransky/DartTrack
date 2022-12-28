@@ -1,4 +1,4 @@
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/point_btn_three_darts.dart';
 
 import 'package:flutter/material.dart';

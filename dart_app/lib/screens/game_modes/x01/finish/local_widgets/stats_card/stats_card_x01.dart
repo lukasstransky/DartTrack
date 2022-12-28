@@ -1,5 +1,5 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/game_details.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -28,7 +28,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = widget.gameX01.getGameSettings;
+    final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
 
     return Padding(
       padding: EdgeInsets.only(top: widget.isFinishScreen ? 15.h : 2.h),

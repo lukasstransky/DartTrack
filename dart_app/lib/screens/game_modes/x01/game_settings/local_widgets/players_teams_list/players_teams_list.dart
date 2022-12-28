@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/local_widgets/players_list.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/local_widgets/teams_list.dart';
 
@@ -15,7 +15,7 @@ class PlayersTeamsList extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Selector<GameSettingsX01, SingleOrTeamEnum>(
+          Selector<GameSettingsX01_P, SingleOrTeamEnum>(
             selector: (_, gameSettingsX01) => gameSettingsX01.getSingleOrTeam,
             builder: (_, singleOrTeam, __) {
               if (singleOrTeam == SingleOrTeamEnum.Single)

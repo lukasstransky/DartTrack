@@ -1,10 +1,10 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -327,7 +327,7 @@ class Utils {
     return '';
   }
 
-  static double getHeightForWidget(GameSettingsX01 gameSettingsX01) {
+  static double getHeightForWidget(GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameSettingsX01.getPlayers.length >= 4 &&
         !gameSettingsX01.getSetsEnabled &&
@@ -341,7 +341,7 @@ class Utils {
   }
 
   static dynamic getPlayersOrTeamStatsList(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameX01.getAreTeamStatsDisplayed) {
       return gameX01.getTeamGameStatistics;
@@ -351,19 +351,19 @@ class Utils {
   }
 
   static bool teamStatsDisplayed(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameX01.getAreTeamStatsDisplayed;
   }
 
   static bool playerStatsDisplayedInTeamMode(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         !gameX01.getAreTeamStatsDisplayed;
   }
 
-  static Row setLegStrings(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01, BuildContext context) {
+  static Row setLegStrings(GameX01 gameX01, GameSettingsX01_P gameSettingsX01,
+      BuildContext context) {
     return Row(
       children: [
         SizedBox(

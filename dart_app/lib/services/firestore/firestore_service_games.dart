@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -65,8 +65,8 @@ class FirestoreServiceGames {
   }
 
   Future<void> resetStatistics(BuildContext context) async {
-    final StatisticsFirestoreX01 statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01>();
+    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01_P>();
 
     for (Game game in statisticsFirestoreX01.games) {
       deleteGame(game, context);
@@ -78,8 +78,8 @@ class FirestoreServiceGames {
         .collection(this._getFirestoreGamesPath())
         .where('name', isEqualTo: 'X01')
         .get();
-    final StatisticsFirestoreX01 statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01>();
+    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01_P>();
 
     statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
     if (!statisticsFirestoreX01.noGamesPlayed) {
@@ -93,7 +93,7 @@ class FirestoreServiceGames {
     late dynamic firestoreStats;
     switch (mode) {
       case 'X01':
-        firestoreStats = context.read<StatisticsFirestoreX01>();
+        firestoreStats = context.read<StatisticsFirestoreX01_P>();
       //add other modes
     }
 

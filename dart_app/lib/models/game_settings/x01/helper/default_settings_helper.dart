@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/default_settings_x01.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:flutter/foundation.dart';
@@ -11,8 +11,8 @@ import 'package:provider/provider.dart';
 //teams not supported
 class DefaultSettingsHelper {
   static setDefaultSettings(BuildContext context) {
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
-    final settingsX01 = context.read<GameSettingsX01>();
+    final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
+    final settingsX01 = context.read<GameSettingsX01_P>();
 
     defaultSettingsX01.automaticallySubmitPoints =
         settingsX01.getAutomaticallySubmitPoints;
@@ -68,8 +68,8 @@ class DefaultSettingsHelper {
   }
 
   static setSettingsFromDefault(BuildContext context) {
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
-    final settingsX01 = context.read<GameSettingsX01>();
+    final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
+    final settingsX01 = context.read<GameSettingsX01_P>();
 
     settingsX01.setAutomaticallySubmitPoints =
         defaultSettingsX01.automaticallySubmitPoints;
@@ -116,8 +116,8 @@ class DefaultSettingsHelper {
   }
 
   static bool defaultSettingsSelected(BuildContext context) {
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
-    final settingsX01 = context.read<GameSettingsX01>();
+    final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
+    final settingsX01 = context.read<GameSettingsX01_P>();
 
     if (defaultSettingsX01.automaticallySubmitPoints ==
             settingsX01.getAutomaticallySubmitPoints &&
@@ -163,7 +163,7 @@ class DefaultSettingsHelper {
   }
 
   static bool generalDefaultSettingsSelected(BuildContext context) {
-    final settingsX01 = context.read<GameSettingsX01>();
+    final settingsX01 = context.read<GameSettingsX01_P>();
 
     if (settingsX01.getAutomaticallySubmitPoints == DEFAULT_AUTO_SUBMIT_POINTS &&
         settingsX01.getCallerEnabled == DEFAULT_CALLER_ENABLED &&
@@ -206,7 +206,7 @@ class DefaultSettingsHelper {
   }
 
   static bool _checkIfDefaultPlayersAreSelected(
-      GameSettingsX01 settingsX01, BuildContext context) {
+      GameSettingsX01_P settingsX01, BuildContext context) {
     return settingsX01.getPlayers.length == 1 &&
         settingsX01.getPlayers[0].getName ==
             context.read<AuthService>().getPlayer!.getName;

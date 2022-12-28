@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/players_teams_list_dialogs.dart';
@@ -24,7 +24,7 @@ class _TeamsListState extends State<TeamsList> {
   }
 
   _deleteIconClicked(
-      Team team, Player player, GameSettingsX01 gameSettingsX01) {
+      Team team, Player player, GameSettingsX01_P gameSettingsX01) {
     if (team.getPlayers.length == 1) {
       PlayersTeamsListDialogs.showDialogForDeletingTeamAsLastPlayer(
           context, team, gameSettingsX01, player);
@@ -35,9 +35,9 @@ class _TeamsListState extends State<TeamsList> {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    return Selector<GameSettingsX01, Tuple2<List<Team>, List<Player>>>(
+    return Selector<GameSettingsX01_P, Tuple2<List<Team>, List<Player>>>(
       selector: (_, gameSettingsX01) =>
           Tuple2(gameSettingsX01.getTeams, gameSettingsX01.getPlayers),
       shouldRebuild: (previous, next) => true,

@@ -1,15 +1,16 @@
 import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/models/game_settings/default_settings_x01.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
+import 'package:dart_app/screens/game_modes/score_training/game_settings_score_training.dart';
 import 'package:dart_app/screens/game_modes/x01/open_games/open_games.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/finish.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings.dart';
 import 'package:dart_app/screens/home/home.dart';
@@ -73,19 +74,19 @@ class MyApp extends StatelessWidget {
             create: (context) => context.read<AuthService>().authStateChanges,
             initialData: null),
         ChangeNotifierProvider(
-          create: (_) => GameSettingsX01(),
+          create: (_) => GameSettingsX01_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => GameX01(),
         ),
         ChangeNotifierProvider(
-          create: (_) => StatisticsFirestoreX01(),
+          create: (_) => StatisticsFirestoreX01_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => OpenGamesFirestore(),
         ),
         ChangeNotifierProvider(
-          create: (_) => DefaultSettingsX01(),
+          create: (_) => DefaultSettingsX01_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => Auth(),
@@ -113,7 +114,7 @@ class MyApp extends StatelessWidget {
             LoginRegisterPage.routeName: (ctx) => LoginRegisterPage(),
             Home.routeName: (ctx) => Home(),
             ForgotPassword.routeName: (ctx) => ForgotPassword(),
-            GameSettings.routeName: (ctx) => GameSettings(),
+            GameSettingsX01.routeName: (ctx) => GameSettingsX01(),
             Game.routeName: (ctx) => Game(),
             InGameSettings.routeName: (ctx) => InGameSettings(),
             Finish.routeName: (ctx) => Finish(),
@@ -122,6 +123,8 @@ class MyApp extends StatelessWidget {
             StatsPerGameFilteredList.routeName: (ctx) =>
                 StatsPerGameFilteredList(),
             OpenGames.routeName: (ctx) => OpenGames(),
+            GameSettingsScoreTraining.routeName: (ctx) =>
+                GameSettingsScoreTraining(),
           },
           home: AuthWrapper(),
         );

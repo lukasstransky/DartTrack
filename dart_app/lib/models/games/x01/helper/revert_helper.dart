@@ -1,14 +1,14 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-import '../../player.dart';
+import '../../../player.dart';
 
 class Revert {
   /************************************************************/
@@ -18,7 +18,7 @@ class Revert {
   static revertPoints(BuildContext context,
       [bool shouldRevertTeamStats = false]) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     if (!_isRevertPossible(gameX01, gameSettingsX01) &&
         !shouldRevertTeamStats) {
@@ -258,7 +258,7 @@ class Revert {
 
   //returns true if at least one player has a score left
   static bool _isRevertPossible(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = false;
     for (PlayerOrTeamGameStatisticsX01 stats
         in gameX01.getPlayerGameStatistics) {
@@ -281,7 +281,7 @@ class Revert {
 
   static _revertStats(
       GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01,
+      GameSettingsX01_P gameSettingsX01,
       PlayerOrTeamGameStatisticsX01 currentStats,
       int points,
       bool legOrSetReverted,
@@ -528,7 +528,7 @@ class Revert {
   }
 
   static bool _allPlayersTeamsHaveStartPoints(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
       for (PlayerOrTeamGameStatisticsX01 stats
           in gameX01.getPlayerGameStatistics) {
@@ -548,7 +548,7 @@ class Revert {
   }
 
   static _setPreviousPlayerOrTeam(GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01, bool legSetOrGameReverted) {
+      GameSettingsX01_P gameSettingsX01, bool legSetOrGameReverted) {
     if (!(gameSettingsX01.getInputMethod == InputMethod.Round ||
         (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
             gameX01.getAmountOfDartsThrown() == 0))) {
@@ -563,7 +563,7 @@ class Revert {
   }
 
   static _setPreviousPlayerOrTeamLegSetReverted(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     // set start player/team index
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single &&
         gameX01.getPlayerOrTeamLegStartIndex == 0) {
@@ -606,7 +606,7 @@ class Revert {
   }
 
   static _setPreviousPlayerOrTeamNoLegSetReverted(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     final int indexOfCurrentPlayer = gameSettingsX01.getPlayers.indexOf(
         gameSettingsX01.getPlayers
             .where((p) => p.getName == gameX01.getCurrentPlayerToThrow.getName)
@@ -682,8 +682,8 @@ class Revert {
     }
   }
 
-  static bool _isCompleteRound(GameX01 gameX01, GameSettingsX01 gameSettingsX01,
-      bool shouldRevertTeamStats) {
+  static bool _isCompleteRound(GameX01 gameX01,
+      GameSettingsX01_P gameSettingsX01, bool shouldRevertTeamStats) {
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       return true;
     } else if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&

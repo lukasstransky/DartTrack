@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class SelectInputMethod extends StatelessWidget {
 class RoundBtn extends StatelessWidget {
   const RoundBtn({Key? key}) : super(key: key);
 
-  _roundBtnClicked(BuildContext context, GameSettingsX01 gameSettingsX01) {
+  _roundBtnClicked(BuildContext context, GameSettingsX01_P gameSettingsX01) {
     if (context.read<GameX01>().getAmountOfDartsThrown() != 0) {
       Fluttertoast.showToast(
           msg: 'In order to switch, please finish the round!',
@@ -42,7 +42,7 @@ class RoundBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isRoundSelected =
         gameSettingsX01.getInputMethod == InputMethod.Round ? true : false;
 
@@ -101,7 +101,7 @@ class RoundBtn extends StatelessWidget {
 class ThreeDartsBtn extends StatelessWidget {
   const ThreeDartsBtn({Key? key}) : super(key: key);
 
-  _threeDartsBtnClicked(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+  _threeDartsBtnClicked(GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     gameX01.setCurrentPointsSelected = 'Points';
     gameSettingsX01.setInputMethod = InputMethod.ThreeDarts;
     gameSettingsX01.notify();
@@ -109,7 +109,7 @@ class ThreeDartsBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isThreeDartsSelected =
         gameSettingsX01.getInputMethod == InputMethod.ThreeDarts ? true : false;
 

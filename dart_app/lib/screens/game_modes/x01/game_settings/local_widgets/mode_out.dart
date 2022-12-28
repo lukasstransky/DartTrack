@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class ModeOut extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01>(
+      child: Consumer<GameSettingsX01_P>(
         builder: (_, gameSettingsX01, __) => Container(
           width: WIDTH_GAMESETTINGS.w,
           height: Utils.getHeightForWidget(gameSettingsX01).h,
@@ -31,7 +31,7 @@ class ModeOut extends StatelessWidget {
 class SingleOutBtn extends StatelessWidget {
   const SingleOutBtn({Key? key}) : super(key: key);
 
-  _singleOutClicked(GameSettingsX01 gameSettingsX01) {
+  _singleOutClicked(GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.setModeOut = ModeOutIn.Single;
     gameSettingsX01.setEnableCheckoutCounting = false;
     gameSettingsX01.notify();
@@ -39,7 +39,7 @@ class SingleOutBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isSingleOutMode = gameSettingsX01.getModeOut == ModeOutIn.Single;
 
     return Expanded(
@@ -83,7 +83,7 @@ class SingleOutBtn extends StatelessWidget {
 class DoubleOutBtn extends StatelessWidget {
   const DoubleOutBtn({Key? key}) : super(key: key);
 
-  _doubleOutClicked(GameSettingsX01 gameSettingsX01) {
+  _doubleOutClicked(GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.setEnableCheckoutCounting = false;
     gameSettingsX01.setModeOut = ModeOutIn.Double;
     gameSettingsX01.notify();
@@ -91,7 +91,7 @@ class DoubleOutBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isDoubleOutMode = gameSettingsX01.getModeOut == ModeOutIn.Double;
 
     return Expanded(
@@ -138,7 +138,7 @@ class DoubleOutBtn extends StatelessWidget {
 class MasterOutBtn extends StatelessWidget {
   const MasterOutBtn({Key? key}) : super(key: key);
 
-  _masterOutClicked(GameSettingsX01 gameSettingsX01) {
+  _masterOutClicked(GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.setModeOut = ModeOutIn.Master;
     gameSettingsX01.setEnableCheckoutCounting = false;
     gameSettingsX01.notify();
@@ -146,7 +146,7 @@ class MasterOutBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isMasterOutMode = gameSettingsX01.getModeOut == ModeOutIn.Master;
 
     return Expanded(

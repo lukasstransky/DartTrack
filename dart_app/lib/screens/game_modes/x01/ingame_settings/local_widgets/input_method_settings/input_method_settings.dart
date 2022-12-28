@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/auto_submit_scored_points_switch.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/select_input_method.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/show_input_method_switch.dart';
@@ -16,8 +16,8 @@ class InputMethodSettings extends StatelessWidget {
 
   int _calcCardHeight(BuildContext context, InputMethod inputMethod,
       bool showMostScoredPoints) {
-    final StatisticsFirestoreX01 statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01>();
+    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01_P>();
 
     if (inputMethod == InputMethod.Round && showMostScoredPoints) {
       if (!statisticsFirestoreX01.noGamesPlayed) {
@@ -32,7 +32,7 @@ class InputMethodSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GameSettingsX01, Tuple2<InputMethod, bool>>(
+    return Selector<GameSettingsX01_P, Tuple2<InputMethod, bool>>(
       selector: (_, gameSettingsX01) => new Tuple2(
           gameSettingsX01.getInputMethod,
           gameSettingsX01.getShowMostScoredPoints),

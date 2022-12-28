@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ class ModeIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01>(
+      child: Consumer<GameSettingsX01_P>(
         builder: (_, gameSettingsX01, __) => Container(
           width: WIDTH_GAMESETTINGS.w,
           height: Utils.getHeightForWidget(gameSettingsX01).h,
@@ -35,7 +35,7 @@ class MasterInBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isMasterModeIn = gameSettingsX01.getModeIn == ModeOutIn.Master;
 
     return Expanded(
@@ -86,7 +86,7 @@ class DoubleInBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isDoubleModeIn = gameSettingsX01.getModeIn == ModeOutIn.Double;
 
     return Expanded(
@@ -140,7 +140,7 @@ class SingleInBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isSingleModeIn = gameSettingsX01.getModeIn == ModeOutIn.Single;
 
     return Expanded(

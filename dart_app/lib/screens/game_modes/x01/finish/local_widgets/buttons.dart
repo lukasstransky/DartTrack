@@ -1,5 +1,5 @@
-import 'package:dart_app/models/games/helper/revert_helper.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/x01/helper/revert_helper.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/utils.dart';
 

@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/display_team_or_player_names.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/legs_sets_won.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/show_teams_or_players_stats_btn.dart';

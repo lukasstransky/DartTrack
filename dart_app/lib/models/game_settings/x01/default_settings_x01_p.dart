@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:flutter/cupertino.dart';
 
-class DefaultSettingsX01 with ChangeNotifier {
+class DefaultSettingsX01_P with ChangeNotifier {
   String _id = '';
   bool _isSelected = false;
 
@@ -34,7 +34,7 @@ class DefaultSettingsX01 with ChangeNotifier {
   late bool _showInputMethodInGameScreen;
   late bool _drawMode;
 
-  DefaultSettingsX01() {
+  DefaultSettingsX01_P() {
     this.resetValues(null);
   }
 

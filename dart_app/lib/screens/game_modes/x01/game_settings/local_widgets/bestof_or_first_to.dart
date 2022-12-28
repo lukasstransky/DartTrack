@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:sizer/sizer.dart';
 
 class BestOfOrFirstTo extends StatelessWidget {
   _switchBestOfOrFirstTo(
-      BuildContext context, GameSettingsX01 gameSettingsX01) {
+      BuildContext context, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf) {
       gameSettingsX01.setMode = BestOfOrFirstToEnum.FirstTo;
 
@@ -40,7 +40,7 @@ class BestOfOrFirstTo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01>(
+      child: Consumer<GameSettingsX01_P>(
         builder: (_, gameSettingsX01, __) => Container(
           width: WIDTH_GAMESETTINGS.w,
           height: Utils.getHeightForWidget(gameSettingsX01).h,
@@ -65,7 +65,7 @@ class BestOfBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isBestOfMode =
         gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf;
 
@@ -119,7 +119,7 @@ class FirstToBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isFirstToMode =
         gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo;
 

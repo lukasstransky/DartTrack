@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
     }
   }
 
-  bool _moreThanFiveScores(GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+  bool _moreThanFiveScores(GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     for (PlayerOrTeamGameStatisticsX01 stats
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
       if (widget.mostScoresPerDart &&
@@ -48,7 +48,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
   }
 
   bool _atLeastOneRoundPlayedWithThreeDartsMode(
-      GameSettingsX01 gameSettingsX01) {
+      GameSettingsX01_P gameSettingsX01) {
     for (PlayerOrTeamGameStatisticsX01 stats
         in Utils.getPlayersOrTeamStatsList(widget.gameX01, gameSettingsX01)) {
       if (stats.getAllScoresPerDart.isNotEmpty) {
@@ -60,7 +60,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = widget.gameX01.getGameSettings;
+    final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
     final bool atLeastOneRoundPlayedWithThreeDartsMode =
         _atLeastOneRoundPlayedWithThreeDartsMode(gameSettingsX01);
 

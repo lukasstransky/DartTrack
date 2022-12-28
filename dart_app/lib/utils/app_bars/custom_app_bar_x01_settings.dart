@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/default_settings_x01.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
+import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/x01/helper/default_settings_helper.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -60,7 +60,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   }
 
   _showDialogForDefaultSettings() async {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool defaultSettingsSelected =
         DefaultSettingsHelper.defaultSettingsSelected(context);
 
@@ -144,8 +144,8 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   }
 
   _setOrUndoDefaultSettings(
-      GameSettingsX01 gameSettingsX01, bool defaultSettingsSelected) {
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+      GameSettingsX01_P gameSettingsX01, bool defaultSettingsSelected) {
+    final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
     final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
         context.read<FirestoreServiceDefaultSettings>();
 
@@ -164,8 +164,8 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   }
 
   _defaultSettingsBtnClicked() {
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     if (DefaultSettingsHelper.generalDefaultSettingsSelected(context) &&
         !defaultSettingsX01.isSelected) {
@@ -205,7 +205,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 10),
-          child: Consumer<GameSettingsX01>(
+          child: Consumer<GameSettingsX01_P>(
             builder: (_, gameSettingsX01, __) => IconButton(
               onPressed: () async => _defaultSettingsBtnClicked(),
               icon: DefaultSettingsHelper.defaultSettingsSelected(context)

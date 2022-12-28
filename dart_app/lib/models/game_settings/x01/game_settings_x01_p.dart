@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings.dart';
+import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 
@@ -8,7 +8,7 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class GameSettingsX01 extends GameSettings {
+class GameSettingsX01_P extends GameSettings_P {
   SingleOrTeamEnum _singleOrTeam = DEFAULT_SINGLE_OR_TEAM;
   BestOfOrFirstToEnum _mode = DEFAULT_MODE;
   int _points = DEFAULT_POINTS;
@@ -39,9 +39,9 @@ class GameSettingsX01 extends GameSettings {
   bool _drawMode = DEFAULT_DRAW_MODE;
   List<int> _teamNamingIds = [];
 
-  GameSettingsX01() {}
+  GameSettingsX01_P() {}
 
-  GameSettingsX01.firestore({
+  GameSettingsX01_P.firestore({
     required bool checkoutCounting,
     required int legs,
     required int sets,
@@ -465,7 +465,7 @@ class GameSettingsX01 extends GameSettings {
   }
 
   Team findTeamForPlayer(
-      String playerNameToFind, GameSettingsX01 gameSettingsX01) {
+      String playerNameToFind, GameSettingsX01_P gameSettingsX01) {
     late Team result;
     for (Team team in gameSettingsX01.getTeams) {
       for (Player player in team.getPlayers) {

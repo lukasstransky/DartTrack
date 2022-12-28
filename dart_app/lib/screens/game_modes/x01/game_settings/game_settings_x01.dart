@@ -1,5 +1,5 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/game_settings/helper/default_settings_helper.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/x01/helper/default_settings_helper.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/add_player_team_btn/add_player_team_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/advanced_settings.dart';
@@ -21,14 +21,14 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class GameSettings extends StatefulWidget {
+class GameSettingsX01 extends StatefulWidget {
   static const routeName = '/settingsX01';
 
   @override
-  _GameSettingsState createState() => _GameSettingsState();
+  _GameSettingsX01State createState() => _GameSettingsX01State();
 }
 
-class _GameSettingsState extends State<GameSettings> {
+class _GameSettingsX01State extends State<GameSettingsX01> {
   @override
   initState() {
     super.initState();
@@ -44,7 +44,7 @@ class _GameSettingsState extends State<GameSettings> {
 
   _addCurrentUserToPlayers() {
     final Player? currentUserAsPlayer = context.read<AuthService>().getPlayer;
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     gameSettingsX01.getPlayers.add(new Player(name: 'Strainski'));
     //todo comment out

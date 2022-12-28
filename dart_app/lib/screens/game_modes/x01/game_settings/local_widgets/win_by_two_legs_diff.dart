@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ final GlobalKey<FormState> _formKeyLegDifference = GlobalKey<FormState>();
 
 class WinByTwoLegsDifference extends StatelessWidget {
   _showDialogForSuddenDeath(
-      BuildContext context, GameSettingsX01 gameSettingsX01) {
+      BuildContext context, GameSettingsX01_P gameSettingsX01) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -197,7 +197,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
     );
   }
 
-  _switchWinByTwoLegsDifference(bool value, GameSettingsX01 gameSettingsX01) {
+  _switchWinByTwoLegsDifference(bool value, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getWinByTwoLegsDifference) {
       gameSettingsX01.setSuddenDeath = false;
       gameSettingsX01.setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
@@ -209,7 +209,7 @@ class WinByTwoLegsDifference extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01>(
+    return Consumer<GameSettingsX01_P>(
       builder: (_, gameSettingsX01, __) {
         if (!gameSettingsX01.getSetsEnabled &&
             gameSettingsX01.getLegs > 1 &&

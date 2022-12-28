@@ -1,12 +1,12 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class DrawMode extends StatelessWidget {
-  double _getProperValueForTransformation(GameSettingsX01 gameSettingsX01) {
+  double _getProperValueForTransformation(GameSettingsX01_P gameSettingsX01) {
     if (_checkoutCountingPresent(gameSettingsX01) &&
         _winByTwoLegsPresent(gameSettingsX01)) {
       return -3.0;
@@ -22,7 +22,7 @@ class DrawMode extends StatelessWidget {
     return -3.0;
   }
 
-  bool _noCheckoutCountAndWinByDiffPresent(GameSettingsX01 gameSettingsX01) {
+  bool _noCheckoutCountAndWinByDiffPresent(GameSettingsX01_P gameSettingsX01) {
     if (!_checkoutCountingPresent(gameSettingsX01) &&
         !_winByTwoLegsPresent(gameSettingsX01)) {
       return true;
@@ -30,17 +30,17 @@ class DrawMode extends StatelessWidget {
     return false;
   }
 
-  bool _checkoutCountingPresent(GameSettingsX01 gameSettingsX01) {
+  bool _checkoutCountingPresent(GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getModeOut == ModeOutIn.Double;
   }
 
-  bool _winByTwoLegsPresent(GameSettingsX01 gameSettingsX01) {
+  bool _winByTwoLegsPresent(GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getLegs > 1 &&
         !gameSettingsX01.getSetsEnabled &&
         !gameSettingsX01.getDrawMode;
   }
 
-  _drawModeSwitchPressed(GameSettingsX01 gameSettingsX01, bool value) {
+  _drawModeSwitchPressed(GameSettingsX01_P gameSettingsX01, bool value) {
     if (value == false) {
       gameSettingsX01.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
       if (gameSettingsX01.getSetsEnabled) {
@@ -66,7 +66,7 @@ class DrawMode extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01>(
+    return Consumer<GameSettingsX01_P>(
       builder: (_, gameSettingsX01, __) {
         if (!gameSettingsX01.getWinByTwoLegsDifference) {
           return Container(

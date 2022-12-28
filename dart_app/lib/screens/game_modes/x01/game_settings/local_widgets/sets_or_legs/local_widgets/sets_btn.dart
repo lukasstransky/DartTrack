@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SetsBtn extends StatelessWidget {
-  _setsBtnClicked(GameSettingsX01 gameSettingsX01) {
+  _setsBtnClicked(GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.setSetsEnabled = !gameSettingsX01.getSetsEnabled;
     gameSettingsX01.setWinByTwoLegsDifference = false;
     gameSettingsX01.setSuddenDeath = false;
@@ -38,7 +38,7 @@ class SetsBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Consumer<GameSettingsX01>(
+      child: Consumer<GameSettingsX01_P>(
         builder: (_, gameSettingsX01, __) => Container(
           height: Utils.getHeightForWidget(gameSettingsX01).h,
           child: ElevatedButton(

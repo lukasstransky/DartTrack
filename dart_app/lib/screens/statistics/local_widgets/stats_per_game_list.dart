@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
@@ -36,7 +36,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     _mode = arguments.entries.first.value.toString();
   }
 
-  String _getMessage(StatisticsFirestoreX01 statisticsFirestoreX01) {
+  String _getMessage(StatisticsFirestoreX01_P statisticsFirestoreX01) {
     if (!statisticsFirestoreX01.noGamesPlayed &&
         statisticsFirestoreX01.favouriteGames.isEmpty) {
       return 'There are currently no games selected as favourite.';
@@ -66,7 +66,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   void _deleteGame(
-      Game game, StatisticsFirestoreX01 statisticsFirestoreX01) async {
+      Game game, StatisticsFirestoreX01_P statisticsFirestoreX01) async {
     await context.read<FirestoreServiceGames>().deleteGame(game, context);
 
     final Game toDelete = statisticsFirestoreX01.games
@@ -88,8 +88,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
   @override
   Widget build(BuildContext context) {
-    final StatisticsFirestoreX01 statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01>();
+    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01_P>();
     final List<Game> games =
         statisticsFirestoreX01.currentFilterValue != FilterValue.Overall
             ? statisticsFirestoreX01.filteredGames
@@ -97,7 +97,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
     return Scaffold(
       appBar: CustomAppBarStatsList(title: '${_mode} Games'),
-      body: Consumer<StatisticsFirestoreX01>(
+      body: Consumer<StatisticsFirestoreX01_P>(
         builder: (_, statisticsFirestore, __) => (statisticsFirestore
                     .showFavouriteGames
                 ? statisticsFirestore.favouriteGames.isNotEmpty

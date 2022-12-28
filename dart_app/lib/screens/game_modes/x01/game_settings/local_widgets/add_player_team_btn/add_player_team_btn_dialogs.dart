@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -23,7 +23,7 @@ class AddPlayerTeamBtnDialogs {
     _selectedBotAvgValue = DEFAULT_BOT_AVG_SLIDER_VALUE;
   }
 
-  static bool showBotOption(GameSettingsX01 gameSettingsX01) {
+  static bool showBotOption(GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
       return !(gameSettingsX01.getCountOfBotPlayers() >= 1);
     }
@@ -32,7 +32,7 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static showDialogForAddingPlayer(
-      GameSettingsX01 gameSettingsX01, BuildContext context) {
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
     NewPlayer? newPlayer =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
             ? NewPlayer.Bot
@@ -236,8 +236,8 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static _submitNewPlayer(GameSettingsX01 gameSettingsX01, BuildContext context,
-      NewPlayer? newPlayer) async {
+  static _submitNewPlayer(GameSettingsX01_P gameSettingsX01,
+      BuildContext context, NewPlayer? newPlayer) async {
     if (!_formKeyNewPlayer.currentState!.validate()) return;
     _formKeyNewPlayer.currentState!.save();
 
@@ -281,7 +281,7 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static showDialogForAddingTeam(
-      GameSettingsX01 gameSettingsX01, BuildContext context) {
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -420,7 +420,8 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static _submitNewTeam(GameSettingsX01 gameSettingsX01, BuildContext context) {
+  static _submitNewTeam(
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
     if (!_formKeyNewTeam.currentState!.validate()) return;
 
     _formKeyNewTeam.currentState!.save();
@@ -431,7 +432,7 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static _addNewPlayerToSpecificTeam(Player playerToAdd, Team? teamForNewPlayer,
-      GameSettingsX01 gameSettingsX01) {
+      GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.getPlayers.add(playerToAdd);
     for (Team team in gameSettingsX01.getTeams)
       if (team == teamForNewPlayer)
@@ -441,7 +442,7 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static showDialogForAddingPlayerOrTeam(
-      GameSettingsX01 gameSettingsX01, BuildContext context) {
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
     String? teamOrPlayer = 'player';
 
     showDialog(
@@ -555,7 +556,7 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static Team _getTeamWithLeastPlayers(GameSettingsX01 gameSettingsX01) {
+  static Team _getTeamWithLeastPlayers(GameSettingsX01_P gameSettingsX01) {
     Team teamWithLeastPlayers = gameSettingsX01.getTeams[0];
     for (Team team in gameSettingsX01.getTeams) {
       if (team.getPlayers.length < teamWithLeastPlayers.getPlayers.length) {
@@ -585,14 +586,14 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static _submitNewTeamForPlayer(Player player, Team? selectedTeam,
-      GameSettingsX01 gameSettings, BuildContext context) {
+      GameSettingsX01_P gameSettings, BuildContext context) {
     _addNewPlayerToSpecificTeam(player, selectedTeam, gameSettings);
 
     Navigator.of(context).pop();
   }
 
   static _showDialogForSelectingTeam(Player playerToAdd, List<Team> teams,
-      GameSettingsX01 gameSettingsX01, BuildContext context) {
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
     Team? selectedTeam;
     if (teams.length >= 2) {
       selectedTeam =
@@ -728,7 +729,7 @@ class AddPlayerTeamBtnDialogs {
 class GuestTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return TextFormField(
       controller: newPlayerController,

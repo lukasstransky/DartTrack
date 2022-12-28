@@ -1,9 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/finish_ways.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/game_stats.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/leg_beginner_asset.dart';
@@ -21,8 +21,8 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
 
   final PlayerOrTeamGameStatisticsX01? currPlayerOrTeamGameStatsX01;
 
-  Color _getBackgroundColor(
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01, BuildContext context) {
+  Color _getBackgroundColor(GameX01 gameX01, GameSettingsX01_P gameSettingsX01,
+      BuildContext context) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
       if (Player.samePlayer(gameX01.getCurrentPlayerToThrow,
           this.currPlayerOrTeamGameStatsX01!.getPlayer)) {
@@ -50,7 +50,7 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isSingleMode =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
 
@@ -91,7 +91,7 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
                   SetsLegsScore(
                       currPlayerOrTeamGameStatsX01:
                           this.currPlayerOrTeamGameStatsX01),
-                  Consumer<GameSettingsX01>(
+                  Consumer<GameSettingsX01_P>(
                     builder: (_, gameSettings, __) => GameStats(
                         currPlayerOrTeamGameStatsX01:
                             this.currPlayerOrTeamGameStatsX01),

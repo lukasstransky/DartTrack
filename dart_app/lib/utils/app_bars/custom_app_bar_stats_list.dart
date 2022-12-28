@@ -1,4 +1,4 @@
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,7 @@ class CustomAppBarStatsList extends StatefulWidget with PreferredSizeWidget {
 class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
   @override
   Widget build(BuildContext context) {
-    final statisticsFirestore = context.read<StatisticsFirestoreX01>();
+    final statisticsFirestore = context.read<StatisticsFirestoreX01_P>();
 
     return AppBar(
       elevation: 0,

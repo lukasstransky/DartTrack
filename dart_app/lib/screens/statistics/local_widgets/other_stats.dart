@@ -1,4 +1,4 @@
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class OtherStats extends StatelessWidget {
   const OtherStats({Key? key}) : super(key: key);
 
-  String _getGamesWonString(StatisticsFirestoreX01 statisticsFirestore) {
+  String _getGamesWonString(StatisticsFirestoreX01_P statisticsFirestore) {
     if (statisticsFirestore.countOfGames == 0) {
       return '-';
     }
@@ -31,7 +31,7 @@ class OtherStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color = Utils.getTextColorDarken(context);
-    return Consumer<StatisticsFirestoreX01>(
+    return Consumer<StatisticsFirestoreX01_P>(
       builder: (_, statisticsFirestore, __) => Column(
         children: [
           Padding(

@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
+    final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
       return Container(

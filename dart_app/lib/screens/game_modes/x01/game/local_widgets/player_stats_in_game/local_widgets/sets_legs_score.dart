@@ -1,5 +1,5 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +13,7 @@ class SetsLegsScore extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (context.read<GameSettingsX01>().getSetsEnabled) {
+    if (context.read<GameSettingsX01_P>().getSetsEnabled) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

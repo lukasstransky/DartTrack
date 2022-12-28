@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _CustomPointsState extends State<CustomPoints> {
   }
 
   _initTextController() {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
     _customPointsController = new TextEditingController(
         text: gameSettingsX01.getCustomPoints != -1
             ? gameSettingsX01.getCustomPoints.toString()
@@ -31,7 +31,7 @@ class _CustomPointsState extends State<CustomPoints> {
   }
 
   Future<int?> _showDialogForCustomPoints(
-          BuildContext context, GameSettingsX01 gameSettingsX01) =>
+          BuildContext context, GameSettingsX01_P gameSettingsX01) =>
       showDialog<int>(
         barrierDismissible: false,
         context: context,
@@ -122,7 +122,7 @@ class _CustomPointsState extends State<CustomPoints> {
     _customPointsController!.clear();
   }
 
-  _customPointsBtnPressed(GameSettingsX01 gameSettingsX01) async {
+  _customPointsBtnPressed(GameSettingsX01_P gameSettingsX01) async {
     _initTextController();
     final int? result =
         await _showDialogForCustomPoints(context, gameSettingsX01);
@@ -154,7 +154,7 @@ class _CustomPointsState extends State<CustomPoints> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: Consumer<GameSettingsX01>(
+      child: Consumer<GameSettingsX01_P>(
         builder: (_, gameSettingsX01, __) => Container(
           height: Utils.getHeightForWidget(gameSettingsX01).h,
           child: ElevatedButton(

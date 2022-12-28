@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -16,7 +16,7 @@ class PlayersTeamsListDialogs {
   static final GlobalKey<FormState> _formKeyEditTeam = GlobalKey<FormState>();
 
   static _editBotAvg(
-      GameSettingsX01 gameSettingsX01, Bot botToEdit, dynamic newValue) {
+      GameSettingsX01_P gameSettingsX01, Bot botToEdit, dynamic newValue) {
     // player from team is not the same refernce as in the single players list, therefore also needs to be updated and vice versa
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
       Player? playerFromSingles =
@@ -40,7 +40,7 @@ class PlayersTeamsListDialogs {
   }
 
   static showDialogForEditingPlayer(BuildContext context, Player playerToEdit,
-      GameSettingsX01 gameSettingsX01) {
+      GameSettingsX01_P gameSettingsX01) {
     //store values as "backup" if user modifies the avg. or name & then clicks on cancel
     String cancelName = '';
     int cancelAverage = 0;
@@ -195,8 +195,8 @@ class PlayersTeamsListDialogs {
     );
   }
 
-  static showDialogForEditingTeam(
-      BuildContext context, Team teamToEdit, GameSettingsX01 gameSettingsX01) {
+  static showDialogForEditingTeam(BuildContext context, Team teamToEdit,
+      GameSettingsX01_P gameSettingsX01) {
     String cancelName = teamToEdit.getName;
 
     showDialog(
@@ -329,7 +329,7 @@ class PlayersTeamsListDialogs {
   static showDialogForDeletingTeamAsLastPlayer(
       BuildContext context,
       Team teamToMaybeDelete,
-      GameSettingsX01 gameSettingsX01,
+      GameSettingsX01_P gameSettingsX01,
       Player playerToDelete) {
     showDialog(
         barrierDismissible: false,
@@ -426,7 +426,7 @@ class PlayersTeamsListDialogs {
   }
 
   static showDialogForSwitchingTeam(BuildContext context, Player playerToSwap,
-      GameSettingsX01 gameSettingsX01) {
+      GameSettingsX01_P gameSettingsX01) {
     Team? newTeam =
         _checkIfSwappingOnlyToOneTeamPossible(playerToSwap, gameSettingsX01);
     if (newTeam == null) {
@@ -515,7 +515,7 @@ class PlayersTeamsListDialogs {
   /*****************               PRIVATE METHODS             *********************/
   /*********************************************************************************/
 
-  static _saveEdit(BuildContext context, GameSettingsX01 gameSettingsX01,
+  static _saveEdit(BuildContext context, GameSettingsX01_P gameSettingsX01,
       Player playerToEdit) {
     if (!_formKeyEditPlayer.currentState!.validate()) return;
 
@@ -541,8 +541,8 @@ class PlayersTeamsListDialogs {
     Navigator.of(context).pop();
   }
 
-  static _submitEditedTeam(
-      BuildContext context, GameSettingsX01 gameSettingsX01, Team teamToEdit) {
+  static _submitEditedTeam(BuildContext context,
+      GameSettingsX01_P gameSettingsX01, Team teamToEdit) {
     if (!_formKeyEditTeam.currentState!.validate()) return;
 
     _formKeyEditTeam.currentState!.save();
@@ -553,7 +553,7 @@ class PlayersTeamsListDialogs {
   }
 
   static _swapTeam(BuildContext context, Player playerToSwap, Team? newTeam,
-      GameSettingsX01 gameSettingsX01) {
+      GameSettingsX01_P gameSettingsX01) {
     final Team? currentTeam =
         _getTeamOfPlayer(playerToSwap, gameSettingsX01.getTeams);
 
@@ -567,7 +567,7 @@ class PlayersTeamsListDialogs {
     if (gameSettingsX01.getTeams.length > 2) Navigator.of(context).pop();
   }
 
-  static _deleteTeam(Team teamToDelete, GameSettingsX01 gameSettingsX01) {
+  static _deleteTeam(Team teamToDelete, GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.getTeams.remove(teamToDelete);
     for (Player playerToDelete in teamToDelete.getPlayers)
       gameSettingsX01.getPlayers.remove(playerToDelete);
@@ -576,7 +576,7 @@ class PlayersTeamsListDialogs {
   }
 
   static List<Team> _getPossibleTeamsToSwap(
-      Player playerToSwap, GameSettingsX01 gameSettingsX01) {
+      Player playerToSwap, GameSettingsX01_P gameSettingsX01) {
     final Team? currentTeam =
         _getTeamOfPlayer(playerToSwap, gameSettingsX01.getTeams);
     List<Team> result = [];
@@ -590,7 +590,7 @@ class PlayersTeamsListDialogs {
 
   //for swaping team -> if only one other team is available then the current one -> swap immediately instead of showing 1 radio button
   static Team? _checkIfSwappingOnlyToOneTeamPossible(
-      Player playerToSwap, GameSettingsX01 gameSettingsX01) {
+      Player playerToSwap, GameSettingsX01_P gameSettingsX01) {
     final Team? currentTeam =
         _getTeamOfPlayer(playerToSwap, gameSettingsX01.getTeams);
     int count = 0;
@@ -619,8 +619,8 @@ class PlayersTeamsListDialogs {
     return null;
   }
 
-  static _showDialogForDeletingTeam(
-      BuildContext context, GameSettingsX01 gameSettingsX01, Team teamToEdit) {
+  static _showDialogForDeletingTeam(BuildContext context,
+      GameSettingsX01_P gameSettingsX01, Team teamToEdit) {
     showDialog(
       barrierDismissible: false,
       context: context,

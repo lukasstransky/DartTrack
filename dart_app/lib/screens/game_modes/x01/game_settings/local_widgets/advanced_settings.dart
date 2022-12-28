@@ -1,11 +1,11 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class AdvancedSettings extends StatelessWidget {
-  double _getProperValueForTransformation(GameSettingsX01 gameSettingsX01) {
+  double _getProperValueForTransformation(GameSettingsX01_P gameSettingsX01) {
     int counter = _getCountOfPresentSwitchers(gameSettingsX01);
     if (counter == 3) {
       return -3.5;
@@ -17,7 +17,7 @@ class AdvancedSettings extends StatelessWidget {
     return 0;
   }
 
-  int _getCountOfPresentSwitchers(GameSettingsX01 gameSettingsX01) {
+  int _getCountOfPresentSwitchers(GameSettingsX01_P gameSettingsX01) {
     int counter = 0;
     if (_checkoutCountingPresent(gameSettingsX01)) {
       counter++;
@@ -31,11 +31,11 @@ class AdvancedSettings extends StatelessWidget {
     return counter;
   }
 
-  bool _checkoutCountingPresent(GameSettingsX01 gameSettingsX01) {
+  bool _checkoutCountingPresent(GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getModeOut == ModeOutIn.Double;
   }
 
-  bool _winByTwoLegsPresent(GameSettingsX01 gameSettingsX01) {
+  bool _winByTwoLegsPresent(GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getLegs > 1 &&
         !gameSettingsX01.getSetsEnabled &&
         !gameSettingsX01.getDrawMode;
@@ -43,7 +43,7 @@ class AdvancedSettings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01>(
+    return Consumer<GameSettingsX01_P>(
       builder: (_, gameSettingsX01, __) => Container(
         transform: Matrix4.translationValues(
             0.0, _getProperValueForTransformation(gameSettingsX01).h, 0.0),

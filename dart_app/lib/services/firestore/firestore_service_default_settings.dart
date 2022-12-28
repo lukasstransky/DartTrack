@@ -1,4 +1,4 @@
-import 'package:dart_app/models/game_settings/default_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,7 +12,7 @@ class FirestoreServiceDefaultSettings {
   FirestoreServiceDefaultSettings(this._firestore, this._firebaseAuth);
 
   Future<void> postDefaultSettingsX01(BuildContext context) async {
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+    final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
     final CollectionReference ref = await _firestore.collection(
         'users/' + _firebaseAuth.currentUser!.uid + '/defaultSettingsX01');
     final QuerySnapshot<Object?> result = await ref.get();
@@ -28,7 +28,7 @@ class FirestoreServiceDefaultSettings {
   }
 
   Future<void> getDefaultSettingsX01(BuildContext context) async {
-    final defaultSettingsX01 = context.read<DefaultSettingsX01>();
+    final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
     final QuerySnapshot<Object?> result = await _firestore
         .collection(
             'users/' + _firebaseAuth.currentUser!.uid + '/defaultSettingsX01')

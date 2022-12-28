@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/local_widgets/best_leg.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/local_widgets/checkout_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/local_widgets/checkout_percent.dart';
@@ -18,7 +18,7 @@ class FinishingStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
+    final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

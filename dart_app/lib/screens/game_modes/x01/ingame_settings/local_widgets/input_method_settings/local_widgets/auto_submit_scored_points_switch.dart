@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _AutoSubmitOrScoredPointsSwitchState
   }
 
   _showDialogForMostScoredPointInput(
-      BuildContext context, GameSettingsX01 gameSettingsX01, int i) {
+      BuildContext context, GameSettingsX01_P gameSettingsX01, int i) {
     _mostScoredPointController = new TextEditingController(
         text: gameSettingsX01.getMostScoredPoints[i].toString());
 
@@ -132,7 +132,7 @@ class _AutoSubmitOrScoredPointsSwitchState
   }
 
   _submitMostScoredPoint(
-      BuildContext context, int i, GameSettingsX01 gameSettingsX01) {
+      BuildContext context, int i, GameSettingsX01_P gameSettingsX01) {
     if (!_formKeyMostScoredPoint.currentState!.validate()) {
       return;
     }
@@ -144,8 +144,8 @@ class _AutoSubmitOrScoredPointsSwitchState
     _mostScoredPointController!.clear();
   }
 
-  int _calcCardHeight(GameSettingsX01 gameSettingsX01,
-      StatisticsFirestoreX01 statisticsFirestoreX01) {
+  int _calcCardHeight(GameSettingsX01_P gameSettingsX01,
+      StatisticsFirestoreX01_P statisticsFirestoreX01) {
     if (gameSettingsX01.getInputMethod == InputMethod.Round &&
         gameSettingsX01.getShowMostScoredPoints) {
       if (!statisticsFirestoreX01.noGamesPlayed) {
@@ -158,8 +158,8 @@ class _AutoSubmitOrScoredPointsSwitchState
     return 6;
   }
 
-  _fetchFromStatsBtnPressed(GameSettingsX01 gameSettingsX01,
-      StatisticsFirestoreX01 statisticsFirestoreX01) {
+  _fetchFromStatsBtnPressed(GameSettingsX01_P gameSettingsX01,
+      StatisticsFirestoreX01_P statisticsFirestoreX01) {
     for (int i = 0; i < gameSettingsX01.getMostScoredPoints.length; i++) {
       if (i < statisticsFirestoreX01.preciseScores.length)
         gameSettingsX01.getMostScoredPoints[i] =
@@ -182,8 +182,8 @@ class _AutoSubmitOrScoredPointsSwitchState
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
-    final statisticsFirestore = context.read<StatisticsFirestoreX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final statisticsFirestore = context.read<StatisticsFirestoreX01_P>();
     final showMostScoredPoints = gameSettingsX01.getShowMostScoredPoints;
 
     return Container(
@@ -193,7 +193,7 @@ class _AutoSubmitOrScoredPointsSwitchState
           getSubmitPointsOrShowPointsSwitch(gameSettingsX01),
           if (gameSettingsX01.getInputMethod == InputMethod.Round &&
               showMostScoredPoints) ...[
-            Selector<GameSettingsX01, List<String>>(
+            Selector<GameSettingsX01_P, List<String>>(
               selector: (_, gameSettingsX01) =>
                   gameSettingsX01.getMostScoredPoints,
               shouldRebuild: (previous, next) => true,
@@ -226,8 +226,8 @@ class _AutoSubmitOrScoredPointsSwitchState
     );
   }
 
-  Container fetchFromStatsBtn(GameSettingsX01 gameSettingsX01,
-      StatisticsFirestoreX01 statisticsFirestoreX01) {
+  Container fetchFromStatsBtn(GameSettingsX01_P gameSettingsX01,
+      StatisticsFirestoreX01_P statisticsFirestoreX01) {
     return Container(
       height: 4.h,
       margin: EdgeInsets.only(top: 5.w, left: 5.w, right: 5.w),
@@ -259,7 +259,7 @@ class _AutoSubmitOrScoredPointsSwitchState
     );
   }
 
-  Container mostScoredPointValue(GameSettingsX01 gameSettingsX01, int i) {
+  Container mostScoredPointValue(GameSettingsX01_P gameSettingsX01, int i) {
     return Container(
       width: 25.w,
       padding:
@@ -317,7 +317,8 @@ class _AutoSubmitOrScoredPointsSwitchState
     );
   }
 
-  Flexible getSubmitPointsOrShowPointsSwitch(GameSettingsX01 gameSettingsX01) {
+  Flexible getSubmitPointsOrShowPointsSwitch(
+      GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       return Flexible(
         child: Padding(
@@ -366,7 +367,7 @@ class _AutoSubmitOrScoredPointsSwitchState
                 ),
               ),
               Spacer(),
-              Selector<GameSettingsX01, bool>(
+              Selector<GameSettingsX01_P, bool>(
                 selector: (_, gameSettingsX01) =>
                     gameSettingsX01.getAutomaticallySubmitPoints,
                 builder: (_, automaticallySubmitPoints, __) => Switch(

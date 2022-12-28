@@ -1,4 +1,4 @@
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -40,15 +40,15 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
   }
 
   Game _getGameById(
-      String gameId, StatisticsFirestoreX01 statisticsFirestoreX01) {
+      String gameId, StatisticsFirestoreX01_P statisticsFirestoreX01) {
     return statisticsFirestoreX01.games
         .where(((g) => g.getGameId == gameId))
         .first;
   }
 
   _addGameToFavourites() {
-    final StatisticsFirestoreX01 statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01>();
+    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatisticsFirestoreX01_P>();
     final String gameId =
         widget.gameId != null ? widget.gameId as String : g_gameId;
 

@@ -1,5 +1,5 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/select_input_method.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/eleven_to_fifteen.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/one_to_five.dart';
@@ -23,7 +23,7 @@ class PointsBtnsThreeDarts extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    return Consumer2<GameX01, GameSettingsX01>(
+    return Consumer2<GameX01, GameSettingsX01_P>(
       builder: (_, gameX01, gameSettingsX01, __) => Expanded(
         child: Column(
           children: [

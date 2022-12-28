@@ -1,10 +1,10 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/game_settings_p.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -14,7 +14,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
   String? _gameId;
   String _name; // e.g. X01 or Cricket
   DateTime _dateTime; // when game was played
-  GameSettings? _gameSettings; // there are different settings for each game
+  GameSettings_P? _gameSettings; // there are different settings for each game
   List<PlayerOrTeamGameStatistics> _playerGameStatistics = [];
   List<PlayerOrTeamGameStatistics> _teamGameStatistics = [];
   Player? _currentPlayerToThrow;
@@ -30,7 +30,6 @@ class Game with ChangeNotifier implements Comparable<Game> {
   })  : this._name = name,
         this._dateTime = dateTime;
 
-  //needed to save game to firestore
   Game.Firestore(
       {String? gameId,
       required String name,
@@ -38,7 +37,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
       required bool isOpenGame,
       required bool isFavouriteGame,
       required DateTime dateTime,
-      required GameSettings gameSettings,
+      required GameSettings_P gameSettings,
       required List<PlayerOrTeamGameStatistics> playerGameStatistics,
       required List<PlayerOrTeamGameStatistics> teamGameStatistics,
       Player? currentPlayerToThrow,
@@ -55,8 +54,47 @@ class Game with ChangeNotifier implements Comparable<Game> {
         this._currentPlayerToThrow = currentPlayerToThrow,
         this._currentTeamToThrow = currentTeamToThrow;
 
+  get getGameId => this._gameId;
+  set setGameId(String? gameId) => this._gameId = gameId;
+
+  String get getName => this._name;
+  set setName(String name) => this._name = name;
+
+  DateTime get getDateTime => this._dateTime;
+  set setDateTime(DateTime dateTime) => this._dateTime = dateTime;
+
+  get getGameSettings => this._gameSettings;
+  set setGameSettings(GameSettings_P? gameSettings) =>
+      this._gameSettings = gameSettings;
+
+  get getPlayerGameStatistics => this._playerGameStatistics;
+  set setPlayerGameStatistics(
+          List<PlayerOrTeamGameStatistics> playerGameStatistics) =>
+      this._playerGameStatistics = playerGameStatistics;
+
+  get getTeamGameStatistics => this._teamGameStatistics;
+  set setTeamGameStatistics(List<PlayerOrTeamGameStatistics> value) =>
+      this._teamGameStatistics = value;
+
+  get getCurrentPlayerToThrow => this._currentPlayerToThrow;
+  set setCurrentPlayerToThrow(Player? currentPlayerToThrow) =>
+      this._currentPlayerToThrow = currentPlayerToThrow;
+
+  get getCurrentTeamToThrow => this._currentTeamToThrow;
+  set setCurrentTeamToThrow(value) => this._currentTeamToThrow = value;
+
+  bool get getIsOpenGame => this._isOpenGame;
+  set setIsOpenGame(bool value) => this._isOpenGame = value;
+
+  bool get getIsGameFinished => this._isGameFinished;
+  set setIsGameFinished(bool value) => this._isGameFinished = value;
+
+  bool get getIsFavouriteGame => this._isFavouriteGame;
+  set setIsFavouriteGame(bool value) => this._isFavouriteGame = value;
+
   Map<String, dynamic> toMapX01(GameX01 gameX01, bool openGame) {
-    final GameSettingsX01 gameSettingsX01 = getGameSettings as GameSettingsX01;
+    final GameSettingsX01_P gameSettingsX01 =
+        getGameSettings as GameSettingsX01_P;
 
     return {
       'name': getName,
@@ -119,10 +157,10 @@ class Game with ChangeNotifier implements Comparable<Game> {
   }
 
   factory Game.fromMap(map, mode, gameId, openGame) {
-    late GameSettings gameSettings;
+    late GameSettings_P gameSettings;
     switch (mode) {
       case 'X01':
-        gameSettings = GameSettings.fromMapX01(map['gameSettings']);
+        gameSettings = GameSettings_P.fromMapX01(map['gameSettings']);
       //add other cases like cricket...
     }
 
@@ -180,44 +218,6 @@ class Game with ChangeNotifier implements Comparable<Game> {
         playerGameStatistics: [],
         teamGameStatistics: []);
   }
-
-  get getGameId => this._gameId;
-  set setGameId(String? gameId) => this._gameId = gameId;
-
-  String get getName => this._name;
-  set setName(String name) => this._name = name;
-
-  DateTime get getDateTime => this._dateTime;
-  set setDateTime(DateTime dateTime) => this._dateTime = dateTime;
-
-  get getGameSettings => this._gameSettings;
-  set setGameSettings(GameSettings? gameSettings) =>
-      this._gameSettings = gameSettings;
-
-  get getPlayerGameStatistics => this._playerGameStatistics;
-  set setPlayerGameStatistics(
-          List<PlayerOrTeamGameStatistics> playerGameStatistics) =>
-      this._playerGameStatistics = playerGameStatistics;
-
-  get getTeamGameStatistics => this._teamGameStatistics;
-  set setTeamGameStatistics(List<PlayerOrTeamGameStatistics> value) =>
-      this._teamGameStatistics = value;
-
-  get getCurrentPlayerToThrow => this._currentPlayerToThrow;
-  set setCurrentPlayerToThrow(Player? currentPlayerToThrow) =>
-      this._currentPlayerToThrow = currentPlayerToThrow;
-
-  get getCurrentTeamToThrow => this._currentTeamToThrow;
-  set setCurrentTeamToThrow(value) => this._currentTeamToThrow = value;
-
-  bool get getIsOpenGame => this._isOpenGame;
-  set setIsOpenGame(bool value) => this._isOpenGame = value;
-
-  bool get getIsGameFinished => this._isGameFinished;
-  set setIsGameFinished(bool value) => this._isGameFinished = value;
-
-  bool get getIsFavouriteGame => this._isFavouriteGame;
-  set setIsFavouriteGame(bool value) => this._isFavouriteGame = value;
 
   @override
   int compareTo(Game other) {

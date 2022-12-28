@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/more_stats.dart';
@@ -23,7 +23,7 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   initState() {
-    context.read<StatisticsFirestoreX01>().currentFilterValue =
+    context.read<StatisticsFirestoreX01_P>().currentFilterValue =
         FilterValue.Overall;
     _getPlayerGameStatistics();
     _getGames();
@@ -42,7 +42,7 @@ class _StatisticsState extends State<Statistics> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-      body: Consumer<StatisticsFirestoreX01>(
+      body: Consumer<StatisticsFirestoreX01_P>(
         builder: (_, statisticsFirestore, __) =>
             statisticsFirestore.avgBestWorstStatsLoaded
                 ? SingleChildScrollView(

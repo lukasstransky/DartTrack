@@ -1,16 +1,16 @@
 import 'dart:collection';
 
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 
 class PlayerOrTeamGameStatistics {
   Player? _player;
   Team? _team;
-  String? _gameId; //to reference the corresponding game -> calc stats
-  final String _mode; //e.g. X01, Cricket.. -> calc stats
+  String? _gameId; // to reference the corresponding game -> calc stats
+  final String _mode; // e.g. X01, Cricket.. -> calc stats
   final DateTime _dateTime;
 
   PlayerOrTeamGameStatistics(
@@ -40,6 +40,19 @@ class PlayerOrTeamGameStatistics {
         _team = team,
         _mode = mode,
         _dateTime = dateTime;
+
+  get getPlayer => this._player;
+  set setPlayer(value) => this._player = value;
+
+  get getTeam => this._team;
+
+  set setTeam(value) => this._team = value;
+
+  get getGameId => this._gameId;
+
+  get getMode => this._mode;
+
+  get getDateTime => this._dateTime;
 
   factory PlayerOrTeamGameStatistics.fromMapX01(map) {
     return PlayerOrTeamGameStatisticsX01.Firestore(
@@ -123,7 +136,7 @@ class PlayerOrTeamGameStatistics {
   Map<String, dynamic> toMapX01(
       PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01,
       GameX01 gameX01,
-      GameSettingsX01 gameSettingsX01,
+      GameSettingsX01_P gameSettingsX01,
       String gameId,
       bool openGame) {
     String checkoutQuote = playerOrTeamGameStatsX01.getCheckoutQuoteInPercent();
@@ -304,19 +317,6 @@ class PlayerOrTeamGameStatistics {
       'totalRoundsCount': playerOrTeamGameStatsX01.getTotalRoundsCount,
     };
   }
-
-  get getPlayer => this._player;
-  set setPlayer(value) => this._player = value;
-
-  get getTeam => this._team;
-
-  set setTeam(value) => this._team = value;
-
-  get getGameId => this._gameId;
-
-  get getMode => this._mode;
-
-  get getDateTime => this._dateTime;
 
   Map<String, int> _getRoundedScoresOddWithStringKey(
       PlayerOrTeamGameStatisticsX01 stats) {

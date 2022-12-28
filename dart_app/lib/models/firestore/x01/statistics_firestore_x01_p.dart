@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
-class StatisticsFirestoreX01 with ChangeNotifier {
+class StatisticsFirestoreX01_P with ChangeNotifier {
   int _countOfGames = 0;
   int _countOfGamesWon = 0;
 

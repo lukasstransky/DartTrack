@@ -1,7 +1,7 @@
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class _DetailedLegState extends State<DetailedLeg> {
   initState() {
     super.initState();
 
-    _currentPoints = context.read<GameSettingsX01>().getPointsOrCustom();
+    _currentPoints = context.read<GameSettingsX01_P>().getPointsOrCustom();
   }
 
   String _getCurrentValue(int score, int i,
@@ -43,8 +43,8 @@ class _DetailedLegState extends State<DetailedLeg> {
         playerOrTeamGameStatsX01
                 .getAllScoresPerLeg[widget.setLegString].length -
             1) {
-      _currentPoints =
-          _currentPoints = context.read<GameSettingsX01>().getPointsOrCustom();
+      _currentPoints = _currentPoints =
+          context.read<GameSettingsX01_P>().getPointsOrCustom();
     }
 
     return result;
@@ -57,7 +57,7 @@ class _DetailedLegState extends State<DetailedLeg> {
   }
 
   bool _emptyRowNeeded(
-      int dartsToCheck, GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      int dartsToCheck, GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     int mostDarts = 0;
     for (PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
@@ -79,7 +79,7 @@ class _DetailedLegState extends State<DetailedLeg> {
   }
 
   String _getPlayerOrTeamName(PlayerOrTeamGameStatisticsX01 stats,
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     if (Utils.teamStatsDisplayed(gameX01, gameSettingsX01))
       return stats.getTeam.getName;
 
@@ -90,7 +90,7 @@ class _DetailedLegState extends State<DetailedLeg> {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = widget.gameX01.getGameSettings;
+    final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
 
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

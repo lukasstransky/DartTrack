@@ -1,8 +1,8 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
@@ -15,7 +15,7 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
   final GameX01 gameX01;
 
   bool _hasPlayerOrTeamWonTheGame(PlayerOrTeamGameStatisticsX01 stats,
-      GameX01 gameX01, GameSettingsX01 gameSettingsX01) {
+      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
     if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01)) {
       return false;
     }
@@ -62,7 +62,7 @@ class DisplayTeamOrPlayerNames extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = gameX01.getGameSettings;
+    final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
 
     return Row(
       children: [

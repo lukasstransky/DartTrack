@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -84,7 +84,7 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final gameX01 = context.read<GameX01>();
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return AppBar(
       elevation: 0,

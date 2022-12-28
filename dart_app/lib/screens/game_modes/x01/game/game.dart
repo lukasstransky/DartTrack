@@ -1,11 +1,11 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/games/helper/submit_helper.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/helper/submit_helper.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/player_or_team_stats_in_game.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/points_btns_round.dart';
@@ -48,7 +48,7 @@ class GameState extends State<Game> {
 
   _init() {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     gameX01.reset();
 
@@ -128,12 +128,12 @@ class GameState extends State<Game> {
       appBar: CustomAppBarX01Game(),
       body: Column(
         children: [
-          if (context.read<GameSettingsX01>().getSingleOrTeam ==
+          if (context.read<GameSettingsX01_P>().getSingleOrTeam ==
               SingleOrTeamEnum.Single)
             SinglePlayersList()
           else
             TeamPlayersList(),
-          Selector<GameSettingsX01, InputMethod>(
+          Selector<GameSettingsX01_P, InputMethod>(
             selector: (_, gameX01) => gameX01.getInputMethod,
             builder: (_, inputMethod, __) => inputMethod == InputMethod.Round
                 ? PointsBtnsRound()

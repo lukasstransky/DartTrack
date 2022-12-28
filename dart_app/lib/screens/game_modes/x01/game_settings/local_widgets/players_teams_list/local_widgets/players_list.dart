@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/players_teams_list_dialogs.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -24,9 +24,9 @@ class _PlayersListState extends State<PlayersList> {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01>();
+    final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    return Selector<GameSettingsX01, List<Player>>(
+    return Selector<GameSettingsX01_P, List<Player>>(
       selector: (_, gameSettingsX01) => gameSettingsX01.getPlayers,
       shouldRebuild: (previous, next) => true,
       builder: (_, players, __) => ConstrainedBox(

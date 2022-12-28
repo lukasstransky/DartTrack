@@ -1,8 +1,8 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/games/helper/submit_helper.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/helper/submit_helper.dart';
+import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -16,7 +16,7 @@ class SubmitPointsBtn extends StatelessWidget {
 
   bool _shouldSubmitBtnBeEnabled(BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     // for bug -> when saving an open game
     if (gameX01.getPlayerGameStatistics.isEmpty) {
@@ -37,7 +37,7 @@ class SubmitPointsBtn extends StatelessWidget {
     return false;
   }
 
-  bool _shouldOnPressedBeEnabled(GameSettingsX01 gameSettingsX01) {
+  bool _shouldOnPressedBeEnabled(GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
         !gameSettingsX01.getAutomaticallySubmitPoints) {
       return true;
@@ -47,7 +47,7 @@ class SubmitPointsBtn extends StatelessWidget {
 
   _submitPointsBtnClicked(BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       _submitPointsForInputMethodRound(
@@ -78,7 +78,7 @@ class SubmitPointsBtn extends StatelessWidget {
   _submitPointsForInputMethodRound(
       String currentPointsSelected, BuildContext context) {
     final GameX01 gameX01 = context.read<GameX01>();
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final PlayerOrTeamGameStatisticsX01 stats =
         gameX01.getCurrentPlayerGameStats();
 
@@ -138,7 +138,7 @@ class SubmitPointsBtn extends StatelessWidget {
                 Utils.darken(Colors.green, 25),
               );
 
-    return Consumer2<GameX01, GameSettingsX01>(
+    return Consumer2<GameX01, GameSettingsX01_P>(
       builder: (_, gameX01, gameSettingsX01, __) => Container(
         decoration: BoxDecoration(
           border: Border(

@@ -1,7 +1,8 @@
 import 'package:dart_app/models/games/game.dart';
+
 import 'package:flutter/material.dart';
 
-//futurebuilder was not working -> therefore provider
+// futurebuilder was not working -> therefore provider
 class OpenGamesFirestore with ChangeNotifier {
   List<Game> _openGames = [];
   bool _init = false;

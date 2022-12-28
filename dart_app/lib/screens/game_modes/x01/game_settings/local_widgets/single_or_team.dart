@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -10,7 +10,7 @@ import 'package:sizer/sizer.dart';
 
 class SingleOrTeam extends StatelessWidget {
   _switchSingleOrTeamMode(
-      BuildContext context, GameSettingsX01 gameSettingsX01) async {
+      BuildContext context, GameSettingsX01_P gameSettingsX01) async {
     final List<Player> players = gameSettingsX01.getPlayers;
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
@@ -61,7 +61,7 @@ class SingleOrTeam extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01>(
+      child: Consumer<GameSettingsX01_P>(
         builder: (_, gameSettingsX01, __) => Container(
           width: WIDTH_GAMESETTINGS.w,
           height: Utils.getHeightForWidget(gameSettingsX01).h,
@@ -87,7 +87,7 @@ class SingleBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isSingle =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
 
@@ -141,7 +141,7 @@ class TeamBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01 gameSettingsX01 = context.read<GameSettingsX01>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isTeam =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team;
 

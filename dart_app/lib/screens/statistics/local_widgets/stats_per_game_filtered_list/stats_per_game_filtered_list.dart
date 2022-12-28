@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/firestore/statistics_firestore_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/best_leg_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/checkouts_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/stats_card_filtered.dart';
@@ -114,7 +114,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: this.getAppBarTitle()),
-      body: Consumer<StatisticsFirestoreX01>(
+      body: Consumer<StatisticsFirestoreX01_P>(
         builder: (_, statisticsFirestore, __) => statisticsFirestore
                     .filteredGames.length >
                 0

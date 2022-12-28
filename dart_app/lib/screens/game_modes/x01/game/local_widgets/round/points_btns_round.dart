@@ -1,6 +1,6 @@
-import 'package:dart_app/models/game_settings/game_settings_x01.dart';
-import 'package:dart_app/models/games/game_x01.dart';
-import 'package:dart_app/models/games/helper/submit_helper.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/helper/submit_helper.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btn_round.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/select_input_method.dart';
@@ -30,7 +30,7 @@ class PointsBtnsRound extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<GameX01, GameSettingsX01>(
+    return Consumer2<GameX01, GameSettingsX01_P>(
       builder: (_, gameX01, gameSettingsX01, __) => Expanded(
         child: Column(
           children: [
