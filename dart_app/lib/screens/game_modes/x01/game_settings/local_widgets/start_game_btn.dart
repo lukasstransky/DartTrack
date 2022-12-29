@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class StartGameBtn extends StatelessWidget {
+class StartGameBtnX01 extends StatelessWidget {
   _showDialogNoUserInPlayerWarning(
       BuildContext context, GameSettingsX01_P gameSettingsX01) {
     final String currentUserName =
@@ -241,7 +241,9 @@ class StartGameBtn extends StatelessWidget {
 
   bool _onePlayerPerTeam(GameSettingsX01_P gameSettingsX01) {
     for (Team team in gameSettingsX01.getTeams) {
-      if (team.getPlayers.length > 1) return false;
+      if (team.getPlayers.length > 1) {
+        return false;
+      }
     }
 
     gameSettingsX01.setSingleOrTeam = SingleOrTeamEnum.Single;
@@ -253,17 +255,22 @@ class StartGameBtn extends StatelessWidget {
     if (gameSettingsX01.getPlayers.length < 2) {
       return false;
     } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      if (_anyEmptyTeam(gameSettingsX01))
+      if (_anyEmptyTeam(gameSettingsX01)) {
         return false;
-      else if (gameSettingsX01.getTeams.length < 2) return false;
+      } else if (gameSettingsX01.getTeams.length < 2) {
+        return false;
+      }
     }
 
     return true;
   }
 
   bool _anyEmptyTeam(GameSettingsX01_P gameSettingsX01) {
-    for (Team team in gameSettingsX01.getTeams)
-      if (team.getPlayers.isEmpty) return true;
+    for (Team team in gameSettingsX01.getTeams) {
+      if (team.getPlayers.isEmpty) {
+        return true;
+      }
+    }
 
     return false;
   }
@@ -271,7 +278,11 @@ class StartGameBtn extends StatelessWidget {
   _setBeginnerTeam(Team? teamToSet, List<Team> teams) {
     int index = 0;
 
-    for (int i = 0; i < teams.length; i++) if (teams[i] == teamToSet) index = i;
+    for (int i = 0; i < teams.length; i++) {
+      if (teams[i] == teamToSet) {
+        index = i;
+      }
+    }
 
     //otherwise team is already first in list
     if (index != 0) {
@@ -284,8 +295,11 @@ class StartGameBtn extends StatelessWidget {
   _setBeginnerPlayer(Player? playerToSet, List<Player> players) {
     int index = 0;
 
-    for (int i = 0; i < players.length; i++)
-      if (players[i] == playerToSet) index = i;
+    for (int i = 0; i < players.length; i++) {
+      if (players[i] == playerToSet) {
+        index = i;
+      }
+    }
 
     //otherwise player is already first in list
     if (index != 0) {

@@ -323,21 +323,6 @@ class GameSettingsX01_P extends GameSettings_P {
     return false;
   }
 
-  bool checkIfPlayerNameExists(
-      String? playerNameToCheck, bool checkTeamPlayers) {
-    if (checkTeamPlayers) {
-      for (Team team in this.getTeams) {
-        for (Player player in team.getPlayers)
-          if (player.getName == playerNameToCheck) return true;
-      }
-    }
-
-    for (Player player in getPlayers)
-      if (player.getName == playerNameToCheck) return true;
-
-    return false;
-  }
-
   notify() {
     notifyListeners();
   }
@@ -364,7 +349,9 @@ class GameSettingsX01_P extends GameSettings_P {
   int getCountOfBotPlayers() {
     int count = 0;
     for (Player player in getPlayers) {
-      if (player is Bot) count++;
+      if (player is Bot) {
+        count++;
+      }
     }
 
     return count;

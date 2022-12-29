@@ -5,7 +5,7 @@ const Color primary = Color(0xff130536);
 //Auth Page
 enum AuthMode { Register, Login }
 
-//Game Settings Page
+//Game Settings Page X01
 enum SingleOrTeamEnum { Single, Team }
 
 enum SingleOrDouble { SingleField, DoubleField }
@@ -334,6 +334,25 @@ const List<int> STARTER_DOUBLES_FOR_FINISH = [16, 20, 24, 32, 36, 40];
 const double PROBABILITY_TO_SUBMIT_ZERO_FOR_FINISH_CHANCE = 0.33;
 
 /************************************************************************************/
+/*******************          score training settings            ********************/
+/************************************************************************************/
+
+enum ScoreTrainingModeEnum { MaxPoints, MaxRounds }
+
+const int MAX_ROUNDS_SCORE_TRAINING = 100;
+const int MAX_ROUNDS_SCORE_TRAINING_NUMBERS = 3;
+const int MIN_ROUNDS_SCORE_TRAINING = 10;
+const int DEFAULT_ROUNDS_SCORE_TRAINING = 20;
+
+const int MAX_POINTS_SCORE_TRAINING = 10000;
+const int MAX_POINTS_SCORE_TRAINING_NUMBERS = 5;
+const int MIN_POINTS_SCORE_TRAINING = 100;
+const int DEFAULT_POINTS_SCORE_TRAINING = 1000;
+
+const int DEFAULT_TARGET_NUMBER = 20;
+const int TARGET_NUMBER_MAX_NUMBERS = 2;
+
+/************************************************************************************/
 /***********************          styling constants            **********************/
 /************************************************************************************/
 
@@ -341,10 +360,10 @@ const double PROBABILITY_TO_SUBMIT_ZERO_FOR_FINISH_CHANCE = 0.33;
 const int GENERAL_DARKEN = 35;
 
 // game modes overview
-const int GAME_MOES_OVERVIEW_WIDTH = 60;
-const int GAME_MOES_OVERVIEW_HEIGHT = 6;
-const int GAME_MOES_OVERVIEW_FONTSIZE = 16;
-const int GAME_MOES_OVERVIEW_PADDING = 2;
+const int GAME_MODES_OVERVIEW_WIDTH = 60;
+const int GAME_MODES_OVERVIEW_HEIGHT = 6;
+const int GAME_MODES_OVERVIEW_FONTSIZE = 16;
+const int GAME_MODES_OVERVIEW_PADDING = 2;
 
 // game settings
 const double GAME_SETTINGS_BTN_BORDER_WITH = 2;

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class PlayersTeamsList extends StatelessWidget {
+class PlayersTeamsListX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,7 +19,7 @@ class PlayersTeamsList extends StatelessWidget {
             selector: (_, gameSettingsX01) => gameSettingsX01.getSingleOrTeam,
             builder: (_, singleOrTeam, __) {
               if (singleOrTeam == SingleOrTeamEnum.Single)
-                return PlayersList();
+                return PlayersListX01();
               else
                 return TeamsList();
             },

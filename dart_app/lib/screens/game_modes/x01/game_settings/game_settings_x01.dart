@@ -66,7 +66,7 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
         child: Column(
           children: [
             SingleOrTeam(),
-            PlayersTeamsList(),
+            PlayersTeamsListX01(),
             AddPlayerTeamBtn(),
             Column(
               children: [
@@ -81,7 +81,7 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
                 AdvancedSettings(),
               ],
             ),
-            StartGameBtn(),
+            StartGameBtnX01(),
           ],
         ),
       ),

@@ -94,4 +94,16 @@ class GameSettings_P with ChangeNotifier {
             }).toList(),
     );
   }
+
+  bool checkIfPlayerNameExists(String playerNameToCheck) {
+    for (Player player in getPlayers)
+      if (player.getName == playerNameToCheck) {
+        return true;
+      }
+    return false;
+  }
+
+  notify() {
+    notifyListeners();
+  }
 }

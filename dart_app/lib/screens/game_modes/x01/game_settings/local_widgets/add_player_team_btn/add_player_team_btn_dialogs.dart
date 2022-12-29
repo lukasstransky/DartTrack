@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
@@ -23,20 +24,27 @@ class AddPlayerTeamBtnDialogs {
     _selectedBotAvgValue = DEFAULT_BOT_AVG_SLIDER_VALUE;
   }
 
-  static bool showBotOption(GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      return !(gameSettingsX01.getCountOfBotPlayers() >= 1);
+  static bool showBotOption(GameSettings_P gameSettings_P) {
+    if (gameSettings_P is GameSettingsX01_P) {
+      if (gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        return !(gameSettings_P.getCountOfBotPlayers() >= 1);
+      }
+      return !(gameSettings_P.getCountOfBotPlayers() >= 1) &&
+          gameSettings_P.getPlayers.length <= 1;
     }
-    return !(gameSettingsX01.getCountOfBotPlayers() >= 1) &&
-        gameSettingsX01.getPlayers.length <= 1;
+    return false;
   }
 
   static showDialogForAddingPlayer(
-      GameSettingsX01_P gameSettingsX01, BuildContext context) {
-    NewPlayer? newPlayer =
-        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
-            ? NewPlayer.Bot
-            : NewPlayer.Guest;
+      GameSettings_P gameSettings_P, BuildContext context) {
+    NewPlayer? newPlayer;
+    if (gameSettings_P is GameSettingsX01_P) {
+      newPlayer = gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Single
+          ? NewPlayer.Bot
+          : NewPlayer.Guest;
+    } else {
+      newPlayer = NewPlayer.Guest;
+    }
     _resetBotAvgValue();
 
     showDialog(
@@ -60,7 +68,7 @@ class AddPlayerTeamBtnDialogs {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (showBotOption(gameSettingsX01)) ...[
+                  if (showBotOption(gameSettings_P)) ...[
                     ListTile(
                       title: Container(
                         transform: Matrix4.translationValues(
@@ -169,8 +177,10 @@ class AddPlayerTeamBtnDialogs {
           actions: [
             Row(
               children: [
-                gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-                        gameSettingsX01.getTeams.length < 4
+                gameSettings_P is GameSettingsX01_P &&
+                        gameSettings_P.getSingleOrTeam ==
+                            SingleOrTeamEnum.Team &&
+                        gameSettings_P.getTeams.length < 4
                     ? Expanded(
                         child: Align(
                           alignment: Alignment.centerLeft,
@@ -184,7 +194,7 @@ class AddPlayerTeamBtnDialogs {
                               Navigator.of(context).pop();
 
                               showDialogForAddingPlayerOrTeam(
-                                  gameSettingsX01, context);
+                                  gameSettings_P, context);
                             },
                           ),
                         ),
@@ -220,7 +230,7 @@ class AddPlayerTeamBtnDialogs {
                             color: Theme.of(context).colorScheme.secondary),
                       ),
                       onPressed: () =>
-                          _submitNewPlayer(gameSettingsX01, context, newPlayer),
+                          _submitNewPlayer(gameSettings_P, context, newPlayer),
                       style: ButtonStyle(
                         backgroundColor:
                             Utils.getPrimaryMaterialStateColorDarken(context),
@@ -236,35 +246,50 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static _submitNewPlayer(GameSettingsX01_P gameSettingsX01,
-      BuildContext context, NewPlayer? newPlayer) async {
-    if (!_formKeyNewPlayer.currentState!.validate()) return;
+  static _submitNewPlayer(GameSettings_P gameSettings_P, BuildContext context,
+      NewPlayer? newPlayer) async {
+    if (!_formKeyNewPlayer.currentState!.validate()) {
+      return;
+    }
     _formKeyNewPlayer.currentState!.save();
 
+    // create new player
     Player playerToAdd;
-    if (!showBotOption(gameSettingsX01)) {
+    if (!showBotOption(gameSettings_P)) {
       newPlayer = NewPlayer.Guest;
     }
-    if (newPlayer == NewPlayer.Bot) {
-      final int botNameId = gameSettingsX01.getCountOfBotPlayers() == 0 ? 1 : 2;
+    if (gameSettings_P is GameSettingsX01_P && newPlayer == NewPlayer.Bot) {
+      final int botNameId = gameSettings_P.getCountOfBotPlayers() == 0 ? 1 : 2;
+
       playerToAdd = new Bot(
           name: 'Bot$botNameId',
           preDefinedAverage: _selectedBotAvgValue,
           level: int.parse(Utils.getLevelForBot(_selectedBotAvgValue)));
-    } else
+    } else {
       playerToAdd = new Player(name: newPlayerController.text);
+    }
 
     Navigator.of(context).pop();
 
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      final Team? team = _checkIfMultipleTeamsToAdd(gameSettingsX01.getTeams);
-      if (team != null)
-        _addNewPlayerToSpecificTeam(playerToAdd, team, gameSettingsX01);
-      else
+    // assign player to team
+    if (gameSettings_P is GameSettingsX01_P &&
+        gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      final Team? team = _checkIfMultipleTeamsToAdd(gameSettings_P.getTeams);
+
+      if (team != null) {
+        _addNewPlayerToSpecificTeam(playerToAdd, team, gameSettings_P);
+      } else {
         _showDialogForSelectingTeam(
-            playerToAdd, gameSettingsX01.getTeams, gameSettingsX01, context);
+            playerToAdd, gameSettings_P.getTeams, gameSettings_P, context);
+      }
     } else {
-      gameSettingsX01.addPlayer(playerToAdd);
+      if (gameSettings_P is GameSettingsX01_P) {
+        gameSettings_P.addPlayer(playerToAdd);
+      } else {
+        // for modes like score training no team should be assigned to a player
+        gameSettings_P.getPlayers.add(playerToAdd);
+        gameSettings_P.notifyListeners();
+      }
 
       //scroll automatically smoothly to top in single player
       await Future.delayed(const Duration(milliseconds: 100));
@@ -738,7 +763,7 @@ class GuestTextFormField extends StatelessWidget {
         if (value!.isEmpty) {
           return ('Please enter a name!');
         }
-        if (gameSettingsX01.checkIfPlayerNameExists(value, true)) {
+        if (gameSettingsX01.checkIfPlayerNameExists(value)) {
           return 'Playername already exists!';
         }
         return null;

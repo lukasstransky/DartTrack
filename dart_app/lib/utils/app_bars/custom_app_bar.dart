@@ -1,12 +1,17 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/utils/app_bars/app_bar_dialog_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool showBackBtn;
   final String title;
+  final bool showInfoIcon;
 
-  const CustomAppBar({this.showBackBtn = true, required this.title});
+  const CustomAppBar(
+      {this.showBackBtn = true,
+      required this.title,
+      this.showInfoIcon = false});
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +46,17 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
             SizedBox.shrink(),
         ],
       ),
+      actions: [
+        if (showInfoIcon)
+          IconButton(
+              onPressed: () =>
+                  AppBarDialogHelper.showDialogForInfoAboutScoreTraining(
+                      context),
+              icon: Icon(
+                Icons.info_outline,
+                color: Theme.of(context).colorScheme.secondary,
+              )),
+      ],
     );
   }
 

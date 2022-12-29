@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
@@ -40,7 +41,7 @@ class PlayersTeamsListDialogs {
   }
 
   static showDialogForEditingPlayer(BuildContext context, Player playerToEdit,
-      GameSettingsX01_P gameSettingsX01) {
+      GameSettings_P gameSettings_P) {
     //store values as "backup" if user modifies the avg. or name & then clicks on cancel
     String cancelName = '';
     int cancelAverage = 0;
@@ -105,7 +106,9 @@ class PlayersTeamsListDialogs {
                       showTicks: false,
                       onChanged: (dynamic newValue) {
                         setState(() => _editBotAvg(
-                            gameSettingsX01, playerToEdit, newValue));
+                            gameSettings_P as GameSettingsX01_P,
+                            playerToEdit,
+                            newValue));
                       },
                     ),
                   ],
@@ -118,7 +121,7 @@ class PlayersTeamsListDialogs {
                     if (value!.isEmpty) {
                       return ('Please enter a name!');
                     }
-                    if (gameSettingsX01.checkIfPlayerNameExists(value, false)) {
+                    if (gameSettings_P.checkIfPlayerNameExists(value)) {
                       return 'Playername already exists!';
                     }
 
@@ -177,8 +180,7 @@ class PlayersTeamsListDialogs {
               ),
             ),
             TextButton(
-              onPressed: () =>
-                  _saveEdit(context, gameSettingsX01, playerToEdit),
+              onPressed: () => _saveEdit(context, gameSettings_P, playerToEdit),
               child: Text(
                 'Submit',
                 style:
@@ -515,28 +517,32 @@ class PlayersTeamsListDialogs {
   /*****************               PRIVATE METHODS             *********************/
   /*********************************************************************************/
 
-  static _saveEdit(BuildContext context, GameSettingsX01_P gameSettingsX01,
+  static _saveEdit(BuildContext context, GameSettings_P gameSettings_P,
       Player playerToEdit) {
-    if (!_formKeyEditPlayer.currentState!.validate()) return;
-
+    if (!_formKeyEditPlayer.currentState!.validate()) {
+      return;
+    }
     _formKeyEditPlayer.currentState!.save();
 
     if (!(playerToEdit is Bot)) {
       // player from team is not the same refernce as in the single players list, therefore also needs to be updated and vice versa
-      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        Player? playerFromSingles =
-            gameSettingsX01.getPlayerFromSingles(playerToEdit.getName);
-        if (playerFromSingles != null) {
-          playerFromSingles.setName = editPlayerController.text;
+      if (gameSettings_P is GameSettingsX01_P) {
+        if (gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+          Player? playerFromSingles =
+              gameSettings_P.getPlayerFromSingles(playerToEdit.getName);
+          if (playerFromSingles != null) {
+            playerFromSingles.setName = editPlayerController.text;
+          }
         }
+        Player playerFromTeam =
+            gameSettings_P.getPlayerFromTeam(playerToEdit.getName);
+        playerFromTeam.setName = editPlayerController.text;
       }
-      Player playerFromTeam =
-          gameSettingsX01.getPlayerFromTeam(playerToEdit.getName);
-      playerFromTeam.setName = editPlayerController.text;
+
       playerToEdit.setName = editPlayerController.text;
     }
 
-    gameSettingsX01.notify();
+    gameSettings_P.notify();
 
     Navigator.of(context).pop();
   }

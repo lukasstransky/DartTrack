@@ -1,4 +1,5 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01.dart';
@@ -6,7 +7,7 @@ import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_settings_score_training.dart';
+import 'package:dart_app/screens/game_modes/score_training/game_settings/game_settings.dart';
 import 'package:dart_app/screens/game_modes/x01/open_games/open_games.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/finish.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game.dart';
@@ -90,6 +91,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => Auth(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => GameSettingsScoreTraining_P(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

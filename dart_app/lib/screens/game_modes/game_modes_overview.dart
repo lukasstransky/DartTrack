@@ -73,13 +73,13 @@ class ScoresTrainingBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: GAME_MOES_OVERVIEW_WIDTH.w,
-      height: GAME_MOES_OVERVIEW_HEIGHT.h,
+      width: GAME_MODES_OVERVIEW_WIDTH.w,
+      height: GAME_MODES_OVERVIEW_HEIGHT.h,
       child: ElevatedButton(
         child: Text(
           'Scores Training',
           style: TextStyle(
-              fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
+              fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
               color: Theme.of(context).colorScheme.secondary),
         ),
         onPressed: () =>
@@ -109,15 +109,15 @@ class DoublesTrainingBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: GAME_MOES_OVERVIEW_PADDING.h),
+      padding: EdgeInsets.only(bottom: GAME_MODES_OVERVIEW_PADDING.h),
       child: Container(
-        width: GAME_MOES_OVERVIEW_WIDTH.w,
-        height: GAME_MOES_OVERVIEW_HEIGHT.h,
+        width: GAME_MODES_OVERVIEW_WIDTH.w,
+        height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
             'Doubles Training',
             style: TextStyle(
-                fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
+                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () => null,
@@ -148,15 +148,15 @@ class SinglesTrainingBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: GAME_MOES_OVERVIEW_PADDING.h),
+      padding: EdgeInsets.only(bottom: GAME_MODES_OVERVIEW_PADDING.h),
       child: Container(
-        width: GAME_MOES_OVERVIEW_WIDTH.w,
-        height: GAME_MOES_OVERVIEW_HEIGHT.h,
+        width: GAME_MODES_OVERVIEW_WIDTH.w,
+        height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
             'Singles Training',
             style: TextStyle(
-                fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
+                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () => null,
@@ -190,15 +190,15 @@ class CricketBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: GAME_MOES_OVERVIEW_PADDING.h),
+      padding: EdgeInsets.only(bottom: GAME_MODES_OVERVIEW_PADDING.h),
       child: Container(
-        width: GAME_MOES_OVERVIEW_WIDTH.w,
-        height: GAME_MOES_OVERVIEW_HEIGHT.h,
+        width: GAME_MODES_OVERVIEW_WIDTH.w,
+        height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
             'Cricket',
             style: TextStyle(
-                fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
+                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () => null,
@@ -232,15 +232,15 @@ class X01Btn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(bottom: GAME_MOES_OVERVIEW_PADDING.h),
+      padding: EdgeInsets.only(bottom: GAME_MODES_OVERVIEW_PADDING.h),
       child: Container(
-        width: GAME_MOES_OVERVIEW_WIDTH.w,
-        height: GAME_MOES_OVERVIEW_HEIGHT.h,
+        width: GAME_MODES_OVERVIEW_WIDTH.w,
+        height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
             'X01',
             style: TextStyle(
-                fontSize: GAME_MOES_OVERVIEW_FONTSIZE.sp,
+                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () => Navigator.of(context).pushNamed('/settingsX01'),
