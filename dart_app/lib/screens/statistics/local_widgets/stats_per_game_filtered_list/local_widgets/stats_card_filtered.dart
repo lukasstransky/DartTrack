@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:sizer/sizer.dart';
@@ -10,7 +11,7 @@ class StatsCardFiltered extends StatefulWidget {
       {Key? key, required this.game, required this.orderField})
       : super(key: key);
 
-  final GameX01? game;
+  final GameX01_P? game;
   final String orderField;
 
   @override
@@ -95,11 +96,16 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
             arguments: {'game': widget.game});
       },
       child: Card(
+        color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 10, left: 10, right: 10, bottom: 5),
+              padding: EdgeInsets.only(
+                top: 5,
+                left: 10,
+                right: 10,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -118,7 +124,10 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                         fit: BoxFit.scaleDown,
                         child: Text(
                           widget.game!.getGameSettings.getGameMode(),
-                          style: TextStyle(fontSize: 12.sp),
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -128,34 +137,55 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                     fit: BoxFit.scaleDown,
                     child: Text(
                       widget.game!.getFormattedDateTime(),
-                      style: TextStyle(fontSize: 10.sp),
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 5),
+              padding: EdgeInsets.only(
+                left: 10,
+              ),
               child: Text(
                 widget.game!.getGameSettings.getGameModeDetails(true),
-                style: TextStyle(fontSize: 12.sp),
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
+              padding: EdgeInsets.only(
+                left: 10,
+                bottom: 5,
+              ),
               child: Text(
                 widget.game!.getGameSettings.getSingleOrTeam ==
                         SingleOrTeamEnum.Single
                     ? 'Single Mode'
                     : 'Team Mode',
-                style: TextStyle(fontSize: 12.sp),
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10, bottom: 10),
+              padding: EdgeInsets.only(
+                left: 10,
+                bottom: 5,
+              ),
               child: Text(
                 _getField(),
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14.sp,
+                  color: Utils.getTextColorDarken(context),
+                ),
               ),
             )
           ],

@@ -1,4 +1,4 @@
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/point_btn_three_darts.dart';
 
 import 'package:flutter/material.dart';
@@ -11,7 +11,7 @@ class ElevenToFifteen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
 
     return Expanded(
       child: Row(

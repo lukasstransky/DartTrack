@@ -1,7 +1,7 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/game_details.dart';
-import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/game_details_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry_finish_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -12,12 +12,12 @@ class StatsCardX01 extends StatefulWidget {
       {Key? key,
       required this.isFinishScreen,
       required this.gameX01,
-      required this.openGame})
+      required this.isOpenGame})
       : super(key: key);
 
   final bool isFinishScreen;
-  final GameX01 gameX01;
-  final bool openGame;
+  final GameX01_P gameX01;
+  final bool isOpenGame;
 
   @override
   State<StatsCardX01> createState() => _StatsCardX01State();
@@ -30,8 +30,8 @@ class _StatsCardX01State extends State<StatsCardX01> {
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
 
-    return Padding(
-      padding: EdgeInsets.only(top: widget.isFinishScreen ? 15.h : 2.h),
+    return Container(
+      padding: EdgeInsets.only(top: widget.isFinishScreen ? 15.h : 0.h),
       child: GestureDetector(
         onTap: () {
           if (!widget.isFinishScreen)
@@ -39,14 +39,15 @@ class _StatsCardX01State extends State<StatsCardX01> {
                 arguments: {'game': widget.gameX01});
         },
         child: Card(
+          margin: EdgeInsets.zero,
           color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              GameDetails(gameX01: widget.gameX01),
+              GameDetailsX01(gameX01: widget.gameX01),
               for (int i = 0; i < 2; i++) ...[
-                PlayerEntry(
-                    i: i, gameX01: widget.gameX01, openGame: widget.openGame),
+                PlayerEntryFinishX01(
+                    i: i, gameX01: widget.gameX01, openGame: widget.isOpenGame),
                 if (i == 0) ListDivider(),
               ],
               if (Utils.getPlayersOrTeamStatsList(
@@ -61,10 +62,11 @@ class _StatsCardX01State extends State<StatsCardX01> {
                                   widget.gameX01, gameSettingsX01)
                               .length;
                       i++) ...[
-                    PlayerEntry(
-                        i: i,
-                        gameX01: widget.gameX01,
-                        openGame: widget.openGame),
+                    PlayerEntryFinishX01(
+                      i: i,
+                      gameX01: widget.gameX01,
+                      openGame: widget.isOpenGame,
+                    ),
                     if (i !=
                         Utils.getPlayersOrTeamStatsList(
                                     widget.gameX01, gameSettingsX01)

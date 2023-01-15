@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:tuple/tuple.dart';
@@ -40,7 +40,7 @@ class Bot extends Player {
   // String -> scored value
   // int -> amount of finish darts
   // int -> amount of checkout darts
-  Tuple3<String, int, int> getNextScoredValue(GameX01 gameX01) {
+  Tuple3<String, int, int> getNextScoredValue(GameX01_P gameX01) {
     Tuple3<String, int, int> resultTuple = new Tuple3('', 3, 0);
 
     // 0 -> when starting the game

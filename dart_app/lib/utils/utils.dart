@@ -1,11 +1,16 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/score_training/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class Utils {
@@ -108,14 +113,14 @@ class Utils {
   }
 
   static String getWinnerOfLeg(
-      String setLegString, Game? game, BuildContext context) {
+      String setLegString, Game_P? game, BuildContext context) {
     final bool isSingleMode =
         game!.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single;
 
     int currentPoints;
     for (PlayerOrTeamGameStatisticsX01 playerOrTeamStats
         in Utils.getPlayersOrTeamStatsList(
-            game as GameX01, game.getGameSettings)) {
+            game as GameX01_P, game.getGameSettings)) {
       if (Utils.playerStatsDisplayedInTeamMode(game, game.getGameSettings)) {
         PlayerOrTeamGameStatisticsX01 teamStats =
             (game).getTeamStatsFromPlayer(playerOrTeamStats.getPlayer.getName);
@@ -341,7 +346,7 @@ class Utils {
   }
 
   static dynamic getPlayersOrTeamStatsList(
-      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameX01.getAreTeamStatsDisplayed) {
       return gameX01.getTeamGameStatistics;
@@ -351,18 +356,18 @@ class Utils {
   }
 
   static bool teamStatsDisplayed(
-      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameX01.getAreTeamStatsDisplayed;
   }
 
   static bool playerStatsDisplayedInTeamMode(
-      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         !gameX01.getAreTeamStatsDisplayed;
   }
 
-  static Row setLegStrings(GameX01 gameX01, GameSettingsX01_P gameSettingsX01,
+  static Row setLegStrings(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
       BuildContext context) {
     return Row(
       children: [
@@ -423,5 +428,270 @@ class Utils {
 
   static Color getTextColorDarken(BuildContext context) {
     return darken(Theme.of(context).colorScheme.primary, 55);
+  }
+
+  static String getCurrentThreeDartsCalculated(List<String> currentThreeDarts) {
+    int result = 0;
+
+    for (String dart in currentThreeDarts) {
+      result += getValueOfSpecificDart(dart);
+    }
+
+    return result.toString();
+  }
+
+  static int getValueOfSpecificDart(String dart) {
+    int result = 0;
+    String temp;
+
+    if (dart == 'Dart 1' || dart == 'Dart 2' || dart == 'Dart 3') {
+      return result;
+    }
+
+    if (dart == 'Bull') {
+      result += 50;
+    } else if (dart[0] == 'D') {
+      temp = dart.substring(1);
+      result += (int.parse(temp) * 2);
+    } else if (dart[0] == 'T') {
+      temp = dart.substring(1);
+      result += (int.parse(temp) * 3);
+    } else {
+      result += int.parse(dart);
+    }
+
+    return result;
+  }
+
+  static String appendTrippleOrDouble(
+      PointType currentPointType, String value) {
+    String text = '';
+    if (value != 'Bull' && value != '25' && value != '0') {
+      if (currentPointType == PointType.Double) {
+        text = 'D';
+      } else if (currentPointType == PointType.Tripple) {
+        text = 'T';
+      }
+    }
+    text += value;
+
+    return text;
+  }
+
+  static getBorder(BuildContext context, String value) {
+    const double borderWidth = 3;
+
+    return Border(
+      right: [
+        '1',
+        '2',
+        '3',
+        '4',
+        '6',
+        '7',
+        '8',
+        '9',
+        '11',
+        '12',
+        '13',
+        '14',
+        '16',
+        '17',
+        '18',
+        '19',
+        '25',
+        'Bull',
+        'Bust',
+      ].contains(value)
+          ? BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: borderWidth,
+            )
+          : BorderSide.none,
+      bottom: [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20'
+      ].contains(value)
+          ? BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: borderWidth,
+            )
+          : BorderSide.none,
+      top: [
+        '0',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '25',
+        'Bull',
+        'Bust',
+      ].contains(value)
+          ? BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: borderWidth,
+            )
+          : BorderSide.none,
+    );
+  }
+
+  static dynamic getPlayerOrTeamStatsDynamic(
+      Game_P game_p, BuildContext context) {
+    if (game_p is GameX01_P) {
+      if (game_p.getIsGameFinished || game_p.getIsOpenGame) {
+        return Utils.getPlayersOrTeamStatsList(
+            (game_p), game_p.getGameSettings);
+      }
+      return Utils.getPlayersOrTeamStatsList(
+          context.read<GameX01_P>(), context.read<GameSettingsX01_P>());
+    } else if (game_p is GameScoreTraining_P) {
+      if (game_p.getIsGameFinished || game_p.getIsOpenGame) {
+        return game_p.getPlayerGameStatistics;
+      }
+      return context.read<GameScoreTraining_P>().getPlayerGameStatistics;
+    }
+  }
+
+  static showDialogForSavingGame(BuildContext context, Game_P game_p) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context1) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        contentPadding: EdgeInsets.only(
+            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+            top: DIALOG_CONTENT_PADDING_TOP,
+            left: DIALOG_CONTENT_PADDING_LEFT,
+            right: DIALOG_CONTENT_PADDING_RIGHT),
+        title: const Text(
+          'End Game',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'Would you like to save the game for finishing it later or end it completely?',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+          TextButton(
+            onPressed: () => {
+              Navigator.of(context).pop(),
+              _resetValuesAndNavigateToHome(context, game_p)
+            },
+            child: Text(
+              'End',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+          TextButton(
+            onPressed: () async => {
+              Navigator.of(context, rootNavigator: true).pop(),
+              await context
+                  .read<FirestoreServiceGames>()
+                  .postOpenGame(game_p, context),
+              _resetValuesAndNavigateToHome(context, game_p),
+            },
+            child: Text(
+              'Save',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static _resetValuesAndNavigateToHome(BuildContext context, dynamic game_p) {
+    game_p.reset();
+    Navigator.of(context).pushNamed('/home');
+  }
+
+  // converts List<"value;value;value"> back to List<List<String>>
+  static List<List<String>> convertSimpleListToAllRemainingScoresPerDart(
+      dynamic list) {
+    List<List<String>> result = [];
+
+    for (String value in list) {
+      List<String> temp = [];
+      List<String> parts = value.split(';');
+      for (String part in parts) {
+        temp.add(part);
+      }
+      result.add(temp);
+    }
+
+    return result;
+  }
+
+  // List<List<String>> can't be stored on firebase
+  // converts to List<"value;value;value">
+  static List<String> convertAllRemainingScoresPerDartToSimpleList(
+      List<List<String>> list) {
+    List<String> result = [];
+
+    for (List<String> item in list) {
+      String temp = '';
+      for (String value in item) {
+        temp += (value + ';');
+      }
+      // removes last ;
+      temp = temp.substring(0, temp.length - 1);
+      result.add(temp);
+    }
+
+    return result;
+  }
+
+  static dynamic getFirestoreStatsProviderBasedOnMode(
+      String mode, BuildContext context) {
+    switch (mode) {
+      case 'X01':
+        return context.read<StatsFirestoreX01_P>();
+      case 'Cricket':
+
+      case 'Single Training':
+
+      case 'Double Training':
+
+      case 'Score Training':
+        return context.read<StatsFirestoreScoreTraining_P>();
+    }
   }
 }

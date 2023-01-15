@@ -1,8 +1,8 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/local_widgets/first_nine_avg.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/local_widgets/highest_score.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/local_widgets/three_dart_avg.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/local_widgets/first_nine_avg_stats_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/local_widgets/highest_score_stats_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/local_widgets/three_dart_avg_stats_x01.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -10,7 +10,7 @@ import 'package:sizer/sizer.dart';
 class ScoringStats extends StatefulWidget {
   const ScoringStats({Key? key, required this.gameX01}) : super(key: key);
 
-  final GameX01 gameX01;
+  final GameX01_P gameX01;
 
   @override
   State<ScoringStats> createState() => _ScoringStatsState();
@@ -33,9 +33,9 @@ class _ScoringStatsState extends State<ScoringStats> {
             ),
           ),
         ),
-        ThreeDartAvg(gameX01: widget.gameX01),
-        FirstNineAvg(gameX01: widget.gameX01),
-        HighestScore(gameX01: widget.gameX01),
+        ThreeDartAvgStatsX01(gameX01: widget.gameX01),
+        FirstNineAvgStatsX01(gameX01: widget.gameX01),
+        HighestScoreStatsX01(gameX01: widget.gameX01),
       ],
     );
   }

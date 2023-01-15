@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/local_widgets/best_leg.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/local_widgets/checkout_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/local_widgets/checkout_percent.dart';
@@ -14,7 +14,7 @@ import 'package:sizer/sizer.dart';
 class FinishingStats extends StatelessWidget {
   const FinishingStats({Key? key, required this.gameX01}) : super(key: key);
 
-  final GameX01 gameX01;
+  final GameX01_P gameX01;
 
   @override
   Widget build(BuildContext context) {

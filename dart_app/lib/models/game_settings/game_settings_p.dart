@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
@@ -15,6 +16,24 @@ class GameSettings_P with ChangeNotifier {
   set setPlayers(List<Player> value) => this._players = value;
 
   GameSettings_P() {}
+
+  Map<String, dynamic> toMapScoreTraining(
+      GameSettingsScoreTraining_P gameSettingsScoreTraining_P, bool openGame) {
+    Map<String, dynamic> result = {
+      'players': gameSettingsScoreTraining_P.getPlayers.map((player) {
+        return player.toMap(player);
+      }).toList(),
+      'mode': gameSettingsScoreTraining_P.getMode.toString().split('.').last,
+      'maxRoundsOrPoints': gameSettingsScoreTraining_P.getMaxRoundsOrPoints,
+    };
+
+    if (openGame) {
+      result['inputMethod'] =
+          gameSettingsScoreTraining_P.getInputMethod.toString().split('.').last;
+    }
+
+    return result;
+  }
 
   factory GameSettings_P.fromMapX01(map) {
     late ModeOutIn modeIn;
@@ -91,6 +110,44 @@ class GameSettings_P with ChangeNotifier {
           ? []
           : map['teams'].map<Team>((item) {
               return Team.fromMap(item);
+            }).toList(),
+    );
+  }
+
+  factory GameSettings_P.fromMapScoreTraining(map) {
+    late ScoreTrainingModeEnum mode;
+    late InputMethod inputMethod;
+
+    switch (map['mode']) {
+      case 'MaxPoints':
+        mode = ScoreTrainingModeEnum.MaxPoints;
+        break;
+      case 'MaxRounds':
+        mode = ScoreTrainingModeEnum.MaxRounds;
+        break;
+    }
+
+    if (map['inputMethod'] == null) {
+      inputMethod = InputMethod.Round;
+    } else {
+      switch (map['inputMethod']) {
+        case 'Round':
+          inputMethod = InputMethod.Round;
+          break;
+        case 'ThreeDarts':
+          inputMethod = InputMethod.ThreeDarts;
+          break;
+      }
+    }
+
+    return GameSettingsScoreTraining_P.firestoreScoreTraining(
+      mode: mode,
+      maxRoundsOrPoints: map['maxRoundsOrPoints'],
+      inputMethod: inputMethod,
+      players: map['players'] == null
+          ? []
+          : map['players'].map<Player>((item) {
+              return Player.fromMap(item);
             }).toList(),
     );
   }

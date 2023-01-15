@@ -1,11 +1,15 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/score_training/stats_firestore_score_training_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
+import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/stats_card_score_training/stats_card_st.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_stats_list.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -22,11 +26,16 @@ class StatsPerGameList extends StatefulWidget {
 
 class _StatsPerGameListState extends State<StatsPerGameList> {
   String _mode = '';
+  bool alreadyLoaded = false;
 
   @override
   didChangeDependencies() {
     super.didChangeDependencies();
-    _getMode();
+    if (!alreadyLoaded) {
+      _getMode();
+      _getGames();
+      alreadyLoaded = true;
+    }
   }
 
   _getMode() async {
@@ -36,159 +45,200 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     _mode = arguments.entries.first.value.toString();
   }
 
-  String _getMessage(StatisticsFirestoreX01_P statisticsFirestoreX01) {
-    if (!statisticsFirestoreX01.noGamesPlayed &&
-        statisticsFirestoreX01.favouriteGames.isEmpty) {
+  _getGames() async {
+    if (_mode != 'X01') {
+      await context.read<FirestoreServiceGames>().getGames(_mode, context);
+    }
+  }
+
+  String _getMessage(dynamic statsFirestore, String mode) {
+    if (!statsFirestore.noGamesPlayed &&
+        statsFirestore.favouriteGames.isEmpty) {
       return 'There are currently no games selected as favourite.';
     }
 
     final String messagePart = 'No ${_mode} games were played';
+    if (mode == 'X01') {
+      switch (statsFirestore.currentFilterValue) {
+        case FilterValue.Overall:
+          return 'No ${_mode} games have been played yet.';
+        case FilterValue.Month:
+          return '${messagePart} in the last 30 days.';
+        case FilterValue.Year:
+          return '${messagePart} in the last 365 days.';
+        case FilterValue.Custom:
+          final List<String> dateTimeParts =
+              statsFirestore.customDateFilterRange.split(';');
 
-    switch (statisticsFirestoreX01.currentFilterValue) {
-      case FilterValue.Overall:
-        return 'No ${_mode} games have been played yet.';
-      case FilterValue.Month:
-        return '${messagePart} in the last 30 days.';
-      case FilterValue.Year:
-        return '${messagePart} in the last 365 days.';
-      case FilterValue.Custom:
-        final List<String> dateTimeParts =
-            statisticsFirestoreX01.customDateFilterRange.split(';');
-
-        if (dateTimeParts[0] == dateTimeParts[1]) {
-          return '${messagePart} on ${dateTimeParts[0]}.';
-        } else {
-          return 'Between the period from ${dateTimeParts[0]} to ${dateTimeParts[1]}, no ${_mode} games were played.';
-        }
+          if (dateTimeParts[0] == dateTimeParts[1]) {
+            return '${messagePart} on ${dateTimeParts[0]}.';
+          } else {
+            return 'Between the period from ${dateTimeParts[0]} to ${dateTimeParts[1]}, no ${_mode} games were played.';
+          }
+      }
     }
 
-    return '';
+    return messagePart;
   }
 
-  void _deleteGame(
-      Game game, StatisticsFirestoreX01_P statisticsFirestoreX01) async {
-    await context.read<FirestoreServiceGames>().deleteGame(game, context);
+  void _deleteGame(Game_P game, dynamic statsFirestore) async {
+    await context.read<FirestoreServiceGames>().deleteGame(game.getGameId,
+        context, game.getTeamGameStatistics.length > 0 ? true : false);
 
-    final Game toDelete = statisticsFirestoreX01.games
+    final Game_P toDelete = statsFirestore.games
         .where(((g) => g.getGameId == game.getGameId))
         .first;
-    final FirestoreServicePlayerStats firestoreServicePlayerStats =
-        context.read<FirestoreServicePlayerStats>();
 
-    statisticsFirestoreX01.games.remove(toDelete);
-    statisticsFirestoreX01.filteredGames.remove(toDelete);
-    if (statisticsFirestoreX01.games.isEmpty) {
-      statisticsFirestoreX01.noGamesPlayed = true;
+    statsFirestore.games.remove(toDelete);
+    if (game is GameX01_P) {
+      statsFirestore.filteredGames.remove(toDelete);
+    }
+    if (statsFirestore.games.isEmpty) {
+      statsFirestore.noGamesPlayed = true;
     }
 
-    await firestoreServicePlayerStats.getStatistics(context);
+    await context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
 
-    statisticsFirestoreX01.notify();
+    statsFirestore.notify();
+  }
+
+  _getWidget(dynamic statsFirestore, List<Game_P> games) {
+    if (_mode != 'X01' && !statsFirestore.gamesLoaded) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Colors.white,
+        ),
+      );
+    } else if ((statsFirestore.showFavouriteGames &&
+            statsFirestore.favouriteGames.isNotEmpty) ||
+        (!statsFirestore.showFavouriteGames && games.isNotEmpty)) {
+      statsFirestore.sortGames();
+
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
+          child: Container(
+            width: 90.w,
+            padding: EdgeInsets.only(bottom: 20),
+            child: Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 10,
+                    left: 5,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Click card to view the details about a game',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: 5,
+                    bottom: 10,
+                  ),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '(Swipe left to delete a game)',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                if ((statsFirestore.showFavouriteGames
+                    ? statsFirestore.favouriteGames.isNotEmpty
+                    : games.isNotEmpty))
+                  for (Game_P game in statsFirestore.showFavouriteGames
+                      ? statsFirestore.favouriteGames
+                      : games) ...[
+                    Container(
+                      padding: EdgeInsets.only(bottom: 2.h),
+                      child: Slidable(
+                        key: ValueKey(game.getGameId),
+                        child: _mode == 'X01'
+                            ? StatsCardX01(
+                                isFinishScreen: false,
+                                gameX01: GameX01_P.createGame(game),
+                                isOpenGame: false,
+                              )
+                            : StatsCardScoreTraining(
+                                isFinishScreen: false,
+                                gameScoreTraining_P:
+                                    GameScoreTraining_P.createGame(game),
+                                isOpenGame: false,
+                              ),
+                        startActionPane: ActionPane(
+                          dismissible: DismissiblePane(onDismissed: () {}),
+                          motion: const ScrollMotion(),
+                          children: [
+                            SlidableAction(
+                              onPressed: (context) async {
+                                _deleteGame(game, statsFirestore);
+                              },
+                              backgroundColor: Color(0xFFFE4A49),
+                              foregroundColor: Colors.white,
+                              icon: Icons.delete,
+                              label: 'Delete',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+              ],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Center(
+        child: Text(
+          _getMessage(statsFirestore, _mode),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01_P>();
-    final List<Game> games =
-        statisticsFirestoreX01.currentFilterValue != FilterValue.Overall
-            ? statisticsFirestoreX01.filteredGames
-            : statisticsFirestoreX01.games;
+    late dynamic statsFirestore;
+
+    switch (_mode) {
+      case 'X01':
+        statsFirestore = context.watch<StatsFirestoreX01_P>();
+        break;
+      case 'Cricket':
+        break;
+      case 'Single Training':
+        break;
+      case 'Double Training':
+        break;
+      case 'Score Training':
+        statsFirestore = context.watch<StatsFirestoreScoreTraining_P>();
+        break;
+    }
+
+    List<Game_P> games = statsFirestore.games;
+    if (_mode == 'X01' &&
+        statsFirestore.currentFilterValue != FilterValue.Overall) {
+      games = statsFirestore.filteredGames;
+    }
 
     return Scaffold(
-      appBar: CustomAppBarStatsList(title: '${_mode} Games'),
-      body: Consumer<StatisticsFirestoreX01_P>(
-        builder: (_, statisticsFirestore, __) => (statisticsFirestore
-                    .showFavouriteGames
-                ? statisticsFirestore.favouriteGames.isNotEmpty
-                : games.isNotEmpty)
-            ? SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Center(
-                  child: Container(
-                    width: 90.w,
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10,
-                            left: 5,
-                          ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Click card to view the details about a game',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            left: 5,
-                          ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              '(Swipe left to delete a game)',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        if ((statisticsFirestore.showFavouriteGames
-                            ? statisticsFirestore.favouriteGames.isNotEmpty
-                            : games.isNotEmpty))
-                          statisticsFirestore.sortGames() == null
-                              ? SizedBox.shrink()
-                              : SizedBox.shrink(),
-                        for (Game game in statisticsFirestore.showFavouriteGames
-                            ? statisticsFirestore.favouriteGames
-                            : games) ...[
-                          if (_mode == 'X01') ...[
-                            Slidable(
-                              key: ValueKey(game.getGameId),
-                              child: StatsCardX01(
-                                  isFinishScreen: false,
-                                  gameX01: GameX01.createGameX01(game),
-                                  openGame: false),
-                              startActionPane: ActionPane(
-                                dismissible:
-                                    DismissiblePane(onDismissed: () {}),
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (context) async {
-                                      _deleteGame(game, statisticsFirestore);
-                                    },
-                                    backgroundColor: Color(0xFFFE4A49),
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: 'Delete',
-                                  ),
-                                ],
-                              ),
-                            )
-                          ]
-
-                          //add cards for other modes (StatsCardCricket)
-                        ]
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : Center(
-                child: statisticsFirestore.noGamesPlayed ||
-                        statisticsFirestore.favouriteGames.isEmpty
-                    ? Text(
-                        _getMessage(statisticsFirestore),
-                        textAlign: TextAlign.center,
-                      )
-                    : CircularProgressIndicator(),
-              ),
+      appBar: CustomAppBarStatsList(
+        title: '${_mode} Games',
+        mode: _mode,
       ),
+      body: _getWidget(statsFirestore, games),
     );
   }
 }

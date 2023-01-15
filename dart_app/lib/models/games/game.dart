@@ -1,16 +1,19 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
+import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/models/team.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
-class Game with ChangeNotifier implements Comparable<Game> {
+class Game_P with ChangeNotifier implements Comparable<Game_P> {
   String? _gameId;
   String _name; // e.g. X01 or Cricket
   DateTime _dateTime; // when game was played
@@ -23,14 +26,15 @@ class Game with ChangeNotifier implements Comparable<Game> {
   bool _isGameFinished =
       false; // for team mode -> needed for weird behaviour when clicking the show players/teams btn in the stats tab
   bool _isFavouriteGame = false;
+  bool _revertPossible = false;
 
-  Game({
+  Game_P({
     required String name,
     required DateTime dateTime,
   })  : this._name = name,
         this._dateTime = dateTime;
 
-  Game.Firestore(
+  Game_P.Firestore(
       {String? gameId,
       required String name,
       required bool isGameFinished,
@@ -40,6 +44,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
       required GameSettings_P gameSettings,
       required List<PlayerOrTeamGameStatistics> playerGameStatistics,
       required List<PlayerOrTeamGameStatistics> teamGameStatistics,
+      required bool revertPossible,
       Player? currentPlayerToThrow,
       Team? currentTeamToThrow})
       : this._gameId = gameId,
@@ -51,6 +56,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
         this._gameSettings = gameSettings,
         this._playerGameStatistics = playerGameStatistics,
         this._teamGameStatistics = teamGameStatistics,
+        this._revertPossible = revertPossible,
         this._currentPlayerToThrow = currentPlayerToThrow,
         this._currentTeamToThrow = currentTeamToThrow;
 
@@ -92,7 +98,11 @@ class Game with ChangeNotifier implements Comparable<Game> {
   bool get getIsFavouriteGame => this._isFavouriteGame;
   set setIsFavouriteGame(bool value) => this._isFavouriteGame = value;
 
-  Map<String, dynamic> toMapX01(GameX01 gameX01, bool openGame) {
+  bool get getRevertPossible => this._revertPossible;
+  set setRevertPossible(bool revertPossible) =>
+      this._revertPossible = revertPossible;
+
+  Map<String, dynamic> toMapX01(GameX01_P gameX01, bool openGame) {
     final GameSettingsX01_P gameSettingsX01 =
         getGameSettings as GameSettingsX01_P;
 
@@ -118,6 +128,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
       if (openGame && gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
         'currentTeamToThrow':
             getCurrentTeamToThrow!.toMap(getCurrentTeamToThrow as Team),
+      if (openGame) 'revertPossible': getRevertPossible,
       'gameSettings': {
         if (openGame)
           'inputMethod':
@@ -156,18 +167,48 @@ class Game with ChangeNotifier implements Comparable<Game> {
     };
   }
 
-  factory Game.fromMap(map, mode, gameId, openGame) {
+  Map<String, dynamic> toMapScoreTraining(
+      GameScoreTraining_P gameScoreTraining_P, bool openGame) {
+    Map<String, dynamic> result = {
+      'name': getName,
+      'dateTime': getDateTime,
+      'isFavouriteGame': getIsFavouriteGame,
+    };
+
+    result['gameSettings'] = gameScoreTraining_P.getGameSettings
+        .toMapScoreTraining(gameScoreTraining_P.getGameSettings, openGame);
+
+    if (openGame) {
+      result['isOpenGame'] = true;
+      result['playerGameStatistics'] = getPlayerGameStatistics.map((item) {
+        return item.toMapScoreTraining(
+            item as PlayerGameStatisticsScoreTraining, '', openGame);
+      }).toList();
+      result['currentPlayerToThrow'] =
+          getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player);
+      result['revertPossible'] = getRevertPossible;
+    } else {
+      result['isGameFinished'] = true;
+    }
+
+    return result;
+  }
+
+  factory Game_P.fromMap(map, mode, gameId, openGame) {
     late GameSettings_P gameSettings;
     switch (mode) {
       case 'X01':
         gameSettings = GameSettings_P.fromMapX01(map['gameSettings']);
-      //add other cases like cricket...
+        break;
+      case 'Score Training':
+        gameSettings = GameSettings_P.fromMapScoreTraining(map['gameSettings']);
+        break;
     }
 
     DateTime dateTime = DateTime.parse(map['dateTime'].toDate().toString());
 
     if (openGame) {
-      return Game.Firestore(
+      return Game_P.Firestore(
           gameId: gameId,
           name: map['name'],
           isGameFinished: false,
@@ -177,10 +218,19 @@ class Game with ChangeNotifier implements Comparable<Game> {
           gameSettings: gameSettings,
           playerGameStatistics: map['playerGameStatistics']
               .map<PlayerOrTeamGameStatistics?>((item) {
+                final List<List<String>> allRemainingScoresPerDart =
+                    Utils.convertSimpleListToAllRemainingScoresPerDart(
+                        item['allRemainingScoresPerDart'] != null
+                            ? item['allRemainingScoresPerDart']
+                            : []);
+
                 switch (mode) {
                   case 'X01':
-                    return PlayerOrTeamGameStatistics.fromMapX01(item);
-                  //add other cases like cricket...
+                    return PlayerOrTeamGameStatistics.fromMapX01(
+                        item, allRemainingScoresPerDart);
+                  case 'Score Training':
+                    return PlayerOrTeamGameStatistics.fromMapScoreTraining(
+                        item, allRemainingScoresPerDart);
                 }
               })
               .toList()
@@ -199,6 +249,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
                   .whereType<PlayerOrTeamGameStatistics>()
                   .toList()
               : [],
+          revertPossible: map['revertPossible'],
           currentPlayerToThrow: Player.getPlayerFromList(
               gameSettings.getPlayers,
               Player.fromMap(map['currentPlayerToThrow'])),
@@ -207,11 +258,12 @@ class Game with ChangeNotifier implements Comparable<Game> {
               : null);
     }
 
-    return Game.Firestore(
+    return Game_P.Firestore(
         gameId: gameId,
         name: map['name'],
         isGameFinished: true,
         isOpenGame: false,
+        revertPossible: false,
         isFavouriteGame: map['isFavouriteGame'],
         dateTime: dateTime,
         gameSettings: gameSettings,
@@ -220,7 +272,7 @@ class Game with ChangeNotifier implements Comparable<Game> {
   }
 
   @override
-  int compareTo(Game other) {
+  int compareTo(Game_P other) {
     if (!getDateTime.isBefore(other.getDateTime)) {
       return -1;
     } else if (getDateTime.isBefore(other.getDateTime)) {

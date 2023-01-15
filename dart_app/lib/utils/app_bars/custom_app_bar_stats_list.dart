@@ -1,13 +1,13 @@
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomAppBarStatsList extends StatefulWidget with PreferredSizeWidget {
   final String title;
+  final String mode;
 
-  const CustomAppBarStatsList({required this.title});
+  const CustomAppBarStatsList({required this.title, required this.mode});
 
   @override
   State<CustomAppBarStatsList> createState() => _CustomAppBarStatsListState();
@@ -19,7 +19,8 @@ class CustomAppBarStatsList extends StatefulWidget with PreferredSizeWidget {
 class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
   @override
   Widget build(BuildContext context) {
-    final statisticsFirestore = context.read<StatisticsFirestoreX01_P>();
+    final dynamic statisticsFirestore =
+        Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
 
     return AppBar(
       elevation: 0,
@@ -36,6 +37,8 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onPressed: () {
               var route = ModalRoute.of(context);
               if (route != null) {
@@ -51,6 +54,8 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
       ),
       actions: [
         IconButton(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onPressed: () => {
             if (statisticsFirestore.showFavouriteGames)
               {

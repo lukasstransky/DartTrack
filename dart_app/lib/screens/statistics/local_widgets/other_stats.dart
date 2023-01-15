@@ -1,4 +1,4 @@
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 class OtherStats extends StatelessWidget {
   const OtherStats({Key? key}) : super(key: key);
 
-  String _getGamesWonString(StatisticsFirestoreX01_P statisticsFirestore) {
+  String _getGamesWonString(StatsFirestoreX01_P statisticsFirestore) {
     if (statisticsFirestore.countOfGames == 0) {
       return '-';
     }
@@ -18,7 +18,7 @@ class OtherStats extends StatelessWidget {
     String winPercentage =
         ((100 * (statisticsFirestore.countOfGamesWon as int)) /
                 statisticsFirestore.countOfGames)
-            .toString();
+            .toStringAsFixed(2);
     // remove .00 after comma if present
     final List<String> parts = winPercentage.toString().split('.');
     if (parts[1] == '0') {
@@ -31,7 +31,7 @@ class OtherStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color = Utils.getTextColorDarken(context);
-    return Consumer<StatisticsFirestoreX01_P>(
+    return Consumer<StatsFirestoreX01_P>(
       builder: (_, statisticsFirestore, __) => Column(
         children: [
           Padding(
@@ -46,7 +46,7 @@ class OtherStats extends StatelessWidget {
                             ? statisticsFirestore.countOf180.toString()
                             : '-',
                         style: TextStyle(
-                          color: color,
+                          color: Colors.white,
                         ),
                       ),
                       Text(
@@ -67,7 +67,7 @@ class OtherStats extends StatelessWidget {
                             ? statisticsFirestore.countOfAllDarts.toString()
                             : '-',
                         style: TextStyle(
-                          color: color,
+                          color: Colors.white,
                         ),
                       ),
                       Text(
@@ -88,7 +88,7 @@ class OtherStats extends StatelessWidget {
                             ? statisticsFirestore.countOfGames.toString()
                             : '-',
                         style: TextStyle(
-                          color: color,
+                          color: Colors.white,
                         ),
                       ),
                       Text(
@@ -107,7 +107,7 @@ class OtherStats extends StatelessWidget {
                       Text(
                         _getGamesWonString(statisticsFirestore),
                         style: TextStyle(
-                          color: color,
+                          color: Colors.white,
                         ),
                       ),
                       Text(

@@ -1,5 +1,5 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_leg.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +9,7 @@ import 'package:sizer/sizer.dart';
 class DetailedLegsList extends StatefulWidget {
   DetailedLegsList({Key? key, required this.gameX01}) : super(key: key);
 
-  final GameX01 gameX01;
+  final GameX01_P gameX01;
 
   @override
   State<DetailedLegsList> createState() => _DetailedLegsListState();

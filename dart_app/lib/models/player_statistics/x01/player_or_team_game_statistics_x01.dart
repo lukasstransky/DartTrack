@@ -87,44 +87,47 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
   int _threeDartModeRoundsCount = 0;
   int _totalRoundsCount = 0;
 
-  PlayerOrTeamGameStatisticsX01.Firestore(
-      {required String gameId,
-      required DateTime dateTime,
-      required String mode,
-      required Player? player,
-      required Team? team,
-      required int currentPoints,
-      required int totalPoints,
-      required int startingPoints,
-      required int firstNineAvgPoints,
-      required int firstNineAvgCount,
-      required int currentThrownDartsInLeg,
-      required int allThrownDarts,
-      required SplayTreeMap<String, int> thrownDartsPerLeg,
-      required int dartsForWonLegCount,
-      required bool gameWon,
-      required int legsWon,
-      required int legsWonTotal,
-      required int setsWon,
-      required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
-      required List<int> legsCount,
-      required int checkoutCount,
-      required SplayTreeMap<String, int> checkouts,
-      required Map<String, int> roundedScoresEven,
-      required Map<String, int> roundedScoresOdd,
-      required Map<String, int> preciseScores,
-      required List<int> allScores,
-      required int allScoresCountForRound,
-      required List<int> allScoresPerDart,
-      required Map<String, int> allScoresPerDartAsStringCount,
-      required List<String> allScoresPerDartAsString,
-      required List<int> allRemainingPoints,
-      required List<List<String>> allRemainingScoresPerDart,
-      required bool gameDraw,
-      required Map<String, String> playersWithCheckoutInLeg,
-      required int threeDartModeRoundsCount,
-      required int totalRoundsCount})
-      : super(gameId: gameId, dateTime: dateTime, mode: mode) {
+  PlayerOrTeamGameStatisticsX01.Firestore({
+    required String gameId,
+    required DateTime dateTime,
+    required String mode,
+    required Player? player,
+    required Team? team,
+    required int currentPoints,
+    required int totalPoints,
+    required int startingPoints,
+    required int firstNineAvgPoints,
+    required int firstNineAvgCount,
+    required int currentThrownDartsInLeg,
+    required int allThrownDarts,
+    required SplayTreeMap<String, int> thrownDartsPerLeg,
+    required int dartsForWonLegCount,
+    required bool gameWon,
+    required int legsWon,
+    required int legsWonTotal,
+    required int setsWon,
+    required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
+    required List<int> legsCount,
+    required int checkoutCount,
+    required SplayTreeMap<String, int> checkouts,
+    required Map<String, int> roundedScoresEven,
+    required Map<String, int> roundedScoresOdd,
+    required Map<String, int> preciseScores,
+    required List<int> allScores,
+    required int allScoresCountForRound,
+    required List<int> allScoresPerDart,
+    required Map<String, int> allScoresPerDartAsStringCount,
+    required List<String> allScoresPerDartAsString,
+    required List<int> allRemainingPoints,
+    required List<List<String>> allRemainingScoresPerDart,
+    required bool gameDraw,
+    required Map<String, String> playersWithCheckoutInLeg,
+    required int threeDartModeRoundsCount,
+    required int totalRoundsCount,
+    required SplayTreeMap<String, int> amountOfFinishDarts,
+    required Map<String, String> setLegWithPlayerOrTeamWhoFinishedIt,
+    required List<InputMethod> inputMethodForRounds,
+  }) : super(gameId: gameId, dateTime: dateTime, mode: mode) {
     this.setTeam = team;
     this.setPlayer = player;
     this._currentPoints = currentPoints;
@@ -162,6 +165,10 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
     this._playersWithCheckoutInLeg = playersWithCheckoutInLeg;
     this._threeDartModeRoundsCount = threeDartModeRoundsCount;
     this._totalRoundsCount = totalRoundsCount;
+    this._amountOfFinishDarts = amountOfFinishDarts;
+    this._setLegWithPlayerOrTeamWhoFinishedIt =
+        setLegWithPlayerOrTeamWhoFinishedIt;
+    this._inputMethodForRounds = inputMethodForRounds;
   }
 
   PlayerOrTeamGameStatisticsX01.Team(
@@ -327,7 +334,9 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
 
   //calc average based on total points and all scores length
   String getAverage() {
-    if (getTotalPoints == 0 && getAllScores.length == 0) return '-';
+    if (getTotalPoints == 0 && getAllScores.length == 0) {
+      return '-';
+    }
 
     return ((getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
   }
@@ -336,7 +345,9 @@ class PlayerOrTeamGameStatisticsX01 extends PlayerOrTeamGameStatistics {
     int result = 0;
 
     for (int score in getAllScores) {
-      if (score > result) result = score;
+      if (score > result) {
+        result = score;
+      }
     }
 
     return result;

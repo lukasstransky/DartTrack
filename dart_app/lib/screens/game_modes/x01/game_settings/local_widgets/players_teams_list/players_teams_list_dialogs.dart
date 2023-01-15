@@ -274,6 +274,8 @@ class PlayersTeamsListDialogs {
                           ),
                         ),
                         IconButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             icon: const Icon(Icons.delete),
                             color: Colors.red,
                             onPressed: () {
@@ -653,6 +655,8 @@ class PlayersTeamsListDialogs {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       padding: EdgeInsets.zero,
                       icon: Icon(
                         Icons.arrow_back,

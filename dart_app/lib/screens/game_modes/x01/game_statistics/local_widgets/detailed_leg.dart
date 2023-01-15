@@ -1,6 +1,6 @@
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -18,7 +18,7 @@ class DetailedLeg extends StatefulWidget {
 
   final String setLegString;
   final String winnerOfLeg;
-  final GameX01 gameX01;
+  final GameX01_P gameX01;
 
   @override
   State<DetailedLeg> createState() => _DetailedLegState();
@@ -57,7 +57,7 @@ class _DetailedLegState extends State<DetailedLeg> {
   }
 
   bool _emptyRowNeeded(
-      int dartsToCheck, GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
+      int dartsToCheck, GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     int mostDarts = 0;
     for (PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
@@ -79,7 +79,7 @@ class _DetailedLegState extends State<DetailedLeg> {
   }
 
   String _getPlayerOrTeamName(PlayerOrTeamGameStatisticsX01 stats,
-      GameX01 gameX01, GameSettingsX01_P gameSettingsX01) {
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     if (Utils.teamStatsDisplayed(gameX01, gameSettingsX01))
       return stats.getTeam.getName;
 

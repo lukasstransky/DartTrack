@@ -1,4 +1,4 @@
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,8 +15,7 @@ class _MoreStatsState extends State<MoreStats> {
   bool _showAllScoesPerDartWithCount = false;
   bool _roundedScoresOdd = false;
 
-  bool _highlightRoundedScore(
-      StatisticsFirestoreX01_P statisticsFirestore, int i) {
+  bool _highlightRoundedScore(StatsFirestoreX01_P statisticsFirestore, int i) {
     return statisticsFirestore.countOfGames > 0 &&
         statisticsFirestore.countOfGames > 0 &&
         (!_roundedScoresOdd
@@ -31,7 +30,7 @@ class _MoreStatsState extends State<MoreStats> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<StatisticsFirestoreX01_P>(
+    return Consumer<StatsFirestoreX01_P>(
       builder: (_, statisticsFirestore, __) => Padding(
         padding: EdgeInsets.only(top: 20),
         child: Column(

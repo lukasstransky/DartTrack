@@ -1,8 +1,8 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/helper/revert_helper.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
-import 'package:dart_app/models/games/x01/helper/submit_helper.dart';
+import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 // finishCount is only transfered when the input method is three darts (there I know the finish count)
 showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
     BuildContext context) {
-  final GameX01 gameX01 = context.read<GameX01>();
+  final GameX01_P gameX01 = context.read<GameX01_P>();
   final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
   String threeDartsCalculated = '';
@@ -24,7 +24,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
   int selectedFinishCount = 3;
 
   if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
-    threeDartsCalculated = gameX01.getCurrentThreeDartsCalculated();
+    threeDartsCalculated =
+        Utils.getCurrentThreeDartsCalculated(gameX01.getCurrentThreeDarts);
     selectedFinishCount = gameX01.getAmountOfDartsThrown();
   } else {
     if (gameX01.finishedLegSetOrGame(currentPointsSelected)) {
@@ -468,7 +469,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
 
               gameX01.getCurrentThreeDarts[amount - 1] =
                   'Dart ${amount.toString()}';
-              Revert.revertSomeStats(context, int.parse(currentPointsSelected));
+              RevertX01Helper.revertSomeStats(
+                  context, int.parse(currentPointsSelected));
             } else {
               gameX01.setCurrentPointsSelected = 'Points';
             }
@@ -490,7 +492,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
               g_checkoutCount = selectedCheckoutCount;
               g_thrownDarts = selectedFinishCount;
             } else {
-              Submit.submitPoints(
+              SubmitX01Helper.submitPoints(
                   currentPointsSelected,
                   context,
                   false,

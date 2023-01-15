@@ -1,18 +1,23 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/firestore/score_training/stats_firestore_score_training_p.dart';
 import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_settings/game_settings.dart';
+import 'package:dart_app/screens/game_modes/score_training/finish/finish_st.dart';
+import 'package:dart_app/screens/game_modes/score_training/game/game_st.dart';
+import 'package:dart_app/screens/game_modes/score_training/game_settings/game_settings_score_training.dart';
+import 'package:dart_app/screens/game_modes/score_training/game_statistics/game_statistics_st.dart';
 import 'package:dart_app/screens/game_modes/x01/open_games/open_games.dart';
-import 'package:dart_app/screens/game_modes/x01/finish/finish.dart';
-import 'package:dart_app/screens/game_modes/x01/game/game.dart';
+import 'package:dart_app/screens/game_modes/x01/finish/finish_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings.dart';
 import 'package:dart_app/screens/home/home.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
@@ -78,10 +83,10 @@ class MyApp extends StatelessWidget {
           create: (_) => GameSettingsX01_P(),
         ),
         ChangeNotifierProvider(
-          create: (_) => GameX01(),
+          create: (_) => GameX01_P(),
         ),
         ChangeNotifierProvider(
-          create: (_) => StatisticsFirestoreX01_P(),
+          create: (_) => StatsFirestoreX01_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => OpenGamesFirestore(),
@@ -95,6 +100,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => GameSettingsScoreTraining_P(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => GameScoreTraining_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StatsFirestoreScoreTraining_P(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -102,15 +113,9 @@ class MyApp extends StatelessWidget {
           navigatorKey: navigatorKey,
           title: 'Dart',
           theme: ThemeData(
-            /* colorScheme: ColorScheme.fromSwatch(
-              primarySwatch: Colors.blue,
-              accentColor: Colors.green,
-            ), */
             colorScheme: ColorScheme.fromSwatch().copyWith(
               primary: color,
               secondary: Color.fromARGB(255, 222, 176, 134),
-
-              // secondary: Color.fromARGB(255, 7, 56, 96),
             ),
             scaffoldBackgroundColor: color,
           ),
@@ -119,16 +124,19 @@ class MyApp extends StatelessWidget {
             Home.routeName: (ctx) => Home(),
             ForgotPassword.routeName: (ctx) => ForgotPassword(),
             GameSettingsX01.routeName: (ctx) => GameSettingsX01(),
-            Game.routeName: (ctx) => Game(),
+            GameX01.routeName: (ctx) => GameX01(),
             InGameSettings.routeName: (ctx) => InGameSettings(),
-            Finish.routeName: (ctx) => Finish(),
-            GameStatistics.routeName: (ctx) => GameStatistics(),
+            FinishX01.routeName: (ctx) => FinishX01(),
+            GameStatisticsX01.routeName: (ctx) => GameStatisticsX01(),
             StatsPerGameList.routeName: (ctx) => StatsPerGameList(),
             StatsPerGameFilteredList.routeName: (ctx) =>
                 StatsPerGameFilteredList(),
             OpenGames.routeName: (ctx) => OpenGames(),
             GameSettingsScoreTraining.routeName: (ctx) =>
                 GameSettingsScoreTraining(),
+            GameScoreTraining.routeName: (ctx) => GameScoreTraining(),
+            Finish_st.routeName: (ctx) => Finish_st(),
+            GameStatistics_st.routeName: (ctx) => GameStatistics_st(),
           },
           home: AuthWrapper(),
         );

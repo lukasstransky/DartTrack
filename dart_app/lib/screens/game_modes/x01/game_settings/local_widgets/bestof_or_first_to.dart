@@ -7,34 +7,33 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class BestOfOrFirstTo extends StatelessWidget {
-  _switchBestOfOrFirstTo(
-      BuildContext context, GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf) {
-      gameSettingsX01.setMode = BestOfOrFirstToEnum.FirstTo;
+  _switchBestOfOrFirstTo(BuildContext context, GameSettingsX01_P settings) {
+    if (settings.getMode == BestOfOrFirstToEnum.BestOf) {
+      settings.setMode = BestOfOrFirstToEnum.FirstTo;
 
-      if (gameSettingsX01.getDrawMode) {
-        gameSettingsX01.setDrawMode = false;
+      if (settings.getDrawMode) {
+        settings.setDrawMode = false;
       }
 
-      if (gameSettingsX01.getSetsEnabled) {
-        gameSettingsX01.setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
-        gameSettingsX01.setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
+      if (settings.getSetsEnabled) {
+        settings.setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
+        settings.setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
       } else {
-        gameSettingsX01.setLegs = DEFAULT_LEGS_FIRST_TO_NO_SETS;
+        settings.setLegs = DEFAULT_LEGS_FIRST_TO_NO_SETS;
       }
     } else {
-      gameSettingsX01.setMode = BestOfOrFirstToEnum.BestOf;
-      gameSettingsX01.setWinByTwoLegsDifference = false;
+      settings.setMode = BestOfOrFirstToEnum.BestOf;
+      settings.setWinByTwoLegsDifference = false;
 
-      if (gameSettingsX01.getSetsEnabled) {
-        gameSettingsX01.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
-        gameSettingsX01.setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
+      if (settings.getSetsEnabled) {
+        settings.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+        settings.setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
       } else {
-        gameSettingsX01.setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
+        settings.setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
       }
     }
 
-    gameSettingsX01..notify();
+    settings..notify();
   }
 
   @override

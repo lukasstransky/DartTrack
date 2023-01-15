@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/display_team_or_player_names.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/legs_sets_won.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/show_teams_or_players_stats_btn.dart';
@@ -10,7 +10,7 @@ import 'package:sizer/sizer.dart';
 class GameStats extends StatelessWidget {
   const GameStats({Key? key, required this.gameX01}) : super(key: key);
 
-  final GameX01 gameX01;
+  final GameX01_P gameX01;
 
   @override
   Widget build(BuildContext context) {

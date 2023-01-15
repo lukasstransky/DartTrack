@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,26 +22,28 @@ class FirestoreServiceGames {
   /*****************************          GAMES            ****************************/
   /************************************************************************************/
 
-  Future<String> postGame(Game game) async {
-    final Game gameToSave = Game.Firestore(
+  Future<String> postGame(Game_P game) async {
+    final Game_P gameToSave = Game_P.Firestore(
         name: game.getName,
         isGameFinished: true,
         isOpenGame: false,
         isFavouriteGame: false,
         dateTime: game.getDateTime,
         gameSettings: game.getGameSettings,
+        revertPossible: false,
         playerGameStatistics: [],
         teamGameStatistics: []);
 
     Map<String, dynamic> data = {};
-    if (game is GameX01) {
+    if (game is GameX01_P) {
       data = gameToSave.toMapX01(game, false);
+    } else if (game is GameScoreTraining_P) {
+      data = gameToSave.toMapScoreTraining(game, false);
     }
-    //add other modes like cricket...
 
     String gameId = '';
     await _firestore
-        .collection(this._getFirestoreGamesPath())
+        .collection(_getFirestoreGamesPath())
         .add(data)
         .then((value) => {
               gameId = value.id,
@@ -48,28 +52,30 @@ class FirestoreServiceGames {
     return gameId;
   }
 
-  Future<void> deleteGame(Game game, BuildContext context) async {
+  Future<void> deleteGame(
+      String gameId, BuildContext context, bool teamStatsAvailable) async {
     final FirestoreServicePlayerStats firestoreServicePlayerStats =
         context.read<FirestoreServicePlayerStats>();
 
     // delete playerStats or teamStats
-    await firestoreServicePlayerStats.deletePlayerOrTeamStats(
-        game.getGameId, true);
-    await firestoreServicePlayerStats.deletePlayerOrTeamStats(
-        game.getGameId, false);
+    await firestoreServicePlayerStats.deletePlayerOrTeamStats(gameId, false);
+    if (teamStatsAvailable) {
+      await firestoreServicePlayerStats.deletePlayerOrTeamStats(gameId, true);
+    }
 
     await _firestore
         .collection(this._getFirestoreGamesPath())
-        .doc(game.getGameId)
+        .doc(gameId)
         .delete();
   }
 
   Future<void> resetStatistics(BuildContext context) async {
-    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01_P>();
+    final StatsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatsFirestoreX01_P>();
 
-    for (Game game in statisticsFirestoreX01.games) {
-      deleteGame(game, context);
+    for (Game_P game in statisticsFirestoreX01.games) {
+      deleteGame(game.getGameId, context,
+          game.getTeamGameStatistics.length > 0 ? true : false);
     }
   }
 
@@ -78,40 +84,40 @@ class FirestoreServiceGames {
         .collection(this._getFirestoreGamesPath())
         .where('name', isEqualTo: 'X01')
         .get();
-    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01_P>();
+    final StatsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatsFirestoreX01_P>();
 
     statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
     if (!statisticsFirestoreX01.noGamesPlayed) {
       //todo not the best solution to load all statistics here (-> only precise scores are needed)
-      context.read<FirestoreServicePlayerStats>().getStatistics(context);
+      context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
     }
     statisticsFirestoreX01.notify();
   }
 
   Future<void> getGames(String mode, BuildContext context) async {
-    late dynamic firestoreStats;
-    switch (mode) {
-      case 'X01':
-        firestoreStats = context.read<StatisticsFirestoreX01_P>();
-      //add other modes
-    }
+    final dynamic statsFirestore =
+        Utils.getFirestoreStatsProviderBasedOnMode(mode, context);
 
     final CollectionReference collectionReference =
-        _firestore.collection(this._getFirestoreGamesPath());
+        _firestore.collection(_getFirestoreGamesPath());
     final Query query = collectionReference.where('name', isEqualTo: mode);
     final QuerySnapshot<Object?> games = await query.get();
 
-    firestoreStats.resetGames();
+    statsFirestore.resetGames();
 
     if (games.docs.isEmpty) {
-      firestoreStats.noGamesPlayed = true;
-      firestoreStats.notify();
+      statsFirestore.noGamesPlayed = true;
+      if (mode != 'X01') {
+        statsFirestore.gamesLoaded = true;
+      }
+      statsFirestore.notify();
     } else {
-      firestoreStats.noGamesPlayed = false;
+      statsFirestore.noGamesPlayed = false;
 
-      games.docs.forEach((element) async {
-        final Game game = Game.fromMap(element.data(), mode, element.id, false);
+      await Future.forEach(games.docs, (QueryDocumentSnapshot element) async {
+        final Game_P game =
+            Game_P.fromMap(element.data(), mode, element.id, false);
         final FirestoreServicePlayerStats firestoreServicePlayerStats =
             context.read<FirestoreServicePlayerStats>();
 
@@ -135,12 +141,14 @@ class FirestoreServiceGames {
         }
 
         if (game.getIsFavouriteGame) {
-          firestoreStats.favouriteGames.add(game);
+          statsFirestore.favouriteGames.add(game);
         }
 
-        firestoreStats.games.add(game);
-        firestoreStats.notify();
+        statsFirestore.games.add(game);
       });
+
+      statsFirestore.gamesLoaded = true;
+      statsFirestore.notify();
     }
   }
 
@@ -148,48 +156,50 @@ class FirestoreServiceGames {
   /****************************        OPEN GAMES            **************************/
   /************************************************************************************/
 
-  Future<void> postOpenGame(Game game, BuildContext context) async {
-    final Game gameToSave = Game.Firestore(
-        gameId: game.getGameId,
-        name: game.getName,
+  Future<void> postOpenGame(Game_P game_p, BuildContext context) async {
+    final Game_P gameToSave = Game_P.Firestore(
+        gameId: game_p.getGameId,
+        name: game_p.getName,
         isGameFinished: false,
         isOpenGame: true,
         isFavouriteGame: false,
-        dateTime: game.getDateTime,
-        gameSettings: game.getGameSettings,
-        playerGameStatistics: game.getPlayerGameStatistics,
-        teamGameStatistics: game.getTeamGameStatistics,
-        currentPlayerToThrow: game.getCurrentPlayerToThrow,
-        currentTeamToThrow: game.getCurrentTeamToThrow);
+        revertPossible: game_p.getRevertPossible,
+        dateTime: game_p.getDateTime,
+        gameSettings: game_p.getGameSettings,
+        playerGameStatistics: game_p.getPlayerGameStatistics,
+        teamGameStatistics: game_p.getTeamGameStatistics,
+        currentPlayerToThrow: game_p.getCurrentPlayerToThrow,
+        currentTeamToThrow: game_p.getCurrentTeamToThrow);
     final openGamesFirestore = context.read<OpenGamesFirestore>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreOpenGamesPath());
 
     bool openGameAlreadyExists = false;
-    for (Game openGame in openGamesFirestore.openGames) {
-      if (openGame.getGameId == game.getGameId) {
+    for (Game_P openGame in openGamesFirestore.openGames) {
+      if (openGame.getGameId == game_p.getGameId) {
         openGameAlreadyExists = true;
         break;
       }
     }
 
     Map<String, dynamic> data = {};
-    if (game is GameX01) {
-      data = gameToSave.toMapX01(game, true);
+    if (game_p is GameX01_P) {
+      data = gameToSave.toMapX01(game_p, true);
+    } else if (game_p is GameScoreTraining_P) {
+      data = gameToSave.toMapScoreTraining(game_p, true);
     }
-    //add other modes like cricket...
 
-    //update (e.g. save game again that was already open)
+    // update (e.g. save game again that was already open)
     if (openGameAlreadyExists) {
       await collectionReference.doc(gameToSave.getGameId).update(data);
     } else {
-      //create new one
+      // create new one
       await _firestore
-          .collection(this._getFirestoreOpenGamesPath())
+          .collection(_getFirestoreOpenGamesPath())
           .add(data)
           .then((value) async => {
                 await _firestore
-                    .collection(this._getFirestoreOpenGamesPath())
+                    .collection(_getFirestoreOpenGamesPath())
                     .doc(value.id)
                     .update({'gameId': value.id})
               });
@@ -198,7 +208,7 @@ class FirestoreServiceGames {
 
   Future<void> deleteOpenGame(String gameId, BuildContext context) async {
     await _firestore
-        .collection(this._getFirestoreOpenGamesPath())
+        .collection(_getFirestoreOpenGamesPath())
         .doc(gameId)
         .delete()
         .then((value) async => {
@@ -220,17 +230,18 @@ class FirestoreServiceGames {
                 .containsValue('X01')) {
               mode = 'X01';
             } else if ((openGame.data() as Map<String, dynamic>)
-                .containsValue('Cricket')) {
-              mode = 'Cricket';
+                .containsValue('Score Training')) {
+              mode = 'Score Training';
             }
 
-            final Game game =
-                Game.fromMap(openGame.data(), mode, openGame.id, true);
+            final Game_P game =
+                Game_P.fromMap(openGame.data(), mode, openGame.id, true);
             openGamesFirestore.openGames.add(game);
             openGamesFirestore.notify();
           })
         });
 
+    openGamesFirestore.openGames.sort();
     openGamesFirestore.init = true;
     openGamesFirestore.notify();
   }

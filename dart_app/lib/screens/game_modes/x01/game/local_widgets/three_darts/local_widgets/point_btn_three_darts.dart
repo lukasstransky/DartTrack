@@ -1,8 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
-import 'package:dart_app/models/games/x01/helper/submit_helper.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -18,26 +19,14 @@ class PointBtnThreeDart extends StatelessWidget {
   final String? point;
   final bool? activeBtn;
 
-  String _appendTrippleOrDouble(GameX01 gameX01) {
-    String text = '';
-    if (point != 'Bull' && point != '25' && point != '0') {
-      if (gameX01.getCurrentPointType == PointType.Double) {
-        text = 'D';
-      } else if (gameX01.getCurrentPointType == PointType.Tripple) {
-        text = 'T';
-      }
-    }
-    text += point as String;
-
-    return text;
-  }
-
   _pointBtnClicked(String pointBtnText, BuildContext context) {
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     if (activeBtn as bool && gameX01.getCanBePressed) {
-      _updateCurrentThreeDarts(gameX01, pointBtnText);
+      UtilsPointBtnsThreeDarts.updateCurrentThreeDarts(
+          gameX01.getCurrentThreeDarts, pointBtnText);
+      gameX01.notify();
 
       if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' &&
           gameSettingsX01.getAutomaticallySubmitPoints) {
@@ -54,44 +43,12 @@ class PointBtnThreeDart extends StatelessWidget {
     }
   }
 
-  _updateCurrentThreeDarts(GameX01 gameX01, String points) {
-    final List<String> currentThreeDarts = gameX01.getCurrentThreeDarts;
-
-    if (currentThreeDarts[0] == 'Dart 1') {
-      currentThreeDarts[0] = points;
-    } else if (currentThreeDarts[1] == 'Dart 2') {
-      currentThreeDarts[1] = points;
-    } else if (currentThreeDarts[2] == 'Dart 3') {
-      currentThreeDarts[2] = points;
-    }
-
-    gameX01.notify();
-  }
-
-  //calculate points based on single, double, tripple
-  String _calculatePoints(String scoredPoint, GameX01 gameX01) {
-    int points;
-
-    if (scoredPoint == 'Bull') {
-      points = 50;
-    } else {
-      points = int.parse(scoredPoint);
-
-      if (gameX01.getCurrentPointType == PointType.Double)
-        points = points * 2;
-      else if (gameX01.getCurrentPointType == PointType.Tripple)
-        points = points * 3;
-    }
-
-    return points.toString();
-  }
-
   // scoredField -> e.g. 20
   // scoredFieldWithPointType -> e.g. T20
   _submitPointsForInputMethodThreeDarts(
       String scoredField, String scoredFieldWithPointType, BuildContext context,
       [bool shouldSubmitTeamStats = false]) {
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     late final PlayerOrTeamGameStatisticsX01 currentStats;
@@ -108,10 +65,11 @@ class PointBtnThreeDart extends StatelessWidget {
     currentStats.setPointsSelectedCount =
         currentStats.getPointsSelectedCount + 1;
 
-    final String scoredPoints = _calculatePoints(scoredField, gameX01);
+    final String scoredPoints = UtilsPointBtnsThreeDarts.calculatePoints(
+        scoredField, gameX01.getCurrentPointType);
     final int scoredPointsParsed = int.parse(scoredPoints);
 
-    Submit.submitStatsForThreeDartsMode(
+    SubmitX01Helper.submitStatsForThreeDartsMode(
         gameX01,
         gameSettingsX01,
         scoredPointsParsed,
@@ -119,7 +77,8 @@ class PointBtnThreeDart extends StatelessWidget {
         shouldSubmitTeamStats,
         currentStats);
 
-    final String currentThreeDarts = gameX01.getCurrentThreeDartsCalculated();
+    final String currentThreeDarts =
+        Utils.getCurrentThreeDartsCalculated(gameX01.getCurrentThreeDarts);
     final int amountOfDartsThrown = gameX01.getAmountOfDartsThrown();
     final bool finished = gameX01.finishedLegSetOrGame(currentThreeDarts);
 
@@ -134,7 +93,7 @@ class PointBtnThreeDart extends StatelessWidget {
         if (!gameSettingsX01.getAutomaticallySubmitPoints) {
           g_checkoutCount = 1;
         } else {
-          Submit.submitPoints(scoredPoints, context, false, 3, 1);
+          SubmitX01Helper.submitPoints(scoredPoints, context, false, 3, 1);
           submitAlreadyCalled = true;
         }
 
@@ -144,7 +103,7 @@ class PointBtnThreeDart extends StatelessWidget {
           g_checkoutCount = 1;
           g_thrownDarts = 1;
         } else {
-          Submit.submitPoints(scoredPoints, context, false, 1, 1);
+          SubmitX01Helper.submitPoints(scoredPoints, context, false, 1, 1);
           submitAlreadyCalled = true;
         }
 
@@ -160,7 +119,7 @@ class PointBtnThreeDart extends StatelessWidget {
               g_checkoutCount = 1;
               g_thrownDarts = amountOfDartsThrown;
             } else {
-              Submit.submitPoints(
+              SubmitX01Helper.submitPoints(
                   scoredPoints, context, false, amountOfDartsThrown, 1);
               submitAlreadyCalled = true;
             }
@@ -181,7 +140,7 @@ class PointBtnThreeDart extends StatelessWidget {
     if (!submitAlreadyCalled &&
         gameSettingsX01.getAutomaticallySubmitPoints &&
         !shouldSubmitTeamStats) {
-      Submit.submitPoints(scoredField, context);
+      SubmitX01Helper.submitPoints(scoredField, context);
     }
 
     if (!shouldSubmitTeamStats &&
@@ -200,79 +159,15 @@ class PointBtnThreeDart extends StatelessWidget {
     return false;
   }
 
-  _getBorder(BuildContext context) {
-    const double borderWidth = 3;
-
-    return Border(
-      right: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '6',
-        '7',
-        '8',
-        '9',
-        '11',
-        '12',
-        '13',
-        '14',
-        '16',
-        '17',
-        '18',
-        '19',
-        '25',
-        'Bull'
-      ].contains(point)
-          ? BorderSide(
-              color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
-            )
-          : BorderSide.none,
-      bottom: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-        '10',
-        '11',
-        '12',
-        '13',
-        '14',
-        '15',
-        '16',
-        '17',
-        '18',
-        '19',
-        '20'
-      ].contains(point)
-          ? BorderSide(
-              color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
-            )
-          : BorderSide.none,
-      top: ['0', '1', '2', '3', '4', '5', '25', 'Bull'].contains(point)
-          ? BorderSide(
-              color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
-            )
-          : BorderSide.none,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    final GameX01 gameX01 = context.read<GameX01>();
-    final String pointBtnText = _appendTrippleOrDouble(gameX01);
+    final GameX01_P gameX01 = context.read<GameX01_P>();
+    final String pointBtnText = Utils.appendTrippleOrDouble(
+        gameX01.getCurrentPointType, point as String);
 
     return Container(
       decoration: BoxDecoration(
-        border: _getBorder(context),
+        border: Utils.getBorder(context, point as String),
       ),
       child: ElevatedButton(
         style: ButtonStyle(

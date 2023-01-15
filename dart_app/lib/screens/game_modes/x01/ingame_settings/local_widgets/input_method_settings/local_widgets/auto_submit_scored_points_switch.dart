@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -145,7 +145,7 @@ class _AutoSubmitOrScoredPointsSwitchState
   }
 
   int _calcCardHeight(GameSettingsX01_P gameSettingsX01,
-      StatisticsFirestoreX01_P statisticsFirestoreX01) {
+      StatsFirestoreX01_P statisticsFirestoreX01) {
     if (gameSettingsX01.getInputMethod == InputMethod.Round &&
         gameSettingsX01.getShowMostScoredPoints) {
       if (!statisticsFirestoreX01.noGamesPlayed) {
@@ -159,7 +159,7 @@ class _AutoSubmitOrScoredPointsSwitchState
   }
 
   _fetchFromStatsBtnPressed(GameSettingsX01_P gameSettingsX01,
-      StatisticsFirestoreX01_P statisticsFirestoreX01) {
+      StatsFirestoreX01_P statisticsFirestoreX01) {
     for (int i = 0; i < gameSettingsX01.getMostScoredPoints.length; i++) {
       if (i < statisticsFirestoreX01.preciseScores.length)
         gameSettingsX01.getMostScoredPoints[i] =
@@ -183,7 +183,7 @@ class _AutoSubmitOrScoredPointsSwitchState
   @override
   Widget build(BuildContext context) {
     final gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final statisticsFirestore = context.read<StatisticsFirestoreX01_P>();
+    final statisticsFirestore = context.read<StatsFirestoreX01_P>();
     final showMostScoredPoints = gameSettingsX01.getShowMostScoredPoints;
 
     return Container(
@@ -227,7 +227,7 @@ class _AutoSubmitOrScoredPointsSwitchState
   }
 
   Container fetchFromStatsBtn(GameSettingsX01_P gameSettingsX01,
-      StatisticsFirestoreX01_P statisticsFirestoreX01) {
+      StatsFirestoreX01_P statisticsFirestoreX01) {
     return Container(
       height: 4.h,
       margin: EdgeInsets.only(top: 5.w, left: 5.w, right: 5.w),

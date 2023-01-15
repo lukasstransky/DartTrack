@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,7 +14,7 @@ class AvgBestWorstStats extends StatelessWidget {
   Widget build(BuildContext context) {
     Color color = Utils.getTextColorDarken(context);
     //Color color = Colors.black;
-    return Consumer<StatisticsFirestoreX01_P>(
+    return Consumer<StatsFirestoreX01_P>(
       builder: (_, statisticsFirestore, __) => Column(
         children: [
           Padding(

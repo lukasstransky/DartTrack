@@ -7,6 +7,8 @@ ItemScrollController scrollController =
     ItemScrollController(); //for scrolling to player whos turn it is in game
 ScrollController scrollControllerPlayers = new ScrollController();
 ScrollController scrollControllerTeams = new ScrollController();
+ScrollController scrollControllerScoreTrainingPlayerEntries =
+    new ScrollController();
 
 TextEditingController newPlayerController = new TextEditingController();
 TextEditingController newTeamController = new TextEditingController();
@@ -27,6 +29,11 @@ ScrollController newScrollControllerPlayers() {
 ScrollController newScrollControllerTeams() {
   scrollControllerTeams = new ScrollController();
   return scrollControllerTeams;
+}
+
+ScrollController newScrollControllerScoreTrainingPlayerEntries() {
+  scrollControllerScoreTrainingPlayerEntries = new ScrollController();
+  return scrollControllerScoreTrainingPlayerEntries;
 }
 
 disposeScrollControllersForGamesettings() {

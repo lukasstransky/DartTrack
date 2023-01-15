@@ -1,17 +1,10 @@
-import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
-import 'package:dart_app/utils/utils.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class TargetNumber extends StatelessWidget {
   const TargetNumber({Key? key}) : super(key: key);
 
-  _showDialogForInfoAboutTargetNumber(BuildContext context) {
+  /* _showDialogForInfoAboutTargetNumber(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -169,16 +162,16 @@ class TargetNumber extends StatelessWidget {
         !gameSettingsScoreTraining_P.getIsTargetNumberEnabled;
 
     Navigator.of(context).pop();
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsScoreTraining_P =
+    /*    final gameSettingsScoreTraining_P =
         context.read<GameSettingsScoreTraining_P>();
-
+ */
     return Container(
       width: 90.w,
-      child: Column(
+      /* child: Column(
         children: [
           Row(
             children: [
@@ -250,7 +243,7 @@ class TargetNumber extends StatelessWidget {
                 : SizedBox.shrink(),
           ),
         ],
-      ),
+      ), */
     );
   }
 }

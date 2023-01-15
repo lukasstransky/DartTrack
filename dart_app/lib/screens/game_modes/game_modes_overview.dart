@@ -22,6 +22,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   @override
   initState() {
     _getOpenGames();
+    //todo move _getDefaultSettingsX01
     _getDefaultSettingsX01();
     super.initState();
   }
@@ -54,9 +55,9 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                 children: [
                   X01Btn(),
                   CricketBtn(),
-                  SinglesTrainingBtn(),
-                  DoublesTrainingBtn(),
-                  ScoresTrainingBtn(),
+                  SingleTrainingBtn(),
+                  DoubleTrainingBtn(),
+                  ScoreTrainingBtn(),
                 ],
               ),
             ),
@@ -67,8 +68,8 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   }
 }
 
-class ScoresTrainingBtn extends StatelessWidget {
-  const ScoresTrainingBtn({Key? key}) : super(key: key);
+class ScoreTrainingBtn extends StatelessWidget {
+  const ScoreTrainingBtn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,7 @@ class ScoresTrainingBtn extends StatelessWidget {
       height: GAME_MODES_OVERVIEW_HEIGHT.h,
       child: ElevatedButton(
         child: Text(
-          'Scores Training',
+          'Score Training',
           style: TextStyle(
               fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
               color: Theme.of(context).colorScheme.secondary),
@@ -85,6 +86,9 @@ class ScoresTrainingBtn extends StatelessWidget {
         onPressed: () =>
             Navigator.of(context).pushNamed('/settingsScoreTraining'),
         style: ButtonStyle(
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
           backgroundColor: MaterialStateProperty.all(
             Utils.darken(Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
           ),
@@ -101,8 +105,8 @@ class ScoresTrainingBtn extends StatelessWidget {
   }
 }
 
-class DoublesTrainingBtn extends StatelessWidget {
-  const DoublesTrainingBtn({
+class DoubleTrainingBtn extends StatelessWidget {
+  const DoubleTrainingBtn({
     Key? key,
   }) : super(key: key);
 
@@ -115,13 +119,16 @@ class DoublesTrainingBtn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'Doubles Training',
+            'Double Training',
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () => null,
           style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: MaterialStateProperty.all(
               Utils.darken(
                   Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
@@ -140,8 +147,8 @@ class DoublesTrainingBtn extends StatelessWidget {
   }
 }
 
-class SinglesTrainingBtn extends StatelessWidget {
-  const SinglesTrainingBtn({
+class SingleTrainingBtn extends StatelessWidget {
+  const SingleTrainingBtn({
     Key? key,
   }) : super(key: key);
 
@@ -154,7 +161,7 @@ class SinglesTrainingBtn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'Singles Training',
+            'Single Training',
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),

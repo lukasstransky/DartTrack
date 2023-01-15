@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -10,7 +10,7 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
   const ShowTeamsOrPlayersStatsBtn({Key? key, required this.gameX01})
       : super(key: key);
 
-  final GameX01 gameX01;
+  final GameX01_P gameX01;
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,9 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
         transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
         child: ElevatedButton(
           onPressed: () {
-            context.read<GameX01>().setAreTeamStatsDisplayed =
+            context.read<GameX01_P>().setAreTeamStatsDisplayed =
                 !gameX01.getAreTeamStatsDisplayed;
-            context.read<GameX01>().notify();
+            context.read<GameX01_P>().notify();
 
             // only for stats tab
             if (gameX01.getIsGameFinished || gameX01.getIsOpenGame) {

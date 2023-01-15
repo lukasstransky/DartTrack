@@ -10,7 +10,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -166,10 +165,10 @@ class AddPlayerTeamBtnDialogs {
                         ),
                       ),
                     ),
-                    if (newPlayer == NewPlayer.Guest) GuestTextFormField(),
-                  ] else ...[
-                    GuestTextFormField(),
-                  ]
+                    if (newPlayer == NewPlayer.Guest)
+                      GuestTextFormField(gameSettings_P: gameSettings_P),
+                  ] else
+                    GuestTextFormField(gameSettings_P: gameSettings_P),
                 ],
               );
             },
@@ -185,6 +184,8 @@ class AddPlayerTeamBtnDialogs {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: IconButton(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                             padding: EdgeInsets.zero,
                             icon: Icon(
                               Icons.arrow_back,
@@ -380,6 +381,8 @@ class AddPlayerTeamBtnDialogs {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                           padding: EdgeInsets.zero,
                           icon: Icon(
                             Icons.arrow_back,
@@ -696,6 +699,8 @@ class AddPlayerTeamBtnDialogs {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       padding: EdgeInsets.zero,
                       icon: Icon(
                         Icons.arrow_back,
@@ -752,10 +757,15 @@ class AddPlayerTeamBtnDialogs {
 }
 
 class GuestTextFormField extends StatelessWidget {
+  const GuestTextFormField({
+    Key? key,
+    required this.gameSettings_P,
+  }) : super(key: key);
+
+  final GameSettings_P gameSettings_P;
+
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01_P>();
-
     return TextFormField(
       controller: newPlayerController,
       textInputAction: TextInputAction.done,
@@ -763,7 +773,7 @@ class GuestTextFormField extends StatelessWidget {
         if (value!.isEmpty) {
           return ('Please enter a name!');
         }
-        if (gameSettingsX01.checkIfPlayerNameExists(value)) {
+        if (gameSettings_P.checkIfPlayerNameExists(value)) {
           return 'Playername already exists!';
         }
         return null;

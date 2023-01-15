@@ -1,8 +1,8 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/auto_submit_scored_points_switch.dart';
-import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/select_input_method.dart';
+import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/select_input_method_x01_settings.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/show_input_method_switch.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -16,8 +16,8 @@ class InputMethodSettings extends StatelessWidget {
 
   int _calcCardHeight(BuildContext context, InputMethod inputMethod,
       bool showMostScoredPoints) {
-    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01_P>();
+    final StatsFirestoreX01_P statisticsFirestoreX01 =
+        context.read<StatsFirestoreX01_P>();
 
     if (inputMethod == InputMethod.Round && showMostScoredPoints) {
       if (!statisticsFirestoreX01.noGamesPlayed) {
@@ -52,13 +52,14 @@ class InputMethodSettings extends StatelessWidget {
                 child: Text(
                   'Input Method',
                   style: TextStyle(
-                      fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
-                      color: Utils.getPrimaryColorDarken(context),
-                      fontWeight: FontWeight.bold),
+                    fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               ShowInputMethodSwitch(),
-              SelectInputMethod(),
+              SelectInputMethodX01Settings(),
               AutoSubmitOrScoredPointsSwitch(),
             ],
           ),

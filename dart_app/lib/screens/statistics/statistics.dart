@@ -1,16 +1,17 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/more_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/other_stats.dart';
-import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns.dart';
+import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/stats_per_game_btns.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 
 class Statistics extends StatefulWidget {
@@ -23,7 +24,7 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   initState() {
-    context.read<StatisticsFirestoreX01_P>().currentFilterValue =
+    context.read<StatsFirestoreX01_P>().currentFilterValue =
         FilterValue.Overall;
     _getPlayerGameStatistics();
     _getGames();
@@ -31,7 +32,7 @@ class _StatisticsState extends State<Statistics> {
   }
 
   _getPlayerGameStatistics() async {
-    await context.read<FirestoreServicePlayerStats>().getStatistics(context);
+    await context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
   }
 
   _getGames() async {
@@ -40,27 +41,31 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-      body: Consumer<StatisticsFirestoreX01_P>(
-        builder: (_, statisticsFirestore, __) =>
-            statisticsFirestore.avgBestWorstStatsLoaded
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        FilterBar(),
-                        OtherStats(),
-                        AvgBestWorstStats(),
-                        if (_showMoreStats) MoreStats(),
-                        showMoreStatsBtn(),
-                        StatsPerGameBtns()
-                      ],
+    return LoaderOverlay(
+      child: Scaffold(
+        appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
+        body: Consumer<StatsFirestoreX01_P>(
+          builder: (_, statisticsFirestore, __) =>
+              statisticsFirestore.avgBestWorstStatsLoaded
+                  ? SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: [
+                          FilterBar(),
+                          OtherStats(),
+                          AvgBestWorstStats(),
+                          if (_showMoreStats) MoreStats(),
+                          showMoreStatsBtn(),
+                          StatsPerGameBtns()
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
                     ),
-                  )
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
+        ),
       ),
     );
   }

@@ -1,7 +1,7 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/helper/default_settings_helper.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/add_player_team_btn/add_player_team_btn.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/add_player_team_btn/add_player_team_btn_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/advanced_settings.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/bestof_or_first_to.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/checkout_counting.dart';
@@ -12,10 +12,10 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/play
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/points_row/points_row.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/sets_or_legs/sets_legs.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/single_or_team.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/start_game_btn.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/start_game_btn_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/win_by_two_legs_diff.dart';
 import 'package:dart_app/services/auth_service.dart';
-import 'package:dart_app/utils/app_bars/custom_app_bar_x01_settings.dart';
+import 'package:dart_app/utils/app_bars/x01/custom_app_bar_x01_settings.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';

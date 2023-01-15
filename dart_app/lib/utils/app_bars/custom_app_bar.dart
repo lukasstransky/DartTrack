@@ -26,6 +26,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         children: [
           if (showBackBtn)
             IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () {
                 var route = ModalRoute.of(context);
                 if (route != null) {
@@ -49,6 +51,8 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
       actions: [
         if (showInfoIcon)
           IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () =>
                   AppBarDialogHelper.showDialogForInfoAboutScoreTraining(
                       context),

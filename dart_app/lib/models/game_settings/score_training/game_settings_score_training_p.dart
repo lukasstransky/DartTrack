@@ -1,12 +1,16 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
+import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
+
 import 'package:flutter/material.dart';
 
 class GameSettingsScoreTraining_P extends GameSettings_P {
   ScoreTrainingModeEnum _mode = ScoreTrainingModeEnum.MaxRounds;
   int _maxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
-  bool _isTargetNumberEnabled = false;
-  int _targetNumber = DEFAULT_TARGET_NUMBER;
+  InputMethod _inputMethod = InputMethod.Round;
+  bool automaticallySubmitPoints = false;
 
   TextEditingController _maxRoundsOrPointsController =
       new TextEditingController(text: DEFAULT_ROUNDS_SCORE_TRAINING.toString());
@@ -17,18 +21,32 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
 
   GameSettingsScoreTraining_P() {}
 
+  GameSettingsScoreTraining_P.firestoreScoreTraining({
+    required ScoreTrainingModeEnum mode,
+    required int maxRoundsOrPoints,
+    required InputMethod inputMethod,
+    List<Player>? players,
+  }) {
+    this.setMode = mode;
+    this.setMaxRoundsOrPoints = maxRoundsOrPoints;
+    this.setInputMethod = inputMethod;
+    if (players != null) {
+      setPlayers = players;
+    }
+  }
+
   ScoreTrainingModeEnum get getMode => this._mode;
   set setMode(ScoreTrainingModeEnum value) => this._mode = value;
 
   int get getMaxRoundsOrPoints => this._maxRoundsOrPoints;
   set setMaxRoundsOrPoints(int value) => this._maxRoundsOrPoints = value;
 
-  bool get getIsTargetNumberEnabled => this._isTargetNumberEnabled;
-  set setIsTargetNumberEnabled(bool value) =>
-      this._isTargetNumberEnabled = value;
+  InputMethod get getInputMethod => this._inputMethod;
+  set setInputMethod(InputMethod value) => this._inputMethod = value;
+  bool get getAutomaticallySubmitPoints => this.automaticallySubmitPoints;
 
-  int get getTargetNumber => this._targetNumber;
-  set setTargetNumber(int value) => this._targetNumber = value;
+  set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) =>
+      this.automaticallySubmitPoints = automaticallySubmitPoints;
 
   GlobalKey<FormState> get getFormKeyMaxRoundsOrPoints =>
       this._formKeyMaxRoundsOrPoints;
@@ -72,25 +90,43 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
     }
   }
 
-  resetTargetNumberToDefault() {
-    setIsTargetNumberEnabled = false;
-    setTargetNumber = DEFAULT_TARGET_NUMBER;
-    setTargetNumberController =
-        new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
-    setFormKeyTargetNumber = GlobalKey<FormState>();
-  }
-
   reset() {
     setMode = ScoreTrainingModeEnum.MaxRounds;
     setMaxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
+    setInputMethod = InputMethod.Round;
     setMaxRoundsOrPointsController = new TextEditingController(
         text: DEFAULT_ROUNDS_SCORE_TRAINING.toString());
     setFormKeyMaxRoundsOrPoints = GlobalKey<FormState>();
     setPlayers = [];
-    resetTargetNumberToDefault();
   }
 
   notify() {
     notifyListeners();
+  }
+
+  String getModeStringFinishScreen(
+      bool isOpenGame, GameScoreTraining_P gameScoreTraining_P) {
+    if (getMode == ScoreTrainingModeEnum.MaxRounds) {
+      if (isOpenGame) {
+        int unplayedRounds = 0;
+        for (PlayerGameStatisticsScoreTraining stats
+            in gameScoreTraining_P.getPlayerGameStatistics) {
+          if (stats.getRoundsOrPointsLeft > unplayedRounds) {
+            unplayedRounds = stats.getRoundsOrPointsLeft;
+          }
+        }
+
+        return '${unplayedRounds} out of ${getMaxRoundsOrPoints} rounds remain unplayed';
+      }
+      return '${getMaxRoundsOrPoints} rounds played';
+    }
+    return 'First to ${getMaxRoundsOrPoints} points';
+  }
+
+  String getModeStringStatsScreen() {
+    if (getMode == ScoreTrainingModeEnum.MaxRounds) {
+      return 'Best of ${getMaxRoundsOrPoints} rounds';
+    }
+    return 'First to ${getMaxRoundsOrPoints} points';
   }
 }

@@ -29,9 +29,10 @@ class HideShow extends StatelessWidget {
               child: Text(
                 'Hide/Show',
                 style: TextStyle(
-                    fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
-                    color: Utils.getPrimaryColorDarken(context),
-                    fontWeight: FontWeight.bold),
+                  fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
             HideShowAverage(),

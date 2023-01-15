@@ -1,7 +1,7 @@
-import 'package:dart_app/models/firestore/x01/statistics_firestore_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
@@ -10,15 +10,18 @@ import 'package:provider/provider.dart';
 class CustomAppBarWithHeart extends StatefulWidget with PreferredSizeWidget {
   CustomAppBarWithHeart(
       {required this.title,
+      required this.mode,
       this.gameId,
       this.isFinishScreen = false,
       this.isFavouriteGame = false,
       this.showHeart = true});
 
   final String title;
+  final String mode;
   final String? gameId; // optional, passed from game.statistics
   final bool isFinishScreen;
   final bool showHeart;
+
   bool isFavouriteGame;
 
   @override
@@ -39,16 +42,13 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
     });
   }
 
-  Game _getGameById(
-      String gameId, StatisticsFirestoreX01_P statisticsFirestoreX01) {
-    return statisticsFirestoreX01.games
-        .where(((g) => g.getGameId == gameId))
-        .first;
+  Game_P _getGameById(String gameId, dynamic statsFirestore) {
+    return statsFirestore.games.where(((g) => g.getGameId == gameId)).first;
   }
 
   _addGameToFavourites() {
-    final StatisticsFirestoreX01_P statisticsFirestoreX01 =
-        context.read<StatisticsFirestoreX01_P>();
+    final dynamic statsFirestore =
+        Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
     final String gameId =
         widget.gameId != null ? widget.gameId as String : g_gameId;
 
@@ -56,25 +56,25 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
       _changeFavouriteStateOfGame(gameId, false);
 
       if (!widget.isFinishScreen) {
-        final Game game = _getGameById(gameId, statisticsFirestoreX01);
+        final Game_P game = _getGameById(gameId, statsFirestore);
         game.setIsFavouriteGame = false;
 
         // remove game from the favourites
-        statisticsFirestoreX01.favouriteGames.remove(game);
+        statsFirestore.favouriteGames.remove(game);
       }
     } else {
       _changeFavouriteStateOfGame(gameId, true);
 
       if (!widget.isFinishScreen) {
-        final Game game = _getGameById(gameId, statisticsFirestoreX01);
+        final Game_P game = _getGameById(gameId, statsFirestore);
         game.setIsFavouriteGame = true;
 
         // add game to the favourites
-        statisticsFirestoreX01.favouriteGames.add(game);
+        statsFirestore.favouriteGames.add(game);
       }
     }
 
-    statisticsFirestoreX01.notify();
+    statsFirestore.notify();
   }
 
   @override
@@ -87,6 +87,8 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
       leading: widget.isFinishScreen
           ? SizedBox.shrink()
           : IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () {
                 var route = ModalRoute.of(context);
                 if (route != null) {
@@ -101,6 +103,8 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
       actions: [
         if (widget.showHeart)
           IconButton(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
             onPressed: () async => {
               _addGameToFavourites(),
             },
@@ -116,9 +120,9 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
           ),
         if (widget.isFinishScreen)
           IconButton(
-            onPressed: () => {
-              Navigator.of(context).pushNamed('/home'),
-            },
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onPressed: () => Navigator.of(context).pushNamed('/home'),
             icon: Icon(
               Icons.home,
               color: Theme.of(context).colorScheme.secondary,

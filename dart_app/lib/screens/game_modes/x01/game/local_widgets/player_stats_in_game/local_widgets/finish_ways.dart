@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class FinishWays extends StatelessWidget {
 
   //for showing finish ways -> if one player is in finish area and the other one not -> text widget not centered
   bool _onePlayerInFinishArea(BuildContext context) {
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
 
     for (PlayerOrTeamGameStatisticsX01 stats in gameX01.getPlayerGameStatistics)
       if (stats.getCurrentPoints <= 170) return true;

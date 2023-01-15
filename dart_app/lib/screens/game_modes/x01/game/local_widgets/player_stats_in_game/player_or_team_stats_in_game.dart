@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/finish_ways.dart';
@@ -21,8 +21,8 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
 
   final PlayerOrTeamGameStatisticsX01? currPlayerOrTeamGameStatsX01;
 
-  Color _getBackgroundColor(GameX01 gameX01, GameSettingsX01_P gameSettingsX01,
-      BuildContext context) {
+  Color _getBackgroundColor(GameX01_P gameX01,
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
       if (Player.samePlayer(gameX01.getCurrentPlayerToThrow,
           this.currPlayerOrTeamGameStatsX01!.getPlayer)) {
@@ -41,7 +41,7 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
     return Colors.transparent;
   }
 
-  bool _shouldDisplayRightBorder(GameX01 gameX01) {
+  bool _shouldDisplayRightBorder(GameX01_P gameX01) {
     return gameX01.getPlayerGameStatistics
             .indexOf(currPlayerOrTeamGameStatsX01) !=
         gameX01.getPlayerGameStatistics.length - 1;
@@ -49,7 +49,7 @@ class PlayerOrTeamStatsInGame extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final bool isSingleMode =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;

@@ -1,4 +1,4 @@
-import 'package:dart_app/models/games/x01/game_x01.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class ThrownDarts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,

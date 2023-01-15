@@ -1,9 +1,9 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/x01/game_x01.dart';
-import 'package:dart_app/models/games/x01/helper/submit_helper.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game/local_widgets/revert_btn.dart';
-import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn.dart';
+import 'package:dart_app/screens/game_modes/shared/game/revert_btn.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/point_btn_three_darts.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -16,10 +16,10 @@ class Other extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameX01 gameX01 = context.read<GameX01>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    bool _isBustClickable(GameX01 gameX01) {
+    bool _isBustClickable(GameX01_P gameX01) {
       // for weird bug when ending game (3 dart mode)
       if (gameX01.getPlayerGameStatistics.isEmpty) {
         return false;
@@ -47,7 +47,7 @@ class Other extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: RevertBtn(),
+            child: RevertBtn(game_p: gameX01),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('25')
@@ -115,8 +115,9 @@ class Other extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: () =>
-                    {if (_isBustClickable(gameX01)) Submit.bust(context)},
+                onPressed: () => {
+                  if (_isBustClickable(gameX01)) SubmitX01Helper.bust(context)
+                },
               ),
             ),
           ),
@@ -133,7 +134,7 @@ class Other extends StatelessWidget {
           ),
           if (!gameSettingsX01.getAutomaticallySubmitPoints)
             Expanded(
-              child: SubmitPointsBtn(),
+              child: SubmitPointsBtnX01(),
             ),
         ],
       ),

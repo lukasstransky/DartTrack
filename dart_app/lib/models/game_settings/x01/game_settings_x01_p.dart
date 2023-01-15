@@ -358,25 +358,25 @@ class GameSettingsX01_P extends GameSettings_P {
   }
 
   String getGameModeDetails(bool showPoints) {
-    String result = '(';
+    String result = '';
 
     if (showPoints) {
       if (getCustomPoints != -1) {
-        result += '${getCustomPoints.toString()} / ';
+        result += '${getCustomPoints.toString()} - ';
       } else {
-        result += '${getPoints.toString()} / ';
+        result += '${getPoints.toString()} - ';
       }
     }
 
     switch (getModeIn) {
       case ModeOutIn.Single:
-        result += 'Single In / ';
+        result += 'Single In - ';
         break;
       case ModeOutIn.Double:
-        result += 'Double In / ';
+        result += 'Double In - ';
         break;
       case ModeOutIn.Master:
-        result += 'Master In / ';
+        result += 'Master In - ';
         break;
     }
 
@@ -392,10 +392,9 @@ class GameSettingsX01_P extends GameSettings_P {
         break;
     }
 
-    result += ')';
-
     if (getSuddenDeath) {
-      result += '\nSudden Death - after max. ${getMaxExtraLegs.toString()} Leg';
+      result +=
+          '\nSudden Death - after max. ${getMaxExtraLegs.toString()} Legs';
       if (getMaxExtraLegs > 1) {
         result += 's';
       }
