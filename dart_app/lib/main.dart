@@ -9,16 +9,16 @@ import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
-import 'package:dart_app/screens/game_modes/score_training/finish/finish_st.dart';
-import 'package:dart_app/screens/game_modes/score_training/game/game_st.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_settings/game_settings_score_training.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_statistics/game_statistics_st.dart';
-import 'package:dart_app/screens/game_modes/x01/open_games/open_games.dart';
+import 'package:dart_app/screens/game_modes/score_training/finish/finish_sc_t.dart';
+import 'package:dart_app/screens/game_modes/score_training/game/game_sc_t.dart';
+import 'package:dart_app/screens/game_modes/score_training/game_settings/game_settings_sc_t.dart';
+import 'package:dart_app/screens/game_modes/score_training/game_statistics/game_statistics_sc_t.dart';
+import 'package:dart_app/screens/game_modes/open_games/open_games.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/finish_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings.dart';
+import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings_x01.dart';
 import 'package:dart_app/screens/home/home.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_list.dart';
@@ -125,7 +125,7 @@ class MyApp extends StatelessWidget {
             ForgotPassword.routeName: (ctx) => ForgotPassword(),
             GameSettingsX01.routeName: (ctx) => GameSettingsX01(),
             GameX01.routeName: (ctx) => GameX01(),
-            InGameSettings.routeName: (ctx) => InGameSettings(),
+            InGameSettingsX01.routeName: (ctx) => InGameSettingsX01(),
             FinishX01.routeName: (ctx) => FinishX01(),
             GameStatisticsX01.routeName: (ctx) => GameStatisticsX01(),
             StatsPerGameList.routeName: (ctx) => StatsPerGameList(),
@@ -135,8 +135,9 @@ class MyApp extends StatelessWidget {
             GameSettingsScoreTraining.routeName: (ctx) =>
                 GameSettingsScoreTraining(),
             GameScoreTraining.routeName: (ctx) => GameScoreTraining(),
-            Finish_st.routeName: (ctx) => Finish_st(),
-            GameStatistics_st.routeName: (ctx) => GameStatistics_st(),
+            FinishScoreTraining.routeName: (ctx) => FinishScoreTraining(),
+            GameStatisticsScoreTraining.routeName: (ctx) =>
+                GameStatisticsScoreTraining(),
           },
           home: AuthWrapper(),
         );

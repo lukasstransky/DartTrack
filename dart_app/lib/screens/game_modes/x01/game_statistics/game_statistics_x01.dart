@@ -1,16 +1,16 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/finishing_stats.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/game_stats.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/leg_average_compared.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/leg_thrown_darts_compared.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/finishing_stats_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/game_stats_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/leg_average_compared_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/leg_thrown_darts_compared_x01.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/most_frequent_scores.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_even.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_odd.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/scoring_stats.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/scoring_stats_x01.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -190,20 +190,20 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                   children: [
                     Padding(
                       padding: _padding,
-                      child: GameStats(gameX01: _game as GameX01_P),
+                      child: GameStatsX01(gameX01: _game as GameX01_P),
                     ),
                     Padding(
                       padding: _padding,
-                      child: ScoringStats(gameX01: _game as GameX01_P),
+                      child: ScoringStatsX01(gameX01: _game as GameX01_P),
                     ),
                     Padding(
                       padding: _padding,
-                      child: FinishingStats(gameX01: _game as GameX01_P),
+                      child: FinishingStatsX01(gameX01: _game as GameX01_P),
                     ),
                     if (_oneLegWonAtLeast())
                       Padding(
                         padding: _padding,
-                        child: Checkouts(gameX01: _game as GameX01_P),
+                        child: CheckoutsX01(gameX01: _game as GameX01_P),
                       ),
                     Padding(
                       padding: EdgeInsets.only(left: 20),
@@ -256,19 +256,20 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                     if (_oneLegWonAtLeast()) ...[
                       Padding(
                         padding: _padding,
-                        child: LegAvgCompared(gameX01: _game as GameX01_P),
+                        child: LegAvgComparedX01(gameX01: _game as GameX01_P),
                       ),
                       if (!Utils.playerStatsDisplayedInTeamMode(
                           _game as GameX01_P,
                           (_game as GameX01_P).getGameSettings)) ...[
                         Padding(
                           padding: _padding,
-                          child: LegThrownDartsCompared(
+                          child: LegThrownDartsComparedX01(
                               gameX01: _game as GameX01_P),
                         ),
                         Padding(
                           padding: EdgeInsets.only(bottom: 30),
-                          child: DetailedLegsList(gameX01: _game as GameX01_P),
+                          child:
+                              DetailedLegsListX01(gameX01: _game as GameX01_P),
                         ),
                       ],
                     ],

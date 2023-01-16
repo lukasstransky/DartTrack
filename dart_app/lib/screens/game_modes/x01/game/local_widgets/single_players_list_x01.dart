@@ -3,7 +3,7 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
 import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/player_or_team_stats_in_game.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/player_or_team_stats_in_game_x01.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
@@ -41,7 +41,7 @@ class SinglePlayersListX01 extends StatelessWidget {
               gameX01.setBotSubmittedPoints = true;
             }
 
-            return PlayerOrTeamStatsInGame(
+            return PlayerOrTeamStatsInGameX01(
               currPlayerOrTeamGameStatsX01:
                   playerStats[index] as PlayerOrTeamGameStatisticsX01,
             );

@@ -4,7 +4,7 @@ import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
-import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/stats_card_score_training/stats_card_st.dart';
+import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/stats_card_score_training/stats_card_sc_t.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';

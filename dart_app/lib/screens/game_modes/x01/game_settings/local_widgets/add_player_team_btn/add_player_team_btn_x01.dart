@@ -3,14 +3,14 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/add_player_team_btn/add_player_team_btn_dialogs.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/add_player_team_btn/add_player_team_btn_dialogs_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class AddPlayerTeamBtn extends StatelessWidget {
+class AddPlayerTeamBtnX01 extends StatelessWidget {
   bool _showAddButton(List<Player> players, GameSettingsX01_P gameSettingsX01) {
     if ((players.any((player) => player is Bot) &&
             players.length >= 2 &&
@@ -37,15 +37,16 @@ class AddPlayerTeamBtn extends StatelessWidget {
       GameSettingsX01_P gameSettingsX01, BuildContext context) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
         gameSettingsX01.getTeams.length == MAX_TEAMS) {
-      AddPlayerTeamBtnDialogs.showDialogForAddingPlayer(
+      AddPlayerTeamBtnDialogsX01.showDialogForAddingPlayer(
           gameSettingsX01, context);
     }
     // case -> team full of players -> should not be possible to add a player, instead only allow to add team
     else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         !_possibleToAddPlayerToSomeTeam(gameSettingsX01.getTeams)) {
-      AddPlayerTeamBtnDialogs.showDialogForAddingTeam(gameSettingsX01, context);
+      AddPlayerTeamBtnDialogsX01.showDialogForAddingTeam(
+          gameSettingsX01, context);
     } else {
-      AddPlayerTeamBtnDialogs.showDialogForAddingPlayerOrTeam(
+      AddPlayerTeamBtnDialogsX01.showDialogForAddingPlayerOrTeam(
           gameSettingsX01, context);
     }
   }

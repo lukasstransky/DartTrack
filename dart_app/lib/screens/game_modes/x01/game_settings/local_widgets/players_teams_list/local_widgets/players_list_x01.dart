@@ -1,6 +1,6 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/local_widgets/players_list_entry.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/local_widgets/players_list_entry_x01.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _PlayersListX01State extends State<PlayersListX01> {
           scrollDirection: Axis.vertical,
           itemCount: players.length,
           itemBuilder: (BuildContext context, int index) {
-            return PlayersListEntry(
+            return PlayersListEntryX01(
               player: players[index],
               gameSettings_P: context.read<GameSettingsX01_P>(),
             );

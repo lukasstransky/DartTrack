@@ -3,7 +3,7 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/players_teams_list_dialogs.dart';
+import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/players_teams_list_dialogs_x01.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
@@ -11,12 +11,12 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
-class TeamsList extends StatefulWidget {
+class TeamsListX01 extends StatefulWidget {
   @override
-  State<TeamsList> createState() => _TeamsListState();
+  State<TeamsListX01> createState() => _TeamsListX01State();
 }
 
-class _TeamsListState extends State<TeamsList> {
+class _TeamsListX01State extends State<TeamsListX01> {
   @override
   initState() {
     super.initState();
@@ -26,7 +26,7 @@ class _TeamsListState extends State<TeamsList> {
   _deleteIconClicked(
       Team team, Player player, GameSettingsX01_P gameSettingsX01) {
     if (team.getPlayers.length == 1) {
-      PlayersTeamsListDialogs.showDialogForDeletingTeamAsLastPlayer(
+      PlayersTeamsListDialogsX01.showDialogForDeletingTeamAsLastPlayer(
           context, team, gameSettingsX01, player);
     } else {
       gameSettingsX01.removePlayer(player, true);
@@ -54,8 +54,9 @@ class _TeamsListState extends State<TeamsList> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GestureDetector(
-                  onTap: () => PlayersTeamsListDialogs.showDialogForEditingTeam(
-                      context, team, gameSettingsX01),
+                  onTap: () =>
+                      PlayersTeamsListDialogsX01.showDialogForEditingTeam(
+                          context, team, gameSettingsX01),
                   child: Text(
                     team.getName,
                     style: TextStyle(
@@ -127,7 +128,7 @@ class _TeamsListState extends State<TeamsList> {
                                     color:
                                         Theme.of(context).colorScheme.secondary,
                                   ),
-                                  onPressed: () => PlayersTeamsListDialogs
+                                  onPressed: () => PlayersTeamsListDialogsX01
                                       .showDialogForEditingPlayer(
                                           context, player, gameSettingsX01),
                                 ),
@@ -142,7 +143,7 @@ class _TeamsListState extends State<TeamsList> {
                                           .colorScheme
                                           .secondary,
                                     ),
-                                    onPressed: () => PlayersTeamsListDialogs
+                                    onPressed: () => PlayersTeamsListDialogsX01
                                         .showDialogForSwitchingTeam(
                                             context, player, gameSettingsX01),
                                   ),
