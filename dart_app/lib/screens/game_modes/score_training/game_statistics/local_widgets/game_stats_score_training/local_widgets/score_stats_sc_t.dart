@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
-import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class ScoreStatsScoreTraining extends StatelessWidget {
               ),
             ),
           ),
-          for (PlayerGameStatisticsScoreTraining stats
+          for (PlayerGameStatsScoreTraining stats
               in gameScoreTraining_P.getPlayerGameStatistics)
             Container(
               width: WIDTH_DATA_STATISTICS.w,

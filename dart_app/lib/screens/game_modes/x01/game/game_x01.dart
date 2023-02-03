@@ -2,8 +2,8 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btns_round_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/single_players_list_x01.dart';
@@ -68,7 +68,7 @@ class GameX01State extends State<GameX01> {
 
       for (Player player in gameSettingsX01.getPlayers) {
         gameX01.getPlayerGameStatistics.add(
-          new PlayerOrTeamGameStatisticsX01(
+          new PlayerOrTeamGameStatsX01(
             mode: 'X01',
             player: player,
             currentPoints: points,
@@ -80,7 +80,7 @@ class GameX01State extends State<GameX01> {
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
         for (Team team in gameSettingsX01.getTeams) {
           gameX01.getTeamGameStatistics.add(
-            new PlayerOrTeamGameStatisticsX01.Team(
+            new PlayerOrTeamGameStatsX01.Team(
               team: team,
               mode: 'X01',
               currentPoints: points,
@@ -90,14 +90,13 @@ class GameX01State extends State<GameX01> {
           team.setCurrentPlayerToThrow = team.getPlayers.first;
         }
 
-        for (PlayerOrTeamGameStatistics teamStats
-            in gameX01.getTeamGameStatistics) {
+        for (PlayerOrTeamGameStats teamStats in gameX01.getTeamGameStatistics) {
           teamStats.getTeam.setCurrentPlayerToThrow =
               teamStats.getTeam.getPlayers.first;
         }
 
         // set team for player stats in order to sort them
-        for (PlayerOrTeamGameStatistics playerStats
+        for (PlayerOrTeamGameStats playerStats
             in gameX01.getPlayerGameStatistics) {
           Team team = gameSettingsX01.findTeamForPlayer(
               playerStats.getPlayer.getName, gameSettingsX01);
@@ -113,12 +112,11 @@ class GameX01State extends State<GameX01> {
       }
     }
 
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in gameX01.getPlayerGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
       stats.setStartingPoints = stats.getCurrentPoints;
     }
 
-    for (PlayerOrTeamGameStatisticsX01 stats in gameX01.getTeamGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
       stats.setStartingPoints = stats.getCurrentPoints;
     }
   }

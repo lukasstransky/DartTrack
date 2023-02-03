@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/finishing_stats_x01.dart';
@@ -74,7 +74,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
   }
 
   bool _oneLegWonAtLeast() {
-    for (PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01
+    for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
         in (_game!.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single
             ? _game!.getPlayerGameStatistics
             : _game!.getTeamGameStatistics)) {
@@ -87,7 +87,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
   }
 
   bool _oneScorePerDartAtLeast() {
-    for (PlayerOrTeamGameStatisticsX01 stats
+    for (PlayerOrTeamGameStatsX01 stats
         in (_game!.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single
             ? _game!.getPlayerGameStatistics
             : _game!.getTeamGameStatistics)) {

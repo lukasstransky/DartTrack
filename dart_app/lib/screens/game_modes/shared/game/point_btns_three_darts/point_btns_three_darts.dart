@@ -1,4 +1,5 @@
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/eleven_to_fifteen.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/one_to_five.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/other.dart';
@@ -14,7 +15,7 @@ import 'package:sizer/sizer.dart';
 class PointBtnsThreeDarts extends StatelessWidget {
   const PointBtnsThreeDarts({Key? key, required this.mode}) : super(key: key);
 
-  final String mode;
+  final GameMode mode;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class PointBtnsThreeDarts extends StatelessWidget {
         builder: (_, currentThreeDarts, __) => Column(
           children: [
             Container(
-              height: 6.h,
+              height: THROWN_DARTS_WIDGET_HEIGHT.h,
               child: ThrownDarts(
                 mode: mode,
               ),

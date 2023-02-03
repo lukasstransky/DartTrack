@@ -1,10 +1,11 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/score_training/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
-import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/stats_card_score_training/stats_card_sc_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
@@ -102,6 +103,28 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     statsFirestore.notify();
   }
 
+  _getCard(Game_P game) {
+    if (_mode == 'X01') {
+      return StatsCardX01(
+        isFinishScreen: false,
+        gameX01: GameX01_P.createGame(game),
+        isOpenGame: false,
+      );
+    } else if (_mode == 'Score Training') {
+      return StatsCard(
+        isFinishScreen: false,
+        game: GameScoreTraining_P.createGame(game),
+        isOpenGame: false,
+      );
+    } else if (_mode == 'Single Training' || _mode == 'Double Training') {
+      return StatsCard(
+        isFinishScreen: false,
+        game: GameSingleDoubleTraining_P.createGame(game),
+        isOpenGame: false,
+      );
+    }
+  }
+
   _getWidget(dynamic statsFirestore, List<Game_P> games) {
     if (_mode != 'X01' && !statsFirestore.gamesLoaded) {
       return Center(
@@ -160,18 +183,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                       padding: EdgeInsets.only(bottom: 2.h),
                       child: Slidable(
                         key: ValueKey(game.getGameId),
-                        child: _mode == 'X01'
-                            ? StatsCardX01(
-                                isFinishScreen: false,
-                                gameX01: GameX01_P.createGame(game),
-                                isOpenGame: false,
-                              )
-                            : StatsCardScoreTraining(
-                                isFinishScreen: false,
-                                gameScoreTraining_P:
-                                    GameScoreTraining_P.createGame(game),
-                                isOpenGame: false,
-                              ),
+                        child: _getCard(game),
                         startActionPane: ActionPane(
                           dismissible: DismissiblePane(onDismissed: () {}),
                           motion: const ScrollMotion(),
@@ -212,19 +224,11 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   Widget build(BuildContext context) {
     late dynamic statsFirestore;
 
-    switch (_mode) {
-      case 'X01':
-        statsFirestore = context.watch<StatsFirestoreX01_P>();
-        break;
-      case 'Cricket':
-        break;
-      case 'Single Training':
-        break;
-      case 'Double Training':
-        break;
-      case 'Score Training':
-        statsFirestore = context.watch<StatsFirestoreScoreTraining_P>();
-        break;
+    if (_mode == 'X01') {
+      statsFirestore = context.watch<StatsFirestoreX01_P>();
+    } else if (['Single Training', 'Double Training', 'Score Training']
+        .contains(_mode)) {
+      statsFirestore = context.watch<StatsFirestore_sdt_sct_P>();
     }
 
     List<Game_P> games = statsFirestore.games;

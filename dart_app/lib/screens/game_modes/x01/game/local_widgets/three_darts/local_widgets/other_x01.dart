@@ -1,7 +1,7 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/shared/game/revert_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/submit_points_btn_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/point_btn_three_darts_x01.dart';
@@ -25,7 +25,7 @@ class OtherX01 extends StatelessWidget {
         return false;
       }
 
-      final PlayerOrTeamGameStatisticsX01 stats =
+      final PlayerOrTeamGameStatsX01 stats =
           gameX01.getCurrentPlayerGameStats();
       final int currentPoints = stats.getCurrentPoints;
 

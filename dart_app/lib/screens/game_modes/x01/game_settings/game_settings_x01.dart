@@ -1,7 +1,9 @@
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/helper/default_settings_helper.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/add_player_team_btn/add_player_team_btn_x01.dart';
+import 'package:dart_app/screens/game_modes/shared/game_settings/add_player_team_btn/add_player_btn.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/advanced_settings_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/bestof_or_first_to_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/checkout_counting_x01.dart';
@@ -57,6 +59,18 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
     } */
   }
 
+  bool _showAddButton(List<Player> players) {
+    if ((players.any((player) => player is Bot) &&
+            players.length >= 2 &&
+            context.read<GameSettingsX01_P>().getSingleOrTeam ==
+                SingleOrTeamEnum.Single) ||
+        players.length >= MAX_PLAYERS) {
+      return false;
+    }
+
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +81,13 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
           children: [
             SingleOrTeamX01(),
             PlayersTeamsListX01(),
-            AddPlayerTeamBtnX01(),
+            Selector<GameSettingsX01_P, List<Player>>(
+              selector: (_, gameSettingsX01) => gameSettingsX01.getPlayers,
+              shouldRebuild: (previous, next) => true,
+              builder: (_, players, __) => _showAddButton(players)
+                  ? AddPlayerBtn(mode: GameMode.X01)
+                  : SizedBox.shrink(),
+            ),
             Column(
               children: [
                 ModeInX01(),

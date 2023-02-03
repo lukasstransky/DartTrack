@@ -1,9 +1,8 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
-import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -78,7 +77,7 @@ class MulitplePlayerStatsScoreTraining extends StatelessWidget {
             thickness: 1,
             color: Colors.white,
           ),
-          Selector<GameScoreTraining_P, List<PlayerOrTeamGameStatistics>>(
+          Selector<GameScoreTraining_P, List<PlayerOrTeamGameStats>>(
             selector: (_, gameScoreTraining_P) =>
                 gameScoreTraining_P.getPlayerGameStatistics,
             shouldRebuild: (previous, next) => true,
@@ -91,8 +90,8 @@ class MulitplePlayerStatsScoreTraining extends StatelessWidget {
                 return Column(
                   children: [
                     PlayerEntry(
-                      playerStats: playerStats[index]
-                          as PlayerGameStatisticsScoreTraining,
+                      playerStats:
+                          playerStats[index] as PlayerGameStatsScoreTraining,
                     ),
                     index != playerStats.length - 1
                         ? Divider(
@@ -118,24 +117,15 @@ class PlayerEntry extends StatelessWidget {
     required this.playerStats,
   }) : super(key: key);
 
-  final PlayerGameStatisticsScoreTraining playerStats;
-
-  Color _getBackgroundColor(BuildContext context) {
-    if (Player.samePlayer(
-        context.read<GameScoreTraining_P>().getCurrentPlayerToThrow,
-        this.playerStats.getPlayer)) {
-      return Utils.lighten(Theme.of(context).colorScheme.primary, 20);
-    }
-
-    return Colors.transparent;
-  }
+  final PlayerGameStatsScoreTraining playerStats;
 
   @override
   Widget build(BuildContext context) {
     const int fontSize = 13;
 
     return Container(
-      color: _getBackgroundColor(context),
+      color: Utils.getBackgroundColorForPlayer(
+          context, context.read<GameScoreTraining_P>(), playerStats),
       height: 5.h,
       child: Row(
         children: [

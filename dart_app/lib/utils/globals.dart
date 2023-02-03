@@ -36,6 +36,11 @@ ScrollController newScrollControllerScoreTrainingPlayerEntries() {
   return scrollControllerScoreTrainingPlayerEntries;
 }
 
+ScrollController newScrollControllerSingleDoubleTrainingPlayerEntries() {
+  scrollControllerScoreTrainingPlayerEntries = new ScrollController();
+  return scrollControllerScoreTrainingPlayerEntries;
+}
+
 disposeScrollControllersForGamesettings() {
   scrollControllerPlayers.dispose();
   scrollControllerTeams.dispose();

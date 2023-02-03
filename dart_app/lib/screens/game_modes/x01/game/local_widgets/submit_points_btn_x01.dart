@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -79,8 +79,7 @@ class SubmitPointsBtnX01 extends StatelessWidget {
       String currentPointsSelected, BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final PlayerOrTeamGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 stats = gameX01.getCurrentPlayerGameStats();
 
     //double in -> check for 1, 3, 5 -> invalid
     if ((gameSettingsX01.getModeIn == ModeOutIn.Double ||

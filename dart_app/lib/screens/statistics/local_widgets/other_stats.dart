@@ -1,4 +1,4 @@
-import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

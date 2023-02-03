@@ -1,4 +1,4 @@
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/local_widgets/first_row_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/local_widgets/fourht_row_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/local_widgets/second_row_sc_t.dart';

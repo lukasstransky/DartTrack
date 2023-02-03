@@ -1,13 +1,15 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/score_training/stats_firestore_score_training_p.dart';
-import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -118,11 +120,11 @@ class Utils {
         game!.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single;
 
     int currentPoints;
-    for (PlayerOrTeamGameStatisticsX01 playerOrTeamStats
+    for (PlayerOrTeamGameStatsX01 playerOrTeamStats
         in Utils.getPlayersOrTeamStatsList(
             game as GameX01_P, game.getGameSettings)) {
       if (Utils.playerStatsDisplayedInTeamMode(game, game.getGameSettings)) {
-        PlayerOrTeamGameStatisticsX01 teamStats =
+        PlayerOrTeamGameStatsX01 teamStats =
             (game).getTeamStatsFromPlayer(playerOrTeamStats.getPlayer.getName);
         if (teamStats.getPlayersWithCheckoutInLeg.containsKey(setLegString))
           return teamStats.getPlayersWithCheckoutInLeg[setLegString] as String;
@@ -130,17 +132,20 @@ class Utils {
 
       currentPoints = game.getGameSettings.getPointsOrCustom();
 
-      if (!playerOrTeamStats.getAllScoresPerLeg.containsKey(setLegString))
+      if (!playerOrTeamStats.getAllScoresPerLeg.containsKey(setLegString)) {
         return '';
+      }
 
-      for (int score in playerOrTeamStats.getAllScoresPerLeg[setLegString])
+      for (int score in playerOrTeamStats.getAllScoresPerLeg[setLegString]) {
         currentPoints -= score;
+      }
 
       if (currentPoints == 0) {
-        if (isSingleMode)
+        if (isSingleMode) {
           return playerOrTeamStats.getPlayer.getName;
-        else
+        } else {
           return playerOrTeamStats.getTeam.getName;
+        }
       }
     }
 
@@ -148,8 +153,7 @@ class Utils {
   }
 
   static String getAverageForLeg(
-      PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01,
-      String setLegString) {
+      PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01, String setLegString) {
     if (playerOrTeamGameStatsX01.getAllScoresPerLeg.isEmpty ||
         !playerOrTeamGameStatsX01.getAllScoresPerLeg.containsKey(setLegString))
       return '0';
@@ -691,7 +695,17 @@ class Utils {
       case 'Double Training':
 
       case 'Score Training':
-        return context.read<StatsFirestoreScoreTraining_P>();
+        return context.read<StatsFirestore_sdt_sct_P>();
     }
+  }
+
+  static getBackgroundColorForPlayer(
+      BuildContext context, Game_P game, PlayerOrTeamGameStats playerStats) {
+    if (Player.samePlayer(
+        game.getCurrentPlayerToThrow, playerStats.getPlayer)) {
+      return Utils.lighten(Theme.of(context).colorScheme.primary, 20);
+    }
+
+    return Colors.transparent;
   }
 }

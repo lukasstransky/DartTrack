@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/shared/select_input_method/select_input_method.dart';
@@ -32,7 +33,7 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
               child: ThrownDartsX01(),
             ),
             if (gameSettingsX01.getShowInputMethodInGameScreen)
-              SelectInputMethod(mode: 'X01'),
+              SelectInputMethod(mode: GameMode.X01),
             OtherX01(),
             OneToFiveX01(),
             SixToTenX01(),

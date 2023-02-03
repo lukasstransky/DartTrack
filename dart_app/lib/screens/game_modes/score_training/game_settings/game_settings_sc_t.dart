@@ -1,10 +1,11 @@
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/add_player_btn_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/mode_sc_t.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/players_list_sc_t.dart';
+import 'package:dart_app/screens/game_modes/shared/game_settings/players_teams_list/players_list.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/rounds_or_points_input_sc_t.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/start_game_btn_sc_t.dart';
+import 'package:dart_app/screens/game_modes/shared/game_settings/start_game_btn.dart';
+import 'package:dart_app/screens/game_modes/shared/game_settings/add_player_team_btn/add_player_btn.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 
 import 'package:flutter/material.dart';
@@ -23,14 +24,12 @@ class GameSettingsScoreTraining extends StatefulWidget {
 class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
   @override
   void initState() {
-    final GameSettingsScoreTraining_P gameSettingsScoreTraining =
-        context.read<GameSettingsScoreTraining_P>();
+    final settings = context.read<GameSettingsScoreTraining_P>();
 
-    gameSettingsScoreTraining.reset();
+    settings.reset();
     //todo add current logged in user
-    if (!gameSettingsScoreTraining.getPlayers
-        .any((p) => p.getName == 'Strainski')) {
-      gameSettingsScoreTraining.getPlayers.add(new Player(name: 'Strainski'));
+    if (!settings.getPlayers.any((p) => p.getName == 'Strainski')) {
+      settings.getPlayers.add(new Player(name: 'Strainski'));
     }
 
     super.initState();
@@ -40,16 +39,26 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar:
-          CustomAppBar(title: 'Score Training Settings', showInfoIcon: true),
+      appBar: CustomAppBar(
+        title: 'Score Training Settings',
+        showInfoIcon: true,
+      ),
       body: SafeArea(
         child: Column(
           children: [
-            PlayersListScoreTraining(),
-            AddPlayerBtnScoreTraining(),
+            Selector<GameSettingsScoreTraining_P, List<Player>>(
+              selector: (_, gameSettingsScoreTraining) =>
+                  gameSettingsScoreTraining.getPlayers,
+              shouldRebuild: (previous, next) => true,
+              builder: (_, players, __) => PlayersList(
+                mode: GameMode.ScoreTraining,
+                players: players,
+              ),
+            ),
+            AddPlayerBtn(mode: GameMode.ScoreTraining),
             ModeScoreTraining(),
             RoundsOrPointsInputScoreTraining(),
-            StartGameBtnScoreTraining(),
+            StartGameBtn(mode: GameMode.ScoreTraining),
           ],
         ),
       ),

@@ -3,7 +3,7 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/finish_ways_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/leg_beginner_asset_x01.dart';
@@ -19,7 +19,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       {Key? key, required this.currPlayerOrTeamGameStatsX01})
       : super(key: key);
 
-  final PlayerOrTeamGameStatisticsX01? currPlayerOrTeamGameStatsX01;
+  final PlayerOrTeamGameStatsX01? currPlayerOrTeamGameStatsX01;
 
   Color _getBackgroundColor(GameX01_P gameX01,
       GameSettingsX01_P gameSettingsX01, BuildContext context) {

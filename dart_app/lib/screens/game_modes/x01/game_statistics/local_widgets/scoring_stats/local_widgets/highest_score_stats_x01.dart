@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -35,7 +35,7 @@ class HighestScoreStatsX01 extends StatelessWidget {
               ),
             ),
           ),
-          for (PlayerOrTeamGameStatisticsX01 stats
+          for (PlayerOrTeamGameStatsX01 stats
               in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
             Container(
               width: WIDTH_DATA_STATISTICS.w,

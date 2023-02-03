@@ -1,5 +1,5 @@
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/local_widgets/multiple_player_stats_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/local_widgets/one_players_stats_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/local_widgets/two_player_stats_sc_t.dart';
@@ -11,19 +11,26 @@ import 'package:sizer/sizer.dart';
 class PlayersListScoreTraining extends StatelessWidget {
   const PlayersListScoreTraining({Key? key}) : super(key: key);
 
+  _getWidget(List<PlayerOrTeamGameStats> stats) {
+    final int length = stats.length;
+
+    if (length == 1) {
+      return OnePlayerStatsScoreTraining();
+    } else if (length == 2) {
+      return TwoPlayerStatsScoreTraining();
+    } else {
+      return MulitplePlayerStatsScoreTraining();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Selector<GameScoreTraining_P, List<PlayerOrTeamGameStatistics>>(
-      selector: (_, gameScoreTraining_P) =>
-          gameScoreTraining_P.getPlayerGameStatistics,
+    return Selector<GameScoreTraining_P, List<PlayerOrTeamGameStats>>(
+      selector: (_, game) => game.getPlayerGameStatistics,
       shouldRebuild: (previous, next) => true,
-      builder: (_, playerOrTeamGameStatistics, __) => Container(
+      builder: (_, stats, __) => Container(
         height: 35.h,
-        child: playerOrTeamGameStatistics.length == 1
-            ? OnePlayerStatsScoreTraining()
-            : playerOrTeamGameStatistics.length == 2
-                ? TwoPlayerStatsScoreTraining()
-                : MulitplePlayerStatsScoreTraining(),
+        child: _getWidget(stats),
       ),
     );
   }

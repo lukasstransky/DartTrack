@@ -1,19 +1,24 @@
 import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/models/firestore/score_training/stats_firestore_score_training_p.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_single_double_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
-import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
 import 'package:dart_app/screens/game_modes/score_training/finish/finish_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/game_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_settings/game_settings_sc_t.dart';
-import 'package:dart_app/screens/game_modes/score_training/game_statistics/game_statistics_sc_t.dart';
+import 'package:dart_app/screens/game_modes/score_training/game_statistics/game_stats_sc_t.dart';
 import 'package:dart_app/screens/game_modes/open_games/open_games.dart';
+import 'package:dart_app/screens/game_modes/single_double_training/game_settings/game_settings_sd_t.dart';
+import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/game_stats_sd_t.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/finish_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.dart';
@@ -34,6 +39,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:sizer/sizer.dart';
+
+import 'screens/game_modes/single_double_training/finish/finish_sd_t.dart';
+import 'screens/game_modes/single_double_training/game/game_sd_t.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -104,7 +112,16 @@ class MyApp extends StatelessWidget {
           create: (_) => GameScoreTraining_P(),
         ),
         ChangeNotifierProvider(
-          create: (_) => StatsFirestoreScoreTraining_P(),
+          create: (_) => StatsFirestore_sdt_sct_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => GameSingleDoubleTraining_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => GameSettingsSingleDoubleTraining_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StatsFirestoreSingleDoubleTraining_P(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
@@ -136,8 +153,15 @@ class MyApp extends StatelessWidget {
                 GameSettingsScoreTraining(),
             GameScoreTraining.routeName: (ctx) => GameScoreTraining(),
             FinishScoreTraining.routeName: (ctx) => FinishScoreTraining(),
-            GameStatisticsScoreTraining.routeName: (ctx) =>
-                GameStatisticsScoreTraining(),
+            GameStatsScoreTraining.routeName: (ctx) => GameStatsScoreTraining(),
+            GameSettingsSingleDoubleTraining.routeName: (ctx) =>
+                GameSettingsSingleDoubleTraining(),
+            GameSingleDoubleTraining.routeName: (ctx) =>
+                GameSingleDoubleTraining(),
+            FinishSingleDoubleTraining.routeName: (ctx) =>
+                FinishSingleDoubleTraining(),
+            GameStatsSingleDoubleTraining.routeName: (ctx) =>
+                GameStatsSingleDoubleTraining(),
           },
           home: AuthWrapper(),
         );

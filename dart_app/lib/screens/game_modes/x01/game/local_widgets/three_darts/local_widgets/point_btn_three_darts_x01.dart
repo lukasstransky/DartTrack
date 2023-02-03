@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -51,7 +51,7 @@ class PointBtnThreeDartX01 extends StatelessWidget {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    late final PlayerOrTeamGameStatisticsX01 currentStats;
+    late final PlayerOrTeamGameStatsX01 currentStats;
     if (shouldSubmitTeamStats) {
       currentStats = gameX01.getCurrentTeamGameStats();
     } else {

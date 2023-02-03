@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
@@ -74,7 +75,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
               ),
             ),
             if (gameX01.getGameSettings.getShowInputMethodInGameScreen)
-              SelectInputMethod(mode: 'X01'),
+              SelectInputMethod(mode: GameMode.X01),
             firstRow(gameX01),
             secondRow(gameX01),
             thirdRow(gameX01),

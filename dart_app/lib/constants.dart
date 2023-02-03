@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 
 const Color primary = Color(0xff130536);
 
+enum GameMode { X01, ScoreTraining, SingleTraining, DoubleTraining, Cricket }
+
+// single training
+enum ModesSingleDoubleTraining { Ascending, Descending, Random }
+
 //Auth Page
 enum AuthMode { Register, Login }
 
@@ -66,6 +71,7 @@ const int FONTSIZE_STATISTICS = 13;
 const int WIDTH_HEADINGS_STATISTICS = 40;
 const int WIDTH_DATA_STATISTICS = 30;
 const double PADDING_TOP_STATISTICS = 10.0;
+const double PADDING_LEFT_STATISTICS = 20.0;
 
 //Game Page
 const double POINTS_BUTTON_MARGIN = 1.0;
@@ -349,8 +355,19 @@ const int MAX_POINTS_SCORE_TRAINING_NUMBERS = 5;
 const int MIN_POINTS_SCORE_TRAINING = 500;
 const int DEFAULT_POINTS_SCORE_TRAINING = 1000;
 
+/************************************************************************************/
+/***************          single/double training settings            ****************/
+/************************************************************************************/
+
 const int DEFAULT_TARGET_NUMBER = 20;
 const int TARGET_NUMBER_MAX_NUMBERS = 2;
+const int DEFUALT_ROUNDS_FOR_TARGET_NUMBER = 20;
+
+const int MAX_ROUNDS_SINGLE_TRAINING = 100;
+const int MAX_ROUNDS_SINGLE_TRAINING_NUMBERS = 3;
+const int MIN_ROUNDS_SINGLE_TRAINING = 5;
+
+const int BTN_FONTSIZE_SD_T = 30;
 
 /************************************************************************************/
 /***********************          styling constants            **********************/
@@ -359,6 +376,7 @@ const int TARGET_NUMBER_MAX_NUMBERS = 2;
 // general
 const int GENERAL_DARKEN = 35;
 const double GENERAL_BORDER_WIDTH = 3;
+const double PADDING_BOTTOM = 20;
 
 // game modes overview
 const int GAME_MODES_OVERVIEW_WIDTH = 60;
@@ -368,3 +386,8 @@ const int GAME_MODES_OVERVIEW_PADDING = 2;
 
 // game settings
 const double GAME_SETTINGS_BTN_BORDER_WITH = 2;
+
+/************************************************************************************/
+/****************************          shared           *****************************/
+/************************************************************************************/
+const int THROWN_DARTS_WIDGET_HEIGHT = 6;

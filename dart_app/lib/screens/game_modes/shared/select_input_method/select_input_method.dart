@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/screens/game_modes/shared/select_input_method/local_widgets/round_mode_btn.dart';
 import 'package:dart_app/screens/game_modes/shared/select_input_method/local_widgets/three_darts_mode_btn.dart';
 
@@ -7,7 +8,7 @@ import 'package:sizer/sizer.dart';
 class SelectInputMethod extends StatelessWidget {
   const SelectInputMethod({Key? key, required this.mode}) : super(key: key);
 
-  final String mode;
+  final GameMode mode;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -29,6 +30,8 @@ class RevertBtn extends StatelessWidget {
       }
     } else if (game_p is GameScoreTraining_P) {
       (game_p as GameScoreTraining_P).revert(context);
+    } else if (game_p is GameSingleDoubleTraining_P) {
+      (game_p as GameSingleDoubleTraining_P).revert(context);
     }
   }
 

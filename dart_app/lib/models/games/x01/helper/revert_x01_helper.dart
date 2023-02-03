@@ -3,7 +3,7 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class RevertX01Helper {
     final bool legSetOrGameReverted =
         _allPlayersTeamsHaveStartPoints(gameX01, gameSettingsX01);
 
-    late PlayerOrTeamGameStatisticsX01 currentStats;
+    late PlayerOrTeamGameStatsX01 currentStats;
     if (shouldRevertTeamStats) {
       currentStats = gameX01.getCurrentTeamGameStats();
     } else {
@@ -74,7 +74,7 @@ class RevertX01Helper {
         setReverted = true;
       }
 
-      for (PlayerOrTeamGameStatisticsX01 stats in (shouldRevertTeamStats
+      for (PlayerOrTeamGameStatsX01 stats in (shouldRevertTeamStats
           ? gameX01.getTeamGameStatistics
           : gameX01.getPlayerGameStatistics)) {
         // set points for each player before leg/set was finished
@@ -112,7 +112,7 @@ class RevertX01Helper {
 
             // set also for players in team
             if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-              for (PlayerOrTeamGameStatisticsX01 playerStatsFromTeam
+              for (PlayerOrTeamGameStatsX01 playerStatsFromTeam
                   in gameX01.getPlayerStatsFromCurrentTeamToThrow(
                       gameX01, gameSettingsX01)) {
                 playerStatsFromTeam.setCurrentPoints = stats.getCurrentPoints;
@@ -179,7 +179,7 @@ class RevertX01Helper {
             currentStats.getCurrentPoints + lastPoints;
 
         // revert current points for each player in team
-        for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+        for (PlayerOrTeamGameStatsX01 stats in gameX01
             .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
           stats.setCurrentPoints = stats.getCurrentPoints + lastPoints;
         }
@@ -191,7 +191,7 @@ class RevertX01Helper {
 
     // update sets, legs for players from same team
     if (legSetOrGameReverted && shouldRevertTeamStats) {
-      for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+      for (PlayerOrTeamGameStatsX01 stats in gameX01
           .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
         stats.setLegsWon = currentStats.getLegsWon;
         stats.setLegsWonTotal = currentStats.getLegsWonTotal;
@@ -217,8 +217,7 @@ class RevertX01Helper {
   //only for cancel button in add checkout count dialog
   static revertSomeStats(BuildContext context, int points) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
-    final PlayerOrTeamGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 stats = gameX01.getCurrentPlayerGameStats();
 
     stats.setCurrentPoints = stats.getCurrentPoints + points;
     stats.setTotalPoints = stats.getTotalPoints - points;
@@ -260,8 +259,7 @@ class RevertX01Helper {
   static bool _isRevertPossible(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = false;
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in gameX01.getPlayerGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
       if (gameSettingsX01.getInputMethod == InputMethod.Round) {
         if (stats.getAllScores.length > 0) {
           result = true;
@@ -282,7 +280,7 @@ class RevertX01Helper {
   static _revertStats(
       GameX01_P gameX01,
       GameSettingsX01_P gameSettingsX01,
-      PlayerOrTeamGameStatisticsX01 currentStats,
+      PlayerOrTeamGameStatsX01 currentStats,
       int points,
       bool legOrSetReverted,
       bool roundCompleted,
@@ -315,7 +313,7 @@ class RevertX01Helper {
 
         // set darts for won leg count
         if (!shouldRevertTeamStats) {
-          for (PlayerOrTeamGameStatisticsX01 stats
+          for (PlayerOrTeamGameStatsX01 stats
               in gameX01.getPlayerGameStatistics) {
             final String playerName =
                 stats.getLegSetWithPlayerOrTeamWhoFinishedIt.values.last;
@@ -334,7 +332,7 @@ class RevertX01Helper {
                   currentStats.getDartsForWonLegCount - currentThrownDartsInLeg;
 
               if (!isSingleMode) {
-                final PlayerOrTeamGameStatisticsX01 teamStatsFromPlayer =
+                final PlayerOrTeamGameStatsX01 teamStatsFromPlayer =
                     gameX01.getTeamStatsFromPlayer(playerName);
                 final int thrownDartsFromTeam =
                     teamStatsFromPlayer.getThrownDartsPerLeg[lastKey];
@@ -450,7 +448,7 @@ class RevertX01Helper {
 
         if (shouldRevertTeamStats) {
           // set also for players in this team
-          for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+          for (PlayerOrTeamGameStatsX01 stats in gameX01
               .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
             stats.setStartingPoints = currentStats.getStartingPoints;
           }
@@ -531,15 +529,13 @@ class RevertX01Helper {
   static bool _allPlayersTeamsHaveStartPoints(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      for (PlayerOrTeamGameStatisticsX01 stats
-          in gameX01.getPlayerGameStatistics) {
+      for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
         if (stats.getCurrentPoints != gameSettingsX01.getPointsOrCustom()) {
           return false;
         }
       }
     } else {
-      for (PlayerOrTeamGameStatisticsX01 stats
-          in gameX01.getTeamGameStatistics) {
+      for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
         if (stats.getCurrentPoints != gameSettingsX01.getPointsOrCustom()) {
           return false;
         }

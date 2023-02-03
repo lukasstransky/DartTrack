@@ -1,8 +1,8 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +13,7 @@ class TwoPlayerStatsScoreTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameScoreTraining_P = context.read<GameScoreTraining_P>();
+    final game = context.read<GameScoreTraining_P>();
     const double WIDTH = 50;
 
     return Row(
@@ -33,7 +33,7 @@ class TwoPlayerStatsScoreTraining extends StatelessWidget {
           ),
           width: WIDTH.w,
           child: PlayerEntry(
-            playerStats: gameScoreTraining_P.getPlayerGameStatistics[0],
+            playerStats: game.getPlayerGameStatistics[0],
           ),
         ),
         Container(
@@ -47,7 +47,7 @@ class TwoPlayerStatsScoreTraining extends StatelessWidget {
           ),
           width: WIDTH.w,
           child: PlayerEntry(
-            playerStats: gameScoreTraining_P.getPlayerGameStatistics[1],
+            playerStats: game.getPlayerGameStatistics[1],
           ),
         ),
       ],
@@ -61,7 +61,7 @@ class PlayerEntry extends StatelessWidget {
     required this.playerStats,
   }) : super(key: key);
 
-  final PlayerGameStatisticsScoreTraining playerStats;
+  final PlayerGameStatsScoreTraining playerStats;
 
   Color _getBackgroundColor(BuildContext context) {
     if (Player.samePlayer(

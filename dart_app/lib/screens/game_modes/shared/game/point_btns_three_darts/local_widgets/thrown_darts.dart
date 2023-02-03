@@ -1,4 +1,6 @@
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -7,18 +9,26 @@ import 'package:sizer/sizer.dart';
 class ThrownDarts extends StatelessWidget {
   const ThrownDarts({Key? key, required this.mode}) : super(key: key);
 
-  final String mode;
+  final GameMode mode;
 
   @override
   Widget build(BuildContext context) {
-    if (mode == 'Score Training')
+    if (mode == GameMode.ScoreTraining) {
       return Selector<GameScoreTraining_P, List<String>>(
-        selector: (_, gameScoreTraining_P) =>
-            gameScoreTraining_P.getCurrentThreeDarts,
+        selector: (_, game) => game.getCurrentThreeDarts,
         shouldRebuild: (previous, next) => true,
         builder: (_, currentThreeDarts, __) =>
             ThrownDartsWidget(currentThreeDarts: currentThreeDarts),
       );
+    } else if (mode == GameMode.SingleTraining ||
+        mode == GameMode.DoubleTraining) {
+      return Selector<GameSingleDoubleTraining_P, List<String>>(
+        selector: (_, game) => game.getCurrentThreeDarts,
+        shouldRebuild: (previous, next) => true,
+        builder: (_, currentThreeDarts, __) =>
+            ThrownDartsWidget(currentThreeDarts: currentThreeDarts),
+      );
+    }
 
     return SizedBox.shrink();
   }

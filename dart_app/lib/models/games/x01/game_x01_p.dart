@@ -3,7 +3,7 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -19,11 +19,6 @@ class GameX01_P extends Game_P {
   bool _reachedSuddenDeath = false;
   PointType _currentPointType =
       PointType.Single; //only for input type -> three darts
-  List<String> _currentThreeDarts = [
-    'Dart 1',
-    'Dart 2',
-    'Dart 3'
-  ]; //only for input type -> three darts
   bool _canBePressed =
       true; //only for input type -> three darts + automatically submit points (to disable buttons when delay is active)
   bool _areTeamStatsDisplayed =
@@ -80,10 +75,6 @@ class GameX01_P extends Game_P {
         this._currentPointType = currentPointType,
       };
 
-  List<String> get getCurrentThreeDarts => this._currentThreeDarts;
-  set setCurrentThreeDarts(List<String> currentThreeDarts) =>
-      this._currentThreeDarts = currentThreeDarts;
-
   bool get getCanBePressed => this._canBePressed;
   set setCanBePressed(bool canBePressed) {
     this._canBePressed = canBePressed;
@@ -136,7 +127,7 @@ class GameX01_P extends Game_P {
   bool shouldPointBtnBeDisabled(String btnValueToCheck) {
     //todo weird bug -> if solves it -> maybe have a look on it (starting game -> end it with cross -> click any button)
     if (getPlayerGameStatistics.isNotEmpty) {
-      PlayerOrTeamGameStatisticsX01 stats = getCurrentPlayerGameStats();
+      PlayerOrTeamGameStatsX01 stats = getCurrentPlayerGameStats();
 
       if (getGameSettings.getInputMethod == InputMethod.Round) {
         return _shouldPointBtnBeDisabledRound(btnValueToCheck, stats);
@@ -148,7 +139,7 @@ class GameX01_P extends Game_P {
     return true;
   }
 
-  PlayerOrTeamGameStatisticsX01 getCurrentPlayerGameStats() {
+  PlayerOrTeamGameStatsX01 getCurrentPlayerGameStats() {
     if (getCurrentPlayerToThrow is Bot) {
       return getPlayerGameStatistics.firstWhere((stats) =>
           stats.getPlayer is Bot &&
@@ -160,13 +151,13 @@ class GameX01_P extends Game_P {
         (stats) => stats.getPlayer.getName == getCurrentPlayerToThrow.getName);
   }
 
-  PlayerOrTeamGameStatisticsX01 getCurrentTeamGameStats() {
+  PlayerOrTeamGameStatsX01 getCurrentTeamGameStats() {
     return getTeamGameStatistics.firstWhere(
         (stats) => stats.getTeam.getName == getCurrentTeamToThrow.getName);
   }
 
   bool isCheckoutPossible() {
-    final PlayerOrTeamGameStatisticsX01 stats = getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 stats = getCurrentPlayerGameStats();
     final String currentThreeDartsCalculated =
         Utils.getCurrentThreeDartsCalculated(getCurrentThreeDarts);
 
@@ -200,8 +191,7 @@ class GameX01_P extends Game_P {
 
   //for checkout counting dialog -> to show the amount of darts for finising the leg, set or game -> in order to calc average correctly
   bool finishedLegSetOrGame(String scoredPoints) {
-    final PlayerOrTeamGameStatisticsX01 currentStats =
-        getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 currentStats = getCurrentPlayerGameStats();
 
     if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
       if (currentStats.getCurrentPoints == 0) {
@@ -228,7 +218,7 @@ class GameX01_P extends Game_P {
       return false;
     }
 
-    final PlayerOrTeamGameStatisticsX01 stats = getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 stats = getCurrentPlayerGameStats();
     int currentPoints = stats.getCurrentPoints;
     if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
       currentPoints = stats.getStartingPoints;
@@ -316,7 +306,7 @@ class GameX01_P extends Game_P {
   /************************************************************/
 
   bool _shouldPointBtnBeDisabledRound(
-      String btnValueToCheck, PlayerOrTeamGameStatisticsX01 stats) {
+      String btnValueToCheck, PlayerOrTeamGameStatsX01 stats) {
     // DOUBLE IN
     if (stats.getCurrentPoints == getGameSettings.getPointsOrCustom() &&
         (getGameSettings.getModeIn == ModeOutIn.Double ||
@@ -367,7 +357,7 @@ class GameX01_P extends Game_P {
   }
 
   bool _shouldPointBtnBeDisabledThreeDarts(
-      String btnValueToCheck, PlayerOrTeamGameStatisticsX01 stats) {
+      String btnValueToCheck, PlayerOrTeamGameStatsX01 stats) {
     if (stats.getCurrentPoints == 0) return true;
 
     //disable 25 in double & tripple mode
@@ -442,7 +432,7 @@ class GameX01_P extends Game_P {
   //e.g. 60 points remaining -> S20, D20 -> only 1 dart on double possible -> dont show 2 as with round mode
   int _getAmountOfCheckoutPossibilitiesForInputMethodThreeDarts(
       int thrownPoints) {
-    final PlayerOrTeamGameStatisticsX01 stats = getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 stats = getCurrentPlayerGameStats();
 
     int currentPoints = stats.getStartingPoints;
     int doubleCount = 0;
@@ -462,7 +452,7 @@ class GameX01_P extends Game_P {
   }
 
   int _getAmountOfCheckoutPossibilitiesForInputMethodRound(int thrownPoints) {
-    final PlayerOrTeamGameStatisticsX01 stats = getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 stats = getCurrentPlayerGameStats();
     final int currentPoints = stats.getCurrentPoints;
     final int result = currentPoints - thrownPoints;
 
@@ -485,12 +475,11 @@ class GameX01_P extends Game_P {
     int result = 1;
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      for (PlayerOrTeamGameStatisticsX01 stats
-          in this.getPlayerGameStatistics) {
+      for (PlayerOrTeamGameStatsX01 stats in this.getPlayerGameStatistics) {
         result += stats.getLegsWon;
       }
     } else {
-      for (PlayerOrTeamGameStatisticsX01 stats in this.getTeamGameStatistics) {
+      for (PlayerOrTeamGameStatsX01 stats in this.getTeamGameStatistics) {
         result += stats.getLegsWon;
       }
 
@@ -504,30 +493,28 @@ class GameX01_P extends Game_P {
   int _getCurrentSet(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     int result = 1;
 
-    for (PlayerOrTeamGameStatisticsX01 stats
+    for (PlayerOrTeamGameStatsX01 stats
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
       result += stats.getSetsWon;
 
     return result;
   }
 
-  PlayerOrTeamGameStatisticsX01 getPlayerGameStats(
-      PlayerOrTeamGameStatisticsX01? statsToFind) {
-    late PlayerOrTeamGameStatisticsX01 result;
+  PlayerOrTeamGameStatsX01 getPlayerGameStats(
+      PlayerOrTeamGameStatsX01? statsToFind) {
+    late PlayerOrTeamGameStatsX01 result;
 
-    for (PlayerOrTeamGameStatisticsX01 playerStats
-        in this.getPlayerGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 playerStats in this.getPlayerGameStatistics) {
       if (playerStats == statsToFind) result = playerStats;
     }
 
     return result;
   }
 
-  PlayerOrTeamGameStatisticsX01 getTeamStatsFromPlayer(String playerName) {
-    late PlayerOrTeamGameStatisticsX01 result;
+  PlayerOrTeamGameStatsX01 getTeamStatsFromPlayer(String playerName) {
+    late PlayerOrTeamGameStatsX01 result;
 
-    for (PlayerOrTeamGameStatisticsX01 teamStats
-        in this.getTeamGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 teamStats in this.getTeamGameStatistics) {
       for (Player player in teamStats.getTeam.getPlayers) {
         if (player.getName == playerName) result = teamStats;
       }
@@ -538,10 +525,9 @@ class GameX01_P extends Game_P {
 
   dynamic getPlayerStatsFromCurrentTeamToThrow(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    List<PlayerOrTeamGameStatisticsX01> result = [];
+    List<PlayerOrTeamGameStatsX01> result = [];
 
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in gameX01.getPlayerGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
       final Team teamOfPlayer = gameSettingsX01.findTeamForPlayer(
           stats.getPlayer.getName, gameSettingsX01);
 
@@ -554,7 +540,7 @@ class GameX01_P extends Game_P {
   }
 
   bool isGameDraw() {
-    for (PlayerOrTeamGameStatisticsX01 stats in getPlayerGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 stats in getPlayerGameStatistics) {
       if (stats.getGameDraw) {
         return true;
       }

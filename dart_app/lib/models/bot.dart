@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:tuple/tuple.dart';
 
 class Bot extends Player {
@@ -59,8 +59,7 @@ class Bot extends Player {
       }
     }
 
-    final PlayerOrTeamGameStatisticsX01 stats =
-        gameX01.getCurrentPlayerGameStats();
+    final PlayerOrTeamGameStatsX01 stats = gameX01.getCurrentPlayerGameStats();
     final int currentPoints = stats.getCurrentPoints;
 
     // finish possible

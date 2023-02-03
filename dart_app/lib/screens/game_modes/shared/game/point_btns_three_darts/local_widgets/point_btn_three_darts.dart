@@ -1,4 +1,5 @@
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class PointBtnThreeDarts extends StatelessWidget {
   }) : super(key: key);
 
   final String pointValue;
-  final String mode;
+  final GameMode mode;
 
   _pointBtnClicked(
       String pointValueWithDoubleOrTripplePrefix, BuildContext context) {
@@ -21,7 +22,7 @@ class PointBtnThreeDarts extends StatelessWidget {
       return;
     }
 
-    if (mode == 'Score Training') {
+    if (mode == GameMode.ScoreTraining) {
       final gameScoreTraining_P = context.read<GameScoreTraining_P>();
 
       gameScoreTraining_P.submitPointsThreeDartsMode(pointValue,
@@ -30,7 +31,7 @@ class PointBtnThreeDarts extends StatelessWidget {
   }
 
   int _getAmountOfDartsThrown(BuildContext context) {
-    if (mode == 'Score Training') {
+    if (mode == GameMode.ScoreTraining) {
       return context.read<GameScoreTraining_P>().getAmountOfDartsThrown();
     }
     return 0;
@@ -39,7 +40,7 @@ class PointBtnThreeDarts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String pointValueWithDoubleOrTripplePrefix = '';
-    if (mode == 'Score Training') {
+    if (mode == GameMode.ScoreTraining) {
       if (pointValue == 'Bust') {
         pointValueWithDoubleOrTripplePrefix = 'Bust';
       } else {
@@ -63,7 +64,8 @@ class PointBtnThreeDarts extends StatelessWidget {
           backgroundColor: _getAmountOfDartsThrown(context) != 3
               ? MaterialStateProperty.all(Theme.of(context).colorScheme.primary)
               : MaterialStateProperty.all(
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25)),
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                ),
           overlayColor: _getAmountOfDartsThrown(context) != 3
               ? Utils.getColorOrPressed(
                   Theme.of(context).colorScheme.primary,

@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/point_btn_three_darts.dart';
 import 'package:flutter/material.dart';
 
@@ -5,7 +6,7 @@ class SixteenToTwentyBtnsThreeDarts extends StatelessWidget {
   const SixteenToTwentyBtnsThreeDarts({Key? key, required this.mode})
       : super(key: key);
 
-  final String mode;
+  final GameMode mode;
 
   @override
   Widget build(BuildContext context) {

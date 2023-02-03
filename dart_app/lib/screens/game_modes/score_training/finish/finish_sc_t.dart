@@ -1,7 +1,8 @@
-import 'package:dart_app/models/firestore/score_training/stats_firestore_score_training_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
-import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/stats_card_score_training/stats_card_sc_t.dart';
-import 'package:dart_app/screens/game_modes/shared/finish_screen_btns/buttons/finish_screen_btns.dart';
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
+import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
@@ -24,7 +25,7 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
   @override
   void initState() {
     _saveDataToFirestore();
-    context.read<StatsFirestoreScoreTraining_P>().gamesLoaded = false;
+    context.read<StatsFirestore_sdt_sct_P>().gamesLoaded = false;
     super.initState();
   }
 
@@ -56,12 +57,12 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
           width: 90.w,
           child: Column(
             children: [
-              StatsCardScoreTraining(
+              StatsCard(
                 isFinishScreen: true,
-                gameScoreTraining_P: context.read<GameScoreTraining_P>(),
+                game: context.read<GameScoreTraining_P>(),
                 isOpenGame: false,
               ),
-              FinishScreenBtns(gameMode: 'Score Training'),
+              FinishScreenBtns(gameMode: GameMode.ScoreTraining),
             ],
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
-import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,14 +12,13 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final PlayerGameStatisticsScoreTraining playerStats =
+    final PlayerGameStatsScoreTraining playerStats =
         context.read<GameScoreTraining_P>().getCurrentPlayerGameStats();
     final bool isRoundMode =
         context.read<GameSettingsScoreTraining_P>().getMode ==
             ScoreTrainingModeEnum.MaxRounds;
     const int WIDTH = 60;
     const int FONTSIZE = 18;
-
     const double PADDING_TOP = 20;
 
     return Column(

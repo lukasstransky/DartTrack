@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -11,16 +11,16 @@ import 'package:sizer/sizer.dart';
 class ThreeDartsBtn extends StatelessWidget {
   const ThreeDartsBtn({Key? key, required this.mode}) : super(key: key);
 
-  final String mode;
+  final GameMode mode;
 
-  _threeDartsBtnClicked(BuildContext context, String mode) {
-    if (mode == 'X01') {
+  _threeDartsBtnClicked(BuildContext context, GameMode mode) {
+    if (mode == GameMode.X01) {
       final gameSettingsX01_P = context.read<GameSettingsX01_P>();
 
       gameSettingsX01_P.setInputMethod = InputMethod.ThreeDarts;
       gameSettingsX01_P.notify();
       context.read<GameX01_P>().setCurrentPointsSelected = 'Points';
-    } else if (mode == 'Score Training') {
+    } else if (mode == GameMode.ScoreTraining) {
       final gameSettingsScoreTraining_P =
           context.read<GameSettingsScoreTraining_P>();
 
@@ -32,12 +32,12 @@ class ThreeDartsBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isThreeDartsSelected = false;
-    if (mode == 'X01') {
+    if (mode == GameMode.X01) {
       isThreeDartsSelected = context.read<GameSettingsX01_P>().getInputMethod ==
               InputMethod.ThreeDarts
           ? true
           : false;
-    } else if (mode == 'Score Training') {
+    } else if (mode == GameMode.ScoreTraining) {
       isThreeDartsSelected =
           context.read<GameSettingsScoreTraining_P>().getInputMethod ==
                   InputMethod.ThreeDarts

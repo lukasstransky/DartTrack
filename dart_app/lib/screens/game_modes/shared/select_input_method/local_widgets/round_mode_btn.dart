@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -13,10 +13,10 @@ import 'package:sizer/sizer.dart';
 class RoundBtn extends StatelessWidget {
   const RoundBtn({Key? key, required this.mode}) : super(key: key);
 
-  final String mode;
+  final GameMode mode;
 
-  _roundBtnClicked(BuildContext context, String mode) {
-    if (mode == 'X01') {
+  _roundBtnClicked(BuildContext context, GameMode mode) {
+    if (mode == GameMode.X01) {
       if (_getAmountOfThrownDarts(context) != 0) {
         Fluttertoast.showToast(
             msg: 'In order to switch, please finish the round!',
@@ -28,7 +28,7 @@ class RoundBtn extends StatelessWidget {
         gameSettingsX01_P.setInputMethod = InputMethod.Round;
         gameSettingsX01_P.notify();
       }
-    } else if (mode == 'Score Training') {
+    } else if (mode == GameMode.ScoreTraining) {
       if (_getAmountOfThrownDarts(context) != 0) {
         Fluttertoast.showToast(
             msg: 'In order to switch, please finish the round!',
@@ -45,9 +45,9 @@ class RoundBtn extends StatelessWidget {
   }
 
   int _getAmountOfThrownDarts(BuildContext context) {
-    if (mode == 'X01') {
+    if (mode == GameMode.X01) {
       return context.read<GameX01_P>().getAmountOfDartsThrown();
-    } else if (mode == 'Score Training') {
+    } else if (mode == GameMode.ScoreTraining) {
       return context.read<GameScoreTraining_P>().getAmountOfDartsThrown();
     }
     return 0;
@@ -56,12 +56,12 @@ class RoundBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isRoundSelected = false;
-    if (mode == 'X01') {
+    if (mode == GameMode.X01) {
       isRoundSelected =
           context.read<GameSettingsX01_P>().getInputMethod == InputMethod.Round
               ? true
               : false;
-    } else if (mode == 'Score Training') {
+    } else if (mode == GameMode.ScoreTraining) {
       isRoundSelected =
           context.read<GameSettingsScoreTraining_P>().getInputMethod ==
                   InputMethod.Round

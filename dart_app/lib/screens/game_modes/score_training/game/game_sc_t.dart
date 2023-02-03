@@ -1,11 +1,11 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/players_list_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/point_btns_round_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/point_btns_three_darts.dart';
 import 'package:dart_app/screens/game_modes/shared/select_input_method/select_input_method.dart';
-import 'package:dart_app/utils/app_bars/score_training/custom_app_bar_score_training_game.dart';
+import 'package:dart_app/utils/app_bars/custom_app_bar_game.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +27,9 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
 
     // only init game for new game, not for open game
     if (arguments.isNotEmpty && !arguments['openGame']) {
-      context.read<GameScoreTraining_P>().init(context);
+      context
+          .read<GameScoreTraining_P>()
+          .init(context.read<GameSettingsScoreTraining_P>());
     }
 
     super.didChangeDependencies();
@@ -37,7 +39,7 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: CustomAppBarScoreTrainingGame(),
+      appBar: CustomAppBarGame(mode: GameMode.ScoreTraining),
       body: Column(
         children: [
           PlayersListScoreTraining(),
@@ -47,10 +49,10 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
                   gameSettingsScoreTraining_P.getInputMethod,
               builder: (_, inputMethod, __) => Column(
                 children: [
-                  SelectInputMethod(mode: 'Score Training'),
+                  SelectInputMethod(mode: GameMode.ScoreTraining),
                   inputMethod == InputMethod.Round
                       ? PointBtnsRoundScoreTraining()
-                      : PointBtnsThreeDarts(mode: 'Score Training'),
+                      : PointBtnsThreeDarts(mode: GameMode.ScoreTraining),
                 ],
               ),
             ),

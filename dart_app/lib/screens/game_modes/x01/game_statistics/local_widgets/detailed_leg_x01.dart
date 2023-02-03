@@ -1,7 +1,7 @@
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -34,8 +34,8 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
     _currentPoints = context.read<GameSettingsX01_P>().getPointsOrCustom();
   }
 
-  String _getCurrentValue(int score, int i,
-      PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01) {
+  String _getCurrentValue(
+      int score, int i, PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01) {
     _currentPoints -= score;
     final String result = _currentPoints.toString();
 
@@ -51,7 +51,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
   }
 
   String _getThrownDartsForLeg(
-      PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01) {
+      PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01) {
     return playerOrTeamGameStatsX01.getThrownDartsPerLeg[widget.setLegString]
         .toString();
   }
@@ -59,7 +59,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
   bool _emptyRowNeeded(
       int dartsToCheck, GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     int mostDarts = 0;
-    for (PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01
+    for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
       final bool isValueForKeyAvailable = playerOrTeamGameStatsX01
           .getAllScoresPerLeg
@@ -78,8 +78,8 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
     return mostDarts > dartsToCheck ? true : false;
   }
 
-  String _getPlayerOrTeamName(PlayerOrTeamGameStatisticsX01 stats,
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+  String _getPlayerOrTeamName(PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01,
+      GameSettingsX01_P gameSettingsX01) {
     if (Utils.teamStatsDisplayed(gameX01, gameSettingsX01))
       return stats.getTeam.getName;
 
@@ -98,7 +98,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            for (PlayerOrTeamGameStatisticsX01 playerOrTeamGameStatsX01
+            for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
                 in Utils.getPlayersOrTeamStatsList(
                     widget.gameX01, gameSettingsX01))
               Container(

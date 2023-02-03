@@ -1,12 +1,14 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
-import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/stats_card_score_training/stats_card_sc_t.dart';
+import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
@@ -53,47 +55,84 @@ class _OpenGamesState extends State<OpenGames> {
       settings.setMode = openGameSettings.getMode;
       settings.setMaxRoundsOrPoints = openGameSettings.getMaxRoundsOrPoints;
       settings.setInputMethod = openGameSettings.getInputMethod;
+      settings.setPlayers = openGameSettings.getPlayers;
+    } else if (openGameSettings is GameSettingsSingleDoubleTraining_P) {
+      final settings = context.read<GameSettingsSingleDoubleTraining_P>();
+
+      settings.setPlayers = openGameSettings.getPlayers;
+      settings.setTargetNumber = openGameSettings.getTargetNumber;
+      settings.setIsTargetNumberEnabled =
+          openGameSettings.getIsTargetNumberEnabled;
+      settings.setAmountOfRounds = openGameSettings.getAmountOfRounds;
     }
   }
 
   _setNewGameValuesFromOpenGame(Game_P openGame, BuildContext context) {
     _setNewGameSettingsFromOpenGame(openGame.getGameSettings);
 
+    late Game_P game;
     if (openGame.getName == 'X01') {
-      final gameX01 = context.read<GameX01_P>();
+      game = context.read<GameX01_P>();
 
-      gameX01.setPlayerGameStatistics = openGame.getPlayerGameStatistics;
-      gameX01.setTeamGameStatistics = openGame.getTeamGameStatistics;
-      gameX01.setDateTime = openGame.getDateTime;
-      gameX01.setGameId = openGame.getGameId;
-      gameX01.setName = openGame.getName;
-      gameX01.setGameSettings = openGame.getGameSettings;
-      gameX01.setCurrentPlayerToThrow = openGame.getCurrentPlayerToThrow;
-      gameX01.setCurrentTeamToThrow = openGame.getCurrentTeamToThrow;
-      gameX01.setIsOpenGame = openGame.getIsOpenGame;
-      gameX01.setRevertPossible = openGame.getRevertPossible;
+      game.setTeamGameStatistics = openGame.getTeamGameStatistics;
+      game.setCurrentTeamToThrow = openGame.getCurrentTeamToThrow;
     } else if (openGame.getName == 'Score Training') {
-      final gameScoreTraining = context.read<GameScoreTraining_P>();
+      game = context.read<GameScoreTraining_P>();
+    } else if (openGame.getName == 'Single Training' ||
+        openGame.getName == 'Double Training') {
+      game = context.read<GameSingleDoubleTraining_P>();
+    }
 
-      gameScoreTraining.setPlayerGameStatistics =
-          openGame.getPlayerGameStatistics;
-      gameScoreTraining.setDateTime = openGame.getDateTime;
-      gameScoreTraining.setGameId = openGame.getGameId;
-      gameScoreTraining.setName = openGame.getName;
-      gameScoreTraining.setGameSettings = openGame.getGameSettings;
-      gameScoreTraining.setCurrentPlayerToThrow =
-          openGame.getCurrentPlayerToThrow;
-      gameScoreTraining.setIsOpenGame = openGame.getIsOpenGame;
-      gameScoreTraining.setRevertPossible = openGame.getRevertPossible;
+    game.setCurrentThreeDarts = openGame.getCurrentThreeDarts;
+    game.setPlayerGameStatistics = openGame.getPlayerGameStatistics;
+    game.setDateTime = openGame.getDateTime;
+    game.setGameId = openGame.getGameId;
+    game.setName = openGame.getName;
+    game.setGameSettings = openGame.getGameSettings;
+    game.setCurrentPlayerToThrow = openGame.getCurrentPlayerToThrow;
+    game.setIsOpenGame = openGame.getIsOpenGame;
+    game.setRevertPossible = openGame.getRevertPossible;
+
+    if (openGame.getName == 'Single Training' ||
+        openGame.getName == 'Double Training') {
+      final game = context.read<GameSingleDoubleTraining_P>();
+
+      openGame = openGame as GameSingleDoubleTraining_P;
+      game.setCurrentFieldToHit = openGame.getCurrentFieldToHit;
+      game.setRandomFieldsGenerated = openGame.getRandomFieldsGenerated;
+      game.setAmountOfRoundsRemaining = openGame.getAmountOfRoundsRemaining;
+      game.setAllFieldsToHit = openGame.getAllFieldsToHit;
+      game.setMode = openGame.getName == 'Single Training'
+          ? GameMode.SingleTraining
+          : GameMode.DoubleTraining;
     }
   }
 
   _continueGame(Game_P game_p) {
     _setNewGameValuesFromOpenGame(game_p, context);
-    Navigator.of(context).pushNamed(
-      game_p.getName == 'X01' ? '/gameX01' : '/gameScoreTraining',
-      arguments: {'openGame': true},
-    );
+
+    if (game_p.getName == 'X01') {
+      Navigator.of(context).pushNamed(
+        '/gameX01',
+        arguments: {'openGame': true},
+      );
+    } else if (game_p.getName == 'Score Training') {
+      Navigator.of(context).pushNamed(
+        '/gameScoreTraining',
+        arguments: {'openGame': true},
+      );
+    } else if (game_p.getName == 'Single Training' ||
+        game_p.getName == 'Double Training') {
+      Navigator.of(context).pushNamed(
+        '/gameSingleDoubleTraining',
+        arguments: {
+          'openGame': true,
+          'mode': game_p.getName == 'Single Training'
+              ? GameMode.SingleTraining
+              : GameMode.DoubleTraining,
+        },
+      );
+    }
   }
 
   @override
@@ -138,13 +177,20 @@ class _OpenGamesState extends State<OpenGames> {
                                         gameX01: GameX01_P.createGame(game_p),
                                         isOpenGame: true,
                                       )
-                                    : StatsCardScoreTraining(
-                                        isFinishScreen: false,
-                                        gameScoreTraining_P:
-                                            GameScoreTraining_P.createGame(
-                                                game_p),
-                                        isOpenGame: true,
-                                      ),
+                                    : game_p.getName == 'Score Training'
+                                        ? StatsCard(
+                                            isFinishScreen: false,
+                                            game:
+                                                GameScoreTraining_P.createGame(
+                                                    game_p),
+                                            isOpenGame: true,
+                                          )
+                                        : StatsCard(
+                                            isFinishScreen: false,
+                                            game: GameSingleDoubleTraining_P
+                                                .createGame(game_p),
+                                            isOpenGame: true,
+                                          ),
                                 startActionPane: ActionPane(
                                   dismissible:
                                       DismissiblePane(onDismissed: () {}),

@@ -1,5 +1,5 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +9,7 @@ class GameStatsX01 extends StatelessWidget {
   const GameStatsX01({Key? key, required this.currPlayerOrTeamGameStatsX01})
       : super(key: key);
 
-  final PlayerOrTeamGameStatisticsX01? currPlayerOrTeamGameStatsX01;
+  final PlayerOrTeamGameStatsX01? currPlayerOrTeamGameStatsX01;
 
   String _getLastThrow(List<int> allScores) {
     if (allScores.length == 0) return '-';

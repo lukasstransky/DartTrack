@@ -1,4 +1,7 @@
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -77,6 +80,17 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
     statsFirestore.notify();
   }
 
+  _resetGame(BuildContext context) {
+    if (widget.mode == 'X01') {
+      context.read<GameX01_P>().reset();
+    } else if (widget.mode == 'Score Training') {
+      context.read<GameScoreTraining_P>().reset();
+    } else if (widget.mode == 'Single Training' ||
+        widget.mode == 'Double Training') {
+      context.read<GameSingleDoubleTraining_P>().reset();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -105,9 +119,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
           IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: () async => {
-              _addGameToFavourites(),
-            },
+            onPressed: () async => _addGameToFavourites(),
             icon: widget.isFavouriteGame
                 ? Icon(
                     MdiIcons.heart,
@@ -122,7 +134,10 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
           IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: () => Navigator.of(context).pushNamed('/home'),
+            onPressed: () {
+              _resetGame(context);
+              Navigator.of(context).pushNamed('/home');
+            },
             icon: Icon(
               Icons.home,
               color: Theme.of(context).colorScheme.secondary,

@@ -1,12 +1,14 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -18,8 +20,8 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   String _name; // e.g. X01 or Cricket
   DateTime _dateTime; // when game was played
   GameSettings_P? _gameSettings; // there are different settings for each game
-  List<PlayerOrTeamGameStatistics> _playerGameStatistics = [];
-  List<PlayerOrTeamGameStatistics> _teamGameStatistics = [];
+  List<PlayerOrTeamGameStats> _playerGameStatistics = [];
+  List<PlayerOrTeamGameStats> _teamGameStatistics = [];
   Player? _currentPlayerToThrow;
   Team? _currentTeamToThrow;
   bool _isOpenGame = false;
@@ -27,6 +29,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       false; // for team mode -> needed for weird behaviour when clicking the show players/teams btn in the stats tab
   bool _isFavouriteGame = false;
   bool _revertPossible = false;
+  List<String> _currentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
 
   Game_P({
     required String name,
@@ -42,9 +45,10 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       required bool isFavouriteGame,
       required DateTime dateTime,
       required GameSettings_P gameSettings,
-      required List<PlayerOrTeamGameStatistics> playerGameStatistics,
-      required List<PlayerOrTeamGameStatistics> teamGameStatistics,
+      required List<PlayerOrTeamGameStats> playerGameStatistics,
+      required List<PlayerOrTeamGameStats> teamGameStatistics,
       required bool revertPossible,
+      required List<String> currentThreeDarts,
       Player? currentPlayerToThrow,
       Team? currentTeamToThrow})
       : this._gameId = gameId,
@@ -58,7 +62,8 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         this._teamGameStatistics = teamGameStatistics,
         this._revertPossible = revertPossible,
         this._currentPlayerToThrow = currentPlayerToThrow,
-        this._currentTeamToThrow = currentTeamToThrow;
+        this._currentTeamToThrow = currentTeamToThrow,
+        this._currentThreeDarts = currentThreeDarts;
 
   get getGameId => this._gameId;
   set setGameId(String? gameId) => this._gameId = gameId;
@@ -75,11 +80,11 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
 
   get getPlayerGameStatistics => this._playerGameStatistics;
   set setPlayerGameStatistics(
-          List<PlayerOrTeamGameStatistics> playerGameStatistics) =>
+          List<PlayerOrTeamGameStats> playerGameStatistics) =>
       this._playerGameStatistics = playerGameStatistics;
 
   get getTeamGameStatistics => this._teamGameStatistics;
-  set setTeamGameStatistics(List<PlayerOrTeamGameStatistics> value) =>
+  set setTeamGameStatistics(List<PlayerOrTeamGameStats> value) =>
       this._teamGameStatistics = value;
 
   get getCurrentPlayerToThrow => this._currentPlayerToThrow;
@@ -102,6 +107,10 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   set setRevertPossible(bool revertPossible) =>
       this._revertPossible = revertPossible;
 
+  List<String> get getCurrentThreeDarts => this._currentThreeDarts;
+  set setCurrentThreeDarts(List<String> currentThreeDarts) =>
+      this._currentThreeDarts = currentThreeDarts;
+
   Map<String, dynamic> toMapX01(GameX01_P gameX01, bool openGame) {
     final GameSettingsX01_P gameSettingsX01 =
         getGameSettings as GameSettingsX01_P;
@@ -110,16 +119,17 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       'name': getName,
       'dateTime': getDateTime,
       'isFavouriteGame': getIsFavouriteGame,
+      if (openGame) 'currentThreeDarts': getCurrentThreeDarts,
       if (!openGame) 'isGameFinished': true,
       if (openGame) 'isOpenGame': true,
       if (openGame)
         'playerGameStatistics': getPlayerGameStatistics.map((item) {
-          return item.toMapX01(item as PlayerOrTeamGameStatisticsX01, gameX01,
+          return item.toMapX01(item as PlayerOrTeamGameStatsX01, gameX01,
               gameSettingsX01, '', openGame);
         }).toList(),
       if (openGame && gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
         'teamGameStatistics': getTeamGameStatistics.map((item) {
-          return item.toMapX01(item as PlayerOrTeamGameStatisticsX01, gameX01,
+          return item.toMapX01(item as PlayerOrTeamGameStatsX01, gameX01,
               gameSettingsX01, '', openGame);
         }).toList(),
       if (openGame)
@@ -179,10 +189,11 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         .toMapScoreTraining(gameScoreTraining_P.getGameSettings, openGame);
 
     if (openGame) {
+      result['currentThreeDarts'] = getCurrentThreeDarts;
       result['isOpenGame'] = true;
       result['playerGameStatistics'] = getPlayerGameStatistics.map((item) {
         return item.toMapScoreTraining(
-            item as PlayerGameStatisticsScoreTraining, '', openGame);
+            item as PlayerGameStatsScoreTraining, '', openGame);
       }).toList();
       result['currentPlayerToThrow'] =
           getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player);
@@ -194,81 +205,130 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
     return result;
   }
 
+  Map<String, dynamic> toMapSingleDoubleTraining(
+      GameSingleDoubleTraining_P game, bool openGame) {
+    Map<String, dynamic> result = {
+      'name': game.getMode == GameMode.SingleTraining
+          ? 'Single Training'
+          : 'Double Training',
+      'dateTime': getDateTime,
+      'isFavouriteGame': getIsFavouriteGame,
+    };
+
+    result['gameSettings'] = game.getGameSettings
+        .toMapSingleDoubleTraining(game.getGameSettings, openGame);
+
+    if (openGame) {
+      result['currentThreeDarts'] = getCurrentThreeDarts;
+      result['isOpenGame'] = true;
+      result['playerGameStatistics'] = getPlayerGameStatistics.map((item) {
+        return item.toMapSingleDoubleTraining(
+            item as PlayerGameStatsSingleDoubleTraining, '', openGame);
+      }).toList();
+      result['currentPlayerToThrow'] =
+          getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player);
+      result['revertPossible'] = getRevertPossible;
+      result['currentFieldToHit'] = game.getCurrentFieldToHit;
+      if (game.getGameSettings.getMode == ModesSingleDoubleTraining.Random) {
+        result['randomFieldsGenerated'] = game.getRandomFieldsGenerated;
+      }
+      if (game.getGameSettings.getIsTargetNumberEnabled) {
+        result['amountOfRoundsRemaining'] = game.getAmountOfRoundsRemaining;
+      }
+      result['allFieldsToHit'] = game.getAllFieldsToHit;
+    } else {
+      result['isGameFinished'] = true;
+    }
+
+    return result;
+  }
+
   factory Game_P.fromMap(map, mode, gameId, openGame) {
     late GameSettings_P gameSettings;
-    switch (mode) {
-      case 'X01':
-        gameSettings = GameSettings_P.fromMapX01(map['gameSettings']);
-        break;
-      case 'Score Training':
-        gameSettings = GameSettings_P.fromMapScoreTraining(map['gameSettings']);
-        break;
+
+    if (mode == 'X01') {
+      gameSettings = GameSettings_P.fromMapX01(map['gameSettings']);
+    } else if (mode == 'Score Training') {
+      gameSettings = GameSettings_P.fromMapScoreTraining(map['gameSettings']);
+    } else if (mode == 'Single Training' || mode == 'Double Training') {
+      gameSettings =
+          GameSettings_P.fromMapSingleDoubleTraining(map['gameSettings']);
     }
 
     DateTime dateTime = DateTime.parse(map['dateTime'].toDate().toString());
 
     if (openGame) {
       return Game_P.Firestore(
-          gameId: gameId,
-          name: map['name'],
-          isGameFinished: false,
-          isOpenGame: true,
-          isFavouriteGame: false,
-          dateTime: dateTime,
-          gameSettings: gameSettings,
-          playerGameStatistics: map['playerGameStatistics']
-              .map<PlayerOrTeamGameStatistics?>((item) {
-                final List<List<String>> allRemainingScoresPerDart =
+        gameId: gameId,
+        name: map['name'],
+        isGameFinished: false,
+        isOpenGame: true,
+        isFavouriteGame: false,
+        dateTime: dateTime,
+        gameSettings: gameSettings,
+        playerGameStatistics: map['playerGameStatistics']
+            .map<PlayerOrTeamGameStats?>((item) {
+              List<List<String>> allRemainingScoresPerDart = [];
+              if (mode == 'X01' || mode == 'Score Training') {
+                allRemainingScoresPerDart =
                     Utils.convertSimpleListToAllRemainingScoresPerDart(
                         item['allRemainingScoresPerDart'] != null
                             ? item['allRemainingScoresPerDart']
                             : []);
+              }
 
-                switch (mode) {
-                  case 'X01':
-                    return PlayerOrTeamGameStatistics.fromMapX01(
-                        item, allRemainingScoresPerDart);
-                  case 'Score Training':
-                    return PlayerOrTeamGameStatistics.fromMapScoreTraining(
-                        item, allRemainingScoresPerDart);
-                }
-              })
-              .toList()
-              .whereType<PlayerOrTeamGameStatistics>()
-              .toList(),
-          teamGameStatistics: map['teamGameStatistics'] != null
-              ? map['teamGameStatistics']
-                  .map<PlayerOrTeamGameStatistics?>((item) {
-                    switch (mode) {
-                      case 'X01':
-                        return PlayerOrTeamGameStatistics.fromMapX01(item);
-                      //add other cases like cricket...
-                    }
-                  })
-                  .toList()
-                  .whereType<PlayerOrTeamGameStatistics>()
-                  .toList()
-              : [],
-          revertPossible: map['revertPossible'],
-          currentPlayerToThrow: Player.getPlayerFromList(
-              gameSettings.getPlayers,
-              Player.fromMap(map['currentPlayerToThrow'])),
-          currentTeamToThrow: map['currentTeamToThrow'] != null
-              ? Team.fromMap(map['currentTeamToThrow'])
-              : null);
+              if (mode == 'X01') {
+                return PlayerOrTeamGameStats.fromMapX01(
+                    item, allRemainingScoresPerDart);
+              } else if (mode == 'Score Training') {
+                return PlayerOrTeamGameStats.fromMapScoreTraining(
+                    item, allRemainingScoresPerDart);
+              } else if (mode == 'Single Training' ||
+                  mode == 'Double Training') {
+                return PlayerOrTeamGameStats.fromMapSingleDoubleTraining(item);
+              }
+            })
+            .toList()
+            .whereType<PlayerOrTeamGameStats>()
+            .toList(),
+        teamGameStatistics: map['teamGameStatistics'] != null
+            ? map['teamGameStatistics']
+                .map<PlayerOrTeamGameStats?>((item) {
+                  switch (mode) {
+                    case 'X01':
+                      return PlayerOrTeamGameStats.fromMapX01(item);
+                    //add other cases like cricket...
+                  }
+                })
+                .toList()
+                .whereType<PlayerOrTeamGameStats>()
+                .toList()
+            : [],
+        revertPossible: map['revertPossible'],
+        currentPlayerToThrow: Player.getPlayerFromList(gameSettings.getPlayers,
+            Player.fromMap(map['currentPlayerToThrow'])),
+        currentTeamToThrow: map['currentTeamToThrow'] != null
+            ? Team.fromMap(map['currentTeamToThrow'])
+            : null,
+        currentThreeDarts: map['currentThreeDarts'] != null
+            ? map['currentThreeDarts'].cast<String>()
+            : ['Dart 1', 'Dart 2', 'Dart 3'],
+      );
     }
 
     return Game_P.Firestore(
-        gameId: gameId,
-        name: map['name'],
-        isGameFinished: true,
-        isOpenGame: false,
-        revertPossible: false,
-        isFavouriteGame: map['isFavouriteGame'],
-        dateTime: dateTime,
-        gameSettings: gameSettings,
-        playerGameStatistics: [],
-        teamGameStatistics: []);
+      gameId: gameId,
+      name: map['name'],
+      isGameFinished: true,
+      isOpenGame: false,
+      revertPossible: false,
+      isFavouriteGame: map['isFavouriteGame'],
+      dateTime: dateTime,
+      gameSettings: gameSettings,
+      playerGameStatistics: [],
+      teamGameStatistics: [],
+      currentThreeDarts: [],
+    );
   }
 
   @override

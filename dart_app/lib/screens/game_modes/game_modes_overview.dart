@@ -124,7 +124,10 @@ class DoubleTrainingBtn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => null,
+          onPressed: () => Navigator.of(context).pushNamed(
+            '/settingsSingleDoubleTraining',
+            arguments: {'mode': GameMode.DoubleTraining},
+          ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -166,7 +169,12 @@ class SingleTrainingBtn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => null,
+          onPressed: () => Navigator.of(context).pushNamed(
+            '/settingsSingleDoubleTraining',
+            arguments: {
+              'mode': GameMode.SingleTraining,
+            },
+          ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -208,7 +216,7 @@ class CricketBtn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => null,
+          onPressed: () => Navigator.of(context).pushNamed('/cricket'),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),

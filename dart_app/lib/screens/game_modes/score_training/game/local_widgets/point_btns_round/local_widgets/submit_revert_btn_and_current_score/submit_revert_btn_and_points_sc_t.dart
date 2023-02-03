@@ -1,4 +1,4 @@
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/local_widgets/submit_revert_btn_and_current_score/local_widgets/current_points_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/local_widgets/submit_revert_btn_and_current_score/local_widgets/submit_points_btn_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game/revert_btn.dart';

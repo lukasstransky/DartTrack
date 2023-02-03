@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/score_training/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -24,21 +25,25 @@ class FirestoreServiceGames {
 
   Future<String> postGame(Game_P game) async {
     final Game_P gameToSave = Game_P.Firestore(
-        name: game.getName,
-        isGameFinished: true,
-        isOpenGame: false,
-        isFavouriteGame: false,
-        dateTime: game.getDateTime,
-        gameSettings: game.getGameSettings,
-        revertPossible: false,
-        playerGameStatistics: [],
-        teamGameStatistics: []);
+      name: game.getName,
+      isGameFinished: true,
+      isOpenGame: false,
+      isFavouriteGame: false,
+      dateTime: game.getDateTime,
+      gameSettings: game.getGameSettings,
+      revertPossible: false,
+      playerGameStatistics: [],
+      teamGameStatistics: [],
+      currentThreeDarts: [],
+    );
 
     Map<String, dynamic> data = {};
     if (game is GameX01_P) {
       data = gameToSave.toMapX01(game, false);
     } else if (game is GameScoreTraining_P) {
       data = gameToSave.toMapScoreTraining(game, false);
+    } else if (game is GameSingleDoubleTraining_P) {
+      data = gameToSave.toMapSingleDoubleTraining(game, false);
     }
 
     String gameId = '';
@@ -121,7 +126,7 @@ class FirestoreServiceGames {
         final FirestoreServicePlayerStats firestoreServicePlayerStats =
             context.read<FirestoreServicePlayerStats>();
 
-        PlayerOrTeamGameStatistics? playerOrTeamGameStatistics;
+        PlayerOrTeamGameStats? playerOrTeamGameStatistics;
 
         for (String playerGameStatsId in element.get('playerGameStatsIds')) {
           playerOrTeamGameStatistics = await firestoreServicePlayerStats
@@ -158,18 +163,20 @@ class FirestoreServiceGames {
 
   Future<void> postOpenGame(Game_P game_p, BuildContext context) async {
     final Game_P gameToSave = Game_P.Firestore(
-        gameId: game_p.getGameId,
-        name: game_p.getName,
-        isGameFinished: false,
-        isOpenGame: true,
-        isFavouriteGame: false,
-        revertPossible: game_p.getRevertPossible,
-        dateTime: game_p.getDateTime,
-        gameSettings: game_p.getGameSettings,
-        playerGameStatistics: game_p.getPlayerGameStatistics,
-        teamGameStatistics: game_p.getTeamGameStatistics,
-        currentPlayerToThrow: game_p.getCurrentPlayerToThrow,
-        currentTeamToThrow: game_p.getCurrentTeamToThrow);
+      gameId: game_p.getGameId,
+      name: game_p.getName,
+      isGameFinished: false,
+      isOpenGame: true,
+      isFavouriteGame: false,
+      revertPossible: game_p.getRevertPossible,
+      dateTime: game_p.getDateTime,
+      gameSettings: game_p.getGameSettings,
+      playerGameStatistics: game_p.getPlayerGameStatistics,
+      teamGameStatistics: game_p.getTeamGameStatistics,
+      currentPlayerToThrow: game_p.getCurrentPlayerToThrow,
+      currentTeamToThrow: game_p.getCurrentTeamToThrow,
+      currentThreeDarts: game_p.getCurrentThreeDarts,
+    );
     final openGamesFirestore = context.read<OpenGamesFirestore>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreOpenGamesPath());
@@ -187,6 +194,8 @@ class FirestoreServiceGames {
       data = gameToSave.toMapX01(game_p, true);
     } else if (game_p is GameScoreTraining_P) {
       data = gameToSave.toMapScoreTraining(game_p, true);
+    } else if (game_p is GameSingleDoubleTraining_P) {
+      data = gameToSave.toMapSingleDoubleTraining(game_p, true);
     }
 
     // update (e.g. save game again that was already open)
@@ -226,17 +235,29 @@ class FirestoreServiceGames {
     await collectionReference.get().then((openGames) => {
           openGames.docs.forEach((openGame) {
             String mode = '';
-            if ((openGame.data() as Map<String, dynamic>)
-                .containsValue('X01')) {
+            Map<String, dynamic> map =
+                (openGame.data() as Map<String, dynamic>);
+            if (map.containsValue('X01')) {
               mode = 'X01';
-            } else if ((openGame.data() as Map<String, dynamic>)
-                .containsValue('Score Training')) {
+            } else if (map.containsValue('Score Training')) {
               mode = 'Score Training';
+            } else if (map.containsValue('Single Training')) {
+              mode = 'Single Training';
+            } else if (map.containsValue('Double Training')) {
+              mode = 'Double Training';
             }
 
-            final Game_P game =
-                Game_P.fromMap(openGame.data(), mode, openGame.id, true);
-            openGamesFirestore.openGames.add(game);
+            if (mode == 'X01' || mode == 'Score Training') {
+              final Game_P game =
+                  Game_P.fromMap(openGame.data(), mode, openGame.id, true);
+              openGamesFirestore.openGames.add(game);
+            } else if (mode == 'Single Training' || mode == 'Double Training') {
+              final GameSingleDoubleTraining_P game =
+                  GameSingleDoubleTraining_P.fromMapSingleDoubleTraining(
+                      openGame.data(), mode, openGame.id, true);
+              openGamesFirestore.openGames.add(game);
+            }
+
             openGamesFirestore.notify();
           })
         });

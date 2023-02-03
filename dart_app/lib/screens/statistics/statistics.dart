@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/more_stats.dart';

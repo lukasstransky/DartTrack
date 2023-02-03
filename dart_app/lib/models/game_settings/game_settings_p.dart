@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/score_training/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
@@ -30,6 +31,24 @@ class GameSettings_P with ChangeNotifier {
     if (openGame) {
       result['inputMethod'] =
           gameSettingsScoreTraining_P.getInputMethod.toString().split('.').last;
+    }
+
+    return result;
+  }
+
+  Map<String, dynamic> toMapSingleDoubleTraining(
+      GameSettingsSingleDoubleTraining_P gameSettings, bool openGame) {
+    Map<String, dynamic> result = {
+      'players': gameSettings.getPlayers.map((player) {
+        return player.toMap(player);
+      }).toList(),
+    };
+
+    if (gameSettings.getIsTargetNumberEnabled) {
+      result['targetNumber'] = gameSettings.getTargetNumber;
+      result['amountOfRounds'] = gameSettings.getAmountOfRounds;
+    } else {
+      result['mode'] = gameSettings.getMode.toString().split('.').last;
     }
 
     return result;
@@ -144,6 +163,40 @@ class GameSettings_P with ChangeNotifier {
       mode: mode,
       maxRoundsOrPoints: map['maxRoundsOrPoints'],
       inputMethod: inputMethod,
+      players: map['players'] == null
+          ? []
+          : map['players'].map<Player>((item) {
+              return Player.fromMap(item);
+            }).toList(),
+    );
+  }
+
+  factory GameSettings_P.fromMapSingleDoubleTraining(map) {
+    ModesSingleDoubleTraining mode = ModesSingleDoubleTraining.Ascending;
+
+    if (map['mode'] != null) {
+      switch (map['mode']) {
+        case 'Ascending':
+          mode = ModesSingleDoubleTraining.Ascending;
+          break;
+        case 'Descending':
+          mode = ModesSingleDoubleTraining.Descending;
+          break;
+        case 'Random':
+          mode = ModesSingleDoubleTraining.Random;
+          break;
+      }
+    }
+
+    return GameSettingsSingleDoubleTraining_P.firestore(
+      mode: mode,
+      targetNumber: map['targetNumber'] != null
+          ? map['targetNumber']
+          : DEFAULT_TARGET_NUMBER,
+      isTargetNumberEnabled: map['targetNumber'] != null ? true : false,
+      amountOfRounds: map['amountOfRounds'] != null
+          ? map['amountOfRounds']
+          : DEFUALT_ROUNDS_FOR_TARGET_NUMBER,
       players: map['players'] == null
           ? []
           : map['players'].map<Player>((item) {

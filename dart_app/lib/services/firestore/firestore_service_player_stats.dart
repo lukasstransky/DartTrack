@@ -5,10 +5,11 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/score_training/player_game_statistics_score_training.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
-import 'package:dart_app/models/firestore/x01/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -27,22 +28,24 @@ class FirestoreServicePlayerStats {
 
     List<String> playerGameStatsIds = [];
     List<String> teamGameStatsIds = [];
-    PlayerOrTeamGameStatistics playerOrTeamStatsToSave;
+    PlayerOrTeamGameStats playerOrTeamStatsToSave;
     Map<String, dynamic> data = {};
 
-    for (PlayerOrTeamGameStatistics playerStats
-        in game.getPlayerGameStatistics) {
-      playerOrTeamStatsToSave = PlayerOrTeamGameStatistics.Player(
+    for (PlayerOrTeamGameStats playerStats in game.getPlayerGameStatistics) {
+      playerOrTeamStatsToSave = PlayerOrTeamGameStats.Player(
           gameId: '',
           player: playerStats.getPlayer,
           mode: playerStats.getMode,
           dateTime: playerStats.getDateTime);
 
-      if (playerStats is PlayerOrTeamGameStatisticsX01) {
+      if (playerStats is PlayerOrTeamGameStatsX01) {
         data = playerOrTeamStatsToSave.toMapX01(playerStats,
             GameX01_P.createGame(game), gameSettingsX01, gameId, false);
-      } else if (playerStats is PlayerGameStatisticsScoreTraining) {
+      } else if (playerStats is PlayerGameStatsScoreTraining) {
         data = playerOrTeamStatsToSave.toMapScoreTraining(
+            playerStats, gameId, false);
+      } else if (playerStats is PlayerGameStatsSingleDoubleTraining) {
+        data = playerOrTeamStatsToSave.toMapSingleDoubleTraining(
             playerStats, gameId, false);
       }
 
@@ -56,14 +59,14 @@ class FirestoreServicePlayerStats {
     }
 
     if (game.getTeamGameStatistics.isNotEmpty) {
-      for (PlayerOrTeamGameStatistics teamStats in game.getTeamGameStatistics) {
-        playerOrTeamStatsToSave = PlayerOrTeamGameStatistics.Team(
+      for (PlayerOrTeamGameStats teamStats in game.getTeamGameStatistics) {
+        playerOrTeamStatsToSave = PlayerOrTeamGameStats.Team(
             gameId: '',
             team: teamStats.getTeam,
             mode: teamStats.getMode,
             dateTime: teamStats.getDateTime);
 
-        if (teamStats is PlayerOrTeamGameStatisticsX01) {
+        if (teamStats is PlayerOrTeamGameStatsX01) {
           data = playerOrTeamStatsToSave.toMapX01(teamStats,
               GameX01_P.createGame(game), gameSettingsX01, gameId, false);
         }
@@ -384,7 +387,7 @@ class FirestoreServicePlayerStats {
     firestoreStats.notify();
   }
 
-  Future<PlayerOrTeamGameStatistics?> getPlayerOrTeamGameStatisticById(
+  Future<PlayerOrTeamGameStats?> getPlayerOrTeamGameStatisticById(
       String playerOrTeamGameStatsId,
       String mode,
       bool loadTeamGameStats) async {
@@ -392,26 +395,29 @@ class FirestoreServicePlayerStats {
         loadTeamGameStats
             ? _getFirestoreTeamStatsPath()
             : _getFirestorePlayerStatsPath());
-    PlayerOrTeamGameStatistics? result;
+    PlayerOrTeamGameStats? result;
 
-    await collectionReference.doc(playerOrTeamGameStatsId).get().then((value) =>
-        {
-          if (mode == 'X01')
-            {
-              result = PlayerOrTeamGameStatistics.fromMapX01(value.data()),
-            }
-          else if (mode == 'Cricket')
-            {}
-          else if (mode == 'Single Training')
-            {}
-          else if (mode == 'Double Training')
-            {}
-          else if (mode == 'Score Training')
-            {
-              result =
-                  PlayerOrTeamGameStatistics.fromMapScoreTraining(value.data()),
-            }
-        });
+    await collectionReference
+        .doc(playerOrTeamGameStatsId)
+        .get()
+        .then((value) => {
+              if (mode == 'X01')
+                {
+                  result = PlayerOrTeamGameStats.fromMapX01(value.data()),
+                }
+              else if (mode == 'Cricket')
+                {}
+              else if (mode == 'Single Training' || mode == 'Double Training')
+                {
+                  result = PlayerOrTeamGameStats.fromMapSingleDoubleTraining(
+                      value.data()),
+                }
+              else if (mode == 'Score Training')
+                {
+                  result =
+                      PlayerOrTeamGameStats.fromMapScoreTraining(value.data()),
+                }
+            });
 
     return result;
   }

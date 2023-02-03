@@ -1,8 +1,8 @@
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/player_or_team_stats_in_game_x01.dart';
 import 'package:dart_app/utils/globals.dart';
 
@@ -21,7 +21,7 @@ class SinglePlayersListX01 extends StatelessWidget {
 
     return Container(
       height: 35.h,
-      child: Selector<GameX01_P, List<PlayerOrTeamGameStatistics>>(
+      child: Selector<GameX01_P, List<PlayerOrTeamGameStats>>(
         selector: (_, gameX01) => gameX01.getPlayerGameStatistics,
         shouldRebuild: (previous, next) => true,
         builder: (_, playerStats, __) => ScrollablePositionedList.builder(
@@ -43,7 +43,7 @@ class SinglePlayersListX01 extends StatelessWidget {
 
             return PlayerOrTeamStatsInGameX01(
               currPlayerOrTeamGameStatsX01:
-                  playerStats[index] as PlayerOrTeamGameStatisticsX01,
+                  playerStats[index] as PlayerOrTeamGameStatsX01,
             );
           },
         ),

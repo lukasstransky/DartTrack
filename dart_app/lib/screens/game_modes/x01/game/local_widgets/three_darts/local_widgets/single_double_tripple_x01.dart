@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -12,7 +12,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
     required this.stats,
   }) : super(key: key);
 
-  final PlayerOrTeamGameStatisticsX01 stats;
+  final PlayerOrTeamGameStatsX01 stats;
 
   @override
   Widget build(BuildContext context) {

@@ -1,7 +1,7 @@
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/local_widgets/stats_cricket_btn.dart';
-import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/local_widgets/stats_doubles_training_btn.dart';
+import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/local_widgets/stats_double_training_btn.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/local_widgets/stats_score_training_btn.dart';
-import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/local_widgets/stats_singles_training_btn.dart';
+import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/local_widgets/stats_single_training_btn.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/local_widgets/stats_x01_btn.dart';
 
 import 'package:flutter/material.dart';
@@ -28,8 +28,8 @@ class StatsPerGameBtns extends StatelessWidget {
           ),
           StatsX01Btn(),
           StatsCricketBtn(),
-          StatsSinglesTrainingBtn(),
-          StatsDoublesTrainingBtn(),
+          StatsSingleTrainingBtn(),
+          StatsDoubleTrainingBtn(),
           StatsScoreTrainingBtn(),
         ],
       ),

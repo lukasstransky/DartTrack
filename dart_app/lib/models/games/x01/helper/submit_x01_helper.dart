@@ -3,8 +3,8 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_statistics.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -42,7 +42,7 @@ class SubmitX01Helper {
     final int scoredPoints =
         isBust ? 0 : Utils.getValueOfSpecificDart(scoredPointsString);
 
-    late final PlayerOrTeamGameStatisticsX01 currentStats;
+    late final PlayerOrTeamGameStatsX01 currentStats;
     if (shouldSubmitTeamStats) {
       currentStats = gameX01.getCurrentTeamGameStats();
     } else {
@@ -70,7 +70,7 @@ class SubmitX01Helper {
       // update current points for each player in team
       if (_shouldUpdateStatsForPlayersOfSameTeam(
           shouldSubmitTeamStats, gameSettingsX01)) {
-        for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+        for (PlayerOrTeamGameStatsX01 stats in gameX01
             .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
           stats.setCurrentPoints = stats.getCurrentPoints - scoredPoints;
         }
@@ -84,7 +84,7 @@ class SubmitX01Helper {
     if (isInputMethodThreeDarts) {
       if (_shouldUpdateStatsForPlayersOfSameTeam(
           shouldSubmitTeamStats, gameSettingsX01)) {
-        for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+        for (PlayerOrTeamGameStatsX01 stats in gameX01
             .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
           stats.setStartingPoints = currentStats.getCurrentPoints;
         }
@@ -166,7 +166,7 @@ class SubmitX01Helper {
       // reset current points & starting points, if leg, set, game won
       if (legSetOrGameFinsihed) {
         if (shouldSubmitTeamStats) {
-          for (PlayerOrTeamGameStatisticsX01 stats
+          for (PlayerOrTeamGameStatsX01 stats
               in gameX01.getTeamGameStatistics) {
             stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
             stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
@@ -174,7 +174,7 @@ class SubmitX01Helper {
         }
 
         if (!shouldSubmitTeamStats) {
-          for (PlayerOrTeamGameStatisticsX01 stats
+          for (PlayerOrTeamGameStatsX01 stats
               in gameX01.getPlayerGameStatistics) {
             stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
             stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
@@ -195,7 +195,7 @@ class SubmitX01Helper {
 
     // update sets, legs for players from same team
     if (shouldSubmitTeamStats) {
-      for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+      for (PlayerOrTeamGameStatsX01 stats in gameX01
           .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
         stats.setLegsWon = currentStats.getLegsWon;
         stats.setLegsWonTotal = currentStats.getLegsWonTotal;
@@ -215,7 +215,7 @@ class SubmitX01Helper {
       int scoredPoints,
       String scoredFieldWithPointType,
       bool shouldSubmitTeamStats,
-      PlayerOrTeamGameStatisticsX01 currentStats) {
+      PlayerOrTeamGameStatsX01 currentStats) {
     gameX01.setRevertPossible = true;
 
     currentStats.getInputMethodForRounds.add(InputMethod.ThreeDarts);
@@ -223,7 +223,7 @@ class SubmitX01Helper {
     // update current points
     if (_shouldUpdateStatsForPlayersOfSameTeam(
         shouldSubmitTeamStats, gameSettingsX01)) {
-      for (PlayerOrTeamGameStatisticsX01 stats in gameX01
+      for (PlayerOrTeamGameStatsX01 stats in gameX01
           .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
         stats.setCurrentPoints = stats.getCurrentPoints - scoredPoints;
       }
@@ -274,7 +274,7 @@ class SubmitX01Helper {
   /********              PRIVATE METHODS                ********/
   /************************************************************/
 
-  static _setScores(PlayerOrTeamGameStatisticsX01 stats, int totalPoints,
+  static _setScores(PlayerOrTeamGameStatsX01 stats, int totalPoints,
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     // precise scores
     if (stats.getPreciseScores.containsKey(totalPoints)) {
@@ -328,7 +328,7 @@ class SubmitX01Helper {
   }
 
   static bool _legSetOrGameFinished(
-      PlayerOrTeamGameStatisticsX01 currentStats,
+      PlayerOrTeamGameStatsX01 currentStats,
       BuildContext context,
       int totalPoints,
       int thrownDarts,
@@ -350,7 +350,7 @@ class SubmitX01Helper {
     currentStats.getAmountOfFinishDarts[currentSetLeg] = thrownDarts;
 
     // set thrown darts per leg & reset points
-    for (PlayerOrTeamGameStatisticsX01 stats in (shouldSubmitTeamStats
+    for (PlayerOrTeamGameStatsX01 stats in (shouldSubmitTeamStats
         ? gameX01.getTeamGameStatistics
         : gameX01.getPlayerGameStatistics)) {
       stats.getThrownDartsPerLeg[currentSetLeg] =
@@ -395,7 +395,7 @@ class SubmitX01Helper {
     // set player of team who finished leg
     if (!isSingleMode && !shouldSubmitTeamStats) {
       final String currentPlayerName = gameX01.getCurrentPlayerToThrow.getName;
-      final PlayerOrTeamGameStatisticsX01 teamStats =
+      final PlayerOrTeamGameStatsX01 teamStats =
           gameX01.getTeamStatsFromPlayer(currentPlayerName);
       teamStats.getPlayersWithCheckoutInLeg[currentSetLeg] = currentPlayerName;
     }
@@ -440,13 +440,11 @@ class SubmitX01Helper {
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
           shouldSubmitTeamStats) Navigator.of(context).pushNamed('/finishX01');
     } else {
-      for (PlayerOrTeamGameStatisticsX01 stats
-          in gameX01.getPlayerGameStatistics) {
+      for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
         stats.setCurrentThrownDartsInLeg = 0;
       }
       if (shouldSubmitTeamStats) {
-        for (PlayerOrTeamGameStatisticsX01 stats
-            in gameX01.getTeamGameStatistics) {
+        for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
           stats.setCurrentThrownDartsInLeg = 0;
         }
       }
@@ -493,7 +491,7 @@ class SubmitX01Helper {
   }
 
   static _updateLegsSets(
-      PlayerOrTeamGameStatisticsX01 currentStats,
+      PlayerOrTeamGameStatsX01 currentStats,
       GameSettingsX01_P gameSettingsX01,
       GameX01_P gameX01,
       bool shouldSubmitTeamStats) {
@@ -509,13 +507,12 @@ class SubmitX01Helper {
     if (gameSettingsX01.getLegs == currentStats.getLegsWon) {
       // save leg count of each player -> in case a user wants to revert a set
       if (shouldSubmitTeamStats) {
-        for (PlayerOrTeamGameStatisticsX01 stats
-            in gameX01.getTeamGameStatistics) {
+        for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
           stats.getLegsCount.add(stats.getLegsWon);
           stats.setLegsWon = 0;
         }
       } else {
-        for (PlayerOrTeamGameStatisticsX01 stats
+        for (PlayerOrTeamGameStatsX01 stats
             in gameX01.getPlayerGameStatistics) {
           stats.getLegsCount.add(stats.getLegsWon);
           stats.setLegsWon = 0;
@@ -526,11 +523,11 @@ class SubmitX01Helper {
     }
   }
 
-  static PlayerOrTeamGameStatisticsX01 _getPlayerStatsByName(
+  static PlayerOrTeamGameStatsX01 _getPlayerStatsByName(
       String name, GameX01_P gameX01) {
-    late PlayerOrTeamGameStatisticsX01 result;
+    late PlayerOrTeamGameStatsX01 result;
 
-    for (PlayerOrTeamGameStatisticsX01 playerStats
+    for (PlayerOrTeamGameStatsX01 playerStats
         in gameX01.getPlayerGameStatistics) {
       if (playerStats.getPlayer.getName == name) {
         result = playerStats;
@@ -545,9 +542,9 @@ class SubmitX01Helper {
   static _sortPlayerStats(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     //convert playerGameStatistics to playerOrTeamGameStatsX01 -> otherwise cant sort
-    List<PlayerOrTeamGameStatisticsX01> temp = [];
-    for (PlayerOrTeamGameStatistics stats in gameX01.getPlayerGameStatistics) {
-      temp.add(stats as PlayerOrTeamGameStatisticsX01);
+    List<PlayerOrTeamGameStatsX01> temp = [];
+    for (PlayerOrTeamGameStats stats in gameX01.getPlayerGameStatistics) {
+      temp.add(stats as PlayerOrTeamGameStatsX01);
     }
 
     //if sets are enabled -> sort after sets, otherwise after legs
@@ -565,7 +562,7 @@ class SubmitX01Helper {
       return false;
     }
 
-    for (PlayerOrTeamGameStatisticsX01 stats in (shouldSubmitTeamStats
+    for (PlayerOrTeamGameStatsX01 stats in (shouldSubmitTeamStats
         ? gameX01.getTeamGameStatistics
         : gameX01.getPlayerGameStatistics)) {
       if (gameSettingsX01.getSetsEnabled &&
@@ -580,7 +577,7 @@ class SubmitX01Helper {
     return true;
   }
 
-  static _setNextTeamAndPlayer(PlayerOrTeamGameStatisticsX01 stats,
+  static _setNextTeamAndPlayer(PlayerOrTeamGameStatsX01 stats,
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     final List<Team> teams = gameSettingsX01.getTeams;
     int indexOfCurrentTeam = -1;
@@ -632,7 +629,7 @@ class SubmitX01Helper {
     }
   }
 
-  static _setNextPlayer(PlayerOrTeamGameStatisticsX01 stats, GameX01_P gameX01,
+  static _setNextPlayer(PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01,
       GameSettingsX01_P gameSettingsX01) {
     final List<Player> players = gameSettingsX01.getPlayers;
 
@@ -663,7 +660,7 @@ class SubmitX01Helper {
   // case 2 -> input method is three darts -> 3 darts entered
   // case 3 -> input method is three darts -> 1 or 2 darts entered & finished leg/set/game
   static bool _shouldSetNextPlayerOrTeam(GameX01_P gameX01,
-      GameSettingsX01_P gameSettingsX01, PlayerOrTeamGameStatisticsX01 stats) {
+      GameSettingsX01_P gameSettingsX01, PlayerOrTeamGameStatsX01 stats) {
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       return true;
     } else if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
@@ -678,7 +675,7 @@ class SubmitX01Helper {
   }
 
   static _setAllRemainingScoresPerDart(
-      PlayerOrTeamGameStatisticsX01 stats, GameX01_P gameX01) {
+      PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01) {
     final List<String> currentThreeDarts = gameX01.getCurrentThreeDarts;
 
     List<String> dartsPerRound = [];
@@ -695,7 +692,7 @@ class SubmitX01Helper {
     stats.getAllRemainingScoresPerDart.add(dartsPerRound);
   }
 
-  static _setCheckoutCountAtThrownDarts(PlayerOrTeamGameStatisticsX01 stats,
+  static _setCheckoutCountAtThrownDarts(PlayerOrTeamGameStatsX01 stats,
       int checkoutCount, GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     if (checkoutCount == 0) {
       return;
@@ -729,7 +726,7 @@ class SubmitX01Helper {
   }
 
 //if player clicks on bust in three darts mode
-  static _submitBusted(PlayerOrTeamGameStatisticsX01 stats, GameX01_P gameX01) {
+  static _submitBusted(PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01) {
     final int amountOfThrownDarts = gameX01.getAmountOfDartsThrown();
 
     //set all completed throws in this round to 0
@@ -849,7 +846,7 @@ class SubmitX01Helper {
     );
   }
 
-  static bool _isGameWon(PlayerOrTeamGameStatisticsX01 stats, GameX01_P gameX01,
+  static bool _isGameWon(PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01,
       GameSettingsX01_P gameSettingsX01, BuildContext context) {
     if (gameX01.getReachedSuddenDeath) {
       return true;
@@ -882,9 +879,8 @@ class SubmitX01Helper {
 
   //for win by two legs diff -> checks if leg won difference is at least 2 at each player -> return true (valid win)
   static bool _isLegDifferenceAtLeastTwo(
-      PlayerOrTeamGameStatisticsX01 playerToCheck, GameX01_P gameX01) {
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in gameX01.getPlayerGameStatistics) {
+      PlayerOrTeamGameStatsX01 playerToCheck, GameX01_P gameX01) {
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
       if (stats != playerToCheck &&
           (playerToCheck.getLegsWon - 2) < stats.getLegsWon) {
         return false;
@@ -898,8 +894,7 @@ class SubmitX01Helper {
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = true;
 
-    for (PlayerOrTeamGameStatisticsX01 stats
-        in gameX01.getPlayerGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
       final int legs =
           gameSettingsX01.getLegs + gameSettingsX01.getMaxExtraLegs;
 

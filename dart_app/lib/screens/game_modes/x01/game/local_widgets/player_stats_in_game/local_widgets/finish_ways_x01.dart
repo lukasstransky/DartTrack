@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/x01/player_or_team_game_statistics_x01.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +11,7 @@ class FinishWaysX01 extends StatelessWidget {
   const FinishWaysX01({Key? key, required this.currPlayerOrTeamGameStatsX01})
       : super(key: key);
 
-  final PlayerOrTeamGameStatisticsX01? currPlayerOrTeamGameStatsX01;
+  final PlayerOrTeamGameStatsX01? currPlayerOrTeamGameStatsX01;
 
   bool _checkoutPossible(int currentPoints) {
     if (currentPoints <= 170 && !BOGEY_NUMBERS.contains(currentPoints))
@@ -30,7 +30,7 @@ class FinishWaysX01 extends StatelessWidget {
   bool _onePlayerInFinishArea(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
 
-    for (PlayerOrTeamGameStatisticsX01 stats in gameX01.getPlayerGameStatistics)
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics)
       if (stats.getCurrentPoints <= 170) return true;
 
     return false;
