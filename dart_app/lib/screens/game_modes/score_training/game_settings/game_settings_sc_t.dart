@@ -40,7 +40,7 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: 'Score Training Settings',
+        title: 'Score training Settings',
         showInfoIcon: true,
       ),
       body: SafeArea(

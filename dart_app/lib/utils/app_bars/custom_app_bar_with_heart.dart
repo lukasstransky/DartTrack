@@ -83,10 +83,10 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
   _resetGame(BuildContext context) {
     if (widget.mode == 'X01') {
       context.read<GameX01_P>().reset();
-    } else if (widget.mode == 'Score Training') {
+    } else if (widget.mode == 'Score training') {
       context.read<GameScoreTraining_P>().reset();
-    } else if (widget.mode == 'Single Training' ||
-        widget.mode == 'Double Training') {
+    } else if (widget.mode == 'Single training' ||
+        widget.mode == 'Double training') {
       context.read<GameSingleDoubleTraining_P>().reset();
     }
   }

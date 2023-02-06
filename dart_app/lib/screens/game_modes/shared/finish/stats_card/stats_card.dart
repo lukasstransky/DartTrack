@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -41,27 +42,71 @@ class _StatsCardState extends State<StatsCard> {
     super.initState();
   }
 
-  _getPlayerEntry(int i) {
+  _getPlayerEntry(int i, bool isDraw) {
     if (widget.game is GameSingleDoubleTraining_P) {
       return PlayerEntryFinishSingleDoubleTraining(
-          i: i,
-          game: widget.game as GameSingleDoubleTraining_P,
-          playerStats: _playerStats[i] as PlayerGameStatsSingleDoubleTraining,
-          isOpenGame: widget.isOpenGame);
+        i: i,
+        game: widget.game as GameSingleDoubleTraining_P,
+        playerStats: _playerStats[i] as PlayerGameStatsSingleDoubleTraining,
+        isOpenGame: widget.isOpenGame,
+        isDraw: isDraw,
+      );
     } else if (widget.game is GameScoreTraining_P) {
       return PlayerEntryFinishScoreTraining(
         i: i,
         game: widget.game as GameScoreTraining_P,
         playerStats: _playerStats[i] as PlayerGameStatsScoreTraining,
         isOpenGame: widget.isOpenGame,
+        isDraw: isDraw,
       );
     }
   }
 
+  bool _isDraw() {
+    if (widget.game.getPlayerGameStatistics.length == 1) {
+      return false;
+    }
+
+    if (widget.game is GameSingleDoubleTraining_P) {
+      final int totalPointsOfFirstPlayer =
+          widget.game.getPlayerGameStatistics[0].getTotalPoints;
+
+      for (int i = 1; i < widget.game.getPlayerGameStatistics.length; i++) {
+        if (totalPointsOfFirstPlayer !=
+            widget.game.getPlayerGameStatistics[i].getTotalPoints) {
+          return false;
+        }
+      }
+
+      return true;
+    } else if (widget.game is GameScoreTraining_P) {
+      if (widget.game.getGameSettings.getMode ==
+          ScoreTrainingModeEnum.MaxPoints) {
+        return false;
+      }
+
+      final int totalPointsOfFirstPlayer =
+          widget.game.getPlayerGameStatistics[0].getCurrentScore;
+
+      for (int i = 1; i < widget.game.getPlayerGameStatistics.length; i++) {
+        if (totalPointsOfFirstPlayer !=
+            widget.game.getPlayerGameStatistics[i].getCurrentScore) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bool isDraw = _isDraw();
+
     return Container(
-      padding: EdgeInsets.only(top: widget.isFinishScreen ? 15.h : 0),
+      padding: EdgeInsets.only(top: widget.isFinishScreen ? 10.h : 0),
       child: GestureDetector(
         onTap: () {
           if (!widget.isFinishScreen) {
@@ -84,16 +129,17 @@ class _StatsCardState extends State<StatsCard> {
                 GameModeDetails(
                   game: widget.game,
                   isOpenGame: widget.isOpenGame,
+                  isDraw: isDraw,
                 ),
                 for (int i = 0; i < 2; i++) ...[
-                  if (i <= (_playersLength - 1)) _getPlayerEntry(i),
+                  if (i <= (_playersLength - 1)) _getPlayerEntry(i, isDraw),
                   if (i == 0 && _playersLength != 1) ListDivider(),
                 ],
                 if (_showAllPlayersOrTeams) ...[
                   ListDivider(),
                   for (int i = 2; i < _playersLength; i++) ...[
                     if (widget.game is GameSingleDoubleTraining_P) ...[
-                      _getPlayerEntry(i),
+                      _getPlayerEntry(i, isDraw),
                     ],
                   ],
                 ],

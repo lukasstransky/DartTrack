@@ -110,13 +110,13 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
         gameX01: GameX01_P.createGame(game),
         isOpenGame: false,
       );
-    } else if (_mode == 'Score Training') {
+    } else if (_mode == 'Score training') {
       return StatsCard(
         isFinishScreen: false,
         game: GameScoreTraining_P.createGame(game),
         isOpenGame: false,
       );
-    } else if (_mode == 'Single Training' || _mode == 'Double Training') {
+    } else if (_mode == 'Single training' || _mode == 'Double training') {
       return StatsCard(
         isFinishScreen: false,
         game: GameSingleDoubleTraining_P.createGame(game),
@@ -226,7 +226,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
     if (_mode == 'X01') {
       statsFirestore = context.watch<StatsFirestoreX01_P>();
-    } else if (['Single Training', 'Double Training', 'Score Training']
+    } else if (['Single training', 'Double training', 'Score training']
         .contains(_mode)) {
       statsFirestore = context.watch<StatsFirestore_sdt_sct_P>();
     }

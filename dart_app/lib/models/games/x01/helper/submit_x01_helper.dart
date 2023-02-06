@@ -134,10 +134,10 @@ class SubmitX01Helper {
       _setCheckoutCountAtThrownDarts(
           currentStats, checkoutCount, gameX01, gameSettingsX01);
       _setScores(currentStats, totalPoints, gameX01, gameSettingsX01);
-      final bool legSetOrGameFinsihed = _legSetOrGameFinished(currentStats,
+      final bool legSetOrGameFinished = _legSetOrGameFinished(currentStats,
           context, totalPoints, thrownDarts, gameX01, shouldSubmitTeamStats);
 
-      if (!legSetOrGameFinsihed) {
+      if (!legSetOrGameFinished) {
         if (shouldSubmitTeamStats) {
           _setNextTeamAndPlayer(currentStats, gameX01, gameSettingsX01);
         } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
@@ -149,14 +149,14 @@ class SubmitX01Helper {
       if (isInputMethodThreeDarts) {
         if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
           if ((gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
-                  legSetOrGameFinsihed) &&
+                  legSetOrGameFinished) &&
               shouldSubmitTeamStats) {
             UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(
                 gameX01.getCurrentThreeDarts);
           }
         } else {
           if (gameX01.getCurrentThreeDarts[2] != 'Dart 3' ||
-              legSetOrGameFinsihed) {
+              legSetOrGameFinished) {
             UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(
                 gameX01.getCurrentThreeDarts);
           }
@@ -164,7 +164,7 @@ class SubmitX01Helper {
       }
 
       // reset current points & starting points, if leg, set, game won
-      if (legSetOrGameFinsihed) {
+      if (legSetOrGameFinished) {
         if (shouldSubmitTeamStats) {
           for (PlayerOrTeamGameStatsX01 stats
               in gameX01.getTeamGameStatistics) {
@@ -181,9 +181,9 @@ class SubmitX01Helper {
           }
         }
       }
-      if (!legSetOrGameFinsihed) {
-        gameX01.notify();
-      }
+      //if (!legSetOrGameFinished) {
+      gameX01.notify();
+      //}
     });
 
     // submit team stats

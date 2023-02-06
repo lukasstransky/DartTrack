@@ -132,12 +132,16 @@ class PlayerEntry extends StatelessWidget {
           Container(
             width: 25.w,
             alignment: Alignment.center,
-            child: Text(
-              playerStats.getPlayer.getName,
-              style: TextStyle(
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize.sp,
+            padding: const EdgeInsets.only(left: 5),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                playerStats.getPlayer.getName,
+                style: TextStyle(
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize.sp,
+                ),
               ),
             ),
           ),

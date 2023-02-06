@@ -15,10 +15,12 @@ class GameSingleDoubleTraining_P extends Game_P {
   GameMode _mode = GameMode.SingleTraining;
   int _amountOfRoundsRemaining = -1; // for target number mode
   List<int> _allFieldsToHit = []; // e.g. '5', '13', '14' (for reverting)
+  bool _randomModeFinished = false;
+  bool _canBePressed = true; // to disable buttons when delay is active)
   final _random = new Random();
 
   GameSingleDoubleTraining_P()
-      : super(dateTime: DateTime.now(), name: 'Single Training');
+      : super(dateTime: DateTime.now(), name: 'Single training');
 
   int get getCurrentFieldToHit => this._currentFieldToHit;
   set setCurrentFieldToHit(int value) => this._currentFieldToHit = value;
@@ -37,6 +39,14 @@ class GameSingleDoubleTraining_P extends Game_P {
   List<int> get getAllFieldsToHit => this._allFieldsToHit;
   set setAllFieldsToHit(List<int> value) => this._allFieldsToHit = value;
 
+  bool get getRandomModeFinished => this._randomModeFinished;
+  set setRandomModeFinished(bool value) => this._randomModeFinished = value;
+
+  bool get getCanBePressed => this._canBePressed;
+  set setCanBePressed(bool canBePressed) {
+    this._canBePressed = canBePressed;
+  }
+
   factory GameSingleDoubleTraining_P.createGame(Game_P game) {
     GameSingleDoubleTraining_P newGame = new GameSingleDoubleTraining_P();
 
@@ -49,7 +59,7 @@ class GameSingleDoubleTraining_P extends Game_P {
     newGame.setIsGameFinished = game.getIsGameFinished;
     newGame.setIsOpenGame = game.getIsOpenGame;
     newGame.setIsFavouriteGame = game.getIsFavouriteGame;
-    if (game.getName == 'Single Training') {
+    if (game.getName == 'Single training') {
       newGame.setMode = GameMode.SingleTraining;
     } else {
       newGame.setMode = GameMode.DoubleTraining;
@@ -96,7 +106,6 @@ class GameSingleDoubleTraining_P extends Game_P {
       reset();
 
       setGameSettings = settings;
-      setCurrentPlayerToThrow = getGameSettings.getPlayers.first;
       setMode = mode;
 
       if (getGameSettings.getIsTargetNumberEnabled) {
@@ -126,8 +135,8 @@ class GameSingleDoubleTraining_P extends Game_P {
         final PlayerGameStatsSingleDoubleTraining stats =
             new PlayerGameStatsSingleDoubleTraining(
           mode: mode == GameMode.SingleTraining
-              ? 'Single Training'
-              : 'Double Training',
+              ? 'Single training'
+              : 'Double training',
           player: player,
           dateTime: getDateTime,
         );
@@ -140,6 +149,9 @@ class GameSingleDoubleTraining_P extends Game_P {
         }
         getPlayerGameStatistics.add(stats);
       }
+
+      setPlayerGameStatistics = new List.from(getPlayerGameStatistics.reversed);
+      setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
     }
   }
 
@@ -154,6 +166,7 @@ class GameSingleDoubleTraining_P extends Game_P {
     setMode = GameMode.SingleTraining;
     setRandomFieldsGenerated = [];
     setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
+    setCanBePressed = true;
 
     setPlayerGameStatistics = [];
     setCurrentPlayerToThrow = null;
@@ -180,6 +193,7 @@ class GameSingleDoubleTraining_P extends Game_P {
 
   int _getRandomValue(int min, int max) {
     if (getRandomFieldsGenerated.length == 20) {
+      setRandomModeFinished = true;
       return -1;
     }
 
@@ -199,14 +213,14 @@ class GameSingleDoubleTraining_P extends Game_P {
 
   bool _isGameFinished() {
     if (getGameSettings.getMode == ModesSingleDoubleTraining.Ascending &&
-        getCurrentFieldToHit == 4) {
+        getCurrentFieldToHit == 21) {
       return true;
     } else if (getGameSettings.getMode ==
             ModesSingleDoubleTraining.Descending &&
-        getCurrentFieldToHit == 16) {
+        getCurrentFieldToHit == 0) {
       return true;
     } else if (getGameSettings.getMode == ModesSingleDoubleTraining.Random &&
-        getRandomFieldsGenerated.length == 5) {
+        getRandomModeFinished) {
       return true;
     } else if (getGameSettings.getIsTargetNumberEnabled &&
         getAmountOfRoundsRemaining == 0) {
@@ -217,8 +231,18 @@ class GameSingleDoubleTraining_P extends Game_P {
   }
 
   submit(String fieldValue, BuildContext context) {
+    if (!getCanBePressed) {
+      return;
+    }
+
     UtilsPointBtnsThreeDarts.updateCurrentThreeDarts(
         getCurrentThreeDarts, fieldValue);
+
+    // set can be pressed
+    if (getAmountOfDartsThrown() == 3) {
+      setCanBePressed = false;
+      notify();
+    }
 
     final PlayerGameStatsSingleDoubleTraining stats =
         getCurrentPlayerGameStats();
@@ -267,71 +291,83 @@ class GameSingleDoubleTraining_P extends Game_P {
 
     bool isGameFinished = false;
     if (getCurrentThreeDarts[2] != 'Dart 3') {
-      // set next player if needed
-      if (getPlayerGameStatistics.length > 1) {
-        final List<Player> players = getGameSettings.getPlayers;
-
-        if (getPlayerGameStatistics.length > 1) {
-          final int indexOfCurrentPlayer =
-              players.indexOf(getCurrentPlayerToThrow);
-
-          if (indexOfCurrentPlayer + 1 == players.length) {
-            // round of all players finished -> restart from beginning
-            setCurrentPlayerToThrow = players[0];
-          } else {
-            setCurrentPlayerToThrow = players[indexOfCurrentPlayer + 1];
-          }
-        }
+      // set highest points for round
+      final int pointsForRound = stats.getPointsForSpecificField(
+          key, getMode == GameMode.DoubleTraining);
+      if (pointsForRound > stats.getHighestPoints) {
+        stats.setHighestPoints = pointsForRound;
       }
 
-      if ((getPlayerGameStatistics.indexOf(stats) + 1) ==
-          getGameSettings.getPlayers.length) {
-        if (!getGameSettings.getIsTargetNumberEnabled) {
-          // add to all fields to hit
-          getAllFieldsToHit.add(getCurrentFieldToHit);
+      Future.delayed(Duration(milliseconds: 500), () {
+        // set next player if needed
+        if (getPlayerGameStatistics.length > 1) {
+          final List<Player> players = getGameSettings.getPlayers;
 
-          // set new field to score
-          switch (getGameSettings.getMode) {
-            case ModesSingleDoubleTraining.Ascending:
-              {
-                setCurrentFieldToHit = getCurrentFieldToHit + 1;
-                break;
-              }
-            case ModesSingleDoubleTraining.Descending:
-              {
-                setCurrentFieldToHit = getCurrentFieldToHit - 1;
-                break;
-              }
-            case ModesSingleDoubleTraining.Random:
-              {
-                setCurrentFieldToHit = _getRandomValue(1, 21);
-                if (getCurrentFieldToHit != -1) {
-                  notify();
+          if (getPlayerGameStatistics.length > 1) {
+            final int indexOfCurrentPlayer =
+                players.indexOf(getCurrentPlayerToThrow);
+
+            if (indexOfCurrentPlayer + 1 == players.length) {
+              // round of all players finished -> restart from beginning
+              setCurrentPlayerToThrow = players[0];
+            } else {
+              setCurrentPlayerToThrow = players[indexOfCurrentPlayer + 1];
+            }
+          }
+        }
+
+        if ((getPlayerGameStatistics.indexOf(stats) + 1) ==
+            getGameSettings.getPlayers.length) {
+          if (!getGameSettings.getIsTargetNumberEnabled) {
+            // add to all fields to hit
+            getAllFieldsToHit.add(getCurrentFieldToHit);
+
+            // set new field to score
+            switch (getGameSettings.getMode) {
+              case ModesSingleDoubleTraining.Ascending:
+                {
+                  setCurrentFieldToHit = getCurrentFieldToHit + 1;
+                  break;
                 }
-                break;
-              }
+              case ModesSingleDoubleTraining.Descending:
+                {
+                  setCurrentFieldToHit = getCurrentFieldToHit - 1;
+                  break;
+                }
+              case ModesSingleDoubleTraining.Random:
+                {
+                  setCurrentFieldToHit = _getRandomValue(1, 21);
+                  if (getCurrentFieldToHit != -1) {
+                    notify();
+                  }
+                  break;
+                }
+            }
+          } else {
+            setAmountOfRoundsRemaining = getAmountOfRoundsRemaining - 1;
+          }
+
+          isGameFinished = _isGameFinished();
+          if (isGameFinished) {
+            Navigator.of(context).pushNamed(
+              '/finishSingleDoubleTraining',
+              arguments: {
+                'mode': getMode,
+              },
+            );
           }
         } else {
-          setAmountOfRoundsRemaining = getAmountOfRoundsRemaining - 1;
+          if (getPlayerGameStatistics.length > 1) {
+            // add to all fields to hit
+            getAllFieldsToHit.add(getCurrentFieldToHit);
+          }
         }
 
-        isGameFinished = _isGameFinished();
-        if (isGameFinished) {
-          Navigator.of(context).pushNamed(
-            '/finishSingleDoubleTraining',
-            arguments: {
-              'mode': getMode,
-            },
-          );
-        }
-      } else {
-        if (getPlayerGameStatistics.length > 1) {
-          // add to all fields to hit
-          getAllFieldsToHit.add(getCurrentFieldToHit);
-        }
-      }
+        UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(getCurrentThreeDarts);
+        setCanBePressed = true;
 
-      UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(getCurrentThreeDarts);
+        notify();
+      });
     }
 
     if (!isGameFinished) {

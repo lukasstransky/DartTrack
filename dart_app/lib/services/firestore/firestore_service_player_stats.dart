@@ -407,12 +407,12 @@ class FirestoreServicePlayerStats {
                 }
               else if (mode == 'Cricket')
                 {}
-              else if (mode == 'Single Training' || mode == 'Double Training')
+              else if (mode == 'Single training' || mode == 'Double training')
                 {
                   result = PlayerOrTeamGameStats.fromMapSingleDoubleTraining(
                       value.data()),
                 }
-              else if (mode == 'Score Training')
+              else if (mode == 'Score training')
                 {
                   result =
                       PlayerOrTeamGameStats.fromMapScoreTraining(value.data()),

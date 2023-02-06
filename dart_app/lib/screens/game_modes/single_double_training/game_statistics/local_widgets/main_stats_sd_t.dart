@@ -6,6 +6,7 @@ import 'package:dart_app/screens/game_modes/shared/game_stats/section_heading_te
 import 'package:dart_app/screens/game_modes/shared/game_stats/value_text.dart';
 
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class MainStatsSingleDoubleTraining extends StatelessWidget {
   const MainStatsSingleDoubleTraining({Key? key, required this.game})
@@ -56,15 +57,123 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                     ValueTextGameStats(
                         textValue: stats.getTotalPoints.toString()),
                     if (isSingleMode)
-                      ValueTextGameStats(
-                          textValue: stats.getSingleHits.toString()),
-                    ValueTextGameStats(
-                        textValue: stats.getDoubleHits.toString()),
+                      Container(
+                        padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                        width: WIDTH_DATA_STATISTICS.w,
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 10.w,
+                              child: Text(
+                                '${stats.getSingleHits}',
+                                style: TextStyle(
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 15.w,
+                              child: Text(
+                                '(${stats.getSingleHitsPercentage()}%)',
+                                style: TextStyle(
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Container(
+                      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                      width: WIDTH_DATA_STATISTICS.w,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 10.w,
+                            child: Text(
+                              '${stats.getDoubleHits}',
+                              style: TextStyle(
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 15.w,
+                            child: Text(
+                              '(${stats.getDoubleHitsPercentage()}%)',
+                              style: TextStyle(
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     if (isSingleMode)
-                      ValueTextGameStats(
-                          textValue: stats.getTrippleHits.toString()),
-                    ValueTextGameStats(
-                        textValue: stats.getMissedHits.toString()),
+                      Container(
+                        padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                        width: WIDTH_DATA_STATISTICS.w,
+                        alignment: Alignment.centerLeft,
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 10.w,
+                              child: Text(
+                                '${stats.getTrippleHits}',
+                                style: TextStyle(
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 15.w,
+                              child: Text(
+                                '(${stats.getTrippleHitsPercentage()}%)',
+                                style: TextStyle(
+                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    Container(
+                      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                      width: WIDTH_DATA_STATISTICS.w,
+                      alignment: Alignment.centerLeft,
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 10.w,
+                            child: Text(
+                              '${stats.getMissedHits}',
+                              style: TextStyle(
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 15.w,
+                            child: Text(
+                              '(${stats.getMissedHitsPercentage()}%)',
+                              style: TextStyle(
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
             ],

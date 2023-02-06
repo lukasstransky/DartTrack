@@ -28,7 +28,7 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
           title: Text(
-            'Enter max. Rounds',
+            'Enter max. rounds',
             style: TextStyle(
               color: Colors.white,
             ),
@@ -190,7 +190,7 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        'rounds are played!',
+                        'rounds are played.',
                         style: TextStyle(
                           color: Colors.white,
                         ),

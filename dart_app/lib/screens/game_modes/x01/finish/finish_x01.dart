@@ -8,6 +8,7 @@ import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -46,27 +47,29 @@ class _FinishX01State extends State<FinishX01> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBarWithHeart(
-        title: 'Finished Game',
-        mode: 'X01',
-        isFinishScreen: true,
-        showHeart: true,
-      ),
-      //todo comment out (for showHeart)
-      // /*context.read<GameSettingsX01>().isCurrentUserInPlayers(context)*/
-      body: Center(
-        child: Container(
-          width: 90.w,
-          child: Column(
-            children: [
-              StatsCardX01(
-                isFinishScreen: true,
-                gameX01: context.read<GameX01_P>(),
-                isOpenGame: false,
-              ),
-              FinishScreenBtns(gameMode: GameMode.X01),
-            ],
+    return LoaderOverlay(
+      child: Scaffold(
+        appBar: CustomAppBarWithHeart(
+          title: 'Finished Game',
+          mode: 'X01',
+          isFinishScreen: true,
+          showHeart: true,
+        ),
+        //todo comment out (for showHeart)
+        // /*context.read<GameSettingsX01>().isCurrentUserInPlayers(context)*/
+        body: Center(
+          child: Container(
+            width: 90.w,
+            child: Column(
+              children: [
+                StatsCardX01(
+                  isFinishScreen: true,
+                  gameX01: context.read<GameX01_P>(),
+                  isOpenGame: false,
+                ),
+                FinishScreenBtns(gameMode: GameMode.X01),
+              ],
+            ),
           ),
         ),
       ),

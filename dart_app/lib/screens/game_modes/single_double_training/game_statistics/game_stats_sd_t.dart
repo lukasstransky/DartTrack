@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/field_hits_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/main_stats_sd_t.dart';
@@ -33,6 +34,29 @@ class _GameStatsSingleDoubleTrainingState
     }
   }
 
+  String _getHeader() {
+    String result = '';
+
+    // single or double training
+    result +=
+        '${_game!.getMode == GameMode.SingleTraining ? 'Single' : 'Double'} training - ';
+
+    //asc, desc or random
+    switch (_game!.getGameSettings.getMode) {
+      case ModesSingleDoubleTraining.Ascending:
+        result += 'Ascending';
+        break;
+      case ModesSingleDoubleTraining.Descending:
+        result += 'Descending';
+        break;
+      case ModesSingleDoubleTraining.Random:
+        result += 'Random';
+        break;
+    }
+
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,6 +72,16 @@ class _GameStatsSingleDoubleTrainingState
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
+            Container(
+              padding: EdgeInsets.only(top: 10),
+              child: Text(
+                _getHeader(),
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             Container(
               alignment: Alignment.center,
               padding: EdgeInsets.only(top: 5),
@@ -67,7 +101,7 @@ class _GameStatsSingleDoubleTrainingState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PlayerNames(settings: _game!.getGameSettings),
+                    PlayerNames(game: _game!),
                     MainStatsSingleDoubleTraining(game: _game!),
                     FieldHitsSingleDoubleTraining(game: _game!),
                   ],

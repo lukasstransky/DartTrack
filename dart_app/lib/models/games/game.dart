@@ -111,82 +111,60 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   set setCurrentThreeDarts(List<String> currentThreeDarts) =>
       this._currentThreeDarts = currentThreeDarts;
 
-  Map<String, dynamic> toMapX01(GameX01_P gameX01, bool openGame) {
-    final GameSettingsX01_P gameSettingsX01 =
-        getGameSettings as GameSettingsX01_P;
+  Map<String, dynamic> toMapX01(GameX01_P game, bool openGame) {
+    final GameSettingsX01_P settings = getGameSettings as GameSettingsX01_P;
 
-    return {
-      'name': getName,
-      'dateTime': getDateTime,
-      'isFavouriteGame': getIsFavouriteGame,
-      if (openGame) 'currentThreeDarts': getCurrentThreeDarts,
-      if (!openGame) 'isGameFinished': true,
-      if (openGame) 'isOpenGame': true,
-      if (openGame)
-        'playerGameStatistics': getPlayerGameStatistics.map((item) {
-          return item.toMapX01(item as PlayerOrTeamGameStatsX01, gameX01,
-              gameSettingsX01, '', openGame);
-        }).toList(),
-      if (openGame && gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
-        'teamGameStatistics': getTeamGameStatistics.map((item) {
-          return item.toMapX01(item as PlayerOrTeamGameStatsX01, gameX01,
-              gameSettingsX01, '', openGame);
-        }).toList(),
-      if (openGame)
-        'currentPlayerToThrow':
-            getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player),
-      if (openGame && gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
-        'currentTeamToThrow':
-            getCurrentTeamToThrow!.toMap(getCurrentTeamToThrow as Team),
-      if (openGame) 'revertPossible': getRevertPossible,
-      'gameSettings': {
-        if (openGame)
-          'inputMethod':
-              gameSettingsX01.getInputMethod.toString().split('.').last,
-        'players': gameSettingsX01.getPlayers.map((player) {
-          return player.toMap(player);
-        }).toList(),
-        if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
-          'teams': gameSettingsX01.getTeams.map((team) {
-            return team.toMap(team);
-          }).toList(),
-        'singleOrTeam':
-            gameSettingsX01.getSingleOrTeam.toString().split('.').last,
-        'legs': gameSettingsX01.getLegs,
-        if (gameSettingsX01.getSetsEnabled) 'sets': gameSettingsX01.getSets,
-        'points': gameSettingsX01.getPointsOrCustom(),
-        'mode': gameSettingsX01.getMode.toString().split('.').last,
-        'modeIn': gameSettingsX01.getModeIn
-            .toString()
-            .split('.')
-            .last
-            .replaceAll('Field', ''),
-        'modeOut': gameSettingsX01.getModeOut
-            .toString()
-            .split('.')
-            .last
-            .replaceAll('Field', ''),
-        'winByTwoLegsDifference': gameSettingsX01.getWinByTwoLegsDifference,
-        if (gameSettingsX01.getWinByTwoLegsDifference)
-          'suddenDeath': gameSettingsX01.getSuddenDeath,
-        if (gameSettingsX01.getWinByTwoLegsDifference)
-          'maxExtraLegs': gameSettingsX01.getMaxExtraLegs,
-        'checkoutCounting': gameSettingsX01.getEnableCheckoutCounting,
-        'setsEnabled': gameSettingsX01.getSetsEnabled,
-      },
-    };
-  }
-
-  Map<String, dynamic> toMapScoreTraining(
-      GameScoreTraining_P gameScoreTraining_P, bool openGame) {
     Map<String, dynamic> result = {
       'name': getName,
       'dateTime': getDateTime,
       'isFavouriteGame': getIsFavouriteGame,
     };
 
-    result['gameSettings'] = gameScoreTraining_P.getGameSettings
-        .toMapScoreTraining(gameScoreTraining_P.getGameSettings, openGame);
+    result['gameSettings'] = settings.toMapX01(game.getGameSettings, openGame);
+
+    if (openGame) {
+      result['currentThreeDarts'] = getCurrentThreeDarts;
+      result['isOpenGame'] = getIsOpenGame;
+      result['playerGameStatistics'] = getPlayerGameStatistics.map((item) {
+        return item.toMapX01(
+            item as PlayerOrTeamGameStatsX01, game, settings, '', openGame);
+      }).toList();
+      result['currentPlayerToThrow'] =
+          getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player);
+      result['revertPossible'] = getIsOpenGame;
+      result['isOpenGame'] = getRevertPossible;
+      result['playerOrTeamLegStartIndex'] = game.getPlayerOrTeamLegStartIndex;
+      result['reachedSuddenDeath'] = game.getReachedSuddenDeath;
+      result['legSetWithPlayerOrTeamWhoFinishedIt'] =
+          game.getLegSetWithPlayerOrTeamWhoFinishedIt;
+
+      if (settings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        result['currentPlayerOfTeamsBeforeLegFinish'] =
+            game.getCurrentPlayerOfTeamsBeforeLegFinish;
+        result['teamGameStatistics'] = getTeamGameStatistics.map((item) {
+          return item.toMapX01(
+              item as PlayerOrTeamGameStatsX01, game, settings, '', openGame);
+        }).toList();
+        result['currentTeamToThrow'] =
+            getCurrentTeamToThrow!.toMap(getCurrentTeamToThrow as Team);
+      }
+    } else {
+      result['isGameFinished'] = true;
+    }
+
+    return result;
+  }
+
+  Map<String, dynamic> toMapScoreTraining(
+      GameScoreTraining_P game, bool openGame) {
+    Map<String, dynamic> result = {
+      'name': getName,
+      'dateTime': getDateTime,
+      'isFavouriteGame': getIsFavouriteGame,
+    };
+
+    result['gameSettings'] =
+        game.getGameSettings.toMapScoreTraining(game.getGameSettings, openGame);
 
     if (openGame) {
       result['currentThreeDarts'] = getCurrentThreeDarts;
@@ -209,8 +187,8 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       GameSingleDoubleTraining_P game, bool openGame) {
     Map<String, dynamic> result = {
       'name': game.getMode == GameMode.SingleTraining
-          ? 'Single Training'
-          : 'Double Training',
+          ? 'Single training'
+          : 'Double training',
       'dateTime': getDateTime,
       'isFavouriteGame': getIsFavouriteGame,
     };
@@ -248,9 +226,9 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
 
     if (mode == 'X01') {
       gameSettings = GameSettings_P.fromMapX01(map['gameSettings']);
-    } else if (mode == 'Score Training') {
+    } else if (mode == 'Score training') {
       gameSettings = GameSettings_P.fromMapScoreTraining(map['gameSettings']);
-    } else if (mode == 'Single Training' || mode == 'Double Training') {
+    } else if (mode == 'Single training' || mode == 'Double training') {
       gameSettings =
           GameSettings_P.fromMapSingleDoubleTraining(map['gameSettings']);
     }
@@ -269,7 +247,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         playerGameStatistics: map['playerGameStatistics']
             .map<PlayerOrTeamGameStats?>((item) {
               List<List<String>> allRemainingScoresPerDart = [];
-              if (mode == 'X01' || mode == 'Score Training') {
+              if (mode == 'X01' || mode == 'Score training') {
                 allRemainingScoresPerDart =
                     Utils.convertSimpleListToAllRemainingScoresPerDart(
                         item['allRemainingScoresPerDart'] != null
@@ -280,11 +258,11 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
               if (mode == 'X01') {
                 return PlayerOrTeamGameStats.fromMapX01(
                     item, allRemainingScoresPerDart);
-              } else if (mode == 'Score Training') {
+              } else if (mode == 'Score training') {
                 return PlayerOrTeamGameStats.fromMapScoreTraining(
                     item, allRemainingScoresPerDart);
-              } else if (mode == 'Single Training' ||
-                  mode == 'Double Training') {
+              } else if (mode == 'Single training' ||
+                  mode == 'Double training') {
                 return PlayerOrTeamGameStats.fromMapSingleDoubleTraining(item);
               }
             })

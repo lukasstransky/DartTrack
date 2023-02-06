@@ -19,7 +19,7 @@ class StatsScoreTrainingBtn extends StatelessWidget {
           context.loaderOverlay.show();
           context.read<StatsFirestoreX01_P>().notify();
           Navigator.of(context).pushNamed('/statsPerGameList',
-              arguments: {'mode': 'Score Training'});
+              arguments: {'mode': 'Score training'});
           context.loaderOverlay.hide();
 
           context.read<StatsFirestoreX01_P>().notify();
@@ -27,7 +27,7 @@ class StatsScoreTrainingBtn extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Score Training',
+            'Score training',
             style: TextStyle(
               fontSize: 12.sp,
               color: Theme.of(context).colorScheme.secondary,

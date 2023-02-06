@@ -226,7 +226,7 @@ class StartGameBtnX01 extends StatelessWidget {
               ),
             },
             child: Text(
-              'Start Game',
+              'Start game',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(

@@ -587,7 +587,7 @@ class Utils {
             left: DIALOG_CONTENT_PADDING_LEFT,
             right: DIALOG_CONTENT_PADDING_RIGHT),
         title: const Text(
-          'End Game',
+          'End game',
           style: TextStyle(color: Colors.white),
         ),
         content: const Text(
@@ -685,17 +685,10 @@ class Utils {
 
   static dynamic getFirestoreStatsProviderBasedOnMode(
       String mode, BuildContext context) {
-    switch (mode) {
-      case 'X01':
-        return context.read<StatsFirestoreX01_P>();
-      case 'Cricket':
-
-      case 'Single Training':
-
-      case 'Double Training':
-
-      case 'Score Training':
-        return context.read<StatsFirestore_sdt_sct_P>();
+    if (mode == 'X01') {
+      return context.read<StatsFirestoreX01_P>();
+    } else {
+      return context.read<StatsFirestore_sdt_sct_P>();
     }
   }
 

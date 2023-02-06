@@ -47,6 +47,37 @@ class GameX01_P extends Game_P {
     return gameX01;
   }
 
+  factory GameX01_P.fromMapX01(map, mode, gameId, openGame) {
+    final Game_P game = Game_P.fromMap(map, mode, gameId, openGame);
+
+    GameX01_P gameX01 = new GameX01_P();
+    gameX01.setGameId = game.getGameId;
+    gameX01.setName = game.getName;
+    gameX01.setIsGameFinished = game.getIsGameFinished;
+    gameX01.setIsOpenGame = game.getIsOpenGame;
+    gameX01.setIsFavouriteGame = game.getIsFavouriteGame;
+    gameX01.setDateTime = game.getDateTime;
+    gameX01.setGameSettings = game.getGameSettings;
+    gameX01.setRevertPossible = game.getRevertPossible;
+    gameX01.setCurrentPlayerToThrow = game.getCurrentPlayerToThrow;
+    gameX01.setPlayerGameStatistics = game.getPlayerGameStatistics;
+    gameX01.setCurrentThreeDarts = game.getCurrentThreeDarts;
+
+    gameX01.setPlayerOrTeamLegStartIndex = map['playerOrTeamLegStartIndex'];
+    gameX01.setReachedSuddenDeath = map['reachedSuddenDeath'];
+    gameX01.setCurrentPlayerOfTeamsBeforeLegFinish =
+        map['currentPlayerOfTeamsBeforeLegFinish'] != null
+            ? map['currentPlayerOfTeamsBeforeLegFinish']
+            : {};
+    gameX01.setLegSetWithPlayerOrTeamWhoFinishedIt =
+        map['legSetWithPlayerOrTeamWhoFinishedIt'] != null
+            ? Map<String, String>.from(
+                map['legSetWithPlayerOrTeamWhoFinishedIt'])
+            : {};
+
+    return gameX01;
+  }
+
   /************************************************************/
   /********              GETTER & SETTER               ********/
   /************************************************************/

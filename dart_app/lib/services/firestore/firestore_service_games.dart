@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -152,7 +153,10 @@ class FirestoreServiceGames {
         statsFirestore.games.add(game);
       });
 
-      statsFirestore.gamesLoaded = true;
+      if (statsFirestore is StatsFirestore_sdt_sct_P) {
+        statsFirestore.gamesLoaded = true;
+      }
+
       statsFirestore.notify();
     }
   }
@@ -234,27 +238,28 @@ class FirestoreServiceGames {
 
     await collectionReference.get().then((openGames) => {
           openGames.docs.forEach((openGame) {
-            String mode = '';
             Map<String, dynamic> map =
                 (openGame.data() as Map<String, dynamic>);
-            if (map.containsValue('X01')) {
-              mode = 'X01';
-            } else if (map.containsValue('Score Training')) {
-              mode = 'Score Training';
-            } else if (map.containsValue('Single Training')) {
-              mode = 'Single Training';
-            } else if (map.containsValue('Double Training')) {
-              mode = 'Double Training';
-            }
 
-            if (mode == 'X01' || mode == 'Score Training') {
-              final Game_P game =
-                  Game_P.fromMap(openGame.data(), mode, openGame.id, true);
+            if (map.containsValue('X01')) {
+              final GameX01_P game = GameX01_P.fromMapX01(
+                  openGame.data(), 'X01', openGame.id, true);
+
               openGamesFirestore.openGames.add(game);
-            } else if (mode == 'Single Training' || mode == 'Double Training') {
+            } else if (map.containsValue('Score training')) {
+              final Game_P game = Game_P.fromMap(
+                  openGame.data(), 'Score training', openGame.id, true);
+
+              openGamesFirestore.openGames.add(game);
+            } else if (map.containsValue('Single training') ||
+                map.containsValue('Double training')) {
+              final String mode = map.containsValue('Single training')
+                  ? 'Single training'
+                  : 'Double training';
               final GameSingleDoubleTraining_P game =
                   GameSingleDoubleTraining_P.fromMapSingleDoubleTraining(
                       openGame.data(), mode, openGame.id, true);
+
               openGamesFirestore.openGames.add(game);
             }
 

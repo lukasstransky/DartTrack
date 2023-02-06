@@ -11,19 +11,26 @@ class GameModeDetails extends StatelessWidget {
     Key? key,
     required this.game,
     required this.isOpenGame,
+    required this.isDraw,
   }) : super(key: key);
 
   final Game_P game;
   final bool isOpenGame;
+  final bool isDraw;
 
   String _getMode() {
+    String result = '';
+
+    if (isDraw) {
+      result = 'Draw - ';
+    }
     if (game is GameSingleDoubleTraining_P) {
-      return game.getName;
+      result += game.getName;
     } else if (game is GameScoreTraining_P) {
-      return 'Score Training';
+      result += 'Score training';
     }
 
-    return '';
+    return result;
   }
 
   @override
@@ -82,10 +89,10 @@ class GameModeDetails extends StatelessWidget {
               bottom: 1.h,
             ),
             child: Text(
-              '(5 rounds)',
+              'Rounds: ${game.getGameSettings.getAmountOfRounds}',
               style: TextStyle(
-                fontSize: 10.sp,
-                color: Colors.white70,
+                fontSize: 12.sp,
+                color: Colors.white,
               ),
             ),
           ),

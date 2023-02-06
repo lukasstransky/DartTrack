@@ -23,13 +23,13 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
             left: DIALOG_CONTENT_PADDING_LEFT,
             right: DIALOG_CONTENT_PADDING_RIGHT),
         title: Text(
-          'Target Number explained',
+          'Target number explained',
           style: TextStyle(
             color: Colors.white,
           ),
         ),
         content: Text(
-          'If this option is enabled, only darts on the selected target number are valid. For example, if the target number is 20, only darts on the 20 field will be added to the total score.',
+          'If this option is enabled, only darts on the selected target number are counted. For example, if the target number is 20, only darts on the 20 field will be added to the total score.',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -70,7 +70,7 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
             right: DIALOG_CONTENT_PADDING_RIGHT,
           ),
           title: Text(
-            'Enter Target Number',
+            'Enter target number',
             style: TextStyle(
               color: Colors.white,
             ),
@@ -191,7 +191,7 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
                 ),
               ),
               Text(
-                'Enable Target Number',
+                'Enable target number',
                 style: TextStyle(
                   color: Utils.getTextColorForGameSettingsPage(),
                 ),
@@ -223,7 +223,7 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
                 ? Row(
                     children: [
                       Text(
-                        '(Selected Target Number: ',
+                        '(Selected target number: ',
                         style: TextStyle(
                           color: Colors.white70,
                           fontSize: 10.sp,

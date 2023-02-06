@@ -43,31 +43,21 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: 35.w,
-                    height: 6.h,
-                    child: Center(
-                      child: Text(
-                        'Field to hit:',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    width: 20.w,
-                    height: 6.h,
-                    padding: const EdgeInsets.only(left: 10),
-                    transform: Matrix4.translationValues(0.0, -2.0, 0.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      _getFieldToHit(tuple.item1.toString(), context),
+                  RichText(
+                    text: TextSpan(
+                      text: 'Field to hit: ',
                       style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 26.sp,
+                        fontSize: 18.sp,
                       ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: _getFieldToHit(tuple.item1.toString(), context),
+                          style: TextStyle(
+                            fontSize: 26.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -78,11 +68,12 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                 .getIsTargetNumberEnabled)
               Container(
                 transform: Matrix4.translationValues(0.0, -5.0, 0.0),
+                padding: EdgeInsets.only(top: 3),
                 child: Text(
-                  '(Remaining Rounds: ${tuple.item2})',
+                  '(Remaining rounds: ${tuple.item2})',
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 14.sp,
+                    fontSize: 13.sp,
                   ),
                 ),
               ),

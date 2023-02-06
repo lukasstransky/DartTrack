@@ -9,6 +9,7 @@ import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -45,25 +46,27 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBarWithHeart(
-        title: 'Finished Game',
-        mode: 'Score Training',
-        isFinishScreen: true,
-        showHeart: true,
-      ),
-      body: Center(
-        child: Container(
-          width: 90.w,
-          child: Column(
-            children: [
-              StatsCard(
-                isFinishScreen: true,
-                game: context.read<GameScoreTraining_P>(),
-                isOpenGame: false,
-              ),
-              FinishScreenBtns(gameMode: GameMode.ScoreTraining),
-            ],
+    return LoaderOverlay(
+      child: Scaffold(
+        appBar: CustomAppBarWithHeart(
+          title: 'Finished Game',
+          mode: 'Score training',
+          isFinishScreen: true,
+          showHeart: true,
+        ),
+        body: Center(
+          child: Container(
+            width: 90.w,
+            child: Column(
+              children: [
+                StatsCard(
+                  isFinishScreen: true,
+                  game: context.read<GameScoreTraining_P>(),
+                  isOpenGame: false,
+                ),
+                FinishScreenBtns(gameMode: GameMode.ScoreTraining),
+              ],
+            ),
           ),
         ),
       ),

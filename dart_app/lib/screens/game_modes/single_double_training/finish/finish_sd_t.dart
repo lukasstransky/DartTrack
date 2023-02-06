@@ -8,6 +8,7 @@ import 'package:dart_app/services/firestore/firestore_service_player_stats.dart'
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -49,7 +50,7 @@ class _FinishSingleDoubleTrainingState
     //todo comment out
     //if (context.read<GameSettingsX01>().isCurrentUserInPlayers(context)) {
     if (game.getMode == GameMode.DoubleTraining) {
-      game.setName = 'Double Training';
+      game.setName = 'Double training';
     }
     g_gameId = await context.read<FirestoreServiceGames>().postGame(game);
     await context
@@ -60,25 +61,27 @@ class _FinishSingleDoubleTrainingState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBarWithHeart(
-        title: 'Finished Game',
-        mode: 'Single Training',
-        isFinishScreen: true,
-        showHeart: true,
-      ),
-      body: Center(
-        child: Container(
-          width: 90.w,
-          child: Column(
-            children: [
-              StatsCard(
-                isFinishScreen: true,
-                game: context.read<GameSingleDoubleTraining_P>(),
-                isOpenGame: false,
-              ),
-              FinishScreenBtns(gameMode: _mode),
-            ],
+    return LoaderOverlay(
+      child: Scaffold(
+        appBar: CustomAppBarWithHeart(
+          title: 'Finished Game',
+          mode: 'Single training',
+          isFinishScreen: true,
+          showHeart: true,
+        ),
+        body: Center(
+          child: Container(
+            width: 90.w,
+            child: Column(
+              children: [
+                StatsCard(
+                  isFinishScreen: true,
+                  game: context.read<GameSingleDoubleTraining_P>(),
+                  isOpenGame: false,
+                ),
+                FinishScreenBtns(gameMode: _mode),
+              ],
+            ),
           ),
         ),
       ),

@@ -13,12 +13,14 @@ class PlayerEntryFinishSingleDoubleTraining extends StatelessWidget {
     required this.game,
     required this.playerStats,
     required this.isOpenGame,
+    required this.isDraw,
   }) : super(key: key);
 
   final int i;
   final GameSingleDoubleTraining_P game;
   final PlayerGameStatsSingleDoubleTraining playerStats;
   final bool isOpenGame;
+  final bool isDraw;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +35,7 @@ class PlayerEntryFinishSingleDoubleTraining extends StatelessWidget {
             game: game,
             playerStats: playerStats,
             isOpenGame: isOpenGame,
+            isDraw: isDraw,
           ),
           ScoreStats(
             playerStats: playerStats,
@@ -68,7 +71,7 @@ class ScoreStats extends StatelessWidget {
           children: [
             if (isSingleTraining)
               Text(
-                'Single: ${playerStats.getSingleHits}',
+                'Singles: ${playerStats.getSingleHits}',
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Colors.white,
@@ -76,7 +79,7 @@ class ScoreStats extends StatelessWidget {
               ),
             if (!isSingleTraining)
               Text(
-                'Double: ${playerStats.getDoubleHits}',
+                'Doubles: ${playerStats.getDoubleHits}',
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Colors.white,
@@ -84,7 +87,7 @@ class ScoreStats extends StatelessWidget {
               ),
             if (isSingleTraining)
               Text(
-                'Tripple: ${playerStats.getTrippleHits}',
+                'Tripples: ${playerStats.getTrippleHits}',
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Colors.white,
@@ -102,6 +105,7 @@ class ScoreStats extends StatelessWidget {
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],

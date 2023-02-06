@@ -2,7 +2,6 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/heading_text.dart';
-import 'package:dart_app/screens/game_modes/shared/game_stats/value_text.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -32,6 +31,15 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
     });
 
     return result;
+  }
+
+  bool _shouldHighlight(PlayerGameStatsSingleDoubleTraining stats, int field) {
+    if (stats.getPointsForSpecificField(
+            field, game.getMode == GameMode.DoubleTraining) ==
+        stats.getHighestPoints) {
+      return true;
+    }
+    return false;
   }
 
   @override
@@ -94,9 +102,22 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                       ),
                       for (PlayerGameStatsSingleDoubleTraining stats
                           in game.getPlayerGameStatistics)
-                        ValueTextGameStats(
-                          textValue:
+                        Container(
+                          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                          width: WIDTH_DATA_STATISTICS.w,
+                          alignment: Alignment.centerLeft,
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
                               '${stats.getFieldHits[i]!} ${stats.getFieldHits[i]! != '-' ? '(${_getScoredPointsForField(stats.getFieldHits[i]!)})' : ''}',
+                              style: TextStyle(
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                                color: _shouldHighlight(stats, i)
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
                     ],
                   ),

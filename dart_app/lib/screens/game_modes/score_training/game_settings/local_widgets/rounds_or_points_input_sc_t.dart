@@ -32,7 +32,7 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
               left: DIALOG_CONTENT_PADDING_LEFT,
               right: DIALOG_CONTENT_PADDING_RIGHT),
           title: Text(
-            isMaxRoundsMode ? 'Enter max. Rounds' : 'Enter max. Points',
+            isMaxRoundsMode ? 'Enter max. rounds' : 'Enter max. points',
             style: TextStyle(
               color: Colors.white,
             ),

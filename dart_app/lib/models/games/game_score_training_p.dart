@@ -13,7 +13,7 @@ class GameScoreTraining_P extends Game_P {
   PointType _currentPointType = PointType.Single;
 
   GameScoreTraining_P()
-      : super(dateTime: DateTime.now(), name: 'Score Training');
+      : super(dateTime: DateTime.now(), name: 'Score training');
 
   String get getCurrentPointsSelected => this._currentPointsSelected;
   set setCurrentPointsSelected(String value) =>
@@ -44,18 +44,20 @@ class GameScoreTraining_P extends Game_P {
       reset();
 
       setGameSettings = settings;
-      setCurrentPlayerToThrow = getGameSettings.getPlayers.first;
 
       for (Player player in getGameSettings.getPlayers) {
         getPlayerGameStatistics.add(
           new PlayerGameStatsScoreTraining(
-            mode: 'Score Training',
+            mode: 'Score training',
             player: player,
             dateTime: getDateTime,
             roundOrPointsLeft: getGameSettings.getMaxRoundsOrPoints,
           ),
         );
       }
+
+      setPlayerGameStatistics = new List.from(getPlayerGameStatistics.reversed);
+      setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
 
       if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
         setCurrentPointType = PointType.Single;
@@ -170,12 +172,12 @@ class GameScoreTraining_P extends Game_P {
     }
 
     // is game finished
-    bool finished = false;
+    bool finished = true;
     if (settings.getMode == ScoreTrainingModeEnum.MaxRounds) {
       for (PlayerGameStatsScoreTraining playerStats
           in getPlayerGameStatistics) {
-        if (playerStats.getRoundsOrPointsLeft == 0) {
-          finished = true;
+        if (playerStats.getRoundsOrPointsLeft != 0) {
+          finished = false;
           break;
         }
       }

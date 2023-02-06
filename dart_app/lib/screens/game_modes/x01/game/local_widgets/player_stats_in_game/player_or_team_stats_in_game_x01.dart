@@ -34,7 +34,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       }
       if (this.currPlayerOrTeamGameStatsX01!.getTeam.getName ==
           gameX01.getCurrentTeamToThrow.getName) {
-        return Colors.grey;
+        return Utils.lighten(Theme.of(context).colorScheme.primary, 20);
       }
     }
 

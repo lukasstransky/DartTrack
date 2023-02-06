@@ -21,18 +21,33 @@ class MulitplePlayerStatsSingleDoubleTraining extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Expanded(child: HeaderText(textValue: 'Name')),
-              Expanded(child: HeaderText(textValue: 'Points')),
-              if (_isSingleMode)
-                Expanded(child: HeaderText(textValue: 'S. Hits')),
-              if (!_isSingleMode)
-                Expanded(child: HeaderText(textValue: 'D. Hits')),
-              if (_isSingleMode)
-                Expanded(child: HeaderText(textValue: 'T. Hits')),
-              Expanded(child: HeaderText(textValue: 'Missed')),
-            ],
+          Container(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: HeaderText(textValue: 'Name'),
+                ),
+                Expanded(
+                  child: HeaderText(textValue: 'Points'),
+                ),
+                if (_isSingleMode)
+                  Expanded(
+                    child: HeaderText(textValue: 'Singles'),
+                  ),
+                if (!_isSingleMode)
+                  Expanded(
+                    child: HeaderText(textValue: 'Doubles'),
+                  ),
+                if (_isSingleMode)
+                  Expanded(
+                    child: HeaderText(textValue: 'Tripples'),
+                  ),
+                Expanded(
+                  child: HeaderText(textValue: 'Missed'),
+                ),
+              ],
+            ),
           ),
           Divider(
             height: 1,
@@ -88,11 +103,14 @@ class HeaderText extends StatelessWidget {
     return Container(
       width: 20.w,
       alignment: Alignment.center,
-      child: Text(
-        textValue,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 13.sp,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          textValue,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 13.sp,
+          ),
         ),
       ),
     );
@@ -117,27 +135,41 @@ class PlayerEntry extends StatelessWidget {
       height: 5.h,
       child: Row(
         children: [
-          Expanded(child: HeaderText(textValue: playerStats.getPlayer.getName)),
           Expanded(
-            child: HeaderText(textValue: playerStats.getTotalPoints.toString()),
+            child: Padding(
+              padding: EdgeInsets.only(left: 5),
+              child: HeaderText(
+                textValue: playerStats.getPlayer.getName,
+              ),
+            ),
+          ),
+          Expanded(
+            child: HeaderText(
+              textValue: playerStats.getTotalPoints.toString(),
+            ),
           ),
           if (isSingleMode)
             Expanded(
-              child:
-                  HeaderText(textValue: playerStats.getSingleHits.toString()),
+              child: HeaderText(
+                textValue: playerStats.getSingleHits.toString(),
+              ),
             ),
           if (!isSingleMode)
             Expanded(
-              child:
-                  HeaderText(textValue: playerStats.getDoubleHits.toString()),
+              child: HeaderText(
+                textValue: playerStats.getDoubleHits.toString(),
+              ),
             ),
           if (isSingleMode)
             Expanded(
-              child:
-                  HeaderText(textValue: playerStats.getTrippleHits.toString()),
+              child: HeaderText(
+                textValue: playerStats.getTrippleHits.toString(),
+              ),
             ),
           Expanded(
-            child: HeaderText(textValue: playerStats.getMissedHits.toString()),
+            child: HeaderText(
+              textValue: playerStats.getMissedHits.toString(),
+            ),
           ),
         ],
       ),

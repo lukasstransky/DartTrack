@@ -12,12 +12,14 @@ class PlayerEntryFinishScoreTraining extends StatelessWidget {
     required this.game,
     required this.playerStats,
     required this.isOpenGame,
+    required this.isDraw,
   }) : super(key: key);
 
   final int i;
   final GameScoreTraining_P game;
   final PlayerGameStatsScoreTraining playerStats;
   final bool isOpenGame;
+  final bool isDraw;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class PlayerEntryFinishScoreTraining extends StatelessWidget {
             game: game,
             playerStats: playerStats,
             isOpenGame: isOpenGame,
+            isDraw: isDraw,
           ),
           ScoringStats(playerStats: playerStats),
         ],

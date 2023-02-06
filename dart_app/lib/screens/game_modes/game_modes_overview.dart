@@ -78,7 +78,7 @@ class ScoreTrainingBtn extends StatelessWidget {
       height: GAME_MODES_OVERVIEW_HEIGHT.h,
       child: ElevatedButton(
         child: Text(
-          'Score Training',
+          'Score training',
           style: TextStyle(
               fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
               color: Theme.of(context).colorScheme.secondary),
@@ -119,7 +119,7 @@ class DoubleTrainingBtn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'Double Training',
+            'Double training',
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
@@ -164,7 +164,7 @@ class SingleTrainingBtn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'Single Training',
+            'Single training',
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),

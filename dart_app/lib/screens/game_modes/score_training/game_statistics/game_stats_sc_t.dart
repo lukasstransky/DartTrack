@@ -55,7 +55,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
       appBar: _game!.getIsGameFinished
           ? CustomAppBarWithHeart(
               title: 'Statistics',
-              mode: 'Score Training',
+              mode: 'Score training',
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )
@@ -92,9 +92,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PlayerNames(
-                    settings: context.read<GameSettingsScoreTraining_P>(),
-                  ),
+                  PlayerNames(game: _game!),
                   MainStatsScoreTraining(
                       gameScoreTraining_P: _game as GameScoreTraining_P),
                   Container(

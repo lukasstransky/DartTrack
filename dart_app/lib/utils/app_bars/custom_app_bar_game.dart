@@ -25,11 +25,11 @@ class CustomAppBarGame extends StatelessWidget with PreferredSizeWidget {
 
   _getHeader(dynamic settings) {
     if (mode == GameMode.ScoreTraining) {
-      return 'Score Training';
+      return 'Score training';
     } else if (mode == GameMode.SingleTraining) {
-      return 'Single Training';
+      return 'Single training';
     } else if (mode == GameMode.DoubleTraining) {
-      return 'Double Training';
+      return 'Double training';
     }
   }
 
@@ -38,6 +38,9 @@ class CustomAppBarGame extends StatelessWidget with PreferredSizeWidget {
       return '(${settings.getMaxRoundsOrPoints} ${settings.getMode == ScoreTrainingModeEnum.MaxRounds ? 'rounds' : 'points'})';
     } else if (mode == GameMode.SingleTraining ||
         mode == GameMode.DoubleTraining) {
+      if (settings.getIsTargetNumberEnabled) {
+        return 'Target number';
+      }
       return (settings.getMode as ModesSingleDoubleTraining).name;
     }
   }

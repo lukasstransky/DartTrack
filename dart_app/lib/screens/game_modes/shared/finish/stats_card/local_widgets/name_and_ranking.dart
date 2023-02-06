@@ -13,12 +13,14 @@ class NameAndRanking extends StatelessWidget {
     required this.game,
     required this.playerStats,
     required this.isOpenGame,
+    required this.isDraw,
   }) : super(key: key);
 
   final int i;
   final Game_P game;
   final PlayerOrTeamGameStats playerStats;
   final bool isOpenGame;
+  final bool isDraw;
 
   @override
   Widget build(BuildContext context) {
@@ -30,20 +32,23 @@ class NameAndRanking extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Container(
-              width: 5.w,
-              child: Text(
-                '${(i + 1)}.',
-                style: TextStyle(
-                  fontSize: i == 0 ? 14.sp : 12.sp,
-                  fontWeight: FontWeight.bold,
-                  color: Utils.getTextColorDarken(context),
-                ),
-              ),
-            ),
+            game.getPlayerGameStatistics.length > 1 && !isDraw
+                ? Container(
+                    width: 5.w,
+                    child: Text(
+                      '${(i + 1)}.',
+                      style: TextStyle(
+                        fontSize: i == 0 ? 14.sp : 12.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Utils.getTextColorDarken(context),
+                      ),
+                    ),
+                  )
+                : SizedBox.shrink(),
             if (i == 0 &&
                 !isOpenGame &&
-                game.getPlayerGameStatistics.length > 1)
+                game.getPlayerGameStatistics.length > 1 &&
+                !isDraw)
               Container(
                 padding: EdgeInsets.only(left: 3.w),
                 transform: Matrix4.translationValues(0.0, -2.0, 0.0),

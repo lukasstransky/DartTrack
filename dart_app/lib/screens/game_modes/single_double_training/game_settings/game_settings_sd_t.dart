@@ -56,9 +56,8 @@ class _GameSettingsSingleDoubleTrainingState
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: _mode == GameMode.SingleTraining
-            ? 'Single Training Settings'
-            : 'Double Training Settings',
+        title:
+            '${_mode == GameMode.SingleTraining ? 'Single' : 'Double'} training settings',
       ),
       body: SafeArea(
         child: Center(

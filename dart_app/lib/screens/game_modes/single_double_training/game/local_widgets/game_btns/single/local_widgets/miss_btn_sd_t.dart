@@ -45,12 +45,13 @@ class MissBtnSingleTraining extends StatelessWidget {
                     Theme.of(context).colorScheme.primary)
                 : MaterialStateProperty.all(
                     Utils.darken(Theme.of(context).colorScheme.primary, 25)),
-            overlayColor: game.getAmountOfDartsThrown() != 3
-                ? Utils.getColorOrPressed(
-                    Theme.of(context).colorScheme.primary,
-                    Utils.darken(Theme.of(context).colorScheme.primary, 25),
-                  )
-                : MaterialStateProperty.all(Colors.transparent),
+            overlayColor:
+                game.getAmountOfDartsThrown() != 3 && game.getCanBePressed
+                    ? Utils.getColorOrPressed(
+                        Theme.of(context).colorScheme.primary,
+                        Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                      )
+                    : MaterialStateProperty.all(Colors.transparent),
           ),
           child: FittedBox(
             child: Text(

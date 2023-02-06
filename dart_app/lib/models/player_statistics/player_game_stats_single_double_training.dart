@@ -14,6 +14,7 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
   SplayTreeMap<int, String> _fieldHits =
       new SplayTreeMap(); // e.g. 20: SST (Single, Single, Tripple hit -> 5 points)
   List<String> _allHits = []; // e.g. SSTDXXSDTTTXX (for reverting)
+  int _highestPoints = 0; // to higlight fields hits
 
   PlayerGameStatsSingleDoubleTraining({
     required Player player,
@@ -75,6 +76,9 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
   List<String> get getAllHits => this._allHits;
   set setAllHits(List<String> value) => this._allHits = value;
 
+  int get getHighestPoints => this._highestPoints;
+  set setHighestPoints(int value) => this._highestPoints = value;
+
   @override
   int compareTo(PlayerGameStatsSingleDoubleTraining other) {
     if (!(getTotalPoints < other.getTotalPoints)) {
@@ -112,5 +116,24 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
       return '0';
     }
     return ((100 * getMissedHits) / getThrownDarts).round().toString();
+  }
+
+  int getPointsForSpecificField(int field, bool isDoubleMode) {
+    int result = 0;
+    getFieldHits[field]!.split('').forEach((hit) {
+      if (hit == 'S') {
+        result += 1;
+      } else if (hit == 'D') {
+        if (isDoubleMode) {
+          result += 1;
+        } else {
+          result += 2;
+        }
+      } else if (hit == 'T') {
+        result += 3;
+      }
+    });
+
+    return result;
   }
 }

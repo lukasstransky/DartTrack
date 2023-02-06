@@ -18,19 +18,62 @@ class GameSettings_P with ChangeNotifier {
 
   GameSettings_P() {}
 
-  Map<String, dynamic> toMapScoreTraining(
-      GameSettingsScoreTraining_P gameSettingsScoreTraining_P, bool openGame) {
+  Map<String, dynamic> toMapX01(GameSettingsX01_P gameSettings, bool openGame) {
     Map<String, dynamic> result = {
-      'players': gameSettingsScoreTraining_P.getPlayers.map((player) {
+      'players': gameSettings.getPlayers.map((player) {
         return player.toMap(player);
       }).toList(),
-      'mode': gameSettingsScoreTraining_P.getMode.toString().split('.').last,
-      'maxRoundsOrPoints': gameSettingsScoreTraining_P.getMaxRoundsOrPoints,
+      'singleOrTeam': gameSettings.getSingleOrTeam.toString().split('.').last,
+      'legs': gameSettings.getLegs,
+      if (gameSettings.getSetsEnabled) 'sets': gameSettings.getSets,
+      'points': gameSettings.getPointsOrCustom(),
+      'mode': gameSettings.getMode.toString().split('.').last,
+      'modeIn': gameSettings.getModeIn
+          .toString()
+          .split('.')
+          .last
+          .replaceAll('Field', ''),
+      'modeOut': gameSettings.getModeOut
+          .toString()
+          .split('.')
+          .last
+          .replaceAll('Field', ''),
+      'winByTwoLegsDifference': gameSettings.getWinByTwoLegsDifference,
+      if (gameSettings.getWinByTwoLegsDifference)
+        'suddenDeath': gameSettings.getSuddenDeath,
+      if (gameSettings.getWinByTwoLegsDifference)
+        'maxExtraLegs': gameSettings.getMaxExtraLegs,
+      'checkoutCounting': gameSettings.getEnableCheckoutCounting,
+      'setsEnabled': gameSettings.getSetsEnabled,
+    };
+
+    if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      result['teams'] = gameSettings.getTeams.map((team) {
+        return team.toMap(team);
+      }).toList();
+    }
+
+    if (openGame) {
+      result['inputMethod'] =
+          gameSettings.getInputMethod.toString().split('.').last;
+    }
+
+    return result;
+  }
+
+  Map<String, dynamic> toMapScoreTraining(
+      GameSettingsScoreTraining_P gameSettings, bool openGame) {
+    Map<String, dynamic> result = {
+      'players': gameSettings.getPlayers.map((player) {
+        return player.toMap(player);
+      }).toList(),
+      'mode': gameSettings.getMode.toString().split('.').last,
+      'maxRoundsOrPoints': gameSettings.getMaxRoundsOrPoints,
     };
 
     if (openGame) {
       result['inputMethod'] =
-          gameSettingsScoreTraining_P.getInputMethod.toString().split('.').last;
+          gameSettings.getInputMethod.toString().split('.').last;
     }
 
     return result;

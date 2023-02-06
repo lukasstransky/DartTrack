@@ -7,6 +7,7 @@ import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -22,20 +23,29 @@ class UndoLastThrowBtn extends StatelessWidget {
     final firestoreServiceGames = await context.read<FirestoreServiceGames>();
 
     if (gameMode == GameMode.X01) {
-      await firestoreServiceGames.deleteGame(
-          g_gameId,
-          context,
-          context.read<GameX01_P>().getTeamGameStatistics.length > 0
-              ? true
-              : false);
+      final game = context.read<GameX01_P>();
+
+      // show loading spinner
+      context.loaderOverlay.show();
+      game.notify();
+
+      await firestoreServiceGames.deleteGame(g_gameId, context,
+          game.getTeamGameStatistics.length > 0 ? true : false);
 
       Navigator.of(context).pushNamed(
         '/gameX01',
         arguments: {'openGame': false},
       );
       RevertX01Helper.revertPoints(context);
+      // hide loading spinner
+      context.loaderOverlay.hide();
+      game.notify();
     } else if (gameMode == GameMode.ScoreTraining) {
       final game = context.read<GameScoreTraining_P>();
+
+      // show loading spinner
+      context.loaderOverlay.show();
+      game.notify();
 
       await firestoreServiceGames.deleteGame(
         g_gameId,
@@ -48,9 +58,17 @@ class UndoLastThrowBtn extends StatelessWidget {
         arguments: {'openGame': false},
       );
       game.revert(context);
+
+      // hide loading spinner
+      context.loaderOverlay.hide();
+      game.notify();
     } else if (gameMode == GameMode.SingleTraining ||
         gameMode == GameMode.DoubleTraining) {
       final game = context.read<GameSingleDoubleTraining_P>();
+
+      // show loading spinner
+      context.loaderOverlay.show();
+      game.notify();
 
       await firestoreServiceGames.deleteGame(
         g_gameId,
@@ -66,6 +84,10 @@ class UndoLastThrowBtn extends StatelessWidget {
         },
       );
       game.revert(context);
+
+      // hide loading spinner
+      context.loaderOverlay.hide();
+      game.notify();
     }
   }
 

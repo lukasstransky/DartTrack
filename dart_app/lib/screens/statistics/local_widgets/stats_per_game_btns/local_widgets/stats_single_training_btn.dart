@@ -13,11 +13,11 @@ class StatsSingleTrainingBtn extends StatelessWidget {
       width: 40.w,
       child: ElevatedButton(
         onPressed: () => Navigator.of(context).pushNamed('/statsPerGameList',
-            arguments: {'mode': 'Single Training'}),
+            arguments: {'mode': 'Single training'}),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Single Training',
+            'Single training',
             style: TextStyle(
                 fontSize: 12.sp,
                 color: Theme.of(context).colorScheme.secondary),

@@ -88,7 +88,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                   HeaderText(
                     widht: HEADER_WIDTH,
                     fontSize: FONTSIZE,
-                    textValue: 'Single Hits',
+                    textValue: 'Single hits',
                   ),
                   ValueText(
                     width: VALUE_WIDTH,
@@ -113,7 +113,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                 HeaderText(
                   widht: HEADER_WIDTH,
                   fontSize: FONTSIZE,
-                  textValue: 'Double Hits',
+                  textValue: 'Double hits',
                 ),
                 ValueText(
                   width: VALUE_WIDTH,
@@ -139,7 +139,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                   HeaderText(
                     widht: HEADER_WIDTH,
                     fontSize: FONTSIZE,
-                    textValue: 'Tripple Hits',
+                    textValue: 'Tripple hits',
                   ),
                   ValueText(
                     width: VALUE_WIDTH,

@@ -15,7 +15,7 @@ class AppBarDialogHelper {
             left: DIALOG_CONTENT_PADDING_LEFT,
             right: DIALOG_CONTENT_PADDING_RIGHT),
         title: Text(
-          'Score Training explained',
+          'Score training explained',
           style: TextStyle(
             color: Colors.white,
           ),
