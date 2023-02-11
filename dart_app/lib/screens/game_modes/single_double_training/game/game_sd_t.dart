@@ -45,16 +45,25 @@ class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBarGame(mode: _mode),
-      body: Column(
-        children: [
-          PlayersListSingleDoubleTraining(),
-          FieldToHitSingleDoubleTraining(),
-          RevertBtnAndThrownDarts(),
-          context.read<GameSingleDoubleTraining_P>().getMode ==
-                  GameMode.DoubleTraining
-              ? GameBtnsDoubleTraining()
-              : GameBtnsSingleTraining(),
-        ],
+      body: Selector<GameSingleDoubleTraining_P, bool>(
+        selector: (_, game) => game.getShowLoadingSpinner,
+        builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
+            : Column(
+                children: [
+                  PlayersListSingleDoubleTraining(),
+                  FieldToHitSingleDoubleTraining(),
+                  RevertBtnAndThrownDarts(),
+                  context.read<GameSingleDoubleTraining_P>().getMode ==
+                          GameMode.DoubleTraining
+                      ? GameBtnsDoubleTraining()
+                      : GameBtnsSingleTraining(),
+                ],
+              ),
       ),
     );
   }

@@ -44,13 +44,13 @@ class _GameStatsSingleDoubleTrainingState
     //asc, desc or random
     switch (_game!.getGameSettings.getMode) {
       case ModesSingleDoubleTraining.Ascending:
-        result += 'Ascending';
+        result += 'ascending';
         break;
       case ModesSingleDoubleTraining.Descending:
-        result += 'Descending';
+        result += 'descending';
         break;
       case ModesSingleDoubleTraining.Random:
-        result += 'Random';
+        result += 'random';
         break;
     }
 

@@ -195,6 +195,8 @@ class PlayerOrTeamGameStats {
         result['allRemainingScoresPerDart'] =
             Utils.convertAllRemainingScoresPerDartToSimpleList(
                 stats.getAllRemainingScoresPerDart);
+      if (stats.getAllScoresPerDartAsString.isNotEmpty)
+        result['allScoresPerDartAsString'] = stats.getAllScoresPerDartAsString;
     }
 
     return result;
@@ -373,6 +375,9 @@ class PlayerOrTeamGameStats {
           map['allScoresPerDartAsStringCount'] == null
               ? {}
               : Map<String, int>.from(map['allScoresPerDartAsStringCount']),
+      allScoresPerDartAsString: map['allScoresPerDartAsString'] == null
+          ? []
+          : map['allScoresPerDartAsString'].cast<String>(),
       allRemainingScoresPerDart:
           allRemainingScoresPerDart != null ? allRemainingScoresPerDart : [],
       threeDartModeRoundsCount: map['threeDartModeRoundsCount'] == null

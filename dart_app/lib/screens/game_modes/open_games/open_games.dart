@@ -148,7 +148,7 @@ class _OpenGamesState extends State<OpenGames> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Open Games'),
+      appBar: CustomAppBar(title: 'Open games'),
       body: Consumer<OpenGamesFirestore>(
         builder: (_, openGamesFirestore, __) => openGamesFirestore
                     .openGames.length !=
@@ -209,8 +209,7 @@ class _OpenGamesState extends State<OpenGames> {
                                     SlidableAction(
                                       onPressed: (context) =>
                                           _continueGame(game_p),
-                                      backgroundColor:
-                                          Theme.of(context).primaryColor,
+                                      backgroundColor: Colors.green,
                                       foregroundColor: Colors.white,
                                       icon: Icons.arrow_forward,
                                       label: 'Play',
@@ -244,7 +243,7 @@ class _OpenGamesState extends State<OpenGames> {
               )
             : Center(
                 child: Text(
-                  'Currently there are no Open Games!',
+                  'Currently there are no open games!',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 12.sp,

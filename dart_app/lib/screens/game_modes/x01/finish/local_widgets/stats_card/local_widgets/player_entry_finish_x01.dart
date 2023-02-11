@@ -101,50 +101,70 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team)
-      return Padding(
-        padding: EdgeInsets.only(left: 3.w),
-        child: Text(
-          gameX01.getTeamGameStatistics[i].getTeam.getName,
-          style: TextStyle(
-            fontSize: firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
-            color: Utils.getTextColorDarken(context),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    else if (gameX01.getPlayerGameStatistics[i].getPlayer is Bot)
-      return Padding(
-        padding: EdgeInsets.only(left: 3.w),
-        child: Column(
-          children: [
-            Text(
-              'Lvl. ${gameX01.getPlayerGameStatistics[i].getPlayer.getLevel} Bot',
+      return Flexible(
+        child: Padding(
+          padding: EdgeInsets.only(left: 3.w),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              gameX01.getTeamGameStatistics[i].getTeam.getName,
               style: TextStyle(
                 fontSize: firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
                 color: Utils.getTextColorDarken(context),
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
-              ' (${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-              style: TextStyle(
-                fontSize: 8.sp,
-                color:
-                    i == 0 ? Utils.getTextColorDarken(context) : Colors.white,
+          ),
+        ),
+      );
+    else if (gameX01.getPlayerGameStatistics[i].getPlayer is Bot)
+      return Flexible(
+        child: Container(
+          padding: EdgeInsets.only(left: 3.w),
+          child: Column(
+            children: [
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'Lvl. ${gameX01.getPlayerGameStatistics[i].getPlayer.getLevel} Bot',
+                  style: TextStyle(
+                    fontSize:
+                        firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ),
-            ),
-          ],
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  ' (${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                  style: TextStyle(
+                    fontSize: 8.sp,
+                    color: i == 0
+                        ? Utils.getTextColorDarken(context)
+                        : Colors.white,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       );
     else
-      return Padding(
-        padding: EdgeInsets.only(left: 3.w),
-        child: Text(
-          gameX01.getPlayerGameStatistics[i].getPlayer.getName,
-          style: TextStyle(
-            fontSize: firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
-            color: Utils.getTextColorDarken(context),
-            fontWeight: FontWeight.bold,
+      return Flexible(
+        child: Container(
+          padding: EdgeInsets.only(left: 3.w),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              gameX01.getPlayerGameStatistics[i].getPlayer.getName,
+              style: TextStyle(
+                fontSize: firstElementNoDrawOrOpenGame(gameX01) ? 14.sp : 12.sp,
+                color: Utils.getTextColorDarken(context),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       );

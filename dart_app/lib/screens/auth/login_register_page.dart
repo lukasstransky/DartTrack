@@ -30,7 +30,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
         resizeToAvoidBottomInset: false,
         body: Form(
           key: _loginRegisterPageFormKey,
-          child: Selector<Auth, AuthMode>(
+          child: Selector<Auth_P, AuthMode>(
             selector: (_, auth) => auth.getAuthMode,
             builder: (_, authMode, __) => Column(
               mainAxisAlignment: MainAxisAlignment.center,

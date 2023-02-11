@@ -1,10 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class StatsScoreTrainingBtn extends StatelessWidget {
@@ -16,13 +13,8 @@ class StatsScoreTrainingBtn extends StatelessWidget {
       width: 40.w,
       child: ElevatedButton(
         onPressed: () {
-          context.loaderOverlay.show();
-          context.read<StatsFirestoreX01_P>().notify();
           Navigator.of(context).pushNamed('/statsPerGameList',
               arguments: {'mode': 'Score training'});
-          context.loaderOverlay.hide();
-
-          context.read<StatsFirestoreX01_P>().notify();
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,

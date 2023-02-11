@@ -1,7 +1,8 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
@@ -487,6 +488,7 @@ class Utils {
 
     return Border(
       right: [
+        '0',
         '1',
         '2',
         '3',
@@ -582,10 +584,11 @@ class Utils {
       builder: (context1) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+          bottom: DIALOG_CONTENT_PADDING_BOTTOM,
+          top: DIALOG_CONTENT_PADDING_TOP,
+          left: DIALOG_CONTENT_PADDING_LEFT,
+          right: DIALOG_CONTENT_PADDING_RIGHT,
+        ),
         title: const Text(
           'End game',
           style: TextStyle(color: Colors.white),
@@ -621,12 +624,17 @@ class Utils {
             ),
           ),
           TextButton(
-            onPressed: () async => {
-              Navigator.of(context, rootNavigator: true).pop(),
+            onPressed: () async {
+              Navigator.of(context, rootNavigator: true).pop();
+
+              game_p.setShowLoadingSpinner = true;
+              game_p.notify();
+
+              await Future.delayed(Duration(milliseconds: 200));
               await context
                   .read<FirestoreServiceGames>()
-                  .postOpenGame(game_p, context),
-              _resetValuesAndNavigateToHome(context, game_p),
+                  .postOpenGame(game_p, context);
+              _resetValuesAndNavigateToHome(context, game_p);
             },
             child: Text(
               'Save',
@@ -687,8 +695,10 @@ class Utils {
       String mode, BuildContext context) {
     if (mode == 'X01') {
       return context.read<StatsFirestoreX01_P>();
-    } else {
-      return context.read<StatsFirestore_sdt_sct_P>();
+    } else if (mode == 'Single training' || mode == 'Double training') {
+      return context.read<StatsFirestoreSingleDoubleTraining_P>();
+    } else if (mode == 'Score training') {
+      return context.read<StatsFirestoreScoreTraining_P>();
     }
   }
 

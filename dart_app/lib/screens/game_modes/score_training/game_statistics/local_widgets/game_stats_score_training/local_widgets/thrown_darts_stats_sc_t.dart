@@ -26,7 +26,7 @@ class ThrownDartsStatsScoreTraining extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                'Thrown Darts',
+                'Thrown darts',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Utils.getTextColorDarken(context),

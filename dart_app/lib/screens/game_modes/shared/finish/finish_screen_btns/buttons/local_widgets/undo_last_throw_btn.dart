@@ -7,7 +7,6 @@ import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -25,27 +24,30 @@ class UndoLastThrowBtn extends StatelessWidget {
     if (gameMode == GameMode.X01) {
       final game = context.read<GameX01_P>();
 
-      // show loading spinner
-      context.loaderOverlay.show();
+      game.setShowLoadingSpinner = true;
       game.notify();
-
-      await firestoreServiceGames.deleteGame(g_gameId, context,
-          game.getTeamGameStatistics.length > 0 ? true : false);
 
       Navigator.of(context).pushNamed(
         '/gameX01',
         arguments: {'openGame': false},
       );
+
+      await firestoreServiceGames.deleteGame(g_gameId, context,
+          game.getTeamGameStatistics.length > 0 ? true : false);
+
       RevertX01Helper.revertPoints(context);
-      // hide loading spinner
-      context.loaderOverlay.hide();
+      game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.ScoreTraining) {
       final game = context.read<GameScoreTraining_P>();
 
-      // show loading spinner
-      context.loaderOverlay.show();
+      game.setShowLoadingSpinner = true;
       game.notify();
+
+      Navigator.of(context).pushNamed(
+        '/gameScoreTraining',
+        arguments: {'openGame': false},
+      );
 
       await firestoreServiceGames.deleteGame(
         g_gameId,
@@ -53,28 +55,15 @@ class UndoLastThrowBtn extends StatelessWidget {
         game.getTeamGameStatistics.length > 0 ? true : false,
       );
 
-      Navigator.of(context).pushNamed(
-        '/gameScoreTraining',
-        arguments: {'openGame': false},
-      );
       game.revert(context);
-
-      // hide loading spinner
-      context.loaderOverlay.hide();
+      game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.SingleTraining ||
         gameMode == GameMode.DoubleTraining) {
       final game = context.read<GameSingleDoubleTraining_P>();
 
-      // show loading spinner
-      context.loaderOverlay.show();
+      game.setShowLoadingSpinner = true;
       game.notify();
-
-      await firestoreServiceGames.deleteGame(
-        g_gameId,
-        context,
-        false,
-      );
 
       Navigator.of(context).pushNamed(
         '/gameSingleDoubleTraining',
@@ -83,10 +72,15 @@ class UndoLastThrowBtn extends StatelessWidget {
           'mode': game.getMode,
         },
       );
-      game.revert(context);
 
-      // hide loading spinner
-      context.loaderOverlay.hide();
+      await firestoreServiceGames.deleteGame(
+        g_gameId,
+        context,
+        false,
+      );
+
+      game.revert(context);
+      game.setShowLoadingSpinner = false;
       game.notify();
     }
   }
@@ -94,7 +88,7 @@ class UndoLastThrowBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 1.h),
+      padding: EdgeInsets.only(top: 1.h, bottom: 3.h),
       child: Container(
         width: 40.w,
         height: 6.h,
@@ -103,7 +97,7 @@ class UndoLastThrowBtn extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'Undo Last Throw',
+              'Undo last throw',
               style: TextStyle(
                 fontSize: 12.sp,
               ),

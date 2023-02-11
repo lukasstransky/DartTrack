@@ -59,7 +59,7 @@ class NewGameBtn extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'New Game',
+              'New game',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Theme.of(context).colorScheme.secondary,

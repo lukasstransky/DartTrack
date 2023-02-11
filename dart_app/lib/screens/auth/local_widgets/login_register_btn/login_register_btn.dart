@@ -20,7 +20,7 @@ class LoginRegisterBtn extends StatelessWidget {
 
   Future<void> submit(bool isLogin, BuildContext context) async {
     final AuthService authService = context.read<AuthService>();
-    final Auth auth = context.read<Auth>();
+    final Auth_P auth = context.read<Auth_P>();
 
     auth.setUsernameValid =
         await authService.usernameValid(auth.getUsernameController.text);
@@ -122,12 +122,12 @@ class LoginRegisterBtn extends StatelessWidget {
 
     // hide loading spinner
     context.loaderOverlay.hide();
-    context.read<Auth>().notify();
+    context.read<Auth_P>().notify();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bool isLogin = context.read<Auth>().getAuthMode == AuthMode.Login;
+    final bool isLogin = context.read<Auth_P>().getAuthMode == AuthMode.Login;
 
     return Column(
       children: [

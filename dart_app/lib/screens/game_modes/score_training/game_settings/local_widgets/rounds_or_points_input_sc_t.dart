@@ -53,15 +53,15 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
                         ? MIN_ROUNDS_SCORE_TRAINING
                         : MIN_POINTS_SCORE_TRAINING)) {
                   return (isMaxRoundsMode
-                      ? 'Minimum rounds are ${MIN_ROUNDS_SCORE_TRAINING}!'
-                      : 'Minimum points are ${MIN_POINTS_SCORE_TRAINING}!');
+                      ? 'Minimum rounds: ${MIN_ROUNDS_SCORE_TRAINING}'
+                      : 'Minimum points: ${MIN_POINTS_SCORE_TRAINING}');
                 } else if (int.parse(value) >
                     (isMaxRoundsMode
                         ? MAX_ROUNDS_SCORE_TRAINING
                         : MAX_POINTS_SCORE_TRAINING)) {
                   return (isMaxRoundsMode
-                      ? 'Maximum rounds are ${MAX_ROUNDS_SCORE_TRAINING}!'
-                      : 'Maximum points are ${MAX_POINTS_SCORE_TRAINING}!');
+                      ? 'Maximum rounds: ${MAX_ROUNDS_SCORE_TRAINING}'
+                      : 'Maximum points: ${MAX_POINTS_SCORE_TRAINING}');
                 }
                 return null;
               },
@@ -213,8 +213,8 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
                 fit: BoxFit.scaleDown,
                 child: Text(
                   scoreTrainingModeEnum == ScoreTrainingModeEnum.MaxRounds
-                      ? ' rounds are played!'
-                      : ' points are reached!',
+                      ? ' rounds are played.'
+                      : ' points are reached.',
                   style: TextStyle(
                     color: Colors.white,
                   ),

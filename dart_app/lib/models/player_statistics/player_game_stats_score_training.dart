@@ -8,6 +8,8 @@ class PlayerGameStatsScoreTraining extends PlayerOrTeamGameStats
   List<int> _allScores = [];
   List<int> _allScoresPerDart = [];
   Map<String, int> _allScoresPerDartAsStringCount = {};
+  List<String> _allScoresPerDartAsString =
+      []; // for reverting allScoresPerDartAsStringCount
   int _thrownDarts = 0;
   int _roundsOrPointsLeft = 0;
   Map<int, int> _roundedScoresEven = {
@@ -50,6 +52,7 @@ class PlayerGameStatsScoreTraining extends PlayerOrTeamGameStats
     required List<int> allScores,
     required List<int> allScoresPerDart,
     required Map<String, int> allScoresPerDartAsStringCount,
+    required List<String> allScoresPerDartAsString,
     required List<List<String>> allRemainingScoresPerDart,
     required int threeDartModeRoundsCount,
     required int totalRoundsCount,
@@ -68,6 +71,7 @@ class PlayerGameStatsScoreTraining extends PlayerOrTeamGameStats
     this.setAllScores = allScores;
     this.setAllScoresPerDart = allScoresPerDart;
     this.setAllScoresPerDartAsStringCount = allScoresPerDartAsStringCount;
+    this.setAllScoresPerDartAsString = allScoresPerDartAsString;
     this.setAllRemainingScoresPerDart = allRemainingScoresPerDart;
     this.setThreeDartModeRoundsCount = threeDartModeRoundsCount;
     this.setTotalRoundsCount = totalRoundsCount;
@@ -90,6 +94,11 @@ class PlayerGameStatsScoreTraining extends PlayerOrTeamGameStats
       this._allScoresPerDartAsStringCount;
   set setAllScoresPerDartAsStringCount(Map<String, int> value) =>
       this._allScoresPerDartAsStringCount = value;
+
+  List<String> get getAllScoresPerDartAsString =>
+      this._allScoresPerDartAsString;
+  set setAllScoresPerDartAsString(List<String> allScoresPerDartAsString) =>
+      this._allScoresPerDartAsString = allScoresPerDartAsString;
 
   int get getThrownDarts => this._thrownDarts;
   set setThrownDarts(int value) => this._thrownDarts = value;
@@ -137,12 +146,19 @@ class PlayerGameStatsScoreTraining extends PlayerOrTeamGameStats
           dateTime: dateTime,
         );
 
-  double getAverage() {
+  String getAverage() {
     if (getCurrentScore == 0 && getAllScores.length == 0) {
-      return 0.0;
+      return '0';
     }
 
-    return ((getCurrentScore / getThrownDarts) * 3).roundToDouble();
+    final String result =
+        ((getCurrentScore / getThrownDarts) * 3).toStringAsFixed(2);
+    final String decimalPlaces = result.substring(result.length - 2);
+
+    if (decimalPlaces == '00') {
+      return result.substring(0, result.length - 3);
+    }
+    return result;
   }
 
   int getHighestScore() {
@@ -166,5 +182,18 @@ class PlayerGameStatsScoreTraining extends PlayerOrTeamGameStats
     } else {
       return 0;
     }
+  }
+
+  String getRoundsOrPointsValue(bool isRoundMode) {
+    if (isRoundMode) {
+      if (getRoundsOrPointsLeft == 0) {
+        return 'Finished';
+      }
+      return getRoundsOrPointsLeft.toString();
+    }
+    if (getRoundsOrPointsLeft <= 0) {
+      return 'Finished';
+    }
+    return getRoundsOrPointsLeft.toString();
   }
 }

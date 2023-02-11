@@ -10,7 +10,7 @@ class ProceedAsGuestLink extends StatelessWidget {
   const ProceedAsGuestLink({Key? key}) : super(key: key);
 
   _clickProceedAsGuest(BuildContext context) async {
-    final Auth auth = context.read<Auth>();
+    final Auth_P auth = context.read<Auth_P>();
 
     // show loading spinner
     context.loaderOverlay.show();

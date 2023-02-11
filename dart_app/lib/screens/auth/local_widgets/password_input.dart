@@ -10,13 +10,13 @@ class PasswordInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Auth auth = context.read<Auth>();
+    final Auth_P auth = context.read<Auth_P>();
 
     return Container(
       key: Key('passwordInput'),
       padding: EdgeInsets.only(top: 1.h),
       width: 80.w,
-      child: Selector<Auth, bool>(
+      child: Selector<Auth_P, bool>(
         selector: (_, auth) => auth.getPasswordVisible,
         builder: (_, passwordVisible, __) => TextFormField(
           obscureText: !passwordVisible,

@@ -21,7 +21,7 @@ class RoundedScoresOdd extends StatelessWidget {
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
           child: Text(
-            'Rounded Scores',
+            'Rounded scores',
             style: TextStyle(
               fontSize: FONTSIZE_HEADING_STATISTICS.sp,
               color: Colors.white,

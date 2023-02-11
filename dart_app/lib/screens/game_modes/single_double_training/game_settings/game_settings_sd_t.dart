@@ -67,15 +67,21 @@ class _GameSettingsSingleDoubleTrainingState
                 selector: (_, gameSettingsScoreTraining) =>
                     gameSettingsScoreTraining.getPlayers,
                 shouldRebuild: (previous, next) => true,
-                builder: (_, players, __) => PlayersList(
-                  mode: GameMode.SingleTraining,
-                  players: players,
+                builder: (_, players, __) => Column(
+                  children: [
+                    PlayersList(
+                      mode: GameMode.SingleTraining,
+                      players: players,
+                    ),
+                    if (players.length <
+                        MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING)
+                      AddPlayerBtn(mode: _mode),
+                  ],
                 ),
               ),
-              AddPlayerBtn(mode: _mode),
+              ModeSingleDoubleTraining(),
               GameInfoSingleDoubleTraining(gameMode: _mode),
               PointDistributionInfoSingleDoubleTraining(gameMode: _mode),
-              ModeSingleDoubleTraining(),
               TargetNumberSingleDoubleTraining(),
               AmountOfRoundsForTargetNumberSingleDoubleTraining(),
               StartGameBtn(mode: _mode),

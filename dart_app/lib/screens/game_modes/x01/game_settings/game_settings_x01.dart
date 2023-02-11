@@ -64,7 +64,7 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
             players.length >= 2 &&
             context.read<GameSettingsX01_P>().getSingleOrTeam ==
                 SingleOrTeamEnum.Single) ||
-        players.length >= MAX_PLAYERS) {
+        players.length >= MAX_PLAYERS_X01) {
       return false;
     }
 

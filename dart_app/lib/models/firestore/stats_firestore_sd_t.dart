@@ -1,8 +1,7 @@
 import 'package:dart_app/models/games/game.dart';
 import 'package:flutter/material.dart';
 
-// used for single/double training + score training
-class StatsFirestore_sdt_sct_P with ChangeNotifier {
+class StatsFirestoreSingleDoubleTraining_P with ChangeNotifier {
   List<Game_P> _games = [];
   bool _noGamesPlayed = false;
   bool _gamesLoaded = false;

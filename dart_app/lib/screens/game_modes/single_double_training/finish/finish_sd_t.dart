@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
@@ -8,7 +8,6 @@ import 'package:dart_app/services/firestore/firestore_service_player_stats.dart'
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -40,7 +39,7 @@ class _FinishSingleDoubleTrainingState
   @override
   void initState() {
     _saveDataToFirestore();
-    context.read<StatsFirestore_sdt_sct_P>().gamesLoaded = false;
+    context.read<StatsFirestoreSingleDoubleTraining_P>().gamesLoaded = false;
     super.initState();
   }
 
@@ -52,7 +51,8 @@ class _FinishSingleDoubleTrainingState
     if (game.getMode == GameMode.DoubleTraining) {
       game.setName = 'Double training';
     }
-    g_gameId = await context.read<FirestoreServiceGames>().postGame(game);
+    g_gameId =
+        await context.read<FirestoreServiceGames>().postGame(game, context);
     await context
         .read<FirestoreServicePlayerStats>()
         .postPlayerGameStatistics(game, g_gameId, context);
@@ -61,15 +61,16 @@ class _FinishSingleDoubleTrainingState
 
   @override
   Widget build(BuildContext context) {
-    return LoaderOverlay(
-      child: Scaffold(
-        appBar: CustomAppBarWithHeart(
-          title: 'Finished Game',
-          mode: 'Single training',
-          isFinishScreen: true,
-          showHeart: true,
-        ),
-        body: Center(
+    return Scaffold(
+      appBar: CustomAppBarWithHeart(
+        title: 'Finished game',
+        mode: 'Single training',
+        isFinishScreen: true,
+        showHeart: true,
+      ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
           child: Container(
             width: 90.w,
             child: Column(

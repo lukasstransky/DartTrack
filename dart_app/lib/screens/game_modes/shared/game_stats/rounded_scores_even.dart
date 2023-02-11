@@ -28,7 +28,7 @@ class RoundedScoresEven extends StatelessWidget {
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
           child: Text(
-            'Rounded Scores',
+            'Rounded scores',
             style: TextStyle(
               fontSize: FONTSIZE_HEADING_STATISTICS.sp,
               color: Colors.white,
@@ -45,24 +45,47 @@ class RoundedScoresEven extends StatelessWidget {
                     Container(
                       width: WIDTH_HEADINGS_STATISTICS.w,
                       padding: EdgeInsets.only(top: 5),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 12.w,
-                            alignment: Alignment.centerRight,
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                i == 180 ? '180' : '${i}+',
-                                style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Utils.getTextColorDarken(context),
+                      alignment: Alignment.centerLeft,
+                      child: Container(
+                        width: 12.w,
+                        alignment: Alignment.centerRight,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: i == 180
+                              ? RichText(
+                                  text: TextSpan(
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                        text: '180',
+                                        style: TextStyle(
+                                          fontSize: FONTSIZE_STATISTICS.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color:
+                                              Utils.getTextColorDarken(context),
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: '+',
+                                        style: TextStyle(
+                                          fontSize: FONTSIZE_STATISTICS.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Text(
+                                  '${i}+',
+                                  style: TextStyle(
+                                    fontSize: FONTSIZE_STATISTICS.sp,
+                                    fontWeight: FontWeight.bold,
+                                    color: Utils.getTextColorDarken(context),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          )
-                        ],
+                        ),
                       ),
                     ),
                 ],

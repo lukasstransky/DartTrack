@@ -38,7 +38,7 @@ class NameAndRanking extends StatelessWidget {
                     child: Text(
                       '${(i + 1)}.',
                       style: TextStyle(
-                        fontSize: i == 0 ? 14.sp : 12.sp,
+                        fontSize: i == 0 && !isOpenGame ? 14.sp : 12.sp,
                         fontWeight: FontWeight.bold,
                         color: Utils.getTextColorDarken(context),
                       ),
@@ -58,14 +58,19 @@ class NameAndRanking extends StatelessWidget {
                   color: Color(0xffFFD700),
                 ),
               ),
-            Container(
-              padding: EdgeInsets.only(left: 3.w),
-              child: Text(
-                playerStats.getPlayer.getName,
-                style: TextStyle(
-                  fontSize: i == 0 ? 14.sp : 12.sp,
-                  color: Utils.getTextColorDarken(context),
-                  fontWeight: FontWeight.bold,
+            Flexible(
+              child: Container(
+                padding: EdgeInsets.only(left: 3.w),
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    playerStats.getPlayer.getName,
+                    style: TextStyle(
+                      fontSize: i == 0 && !isOpenGame ? 14.sp : 12.sp,
+                      color: Utils.getTextColorDarken(context),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ),
             ),

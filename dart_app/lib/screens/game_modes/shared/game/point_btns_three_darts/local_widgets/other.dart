@@ -34,12 +34,13 @@ class OtherBtns extends StatelessWidget {
               mode: mode,
             ),
           ),
-          Expanded(
-            child: PointBtnThreeDarts(
-              pointValue: 'Bust',
-              mode: mode,
+          if (mode != GameMode.ScoreTraining)
+            Expanded(
+              child: PointBtnThreeDarts(
+                pointValue: 'Bust',
+                mode: mode,
+              ),
             ),
-          ),
           Expanded(
             child: PointBtnThreeDarts(
               pointValue: '0',

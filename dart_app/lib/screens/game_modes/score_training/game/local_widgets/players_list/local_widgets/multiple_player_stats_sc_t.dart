@@ -24,53 +24,48 @@ class MulitplePlayerStatsScoreTraining extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              Container(
-                width: 25.w,
-                alignment: Alignment.center,
-                child: Text(
-                  'Name',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: fontSize.sp,
+          Padding(
+            padding: EdgeInsets.only(bottom: 5),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Name',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: fontSize.sp,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: 25.w,
-                alignment: Alignment.center,
-                child: Text(
-                  'Avg.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: fontSize.sp,
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Avg.',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: fontSize.sp,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: 25.w,
-                alignment: Alignment.center,
-                child: Text(
-                  'Score',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: fontSize.sp,
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Text(
+                      isRoundMode ? 'Rounds left' : 'Points left',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: fontSize.sp,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: 25.w,
-                alignment: Alignment.center,
-                child: Text(
-                  isRoundMode ? 'Rounds left' : 'Points left',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: fontSize.sp,
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
           Divider(
             height: 1,
@@ -129,14 +124,28 @@ class PlayerEntry extends StatelessWidget {
       height: 5.h,
       child: Row(
         children: [
-          Container(
-            width: 25.w,
-            alignment: Alignment.center,
-            padding: const EdgeInsets.only(left: 5),
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              padding: const EdgeInsets.only(left: 5),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  playerStats.getPlayer.getName,
+                  style: TextStyle(
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                    fontSize: fontSize.sp,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
               child: Text(
-                playerStats.getPlayer.getName,
+                playerStats.getAverage(),
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
@@ -145,39 +154,18 @@ class PlayerEntry extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: 25.w,
-            alignment: Alignment.center,
-            child: Text(
-              playerStats.getAverage().toString(),
-              style: TextStyle(
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize.sp,
-              ),
-            ),
-          ),
-          Container(
-            width: 25.w,
-            alignment: Alignment.center,
-            child: Text(
-              playerStats.getCurrentScore.toString(),
-              style: TextStyle(
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize.sp,
-              ),
-            ),
-          ),
-          Container(
-            width: 25.w,
-            alignment: Alignment.center,
-            child: Text(
-              playerStats.getRoundsOrPointsLeft.toString(),
-              style: TextStyle(
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
-                fontSize: fontSize.sp,
+          Expanded(
+            child: Container(
+              alignment: Alignment.center,
+              child: Text(
+                playerStats.getRoundsOrPointsValue(
+                    context.read<GameSettingsScoreTraining_P>().getMode ==
+                        ScoreTrainingModeEnum.MaxRounds),
+                style: TextStyle(
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                  fontSize: fontSize.sp,
+                ),
               ),
             ),
           ),

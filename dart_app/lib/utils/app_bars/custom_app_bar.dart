@@ -36,7 +36,7 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
 
                 if (ModalRoute.of(context)!.settings.name ==
                     '/forgotPassword') {
-                  context.read<Auth>().getEmailController.clear();
+                  context.read<Auth_P>().getEmailController.clear();
                 }
               },
               icon: Icon(

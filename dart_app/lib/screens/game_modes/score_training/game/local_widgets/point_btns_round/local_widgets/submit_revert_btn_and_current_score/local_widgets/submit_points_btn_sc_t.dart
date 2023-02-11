@@ -53,7 +53,10 @@ class SubmitPointsBtnScoreTraining extends StatelessWidget {
           ),
           left: BorderSide(
             color: Utils.getPrimaryColorDarken(context),
-            width: 3,
+            width: context.read<GameSettingsScoreTraining_P>().getInputMethod ==
+                    InputMethod.Round
+                ? 3
+                : 0,
           ),
         ),
       ),

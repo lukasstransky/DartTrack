@@ -26,7 +26,7 @@ class ScoreStatsScoreTraining extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                'Total Score',
+                'Total score',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Utils.getTextColorDarken(context),

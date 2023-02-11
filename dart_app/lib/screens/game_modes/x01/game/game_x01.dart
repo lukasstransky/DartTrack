@@ -126,20 +126,30 @@ class GameX01State extends State<GameX01> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBarX01Game(),
-      body: Column(
-        children: [
-          if (context.read<GameSettingsX01_P>().getSingleOrTeam ==
-              SingleOrTeamEnum.Single)
-            SinglePlayersListX01()
-          else
-            TeamPlayersListX01(),
-          Selector<GameSettingsX01_P, InputMethod>(
-            selector: (_, gameX01) => gameX01.getInputMethod,
-            builder: (_, inputMethod, __) => inputMethod == InputMethod.Round
-                ? PointBtnsRoundX01()
-                : PointsBtnsThreeDartsX01(),
-          )
-        ],
+      body: Selector<GameX01_P, bool>(
+        selector: (_, game) => game.getShowLoadingSpinner,
+        builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
+            : Column(
+                children: [
+                  if (context.read<GameSettingsX01_P>().getSingleOrTeam ==
+                      SingleOrTeamEnum.Single)
+                    SinglePlayersListX01()
+                  else
+                    TeamPlayersListX01(),
+                  Selector<GameSettingsX01_P, InputMethod>(
+                    selector: (_, gameX01) => gameX01.getInputMethod,
+                    builder: (_, inputMethod, __) =>
+                        inputMethod == InputMethod.Round
+                            ? PointBtnsRoundX01()
+                            : PointsBtnsThreeDartsX01(),
+                  )
+                ],
+              ),
       ),
     );
   }

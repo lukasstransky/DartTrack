@@ -151,12 +151,10 @@ class GameSingleDoubleTraining_P extends Game_P {
       }
 
       setPlayerGameStatistics = new List.from(getPlayerGameStatistics.reversed);
+      getGameSettings.setPlayers =
+          new List<Player>.from(getGameSettings.getPlayers.reversed);
       setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
     }
-  }
-
-  notify() {
-    notifyListeners();
   }
 
   reset() {
@@ -165,14 +163,18 @@ class GameSingleDoubleTraining_P extends Game_P {
     setAllFieldsToHit = [];
     setMode = GameMode.SingleTraining;
     setRandomFieldsGenerated = [];
-    setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
     setCanBePressed = true;
 
+    setGameId = '';
+    setGameSettings = null;
     setPlayerGameStatistics = [];
     setCurrentPlayerToThrow = null;
     setIsOpenGame = false;
     setIsGameFinished = false;
+    setIsFavouriteGame = false;
     setRevertPossible = false;
+    setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
+    setShowLoadingSpinner = false;
   }
 
   int getAmountOfDartsThrown() {
@@ -366,12 +368,14 @@ class GameSingleDoubleTraining_P extends Game_P {
         UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(getCurrentThreeDarts);
         setCanBePressed = true;
 
-        notify();
+        if (!isGameFinished) {
+          notify();
+        }
       });
-    }
-
-    if (!isGameFinished) {
-      notify();
+    } else {
+      if (!isGameFinished) {
+        notify();
+      }
     }
   }
 

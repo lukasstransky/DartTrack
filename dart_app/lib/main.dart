@@ -1,6 +1,6 @@
 import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
-import 'package:dart_app/models/firestore/stats_firestore_single_double_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
           create: (_) => DefaultSettingsX01_P(),
         ),
         ChangeNotifierProvider(
-          create: (_) => Auth(),
+          create: (_) => Auth_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => GameSettingsScoreTraining_P(),
@@ -112,16 +112,16 @@ class MyApp extends StatelessWidget {
           create: (_) => GameScoreTraining_P(),
         ),
         ChangeNotifierProvider(
-          create: (_) => StatsFirestore_sdt_sct_P(),
+          create: (_) => StatsFirestoreSingleDoubleTraining_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StatsFirestoreScoreTraining_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => GameSingleDoubleTraining_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => GameSettingsSingleDoubleTraining_P(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => StatsFirestoreSingleDoubleTraining_P(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

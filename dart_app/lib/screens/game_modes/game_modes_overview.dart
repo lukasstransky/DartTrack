@@ -294,7 +294,7 @@ class OpenGames extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Open Games: ',
+                    'Open games: ',
                     style: TextStyle(
                       fontSize: 14.sp,
                       color: Colors.white,

@@ -65,7 +65,7 @@ class Settings extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Auth auth = context.read<Auth>();
+    final Auth_P auth = context.read<Auth_P>();
 
     return Scaffold(
         appBar: CustomAppBar(showBackBtn: false, title: 'Settings'),
@@ -87,14 +87,15 @@ class Settings extends StatelessWidget {
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),
-                onPressed: () async => {
-                  auth.getEmailController.clear(),
-                  auth.getPasswordController.clear(),
-                  auth.getUsernameController.clear(),
-                  auth.setAuthMode = AuthMode.Login,
-                  auth.setPasswordVisible = false,
-                  Navigator.of(context).pushNamed('/loginRegister'),
-                  await context.read<AuthService>().logout(),
+                onPressed: () async {
+                  auth.getEmailController.clear();
+                  auth.getPasswordController.clear();
+                  auth.getUsernameController.clear();
+                  auth.setAuthMode = AuthMode.Login;
+                  auth.setPasswordVisible = false;
+                  auth.setShowLoadingSpinner = false;
+                  Navigator.of(context).pushNamed('/loginRegister');
+                  await context.read<AuthService>().logout();
                 },
               ),
               TextButton(

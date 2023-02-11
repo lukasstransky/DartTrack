@@ -14,32 +14,40 @@ class ModeScoreTraining extends StatelessWidget {
     final gameSettingsScoreTraining_P =
         context.read<GameSettingsScoreTraining_P>();
 
-    return Center(
-      child: Container(
-        width: WIDTH_GAMESETTINGS.w,
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        child: Selector<GameSettingsScoreTraining_P, ScoreTrainingModeEnum>(
-          selector: (_, gameSettingsScoreTraining_P) =>
-              gameSettingsScoreTraining_P.getMode,
-          builder: (_, scoreTrainingModeEnum, __) => Row(
-            children: [
-              SettingsBtn(
-                condition: gameSettingsScoreTraining_P.getMode ==
-                    ScoreTrainingModeEnum.MaxRounds,
-                text: 'max. Rounds',
-                isLeftBtn: true,
-                onPressed:
-                    context.read<GameSettingsScoreTraining_P>().switchMode,
-              ),
-              SettingsBtn(
-                condition: gameSettingsScoreTraining_P.getMode ==
-                    ScoreTrainingModeEnum.MaxPoints,
-                text: 'max. Points',
-                isLeftBtn: false,
-                onPressed:
-                    context.read<GameSettingsScoreTraining_P>().switchMode,
-              )
-            ],
+    return Padding(
+      padding: EdgeInsets.only(
+        top: context.watch<GameSettingsScoreTraining_P>().getPlayers.length ==
+                MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING
+            ? 15
+            : 0,
+      ),
+      child: Center(
+        child: Container(
+          width: WIDTH_GAMESETTINGS.w,
+          height: WIDGET_HEIGHT_GAMESETTINGS.h,
+          child: Selector<GameSettingsScoreTraining_P, ScoreTrainingModeEnum>(
+            selector: (_, gameSettingsScoreTraining_P) =>
+                gameSettingsScoreTraining_P.getMode,
+            builder: (_, scoreTrainingModeEnum, __) => Row(
+              children: [
+                SettingsBtn(
+                  condition: gameSettingsScoreTraining_P.getMode ==
+                      ScoreTrainingModeEnum.MaxRounds,
+                  text: 'max. Rounds',
+                  isLeftBtn: true,
+                  onPressed:
+                      context.read<GameSettingsScoreTraining_P>().switchMode,
+                ),
+                SettingsBtn(
+                  condition: gameSettingsScoreTraining_P.getMode ==
+                      ScoreTrainingModeEnum.MaxPoints,
+                  text: 'max. Points',
+                  isLeftBtn: false,
+                  onPressed:
+                      context.read<GameSettingsScoreTraining_P>().switchMode,
+                )
+              ],
+            ),
           ),
         ),
       ),

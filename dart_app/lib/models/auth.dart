@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 
 import 'package:flutter/material.dart';
 
-class Auth with ChangeNotifier {
+class Auth_P with ChangeNotifier {
   final TextEditingController _usernameController = new TextEditingController();
   final TextEditingController _emailController = new TextEditingController();
   final TextEditingController _passwordController = new TextEditingController();
@@ -10,6 +10,7 @@ class Auth with ChangeNotifier {
   bool _usernameValid = false;
   bool _emailAlreadyExists = false;
   bool _passwordVisible = false;
+  bool _showLoadingSpinner = false;
   AuthMode _authMode = AuthMode.Login;
 
   TextEditingController get getUsernameController => this._usernameController;
@@ -26,6 +27,9 @@ class Auth with ChangeNotifier {
 
   bool get getPasswordVisible => this._passwordVisible;
   set setPasswordVisible(bool value) => this._passwordVisible = value;
+
+  bool get getShowLoadingSpinner => this._showLoadingSpinner;
+  set setShowLoadingSpinner(bool value) => this._showLoadingSpinner = value;
 
   AuthMode get getAuthMode => this._authMode;
   set setAuthMode(AuthMode value) => this._authMode = value;

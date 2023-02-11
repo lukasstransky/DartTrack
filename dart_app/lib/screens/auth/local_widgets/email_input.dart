@@ -17,13 +17,13 @@ class EmailInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Auth auth = context.read<Auth>();
+    final Auth_P auth = context.read<Auth_P>();
 
     return Container(
       width: 80.w,
       child: TextFormField(
         key: Key('emailInput'),
-        controller: context.read<Auth>().getEmailController,
+        controller: context.read<Auth_P>().getEmailController,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         validator: (value) {

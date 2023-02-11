@@ -11,7 +11,6 @@ import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 
 class Statistics extends StatefulWidget {
@@ -41,31 +40,29 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   Widget build(BuildContext context) {
-    return LoaderOverlay(
-      child: Scaffold(
-        appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-        body: Consumer<StatsFirestoreX01_P>(
-          builder: (_, statisticsFirestore, __) =>
-              statisticsFirestore.avgBestWorstStatsLoaded
-                  ? SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          FilterBar(),
-                          OtherStats(),
-                          AvgBestWorstStats(),
-                          if (_showMoreStats) MoreStats(),
-                          showMoreStatsBtn(),
-                          StatsPerGameBtns()
-                        ],
-                      ),
-                    )
-                  : Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
+    return Scaffold(
+      appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
+      body: Consumer<StatsFirestoreX01_P>(
+        builder: (_, statisticsFirestore, __) =>
+            statisticsFirestore.avgBestWorstStatsLoaded
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: [
+                        FilterBar(),
+                        OtherStats(),
+                        AvgBestWorstStats(),
+                        if (_showMoreStats) MoreStats(),
+                        showMoreStatsBtn(),
+                        StatsPerGameBtns()
+                      ],
                     ),
-        ),
+                  )
+                : Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  ),
       ),
     );
   }

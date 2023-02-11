@@ -13,9 +13,7 @@ class StartGameBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 40.w,
-      padding: EdgeInsets.only(
-        top: 20,
-      ),
+      padding: EdgeInsets.only(top: 10),
       child: ElevatedButton(
         onPressed: () {
           if (mode == GameMode.ScoreTraining) {

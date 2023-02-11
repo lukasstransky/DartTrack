@@ -17,7 +17,7 @@ class ForgotPasswordLink extends StatelessWidget {
       child: GestureDetector(
         onTap: () => {
           Navigator.of(context).pushNamed('/forgotPassword'),
-          context.read<Auth>().getEmailController.clear(),
+          context.read<Auth_P>().getEmailController.clear(),
         },
         child: Text(
           'Forgot password?',

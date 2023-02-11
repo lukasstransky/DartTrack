@@ -107,15 +107,15 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
   String getModeStringFinishScreen(bool isOpenGame, GameScoreTraining_P game) {
     if (getMode == ScoreTrainingModeEnum.MaxRounds) {
       if (isOpenGame) {
-        int unplayedRounds = 0;
+        int playedRounds = game.getGameSettings.getMaxRoundsOrPoints;
         for (PlayerGameStatsScoreTraining stats
             in game.getPlayerGameStatistics) {
-          if (stats.getRoundsOrPointsLeft > unplayedRounds) {
-            unplayedRounds = stats.getRoundsOrPointsLeft;
+          if (stats.getRoundsOrPointsLeft < playedRounds) {
+            playedRounds = stats.getRoundsOrPointsLeft;
           }
         }
 
-        return '${unplayedRounds} out of ${getMaxRoundsOrPoints} rounds remain unplayed';
+        return '${game.getGameSettings.getMaxRoundsOrPoints - playedRounds} out of ${getMaxRoundsOrPoints} rounds played';
       }
       return '${getMaxRoundsOrPoints} rounds played';
     }

@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
 
     // lead to some errors in the submit method (login_register_btn.dart)
     if (arguments.isNotEmpty) {
-      final Auth auth = context.read<Auth>();
+      final Auth_P auth = context.read<Auth_P>();
       if (arguments['isLogin']) {
         context.read<AuthService>().createPlayerOfCurrentUser();
       } else if (!arguments['isLogin']) {

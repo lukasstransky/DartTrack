@@ -26,13 +26,13 @@ class MainStatsScoreTraining extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SectionHeadingGameStats(textValue: 'Game'),
-          ScoreStatsScoreTraining(gameScoreTraining_P: gameScoreTraining_P),
           ThreeDartsAvgStatsScoreTraining(
-              gameScoreTraining_P: gameScoreTraining_P),
-          ThrownDartsStatsScoreTraining(
               gameScoreTraining_P: gameScoreTraining_P),
           HighestScoreStatsScoreTraining(
               gameScoreTraining_P: gameScoreTraining_P),
+          ThrownDartsStatsScoreTraining(
+              gameScoreTraining_P: gameScoreTraining_P),
+          ScoreStatsScoreTraining(gameScoreTraining_P: gameScoreTraining_P),
         ],
       ),
     );

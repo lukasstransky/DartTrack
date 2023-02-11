@@ -136,11 +136,9 @@ class _StatsCardState extends State<StatsCard> {
                   if (i == 0 && _playersLength != 1) ListDivider(),
                 ],
                 if (_showAllPlayersOrTeams) ...[
-                  ListDivider(),
                   for (int i = 2; i < _playersLength; i++) ...[
-                    if (widget.game is GameSingleDoubleTraining_P) ...[
-                      _getPlayerEntry(i, isDraw),
-                    ],
+                    ListDivider(),
+                    _getPlayerEntry(i, isDraw),
                   ],
                 ],
                 if (_playersLength > 2)

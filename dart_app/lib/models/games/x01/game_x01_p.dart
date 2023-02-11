@@ -136,7 +136,6 @@ class GameX01_P extends Game_P {
   reset() {
     setCurrentPointsSelected = 'Points';
     setPlayerOrTeamLegStartIndex = 0;
-    setRevertPossible = false;
     setInit = false;
     setReachedSuddenDeath = false;
     setCurrentPointType = PointType.Single;
@@ -146,12 +145,18 @@ class GameX01_P extends Game_P {
     setCurrentPlayerOfTeamsBeforeLegFinish = {};
     setLegSetWithPlayerOrTeamWhoFinishedIt = {};
 
+    setGameId = '';
+    setGameSettings = null;
     setPlayerGameStatistics = [];
     setTeamGameStatistics = [];
     setCurrentPlayerToThrow = null;
     setCurrentTeamToThrow = null;
     setIsOpenGame = false;
     setIsGameFinished = false;
+    setIsFavouriteGame = false;
+    setRevertPossible = false;
+    setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
+    setShowLoadingSpinner = false;
   }
 
   //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
@@ -214,10 +219,6 @@ class GameX01_P extends Game_P {
     }
 
     return _getAmountOfCheckoutPossibilitiesForInputMethodRound(thrownPoints);
-  }
-
-  notify() {
-    notifyListeners();
   }
 
   //for checkout counting dialog -> to show the amount of darts for finising the leg, set or game -> in order to calc average correctly

@@ -33,7 +33,8 @@ class _PlayersListState extends State<PlayersList> {
     return Container(
       width: WIDTH_GAMESETTINGS.w,
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxHeight: 16.h),
+        constraints: BoxConstraints(
+            maxHeight: widget.mode == GameMode.X01 ? 16.h : 20.h),
         child: ListView.builder(
           shrinkWrap: true,
           controller: newScrollControllerPlayers(),
@@ -52,6 +53,7 @@ class _PlayersListState extends State<PlayersList> {
                 settings = context.read<GameSettingsSingleDoubleTraining_P>();
                 break;
               case GameMode.DoubleTraining:
+                settings = context.read<GameSettingsSingleDoubleTraining_P>();
                 break;
               case GameMode.Cricket:
                 break;

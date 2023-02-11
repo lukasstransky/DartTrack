@@ -30,6 +30,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   bool _isFavouriteGame = false;
   bool _revertPossible = false;
   List<String> _currentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
+  bool _showLoadingSpinner = false; // to show loading spinner
 
   Game_P({
     required String name,
@@ -110,6 +111,9 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   List<String> get getCurrentThreeDarts => this._currentThreeDarts;
   set setCurrentThreeDarts(List<String> currentThreeDarts) =>
       this._currentThreeDarts = currentThreeDarts;
+
+  bool get getShowLoadingSpinner => this._showLoadingSpinner;
+  set setShowLoadingSpinner(bool value) => this._showLoadingSpinner = value;
 
   Map<String, dynamic> toMapX01(GameX01_P game, bool openGame) {
     final GameSettingsX01_P settings = getGameSettings as GameSettingsX01_P;
@@ -324,5 +328,9 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm');
 
     return formatter.format(getDateTime);
+  }
+
+  notify() {
+    notifyListeners();
   }
 }

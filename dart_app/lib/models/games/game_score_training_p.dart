@@ -57,6 +57,8 @@ class GameScoreTraining_P extends Game_P {
       }
 
       setPlayerGameStatistics = new List.from(getPlayerGameStatistics.reversed);
+      getGameSettings.setPlayers =
+          new List<Player>.from(getGameSettings.getPlayers.reversed);
       setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
 
       if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
@@ -186,16 +188,36 @@ class GameScoreTraining_P extends Game_P {
         Navigator.of(context).pushNamed('/finishScoreTraining');
       }
     } else {
-      if (stats.getRoundsOrPointsLeft <= 0) {
-        finished = true;
+      bool noPlayerBelowZero = true;
+      for (PlayerGameStatsScoreTraining playerStatsOut
+          in getPlayerGameStatistics) {
+        if (playerStatsOut.getRoundsOrPointsLeft <= 0) {
+          noPlayerBelowZero = false;
+          for (PlayerGameStatsScoreTraining playerStatsIn
+              in getPlayerGameStatistics) {
+            if (playerStatsOut.getThrownDarts != playerStatsIn.getThrownDarts) {
+              finished = false;
+              break;
+            }
+          }
+        }
+        if (!finished) {
+          break;
+        }
+      }
+
+      if (noPlayerBelowZero) {
+        finished = false;
+      }
+
+      if (finished) {
         Navigator.of(context).pushNamed('/finishScoreTraining');
       }
     }
 
     // set next player if needed
-    final List<Player> players = getGameSettings.getPlayers;
-
     if (getPlayerGameStatistics.length > 1) {
+      final List<Player> players = getGameSettings.getPlayers;
       final int indexOfCurrentPlayer = players.indexOf(getCurrentPlayerToThrow);
 
       if (indexOfCurrentPlayer + 1 == players.length) {
@@ -209,6 +231,7 @@ class GameScoreTraining_P extends Game_P {
     setCurrentPointsSelected = 'Points';
     UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(
         context.read<GameScoreTraining_P>().getCurrentThreeDarts);
+
     if (!finished) {
       notify();
     }
@@ -228,6 +251,7 @@ class GameScoreTraining_P extends Game_P {
       notify();
       return;
     }
+
     UtilsPointBtnsThreeDarts.updateCurrentThreeDarts(
         gameScoreTraining_P.getCurrentThreeDarts,
         pointValueWithDoubleOrTripplePrefix);
@@ -263,23 +287,26 @@ class GameScoreTraining_P extends Game_P {
       stats.getAllScoresPerDartAsStringCount[key] = 1;
     }
 
+    // all scores per dart as string
+    stats.getAllScoresPerDartAsString.add(pointValueWithDoubleOrTripplePrefix);
+
     notify();
   }
 
   reset() {
+    setCurrentPointsSelected = 'Points';
+    setCurrentPointType = PointType.Single;
+
+    setGameId = '';
+    setGameSettings = null;
     setPlayerGameStatistics = [];
     setCurrentPlayerToThrow = null;
     setIsOpenGame = false;
     setIsGameFinished = false;
-
-    setCurrentPointsSelected = 'Points';
-    setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
+    setIsFavouriteGame = false;
     setRevertPossible = false;
-    setCurrentPointType = PointType.Single;
-  }
-
-  notify() {
-    notifyListeners();
+    setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
+    setShowLoadingSpinner = false;
   }
 
   int getAmountOfDartsThrown() {
@@ -368,6 +395,7 @@ class GameScoreTraining_P extends Game_P {
     if (settings.getInputMethod == InputMethod.ThreeDarts) {
       if (getAmountOfDartsThrown() == 0) {
         _setLastThrownDarts(stats.getAllRemainingScoresPerDart.last);
+        stats.getAllRemainingScoresPerDart.removeLast();
         getCurrentThreeDarts[2] = 'Dart 3';
       } else {
         getCurrentThreeDarts[getAmountOfDartsThrown() - 1] =
@@ -375,17 +403,24 @@ class GameScoreTraining_P extends Game_P {
       }
 
       // all scores per dart + count
-      final String point = stats.getAllScoresPerDart.last.toString();
+      late String pointKey;
+
+      pointKey = stats.getAllScoresPerDartAsString.last.toString();
+      stats.getAllScoresPerDartAsString.removeLast();
       stats.getAllScoresPerDart.removeLast();
 
+      if (pointKey == '50') {
+        pointKey = 'Bull';
+      }
+
       // precise scores per dart
-      if (stats.getAllScoresPerDartAsStringCount.containsKey(point)) {
-        stats.getAllScoresPerDartAsStringCount[point] =
-            stats.getAllScoresPerDartAsStringCount[point]! - 1;
+      if (stats.getAllScoresPerDartAsStringCount.containsKey(pointKey)) {
+        stats.getAllScoresPerDartAsStringCount[pointKey] =
+            stats.getAllScoresPerDartAsStringCount[pointKey]! - 1;
         // if amount of precise scores is 0 -> remove it from map
-        if (stats.getAllScoresPerDartAsStringCount[point] == 0) {
+        if (stats.getAllScoresPerDartAsStringCount[pointKey] == 0) {
           stats.getAllScoresPerDartAsStringCount
-              .removeWhere((key, value) => key == point);
+              .removeWhere((key, value) => key == pointKey);
         }
       }
     }
@@ -458,6 +493,8 @@ class GameScoreTraining_P extends Game_P {
         stats.setThreeDartModeRoundsCount =
             stats.getThreeDartModeRoundsCount - 1;
       }
+
+      setCurrentPointsSelected = 'Points';
     }
 
     // if 1 score is left, the revert btn is still highlighted without this call

@@ -8,7 +8,6 @@ import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -32,7 +31,8 @@ class _FinishX01State extends State<FinishX01> {
 
     //todo comment out
     //if (context.read<GameSettingsX01>().isCurrentUserInPlayers(context)) {
-    g_gameId = await context.read<FirestoreServiceGames>().postGame(gameX01);
+    g_gameId =
+        await context.read<FirestoreServiceGames>().postGame(gameX01, context);
     await context
         .read<FirestoreServicePlayerStats>()
         .postPlayerGameStatistics(gameX01, g_gameId, context);
@@ -47,17 +47,18 @@ class _FinishX01State extends State<FinishX01> {
 
   @override
   Widget build(BuildContext context) {
-    return LoaderOverlay(
-      child: Scaffold(
-        appBar: CustomAppBarWithHeart(
-          title: 'Finished Game',
-          mode: 'X01',
-          isFinishScreen: true,
-          showHeart: true,
-        ),
-        //todo comment out (for showHeart)
-        // /*context.read<GameSettingsX01>().isCurrentUserInPlayers(context)*/
-        body: Center(
+    return Scaffold(
+      appBar: CustomAppBarWithHeart(
+        title: 'Finished game',
+        mode: 'X01',
+        isFinishScreen: true,
+        showHeart: true,
+      ),
+      //todo comment out (for showHeart)
+      // /*context.read<GameSettingsX01>().isCurrentUserInPlayers(context)*/
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Center(
           child: Container(
             width: 90.w,
             child: Column(

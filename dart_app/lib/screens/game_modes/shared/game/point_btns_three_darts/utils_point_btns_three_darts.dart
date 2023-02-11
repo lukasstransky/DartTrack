@@ -7,6 +7,8 @@ class UtilsPointBtnsThreeDarts {
 
     if (pointValue == 'Bull') {
       points = 50;
+    } else if (pointValue == '25') {
+      points = 25;
     } else {
       points = int.parse(pointValue);
 

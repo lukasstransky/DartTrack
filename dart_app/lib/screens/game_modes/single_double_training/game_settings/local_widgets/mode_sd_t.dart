@@ -12,31 +12,43 @@ class ModeSingleDoubleTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: WIDTH_GAMESETTINGS.w,
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        child: Selector<GameSettingsSingleDoubleTraining_P,
-            Tuple2<ModesSingleDoubleTraining, bool>>(
-          selector: (_, settings) =>
-              new Tuple2(settings.getMode, settings.getIsTargetNumberEnabled),
-          builder: (_, tuple, __) => Row(
-            children: [
-              AscendingBtn(
-                isAscendingMode:
-                    tuple.item1 == ModesSingleDoubleTraining.Ascending,
-                isTargetNumberEnabled: tuple.item2,
-              ),
-              DescendingBtn(
-                isDescendingMode:
-                    tuple.item1 == ModesSingleDoubleTraining.Descending,
-                isTargetNumberEnabled: tuple.item2,
-              ),
-              RandomBtn(
-                isRandomBtn: tuple.item1 == ModesSingleDoubleTraining.Random,
-                isTargetNumberEnabled: tuple.item2,
-              ),
-            ],
+    return Container(
+      padding: EdgeInsets.only(
+        top: context
+                    .watch<GameSettingsSingleDoubleTraining_P>()
+                    .getPlayers
+                    .length ==
+                MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING
+            ? 15
+            : 0,
+        bottom: 5,
+      ),
+      child: Center(
+        child: Container(
+          width: WIDTH_GAMESETTINGS.w,
+          height: WIDGET_HEIGHT_GAMESETTINGS.h,
+          child: Selector<GameSettingsSingleDoubleTraining_P,
+              Tuple2<ModesSingleDoubleTraining, bool>>(
+            selector: (_, settings) =>
+                new Tuple2(settings.getMode, settings.getIsTargetNumberEnabled),
+            builder: (_, tuple, __) => Row(
+              children: [
+                AscendingBtn(
+                  isAscendingMode:
+                      tuple.item1 == ModesSingleDoubleTraining.Ascending,
+                  isTargetNumberEnabled: tuple.item2,
+                ),
+                DescendingBtn(
+                  isDescendingMode:
+                      tuple.item1 == ModesSingleDoubleTraining.Descending,
+                  isTargetNumberEnabled: tuple.item2,
+                ),
+                RandomBtn(
+                  isRandomBtn: tuple.item1 == ModesSingleDoubleTraining.Random,
+                  isTargetNumberEnabled: tuple.item2,
+                ),
+              ],
+            ),
           ),
         ),
       ),

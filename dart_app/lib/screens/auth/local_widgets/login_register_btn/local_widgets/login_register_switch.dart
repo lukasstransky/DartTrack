@@ -10,7 +10,7 @@ class LoginRegisterSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Auth auth = context.read<Auth>();
+    final Auth_P auth = context.read<Auth_P>();
 
     return Padding(
       padding: EdgeInsets.only(top: 1.h),

@@ -31,7 +31,8 @@ const String SUDDEN_DEATH_LEG_DIFFERENCE_INFO =
 const int MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING = 2;
 const int DEFAULT_BOT_AVG_SLIDER_VALUE = 50;
 const int BOT_AVG_SLIDER_VALUE_RANGE = 2;
-const int MAX_PLAYERS = 8;
+const int MAX_PLAYERS_X01 = 8;
+const int MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING = 5;
 const int MAX_TEAMS = 4;
 const int MAX_PLAYERS_PER_TEAM = 4;
 const int MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD = 12;
@@ -348,11 +349,11 @@ enum ScoreTrainingModeEnum { MaxPoints, MaxRounds }
 const int MAX_ROUNDS_SCORE_TRAINING = 100;
 const int MAX_ROUNDS_SCORE_TRAINING_NUMBERS = 3;
 const int MIN_ROUNDS_SCORE_TRAINING = 5;
-const int DEFAULT_ROUNDS_SCORE_TRAINING = 2;
+const int DEFAULT_ROUNDS_SCORE_TRAINING = 20;
 
 const int MAX_POINTS_SCORE_TRAINING = 10000;
 const int MAX_POINTS_SCORE_TRAINING_NUMBERS = 5;
-const int MIN_POINTS_SCORE_TRAINING = 500;
+const int MIN_POINTS_SCORE_TRAINING = 200;
 const int DEFAULT_POINTS_SCORE_TRAINING = 1000;
 
 /************************************************************************************/

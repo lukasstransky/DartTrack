@@ -55,28 +55,27 @@ class ScoringStats extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.only(
-          left: 4.w,
-        ),
+        padding: EdgeInsets.only(left: 4.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Points: ${playerStats.getCurrentScore}',
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.white,
-              ),
-            ),
             Text(
               'Average: ${playerStats.getAverage()}',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.white,
+                fontWeight: FontWeight.bold,
               ),
             ),
             Text(
               'Highest score: ${playerStats.getHighestScore()}',
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+              ),
+            ),
+            Text(
+              'Total points: ${playerStats.getCurrentScore}',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.white,

@@ -68,7 +68,7 @@ class ResetPasswordBtn extends StatelessWidget {
   final GlobalKey<FormState> forgotPasswordFormKey;
 
   resetPassword(String email, BuildContext context) async {
-    final Auth auth = context.read<Auth>();
+    final Auth_P auth = context.read<Auth_P>();
 
     auth.setEmailAlreadyExists = await context
         .read<AuthService>()
@@ -115,7 +115,7 @@ class ResetPasswordBtn extends StatelessWidget {
           backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
         ),
         onPressed: () => resetPassword(
-            context.read<Auth>().getEmailController.text, context),
+            context.read<Auth_P>().getEmailController.text, context),
       ),
     );
   }

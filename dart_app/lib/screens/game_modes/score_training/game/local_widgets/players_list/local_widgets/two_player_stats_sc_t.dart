@@ -105,7 +105,7 @@ class PlayerEntry extends StatelessWidget {
             ),
           ),
           Text(
-            playerStats.getAverage().toString(),
+            playerStats.getAverage(),
             style: TextStyle(
               color: Utils.getTextColorDarken(context),
               fontWeight: FontWeight.bold,
@@ -117,7 +117,7 @@ class PlayerEntry extends StatelessWidget {
               top: PADDING_TOP,
             ),
             child: Text(
-              'Current points',
+              '${isRoundMode ? 'Rounds' : 'Points'} left',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: FONTSIZE.sp,
@@ -125,7 +125,7 @@ class PlayerEntry extends StatelessWidget {
             ),
           ),
           Text(
-            playerStats.getCurrentScore.toString(),
+            playerStats.getRoundsOrPointsValue(isRoundMode),
             style: TextStyle(
               color: Utils.getTextColorDarken(context),
               fontWeight: FontWeight.bold,
@@ -137,7 +137,7 @@ class PlayerEntry extends StatelessWidget {
               top: PADDING_TOP,
             ),
             child: Text(
-              '${isRoundMode ? 'Rounds' : 'Points'} left:',
+              'Highest score',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: FONTSIZE.sp,
@@ -145,7 +145,7 @@ class PlayerEntry extends StatelessWidget {
             ),
           ),
           Text(
-            playerStats.getRoundsOrPointsLeft.toString(),
+            playerStats.getHighestScore().toString(),
             style: TextStyle(
               color: Utils.getTextColorDarken(context),
               fontWeight: FontWeight.bold,

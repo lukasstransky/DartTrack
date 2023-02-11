@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -24,7 +25,7 @@ class FirestoreServiceGames {
   /*****************************          GAMES            ****************************/
   /************************************************************************************/
 
-  Future<String> postGame(Game_P game) async {
+  Future<String> postGame(Game_P game, BuildContext context) async {
     final Game_P gameToSave = Game_P.Firestore(
       name: game.getName,
       isGameFinished: true,
@@ -37,6 +38,11 @@ class FirestoreServiceGames {
       teamGameStatistics: [],
       currentThreeDarts: [],
     );
+
+    // delete open game
+    if (game.getIsOpenGame) {
+      deleteOpenGame(game.getGameId, context);
+    }
 
     Map<String, dynamic> data = {};
     if (game is GameX01_P) {
@@ -128,7 +134,6 @@ class FirestoreServiceGames {
             context.read<FirestoreServicePlayerStats>();
 
         PlayerOrTeamGameStats? playerOrTeamGameStatistics;
-
         for (String playerGameStatsId in element.get('playerGameStatsIds')) {
           playerOrTeamGameStatistics = await firestoreServicePlayerStats
               .getPlayerOrTeamGameStatisticById(playerGameStatsId, mode, false);
@@ -153,7 +158,8 @@ class FirestoreServiceGames {
         statsFirestore.games.add(game);
       });
 
-      if (statsFirestore is StatsFirestore_sdt_sct_P) {
+      if (statsFirestore is StatsFirestoreSingleDoubleTraining_P ||
+          statsFirestore is StatsFirestoreScoreTraining_P) {
         statsFirestore.gamesLoaded = true;
       }
 

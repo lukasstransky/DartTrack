@@ -40,24 +40,34 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBarGame(mode: GameMode.ScoreTraining),
-      body: Column(
-        children: [
-          PlayersListScoreTraining(),
-          Expanded(
-            child: Selector<GameSettingsScoreTraining_P, InputMethod>(
-              selector: (_, gameSettingsScoreTraining_P) =>
-                  gameSettingsScoreTraining_P.getInputMethod,
-              builder: (_, inputMethod, __) => Column(
+      body: Selector<GameScoreTraining_P, bool>(
+        selector: (_, game) => game.getShowLoadingSpinner,
+        builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
+            : Column(
                 children: [
-                  SelectInputMethod(mode: GameMode.ScoreTraining),
-                  inputMethod == InputMethod.Round
-                      ? PointBtnsRoundScoreTraining()
-                      : PointBtnsThreeDarts(mode: GameMode.ScoreTraining),
+                  PlayersListScoreTraining(),
+                  Expanded(
+                    child: Selector<GameSettingsScoreTraining_P, InputMethod>(
+                      selector: (_, gameSettingsScoreTraining_P) =>
+                          gameSettingsScoreTraining_P.getInputMethod,
+                      builder: (_, inputMethod, __) => Column(
+                        children: [
+                          SelectInputMethod(mode: GameMode.ScoreTraining),
+                          inputMethod == InputMethod.Round
+                              ? PointBtnsRoundScoreTraining()
+                              : PointBtnsThreeDarts(
+                                  mode: GameMode.ScoreTraining),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
-            ),
-          ),
-        ],
       ),
     );
   }

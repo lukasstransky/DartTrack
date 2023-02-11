@@ -40,7 +40,7 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
-        title: 'Score training Settings',
+        title: 'Score training settings',
         showInfoIcon: true,
       ),
       body: SafeArea(
@@ -50,12 +50,17 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
               selector: (_, gameSettingsScoreTraining) =>
                   gameSettingsScoreTraining.getPlayers,
               shouldRebuild: (previous, next) => true,
-              builder: (_, players, __) => PlayersList(
-                mode: GameMode.ScoreTraining,
-                players: players,
+              builder: (_, players, __) => Column(
+                children: [
+                  PlayersList(
+                    mode: GameMode.ScoreTraining,
+                    players: players,
+                  ),
+                  if (players.length < MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING)
+                    AddPlayerBtn(mode: GameMode.ScoreTraining),
+                ],
               ),
             ),
-            AddPlayerBtn(mode: GameMode.ScoreTraining),
             ModeScoreTraining(),
             RoundsOrPointsInputScoreTraining(),
             StartGameBtn(mode: GameMode.ScoreTraining),

@@ -347,7 +347,14 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
       return '-';
     }
 
-    return ((getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
+    final String result =
+        ((getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
+    final String decimalPlaces = result.substring(result.length - 2);
+
+    if (decimalPlaces == '00') {
+      return result.substring(0, result.length - 3);
+    }
+    return result;
   }
 
   int getHighestScore() {

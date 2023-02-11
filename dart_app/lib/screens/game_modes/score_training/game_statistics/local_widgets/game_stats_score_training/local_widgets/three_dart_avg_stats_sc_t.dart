@@ -26,7 +26,7 @@ class ThreeDartsAvgStatsScoreTraining extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                '3-Dart Avg.',
+                '3-Dart avg.',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Utils.getTextColorDarken(context),
@@ -40,7 +40,7 @@ class ThreeDartsAvgStatsScoreTraining extends StatelessWidget {
             Container(
               width: WIDTH_DATA_STATISTICS.w,
               child: Text(
-                stats.getAverage().toString(),
+                stats.getAverage(),
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Colors.white,

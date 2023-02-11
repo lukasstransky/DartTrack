@@ -26,7 +26,7 @@ class HighestScoreStatsScoreTraining extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                'Highest Score',
+                'Highest score',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Utils.getTextColorDarken(context),

@@ -9,9 +9,11 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class MostFrequentScores extends StatefulWidget {
-  const MostFrequentScores(
-      {Key? key, required this.mostScoresPerDart, required this.game_p})
-      : super(key: key);
+  const MostFrequentScores({
+    Key? key,
+    required this.mostScoresPerDart,
+    required this.game_p,
+  }) : super(key: key);
 
   final bool mostScoresPerDart;
   final Game_P game_p;
@@ -31,6 +33,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
 
     for (int i = 0; i < players.length; i++) {
       final dynamic stats = players[i];
+
       Utils.sortMapIntInt(stats.getPreciseScores);
       Utils.sortMapStringInt(stats.getAllScoresPerDartAsStringCount);
     }
@@ -41,11 +44,13 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
       if (widget.game_p.getIsGameFinished) {
         return widget.game_p.getPlayerGameStatistics;
       }
+
       return context.read<GameX01_P>().getPlayerGameStatistics;
     } else if (widget.game_p is GameScoreTraining_P) {
       if (widget.game_p.getIsGameFinished) {
         return widget.game_p.getPlayerGameStatistics;
       }
+
       return context.read<GameScoreTraining_P>().getPlayerGameStatistics;
     }
   }
@@ -74,10 +79,12 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
 
     for (int i = 0; i < playerOrTeamStats.length; i++) {
       final dynamic stats = playerOrTeamStats[i];
+
       if (stats.getAllScoresPerDartAsStringCount.isNotEmpty) {
         return true;
       }
     }
+
     return false;
   }
 
@@ -90,145 +97,24 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          width: 100.w,
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
           transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
           child: Text(
-            widget.mostScoresPerDart
-                ? 'Most Frequent Scores per Dart'
-                : 'Most Frequent Scores',
+            'Most frequent scores ${widget.mostScoresPerDart ? 'per dart' : ''}',
             style: TextStyle(
               fontSize: FONTSIZE_HEADING_STATISTICS.sp,
               color: Colors.white,
             ),
           ),
         ),
-        if (widget.mostScoresPerDart &&
-            atLeastOneRoundPlayedWithThreeDartsMode) ...[
-          Padding(
-            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
-            child: Row(
-              children: [
-                Container(
-                  width: 40.w,
-                  padding: EdgeInsets.only(top: 5),
-                  alignment: Alignment.centerLeft,
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      '3-dart-mode rounds',
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Utils.getTextColorDarken(context),
-                      ),
-                    ),
-                  ),
-                ),
-                for (dynamic stats in Utils.getPlayerOrTeamStatsDynamic(
-                    widget.game_p, context))
-                  Container(
-                    width: 30.w,
-                    padding: EdgeInsets.only(top: 5),
-                    alignment: Alignment.centerLeft,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        '${stats.getThreeDartModeRoundsCount}/${stats.getTotalRoundsCount}',
-                        style: TextStyle(
-                          fontSize: 10.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ],
-        Padding(
-          padding: EdgeInsets.only(
-              top: atLeastOneRoundPlayedWithThreeDartsMode &&
-                      widget.mostScoresPerDart
-                  ? 0
-                  : PADDING_TOP_STATISTICS),
-          child: Column(
-            children: [
-              for (int i = 0; i < (_showFirst10 ? 10 : 5); i++)
-                Row(
-                  children: [
-                    Container(
-                      width: 20.w,
-                      padding: EdgeInsets.only(top: 5),
-                      alignment: Alignment.centerLeft,
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          '${i + 1}.',
-                          style: TextStyle(
-                            fontSize: FONTSIZE_STATISTICS.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Utils.getTextColorDarken(context),
-                          ),
-                        ),
-                      ),
-                    ),
-                    for (dynamic stats in Utils.getPlayerOrTeamStatsDynamic(
-                        widget.game_p, context))
-                      Container(
-                        width: 30.w,
-                        padding: EdgeInsets.only(top: 5),
-                        child: (widget.mostScoresPerDart
-                                    ? stats.getAllScoresPerDartAsStringCount
-                                        .keys.length
-                                    : stats.getPreciseScores.keys.length) >
-                                i
-                            ? Align(
-                                alignment: Alignment.centerRight,
-                                child: RichText(
-                                  text: TextSpan(
-                                    text: (widget.mostScoresPerDart
-                                        ? Utils.sortMapStringIntByKey(stats
-                                                .getAllScoresPerDartAsStringCount)
-                                            .keys
-                                            .elementAt(i)
-                                            .toString()
-                                        : Utils.sortMapIntIntByKey(
-                                                stats.getPreciseScores)
-                                            .keys
-                                            .elementAt(i)
-                                            .toString()),
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: FONTSIZE_STATISTICS.sp,
-                                    ),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                        text:
-                                            ' (${(widget.mostScoresPerDart ? Utils.sortMapStringIntByKey(stats.getAllScoresPerDartAsStringCount).values.elementAt(i).toString() : Utils.sortMapIntIntByKey(stats.getPreciseScores).values.elementAt(i).toString())}x)',
-                                        style: TextStyle(
-                                          color: Colors.white70,
-                                          fontSize: 11.sp,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                alignment: Alignment.centerRight,
-                                padding: EdgeInsets.only(right: 7.w),
-                                child: Text(
-                                  '-',
-                                  style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp),
-                                ),
-                              ),
-                      ),
-                  ],
-                )
-            ],
-          ),
+        if (widget.mostScoresPerDart && atLeastOneRoundPlayedWithThreeDartsMode)
+          AmountOfThreeDartModeRounds(game_p: widget.game_p),
+        MostFrequentScoresList(
+          mostScoresPerDart: widget.mostScoresPerDart,
+          game_p: widget.game_p,
+          atLeastOneRoundPlayedWithThreeDartsMode:
+              atLeastOneRoundPlayedWithThreeDartsMode,
+          showFirst10: _showFirst10,
         ),
         if (_moreThanFiveScores())
           Container(
@@ -246,7 +132,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                   color: Theme.of(context).colorScheme.secondary,
                 ),
                 label: Text(
-                  _showFirst10 ? 'Show Less' : 'Show More',
+                  'Show ${_showFirst10 ? 'less' : 'more'}',
                   style: TextStyle(
                     color: Colors.white,
                   ),
@@ -255,6 +141,170 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
             ),
           ),
       ],
+    );
+  }
+}
+
+class AmountOfThreeDartModeRounds extends StatelessWidget {
+  const AmountOfThreeDartModeRounds({
+    Key? key,
+    required this.game_p,
+  }) : super(key: key);
+
+  final Game_P game_p;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+      child: Row(
+        children: [
+          Container(
+            width: 40.w,
+            padding: EdgeInsets.only(top: 5),
+            alignment: Alignment.centerLeft,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                '3-dart-mode rounds:',
+                style: TextStyle(
+                  fontSize: 10.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Utils.getTextColorDarken(context),
+                ),
+              ),
+            ),
+          ),
+          for (dynamic stats
+              in Utils.getPlayerOrTeamStatsDynamic(game_p, context))
+            Container(
+              width: 30.w,
+              padding: EdgeInsets.only(top: 5),
+              alignment: Alignment.centerLeft,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  '${stats.getThreeDartModeRoundsCount}/${stats.getTotalRoundsCount}',
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class MostFrequentScoresList extends StatelessWidget {
+  const MostFrequentScoresList({
+    Key? key,
+    required this.mostScoresPerDart,
+    required this.game_p,
+    required this.atLeastOneRoundPlayedWithThreeDartsMode,
+    required this.showFirst10,
+  }) : super(key: key);
+
+  final bool mostScoresPerDart;
+  final Game_P game_p;
+  final bool atLeastOneRoundPlayedWithThreeDartsMode;
+  final bool showFirst10;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+          top: atLeastOneRoundPlayedWithThreeDartsMode && mostScoresPerDart
+              ? 0
+              : PADDING_TOP_STATISTICS),
+      child: Column(
+        children: [
+          for (int i = 0; i < (showFirst10 ? 10 : 5); i++)
+            Row(
+              children: [
+                Container(
+                  width: WIDTH_HEADINGS_STATISTICS.w,
+                  padding: EdgeInsets.only(top: 5),
+                  alignment: Alignment.centerLeft,
+                  child: Container(
+                    width: 12.w,
+                    alignment: Alignment.centerRight,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        '${i + 1}.',
+                        style: TextStyle(
+                          fontSize: FONTSIZE_STATISTICS.sp,
+                          fontWeight: FontWeight.bold,
+                          color: Utils.getTextColorDarken(context),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                for (dynamic stats
+                    in Utils.getPlayerOrTeamStatsDynamic(game_p, context))
+                  Container(
+                    width: WIDTH_DATA_STATISTICS.w,
+                    padding: EdgeInsets.only(top: 5),
+                    child: (mostScoresPerDart
+                                ? stats.getAllScoresPerDartAsStringCount.keys
+                                    .length
+                                : stats.getPreciseScores.keys.length) >
+                            i
+                        ? Row(
+                            children: [
+                              Container(
+                                width: 9.w,
+                                child: Text(
+                                  mostScoresPerDart
+                                      ? Utils.sortMapStringIntByKey(stats
+                                              .getAllScoresPerDartAsStringCount)
+                                          .keys
+                                          .elementAt(i)
+                                          .toString()
+                                      : Utils.sortMapIntIntByKey(
+                                              stats.getPreciseScores)
+                                          .keys
+                                          .elementAt(i)
+                                          .toString(),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: FONTSIZE_STATISTICS.sp,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                '(${(mostScoresPerDart ? Utils.sortMapStringIntByKey(stats.getAllScoresPerDartAsStringCount).values.elementAt(i).toString() : Utils.sortMapIntIntByKey(stats.getPreciseScores).values.elementAt(i).toString())}x)',
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 11.sp,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              Container(
+                                width: 9.w,
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '-',
+                                  style: TextStyle(
+                                    fontSize: FONTSIZE_STATISTICS.sp,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                  ),
+              ],
+            ),
+        ],
+      ),
     );
   }
 }

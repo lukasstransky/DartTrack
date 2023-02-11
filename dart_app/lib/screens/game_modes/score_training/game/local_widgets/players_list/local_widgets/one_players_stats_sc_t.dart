@@ -52,35 +52,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 ),
               ),
               Text(
-                playerStats.getAverage().toString(),
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: FONTSIZE.sp,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(
-            top: PADDING_TOP,
-          ),
-          width: WIDTH.w,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                isRoundMode ? 'Highest score:' : 'Total rounds:',
-                style: TextStyle(
-                  color: Utils.getTextColorDarken(context),
-                  fontWeight: FontWeight.bold,
-                  fontSize: FONTSIZE.sp,
-                ),
-              ),
-              Text(
-                isRoundMode
-                    ? playerStats.getHighestScore().toString()
-                    : (playerStats.getThrownDarts / 3).round().toString(),
+                playerStats.getAverage(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: FONTSIZE.sp,
@@ -106,7 +78,33 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 ),
               ),
               Text(
-                playerStats.getRoundsOrPointsLeft.toString(),
+                playerStats.getRoundsOrPointsValue(isRoundMode),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: FONTSIZE.sp,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(
+            top: PADDING_TOP,
+          ),
+          width: WIDTH.w,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Highest score:',
+                style: TextStyle(
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                  fontSize: FONTSIZE.sp,
+                ),
+              ),
+              Text(
+                playerStats.getHighestScore().toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: FONTSIZE.sp,

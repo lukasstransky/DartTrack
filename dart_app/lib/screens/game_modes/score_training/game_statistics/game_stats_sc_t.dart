@@ -113,7 +113,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                     child: Row(
                       children: [
                         const Text(
-                          'Show Odd Rounded Scores',
+                          'Show odd rounded scores',
                           style: TextStyle(
                             color: Colors.white,
                           ),

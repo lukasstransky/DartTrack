@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/stats_firestore_score_training_p.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -226,9 +227,10 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
     if (_mode == 'X01') {
       statsFirestore = context.watch<StatsFirestoreX01_P>();
-    } else if (['Single training', 'Double training', 'Score training']
-        .contains(_mode)) {
-      statsFirestore = context.watch<StatsFirestore_sdt_sct_P>();
+    } else if (_mode == 'Single training' || _mode == 'Double training') {
+      statsFirestore = context.watch<StatsFirestoreSingleDoubleTraining_P>();
+    } else if (_mode == 'Score training') {
+      statsFirestore = context.watch<StatsFirestoreScoreTraining_P>();
     }
 
     List<Game_P> games = statsFirestore.games;

@@ -45,9 +45,7 @@ class AddPlayerBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 10.w,
-      padding: EdgeInsets.only(
-        bottom: 5,
-      ),
+      padding: EdgeInsets.only(bottom: 5),
       child: Theme(
         data: Theme.of(context).copyWith(
             highlightColor: Colors.transparent,

@@ -397,27 +397,17 @@ class FirestoreServicePlayerStats {
             : _getFirestorePlayerStatsPath());
     PlayerOrTeamGameStats? result;
 
-    await collectionReference
-        .doc(playerOrTeamGameStatsId)
-        .get()
-        .then((value) => {
-              if (mode == 'X01')
-                {
-                  result = PlayerOrTeamGameStats.fromMapX01(value.data()),
-                }
-              else if (mode == 'Cricket')
-                {}
-              else if (mode == 'Single training' || mode == 'Double training')
-                {
-                  result = PlayerOrTeamGameStats.fromMapSingleDoubleTraining(
-                      value.data()),
-                }
-              else if (mode == 'Score training')
-                {
-                  result =
-                      PlayerOrTeamGameStats.fromMapScoreTraining(value.data()),
-                }
-            });
+    await collectionReference.doc(playerOrTeamGameStatsId).get().then((value) {
+      if (mode == 'X01') {
+        result = PlayerOrTeamGameStats.fromMapX01(value.data());
+      } else if (mode == 'Cricket') {
+      } else if (mode == 'Single training' || mode == 'Double training') {
+        result =
+            PlayerOrTeamGameStats.fromMapSingleDoubleTraining(value.data());
+      } else if (mode == 'Score training') {
+        result = PlayerOrTeamGameStats.fromMapScoreTraining(value.data());
+      }
+    });
 
     return result;
   }
