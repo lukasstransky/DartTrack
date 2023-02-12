@@ -40,6 +40,7 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
     required int missedHits,
     required SplayTreeMap<int, String> fieldHits,
     required List<String> allHits,
+    required int highestPoints,
   }) : super(gameId: gameId, dateTime: dateTime, mode: mode) {
     this.setPlayer = player;
     this.setTotalPoints = totalPoints;
@@ -50,6 +51,7 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
     this.setMissedHits = missedHits;
     this.setFieldHits = fieldHits;
     this.setAllHits = allHits;
+    this.setHighestPoints = highestPoints;
   }
 
   int get getTotalPoints => this._totalPoints;
@@ -120,6 +122,10 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
 
   int getPointsForSpecificField(int field, bool isDoubleMode) {
     int result = 0;
+    if (field <= 0 || field >= 21) {
+      return result;
+    }
+
     getFieldHits[field]!.split('').forEach((hit) {
       if (hit == 'S') {
         result += 1;

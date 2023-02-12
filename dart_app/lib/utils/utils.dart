@@ -439,7 +439,9 @@ class Utils {
     int result = 0;
 
     for (String dart in currentThreeDarts) {
-      result += getValueOfSpecificDart(dart);
+      if (!dart.contains('Dart')) {
+        result += getValueOfSpecificDart(dart);
+      }
     }
 
     return result.toString();

@@ -216,6 +216,7 @@ class PlayerOrTeamGameStats {
       'trippleHits': stats.getTrippleHits,
       'missedHits': stats.getMissedHits,
       'fieldHits': convertFieldHitsMapForUploading(stats.getFieldHits),
+      'highestPoints': stats.getHighestPoints,
     };
 
     if (openGame) {
@@ -413,6 +414,7 @@ class PlayerOrTeamGameStats {
       missedHits: map['missedHits'],
       fieldHits: fieldHits,
       allHits: map['allHits'] != null ? map['allHits'].cast<String>() : [],
+      highestPoints: map['highestPoints'],
     );
   }
 

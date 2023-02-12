@@ -115,6 +115,7 @@ class _OpenGamesState extends State<OpenGames> {
       game.setMode = openGame.getName == 'Single training'
           ? GameMode.SingleTraining
           : GameMode.DoubleTraining;
+      game.setRandomModeFinished = false;
     }
   }
 
@@ -137,11 +138,33 @@ class _OpenGamesState extends State<OpenGames> {
         '/gameSingleDoubleTraining',
         arguments: {
           'openGame': true,
-          'mode': game_p.getName == 'Single training'
-              ? GameMode.SingleTraining
-              : GameMode.DoubleTraining,
+          'mode': game_p.getName,
         },
       );
+    }
+  }
+
+  _getCard(Game_P game) {
+    if (game.getName == 'X01') {
+      return StatsCardX01(
+        isFinishScreen: false,
+        gameX01: GameX01_P.createGame(game),
+        isOpenGame: true,
+      );
+    } else {
+      if (game.getName == 'Score training') {
+        return StatsCard(
+          isFinishScreen: false,
+          game: GameScoreTraining_P.createGame(game),
+          isOpenGame: true,
+        );
+      } else {
+        return StatsCard(
+          isFinishScreen: false,
+          game: GameSingleDoubleTraining_P.createGame(game),
+          isOpenGame: true,
+        );
+      }
     }
   }
 
@@ -150,106 +173,88 @@ class _OpenGamesState extends State<OpenGames> {
     return Scaffold(
       appBar: CustomAppBar(title: 'Open games'),
       body: Consumer<OpenGamesFirestore>(
-        builder: (_, openGamesFirestore, __) => openGamesFirestore
-                    .openGames.length !=
-                0
-            ? SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Center(
-                  child: Container(
-                    width: 90.w,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 10,
-                            left: 5,
-                            bottom: 10,
-                          ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Swipe left for actions (play & delete)',
-                              style: TextStyle(
-                                color: Colors.white,
+        builder: (_, openGamesFirestore, __) =>
+            openGamesFirestore.openGames.length != 0
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: Center(
+                      child: Container(
+                        width: 90.w,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: 10,
+                                left: 5,
+                                bottom: 10,
                               ),
-                            ),
-                          ),
-                        ),
-                        for (Game_P game_p in openGamesFirestore.openGames) ...[
-                          Column(
-                            children: [
-                              Slidable(
-                                key: ValueKey(game_p.getGameId),
-                                child: game_p.getName == 'X01'
-                                    ? StatsCardX01(
-                                        isFinishScreen: false,
-                                        gameX01: GameX01_P.createGame(game_p),
-                                        isOpenGame: true,
-                                      )
-                                    : game_p.getName == 'Score training'
-                                        ? StatsCard(
-                                            isFinishScreen: false,
-                                            game:
-                                                GameScoreTraining_P.createGame(
-                                                    game_p),
-                                            isOpenGame: true,
-                                          )
-                                        : StatsCard(
-                                            isFinishScreen: false,
-                                            game: GameSingleDoubleTraining_P
-                                                .createGame(game_p),
-                                            isOpenGame: true,
-                                          ),
-                                startActionPane: ActionPane(
-                                  dismissible:
-                                      DismissiblePane(onDismissed: () {}),
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) =>
-                                          _continueGame(game_p),
-                                      backgroundColor: Colors.green,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.arrow_forward,
-                                      label: 'Play',
-                                    ),
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        context
-                                            .read<FirestoreServiceGames>()
-                                            .deleteOpenGame(
-                                                game_p.getGameId, context);
-                                      },
-                                      backgroundColor: Color(0xFFFE4A49),
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                      label: 'Delete',
-                                    ),
-                                  ],
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'Swipe left for actions (play & delete)',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
-                              Container(
-                                height: 2.h,
-                                color: Theme.of(context).colorScheme.primary,
+                            ),
+                            for (Game_P game_p
+                                in openGamesFirestore.openGames) ...[
+                              Column(
+                                children: [
+                                  Slidable(
+                                    key: UniqueKey(),
+                                    child: _getCard(game_p),
+                                    startActionPane: ActionPane(
+                                      dismissible:
+                                          DismissiblePane(onDismissed: () {}),
+                                      motion: const ScrollMotion(),
+                                      children: [
+                                        SlidableAction(
+                                          onPressed: (context) =>
+                                              _continueGame(game_p),
+                                          backgroundColor: Colors.green,
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.arrow_forward,
+                                          label: 'Play',
+                                        ),
+                                        SlidableAction(
+                                          onPressed: (context) {
+                                            context
+                                                .read<FirestoreServiceGames>()
+                                                .deleteOpenGame(
+                                                    game_p.getGameId, context);
+                                          },
+                                          backgroundColor: Color(0xFFFE4A49),
+                                          foregroundColor: Colors.white,
+                                          icon: Icons.delete,
+                                          label: 'Delete',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    height: 2.h,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ]
-                      ],
+                            ]
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      'Currently there are no open games!',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12.sp,
+                      ),
                     ),
                   ),
-                ),
-              )
-            : Center(
-                child: Text(
-                  'Currently there are no open games!',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.sp,
-                  ),
-                ),
-              ),
       ),
     );
   }

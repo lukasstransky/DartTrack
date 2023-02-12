@@ -64,7 +64,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                         child: Row(
                           children: [
                             Container(
-                              width: 10.w,
+                              width: 7.w,
                               child: Text(
                                 '${stats.getSingleHits}',
                                 style: TextStyle(
@@ -93,7 +93,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            width: 10.w,
+                            width: 7.w,
                             child: Text(
                               '${stats.getDoubleHits}',
                               style: TextStyle(
@@ -123,7 +123,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                         child: Row(
                           children: [
                             Container(
-                              width: 10.w,
+                              width: 7.w,
                               child: Text(
                                 '${stats.getTrippleHits}',
                                 style: TextStyle(
@@ -152,7 +152,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            width: 10.w,
+                            width: 7.w,
                             child: Text(
                               '${stats.getMissedHits}',
                               style: TextStyle(

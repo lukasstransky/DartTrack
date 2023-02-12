@@ -43,10 +43,9 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
               validator: (value) {
                 if (value!.isEmpty) {
                   return ('Please enter a value!');
-                } else if (int.parse(value) < MIN_ROUNDS_SINGLE_TRAINING) {
-                  return 'Minimum rounds are ${MIN_ROUNDS_SINGLE_TRAINING}!';
-                } else if (int.parse(value) > MAX_ROUNDS_SINGLE_TRAINING) {
-                  return ('Maximum rounds are ${MAX_ROUNDS_SINGLE_TRAINING}!');
+                } else if (int.parse(value) < MIN_ROUNDS_SINGLE_TRAINING ||
+                    int.parse(value) > MAX_ROUNDS_SINGLE_TRAINING) {
+                  return 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING} - ${MAX_ROUNDS_SINGLE_TRAINING}';
                 }
                 return null;
               },

@@ -22,7 +22,10 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
           result += 1;
           break;
         case 'D':
-          result += 2;
+          result += game.getName == 'Double training' ||
+                  game.getMode == GameMode.DoubleTraining
+              ? 1
+              : 2;
           break;
         case 'T':
           result += 3;
@@ -37,7 +40,9 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
     if (stats.getPointsForSpecificField(
             field, game.getMode == GameMode.DoubleTraining) ==
         stats.getHighestPoints) {
-      return true;
+      if (stats.getHighestPoints != 0) {
+        return true;
+      }
     }
     return false;
   }
@@ -50,7 +55,7 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
     final bool isTargetNumberEnabled =
         game.getGameSettings.getIsTargetNumberEnabled;
 
-    int i = isAscendingOrRandomMode ? 1 : 20;
+    int i = (isAscendingOrRandomMode || isTargetNumberEnabled) ? 1 : 20;
 
     return Container(
       padding: const EdgeInsets.only(
@@ -91,10 +96,12 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                 for (i;
                     isTargetNumberEnabled
                         ? i < game.getGameSettings.getAmountOfRounds + 1
-                        : isAscendingOrRandomMode
+                        : (isAscendingOrRandomMode || isTargetNumberEnabled)
                             ? i < 21
                             : i > 0;
-                    isAscendingOrRandomMode ? i++ : i--)
+                    (isAscendingOrRandomMode || isTargetNumberEnabled)
+                        ? i++
+                        : i--)
                   Row(
                     children: [
                       HeadingTextGameStats(
@@ -105,20 +112,49 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
                           width: WIDTH_DATA_STATISTICS.w,
-                          alignment: Alignment.centerLeft,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              '${stats.getFieldHits[i]!} ${stats.getFieldHits[i]! != '-' ? '(${_getScoredPointsForField(stats.getFieldHits[i]!)})' : ''}',
-                              style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
-                                color: _shouldHighlight(stats, i)
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Colors.white,
+                          child: Row(
+                            children: [
+                              Container(
+                                alignment: stats.getFieldHits[i]! != '-'
+                                    ? Alignment.centerLeft
+                                    : Alignment.center,
+                                width: 10.w,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    '${stats.getFieldHits[i]!} ',
+                                    style: TextStyle(
+                                      fontSize: FONTSIZE_STATISTICS.sp,
+                                      color: _shouldHighlight(stats, i)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+                              Container(
+                                alignment: Alignment.centerLeft,
+                                width: 20.w,
+                                child: FittedBox(
+                                  fit: BoxFit.scaleDown,
+                                  child: Text(
+                                    ' ${stats.getFieldHits[i]! != '-' ? '(${_getScoredPointsForField(stats.getFieldHits[i]!)})' : ''}',
+                                    style: TextStyle(
+                                      fontSize: FONTSIZE_STATISTICS.sp,
+                                      color: _shouldHighlight(stats, i)
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .secondary
+                                          : Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
+                        )
                     ],
                   ),
               ],

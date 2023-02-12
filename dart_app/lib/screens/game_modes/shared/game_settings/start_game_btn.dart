@@ -30,7 +30,9 @@ class StartGameBtn extends StatelessWidget {
               '/gameSingleDoubleTraining',
               arguments: {
                 'openGame': false,
-                'mode': mode,
+                'mode': mode == GameMode.SingleTraining
+                    ? 'Single training'
+                    : 'Double training',
               },
             );
           }

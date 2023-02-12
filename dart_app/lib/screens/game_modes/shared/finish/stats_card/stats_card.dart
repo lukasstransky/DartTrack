@@ -42,10 +42,16 @@ class _StatsCardState extends State<StatsCard> {
     super.initState();
   }
 
+  _multipleWinners(int i) {
+    return (_playerStats[i] as PlayerGameStatsSingleDoubleTraining)
+            .getTotalPoints ==
+        (_playerStats[0] as PlayerGameStatsSingleDoubleTraining).getTotalPoints;
+  }
+
   _getPlayerEntry(int i, bool isDraw) {
     if (widget.game is GameSingleDoubleTraining_P) {
       return PlayerEntryFinishSingleDoubleTraining(
-        i: i,
+        i: _multipleWinners(i) ? 0 : i,
         game: widget.game as GameSingleDoubleTraining_P,
         playerStats: _playerStats[i] as PlayerGameStatsSingleDoubleTraining,
         isOpenGame: widget.isOpenGame,

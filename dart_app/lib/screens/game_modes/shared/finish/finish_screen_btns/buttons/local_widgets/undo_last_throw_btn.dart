@@ -69,7 +69,7 @@ class UndoLastThrowBtn extends StatelessWidget {
         '/gameSingleDoubleTraining',
         arguments: {
           'openGame': false,
-          'mode': game.getMode,
+          'mode': game.getName,
         },
       );
 
@@ -79,7 +79,12 @@ class UndoLastThrowBtn extends StatelessWidget {
         false,
       );
 
-      game.revert(context);
+      final isRandomMode =
+          game.getGameSettings.getMode == ModesSingleDoubleTraining.Random;
+      if (isRandomMode) {
+        game.setRandomModeFinished = false;
+      }
+      game.revert(context, isRandomMode);
       game.setShowLoadingSpinner = false;
       game.notify();
     }

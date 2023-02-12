@@ -31,7 +31,7 @@ class RevertBtn extends StatelessWidget {
     } else if (game_p is GameScoreTraining_P) {
       (game_p as GameScoreTraining_P).revert(context);
     } else if (game_p is GameSingleDoubleTraining_P) {
-      (game_p as GameSingleDoubleTraining_P).revert(context);
+      (game_p as GameSingleDoubleTraining_P).revert(context, false);
     }
   }
 

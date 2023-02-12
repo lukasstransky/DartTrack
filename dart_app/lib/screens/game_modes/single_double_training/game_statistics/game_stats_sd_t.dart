@@ -39,19 +39,22 @@ class _GameStatsSingleDoubleTrainingState
 
     // single or double training
     result +=
-        '${_game!.getMode == GameMode.SingleTraining ? 'Single' : 'Double'} training - ';
+        '${_game!.getMode == GameMode.SingleTraining ? 'Single' : 'Double'} training';
 
-    //asc, desc or random
-    switch (_game!.getGameSettings.getMode) {
-      case ModesSingleDoubleTraining.Ascending:
-        result += 'ascending';
-        break;
-      case ModesSingleDoubleTraining.Descending:
-        result += 'descending';
-        break;
-      case ModesSingleDoubleTraining.Random:
-        result += 'random';
-        break;
+    if (!_game!.getGameSettings.getIsTargetNumberEnabled) {
+      result += ' - ';
+      //asc, desc or random
+      switch (_game!.getGameSettings.getMode) {
+        case ModesSingleDoubleTraining.Ascending:
+          result += 'ascending';
+          break;
+        case ModesSingleDoubleTraining.Descending:
+          result += 'descending';
+          break;
+        case ModesSingleDoubleTraining.Random:
+          result += 'random';
+          break;
+      }
     }
 
     return result;
@@ -82,9 +85,23 @@ class _GameStatsSingleDoubleTrainingState
                 ),
               ),
             ),
+            if (_game!.getGameSettings.getIsTargetNumberEnabled)
+              Container(
+                padding: EdgeInsets.only(top: 5),
+                child: Text(
+                  'Target number: ${_game!.getGameSettings.getTargetNumber} (${_game!.getGameSettings.getAmountOfRounds} rounds)',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
             Container(
               alignment: Alignment.center,
-              padding: EdgeInsets.only(top: 5),
+              padding: EdgeInsets.only(
+                top: 5,
+                bottom: 10,
+              ),
               child: Text(
                 _game!.getFormattedDateTime(),
                 style: TextStyle(

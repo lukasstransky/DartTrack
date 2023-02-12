@@ -41,7 +41,7 @@ class NewGameBtn extends StatelessWidget {
         '/gameSingleDoubleTraining',
         arguments: {
           'openGame': false,
-          'mode': game.getMode,
+          'mode': game.getName,
         },
       );
     }

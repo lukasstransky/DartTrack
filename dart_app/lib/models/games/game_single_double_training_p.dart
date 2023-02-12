@@ -65,6 +65,13 @@ class GameSingleDoubleTraining_P extends Game_P {
       newGame.setMode = GameMode.DoubleTraining;
     }
 
+    // needed for stats card
+    if (game.getIsOpenGame) {
+      newGame.setCurrentFieldToHit =
+          (game as GameSingleDoubleTraining_P).getCurrentFieldToHit;
+      newGame.setAmountOfRoundsRemaining = game.getAmountOfRoundsRemaining;
+    }
+
     return newGame;
   }
 
@@ -158,11 +165,12 @@ class GameSingleDoubleTraining_P extends Game_P {
   }
 
   reset() {
-    setAmountOfRoundsRemaining = -1;
     setCurrentFieldToHit = 0;
-    setAllFieldsToHit = [];
-    setMode = GameMode.SingleTraining;
     setRandomFieldsGenerated = [];
+    setMode = GameMode.SingleTraining;
+    setAmountOfRoundsRemaining = -1;
+    setAllFieldsToHit = [];
+    setRandomModeFinished = false;
     setCanBePressed = true;
 
     setGameId = '';
@@ -417,7 +425,7 @@ class GameSingleDoubleTraining_P extends Game_P {
     getCurrentThreeDarts[1] = hits[1];
   }
 
-  revert(BuildContext context) {
+  revert(BuildContext context, bool isRevertedFromFinishScreenWithRandomMode) {
     if (!_isRevertPossible()) {
       return;
     }
@@ -455,6 +463,9 @@ class GameSingleDoubleTraining_P extends Game_P {
     // revert thrown darts
     stats.setThrownDarts = stats.getThrownDarts - 1;
 
+    // reset highest points if neccessary
+    _resetHighestPoints(stats);
+
     // revert current three darts
     if (getAmountOfDartsThrown() == 0) {
       if (!getGameSettings.getIsTargetNumberEnabled) {
@@ -480,10 +491,20 @@ class GameSingleDoubleTraining_P extends Game_P {
           'Dart ' + getAmountOfDartsThrown().toString();
     }
 
-    // revert field hits
+    // revert random fields generated
+    if (getGameSettings.getMode == ModesSingleDoubleTraining.Random &&
+        getAmountOfDartsThrown() == 2 &&
+        !isRevertedFromFinishScreenWithRandomMode &&
+        getPlayerGameStatistics.indexOf(stats) ==
+            getPlayerGameStatistics.length - 1) {
+      getRandomFieldsGenerated.removeLast();
+    }
+
     final int key = getGameSettings.getIsTargetNumberEnabled
         ? (getGameSettings.getAmountOfRounds - getAmountOfRoundsRemaining + 1)
         : getCurrentFieldToHit;
+
+    // revert field hits
     if (stats.getFieldHits.containsKey(key)) {
       final String? value = stats.getFieldHits[key];
 
@@ -495,9 +516,89 @@ class GameSingleDoubleTraining_P extends Game_P {
       }
     }
 
+    _recalculateHighestPoints(stats);
+
     // if 1 score is left, the revert btn is still highlighted without this call
     _isRevertPossible();
 
     notify();
+  }
+
+  _resetHighestPoints(PlayerGameStatsSingleDoubleTraining stats) {
+    late int key;
+    if (getGameSettings.getIsTargetNumberEnabled) {
+      key = getGameSettings.getAmountOfRounds - getAmountOfRoundsRemaining;
+      if (key == 0) {
+        key = 1;
+      }
+    } else {
+      if (getGameSettings.getMode == ModesSingleDoubleTraining.Ascending) {
+        key = getCurrentFieldToHit - (getAmountOfDartsThrown() == 0 ? 1 : 0);
+      } else if (getGameSettings.getMode ==
+          ModesSingleDoubleTraining.Descending) {
+        key = getCurrentFieldToHit + (getAmountOfDartsThrown() == 0 ? 1 : 0);
+      } else {
+        // random
+        if (getRandomFieldsGenerated.length == 1) {
+          key = getRandomFieldsGenerated.elementAt(0);
+        } else if (getRandomFieldsGenerated.length == 20) {
+          key = getRandomFieldsGenerated
+              .elementAt(getRandomFieldsGenerated.length - 1);
+        } else {
+          key = getRandomFieldsGenerated
+              .elementAt(getRandomFieldsGenerated.length - 2);
+        }
+      }
+    }
+
+    if (stats.getHighestPoints ==
+        stats.getPointsForSpecificField(
+            key, getMode == GameMode.DoubleTraining)) {
+      stats.setHighestPoints = -1;
+    }
+  }
+
+  _recalculateHighestPoints(PlayerGameStatsSingleDoubleTraining stats) {
+    if (getGameSettings.getMode == ModesSingleDoubleTraining.Random) {
+      for (int randomField in getRandomFieldsGenerated) {
+        final int pointsForRound = stats.getPointsForSpecificField(
+            randomField, getMode == GameMode.DoubleTraining);
+
+        if (pointsForRound > stats.getHighestPoints) {
+          stats.setHighestPoints = pointsForRound;
+        }
+      }
+    } else {
+      final bool isDescendingMode =
+          getGameSettings.getMode == ModesSingleDoubleTraining.Descending;
+      late int i;
+      late int until;
+      if (getGameSettings.getIsTargetNumberEnabled) {
+        i = 1;
+        until = getGameSettings.getAmountOfRounds;
+      } else {
+        if (isDescendingMode) {
+          i = 20;
+          until = 1;
+        } else {
+          // ascending
+          i = 1;
+          until = 20;
+        }
+      }
+      for (i;
+          isDescendingMode ? i >= until : i <= until;
+          isDescendingMode ? i-- : i++) {
+        if (stats.getFieldHits[i] == '-') {
+          break;
+        }
+        final int pointsForRound = stats.getPointsForSpecificField(
+            i, getMode == GameMode.DoubleTraining);
+
+        if (pointsForRound > stats.getHighestPoints) {
+          stats.setHighestPoints = pointsForRound;
+        }
+      }
+    }
   }
 }

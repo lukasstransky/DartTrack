@@ -183,7 +183,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                     Container(
                       padding: EdgeInsets.only(bottom: 2.h),
                       child: Slidable(
-                        key: ValueKey(game.getGameId),
+                        key: UniqueKey(),
                         child: _getCard(game),
                         startActionPane: ActionPane(
                           dismissible: DismissiblePane(onDismissed: () {}),

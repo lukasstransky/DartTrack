@@ -73,6 +73,7 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
   changeMode(ModesSingleDoubleTraining newMode) {
     setMode = newMode;
     setIsTargetNumberEnabled = false;
+    resetTargetNumberToDefault();
     notify();
   }
 
@@ -97,13 +98,21 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
     if (getIsTargetNumberEnabled) {
       return 'Target number: ${getTargetNumber}';
     }
-    switch (getMode) {
-      case ModesSingleDoubleTraining.Ascending:
-        return 'Ascending';
-      case ModesSingleDoubleTraining.Descending:
-        return 'Descending';
-      case ModesSingleDoubleTraining.Random:
-        return 'Random';
+
+    if (getMode == ModesSingleDoubleTraining.Random) {
+      return 'Random';
     }
+
+    late String mode;
+    if (getMode == ModesSingleDoubleTraining.Ascending) {
+      mode = 'Ascending';
+    } else {
+      mode = 'Descending';
+    }
+
+    if (isOpenGame) {
+      return '${mode} - at field ${game.getCurrentFieldToHit}';
+    }
+    return mode;
   }
 }

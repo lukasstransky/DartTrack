@@ -89,7 +89,9 @@ class GameModeDetails extends StatelessWidget {
               bottom: 1.h,
             ),
             child: Text(
-              'Rounds: ${game.getGameSettings.getAmountOfRounds}',
+              game.getIsOpenGame
+                  ? 'Remaining rounds: ${(game as GameSingleDoubleTraining_P).getAmountOfRoundsRemaining}'
+                  : 'Rounds: ${game.getGameSettings.getAmountOfRounds}',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.white,
