@@ -19,9 +19,10 @@ class OtherStats extends StatelessWidget {
         ((100 * (statisticsFirestore.countOfGamesWon as int)) /
                 statisticsFirestore.countOfGames)
             .toStringAsFixed(2);
+
     // remove .00 after comma if present
     final List<String> parts = winPercentage.toString().split('.');
-    if (parts[1] == '0') {
+    if (parts[1] == '00') {
       winPercentage = parts[0];
     }
 
@@ -111,7 +112,7 @@ class OtherStats extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'Games Won',
+                        'Games won',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           color: color,

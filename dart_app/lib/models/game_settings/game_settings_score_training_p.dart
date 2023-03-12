@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
+import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 
@@ -12,11 +13,7 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
   InputMethod _inputMethod = InputMethod.Round;
   bool automaticallySubmitPoints = false;
 
-  TextEditingController _maxRoundsOrPointsController =
-      new TextEditingController(text: DEFAULT_ROUNDS_SCORE_TRAINING.toString());
   GlobalKey<FormState> _formKeyMaxRoundsOrPoints = GlobalKey<FormState>();
-  TextEditingController _targetNumberController =
-      new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
   GlobalKey<FormState> _formKeyTargetNumber = GlobalKey<FormState>();
 
   GameSettingsScoreTraining_P() {}
@@ -53,49 +50,32 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
   set setFormKeyMaxRoundsOrPoints(GlobalKey<FormState> value) =>
       this._formKeyMaxRoundsOrPoints = value;
 
-  TextEditingController get getMaxRoundsOrPointsController =>
-      this._maxRoundsOrPointsController;
-  set setMaxRoundsOrPointsController(TextEditingController value) =>
-      this._maxRoundsOrPointsController = value;
-
   GlobalKey<FormState> get getFormKeyTargetNumber => this._formKeyTargetNumber;
   set setFormKeyTargetNumber(GlobalKey<FormState> value) =>
       this._formKeyTargetNumber = value;
-
-  TextEditingController get getTargetNumberController =>
-      this._targetNumberController;
-  set setTargetNumberController(TextEditingController value) =>
-      this._targetNumberController = value;
 
   switchMode() {
     if (getMode == ScoreTrainingModeEnum.MaxRounds) {
       setMode = ScoreTrainingModeEnum.MaxPoints;
       setMaxRoundsOrPoints = DEFAULT_POINTS_SCORE_TRAINING;
+      maxRoundsOrPointsTextController.text =
+          DEFAULT_POINTS_SCORE_TRAINING.toString();
     } else {
       setMode = ScoreTrainingModeEnum.MaxRounds;
       setMaxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
+      maxRoundsOrPointsTextController.text =
+          DEFAULT_ROUNDS_SCORE_TRAINING.toString();
     }
-    setControllerTextValueToDefault();
 
     notify();
-  }
-
-  setControllerTextValueToDefault() {
-    if (getMode == ScoreTrainingModeEnum.MaxRounds) {
-      setMaxRoundsOrPointsController = new TextEditingController(
-          text: DEFAULT_ROUNDS_SCORE_TRAINING.toString());
-    } else {
-      setMaxRoundsOrPointsController = new TextEditingController(
-          text: DEFAULT_POINTS_SCORE_TRAINING.toString());
-    }
   }
 
   reset() {
     setMode = ScoreTrainingModeEnum.MaxRounds;
     setMaxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
     setInputMethod = InputMethod.Round;
-    setMaxRoundsOrPointsController = new TextEditingController(
-        text: DEFAULT_ROUNDS_SCORE_TRAINING.toString());
+    newTextControllerMaxRoundsOrPointsGameSettingsSct(
+        DEFAULT_ROUNDS_SCORE_TRAINING.toString());
     setFormKeyMaxRoundsOrPoints = GlobalKey<FormState>();
     setPlayers = [];
   }

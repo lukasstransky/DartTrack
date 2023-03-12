@@ -78,7 +78,7 @@ class BestOfBtn extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Best Of',
+            'Best of',
             style: TextStyle(
               color:
                   Utils.getTextColorForGameSettingsBtn(isBestOfMode, context),
@@ -131,7 +131,7 @@ class FirstToBtn extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'First To',
+              'First to',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
                     isFirstToMode, context),

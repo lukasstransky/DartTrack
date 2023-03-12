@@ -5,6 +5,7 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -50,6 +51,23 @@ class RevertX01Helper {
         currentStats.getPlayer.getIndexForGeneratedScores != 0) {
       currentStats.getPlayer.setIndexForGeneratedScores =
           currentStats.getPlayer.getIndexForGeneratedScores - 1;
+    }
+
+    // set game won or game draw to false if needed
+    if (currentStats.getGameDraw) {
+      currentStats.setGameDraw = false;
+    } else if (currentStats.getGameWon) {
+      currentStats.setGameWon = false;
+    }
+
+    // last throw of bot gets reverted -> reset global variables
+    if (((currentStats.getTeam != null &&
+                currentStats.getTeam.getCurrentPlayerToThrow is Bot) ||
+            currentStats.getPlayer is Bot) &&
+        currentStats.getAllScores.length == 1) {
+      g_average = '-';
+      g_last_throw = '-';
+      g_thrown_darts = '-';
     }
 
     final int lastPoints = gameSettingsX01.getInputMethod == InputMethod.Round
@@ -140,6 +158,9 @@ class RevertX01Helper {
           }
         }
       }
+
+      // revert reached sudden death if neccessary
+      _revertSuddenDeathIfNeccessary(gameSettingsX01, gameX01);
     }
 
     // revert stats for team
@@ -260,14 +281,25 @@ class RevertX01Helper {
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = false;
     for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-      if (gameSettingsX01.getInputMethod == InputMethod.Round) {
-        if (stats.getAllScores.length > 0) {
-          result = true;
+      if (stats.getAllScores.length > 0 ||
+          stats.getAllScoresPerDart.length > 0) {
+        result = true;
+      }
+    }
+
+    // if bot is first player -> first score shouldn't be revertable
+    if (gameSettingsX01.getPlayers[0] is Bot) {
+      bool noPlayerExceptBotHasScore = true;
+      for (int i = 1; i < gameX01.getPlayerGameStatistics.length; i++) {
+        if (gameX01.getPlayerGameStatistics[i].getAllThrownDarts > 0) {
+          noPlayerExceptBotHasScore = false;
+          break;
         }
+      }
+      if (noPlayerExceptBotHasScore) {
+        result = false;
       } else {
-        if (stats.getAllScoresPerDart.length > 0) {
-          result = true;
-        }
+        result = true;
       }
     }
 
@@ -528,19 +560,20 @@ class RevertX01Helper {
 
   static bool _allPlayersTeamsHaveStartPoints(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-        if (stats.getCurrentPoints != gameSettingsX01.getPointsOrCustom()) {
-          return false;
-        }
-      }
-    } else {
-      for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
-        if (stats.getCurrentPoints != gameSettingsX01.getPointsOrCustom()) {
-          return false;
-        }
+    for (PlayerOrTeamGameStatsX01 stats
+        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+      if (stats.getCurrentPoints != gameSettingsX01.getPointsOrCustom()) {
+        return false;
+      } else if (stats.getAllScoresPerDart.isNotEmpty &&
+          stats.getAllScoresPerDart[0] == 0) {
+        // when busting the first input in three dart mode
+        return false;
+      } else if (stats.getAllScores.isNotEmpty && stats.getAllScores[0] == 0) {
+        // when busting the first input in round mode
+        return false;
       }
     }
+
     return true;
   }
 
@@ -694,5 +727,28 @@ class RevertX01Helper {
       return true;
     }
     return false;
+  }
+
+  static _revertSuddenDeathIfNeccessary(
+      GameSettingsX01_P gameSettingsX01, GameX01_P gameX01) {
+    if (gameSettingsX01.getSuddenDeath) {
+      int amountOfLegsWon = 0;
+      for (PlayerOrTeamGameStatsX01 stats
+          in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+        amountOfLegsWon += stats.getLegsWon;
+      }
+
+      int amountOfLegsForSuddenDeath =
+          gameSettingsX01.getLegs + gameSettingsX01.getMaxExtraLegs;
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
+        amountOfLegsForSuddenDeath *= gameSettingsX01.getPlayers.length;
+        amountOfLegsForSuddenDeath -= 1;
+      } else {
+        amountOfLegsForSuddenDeath *= gameSettingsX01.getTeams.length;
+      }
+      if (amountOfLegsForSuddenDeath == amountOfLegsWon) {
+        gameX01.setReachedSuddenDeath = false;
+      }
+    }
   }
 }

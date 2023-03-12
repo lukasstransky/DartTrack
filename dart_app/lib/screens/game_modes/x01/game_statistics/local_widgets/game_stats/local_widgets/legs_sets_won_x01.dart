@@ -42,7 +42,7 @@ class LegSetsWonX01 extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    setsEnabled ? 'Sets Won' : 'Legs Won',
+                    setsEnabled ? 'Sets won' : 'Legs won',
                     style: TextStyle(
                       fontSize: FONTSIZE_STATISTICS.sp,
                       fontWeight: FontWeight.bold,
@@ -52,7 +52,8 @@ class LegSetsWonX01 extends StatelessWidget {
                 ),
               ),
               for (PlayerOrTeamGameStatsX01 stats
-                  in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
+                  in Utils.getPlayersOrTeamStatsListStatsScreen(
+                      gameX01, gameSettingsX01))
                 Container(
                   width: WIDTH_DATA_STATISTICS.w,
                   child: Text(
@@ -78,7 +79,7 @@ class LegSetsWonX01 extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      'Legs Won',
+                      'Legs won',
                       style: TextStyle(
                         fontSize: FONTSIZE_STATISTICS.sp,
                         fontWeight: FontWeight.bold,
@@ -88,7 +89,7 @@ class LegSetsWonX01 extends StatelessWidget {
                   ),
                 ),
                 for (PlayerOrTeamGameStatsX01 stats
-                    in Utils.getPlayersOrTeamStatsList(
+                    in Utils.getPlayersOrTeamStatsListStatsScreen(
                         gameX01, gameSettingsX01))
                   Container(
                     width: WIDTH_DATA_STATISTICS.w,

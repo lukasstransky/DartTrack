@@ -1,12 +1,24 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class PasswordInput extends StatelessWidget {
+class PasswordInput extends StatefulWidget {
   const PasswordInput({Key? key}) : super(key: key);
+
+  @override
+  State<PasswordInput> createState() => _PasswordInputState();
+}
+
+class _PasswordInputState extends State<PasswordInput> {
+  @override
+  void initState() {
+    super.initState();
+    newTextControllerForPassword();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +32,7 @@ class PasswordInput extends StatelessWidget {
         selector: (_, auth) => auth.getPasswordVisible,
         builder: (_, passwordVisible, __) => TextFormField(
           obscureText: !passwordVisible,
-          controller: auth.getPasswordController,
+          controller: passwordTextController,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           validator: (value) {

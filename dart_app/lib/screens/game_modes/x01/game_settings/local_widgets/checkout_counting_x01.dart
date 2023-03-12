@@ -39,7 +39,7 @@ class CheckoutCountingX01 extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Counting of Checkout %',
+                      'Counting of checkout %',
                       style: TextStyle(color: Colors.white),
                     ),
                     Switch(

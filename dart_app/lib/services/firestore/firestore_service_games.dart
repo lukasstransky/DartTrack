@@ -235,6 +235,15 @@ class FirestoreServiceGames {
             });
   }
 
+  Future<void> deleteAllOpenGames() async {
+    await _firestore
+        .collection(_getFirestoreOpenGamesPath())
+        .get()
+        .then((snapshot) {
+      snapshot.docs.forEach((doc) => doc.reference.delete());
+    });
+  }
+
   Future<void> getOpenGames(BuildContext context) async {
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreOpenGamesPath());

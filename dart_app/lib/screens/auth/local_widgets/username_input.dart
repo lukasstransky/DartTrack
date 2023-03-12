@@ -1,12 +1,24 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class UsernameInput extends StatelessWidget {
+class UsernameInput extends StatefulWidget {
   const UsernameInput({Key? key}) : super(key: key);
+
+  @override
+  State<UsernameInput> createState() => _UsernameInputState();
+}
+
+class _UsernameInputState extends State<UsernameInput> {
+  @override
+  void initState() {
+    super.initState();
+    newTextControllerForUsername();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +30,7 @@ class UsernameInput extends StatelessWidget {
       child: TextFormField(
         key: Key('usernameInput'),
         autofocus: false,
-        controller: auth.getUsernameController,
+        controller: usernameTextController,
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         validator: (value) {
@@ -26,7 +38,7 @@ class UsernameInput extends StatelessWidget {
             return ('Username is required!');
           }
           if (!auth.getUsernameValid) {
-            auth.getUsernameController.clear();
+            usernameTextController.clear();
             return ('Username already exists!');
           }
           return null;

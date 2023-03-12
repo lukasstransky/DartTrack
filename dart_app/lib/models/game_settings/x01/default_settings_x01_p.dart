@@ -25,7 +25,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
   late bool _showFinishWays;
   late bool _showThrownDartsPerLeg;
   late bool _showLastThrow;
-  late bool _callerEnabled;
   late bool _vibrationFeedbackEnabled;
   late bool _automaticallySubmitPoints;
   late bool _showMostScoredPoints;
@@ -67,7 +66,7 @@ class DefaultSettingsX01_P with ChangeNotifier {
         ? SingleOrTeamEnum.Single
         : SingleOrTeamEnum.Team;
     isSelected = map['isSelected'];
-    mode = map['mode'] == 'First To'
+    mode = map['mode'] == 'First to'
         ? BestOfOrFirstToEnum.FirstTo
         : BestOfOrFirstToEnum.BestOf;
     points = map['points'];
@@ -84,7 +83,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
     showFinishWays = map['showFinishWays'];
     showThrownDartsPerLeg = map['showThrownDartsPerLeg'];
     showLastThrow = map['showLastThrow'];
-    callerEnabled = map['callerEnabled'];
     vibrationFeedbackEnabled = map['vibrationFeedbackEnabled'];
     automaticallySubmitPoints = map['automaticallySubmitPoints'];
     showMostScoredPoints = map['showMostScoredPoints'];
@@ -136,7 +134,7 @@ class DefaultSettingsX01_P with ChangeNotifier {
       'isSelected': isSelected,
       'singleOrTeam':
           singleOrTeam == SingleOrTeamEnum.Single ? 'Single' : 'Team',
-      'mode': mode == BestOfOrFirstToEnum.FirstTo ? 'First To' : 'Best Of',
+      'mode': mode == BestOfOrFirstToEnum.FirstTo ? 'First to' : 'Best of',
       'points': points,
       'customPoints': customPoints,
       'legs': legs,
@@ -153,7 +151,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
       'showFinishWays': showFinishWays,
       'showThrownDartsPerLeg': showThrownDartsPerLeg,
       'showLastThrow': showLastThrow,
-      'callerEnabled': callerEnabled,
       'vibrationFeedbackEnabled': vibrationFeedbackEnabled,
       'automaticallySubmitPoints': automaticallySubmitPoints,
       'showMostScoredPoints': showMostScoredPoints,
@@ -253,10 +250,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
 
   set showLastThrow(value) => this._showLastThrow = value;
 
-  get callerEnabled => this._callerEnabled;
-
-  set callerEnabled(value) => this._callerEnabled = value;
-
   get vibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
 
   set vibrationFeedbackEnabled(value) => this._vibrationFeedbackEnabled = value;
@@ -287,9 +280,9 @@ class DefaultSettingsX01_P with ChangeNotifier {
 
   set drawMode(value) => this._drawMode = value;
 
-  resetValues(Player? currentUserAsPlayer) {
-    if (currentUserAsPlayer != null) {
-      players = [Player.clone(currentUserAsPlayer)];
+  resetValues(String? username) async {
+    if (username != null) {
+      players = [new Player(name: username)];
     } else {
       players = [];
     }
@@ -313,7 +306,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
     showFinishWays = DEFAULT_SHOW_FINISH_WAYS;
     showThrownDartsPerLeg = DEFAULT_SHOW_THROWN_DARTS_PER_LEG;
     showLastThrow = DEFAULT_SHOW_LAST_THROW;
-    callerEnabled = DEFAULT_CALLER_ENABLED;
     vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
     automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
     showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;

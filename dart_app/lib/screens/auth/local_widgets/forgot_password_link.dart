@@ -1,7 +1,6 @@
-import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class ForgotPasswordLink extends StatelessWidget {
@@ -17,7 +16,7 @@ class ForgotPasswordLink extends StatelessWidget {
       child: GestureDetector(
         onTap: () => {
           Navigator.of(context).pushNamed('/forgotPassword'),
-          context.read<Auth_P>().getEmailController.clear(),
+          emailTextController.clear(),
         },
         child: Text(
           'Forgot password?',

@@ -47,6 +47,91 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
         gameX01.getPlayerGameStatistics.length - 1;
   }
 
+  Column team(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          transform: Matrix4.translationValues(0.0, 5.0, 0.0),
+          child: Column(
+            children: [
+              Text(
+                currPlayerOrTeamGameStatsX01!.getTeam.getName,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow
+                        is Bot
+                    ? 'Lvl. ${currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow.getLevel} Bot'
+                    : currPlayerOrTeamGameStatsX01!
+                        .getTeam.getCurrentPlayerToThrow.getName,
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Text(
+          currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
+          style: TextStyle(
+            fontSize: 50.sp,
+            color: Colors.white,
+          ),
+        ),
+        Container(
+          transform: Matrix4.translationValues(0.0, -15.0, 0.0),
+          child: Selector<GameSettingsX01_P, bool>(
+            selector: (_, gameSettings) => gameSettings.getShowFinishWays,
+            builder: (_, __, ___) => FinishWaysX01(
+                currPlayerOrTeamGameStatsX01:
+                    this.currPlayerOrTeamGameStatsX01),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Column single(BuildContext context) {
+    return Column(
+      children: [
+        Selector<GameSettingsX01_P, bool>(
+          selector: (_, gameSettings) => gameSettings.getShowFinishWays,
+          builder: (_, __, ___) => FinishWaysX01(
+              currPlayerOrTeamGameStatsX01: this.currPlayerOrTeamGameStatsX01),
+        ),
+        Container(
+          padding: EdgeInsets.only(top: 5),
+          child: Text(
+            currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
+            style: TextStyle(
+              fontSize: 50.sp,
+              color: Colors.white,
+            ),
+          ),
+        ),
+        Container(
+          transform: Matrix4.translationValues(0.0, -5.0, 0.0),
+          child: Text(
+            currPlayerOrTeamGameStatsX01!.getPlayer is Bot
+                ? 'Bot - level ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} '
+                : currPlayerOrTeamGameStatsX01!.getPlayer.getName,
+            style: TextStyle(
+              fontSize: 18.sp,
+              color: Utils.getTextColorDarken(context),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
@@ -83,18 +168,13 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
                   0.0, isSingleMode ? -15 : -25.0, 0.0),
               child: Column(
                 children: [
-                  if (isSingleMode) ...[
-                    single(context),
-                  ] else ...[
-                    team(),
-                  ],
+                  if (isSingleMode) single(context) else team(context),
                   SetsLegsScoreX01(
                       currPlayerOrTeamGameStatsX01:
                           this.currPlayerOrTeamGameStatsX01),
                   Consumer<GameSettingsX01_P>(
                     builder: (_, gameSettings, __) => GameStatsX01(
-                        currPlayerOrTeamGameStatsX01:
-                            this.currPlayerOrTeamGameStatsX01),
+                        currentStats: this.currPlayerOrTeamGameStatsX01),
                   ),
                 ],
               ),
@@ -102,64 +182,6 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Column team() {
-    return Column(
-      children: [
-        Container(
-          transform: Matrix4.translationValues(0.0, 5.0, 0.0),
-          child: Column(
-            children: [
-              Text(
-                currPlayerOrTeamGameStatsX01!.getTeam.getName,
-                style: TextStyle(fontSize: 16.sp),
-              ),
-              Text(
-                currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow
-                        is Bot
-                    ? 'Lvl. ${currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow.getLevel} Bot'
-                    : currPlayerOrTeamGameStatsX01!
-                        .getTeam.getCurrentPlayerToThrow.getName,
-                style: TextStyle(fontSize: 13.sp),
-              ),
-            ],
-          ),
-        ),
-        FinishWaysX01(
-            currPlayerOrTeamGameStatsX01: this.currPlayerOrTeamGameStatsX01),
-        Text(
-          currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
-          style: TextStyle(fontSize: 50.sp),
-        ),
-      ],
-    );
-  }
-
-  Column single(BuildContext context) {
-    return Column(
-      children: [
-        FinishWaysX01(
-            currPlayerOrTeamGameStatsX01: this.currPlayerOrTeamGameStatsX01),
-        Text(
-          currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
-          style: TextStyle(
-            fontSize: 50.sp,
-            color: Colors.white,
-          ),
-        ),
-        Text(
-          currPlayerOrTeamGameStatsX01!.getPlayer is Bot
-              ? 'Lvl. ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} Bot'
-              : currPlayerOrTeamGameStatsX01!.getPlayer.getName,
-          style: TextStyle(
-            fontSize: 18.sp,
-            color: Utils.getTextColorDarken(context),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 }

@@ -47,7 +47,7 @@ class MasterInBtn extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Master In',
+            'Master in',
             style: TextStyle(
               color:
                   Utils.getTextColorForGameSettingsBtn(isMasterModeIn, context),
@@ -109,7 +109,7 @@ class DoubleInBtn extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'Double In',
+              'Double in',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
                     isDoubleModeIn, context),
@@ -152,7 +152,7 @@ class SingleInBtn extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Single In',
+            'Single in',
             style: TextStyle(
               color:
                   Utils.getTextColorForGameSettingsBtn(isSingleModeIn, context),

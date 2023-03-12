@@ -2,22 +2,14 @@ import 'package:dart_app/constants.dart';
 
 import 'package:flutter/material.dart';
 
-class Auth_P with ChangeNotifier {
-  final TextEditingController _usernameController = new TextEditingController();
-  final TextEditingController _emailController = new TextEditingController();
-  final TextEditingController _passwordController = new TextEditingController();
+import '../utils/globals.dart';
 
+class Auth_P with ChangeNotifier {
   bool _usernameValid = false;
   bool _emailAlreadyExists = false;
   bool _passwordVisible = false;
   bool _showLoadingSpinner = false;
   AuthMode _authMode = AuthMode.Login;
-
-  TextEditingController get getUsernameController => this._usernameController;
-
-  TextEditingController get getEmailController => this._emailController;
-
-  TextEditingController get getPasswordController => this._passwordController;
 
   bool get getUsernameValid => this._usernameValid;
   set setUsernameValid(bool value) => this._usernameValid = value;
@@ -36,13 +28,13 @@ class Auth_P with ChangeNotifier {
 
   switchAuthMode() {
     if (_authMode == AuthMode.Login) {
-      _emailController.text = '';
-      _passwordController.text = '';
+      emailTextController.text = '';
+      passwordTextController.text = '';
       _authMode = AuthMode.Register;
     } else {
-      _emailController.text = '';
-      _passwordController.text = '';
-      _usernameController.text = '';
+      emailTextController.text = '';
+      passwordTextController.text = '';
+      usernameTextController.text = '';
       _authMode = AuthMode.Login;
     }
 

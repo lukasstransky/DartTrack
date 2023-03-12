@@ -7,6 +7,7 @@ import 'package:dart_app/screens/game_modes/score_training/game_settings/local_w
 import 'package:dart_app/screens/game_modes/shared/game_settings/start_game_btn.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/add_player_team_btn/add_player_btn.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,12 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
     }
 
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    disposeControllersForGamesettingsScoreTraining();
+    super.dispose();
   }
 
   @override

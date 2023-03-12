@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -15,27 +16,18 @@ class SingleOrTeamX01 extends StatelessWidget {
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
       gameSettingsX01.setSingleOrTeam = SingleOrTeamEnum.Team;
-      /*await Future.delayed(const Duration(milliseconds: 100));
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        if (scrollControllerTeams.hasClients)
-          scrollControllerTeams.animateTo(
-              scrollControllerTeams.position.maxScrollExtent,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.fastOutSlowIn);
-      });*/
     } else {
       final int countOfBotPlayers = gameSettingsX01.getCountOfBotPlayers();
       final int countOfGuestPlayers = players.length - countOfBotPlayers;
 
       if (countOfBotPlayers >= 1 && countOfGuestPlayers >= 2) {
-        const String loggedInUser = '';
-        //todo comment out
-        // final String loggedInUser =
-        //     context.read<AuthService>().getPlayer!.getName;
+        final String username =
+            context.read<AuthService>().getUsernameFromSharedPreferences() ??
+                '';
         List<Player> toRemove = [];
 
         for (int i = 2; i < players.length; i++) {
-          if (players.elementAt(i).getName == loggedInUser) {
+          if (players.elementAt(i).getName == username) {
             toRemove.add(players.elementAt(1));
           } else {
             toRemove.add(players.elementAt(i));
@@ -87,22 +79,21 @@ class SingleBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final GameSettingsX01_P gameSettings = context.read<GameSettingsX01_P>();
     final bool isSingle =
-        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+        gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single;
 
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => {
-          if (!isSingle)
-            {
-              switchSingleOrTeamMode(context, gameSettingsX01),
-            }
+        onPressed: () {
+          if (!isSingle) {
+            switchSingleOrTeamMode(context, gameSettings);
+          }
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Single',
+            'Single ${gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single ? '(${gameSettings.getPlayers.length})' : ''}',
             style: TextStyle(
               color: Utils.getTextColorForGameSettingsBtn(isSingle, context),
             ),
@@ -141,21 +132,20 @@ class TeamBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isTeam =
-        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team;
+    final GameSettingsX01_P gameSettings = context.read<GameSettingsX01_P>();
+    final bool isTeam = gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team;
 
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
           if (!isTeam) {
-            switchSingleOrTeamMode(context, gameSettingsX01);
+            switchSingleOrTeamMode(context, gameSettings);
           }
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Team',
+            'Team ${gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team ? '(${gameSettings.getTeams.length})' : ''}',
             style: TextStyle(
               color: Utils.getTextColorForGameSettingsBtn(isTeam, context),
             ),

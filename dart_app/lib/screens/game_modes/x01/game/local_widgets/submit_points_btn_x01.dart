@@ -52,11 +52,39 @@ class SubmitPointsBtnX01 extends StatelessWidget {
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       _submitPointsForInputMethodRound(
           gameX01.getCurrentPointsSelected, context);
+      if (gameSettingsX01.getPlayers.length > 2 ||
+          gameSettingsX01.getTeams.length > 2) {
+        _scrollToTopBottomIfNeccessary(gameX01, gameSettingsX01);
+      }
     } else if (_shouldOnPressedBeEnabled(gameSettingsX01)) {
       // if input method is three darts and points are not auto submitted (btn needs to be pressed)
       g_thrownDarts = g_thrownDarts == 0 ? 3 : g_thrownDarts;
       SubmitX01Helper.submitPoints(_getLastDartThrown(gameX01), context, false,
           g_thrownDarts, g_checkoutCount);
+    }
+  }
+
+  _scrollToTopBottomIfNeccessary(
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+    final int index = gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+        ? gameSettingsX01.getPlayers.indexOf(gameX01.getCurrentPlayerToThrow)
+        : gameSettingsX01.getTeams.indexOf(gameX01.getCurrentTeamToThrow);
+    if (index == 3) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        scrollControllerGameX01MultiplePlayers.animateTo(
+          scrollControllerGameX01MultiplePlayers.position.maxScrollExtent,
+          duration: Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
+      });
+    } else if (index == gameSettingsX01.getPlayers.length - 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        scrollControllerGameX01MultiplePlayers.animateTo(
+          scrollControllerGameX01MultiplePlayers.position.minScrollExtent,
+          duration: Duration(milliseconds: 800),
+          curve: Curves.easeInOut,
+        );
+      });
     }
   }
 
@@ -86,7 +114,8 @@ class SubmitPointsBtnX01 extends StatelessWidget {
             gameSettingsX01.getModeIn == ModeOutIn.Master) &&
         _areInvalidDoubleInPoints(currentPointsSelected) &&
         stats.getCurrentPoints == gameSettingsX01.getPointsOrCustom()) {
-      Fluttertoast.showToast(msg: 'Invalid Score for Double In!');
+      Fluttertoast.showToast(
+          msg: 'Invalid score for double in!', toastLength: Toast.LENGTH_SHORT);
       gameX01.setCurrentPointsSelected = 'Points';
       gameX01.notify();
     } else {
@@ -148,7 +177,8 @@ class SubmitPointsBtnX01 extends StatelessWidget {
             ),
             left: BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: 3,
+              width:
+                  gameSettingsX01.getInputMethod == InputMethod.Round ? 3 : 0,
             ),
           ),
         ),

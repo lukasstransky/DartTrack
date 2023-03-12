@@ -32,9 +32,8 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   }
 
   _getDefaultSettingsX01() async {
-    context
-        .read<DefaultSettingsX01_P>()
-        .resetValues(context.read<AuthService>().getPlayer);
+    context.read<DefaultSettingsX01_P>().resetValues(
+        context.read<AuthService>().getUsernameFromSharedPreferences());
     await context
         .read<FirestoreServiceDefaultSettings>()
         .getDefaultSettingsX01(context);
@@ -43,7 +42,7 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(showBackBtn: false, title: 'Game Modes'),
+      appBar: CustomAppBar(showBackBtn: false, title: 'Game modes'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [

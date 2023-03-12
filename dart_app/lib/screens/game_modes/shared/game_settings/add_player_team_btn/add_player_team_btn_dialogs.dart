@@ -53,11 +53,7 @@ class AddPlayerTeamBtnDialogs {
         key: _formKeyNewPlayer,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: Text(
             'Add new player',
             style: TextStyle(color: Colors.white),
@@ -79,7 +75,7 @@ class AddPlayerTeamBtnDialogs {
                               children: [
                                 if (newPlayer == NewPlayer.Bot) ...[
                                   Text(
-                                    'Level ${Utils.getLevelForBot(_selectedBotAvgValue)} Bot',
+                                    'Bot - level ${Utils.getLevelForBot(_selectedBotAvgValue)}',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   Container(
@@ -316,13 +312,9 @@ class AddPlayerTeamBtnDialogs {
           key: _formKeyNewTeam,
           child: AlertDialog(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: EdgeInsets.only(
-                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-                top: DIALOG_CONTENT_PADDING_TOP,
-                left: DIALOG_CONTENT_PADDING_LEFT,
-                right: DIALOG_CONTENT_PADDING_RIGHT),
+            contentPadding: dialogContentPadding,
             title: Text(
-              'Add Team',
+              'Add team',
               style: TextStyle(color: Colors.white),
             ),
             content: StatefulBuilder(
@@ -331,11 +323,12 @@ class AddPlayerTeamBtnDialogs {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
-                      controller: newTeamController,
+                      controller:
+                          newTextControllerForAddingNewTeamInGameSettingsX01(),
                       textInputAction: TextInputAction.done,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return ('Please enter a Team name!');
+                          return ('Please enter a team name!');
                         }
                         if (gameSettingsX01.checkIfTeamNameExists(value)) {
                           return 'Teamname already exists!';
@@ -456,6 +449,18 @@ class AddPlayerTeamBtnDialogs {
 
     gameSettingsX01.getTeams.add(new Team(name: newTeamController.text));
     gameSettingsX01.notify();
+
+    // scroll to bottom
+    if (gameSettingsX01.getTeams.length > 2) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        scrollControllerTeams.animateTo(
+          scrollControllerTeams.position.maxScrollExtent,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      });
+    }
+
     Navigator.of(context).pop();
   }
 
@@ -479,11 +484,7 @@ class AddPlayerTeamBtnDialogs {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: Text(
             'Add team or player?',
             style: TextStyle(color: Colors.white),
@@ -635,11 +636,7 @@ class AddPlayerTeamBtnDialogs {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: Text(
             'Which team?',
             style: TextStyle(color: Colors.white),
@@ -756,13 +753,24 @@ class AddPlayerTeamBtnDialogs {
   }
 }
 
-class GuestTextFormField extends StatelessWidget {
+class GuestTextFormField extends StatefulWidget {
   const GuestTextFormField({
     Key? key,
     required this.gameSettings_P,
   }) : super(key: key);
 
   final GameSettings_P gameSettings_P;
+
+  @override
+  State<GuestTextFormField> createState() => _GuestTextFormFieldState();
+}
+
+class _GuestTextFormFieldState extends State<GuestTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    newTextControllerForAddingNewPlayerInGameSettingsX01();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -773,8 +781,8 @@ class GuestTextFormField extends StatelessWidget {
         if (value!.isEmpty) {
           return ('Please enter a name!');
         }
-        if (gameSettings_P.checkIfPlayerNameExists(value)) {
-          return 'Playername already exists!';
+        if (widget.gameSettings_P.checkIfPlayerNameExists(value)) {
+          return 'Name already exists!';
         }
         return null;
       },

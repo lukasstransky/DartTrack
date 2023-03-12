@@ -139,7 +139,7 @@ class _FilterBarState extends State<FilterBar> {
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          'Last 30 Days',
+                          'Last 30 days',
                           style: TextStyle(
                             fontSize: 7.sp,
                             color: Utils.getTextColorForGameSettingsBtn(
@@ -192,7 +192,7 @@ class _FilterBarState extends State<FilterBar> {
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          'Last 365 Days',
+                          'Last 365 days',
                           style: TextStyle(
                             fontSize: 7.sp,
                             color: Utils.getTextColorForGameSettingsBtn(

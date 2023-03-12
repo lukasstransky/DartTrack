@@ -1,9 +1,12 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class StatsCardFiltered extends StatefulWidget {
@@ -20,17 +23,15 @@ class StatsCardFiltered extends StatefulWidget {
 
 class _StatsCardFilteredState extends State<StatsCardFiltered> {
   String _getValueOfOrderField() {
-    //todo change
-    const String currentPlayerName =
-        //await context.read<AuthService>().getPlayer!.getName;
-        'Strainski';
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     for (PlayerOrTeamGameStatsX01 playerStats
         in widget.game!.getPlayerGameStatistics) {
-      if (playerStats.getPlayer.getName == currentPlayerName) {
+      if (playerStats.getPlayer.getName == username) {
         switch (widget.orderField) {
           case 'average':
-            return playerStats.getAverage();
+            return playerStats.getAverage(context.read<GameSettingsX01_P>());
           case 'firstNineAvg':
             return playerStats.getFirstNinveAvg();
           case 'checkoutInPercent':
@@ -47,14 +48,12 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
   }
 
   bool _isGameWonByCurrentPlayer() {
-    //todo change
-    const String currentPlayerName =
-        //await context.read<AuthService>().getPlayer!.getName;
-        'Strainski';
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     for (PlayerOrTeamGameStatsX01 playerStats
         in widget.game!.getPlayerGameStatistics) {
-      if (playerStats.getPlayer.getName == currentPlayerName) {
+      if (playerStats.getPlayer.getName == username) {
         if (playerStats.getGameWon) {
           return true;
         }
@@ -71,16 +70,16 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
         result += 'Average: ';
         break;
       case 'firstNineAvg':
-        result += 'First Nine Avg.: ';
+        result += 'First nine avg.: ';
         break;
       case 'checkoutInPercent':
-        result += 'Checkout in Percent: ';
+        result += 'Checkout in percent: ';
         break;
       case 'highestFinish':
-        result += 'Highest Finish: ';
+        result += 'Highest finish: ';
         break;
       case 'bestLeg':
-        result += 'Darts for Leg: ';
+        result += 'Darts for leg: ';
         break;
     }
     result += _getValueOfOrderField();
@@ -166,8 +165,8 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
               child: Text(
                 widget.game!.getGameSettings.getSingleOrTeam ==
                         SingleOrTeamEnum.Single
-                    ? 'Single Mode'
-                    : 'Team Mode',
+                    ? 'Single mode'
+                    : 'Team mode',
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Colors.white,

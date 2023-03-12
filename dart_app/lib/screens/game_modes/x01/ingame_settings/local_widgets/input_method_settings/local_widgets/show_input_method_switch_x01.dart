@@ -22,7 +22,7 @@ class ShowInputMethodSwitchX01 extends StatelessWidget {
       child: Row(
         children: [
           Text(
-            'Show in Game Screen',
+            'Show in game screen',
             style: TextStyle(
                 fontSize: FONTSIZE_IN_GAME_SETTINGS.sp, color: Colors.white),
           ),

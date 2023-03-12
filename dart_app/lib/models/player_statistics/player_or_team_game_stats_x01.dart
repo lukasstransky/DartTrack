@@ -1,4 +1,6 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/team.dart';
@@ -342,13 +344,25 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
   set setTotalRoundsCount(int value) => this._totalRoundsCount = value;
 
   //calc average based on total points and all scores length
-  String getAverage() {
-    if (getTotalPoints == 0 && getAllScores.length == 0) {
+  String getAverage(GameSettingsX01_P gameSettingsX01_P) {
+    if (getTotalPoints == 0 || getAllScores.length == 0) {
       return '-';
     }
 
+    int totalPoints = getTotalPoints;
+    // for avg bot bug caused by the delay in the submit
+    if (((getTeam != null && getTeam.getCurrentPlayerToThrow is Bot) ||
+            getPlayer is Bot) &&
+        getInputMethodForRounds.length != getAllScores.length) {
+      int temp = 0;
+      for (int score in getAllScores) {
+        temp += score;
+      }
+      totalPoints = temp;
+    }
+
     final String result =
-        ((getTotalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
+        ((totalPoints / getAllThrownDarts) * 3).toStringAsFixed(2);
     final String decimalPlaces = result.substring(result.length - 2);
 
     if (decimalPlaces == '00') {
@@ -373,28 +387,43 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
     int result = 0;
 
     for (int checkOut in getCheckouts.values) {
-      if (checkOut > result) result = checkOut;
+      if (checkOut > result) {
+        result = checkOut;
+      }
     }
 
     return result;
   }
 
   String getFirstNinveAvg() {
-    if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) return '-';
+    if (getAllScores.length == 0 && getAllScoresPerDart.length == 0) {
+      return '-';
+    }
 
     return ((getFirstNineAvgPoints / getFirstNineAvgCount) * 3)
         .toStringAsFixed(2);
   }
 
   String getCheckoutQuoteInPercent() {
-    if (getCheckoutCount == 0) return '-';
+    if (getCheckoutCount == 0) {
+      return '-';
+    }
 
-    return ((getLegsWonTotal / getCheckoutCount) * 100).toStringAsFixed(2) +
-        '%';
+    final String result =
+        ((getLegsWonTotal / getCheckoutCount) * 100).toStringAsFixed(2);
+    final String decimalPlaces = result.substring(result.length - 2);
+
+    if (decimalPlaces == '00') {
+      return '${result.substring(0, result.length - 3)}%';
+    }
+
+    return '${result}%';
   }
 
   String getBestLeg() {
-    if (getLegsWonTotal == 0) return '-';
+    if (getLegsWonTotal == 0) {
+      return '-';
+    }
 
     int bestLeg = -1;
 
@@ -408,7 +437,9 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
   }
 
   String getWorstLeg() {
-    if (getLegsWonTotal == 0) return '-';
+    if (getLegsWonTotal == 0) {
+      return '-';
+    }
 
     int worstLeg = -1;
 

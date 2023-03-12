@@ -40,7 +40,7 @@ class StartGameBtn extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Start game',
+            'Start',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
             ),

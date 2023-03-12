@@ -38,7 +38,7 @@ class PlayersListEntry extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'Level ${(player as Bot).getLevel} Bot',
+                            'Bot - level ${(player as Bot).getLevel}',
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: Colors.white,
@@ -71,8 +71,7 @@ class PlayersListEntry extends StatelessWidget {
                     ),
                   ),
           ),
-          Container(
-            width: 30.w,
+          Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

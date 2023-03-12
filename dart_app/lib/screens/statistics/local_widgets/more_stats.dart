@@ -40,7 +40,7 @@ class _MoreStatsState extends State<MoreStats> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Rounded Scores',
+                      'Rounded scores',
                       style: TextStyle(
                           fontSize: 14.sp,
                           color: Utils.getTextColorDarken(context),
@@ -52,8 +52,8 @@ class _MoreStatsState extends State<MoreStats> {
                   child: Center(
                     child: Text(
                       _showAllScoesPerDartWithCount
-                          ? 'All Scores per Dart'
-                          : 'Precise Scores',
+                          ? 'All scores per dart'
+                          : 'Precise scores',
                       style: TextStyle(
                         fontSize: 14.sp,
                         color: Utils.getTextColorDarken(context),
@@ -256,7 +256,7 @@ class _MoreStatsState extends State<MoreStats> {
               child: Row(
                 children: [
                   Text(
-                    'Show All Scores per Dart',
+                    'Show all scores per dart',
                     style: TextStyle(
                       color: Colors.white,
                     ),
@@ -284,7 +284,7 @@ class _MoreStatsState extends State<MoreStats> {
                 child: Row(
                   children: [
                     Text(
-                      'Show Odd Rounded Scores',
+                      'Show odd rounded scores',
                       style: TextStyle(
                         color: Colors.white,
                       ),

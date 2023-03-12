@@ -17,7 +17,7 @@ class StatsPerGameBtns extends StatelessWidget {
         Padding(
           padding: EdgeInsets.only(bottom: 10),
           child: Text(
-            'Stats per Game',
+            'Stats per game',
             style: TextStyle(
               fontSize: 16.sp,
               color: Colors.white,

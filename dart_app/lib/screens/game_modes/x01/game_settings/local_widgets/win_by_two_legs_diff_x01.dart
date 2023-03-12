@@ -18,13 +18,9 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
         key: _formKeyLegDifference,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: const Text(
-            'Sudden Death',
+            'Sudden death',
             style: TextStyle(color: Colors.white),
           ),
           content: StatefulBuilder(
@@ -44,17 +40,18 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
-                            color: Colors.white,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                           textStyle: const TextStyle(
                             fontSize: 18,
+                            color: Colors.white,
                           ),
                           message: SUDDEN_DEATH_INFO,
                           preferBelow: false,
                         ),
                       ),
                       const Text(
-                        'enable Sudden Death',
+                        'Enable sudden death',
                         style: TextStyle(color: Colors.white),
                       ),
                       Switch(
@@ -85,17 +82,18 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              color: Colors.white,
+                              color: Theme.of(context).colorScheme.primary,
                             ),
                             textStyle: const TextStyle(
                               fontSize: 18,
+                              color: Colors.white,
                             ),
                             message: SUDDEN_DEATH_LEG_DIFFERENCE_INFO,
                             preferBelow: false,
                           ),
                         ),
                         const Text(
-                          'after max. Legs',
+                          'After max. legs',
                           style: TextStyle(color: Colors.white),
                         ),
                         Padding(
@@ -160,10 +158,9 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => {
-                _switchWinByTwoLegsDifference(false, gameSettingsX01),
-                gameSettingsX01.notify(),
-                Navigator.of(context).pop(),
+              onPressed: () {
+                _resetWinByTwoLegsDifference(gameSettingsX01);
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Cancel',
@@ -176,10 +173,9 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () => {
-                _switchWinByTwoLegsDifference(true, gameSettingsX01),
-                gameSettingsX01.notify(),
-                Navigator.of(context).pop(),
+              onPressed: () {
+                _submitWinByTwoLegsDifference(gameSettingsX01);
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Submit',
@@ -197,12 +193,16 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
     );
   }
 
-  _switchWinByTwoLegsDifference(bool value, GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getWinByTwoLegsDifference) {
-      gameSettingsX01.setSuddenDeath = false;
-      gameSettingsX01.setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
-    }
-    gameSettingsX01.setWinByTwoLegsDifference = value;
+  _resetWinByTwoLegsDifference(GameSettingsX01_P gameSettingsX01) {
+    gameSettingsX01.setWinByTwoLegsDifference = false;
+    gameSettingsX01.setSuddenDeath = false;
+    gameSettingsX01.setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
+
+    gameSettingsX01.notify();
+  }
+
+  _submitWinByTwoLegsDifference(GameSettingsX01_P gameSettingsX01) {
+    gameSettingsX01.setWinByTwoLegsDifference = true;
 
     gameSettingsX01.notify();
   }
@@ -222,7 +222,7 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Win by Two Legs Difference',
+                      'Win by two legs difference',
                       style: TextStyle(
                         color: Utils.getTextColorForGameSettingsPage(),
                       ),
@@ -238,7 +238,7 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                         if (value) {
                           _showDialogForSuddenDeath(context, gameSettingsX01);
                         } else {
-                          _switchWinByTwoLegsDifference(value, gameSettingsX01);
+                          _resetWinByTwoLegsDifference(gameSettingsX01);
                         }
                       },
                     ),
@@ -249,10 +249,10 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                     transform: Matrix4.translationValues(0.0, -1.h, 0.0),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '(Sudden Death Leg after max. ${gameSettingsX01.getMaxExtraLegs} additional ' +
+                      '(Sudden death leg after max. ${gameSettingsX01.getMaxExtraLegs} additional ' +
                           (gameSettingsX01.getMaxExtraLegs == 1
-                              ? 'Leg)'
-                              : 'Legs)'),
+                              ? 'leg)'
+                              : 'legs)'),
                       style: TextStyle(
                         fontSize: 8.sp,
                         color: Colors.white70,

@@ -60,7 +60,8 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
       int dartsToCheck, GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     int mostDarts = 0;
     for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+        in Utils.getPlayersOrTeamStatsListStatsScreen(
+            gameX01, gameSettingsX01)) {
       final bool isValueForKeyAvailable = playerOrTeamGameStatsX01
           .getAllScoresPerLeg
           .containsKey(widget.setLegString);
@@ -99,7 +100,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
-                in Utils.getPlayersOrTeamStatsList(
+                in Utils.getPlayersOrTeamStatsListStatsScreen(
                     widget.gameX01, gameSettingsX01))
               Container(
                 width: 43.w,

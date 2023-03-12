@@ -10,6 +10,7 @@ import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -97,10 +98,8 @@ class FirestoreServicePlayerStats {
   }
 
   Future<void> getX01Statistics(BuildContext context) async {
-    //todo comment out
-    const String currentPlayerName =
-        //await context.read<AuthService>().getPlayer!.getName;
-        'Strainski';
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
     final firestoreStats = context.read<StatsFirestoreX01_P>();
 
     firestoreStats.resetValues();
@@ -142,7 +141,7 @@ class FirestoreServicePlayerStats {
     final CollectionReference collectionReference =
         _firestore.collection(_getFirestorePlayerStatsPath());
     Query query = collectionReference
-        .where('player.name', isEqualTo: currentPlayerName)
+        .where('player.name', isEqualTo: username)
         .where('mode', isEqualTo: 'X01');
 
     if (firestoreStats.currentFilterValue == FilterValue.Year ||
@@ -166,7 +165,7 @@ class FirestoreServicePlayerStats {
 
                 //count of games won
                 if ((element.data() as Map<String, dynamic>)
-                        .containsKey('checkoutInPercent') &&
+                        .containsKey('gameWon') &&
                     element.get('gameWon') == true)
                   {
                     countOfGamesWon++,
@@ -414,15 +413,13 @@ class FirestoreServicePlayerStats {
 
   Future<void> getFilteredPlayerGameStatistics(
       String orderField, bool ascendingOrder, BuildContext context) async {
-    const String currentPlayerName =
-        //todo change
-        //await context.read<AuthService>().getPlayer!.getName;
-        'Strainski';
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
     final firestoreStats = context.read<StatsFirestoreX01_P>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestorePlayerStatsPath());
     final Query query = collectionReference
-        .where('player.name', isEqualTo: currentPlayerName)
+        .where('player.name', isEqualTo: username)
         .orderBy(orderField, descending: ascendingOrder);
 
     List<Game_P> temp = [];

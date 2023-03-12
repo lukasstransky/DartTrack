@@ -16,7 +16,6 @@ class DefaultSettingsHelper {
 
     defaultSettingsX01.automaticallySubmitPoints =
         settingsX01.getAutomaticallySubmitPoints;
-    defaultSettingsX01.callerEnabled = settingsX01.getCallerEnabled;
     defaultSettingsX01.checkoutCountingFinallyDisabled =
         settingsX01.getCheckoutCountingFinallyDisabled;
     defaultSettingsX01.customPoints = settingsX01.getCustomPoints;
@@ -54,14 +53,13 @@ class DefaultSettingsHelper {
     }
 
     defaultSettingsX01.players = [];
+
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
     for (Player player in settingsX01.getPlayers) {
-      //todo comment out
-      //if (context.read<AuthService>().getPlayer!.getName != player.getName) {
-      if (player.getName != 'Strainski') {
+      if (username != player.getName) {
         defaultSettingsX01.players.add(Player.clone(player));
       }
-
-      //}
     }
 
     settingsX01.notify();
@@ -73,7 +71,6 @@ class DefaultSettingsHelper {
 
     settingsX01.setAutomaticallySubmitPoints =
         defaultSettingsX01.automaticallySubmitPoints;
-    settingsX01.setCallerEnabled = defaultSettingsX01.callerEnabled;
     settingsX01.setCheckoutCountingFinallyDisabled =
         defaultSettingsX01.checkoutCountingFinallyDisabled;
     settingsX01.setEnableCheckoutCounting =
@@ -121,7 +118,6 @@ class DefaultSettingsHelper {
 
     if (defaultSettingsX01.automaticallySubmitPoints ==
             settingsX01.getAutomaticallySubmitPoints &&
-        defaultSettingsX01.callerEnabled == settingsX01.getCallerEnabled &&
         defaultSettingsX01.checkoutCountingFinallyDisabled ==
             settingsX01.getCheckoutCountingFinallyDisabled &&
         defaultSettingsX01.customPoints == settingsX01.getCustomPoints &&
@@ -166,7 +162,6 @@ class DefaultSettingsHelper {
     final settingsX01 = context.read<GameSettingsX01_P>();
 
     if (settingsX01.getAutomaticallySubmitPoints == DEFAULT_AUTO_SUBMIT_POINTS &&
-        settingsX01.getCallerEnabled == DEFAULT_CALLER_ENABLED &&
         settingsX01.getCheckoutCountingFinallyDisabled ==
             DEFAULT_CHECKOUT_COUNTING_FINALLY_DISABLED &&
         settingsX01.getCustomPoints == DEFAULT_CUSTOM_POINTS &&
@@ -207,15 +202,20 @@ class DefaultSettingsHelper {
 
   static bool _checkIfDefaultPlayersAreSelected(
       GameSettingsX01_P settingsX01, BuildContext context) {
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
     return settingsX01.getPlayers.length == 1 &&
-        settingsX01.getPlayers[0].getName ==
-            context.read<AuthService>().getPlayer!.getName;
+        settingsX01.getPlayers[0].getName == username;
   }
 
   static bool _isCurrentUserInPlayers(
       List<Player> defaultSettingsPlayers, BuildContext context) {
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
     for (Player player in defaultSettingsPlayers) {
-      if (player.getName == context.read<AuthService>().getPlayer!.getName) {
+      if (player.getName == username) {
         return true;
       }
     }
@@ -225,11 +225,11 @@ class DefaultSettingsHelper {
 
   static bool _checkIfPlayersAreEqual(List<Player> defaultSettingsPlayers,
       List<Player> currentPlayers, BuildContext context) {
-    //todo comment out
-    /* final Player? currentPlayer = context.read<AuthService>().getPlayer;
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
     if (!_isCurrentUserInPlayers(defaultSettingsPlayers, context)) {
-      defaultSettingsPlayers.add(currentPlayer!);
-    } */
+      defaultSettingsPlayers.add(new Player(name: username));
+    }
 
     if (defaultSettingsPlayers.length != currentPlayers.length) {
       return false;
@@ -239,10 +239,9 @@ class DefaultSettingsHelper {
       int length = 0;
       for (Player defaultPlayer in defaultSettingsPlayers) {
         length++;
-        //todo comment out
-        /* if (player.getName == currentPlayer!.getName) {
+        if (player.getName == username) {
           break;
-        } */
+        }
         if (player is Bot && defaultPlayer is Bot) {
           if (player.getLevel == defaultPlayer.getLevel) {
             break;

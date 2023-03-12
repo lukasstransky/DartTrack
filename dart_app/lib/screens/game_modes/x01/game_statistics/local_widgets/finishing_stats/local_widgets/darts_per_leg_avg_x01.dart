@@ -49,9 +49,9 @@ class DartsPerLegAvgX01 extends StatelessWidget {
                     color: Utils.getTextColorDarken(context),
                   ),
                   children: <TextSpan>[
-                    new TextSpan(text: 'Darts/Leg'),
+                    new TextSpan(text: 'Darts/leg'),
                     new TextSpan(
-                      text: ' (Avg.)',
+                      text: ' (avg.)',
                       style: new TextStyle(
                         fontSize: 8.sp,
                         fontWeight: FontWeight.bold,
@@ -64,7 +64,8 @@ class DartsPerLegAvgX01 extends StatelessWidget {
             ),
           ),
           for (PlayerOrTeamGameStatsX01 stats
-              in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
+              in Utils.getPlayersOrTeamStatsListStatsScreen(
+                  gameX01, gameSettingsX01))
             Container(
               width: WIDTH_DATA_STATISTICS.w,
               child: Text(

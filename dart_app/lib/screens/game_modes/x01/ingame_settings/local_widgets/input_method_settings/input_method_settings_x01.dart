@@ -21,7 +21,7 @@ class InputMethodSettingsX01 extends StatelessWidget {
 
     if (inputMethod == InputMethod.Round && showMostScoredPoints) {
       if (!statisticsFirestoreX01.noGamesPlayed) {
-        return 49;
+        return 48;
       } else {
         return 43;
       }
@@ -50,7 +50,7 @@ class InputMethodSettingsX01 extends StatelessWidget {
                 padding: EdgeInsets.only(top: 0.5.h, left: 1.5.w),
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'Input Method',
+                  'Input method',
                   style: TextStyle(
                     fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
                     color: Utils.getTextColorDarken(context),

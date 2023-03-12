@@ -8,8 +8,21 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class MulitplePlayerStatsSingleDoubleTraining extends StatelessWidget {
+class MulitplePlayerStatsSingleDoubleTraining extends StatefulWidget {
   const MulitplePlayerStatsSingleDoubleTraining({Key? key}) : super(key: key);
+
+  @override
+  State<MulitplePlayerStatsSingleDoubleTraining> createState() =>
+      _MulitplePlayerStatsSingleDoubleTrainingState();
+}
+
+class _MulitplePlayerStatsSingleDoubleTrainingState
+    extends State<MulitplePlayerStatsSingleDoubleTraining> {
+  @override
+  void initState() {
+    super.initState();
+    newScrollControllerSingleDoubleTrainingPlayerEntries();
+  }
 
   @override
   Widget build(BuildContext context) {

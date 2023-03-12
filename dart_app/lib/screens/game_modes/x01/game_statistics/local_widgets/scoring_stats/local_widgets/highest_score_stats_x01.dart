@@ -26,7 +26,7 @@ class HighestScoreStatsX01 extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                'Highest Score',
+                'Highest score',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Utils.getTextColorDarken(context),
@@ -36,7 +36,8 @@ class HighestScoreStatsX01 extends StatelessWidget {
             ),
           ),
           for (PlayerOrTeamGameStatsX01 stats
-              in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
+              in Utils.getPlayersOrTeamStatsListStatsScreen(
+                  gameX01, gameSettingsX01))
             Container(
               width: WIDTH_DATA_STATISTICS.w,
               child: Text(

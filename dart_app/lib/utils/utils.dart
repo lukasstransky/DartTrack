@@ -122,7 +122,7 @@ class Utils {
 
     int currentPoints;
     for (PlayerOrTeamGameStatsX01 playerOrTeamStats
-        in Utils.getPlayersOrTeamStatsList(
+        in Utils.getPlayersOrTeamStatsListStatsScreen(
             game as GameX01_P, game.getGameSettings)) {
       if (Utils.playerStatsDisplayedInTeamMode(game, game.getGameSettings)) {
         PlayerOrTeamGameStatsX01 teamStats =
@@ -350,10 +350,19 @@ class Utils {
     return WIDGET_HEIGHT_GAMESETTINGS;
   }
 
-  static dynamic getPlayersOrTeamStatsList(
+  static dynamic getPlayersOrTeamStatsListStatsScreen(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameX01.getAreTeamStatsDisplayed) {
+      return gameX01.getTeamGameStatistics;
+    }
+
+    return gameX01.getPlayerGameStatistics;
+  }
+
+  static dynamic getPlayersOrTeamStatsList(
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
       return gameX01.getTeamGameStatistics;
     }
 
@@ -566,10 +575,10 @@ class Utils {
       Game_P game_p, BuildContext context) {
     if (game_p is GameX01_P) {
       if (game_p.getIsGameFinished || game_p.getIsOpenGame) {
-        return Utils.getPlayersOrTeamStatsList(
+        return Utils.getPlayersOrTeamStatsListStatsScreen(
             (game_p), game_p.getGameSettings);
       }
-      return Utils.getPlayersOrTeamStatsList(
+      return Utils.getPlayersOrTeamStatsListStatsScreen(
           context.read<GameX01_P>(), context.read<GameSettingsX01_P>());
     } else if (game_p is GameScoreTraining_P) {
       if (game_p.getIsGameFinished || game_p.getIsOpenGame) {
@@ -585,67 +594,80 @@ class Utils {
       context: context,
       builder: (context1) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: EdgeInsets.only(
-          bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-          top: DIALOG_CONTENT_PADDING_TOP,
-          left: DIALOG_CONTENT_PADDING_LEFT,
-          right: DIALOG_CONTENT_PADDING_RIGHT,
-        ),
+        contentPadding: dialogContentPadding,
         title: const Text(
           'End game',
           style: TextStyle(color: Colors.white),
         ),
         content: const Text(
-          'Would you like to save the game for finishing it later or end it completely?',
+          'Do you want to save the game to finish it later?',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: Text(
-              'Continue',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-            ),
-            style: ButtonStyle(
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
-            ),
-          ),
-          TextButton(
-            onPressed: () => {
-              Navigator.of(context).pop(),
-              _resetValuesAndNavigateToHome(context, game_p)
-            },
-            child: Text(
-              'End',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-            ),
-            style: ButtonStyle(
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
-            ),
-          ),
-          TextButton(
-            onPressed: () async {
-              Navigator.of(context, rootNavigator: true).pop();
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                alignment: Alignment.centerLeft,
+                child: TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(
+                    'Continue',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        Utils.getPrimaryMaterialStateColorDarken(context),
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Container(
+                    padding: EdgeInsets.only(right: 10),
+                    child: TextButton(
+                      onPressed: () => {
+                        Navigator.of(context).pop(),
+                        _resetValuesAndNavigateToHome(context, game_p)
+                      },
+                      child: Text(
+                        'No',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            Utils.getPrimaryMaterialStateColorDarken(context),
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      Navigator.of(context, rootNavigator: true).pop();
 
-              game_p.setShowLoadingSpinner = true;
-              game_p.notify();
+                      game_p.setShowLoadingSpinner = true;
+                      game_p.notify();
 
-              await Future.delayed(Duration(milliseconds: 200));
-              await context
-                  .read<FirestoreServiceGames>()
-                  .postOpenGame(game_p, context);
-              _resetValuesAndNavigateToHome(context, game_p);
-            },
-            child: Text(
-              'Save',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-            ),
-            style: ButtonStyle(
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
-            ),
+                      await Future.delayed(Duration(milliseconds: 200));
+                      await context
+                          .read<FirestoreServiceGames>()
+                          .postOpenGame(game_p, context);
+                      _resetValuesAndNavigateToHome(context, game_p);
+                    },
+                    child: Text(
+                      'Yes',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary),
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor:
+                          Utils.getPrimaryMaterialStateColorDarken(context),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

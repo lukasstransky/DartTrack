@@ -38,7 +38,7 @@ class CheckoutsX01 extends StatelessWidget {
     final bool isSingleMode =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
     final List<String> allSetLegStrings =
-        Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)[0]
+        Utils.getPlayersOrTeamStatsListStatsScreen(gameX01, gameSettingsX01)[0]
             .getAllScoresPerLeg
             .keys
             .toList();
@@ -79,7 +79,7 @@ class CheckoutsX01 extends StatelessWidget {
                     ),
                   ),
                   for (PlayerOrTeamGameStatsX01 stats
-                      in Utils.getPlayersOrTeamStatsList(
+                      in Utils.getPlayersOrTeamStatsListStatsScreen(
                           gameX01, gameSettingsX01))
                     Container(
                       width: WIDTH_DATA_STATISTICS.w,

@@ -51,6 +51,7 @@ dependencies:
   material_design_icons_flutter: ^6.0.7096
   get: ^4.6.1
   intl: ^0.18.0
+  shared_preferences: ^2.0.10
 
   flutter_test:
     sdk: flutter

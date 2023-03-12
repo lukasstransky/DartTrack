@@ -24,9 +24,7 @@ class GameDetailsX01 extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  gameX01.isGameDraw()
-                      ? 'Draw - ${gameSettingsX01.getGameMode()}'
-                      : 'X01 - ${gameSettingsX01.getGameMode()}',
+                  'X01 ${gameX01.isGameDraw(context) ? '- Draw' : ''}${(gameSettingsX01.getSetsEnabled || gameX01.isGameDraw(context)) ? '' : '- ' + gameSettingsX01.getGameMode()}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14.sp,
@@ -48,6 +46,18 @@ class GameDetailsX01 extends StatelessWidget {
             ],
           ),
         ),
+        if (gameSettingsX01.getSetsEnabled || gameX01.isGameDraw(context))
+          Padding(
+            padding: EdgeInsets.only(left: 2.w),
+            child: Text(
+              '${gameSettingsX01.getGameMode()}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14.sp,
+                color: Colors.white,
+              ),
+            ),
+          ),
         Padding(
           padding: EdgeInsets.only(left: 2.w),
           child: Text(
@@ -59,17 +69,61 @@ class GameDetailsX01 extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(left: 2.w, bottom: 0.5.h),
+          padding: EdgeInsets.only(
+              left: 2.w,
+              bottom: gameSettingsX01.getWinByTwoLegsDifference &&
+                      gameSettingsX01.getSuddenDeath
+                  ? 1.h
+                  : 0),
           child: Text(
             gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
-                ? 'Single Mode'
-                : 'Team Mode',
+                ? 'Single mode'
+                : 'Team mode',
             style: TextStyle(
               fontSize: 12.sp,
               color: Colors.white,
             ),
           ),
         ),
+        if (gameSettingsX01.getDrawMode && !gameX01.isGameDraw(context))
+          Padding(
+            padding: EdgeInsets.only(left: 2.w),
+            child: Text(
+              'Draw enabled',
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        if (gameSettingsX01.getWinByTwoLegsDifference) ...[
+          Padding(
+            padding: EdgeInsets.only(
+                left: 2.w, bottom: !gameSettingsX01.getSuddenDeath ? 1.h : 0),
+            child: Text(
+              'Win by two legs difference',
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          if (gameSettingsX01.getSuddenDeath)
+            Padding(
+              padding: EdgeInsets.only(left: 2.w, bottom: 1.h),
+              child: Row(
+                children: [
+                  Text(
+                    'Sudden death (after max. ${gameSettingsX01.getMaxExtraLegs} leg${gameSettingsX01.getMaxExtraLegs == 1 ? '' : 's'})',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ],
     );
   }

@@ -21,12 +21,12 @@ class ThreeDartAvgStatsX01 extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: WIDTH_HEADINGS_STATISTICS.w,
+            width: 40.w,
             alignment: Alignment.centerLeft,
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                '3-Dart Avg.',
+                '3-Dart avg.',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Utils.getTextColorDarken(context),
@@ -36,11 +36,12 @@ class ThreeDartAvgStatsX01 extends StatelessWidget {
             ),
           ),
           for (PlayerOrTeamGameStatsX01 stats
-              in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
+              in Utils.getPlayersOrTeamStatsListStatsScreen(
+                  gameX01, gameSettingsX01))
             Container(
               width: WIDTH_DATA_STATISTICS.w,
               child: Text(
-                stats.getAverage(),
+                stats.getAverage(gameSettingsX01),
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Colors.white,

@@ -46,23 +46,23 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
 
     //mode
     _game!.getGameSettings.getMode == BestOfOrFirstToEnum.BestOf
-        ? result += 'Best Of '
-        : result += 'First To ';
+        ? result += 'Best of '
+        : result += 'First to ';
 
     //sets
     if (_game!.getGameSettings.getSetsEnabled) {
       if (_game!.getGameSettings.getSets == 1) {
-        result += _game!.getGameSettings.getSets.toString() + ' Set ';
+        result += _game!.getGameSettings.getSets.toString() + ' set ';
       } else {
-        result += _game!.getGameSettings.getSets.toString() + ' Sets ';
+        result += _game!.getGameSettings.getSets.toString() + ' sets ';
       }
     }
 
     //legs
     if (_game!.getGameSettings.getLegs == 1) {
-      result += _game!.getGameSettings.getLegs.toString() + ' Leg - ';
+      result += _game!.getGameSettings.getLegs.toString() + ' leg - ';
     } else {
-      result += _game!.getGameSettings.getLegs.toString() + ' Legs - ';
+      result += _game!.getGameSettings.getLegs.toString() + ' legs - ';
     }
 
     //points
@@ -138,47 +138,87 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                 ),
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Column(
               children: [
-                Chip(
-                  backgroundColor: Utils.getPrimaryColorDarken(context),
-                  label: Text(
-                    _game!.getGameSettings.getModeIn == ModeOutIn.Single
-                        ? 'Single In'
-                        : 'Double In',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5),
-                  child: Chip(
-                    backgroundColor: Utils.getPrimaryColorDarken(context),
-                    label: Text(
-                      _game!.getGameSettings.getModeOut == ModeOutIn.Single
-                          ? 'Single Out'
-                          : 'Double Out',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                if (_game!.getGameSettings.getSuddenDeath)
-                  Padding(
-                    padding: EdgeInsets.only(left: 5),
-                    child: Chip(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Chip(
+                      backgroundColor: Utils.getPrimaryColorDarken(context),
                       label: Text(
-                        'Sudden Death',
+                        _game!.getGameSettings.getModeIn == ModeOutIn.Single
+                            ? 'Single in'
+                            : 'Double in',
                         style: TextStyle(
                           color: Colors.white,
                         ),
                       ),
                     ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 5),
+                      child: Chip(
+                        backgroundColor: Utils.getPrimaryColorDarken(context),
+                        label: Text(
+                          _game!.getGameSettings.getModeOut == ModeOutIn.Single
+                              ? 'Single out'
+                              : 'Double out',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    if (_game!.getGameSettings.getSuddenDeath)
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Chip(
+                          backgroundColor: Utils.getPrimaryColorDarken(context),
+                          label: Text(
+                            'Sudden death',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    if (_game!.getGameSettings.getDrawMode)
+                      Padding(
+                        padding: EdgeInsets.only(left: 5),
+                        child: Chip(
+                          backgroundColor: Utils.getPrimaryColorDarken(context),
+                          label: Text(
+                            'Draw enabled',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+                Container(
+                  transform: Matrix4.translationValues(0.0, -8, 0.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (!_game!.getGameSettings.getSuddenDeath &&
+                          _game!.getGameSettings.getWinByTwoLegsDifference)
+                        Padding(
+                          padding: EdgeInsets.only(left: 5),
+                          child: Chip(
+                            backgroundColor:
+                                Utils.getPrimaryColorDarken(context),
+                            label: Text(
+                              'Win by two legs difference',
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
+                ),
               ],
             ),
             SingleChildScrollView(
@@ -216,7 +256,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       child: Row(
                         children: [
                           const Text(
-                            'Show Odd Rounded Scores',
+                            'Show odd rounded scores',
                             style: TextStyle(
                               color: Colors.white,
                             ),

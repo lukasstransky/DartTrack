@@ -2,6 +2,7 @@ import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -72,7 +73,7 @@ class ResetPasswordBtn extends StatelessWidget {
 
     auth.setEmailAlreadyExists = await context
         .read<AuthService>()
-        .emailAlreadyExists(auth.getEmailController.text);
+        .emailAlreadyExists(emailTextController.text);
 
     if (!forgotPasswordFormKey.currentState!.validate()) {
       return;
@@ -85,7 +86,7 @@ class ResetPasswordBtn extends StatelessWidget {
 
     await context.read<AuthService>().resetPassword(email.trim());
 
-    auth.getPasswordController.clear();
+    passwordTextController.clear();
     Navigator.of(context).pop();
 
     // hide loading spinner
@@ -114,8 +115,7 @@ class ResetPasswordBtn extends StatelessWidget {
           ),
           backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
         ),
-        onPressed: () => resetPassword(
-            context.read<Auth_P>().getEmailController.text, context),
+        onPressed: () => resetPassword(emailTextController.text, context),
       ),
     );
   }

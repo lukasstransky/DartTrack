@@ -24,16 +24,22 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    return Consumer2<GameX01_P, GameSettingsX01_P>(
-      builder: (_, gameX01, gameSettingsX01, __) => Expanded(
+    return Consumer<GameX01_P>(
+      builder: (_, gameX01, __) => Expanded(
         child: Column(
           children: [
             Container(
               height: 6.h,
               child: ThrownDartsX01(),
             ),
-            if (gameSettingsX01.getShowInputMethodInGameScreen)
-              SelectInputMethod(mode: GameMode.X01),
+            Selector<GameSettingsX01_P, bool>(
+              selector: (_, gameSettings) =>
+                  gameSettings.getShowInputMethodInGameScreen,
+              builder: (_, showInputMethodInGameScreen, __) =>
+                  showInputMethodInGameScreen
+                      ? SelectInputMethod(mode: GameMode.X01)
+                      : SizedBox.shrink(),
+            ),
             OtherX01(),
             OneToFiveX01(),
             SixToTenX01(),

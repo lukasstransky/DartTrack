@@ -24,9 +24,9 @@ enum SetsOrLegsEnum { Sets, Legs }
 enum NewPlayer { Bot, Guest }
 
 const String SUDDEN_DEATH_INFO =
-    "If the score is tied after the regular number of Legs, a deciding Leg is played, called 'Sudden Death'. Whoever wins this Leg, is the winner of the match.";
+    "If the score is tied after the regular number of legs, a deciding leg is played, called 'Sudden death'. Whoever wins this leg, is the winner of the match.";
 const String SUDDEN_DEATH_LEG_DIFFERENCE_INFO =
-    "The additional maximum number of legs until the 'Sudden Death' Leg, is specified here. By default it's 2 Legs. (e.g. in case of 'First To 5 Legs' the 'Sudden Death' Leg is played after a score of 7:7).";
+    "The additional maximum number of legs until the 'Sudden death' leg, is specified here. By default it's 2 legs. (e.g. in case of 'First to 5 legs' the 'Sudden death' leg is played after a score of 7:7).";
 
 const int MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING = 2;
 const int DEFAULT_BOT_AVG_SLIDER_VALUE = 50;
@@ -44,7 +44,7 @@ const int MIN_SETS = 1;
 const int MAX_SETS = 31;
 const int MAX_EXTRA_LEGS = 9;
 const int CUSTOM_POINTS_MIN_NUMBER = 100;
-const int DEFAULT_LEGS_DRAW_MODE = 12;
+const int DEFAULT_LEGS_DRAW_MODE = 6;
 
 const int WIDTH_GAMESETTINGS = 80;
 const double WIDGET_HEIGHT_GAMESETTINGS = 4;
@@ -54,7 +54,7 @@ const double BUTTON_BORDER_RADIUS = 10.0;
 
 const String FIRST_DEFAULT_MOST_SCORED_POINT = '60';
 const String SECOND_DEFAULT_MOST_SCORED_POINT = '26';
-const String THIRD_DEFAULT_MOST_SCORED_POINT = '180';
+const String THIRD_DEFAULT_MOST_SCORED_POINT = '45';
 const String FOURTH_DEFAULT_MOST_SCORED_POINT = '30';
 const String FIFTH_DEFAULT_MOST_SCORED_POINT = '59';
 const String SIXTH_DEFAULT_MOST_SCORED_POINT = '100';
@@ -286,7 +286,7 @@ const SingleOrTeamEnum DEFAULT_SINGLE_OR_TEAM = SingleOrTeamEnum.Single;
 const BestOfOrFirstToEnum DEFAULT_MODE = BestOfOrFirstToEnum.FirstTo;
 const int DEFAULT_POINTS = 501;
 const int DEFAULT_CUSTOM_POINTS = -1;
-const int DEFAULT_LEGS = 1;
+const int DEFAULT_LEGS = 3;
 const int DEFAULT_SETS = 5;
 const bool DEFAULT_SETS_ENABLED = false;
 const ModeOutIn DEFAULT_MODE_IN = ModeOutIn.Single;
@@ -300,7 +300,6 @@ const bool DEFAULT_SHOW_AVG = true;
 const bool DEFAULT_SHOW_FINISH_WAYS = true;
 const bool DEFAULT_SHOW_THROWN_DARTS_PER_LEG = true;
 const bool DEFAULT_SHOW_LAST_THROW = true;
-const bool DEFAULT_CALLER_ENABLED = false;
 const bool DEFAULT_VIBRATION_FEEDBACK = false;
 const bool DEFAULT_AUTO_SUBMIT_POINTS = false;
 const bool DEFAULT_SHOW_MOST_SCORED_POINTS = false;
@@ -312,7 +311,8 @@ final mostScoredPoints = <String>[
   FIFTH_DEFAULT_MOST_SCORED_POINT,
   SIXTH_DEFAULT_MOST_SCORED_POINT
 ];
-List<String> DEFAULT_MOST_SCORED_POINTS = List<String>.of(mostScoredPoints);
+List<String> DEFAULT_MOST_SCORED_POINTS =
+    List<String>.of([...mostScoredPoints]);
 const InputMethod DEFAULT_INPUT_METHOD = InputMethod.Round;
 const bool DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN = false;
 const bool DEFAULT_DRAW_MODE = false;
@@ -321,17 +321,14 @@ const int DEFAULT_SETS_FIRST_TO_SETS_ENABLED = 3;
 const int DEFAULT_LEGS_FIRST_TO_SETS_ENABLED = 2;
 const int DEFAULT_SETS_BEST_OF_SETS_ENABLED = 5;
 const int DEFAULT_LEGS_BEST_OF_SETS_ENABLED = 3;
-const int DEFAULT_LEGS_FIRST_TO_NO_SETS = 5;
-const int DEFAULT_LEGS_BEST_OF_NO_SETS = 11;
+const int DEFAULT_LEGS_FIRST_TO_NO_SETS = 3;
+const int DEFAULT_LEGS_BEST_OF_NO_SETS = 7;
 const int DEFAULT_SETS_DRAW_MODE = 6;
 const int DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED = 5;
 
 const int DEFAULT_LIST_TILE_NEGATIVE_MARGIN = -4;
 
-const double DIALOG_CONTENT_PADDING_TOP = 20.0;
-const double DIALOG_CONTENT_PADDING_RIGHT = 15.0;
-const double DIALOG_CONTENT_PADDING_LEFT = 15.0;
-const double DIALOG_CONTENT_PADDING_BOTTOM = 0.0;
+const dialogContentPadding = EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 0.0);
 
 // Bot class
 const int AMOUNT_OF_GENERATED_SCORES = 2;

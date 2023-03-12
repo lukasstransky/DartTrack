@@ -27,11 +27,12 @@ class InGameSettingsX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Game Settings'),
+      appBar: CustomAppBar(title: 'Game settings'),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
               child: Center(
                 child: Container(
                   width: 95.w,

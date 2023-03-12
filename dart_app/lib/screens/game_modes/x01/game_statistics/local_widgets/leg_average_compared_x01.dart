@@ -24,7 +24,7 @@ class LegAvgComparedX01 extends StatelessWidget {
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS, bottom: 10),
           alignment: Alignment.center,
           child: Text(
-            'Averages per Leg',
+            'Averages per leg',
             style: TextStyle(
               fontSize: FONTSIZE_HEADING_STATISTICS.sp,
               color: Colors.white,
@@ -32,7 +32,8 @@ class LegAvgComparedX01 extends StatelessWidget {
           ),
         ),
         for (PlayerOrTeamGameStatsX01 stats
-            in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
+            in Utils.getPlayersOrTeamStatsListStatsScreen(
+                gameX01, gameSettingsX01))
           Row(
             children: [
               Container(

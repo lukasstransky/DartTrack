@@ -63,17 +63,19 @@ class PlayerOrTeamGameStats {
     String checkoutQuote = stats.getCheckoutQuoteInPercent();
 
     Map<String, dynamic> result = {
-      'player': stats.getPlayer.toMap(stats.getPlayer),
       'mode': _mode,
       'gameId': gameId,
       'dateTime': _dateTime,
       'dateTimeForFiltering':
           DateTime(_dateTime.year, _dateTime.month, _dateTime.day),
+      'currentPoints': stats.getCurrentPoints,
+      if (stats.getPlayer != null)
+        'player': stats.getPlayer.toMap(stats.getPlayer),
       if (stats.getLegsWon != 0) 'legsWon': stats.getLegsWon,
       if (stats.getTeam != null) 'team': stats.getTeam.toMap(stats.getTeam),
       if (settings.getSetsEnabled) 'setsWon': stats.getSetsWon,
       if (stats.getAllScores.isNotEmpty)
-        'average': double.parse(stats.getAverage()),
+        'average': double.parse(stats.getAverage(settings)),
       if (stats.getAllScores.isNotEmpty)
         'firstNineAvgPoints': stats.getFirstNineAvgPoints,
       if (stats.getFirstNineAvgCount > 0)
@@ -116,7 +118,7 @@ class PlayerOrTeamGameStats {
       if (stats.getGameWon) 'gameWon': stats.getGameWon,
       if (stats.getAllScoresCountForRound != 0)
         'allScoresCountForRound': stats.getAllScoresCountForRound,
-      if (stats.getLegsWonTotal != 0) 'totalPoints': stats.getTotalPoints,
+      if (stats.getTotalPoints != 0) 'totalPoints': stats.getTotalPoints,
       if (stats.getDartsForWonLegCount != 0)
         'dartsForWonLegCount': stats.getDartsForWonLegCount,
       if (stats.getGameDraw) 'gameDraw': true,
@@ -148,6 +150,7 @@ class PlayerOrTeamGameStats {
         result['inputMethodForRounds'] = stats.getInputMethodForRounds
             .map((e) => e.toString().split('.').last)
             .toList();
+      result['currentThrownDartsInLeg'] = stats.getCurrentThrownDartsInLeg;
       //todo add _checkoutCountAtThrownDarts
     }
 
@@ -256,7 +259,7 @@ class PlayerOrTeamGameStats {
       gameId: map['gameId'],
       dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
       mode: map['mode'],
-      player: Player.fromMap(map['player']),
+      player: map['player'] == null ? null : Player.fromMap(map['player']),
       team: map['team'] == null ? null : Team.fromMap(map['team']),
       currentPoints: map['currentPoints'] == null ? 0 : map['currentPoints'],
       totalPoints: map['totalPoints'] == null ? 0 : map['totalPoints'],
@@ -333,9 +336,7 @@ class PlayerOrTeamGameStats {
               ? {}
               : Map<String, String>.from(
                   map['setLegWithPlayerOrTeamWhoFinishedIt']),
-      inputMethodForRounds: map['inputMethodForRounds'] == null
-          ? []
-          : map['inputMethodForRounds'].cast<InputMethod>(),
+      inputMethodForRounds: inputMethodForRounds,
     );
   }
 

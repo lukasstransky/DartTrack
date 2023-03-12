@@ -5,6 +5,7 @@ import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/more_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/other_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/stats_per_game_btns.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
@@ -20,13 +21,25 @@ class Statistics extends StatefulWidget {
 
 class _StatisticsState extends State<Statistics> {
   bool _showMoreStats = false;
+  String username = '';
 
   @override
   initState() {
     context.read<StatsFirestoreX01_P>().currentFilterValue =
         FilterValue.Overall;
-    _getPlayerGameStatistics();
-    _getGames();
+    username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
+    if (username == 'Guest') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showDialogWhenLoggedInAsGuest();
+      });
+      context.read<StatsFirestoreX01_P>().resetAll();
+    } else {
+      _getPlayerGameStatistics();
+      _getGames();
+    }
+
     super.initState();
   }
 
@@ -38,13 +51,45 @@ class _StatisticsState extends State<Statistics> {
     await context.read<FirestoreServiceGames>().getGames('X01', context);
   }
 
+  _showDialogWhenLoggedInAsGuest() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        contentPadding: dialogContentPadding,
+        title: const Text(
+          'Information',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          'In order to track your games you need to create an account.',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
       body: Consumer<StatsFirestoreX01_P>(
         builder: (_, statisticsFirestore, __) =>
-            statisticsFirestore.avgBestWorstStatsLoaded
+            statisticsFirestore.avgBestWorstStatsLoaded || username == 'Guest'
                 ? SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(
@@ -80,7 +125,7 @@ class _StatisticsState extends State<Statistics> {
           color: Theme.of(context).colorScheme.secondary,
         ),
         label: Text(
-          _showMoreStats ? 'Less Stats' : 'More Stats',
+          _showMoreStats ? 'Less stats' : 'More stats',
           style: TextStyle(
             color: Utils.getTextColorDarken(context),
             fontWeight: FontWeight.bold,

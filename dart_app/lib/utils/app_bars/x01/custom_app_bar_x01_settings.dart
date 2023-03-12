@@ -21,21 +21,15 @@ class CustomAppBarX01Settings extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
-  final _edgeInsets = EdgeInsets.only(
-      bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-      top: DIALOG_CONTENT_PADDING_TOP,
-      left: DIALOG_CONTENT_PADDING_LEFT,
-      right: DIALOG_CONTENT_PADDING_RIGHT);
-
   _showDialogForGenerelDefaultSettings() {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: _edgeInsets,
+        contentPadding: dialogContentPadding,
         title: Text(
-          'Info',
+          'Information',
           style: TextStyle(color: Colors.white),
         ),
         content: Text(
@@ -69,7 +63,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: _edgeInsets,
+        contentPadding: dialogContentPadding,
         title: Text(
           defaultSettingsSelected
               ? 'Undo default settings'
@@ -98,7 +92,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             onPressed: () => _setOrUndoDefaultSettings(
                 gameSettingsX01, defaultSettingsSelected),
             child: Text(
-              'Save',
+              defaultSettingsSelected ? 'Undo' : 'Save',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
@@ -117,13 +111,77 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: _edgeInsets,
+        contentPadding: dialogContentPadding,
         title: const Text(
-          'Info',
+          'Information',
           style: TextStyle(color: Colors.white),
         ),
         content: const Text(
-          'Team mode for default settings is not supported!',
+          'Team mode is not supported for default settings.',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _showDialogCurrentUserNotInPlayers(String username) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        contentPadding: dialogContentPadding,
+        title: const Text(
+          'Information',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          'Not able to save default settings because current logged in user (${username}) is not present within the players.',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  _showDialogIfLoggedInAsGuest() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        contentPadding: dialogContentPadding,
+        title: const Text(
+          'Information',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Text(
+          'Logged in as a guest it is not possible to set default settings.',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -151,7 +209,8 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
 
     if (defaultSettingsSelected) {
       defaultSettingsX01.isSelected = false;
-      defaultSettingsX01.resetValues(context.read<AuthService>().getPlayer);
+      defaultSettingsX01.resetValues(
+          context.read<AuthService>().getUsernameFromSharedPreferences());
       DefaultSettingsHelper.setSettingsFromDefault(context);
     } else {
       defaultSettingsX01.isSelected = true;
@@ -166,14 +225,20 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   _defaultSettingsBtnClicked() {
     final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
     final gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
-    if (DefaultSettingsHelper.generalDefaultSettingsSelected(context) &&
+    if (username == 'Guest') {
+      _showDialogIfLoggedInAsGuest();
+    } else if (DefaultSettingsHelper.generalDefaultSettingsSelected(context) &&
         !defaultSettingsX01.isSelected) {
-      this._showDialogForGenerelDefaultSettings();
+      _showDialogForGenerelDefaultSettings();
     } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      this._showDialogForNoTeamModeSupported();
+      _showDialogForNoTeamModeSupported();
+    } else if (!gameSettingsX01.getPlayers.any((p) => p.getName == username)) {
+      _showDialogCurrentUserNotInPlayers(username);
     } else {
-      this._showDialogForDefaultSettings();
+      _showDialogForDefaultSettings();
     }
   }
 
@@ -185,7 +250,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       title: Column(
         children: [
           Text(
-            'Game Settings',
+            'Game settings',
             style: TextStyle(
                 fontSize: 14.sp,
                 color: Utils.getTextColorForGameSettingsPage()),
@@ -209,6 +274,8 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           padding: const EdgeInsets.only(right: 10),
           child: Consumer<GameSettingsX01_P>(
             builder: (_, gameSettingsX01, __) => IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () async => _defaultSettingsBtnClicked(),
               icon: DefaultSettingsHelper.defaultSettingsSelected(context)
                   ? Icon(MdiIcons.heart,

@@ -70,7 +70,7 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
                 bottom: 5,
               ),
               child: Text(
-                'Highest Finish: ' + widget.finish.toString(),
+                'Highest finish: ' + widget.finish.toString(),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,

@@ -28,7 +28,6 @@ class GameSettingsX01_P extends GameSettings_P {
   bool _showFinishWays = DEFAULT_SHOW_FINISH_WAYS;
   bool _showThrownDartsPerLeg = DEFAULT_SHOW_THROWN_DARTS_PER_LEG;
   bool _showLastThrow = DEFAULT_SHOW_LAST_THROW;
-  bool _callerEnabled = DEFAULT_CALLER_ENABLED;
   bool _vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
   bool _automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
   bool _showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
@@ -51,6 +50,9 @@ class GameSettingsX01_P extends GameSettings_P {
     required int points,
     required SingleOrTeamEnum singleOrTeam,
     required bool winByTwoLegsDifference,
+    required bool suddenDeath,
+    required int maxExtraLegs,
+    required bool drawMode,
     required bool setsEnabled,
     required InputMethod inputMethod,
     List<Player>? players,
@@ -65,6 +67,9 @@ class GameSettingsX01_P extends GameSettings_P {
     this._points = points;
     this._singleOrTeam = singleOrTeam;
     this._winByTwoLegsDifference = winByTwoLegsDifference;
+    this._suddenDeath = suddenDeath;
+    this._maxExtraLegs = maxExtraLegs;
+    this._drawMode = drawMode;
     this._setsEnabled = setsEnabled;
     this._inputMethod = inputMethod;
     if (players != null) {
@@ -159,11 +164,6 @@ class GameSettingsX01_P extends GameSettings_P {
         this._showLastThrow = showLastThrow,
       };
 
-  bool get getCallerEnabled => this._callerEnabled;
-  set setCallerEnabled(bool callerEnabled) => {
-        this._callerEnabled = callerEnabled,
-      };
-
   bool get getVibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
   set setVibrationFeedbackEnabled(bool vibrationFeedbackEnabled) => {
         this._vibrationFeedbackEnabled = vibrationFeedbackEnabled,
@@ -246,8 +246,10 @@ class GameSettingsX01_P extends GameSettings_P {
   checkTeamNamingIds(Team team) {
     final String lastCharFromTeamName =
         team.getName.substring(team.getName.length - 1);
-    if (!team.getName.startsWith('Team ') &&
-        int.tryParse(lastCharFromTeamName) == null) return;
+    if (!team.getName.startsWith('Team ') ||
+        int.tryParse(lastCharFromTeamName) == null) {
+      return;
+    }
 
     int teamNamingId = int.parse(lastCharFromTeamName);
     getTeamNamingIds.remove(teamNamingId);
@@ -328,17 +330,23 @@ class GameSettingsX01_P extends GameSettings_P {
   }
 
   int getPointsOrCustom() {
-    if (getCustomPoints != -1) return getCustomPoints;
+    if (getCustomPoints != -1) {
+      return getCustomPoints;
+    }
 
     return getPoints;
   }
 
   bool isCurrentUserInPlayers(BuildContext context) {
-    final String currentPlayerName =
-        context.read<AuthService>().getPlayer!.getName;
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
+    if (currentUsername == 'Guest') {
+      return false;
+    }
 
     for (Player player in getPlayers) {
-      if (player.getName == currentPlayerName) {
+      if (player.getName == currentUsername) {
         return true;
       }
     }
@@ -370,59 +378,55 @@ class GameSettingsX01_P extends GameSettings_P {
 
     switch (getModeIn) {
       case ModeOutIn.Single:
-        result += 'Single In - ';
+        result += 'Single in - ';
         break;
       case ModeOutIn.Double:
-        result += 'Double In - ';
+        result += 'Double in - ';
         break;
       case ModeOutIn.Master:
-        result += 'Master In - ';
+        result += 'Master in - ';
         break;
     }
 
     switch (getModeOut) {
       case ModeOutIn.Single:
-        result += 'Single Out';
+        result += 'Single out';
         break;
       case ModeOutIn.Double:
-        result += 'Double Out';
+        result += 'Double out';
         break;
       case ModeOutIn.Master:
-        result += 'Master Out';
+        result += 'Master out';
         break;
-    }
-
-    if (getSuddenDeath) {
-      result +=
-          '\nSudden Death - after max. ${getMaxExtraLegs.toString()} Legs';
-      if (getMaxExtraLegs > 1) {
-        result += 's';
-      }
     }
 
     return result;
+  }
+
+  String getSuddenDeathInfo() {
+    return '(Sudden death - after max. ${getMaxExtraLegs.toString()} leg${getMaxExtraLegs > 1 ? 's' : ''})';
   }
 
   String getGameMode() {
     String result = '';
 
     if (getMode == BestOfOrFirstToEnum.BestOf) {
-      result += 'Best Of ';
+      result += 'Best of ';
     } else {
-      result += 'First To ';
+      result += 'First to ';
     }
 
     if (getSetsEnabled) {
       if (getSets > 1) {
-        result += '${getSets.toString()} Sets - ';
+        result += '${getSets.toString()} sets - ';
       } else {
-        result += '${getSets.toString()} Set - ';
+        result += '${getSets.toString()} set - ';
       }
     }
     if (getLegs > 1) {
-      result += '${getLegs.toString()} Legs';
+      result += '${getLegs.toString()} legs';
     } else {
-      result += '${getLegs.toString()} Leg';
+      result += '${getLegs.toString()} leg';
     }
 
     return result;

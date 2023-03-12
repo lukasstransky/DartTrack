@@ -48,7 +48,7 @@ class SingleOutBtn extends StatelessWidget {
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Single Out',
+            'Single out',
             style: TextStyle(
               color: Utils.getTextColorForGameSettingsBtn(
                   isSingleOutMode, context),
@@ -111,7 +111,7 @@ class DoubleOutBtn extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'Double Out',
+              'Double out',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
                     isDoubleOutMode, context),
@@ -156,7 +156,7 @@ class MasterOutBtn extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              'Master Out',
+              'Master out',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
                     isMasterOutMode, context),

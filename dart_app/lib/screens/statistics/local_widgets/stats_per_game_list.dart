@@ -54,16 +54,17 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   String _getMessage(dynamic statsFirestore, String mode) {
-    if (!statsFirestore.noGamesPlayed &&
+    if (statsFirestore.showFavouriteGames &&
         statsFirestore.favouriteGames.isEmpty) {
       return 'There are currently no games selected as favourite.';
     }
 
-    final String messagePart = 'No ${_mode} games were played';
+    String tempMode = _mode.toLowerCase();
+    final String messagePart = 'No ${tempMode} games were played';
     if (mode == 'X01') {
       switch (statsFirestore.currentFilterValue) {
         case FilterValue.Overall:
-          return 'No ${_mode} games have been played yet.';
+          return 'No ${tempMode} games have been played yet.';
         case FilterValue.Month:
           return '${messagePart} in the last 30 days.';
         case FilterValue.Year:
@@ -241,7 +242,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
     return Scaffold(
       appBar: CustomAppBarStatsList(
-        title: '${_mode} Games',
+        title: '${_mode} games',
         mode: _mode,
       ),
       body: _getWidget(statsFirestore, games),

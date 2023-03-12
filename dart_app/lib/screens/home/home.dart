@@ -1,12 +1,12 @@
-import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/game_modes/game_modes_overview.dart';
 import 'package:dart_app/screens/settings/settings.dart';
 import 'package:dart_app/screens/statistics/statistics.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
-import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
@@ -24,7 +24,7 @@ class _HomeState extends State<Home> {
   final List _pages = [
     GameModesOverView(),
     Statistics(),
-    Settings(),
+    SettingsPage(),
   ];
 
   onTabTapped(int index) {
@@ -40,12 +40,14 @@ class _HomeState extends State<Home> {
 
     // lead to some errors in the submit method (login_register_btn.dart)
     if (arguments.isNotEmpty) {
-      final Auth_P auth = context.read<Auth_P>();
+      final String email = arguments['email'];
+
       if (arguments['isLogin']) {
-        context.read<AuthService>().createPlayerOfCurrentUser();
+        context.read<AuthService>().storeUsernameInSharedPreferences(email);
       } else if (!arguments['isLogin']) {
-        context.read<AuthService>().postUserToFirestore(
-            auth.getEmailController.text, auth.getUsernameController.text);
+        context
+            .read<AuthService>()
+            .postUserToFirestore(email, arguments['username']);
       }
     }
     super.didChangeDependencies();

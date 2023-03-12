@@ -60,7 +60,7 @@ class _TeamsListX01State extends State<TeamsListX01> {
                   child: Text(
                     team.getName,
                     style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.white),
                   ),
@@ -81,6 +81,7 @@ class _TeamsListX01State extends State<TeamsListX01> {
                         children: [
                           Container(
                             width: 39.w,
+                            padding: EdgeInsets.only(left: 15),
                             child: FittedBox(
                               alignment: Alignment.centerLeft,
                               fit: BoxFit.scaleDown,
@@ -90,10 +91,11 @@ class _TeamsListX01State extends State<TeamsListX01> {
                                           CrossAxisAlignment.end,
                                       children: [
                                         Text(
-                                          'Level ${player.getLevel} Bot',
+                                          'Bot - level ${player.getLevel}',
                                           style: TextStyle(
-                                              fontSize: 10.sp,
-                                              color: Colors.white),
+                                            fontSize: 10.sp,
+                                            color: Colors.white,
+                                          ),
                                         ),
                                         Container(
                                           transform: Matrix4.translationValues(
@@ -101,8 +103,9 @@ class _TeamsListX01State extends State<TeamsListX01> {
                                           child: Text(
                                             ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                                             style: TextStyle(
-                                                fontSize: 7.sp,
-                                                color: Colors.white),
+                                              fontSize: 7.sp,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -110,12 +113,13 @@ class _TeamsListX01State extends State<TeamsListX01> {
                                   : Text(
                                       player.getName,
                                       style: TextStyle(
-                                          fontSize: 10.sp, color: Colors.white),
+                                        fontSize: 12.sp,
+                                        color: Colors.white,
+                                      ),
                                     ),
                             ),
                           ),
-                          Container(
-                            width: 39.w,
+                          Expanded(
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -147,17 +151,22 @@ class _TeamsListX01State extends State<TeamsListX01> {
                                         .showDialogForSwitchingTeam(
                                             context, player, gameSettingsX01),
                                   ),
-                                IconButton(
-                                  splashColor: Colors.transparent,
-                                  highlightColor: Colors.transparent,
-                                  padding: EdgeInsets.zero,
-                                  icon: Icon(
-                                    Icons.highlight_remove,
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
+                                Container(
+                                  transform:
+                                      Matrix4.translationValues(0.0, 1, 0.0),
+                                  child: IconButton(
+                                    splashColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    padding: EdgeInsets.zero,
+                                    icon: Icon(
+                                      Icons.highlight_remove,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary,
+                                    ),
+                                    onPressed: () => _deleteIconClicked(
+                                        team, player, gameSettingsX01),
                                   ),
-                                  onPressed: () => _deleteIconClicked(
-                                      team, player, gameSettingsX01),
                                 ),
                               ],
                             ),

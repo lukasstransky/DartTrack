@@ -71,7 +71,7 @@ class AvgBestWorstStats extends StatelessWidget {
                 Container(
                   width: 30.w,
                   child: Text(
-                    'X01 Avg.',
+                    'X01 avg.',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: color,
@@ -112,7 +112,7 @@ class AvgBestWorstStats extends StatelessWidget {
                 Container(
                   width: 30.w,
                   child: Text(
-                    'First Nine Avg.',
+                    'First nine avg.',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: color,

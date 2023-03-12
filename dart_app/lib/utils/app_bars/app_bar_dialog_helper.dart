@@ -9,11 +9,7 @@ class AppBarDialogHelper {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: dialogContentPadding,
         title: Text(
           'Score training explained',
           style: TextStyle(

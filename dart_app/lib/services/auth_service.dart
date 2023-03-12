@@ -1,20 +1,26 @@
-import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/user.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
-  Player? _player;
-
-  // reason why its loaded here -> gamesettings tab looks laggy when the player is loaded there in the initstate method
-  Player? get getPlayer => _player;
-
-  AuthService(this._firebaseAuth, this._firestore);
+  late SharedPreferences prefs;
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
+
+  AuthService(this._firebaseAuth, this._firestore) {
+    _initSharedPreferences();
+  }
+
+  Future<void> _initSharedPreferences() async {
+    prefs = await SharedPreferences.getInstance();
+  }
 
   Future<void> register(email, password) async {
     try {
@@ -30,7 +36,6 @@ class AuthService {
         uid: _firebaseAuth.currentUser!.uid, email: email, username: username);
 
     await _firestore.collection('users').doc(newUser.uid).set(newUser.toMap());
-    await createPlayerOfCurrentUser();
   }
 
   Future<void> login(email, password) async {
@@ -42,7 +47,14 @@ class AuthService {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
+    final String username = getUsernameFromSharedPreferences() ?? '';
+    if (username == 'Guest') {
+      await context.read<FirestoreServiceGames>().deleteAllOpenGames();
+      await _firebaseAuth.currentUser!.delete();
+      deleteUserData();
+    }
+
     await _firebaseAuth.signOut();
   }
 
@@ -78,20 +90,32 @@ class AuthService {
     await _firebaseAuth.signInAnonymously();
   }
 
-  Future<void> createPlayerOfCurrentUser() async {
-    if (_firebaseAuth.currentUser!.email == null) {
-      // guest
-      return;
+  Future<void> storeUsernameInSharedPreferences(String email) async {
+    final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    final String username =
+        (querySnapshot.docs.first.data() as Map<String, dynamic>)['username'];
+
+    await prefs.setString('username', username);
+  }
+
+  String? getUsernameFromSharedPreferences() {
+    if (_firebaseAuth.currentUser!.isAnonymous) {
+      return 'Guest';
     }
 
-    final String currentUserUid = _firebaseAuth.currentUser!.uid;
+    return prefs.getString('username');
+  }
 
-    await _firestore
-        .collection('users')
-        .doc(currentUserUid)
-        .get()
-        .then((value) => {
-              _player = new Player(name: value.data()!['username']),
-            });
+  Future<void> deleteUserData() async {
+    await _firebaseAuth.authStateChanges().firstWhere((user) => user != null);
+
+    final currentUser = _firebaseAuth.currentUser;
+    if (currentUser != null && currentUser.isAnonymous) {
+      final String uid = currentUser.uid;
+      await _firestore.collection('users').doc(uid).delete();
+    }
   }
 }

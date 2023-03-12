@@ -11,6 +11,7 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
 class SubmitX01Helper {
@@ -49,7 +50,9 @@ class SubmitX01Helper {
       currentStats = gameX01.getCurrentPlayerGameStats();
     }
 
-    gameX01.setRevertPossible = true;
+    if (!isBotBeginning(currentStats, gameX01, gameSettingsX01)) {
+      gameX01.setRevertPossible = true;
+    }
 
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       currentStats.getInputMethodForRounds.add(gameSettingsX01.getInputMethod);
@@ -94,10 +97,18 @@ class SubmitX01Helper {
     }
 
     //add delay for last dart for three darts input method
-    final int milliseconds =
+    int milliseconds =
         isInputMethodThreeDarts && gameSettingsX01.getAutomaticallySubmitPoints
             ? 800
             : 0;
+    if (currentStats.getPlayer is Bot ||
+        (currentStats.getTeam != null &&
+            currentStats.getTeam.getCurrentPlayerToThrow is Bot)) {
+      milliseconds = 400;
+    }
+    if (isBotBeginning(currentStats, gameX01, gameSettingsX01)) {
+      milliseconds = 0;
+    }
 
     Future.delayed(Duration(milliseconds: milliseconds), () {
       currentStats.setPointsSelectedCount = 0;
@@ -134,8 +145,10 @@ class SubmitX01Helper {
       _setCheckoutCountAtThrownDarts(
           currentStats, checkoutCount, gameX01, gameSettingsX01);
       _setScores(currentStats, totalPoints, gameX01, gameSettingsX01);
-      final bool legSetOrGameFinished = _legSetOrGameFinished(currentStats,
+      final Tuple2<bool, bool> tuple = _legSetOrGameFinished(currentStats,
           context, totalPoints, thrownDarts, gameX01, shouldSubmitTeamStats);
+      final bool legSetOrGameFinished = tuple.item1;
+      final bool gameFinished = tuple.item2;
 
       if (!legSetOrGameFinished) {
         if (shouldSubmitTeamStats) {
@@ -163,8 +176,15 @@ class SubmitX01Helper {
         }
       }
 
-      // reset current points & starting points, if leg, set, game won
+      // reset current points & starting points IF leg, set, game won
       if (legSetOrGameFinished) {
+        if (currentStats.getCurrentPoints != 0 ||
+            (currentStats.getCurrentPoints == 0 &&
+                currentStats.getPlayer != gameX01.getCurrentPlayerToThrow &&
+                !shouldSubmitTeamStats)) {
+          g_thrown_darts = '-';
+        }
+
         if (shouldSubmitTeamStats) {
           for (PlayerOrTeamGameStatsX01 stats
               in gameX01.getTeamGameStatistics) {
@@ -181,9 +201,14 @@ class SubmitX01Helper {
           }
         }
       }
-      //if (!legSetOrGameFinished) {
-      gameX01.notify();
-      //}
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+          !gameFinished &&
+          shouldSubmitTeamStats) {
+        gameX01.notify();
+      } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single &&
+          !gameFinished) {
+        gameX01.notify();
+      }
     });
 
     // submit team stats
@@ -327,7 +352,7 @@ class SubmitX01Helper {
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team;
   }
 
-  static bool _legSetOrGameFinished(
+  static Tuple2<bool, bool> _legSetOrGameFinished(
       PlayerOrTeamGameStatsX01 currentStats,
       BuildContext context,
       int totalPoints,
@@ -335,7 +360,7 @@ class SubmitX01Helper {
       GameX01_P gameX01,
       bool shouldSubmitTeamStats) {
     if (currentStats.getCurrentPoints != 0) {
-      return false;
+      return new Tuple2(false, false);
     }
 
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
@@ -438,7 +463,9 @@ class SubmitX01Helper {
 
     if ((isGameFinished || currentStats.getGameDraw)) {
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
-          shouldSubmitTeamStats) Navigator.of(context).pushNamed('/finishX01');
+          shouldSubmitTeamStats) {
+        Navigator.of(context).pushNamed('/finishX01');
+      }
     } else {
       for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
         stats.setCurrentThrownDartsInLeg = 0;
@@ -452,7 +479,7 @@ class SubmitX01Helper {
 
     // set player or team who will begin next leg
     if (shouldSubmitTeamStats) {
-      return true;
+      return new Tuple2(true, isGameFinished);
     }
 
     // set player leg start index
@@ -487,7 +514,7 @@ class SubmitX01Helper {
       gameX01.botSubmittedPoints = false;
     }
 
-    return true;
+    return new Tuple2(true, isGameFinished);
   }
 
   static _updateLegsSets(
@@ -504,7 +531,10 @@ class SubmitX01Helper {
     }
 
     // update won sets
-    if (gameSettingsX01.getLegs == currentStats.getLegsWon) {
+    if (gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
+            gameSettingsX01.getLegs == currentStats.getLegsWon ||
+        gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+            (gameSettingsX01.getLegs + 1) / 2 == currentStats.getLegsWon) {
       // save leg count of each player -> in case a user wants to revert a set
       if (shouldSubmitTeamStats) {
         for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
@@ -548,10 +578,11 @@ class SubmitX01Helper {
     }
 
     //if sets are enabled -> sort after sets, otherwise after legs
-    if (gameSettingsX01.getSetsEnabled)
+    if (gameSettingsX01.getSetsEnabled) {
       temp.sort((a, b) => b.getSetsWon.compareTo(a.getSetsWon));
-    else
+    } else {
       temp.sort((a, b) => b.getLegsWon.compareTo(a.getLegsWon));
+    }
 
     gameX01.setPlayerGameStatistics = temp;
   }
@@ -622,10 +653,6 @@ class SubmitX01Helper {
       if (gameX01.getCurrentPlayerToThrow is Bot) {
         gameX01.setBotSubmittedPoints = false;
       }
-
-      if (scrollController.isAttached) {
-        scrollController.jumpTo(index: jumpToIndex);
-      }
     }
   }
 
@@ -637,21 +664,15 @@ class SubmitX01Helper {
       final int indexOfCurrentPlayer =
           players.indexOf(gameX01.getCurrentPlayerToThrow);
 
-      int jumpToIndex = 0;
       if (indexOfCurrentPlayer + 1 == players.length) {
         //round of all players finished -> restart from beginning
         gameX01.setCurrentPlayerToThrow = players[0];
       } else {
         gameX01.setCurrentPlayerToThrow = players[indexOfCurrentPlayer + 1];
-        jumpToIndex = indexOfCurrentPlayer + 1;
       }
 
       if (gameX01.getCurrentPlayerToThrow is Bot) {
         gameX01.setBotSubmittedPoints = false;
-      }
-
-      if (scrollController.isAttached) {
-        scrollController.jumpTo(index: jumpToIndex);
       }
     }
   }
@@ -727,7 +748,11 @@ class SubmitX01Helper {
 
 //if player clicks on bust in three darts mode
   static _submitBusted(PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01) {
-    final int amountOfThrownDarts = gameX01.getAmountOfDartsThrown();
+    int amountOfThrownDarts = gameX01.getAmountOfDartsThrown();
+
+    if (stats.getTeam != null) {
+      amountOfThrownDarts = 0;
+    }
 
     //set all completed throws in this round to 0
     for (int i = stats.getAllScoresPerDart.length - 1;
@@ -761,7 +786,7 @@ class SubmitX01Helper {
 
     int diffTo3 = 3 - amountOfThrownDarts;
     //set remaining throws to 0 (e.g. 20 left -> with first dart T20 -> set 2nd & 3rd throw also to 0)
-    for (int i = 0; i < diffTo3 - 1; i++) {
+    for (int i = 0; i < diffTo3; i++) {
       stats.getAllScoresPerDart.add(0);
       stats.getAllScoresPerDartAsString.add('0');
     }
@@ -778,10 +803,11 @@ class SubmitX01Helper {
     gameX01.getCurrentThreeDarts[1] = '0';
     gameX01.getCurrentThreeDarts[2] = '0';
 
-    if (stats.getAllScoresPerDartAsStringCount.containsKey('0'))
+    if (stats.getAllScoresPerDartAsStringCount.containsKey('0')) {
       stats.getAllScoresPerDartAsStringCount['0'] += 3;
-    else
+    } else {
       stats.getAllScoresPerDartAsStringCount['0'] = 3;
+    }
   }
 
   static bool _gameWonFirstToWithSets(
@@ -810,24 +836,52 @@ class SubmitX01Helper {
         ((legsWon * 2) - 1) == gameSettingsX01.getLegs;
   }
 
+  static bool _gameWonBestOfWithLegsWithDrawMode(
+      int legsWon, GameSettingsX01_P gameSettingsX01) {
+    return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+        legsWon == (gameSettingsX01.getLegs / 2) + 1;
+  }
+
+  static bool _gameWonBestOfWithSetsWithDrawMode(
+      int setsWon, GameSettingsX01_P gameSettingsX01) {
+    return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+        setsWon == (gameSettingsX01.getSets / 2) + 1;
+  }
+
   static _showDialogForSuddenDeath(BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: dialogContentPadding,
         title: Text(
-          'Sudden Death',
+          'Sudden death',
           style: TextStyle(color: Colors.white),
         ),
-        content: Text(
-          "The 'Sudden Death' leg is reached. The player who wins this leg also wins the game.",
-          style: TextStyle(color: Colors.white),
+        content: RichText(
+          text: TextSpan(
+            text: 'The ',
+            style: TextStyle(
+              fontSize: 12.sp,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Sudden death',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12.sp,
+                ),
+              ),
+              TextSpan(
+                text:
+                    ' leg is reached. The player who wins this leg also wins the game.',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                ),
+              )
+            ],
+          ),
         ),
         actions: [
           TextButton(
@@ -852,57 +906,73 @@ class SubmitX01Helper {
       return true;
     }
 
-    if (_gameWonFirstToWithSets(stats.getSetsWon, gameSettingsX01) ||
-        _gameWonBestOfWithSets(stats.getSetsWon, gameSettingsX01) ||
-        _gameWonBestOfWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
-      return true;
-    } else if (!gameSettingsX01.getSetsEnabled &&
-        _gameWonFirstToWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
-      if (!gameSettingsX01.getWinByTwoLegsDifference) {
+    // draw mode
+    if (gameSettingsX01.getDrawMode) {
+      return _gameWonBestOfWithLegsWithDrawMode(
+              stats.getLegsWonTotal, gameSettingsX01) ||
+          _gameWonBestOfWithSetsWithDrawMode(stats.getSetsWon, gameSettingsX01);
+    } else if (gameSettingsX01.getSetsEnabled) {
+      // set mode
+      return _gameWonFirstToWithSets(stats.getSetsWon, gameSettingsX01) ||
+          _gameWonBestOfWithSets(stats.getSetsWon, gameSettingsX01);
+    } else if (!gameSettingsX01.getSetsEnabled) {
+      // leg mode
+      if (_gameWonBestOfWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
         return true;
-      }
+      } else if (_gameWonFirstToWithLegs(
+          stats.getLegsWonTotal, gameSettingsX01)) {
+        if (!gameSettingsX01.getWinByTwoLegsDifference) {
+          return true;
+        }
 
-      // suddean death reached
-      if (gameSettingsX01.getSuddenDeath &&
-          _reachedSuddenDeath(gameX01, gameSettingsX01)) {
-        _showDialogForSuddenDeath(context);
-        gameX01.setReachedSuddenDeath = true;
-      }
+        // suddean death reached
+        if (gameSettingsX01.getSuddenDeath &&
+            _reachedSuddenDeath(gameX01, gameSettingsX01)) {
+          _showDialogForSuddenDeath(context);
+          gameX01.setReachedSuddenDeath = true;
+        }
 
-      if (_isLegDifferenceAtLeastTwo(stats, gameX01)) {
-        return true;
+        if (gameX01.isLegDifferenceAtLeastTwo(
+            stats, gameX01, gameSettingsX01)) {
+          return true;
+        }
       }
     }
 
     return false;
   }
 
-  //for win by two legs diff -> checks if leg won difference is at least 2 at each player -> return true (valid win)
-  static bool _isLegDifferenceAtLeastTwo(
-      PlayerOrTeamGameStatsX01 playerToCheck, GameX01_P gameX01) {
-    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-      if (stats != playerToCheck &&
-          (playerToCheck.getLegsWon - 2) < stats.getLegsWon) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   static bool _reachedSuddenDeath(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = true;
 
-    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-      final int legs =
+    for (PlayerOrTeamGameStatsX01 stats
+        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+      final int legsForSuddenDeath =
           gameSettingsX01.getLegs + gameSettingsX01.getMaxExtraLegs;
 
-      if (stats.getLegsWon != legs) {
+      if (stats.getLegsWon != legsForSuddenDeath) {
         result = false;
       }
     }
 
     return result;
+  }
+
+  static bool isBotBeginning(PlayerOrTeamGameStatsX01 currentStats,
+      GameX01_P gameX01_P, GameSettingsX01_P gameSettingsX01_P) {
+    if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      return currentStats.getPlayer == null ||
+          (currentStats.getPlayer is Bot &&
+              currentStats.getAllThrownDarts == 0 &&
+              gameSettingsX01_P.getPlayers.first == currentStats.getPlayer);
+    }
+
+    // team
+    return currentStats.getTeam == null ||
+        (currentStats.getTeam.getPlayers.first is Bot &&
+            currentStats.getAllThrownDarts == 0 &&
+            Player.samePlayer(gameSettingsX01_P.getTeams.first.getPlayers.first,
+                currentStats.getTeam.getPlayers.first));
   }
 }

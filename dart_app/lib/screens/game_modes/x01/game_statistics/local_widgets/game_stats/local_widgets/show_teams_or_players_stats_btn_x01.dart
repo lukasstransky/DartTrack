@@ -18,9 +18,7 @@ class ShowTeamsOrPlayersStatsBtnX01 extends StatelessWidget {
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
       return Container(
-        width: WIDTH_HEADINGS_STATISTICS.w,
-        padding: EdgeInsets.only(left: 5.w, right: 5.w),
-        transform: Matrix4.translationValues(-20.0, 0.0, 0.0),
+        width: WIDTH_HEADINGS_STATISTICS.w - 10.w,
         child: ElevatedButton(
           onPressed: () {
             context.read<GameX01_P>().setAreTeamStatsDisplayed =
@@ -37,7 +35,7 @@ class ShowTeamsOrPlayersStatsBtnX01 extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              gameX01.getAreTeamStatsDisplayed ? 'Show Players' : 'Show Teams',
+              gameX01.getAreTeamStatsDisplayed ? 'Show players' : 'Show teams',
               style: TextStyle(
                 fontSize: 10.sp,
                 color: Theme.of(context).colorScheme.secondary,
@@ -53,13 +51,14 @@ class ShowTeamsOrPlayersStatsBtnX01 extends StatelessWidget {
               ),
             ),
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
-            overlayColor: MaterialStateProperty.all(
-                Theme.of(context).colorScheme.primary),
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
           ),
         ),
       );
     return Container(
-      width: WIDTH_HEADINGS_STATISTICS.w,
+      width: WIDTH_HEADINGS_STATISTICS.w - 10.w,
     );
   }
 }

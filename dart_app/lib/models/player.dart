@@ -42,7 +42,9 @@ class Player {
   }
 
   static bool samePlayer(Player? playerA, Player playerB) {
-    if (playerA == null || playerA.getName != playerB.getName) return false;
+    if (playerA == null || playerA.getName != playerB.getName) {
+      return false;
+    }
 
     if (playerA is Bot && playerB is Bot) {
       if (playerA.getPreDefinedAverage == playerB.getPreDefinedAverage) {

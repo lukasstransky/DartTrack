@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -8,8 +9,22 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
-class RoundsOrPointsInputScoreTraining extends StatelessWidget {
+class RoundsOrPointsInputScoreTraining extends StatefulWidget {
   const RoundsOrPointsInputScoreTraining({Key? key}) : super(key: key);
+
+  @override
+  State<RoundsOrPointsInputScoreTraining> createState() =>
+      _RoundsOrPointsInputScoreTrainingState();
+}
+
+class _RoundsOrPointsInputScoreTrainingState
+    extends State<RoundsOrPointsInputScoreTraining> {
+  @override
+  void initState() {
+    super.initState();
+    newTextControllerMaxRoundsOrPointsGameSettingsSct(
+        DEFAULT_ROUNDS_SCORE_TRAINING.toString());
+  }
 
   _showDialogForRoundsOrPoints(BuildContext context) {
     final gameSettingsScoreTraining_P =
@@ -18,6 +33,8 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
         gameSettingsScoreTraining_P.getMode == ScoreTrainingModeEnum.MaxRounds
             ? true
             : false;
+    final String backupString = maxRoundsOrPointsTextController
+        .text; // in case of changing input and canceling
 
     showDialog(
       barrierDismissible: false,
@@ -26,11 +43,7 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
         key: gameSettingsScoreTraining_P.getFormKeyMaxRoundsOrPoints,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: Text(
             isMaxRoundsMode ? 'Enter max. rounds' : 'Enter max. points',
             style: TextStyle(
@@ -43,8 +56,7 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
               right: 10.w,
             ),
             child: TextFormField(
-              controller:
-                  gameSettingsScoreTraining_P.getMaxRoundsOrPointsController,
+              controller: maxRoundsOrPointsTextController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return ('Please enter a value!');
@@ -87,15 +99,23 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
                 hintStyle: TextStyle(
                   color: Utils.getPrimaryColorDarken(context),
                 ),
-                border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
               ),
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () => {
-                gameSettingsScoreTraining_P.setControllerTextValueToDefault(),
-                Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Future.delayed(Duration(milliseconds: 300), () {
+                  maxRoundsOrPointsTextController.text = backupString;
+                });
               },
               child: Text(
                 'Cancel',
@@ -138,8 +158,8 @@ class RoundsOrPointsInputScoreTraining extends StatelessWidget {
     gameSettingsScoreTraining_P.getFormKeyMaxRoundsOrPoints.currentState!
         .save();
 
-    gameSettingsScoreTraining_P.setMaxRoundsOrPoints = int.parse(
-        gameSettingsScoreTraining_P.getMaxRoundsOrPointsController.text);
+    gameSettingsScoreTraining_P.setMaxRoundsOrPoints =
+        int.parse(maxRoundsOrPointsTextController.text);
     gameSettingsScoreTraining_P.notify();
 
     Navigator.of(context).pop();

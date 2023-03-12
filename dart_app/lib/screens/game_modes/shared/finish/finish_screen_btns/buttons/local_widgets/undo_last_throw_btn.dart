@@ -1,8 +1,13 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
+import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
 
@@ -18,8 +23,37 @@ class UndoLastThrowBtn extends StatelessWidget {
 
   final GameMode gameMode;
 
+  _sortPlayerStatsBack(BuildContext context, GameX01_P gameX01_P) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
+    List<PlayerOrTeamGameStatsX01> newOrderedStats = [];
+    for (Player player in gameSettingsX01.getPlayers) {
+      final PlayerOrTeamGameStatsX01 stats = gameX01_P.getPlayerGameStatistics
+          .where((element) => element.getPlayer.getName == player.getName)
+          .first;
+      newOrderedStats.add(stats);
+    }
+
+    gameX01_P.setPlayerGameStatistics = newOrderedStats;
+  }
+
+  bool _didBotFinishGame(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+    final String playerOrTeamWhoFinishedGame =
+        gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.entries.last.value;
+
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      return playerOrTeamWhoFinishedGame.startsWith('Bot');
+    } else {
+      return gameSettingsX01.getTeams
+          .firstWhere((team) => team.getName == playerOrTeamWhoFinishedGame)
+          .getCurrentPlayerToThrow is Bot;
+    }
+  }
+
   _undoLastThrowBtnClicked(BuildContext context) async {
     final firestoreServiceGames = await context.read<FirestoreServiceGames>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     if (gameMode == GameMode.X01) {
       final game = context.read<GameX01_P>();
@@ -32,10 +66,20 @@ class UndoLastThrowBtn extends StatelessWidget {
         arguments: {'openGame': false},
       );
 
-      await firestoreServiceGames.deleteGame(g_gameId, context,
-          game.getTeamGameStatistics.length > 0 ? true : false);
+      if (username != 'Guest') {
+        await firestoreServiceGames.deleteGame(g_gameId, context,
+            game.getTeamGameStatistics.length > 0 ? true : false);
+      }
 
-      RevertX01Helper.revertPoints(context);
+      _sortPlayerStatsBack(context, game);
+
+      if (_didBotFinishGame(game, context.read<GameSettingsX01_P>())) {
+        RevertX01Helper.revertPoints(context);
+        RevertX01Helper.revertPoints(context);
+      } else {
+        RevertX01Helper.revertPoints(context);
+      }
+
       game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.ScoreTraining) {

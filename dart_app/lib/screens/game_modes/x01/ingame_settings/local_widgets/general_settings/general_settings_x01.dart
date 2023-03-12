@@ -1,5 +1,4 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/general_settings/local_widgets/caller_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/general_settings/local_widgets/vibration_feedback_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -12,7 +11,7 @@ class GeneralSettingsX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 14.h,
+      height: 11.h,
       padding: EdgeInsets.only(top: 2.0.h, left: 0.5.h, right: 0.5.h),
       child: Card(
         elevation: 5,
@@ -32,7 +31,6 @@ class GeneralSettingsX01 extends StatelessWidget {
                 ),
               ),
             ),
-            CallerX01(),
             VibrationFeedbackX01(),
           ],
         ),

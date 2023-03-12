@@ -44,28 +44,31 @@ class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBarGame(mode: _mode),
-      body: Selector<GameSingleDoubleTraining_P, bool>(
-        selector: (_, game) => game.getShowLoadingSpinner,
-        builder: (_, showLoadingSpinner, __) => showLoadingSpinner
-            ? Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async => false, // ignore gestures
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: CustomAppBarGame(mode: _mode),
+        body: Selector<GameSingleDoubleTraining_P, bool>(
+          selector: (_, game) => game.getShowLoadingSpinner,
+          builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                )
+              : Column(
+                  children: [
+                    PlayersListSingleDoubleTraining(),
+                    FieldToHitSingleDoubleTraining(),
+                    RevertBtnAndThrownDarts(),
+                    context.read<GameSingleDoubleTraining_P>().getMode ==
+                            GameMode.DoubleTraining
+                        ? GameBtnsDoubleTraining()
+                        : GameBtnsSingleTraining(),
+                  ],
                 ),
-              )
-            : Column(
-                children: [
-                  PlayersListSingleDoubleTraining(),
-                  FieldToHitSingleDoubleTraining(),
-                  RevertBtnAndThrownDarts(),
-                  context.read<GameSingleDoubleTraining_P>().getMode ==
-                          GameMode.DoubleTraining
-                      ? GameBtnsDoubleTraining()
-                      : GameBtnsSingleTraining(),
-                ],
-              ),
+        ),
       ),
     );
   }

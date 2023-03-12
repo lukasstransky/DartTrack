@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
@@ -32,40 +33,42 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
   _saveDataToFirestore() async {
     final gameScoreTraining_P = context.read<GameScoreTraining_P>();
 
-    //todo comment out
-    //if (context.read<GameSettingsX01>().isCurrentUserInPlayers(context)) {
-    g_gameId = await context
-        .read<FirestoreServiceGames>()
-        .postGame(gameScoreTraining_P, context);
-    await context
-        .read<FirestoreServicePlayerStats>()
-        .postPlayerGameStatistics(gameScoreTraining_P, g_gameId, context);
-    //}
+    if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
+      g_gameId = await context
+          .read<FirestoreServiceGames>()
+          .postGame(gameScoreTraining_P, context);
+      await context
+          .read<FirestoreServicePlayerStats>()
+          .postPlayerGameStatistics(gameScoreTraining_P, g_gameId, context);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBarWithHeart(
-        title: 'Finished game',
-        mode: 'Score training',
-        isFinishScreen: true,
-        showHeart: true,
-      ),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Center(
-          child: Container(
-            width: 90.w,
-            child: Column(
-              children: [
-                StatsCard(
-                  isFinishScreen: true,
-                  game: context.read<GameScoreTraining_P>(),
-                  isOpenGame: false,
-                ),
-                FinishScreenBtns(gameMode: GameMode.ScoreTraining),
-              ],
+    return WillPopScope(
+      onWillPop: () async => false, // ignore gestures
+      child: Scaffold(
+        appBar: CustomAppBarWithHeart(
+          title: 'Finished game',
+          mode: 'Score training',
+          isFinishScreen: true,
+          showHeart: true,
+        ),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Center(
+            child: Container(
+              width: 90.w,
+              child: Column(
+                children: [
+                  StatsCard(
+                    isFinishScreen: true,
+                    game: context.read<GameScoreTraining_P>(),
+                    isOpenGame: false,
+                  ),
+                  FinishScreenBtns(gameMode: GameMode.ScoreTraining),
+                ],
+              ),
             ),
           ),
         ),

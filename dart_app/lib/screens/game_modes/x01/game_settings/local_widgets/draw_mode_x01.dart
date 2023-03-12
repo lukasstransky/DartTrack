@@ -82,7 +82,7 @@ class DrawModeX01 extends StatelessWidget {
                 Row(
                   children: [
                     Text(
-                      'Draw Mode',
+                      'Draw mode',
                       style: TextStyle(
                         color: Utils.getTextColorForGameSettingsPage(),
                       ),

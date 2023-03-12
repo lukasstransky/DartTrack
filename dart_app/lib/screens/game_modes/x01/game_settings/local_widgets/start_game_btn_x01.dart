@@ -7,47 +7,39 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class StartGameBtnX01 extends StatelessWidget {
   _showDialogNoUserInPlayerWarning(
       BuildContext context, GameSettingsX01_P gameSettingsX01) {
-    final String currentUserName =
-        context.read<AuthService>().getPlayer!.getName;
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: dialogContentPadding,
         title: Text(
-          'Game will not be stored for Statistics!',
+          'Game will not be stored!',
           style: TextStyle(color: Colors.white),
         ),
         content: RichText(
           text: TextSpan(
-            text: 'No player with the current username ',
+            text: 'No player with the current logged in username ',
             style: TextStyle(color: Colors.white),
             children: <TextSpan>[
               TextSpan(
-                text: '\'$currentUserName\'',
+                text: '\'$username\'',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
               TextSpan(
                 text: ' is present, therefore the game will not be stored.',
-                style: TextStyle(color: Colors.white),
-              ),
-              TextSpan(
-                text:
-                    '\n\n(In order to store the game, change the name of one player to \'$currentUserName\')',
                 style: TextStyle(color: Colors.white),
               ),
             ],
@@ -84,32 +76,28 @@ class StartGameBtnX01 extends StatelessWidget {
     );
   }
 
-  _showDialogForBeginner(
-      BuildContext context, GameSettingsX01_P gameSettingsX01) {
-    final List<Player> players = gameSettingsX01.getPlayers;
-    Player? selectedPlayer = gameSettingsX01.getPlayers[0];
+  _showDialogForBeginner(BuildContext context, GameSettingsX01_P gameSettings) {
+    final List<Player> players = gameSettings.getPlayers;
+    Player? selectedPlayer =
+        gameSettings.getPlayers[gameSettings.getPlayers.length - 1];
 
-    final List<Team> teams = gameSettingsX01.getTeams;
-    Team? selectedTeam = gameSettingsX01.getTeams[0];
+    final List<Team> teams = gameSettings.getTeams;
+    Team? selectedTeam = gameSettings.getTeams[0];
 
     showDialog(
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: dialogContentPadding,
         title: Text(
           'Who will begin?',
           style: TextStyle(color: Colors.white),
         ),
         content: StatefulBuilder(
           builder: ((context, setState) {
-            if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
-                _onePlayerPerTeam(gameSettingsX01))
+            if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single ||
+                _onePlayerPerTeam(gameSettings))
               return Container(
                 width: double.maxFinite,
                 child: ListView.builder(
@@ -134,7 +122,7 @@ class StartGameBtnX01 extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      'Level ${player.getLevel} Bot',
+                                      'Bot - level ${player.getLevel}',
                                       style: TextStyle(
                                         fontSize: 12.sp,
                                         color: Colors.white,
@@ -202,7 +190,7 @@ class StartGameBtnX01 extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => {
-              gameSettingsX01.notify(),
+              gameSettings.notify(),
               Navigator.of(context).pop(),
             },
             child: Text(
@@ -215,18 +203,20 @@ class StartGameBtnX01 extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () => {
-              if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single)
-                _setBeginnerPlayer(selectedPlayer, gameSettingsX01.getPlayers)
-              else
-                _setBeginnerTeam(selectedTeam, gameSettingsX01.getTeams),
+            onPressed: () {
+              if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+                _setBeginnerPlayer(selectedPlayer, gameSettings);
+              } else {
+                _setBeginnerTeam(selectedTeam, gameSettings);
+              }
+
               Navigator.of(context).pushNamed(
                 '/gameX01',
                 arguments: {'openGame': false},
-              ),
+              );
             },
             child: Text(
-              'Start game',
+              'Start',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
@@ -275,52 +265,40 @@ class StartGameBtnX01 extends StatelessWidget {
     return false;
   }
 
-  _setBeginnerTeam(Team? teamToSet, List<Team> teams) {
-    int index = 0;
+  _setBeginnerTeam(Team? firstTeam, GameSettingsX01_P gameSettingsX01_P) {
+    List<Team> teams = [...gameSettingsX01_P.getTeams];
 
-    for (int i = 0; i < teams.length; i++) {
-      if (teams[i] == teamToSet) {
-        index = i;
-      }
-    }
+    teams.removeWhere((p) => p.getName == firstTeam!.getName);
+    teams.insert(0, firstTeam as Team);
 
-    //otherwise team is already first in list
-    if (index != 0) {
-      final Team temp = teams[0];
-      teams[0] = teamToSet as Team;
-      teams[index] = temp;
-    }
+    gameSettingsX01_P.setTeams = teams;
   }
 
-  _setBeginnerPlayer(Player? playerToSet, List<Player> players) {
-    int index = 0;
+  _setBeginnerPlayer(Player? firstPlayer, GameSettingsX01_P gameSettingsX01_P) {
+    List<Player> players = [...gameSettingsX01_P.getPlayers];
 
-    for (int i = 0; i < players.length; i++) {
-      if (players[i] == playerToSet) {
-        index = i;
-      }
-    }
+    players.removeWhere((p) => p.getName == firstPlayer!.getName);
+    players = new List.from(players.reversed);
+    players.insert(0, firstPlayer as Player);
 
-    //otherwise player is already first in list
-    if (index != 0) {
-      final Player temp = players[0];
-      players[0] = playerToSet as Player;
-      players[index] = temp;
-    }
+    gameSettingsX01_P.setPlayers = players;
   }
 
   @override
   Widget build(BuildContext context) {
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
     return Expanded(
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Consumer<GameSettingsX01_P>(builder: (_, gameSettingsX01, __) {
           return Container(
             width: 60.w,
-            height: Utils.getHeightForWidget(gameSettingsX01).h,
+            height: 5.h,
             child: TextButton(
               child: Text(
-                'Start game',
+                'Start',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
@@ -339,20 +317,19 @@ class StartGameBtnX01 extends StatelessWidget {
                     : Utils.getColor(Utils.darken(
                         Theme.of(context).colorScheme.primary, 60)),
               ),
-              onPressed: () => {
-                if (_activateStartGameBtn(gameSettingsX01))
-                  {
-                    //todo comment out
-                    /*if (!gameSettingsX01.isCurrentUserInPlayers(context))
-                      {
-                        _showDialogNoUserInPlayerWarning(
-                            context, gameSettingsX01),
-                      }
-                    else
-                      {*/
-                    _showDialogForBeginner(context, gameSettingsX01),
-                    //}
+              onPressed: () {
+                if (_activateStartGameBtn(gameSettingsX01)) {
+                  if (!gameSettingsX01.isCurrentUserInPlayers(context) &&
+                      currentUsername != 'Guest') {
+                    _showDialogNoUserInPlayerWarning(context, gameSettingsX01);
+                  } else {
+                    _showDialogForBeginner(context, gameSettingsX01);
                   }
+                } else {
+                  Fluttertoast.showToast(
+                      msg: 'At least two players are required!',
+                      toastLength: Toast.LENGTH_LONG);
+                }
               },
             ),
           );

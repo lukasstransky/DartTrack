@@ -2,6 +2,7 @@ import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -93,6 +94,9 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
 
   @override
   Widget build(BuildContext context) {
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
     return AppBar(
       elevation: 0,
       centerTitle: true,
@@ -115,7 +119,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
               ),
             ),
       actions: [
-        if (widget.showHeart)
+        if (widget.showHeart && username != 'Guest')
           IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,

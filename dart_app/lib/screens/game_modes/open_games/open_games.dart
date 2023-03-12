@@ -41,6 +41,8 @@ class _OpenGamesState extends State<OpenGames> {
       settings.setWinByTwoLegsDifference =
           openGameSettings.getWinByTwoLegsDifference;
       settings.setSuddenDeath = openGameSettings.getSuddenDeath;
+      settings.setMaxExtraLegs = openGameSettings.getMaxExtraLegs;
+      settings.setDrawMode = openGameSettings.getDrawMode;
       settings.setPlayers = openGameSettings.getPlayers;
       settings.setTeams = openGameSettings.getTeams;
 

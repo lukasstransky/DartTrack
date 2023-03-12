@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -7,13 +8,27 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class AmountOfRoundsForTargetNumberSingleDoubleTraining
-    extends StatelessWidget {
+class AmountOfRoundsForTargetNumberSingleDoubleTraining extends StatefulWidget {
   const AmountOfRoundsForTargetNumberSingleDoubleTraining({Key? key})
       : super(key: key);
 
+  @override
+  State<AmountOfRoundsForTargetNumberSingleDoubleTraining> createState() =>
+      _AmountOfRoundsForTargetNumberSingleDoubleTrainingState();
+}
+
+class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
+    extends State<AmountOfRoundsForTargetNumberSingleDoubleTraining> {
+  @override
+  void initState() {
+    super.initState();
+    newTextControllerAmountOfRoundsGameSettingsSdt();
+  }
+
   _showDialogForRoundsOrPoints(BuildContext context) {
     final settings = context.read<GameSettingsSingleDoubleTraining_P>();
+    final String backupString = amountOfRoundsController
+        .text; // in case text was changed and cancel pressed
 
     showDialog(
       barrierDismissible: false,
@@ -22,11 +37,7 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
         key: settings.getFormKeyAmountOfRounds,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: Text(
             'Enter max. rounds',
             style: TextStyle(
@@ -39,7 +50,7 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
               right: 10.w,
             ),
             child: TextFormField(
-              controller: settings.getAmountOfRoundsController,
+              controller: amountOfRoundsController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return ('Please enter a value!');
@@ -67,16 +78,23 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
                 hintStyle: TextStyle(
                   color: Utils.getPrimaryColorDarken(context),
                 ),
-                border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
               ),
             ),
           ),
           actions: [
             TextButton(
               onPressed: () {
-                settings.setAmountOfRoundsController =
-                    new TextEditingController(
-                        text: DEFUALT_ROUNDS_FOR_TARGET_NUMBER.toString());
+                Future.delayed(Duration(milliseconds: 300), () {
+                  amountOfRoundsController.text = backupString;
+                });
+
                 Navigator.of(context).pop();
               },
               child: Text(
@@ -116,8 +134,7 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
     }
     settings.getFormKeyAmountOfRounds.currentState!.save();
 
-    settings.setAmountOfRounds =
-        int.parse(settings.getAmountOfRoundsController.text);
+    settings.setAmountOfRounds = int.parse(amountOfRoundsController.text);
     settings.notify();
 
     Navigator.of(context).pop();

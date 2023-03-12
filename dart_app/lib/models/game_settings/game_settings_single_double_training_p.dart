@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/player.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:flutter/material.dart';
 
 class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
@@ -9,11 +10,8 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
   int _targetNumber = DEFAULT_TARGET_NUMBER;
   bool _isTargetNumberEnabled = false;
   int _amountOfRounds = DEFUALT_ROUNDS_FOR_TARGET_NUMBER;
-  TextEditingController _targetNumberController =
-      new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
   GlobalKey<FormState> _formKeyTargetNumber = GlobalKey<FormState>();
-  TextEditingController _amountOfRoundsController =
-      new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
+
   GlobalKey<FormState> _formKeyAmountOfRounds = GlobalKey<FormState>();
 
   GameSettingsSingleDoubleTraining_P() {}
@@ -47,19 +45,9 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
   int get getAmountOfRounds => this._amountOfRounds;
   set setAmountOfRounds(int value) => this._amountOfRounds = value;
 
-  TextEditingController get getTargetNumberController =>
-      this._targetNumberController;
-  set setTargetNumberController(TextEditingController value) =>
-      this._targetNumberController = value;
-
   GlobalKey<FormState> get getFormKeyTargetNumber => this._formKeyTargetNumber;
   set setFormKeyTargetNumber(GlobalKey<FormState> value) =>
       this._formKeyTargetNumber = value;
-
-  TextEditingController get getAmountOfRoundsController =>
-      this._amountOfRoundsController;
-  set setAmountOfRoundsController(TextEditingController value) =>
-      this._amountOfRoundsController = value;
 
   GlobalKey<FormState> get getFormKeyAmountOfRounds =>
       this._formKeyAmountOfRounds;
@@ -87,10 +75,8 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
     setTargetNumber = DEFAULT_TARGET_NUMBER;
     setIsTargetNumberEnabled = false;
     setAmountOfRounds = DEFUALT_ROUNDS_FOR_TARGET_NUMBER;
-    setTargetNumberController =
-        new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
-    setAmountOfRoundsController =
-        new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
+    targetNumberTextController.text = DEFAULT_TARGET_NUMBER.toString();
+    amountOfRoundsController.text = DEFUALT_ROUNDS_FOR_TARGET_NUMBER.toString();
   }
 
   String getModeStringFinishScreen(

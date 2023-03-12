@@ -8,8 +8,8 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Settings extends StatelessWidget {
-  const Settings({Key? key}) : super(key: key);
+class SettingsPage extends StatelessWidget {
+  const SettingsPage({Key? key}) : super(key: key);
 
   _showDialogForResettingStatistics(BuildContext context) {
     showDialog(
@@ -17,11 +17,7 @@ class Settings extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: dialogContentPadding,
         title: Text(
           'Reset statistics',
           style: TextStyle(color: Colors.white),
@@ -88,14 +84,11 @@ class Settings extends StatelessWidget {
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),
                 onPressed: () async {
-                  auth.getEmailController.clear();
-                  auth.getPasswordController.clear();
-                  auth.getUsernameController.clear();
                   auth.setAuthMode = AuthMode.Login;
                   auth.setPasswordVisible = false;
                   auth.setShowLoadingSpinner = false;
                   Navigator.of(context).pushNamed('/loginRegister');
-                  await context.read<AuthService>().logout();
+                  await context.read<AuthService>().logout(context);
                 },
               ),
               TextButton(

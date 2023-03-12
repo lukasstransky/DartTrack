@@ -115,8 +115,8 @@ class OtherX01 extends StatelessWidget {
                     ),
                   ),
                 ),
-                onPressed: () => {
-                  if (_isBustClickable(gameX01)) SubmitX01Helper.bust(context)
+                onPressed: () {
+                  if (_isBustClickable(gameX01)) SubmitX01Helper.bust(context);
                 },
               ),
             ),

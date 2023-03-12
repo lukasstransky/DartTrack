@@ -1,11 +1,12 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class EmailInput extends StatelessWidget {
+class EmailInput extends StatefulWidget {
   final bool isForgotPasswordScreen;
   final bool isRegisterScreen;
 
@@ -16,6 +17,17 @@ class EmailInput extends StatelessWidget {
       : super(key: key);
 
   @override
+  State<EmailInput> createState() => _EmailInputState();
+}
+
+class _EmailInputState extends State<EmailInput> {
+  @override
+  void initState() {
+    super.initState();
+    newTextControllerForEmail();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Auth_P auth = context.read<Auth_P>();
 
@@ -23,7 +35,7 @@ class EmailInput extends StatelessWidget {
       width: 80.w,
       child: TextFormField(
         key: Key('emailInput'),
-        controller: context.read<Auth_P>().getEmailController,
+        controller: emailTextController,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         validator: (value) {
@@ -31,13 +43,14 @@ class EmailInput extends StatelessWidget {
             return ('Email is required!');
           } else if (!RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}')
               .hasMatch(value)) {
-            auth.getEmailController.clear();
+            emailTextController.clear();
             return ('Please enter a valid email!');
-          } else if (isRegisterScreen && auth.getEmailAlreadyExists) {
-            auth.getEmailController.clear();
+          } else if (widget.isRegisterScreen && auth.getEmailAlreadyExists) {
+            emailTextController.clear();
             return 'Email already exists!';
-          } else if (isForgotPasswordScreen && !auth.getEmailAlreadyExists) {
-            auth.getEmailController.clear();
+          } else if (widget.isForgotPasswordScreen &&
+              !auth.getEmailAlreadyExists) {
+            emailTextController.clear();
             return 'Email does not exist!';
           }
           return null;

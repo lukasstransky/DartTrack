@@ -51,16 +51,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
     context: context,
     builder: (context) => AlertDialog(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: EdgeInsets.only(
-          bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-          top: DIALOG_CONTENT_PADDING_TOP,
-          left: DIALOG_CONTENT_PADDING_LEFT,
-          right: DIALOG_CONTENT_PADDING_RIGHT),
+      contentPadding: dialogContentPadding,
       title: Text(
         gameSettingsX01.getEnableCheckoutCounting &&
                 !gameSettingsX01.getCheckoutCountingFinallyDisabled
-            ? 'Checkout Counting'
-            : 'Finish Counting',
+            ? 'Checkout counting'
+            : 'Finish counting',
         style: TextStyle(color: Colors.white),
       ),
       content: StatefulBuilder(
@@ -73,7 +69,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Darts on Double:',
+                    'Darts on double:',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
@@ -289,7 +285,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Darts for Finish:',
+                    'Darts for finish:',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),

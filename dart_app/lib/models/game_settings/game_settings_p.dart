@@ -26,6 +26,7 @@ class GameSettings_P with ChangeNotifier {
       'singleOrTeam': gameSettings.getSingleOrTeam.toString().split('.').last,
       'legs': gameSettings.getLegs,
       if (gameSettings.getSetsEnabled) 'sets': gameSettings.getSets,
+      'setsEnabled': gameSettings.getSetsEnabled,
       'points': gameSettings.getPointsOrCustom(),
       'mode': gameSettings.getMode.toString().split('.').last,
       'modeIn': gameSettings.getModeIn
@@ -39,12 +40,12 @@ class GameSettings_P with ChangeNotifier {
           .last
           .replaceAll('Field', ''),
       'winByTwoLegsDifference': gameSettings.getWinByTwoLegsDifference,
-      if (gameSettings.getWinByTwoLegsDifference)
+      if (gameSettings.getWinByTwoLegsDifference && gameSettings.getSuddenDeath)
         'suddenDeath': gameSettings.getSuddenDeath,
-      if (gameSettings.getWinByTwoLegsDifference)
+      if (gameSettings.getWinByTwoLegsDifference && gameSettings.getSuddenDeath)
         'maxExtraLegs': gameSettings.getMaxExtraLegs,
       'checkoutCounting': gameSettings.getEnableCheckoutCounting,
-      'setsEnabled': gameSettings.getSetsEnabled,
+      'drawMode': gameSettings.getDrawMode,
     };
 
     if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
@@ -162,6 +163,9 @@ class GameSettings_P with ChangeNotifier {
           ? SingleOrTeamEnum.Single
           : SingleOrTeamEnum.Team,
       winByTwoLegsDifference: map['winByTwoLegsDifference'],
+      suddenDeath: map['suddenDeath'] == null ? false : map['suddenDeath'],
+      maxExtraLegs: map['maxExtraLegs'] == null ? 2 : map['maxExtraLegs'],
+      drawMode: map['drawMode'] == null ? false : map['drawMode'],
       inputMethod: inputMethod,
       players: map['players'] == null
           ? []

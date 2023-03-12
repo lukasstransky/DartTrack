@@ -59,11 +59,7 @@ class PlayersTeamsListDialogsX01 {
         key: _formKeyEditPlayer,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: Text(
             'Edit',
             style: TextStyle(color: Colors.white),
@@ -82,7 +78,7 @@ class PlayersTeamsListDialogsX01 {
                           Padding(
                             padding: EdgeInsets.only(left: 5),
                             child: Text(
-                              'Level ${playerToEdit.getLevel} Bot',
+                              'Bot - level ${playerToEdit.getLevel}',
                               style: TextStyle(
                                   fontSize: 12.sp, color: Colors.white),
                             ),
@@ -115,14 +111,16 @@ class PlayersTeamsListDialogsX01 {
                 );
               } else {
                 return TextFormField(
-                  controller: editPlayerController..text = playerToEdit.getName,
+                  controller:
+                      newTextControllerForEditingPlayerInGameSettingsX01()
+                        ..text = playerToEdit.getName,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return ('Please enter a name!');
                     }
                     if (gameSettings_P.checkIfPlayerNameExists(value)) {
-                      return 'Playername already exists!';
+                      return 'Name already exists!';
                     }
 
                     return null;
@@ -209,11 +207,7 @@ class PlayersTeamsListDialogsX01 {
           key: _formKeyEditTeam,
           child: AlertDialog(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: EdgeInsets.only(
-                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-                top: DIALOG_CONTENT_PADDING_TOP,
-                left: DIALOG_CONTENT_PADDING_LEFT,
-                right: DIALOG_CONTENT_PADDING_RIGHT),
+            contentPadding: dialogContentPadding,
             title: Text(
               'Edit team',
               style: TextStyle(color: Colors.white),
@@ -225,11 +219,13 @@ class PlayersTeamsListDialogsX01 {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
-                      controller: editTeamController..text = teamToEdit.getName,
+                      controller:
+                          newTextControllerForEditingTeamInGameSettingsX01()
+                            ..text = teamToEdit.getName,
                       textInputAction: TextInputAction.done,
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return ('Please enter a valid name!');
+                          return ('Please enter a name!');
                         }
                         if (gameSettingsX01.checkIfTeamNameExists(value)) {
                           return 'Team name already exists!';
@@ -268,7 +264,7 @@ class PlayersTeamsListDialogsX01 {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const Text(
-                          'Delete this Team?',
+                          'Delete this team?',
                           style: TextStyle(
                             color: Colors.red,
                           ),
@@ -341,75 +337,46 @@ class PlayersTeamsListDialogsX01 {
         builder: (context) {
           return AlertDialog(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: EdgeInsets.only(
-                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-                top: DIALOG_CONTENT_PADDING_TOP,
-                left: 24,
-                right: 24),
+            contentPadding: dialogContentPadding,
             title: Text(
               'Delete team',
               style: TextStyle(color: Colors.white),
             ),
             content: Text(
-              'Do you also want to delete this team?',
+              'Do you also want to delete the team?',
               style: TextStyle(color: Colors.white),
             ),
             actions: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                    child: Container(
-                      padding: EdgeInsets.only(left: 3.w),
-                      alignment: Alignment.centerLeft,
-                      child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
-                        ),
-                        style: ButtonStyle(
-                          backgroundColor:
-                              Utils.getPrimaryMaterialStateColorDarken(context),
-                        ),
+                  Container(
+                    padding: EdgeInsets.only(left: 3.w),
+                    alignment: Alignment.centerLeft,
+                    child: TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            Utils.getPrimaryMaterialStateColorDarken(context),
                       ),
                     ),
                   ),
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 3.w),
-                          child: TextButton(
-                            onPressed: () {
-                              gameSettingsX01.removePlayer(
-                                  playerToDelete, false);
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'No',
-                              style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
-                            ),
-                            style: ButtonStyle(
-                              backgroundColor:
-                                  Utils.getPrimaryMaterialStateColorDarken(
-                                      context),
-                            ),
-                          ),
-                        ),
-                        TextButton(
+                  Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.only(right: 10),
+                        child: TextButton(
                           onPressed: () {
-                            gameSettingsX01
-                                .checkTeamNamingIds(teamToMaybeDelete);
-                            gameSettingsX01.getTeams.removeWhere(
-                                (team) => team == teamToMaybeDelete);
-                            gameSettingsX01.removePlayer(playerToDelete, true);
+                            gameSettingsX01.removePlayer(playerToDelete, false);
                             Navigator.of(context).pop();
                           },
                           child: Text(
-                            'Yes',
+                            'No',
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.secondary),
                           ),
@@ -419,8 +386,26 @@ class PlayersTeamsListDialogsX01 {
                                     context),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          gameSettingsX01.checkTeamNamingIds(teamToMaybeDelete);
+                          gameSettingsX01.getTeams
+                              .removeWhere((team) => team == teamToMaybeDelete);
+                          gameSettingsX01.removePlayer(playerToDelete, true);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Yes',
+                          style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary),
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor:
+                              Utils.getPrimaryMaterialStateColorDarken(context),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -444,13 +429,9 @@ class PlayersTeamsListDialogsX01 {
         builder: (context) {
           return AlertDialog(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: EdgeInsets.only(
-                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-                top: DIALOG_CONTENT_PADDING_TOP,
-                left: DIALOG_CONTENT_PADDING_LEFT,
-                right: DIALOG_CONTENT_PADDING_RIGHT),
+            contentPadding: dialogContentPadding,
             title: Text(
-              'Swap Team',
+              'Swap team',
               style: TextStyle(color: Colors.white),
             ),
             content: StatefulBuilder(
@@ -572,13 +553,17 @@ class PlayersTeamsListDialogsX01 {
 
     gameSettingsX01.notify();
 
-    if (gameSettingsX01.getTeams.length > 2) Navigator.of(context).pop();
+    if (gameSettingsX01.getTeams.length > 2) {
+      Navigator.of(context).pop();
+    }
   }
 
   static _deleteTeam(Team teamToDelete, GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.getTeams.remove(teamToDelete);
-    for (Player playerToDelete in teamToDelete.getPlayers)
-      gameSettingsX01.getPlayers.remove(playerToDelete);
+    for (Player playerToDelete in teamToDelete.getPlayers) {
+      gameSettingsX01.getPlayers
+          .removeWhere((p) => p.getName == playerToDelete.getName);
+    }
 
     gameSettingsX01.notify();
   }
@@ -635,18 +620,17 @@ class PlayersTeamsListDialogsX01 {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: 24,
-              right: 24),
+          contentPadding: dialogContentPadding,
           title: const Text(
             'Info',
             style: TextStyle(color: Colors.white),
           ),
-          content: Text(
-            'All the players in this team will also be deleted.',
-            style: TextStyle(color: Colors.white),
+          content: Container(
+            width: 0.6.w,
+            child: Text(
+              'All the players in this team will also be deleted.',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           actions: [
             Row(
@@ -697,7 +681,7 @@ class PlayersTeamsListDialogsX01 {
                           Navigator.of(context).pop();
                         },
                         child: Text(
-                          'Continue',
+                          'Submit',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                         ),

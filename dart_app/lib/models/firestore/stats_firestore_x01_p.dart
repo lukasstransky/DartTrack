@@ -294,6 +294,13 @@ class StatsFirestoreX01_P with ChangeNotifier {
     _filteredGames = [];
   }
 
+  resetAll() {
+    resetOverallStats();
+    resetGames();
+    resetFilteredGames();
+    resetValues();
+  }
+
   notify() {
     notifyListeners();
   }

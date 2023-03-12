@@ -3,12 +3,14 @@ import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_widgets/login_register_switch.dart';
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_widgets/proceed_as_guest_link.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class LoginRegisterBtn extends StatelessWidget {
@@ -23,13 +25,13 @@ class LoginRegisterBtn extends StatelessWidget {
     final Auth_P auth = context.read<Auth_P>();
 
     auth.setUsernameValid =
-        await authService.usernameValid(auth.getUsernameController.text);
+        await authService.usernameValid(usernameTextController.text);
     if (isLogin) {
       auth.setEmailAlreadyExists = true;
     } else {
       // register
       auth.setEmailAlreadyExists =
-          await authService.emailAlreadyExists(auth.getEmailController.text);
+          await authService.emailAlreadyExists(emailTextController.text);
     }
 
     if (!loginRegisterPageFormKey.currentState!.validate()) {
@@ -42,17 +44,31 @@ class LoginRegisterBtn extends StatelessWidget {
     auth.notify();
 
     try {
-      auth.getEmailController.text = auth.getEmailController.text.trim();
+      emailTextController.text = emailTextController.text.trim();
 
       if (auth.getAuthMode == AuthMode.Login) {
         await authService.login(
-            auth.getEmailController.text, auth.getPasswordController.text);
+            emailTextController.text, passwordTextController.text);
       } else {
+        // store the username in shared preferences
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('username', usernameTextController.text);
+
         await authService.register(
-            auth.getEmailController.text, auth.getPasswordController.text);
+            emailTextController.text, passwordTextController.text);
       }
 
-      Navigator.of(context).pushNamed('/home', arguments: {'isLogin': isLogin});
+      Navigator.of(context).pushNamed('/home', arguments: {
+        'isLogin': isLogin,
+        'email': emailTextController.text,
+        'username': usernameTextController.text,
+      });
+
+      emailTextController.clear();
+      passwordTextController.clear();
+      usernameTextController.clear();
+
+      disposeControllersForAuth();
 
       // hide loading spinner
       context.loaderOverlay.hide();
@@ -61,23 +77,23 @@ class LoginRegisterBtn extends StatelessWidget {
       String errorMessage = 'Authentication failed';
 
       if (error.toString().contains('email-already-in-use')) {
-        auth.getEmailController.clear();
+        emailTextController.clear();
         errorMessage = 'This email address is already in use.';
-        auth.getEmailController.clear();
+        emailTextController.clear();
       } else if (error.toString().contains('user-not-found')) {
         errorMessage = 'Could not find a user with that email.';
-        auth.getPasswordController.clear();
+        passwordTextController.clear();
       } else if (error.toString().contains('wrong-password')) {
         errorMessage = 'Invalid password.';
-        auth.getPasswordController.clear();
+        passwordTextController.clear();
       } else if (error.toString().contains('too-many-requests')) {
         errorMessage =
             'To many failed login attempts. Try again later or reset the password.';
-        auth.getEmailController.clear();
-        auth.getPasswordController.clear();
+        emailTextController.clear();
+        passwordTextController.clear();
       } else if (error.toString().contains('weak-password')) {
-        errorMessage = 'The password is tooweak.';
-        auth.getPasswordController.clear();
+        errorMessage = 'The password is too weak.';
+        passwordTextController.clear();
       }
 
       _showErrorDialog(errorMessage, context);
@@ -94,16 +110,12 @@ class LoginRegisterBtn extends StatelessWidget {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: const EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: dialogContentPadding,
         title: const Text(
           'An error occurred!',
           style: TextStyle(color: Colors.white),
         ),
-        content: Text(message),
+        content: Text(message, style: TextStyle(color: Colors.white)),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),

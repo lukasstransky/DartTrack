@@ -11,7 +11,6 @@ class PointBtnRoundX01 extends StatelessWidget {
 
   final String? point;
   final bool? activeBtn;
-  //todo eventually remove
   final bool? mostScoredPointBtn;
 
   _updateCurrentPointsSelected(BuildContext context, String newPoints) {
@@ -60,7 +59,8 @@ class PointBtnRoundX01 extends StatelessWidget {
     const double borderWidth = 3;
 
     if (gameX01.getGameSettings.getShowMostScoredPoints &&
-        gameX01.getGameSettings.getMostScoredPoints.isNotEmpty) {
+        gameX01.getGameSettings.getMostScoredPoints.isNotEmpty &&
+        this.mostScoredPointBtn as bool) {
       return Border(
         left: [
           gameX01.getGameSettings.getMostScoredPoints[1],

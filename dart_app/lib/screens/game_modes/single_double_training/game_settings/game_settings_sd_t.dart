@@ -10,6 +10,7 @@ import 'package:dart_app/screens/game_modes/single_double_training/game_settings
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/point_distribution_info_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/target_number_sd_t.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,12 @@ class _GameSettingsSingleDoubleTrainingState
       settings.getPlayers.add(new Player(name: 'Strainski'));
     }
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    disposeControllersForGamesettingsSingleDoubleTraining();
+    super.dispose();
   }
 
   @override

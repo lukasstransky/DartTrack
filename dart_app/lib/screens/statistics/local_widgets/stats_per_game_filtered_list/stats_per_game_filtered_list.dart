@@ -89,25 +89,25 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   String getAppBarTitle() {
     switch (this._type) {
       case BEST_AVG:
-        return 'Best Averages';
+        return 'Best averages';
       case WORST_AVG:
-        return 'Worst Averages';
+        return 'Worst averages';
       case BEST_FIRST_NINE_AVG:
-        return 'Best First 9 Averages';
+        return 'Best first nine averages';
       case WORST_FIRST_NINE_AVG:
-        return 'Worst First 9 Averages';
+        return 'Worst first nine averages';
       case BEST_CHECKOUT_QUOTE:
-        return 'Best Checkout Quotes';
+        return 'Best checkout quotes';
       case WORST_CHECKOUT_QUOTE:
-        return 'Worst Checkout Quotes';
+        return 'Worst checkout quotes';
       case BEST_CHECKOUT_SCORE:
-        return 'Best Finishes';
+        return 'Best finishes';
       case WORST_CHECKOUT_SCORE:
-        return 'Worst Finishes';
+        return 'Worst finishes';
       case BEST_DARTS_PER_LEG:
-        return 'Best Legs';
+        return 'Best legs';
       case WORST_DARTS_PER_LEG:
-        return 'Worst Legs';
+        return 'Worst legs';
     }
     return '';
   }
@@ -193,7 +193,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: Text(
-                                        'per Game',
+                                        'Per game',
                                         style: TextStyle(
                                           color: Utils
                                               .getTextColorForGameSettingsBtn(

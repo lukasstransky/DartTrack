@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ class CustomPointsX01 extends StatefulWidget {
 }
 
 class _CustomPointsX01State extends State<CustomPointsX01> {
-  TextEditingController? _customPointsController;
   final GlobalKey<FormState> _formKeyCustomPoints = GlobalKey<FormState>();
 
   @override
@@ -24,10 +24,11 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
 
   _initTextController() {
     final gameSettingsX01 = context.read<GameSettingsX01_P>();
-    _customPointsController = new TextEditingController(
-        text: gameSettingsX01.getCustomPoints != -1
-            ? gameSettingsX01.getCustomPoints.toString()
-            : '');
+    final String text = gameSettingsX01.getCustomPoints != -1
+        ? gameSettingsX01.getCustomPoints.toString()
+        : '';
+
+    newTextControllerForCustomPointsGameSettingsX01(text);
   }
 
   Future<int?> _showDialogForCustomPoints(
@@ -39,19 +40,15 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
           key: _formKeyCustomPoints,
           child: AlertDialog(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: EdgeInsets.only(
-                bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-                top: DIALOG_CONTENT_PADDING_TOP,
-                left: DIALOG_CONTENT_PADDING_LEFT,
-                right: DIALOG_CONTENT_PADDING_RIGHT),
+            contentPadding: dialogContentPadding,
             title: Text(
               'Enter points',
               style: TextStyle(color: Colors.white),
             ),
             content: Container(
-              margin: EdgeInsets.only(left: 15.w, right: 15.w),
+              margin: EdgeInsets.only(left: 10.w, right: 10.w),
               child: TextFormField(
-                controller: _customPointsController,
+                controller: customPointsController,
                 validator: (value) {
                   if (value!.isEmpty) {
                     return ('Please enter some points!');
@@ -76,7 +73,13 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   hintStyle: TextStyle(
                     color: Utils.getPrimaryColorDarken(context),
                   ),
-                  border: InputBorder.none,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide(
+                      width: 0,
+                      style: BorderStyle.none,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -118,8 +121,8 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
     }
     _formKeyCustomPoints.currentState!.save();
 
-    Navigator.of(context).pop(int.parse(_customPointsController!.text));
-    _customPointsController!.clear();
+    Navigator.of(context).pop(int.parse(customPointsController.text));
+    customPointsController.clear();
   }
 
   _customPointsBtnPressed(GameSettingsX01_P gameSettingsX01) async {

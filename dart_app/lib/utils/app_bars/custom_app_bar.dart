@@ -1,7 +1,5 @@
-import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/utils/app_bars/app_bar_dialog_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool showBackBtn;
@@ -32,11 +30,6 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
                 var route = ModalRoute.of(context);
                 if (route != null) {
                   Navigator.of(context).pop();
-                }
-
-                if (ModalRoute.of(context)!.settings.name ==
-                    '/forgotPassword') {
-                  context.read<Auth_P>().getEmailController.clear();
                 }
               },
               icon: Icon(

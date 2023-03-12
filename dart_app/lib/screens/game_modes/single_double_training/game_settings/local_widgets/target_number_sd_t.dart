@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -8,8 +9,21 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
-class TargetNumberSingleDoubleTraining extends StatelessWidget {
+class TargetNumberSingleDoubleTraining extends StatefulWidget {
   const TargetNumberSingleDoubleTraining({Key? key}) : super(key: key);
+
+  @override
+  State<TargetNumberSingleDoubleTraining> createState() =>
+      _TargetNumberSingleDoubleTrainingState();
+}
+
+class _TargetNumberSingleDoubleTrainingState
+    extends State<TargetNumberSingleDoubleTraining> {
+  @override
+  void initState() {
+    super.initState();
+    newTextControllerTargetNumberGameSettingsSdt();
+  }
 
   _showDialogForInfoAboutTargetNumber(BuildContext context) {
     showDialog(
@@ -17,11 +31,7 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT),
+        contentPadding: dialogContentPadding,
         title: Text(
           'Target number explained',
           style: TextStyle(
@@ -55,6 +65,8 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
 
   _showDialogForEnteringTargetNumber(BuildContext context) {
     final settings = context.read<GameSettingsSingleDoubleTraining_P>();
+    final String backupString = targetNumberTextController
+        .text; // in case text was changed and cancel pressed
 
     showDialog(
       barrierDismissible: false,
@@ -63,12 +75,7 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
         key: settings.getFormKeyTargetNumber,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-            bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-            top: DIALOG_CONTENT_PADDING_TOP,
-            left: DIALOG_CONTENT_PADDING_LEFT,
-            right: DIALOG_CONTENT_PADDING_RIGHT,
-          ),
+          contentPadding: dialogContentPadding,
           title: Text(
             'Enter target number',
             style: TextStyle(
@@ -81,7 +88,7 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
               right: 10.w,
             ),
             child: TextFormField(
-              controller: settings.getTargetNumberController,
+              controller: targetNumberTextController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return ('Please enter a value!');
@@ -110,16 +117,23 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
                 hintStyle: TextStyle(
                   color: Utils.getPrimaryColorDarken(context),
                 ),
-                border: InputBorder.none,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
               ),
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () => {
-                settings.resetTargetNumberToDefault(),
-                settings.notify(),
-                Navigator.of(context).pop(),
+              onPressed: () {
+                Future.delayed(Duration(milliseconds: 300), () {
+                  targetNumberTextController.text = backupString;
+                });
+                Navigator.of(context).pop();
               },
               child: Text(
                 'Cancel',
@@ -159,8 +173,7 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
     }
     settings.getFormKeyTargetNumber.currentState!.save();
 
-    settings.setTargetNumber =
-        int.parse(settings.getTargetNumberController.text);
+    settings.setTargetNumber = int.parse(targetNumberTextController.text);
     settings.notify();
     settings.setIsTargetNumberEnabled = !settings.getIsTargetNumberEnabled;
 

@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/game_details_x01.dart';
@@ -86,13 +87,13 @@ class _StatsCardX01State extends State<StatsCardX01> {
                       _showAllPlayersOrTeams
                           ? Icons.expand_less
                           : Icons.expand_more,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
                     label: Text(
-                      _showAllPlayersOrTeams
-                          ? 'Show less players'
-                          : 'Show all players',
-                      style: TextStyle(color: Colors.black),
+                      'Show ${_showAllPlayersOrTeams ? 'less' : 'all'} ${gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ? 'players' : 'teams'}',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

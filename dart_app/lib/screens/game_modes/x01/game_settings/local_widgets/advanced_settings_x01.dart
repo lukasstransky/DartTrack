@@ -57,7 +57,7 @@ class AdvancedSettingsX01 extends StatelessWidget {
               icon: Icon(Icons.settings,
                   color: Theme.of(context).colorScheme.secondary),
               label: Text(
-                'Advanced Setttings',
+                'Advanced setttings',
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),

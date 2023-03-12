@@ -23,9 +23,24 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
           ),
           Text(
             gameSettingsX01.getGameModeDetails(false),
-            style: TextStyle(
-                fontSize: gameSettingsX01.getSuddenDeath ? 8.sp : 10.sp),
-          )
+            style: TextStyle(fontSize: 10.sp),
+          ),
+          if (!gameSettingsX01.getSuddenDeath &&
+              gameSettingsX01.getWinByTwoLegsDifference)
+            Text(
+              '(Win by two legs difference)',
+              style: TextStyle(fontSize: 8.sp),
+            ),
+          if (gameSettingsX01.getSuddenDeath)
+            Text(
+              gameSettingsX01.getSuddenDeathInfo(),
+              style: TextStyle(fontSize: 8.sp),
+            ),
+          if (gameSettingsX01.getDrawMode)
+            Text(
+              '(Draw enabled)',
+              style: TextStyle(fontSize: 8.sp),
+            ),
         ],
       ),
       leading: Column(

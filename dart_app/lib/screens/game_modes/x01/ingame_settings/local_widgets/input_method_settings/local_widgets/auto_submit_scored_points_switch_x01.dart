@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +20,6 @@ class AutoSubmitOrScoredPointsSwitchX01 extends StatefulWidget {
 class _AutoSubmitOrScoredPointsSwitchX01State
     extends State<AutoSubmitOrScoredPointsSwitchX01> {
   final GlobalKey<FormState> _formKeyMostScoredPoint = GlobalKey<FormState>();
-  TextEditingController? _mostScoredPointController;
 
   @override
   void initState() {
@@ -36,8 +36,8 @@ class _AutoSubmitOrScoredPointsSwitchX01State
 
   _showDialogForMostScoredPointInput(
       BuildContext context, GameSettingsX01_P gameSettingsX01, int i) {
-    _mostScoredPointController = new TextEditingController(
-        text: gameSettingsX01.getMostScoredPoints[i].toString());
+    newTextControllerForMostScoredPointGameSettingsX01(
+        gameSettingsX01.getMostScoredPoints[i].toString());
 
     showDialog(
       barrierDismissible: false,
@@ -46,19 +46,15 @@ class _AutoSubmitOrScoredPointsSwitchX01State
         key: _formKeyMostScoredPoint,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: EdgeInsets.only(
-              bottom: DIALOG_CONTENT_PADDING_BOTTOM,
-              top: DIALOG_CONTENT_PADDING_TOP,
-              left: DIALOG_CONTENT_PADDING_LEFT,
-              right: DIALOG_CONTENT_PADDING_RIGHT),
+          contentPadding: dialogContentPadding,
           title: const Text(
-            'Enter Value',
+            'Enter value',
             style: TextStyle(color: Colors.white),
           ),
           content: Container(
-            margin: EdgeInsets.only(left: 20.w, right: 20.w),
+            margin: EdgeInsets.only(left: 10.w, right: 10.w),
             child: TextFormField(
-              controller: _mostScoredPointController,
+              controller: mostScoredPointController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return ('Please enter a value!');
@@ -90,7 +86,7 @@ class _AutoSubmitOrScoredPointsSwitchX01State
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(15),
                   borderSide: BorderSide(
                     width: 0,
                     style: BorderStyle.none,
@@ -138,10 +134,10 @@ class _AutoSubmitOrScoredPointsSwitchX01State
     }
     _formKeyMostScoredPoint.currentState!.save();
 
-    gameSettingsX01.getMostScoredPoints[i] = _mostScoredPointController!.text;
+    gameSettingsX01.getMostScoredPoints[i] = mostScoredPointController.text;
     gameSettingsX01.notify();
     Navigator.of(context).pop();
-    _mostScoredPointController!.clear();
+    mostScoredPointController.clear();
   }
 
   int _calcCardHeight(GameSettingsX01_P gameSettingsX01,
@@ -218,10 +214,54 @@ class _AutoSubmitOrScoredPointsSwitchX01State
                 ],
               ),
             ),
-            if (!statisticsFirestore.noGamesPlayed)
-              fetchFromStatsBtn(gameSettingsX01, statisticsFirestore),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                if (!statisticsFirestore.noGamesPlayed) ...[
+                  fetchFromStatsBtn(gameSettingsX01, statisticsFirestore),
+                  resetBtn(context, gameSettingsX01),
+                ]
+              ],
+            )
           ],
         ],
+      ),
+    );
+  }
+
+  Container resetBtn(BuildContext context, GameSettingsX01_P gameSettingsX01) {
+    return Container(
+      height: 4.h,
+      margin: EdgeInsets.only(
+        top: 2.h,
+        right: 5.w,
+      ),
+      alignment: Alignment.centerLeft,
+      child: ElevatedButton(
+        child: Text(
+          'Reset',
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+          ),
+        ),
+        onPressed: () {
+          gameSettingsX01.setMostScoredPoints =
+              List<String>.of(mostScoredPoints);
+          gameSettingsX01.notify();
+        },
+        style: ButtonStyle(
+          backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -230,7 +270,10 @@ class _AutoSubmitOrScoredPointsSwitchX01State
       StatsFirestoreX01_P statisticsFirestoreX01) {
     return Container(
       height: 4.h,
-      margin: EdgeInsets.only(top: 5.w, left: 5.w, right: 5.w),
+      margin: EdgeInsets.only(
+        top: 2.h,
+        left: 5.w,
+      ),
       alignment: Alignment.centerLeft,
       child: ElevatedButton(
         child: Text(
@@ -239,9 +282,8 @@ class _AutoSubmitOrScoredPointsSwitchX01State
             color: Theme.of(context).colorScheme.secondary,
           ),
         ),
-        onPressed: () => {
-          _fetchFromStatsBtnPressed(gameSettingsX01, statisticsFirestoreX01),
-        },
+        onPressed: () =>
+            _fetchFromStatsBtnPressed(gameSettingsX01, statisticsFirestoreX01),
         style: ButtonStyle(
           backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
           splashFactory: NoSplash.splashFactory,
@@ -328,7 +370,7 @@ class _AutoSubmitOrScoredPointsSwitchX01State
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  'Most Scored Points',
+                  'Most scored points',
                   style: TextStyle(
                       fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
                       color: Colors.white),
@@ -360,7 +402,7 @@ class _AutoSubmitOrScoredPointsSwitchX01State
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  'Automatically Submit Points',
+                  'Automatically submit points',
                   style: TextStyle(
                       fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
                       color: Colors.white),

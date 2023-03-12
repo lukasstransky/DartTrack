@@ -40,23 +40,20 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
 
   @override
   dispose() {
-    disposeScrollControllersForGamesettings();
+    disposeControllersForGamesettingsX01();
     super.dispose();
   }
 
   _addCurrentUserToPlayers() {
-    final Player? currentUserAsPlayer = context.read<AuthService>().getPlayer;
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    gameSettingsX01.getPlayers.add(new Player(name: 'Strainski'));
-    //todo comment out
-    /* if (currentUserAsPlayer != null) {
-      final Player toAdd = new Player(name: currentUserAsPlayer.getName);
-
-      Future.delayed(Duration.zero, () {
-        gameSettingsX01.addPlayer(toAdd);
-      });
-    } */
+    Future.delayed(Duration.zero, () {
+      if (!gameSettingsX01.getPlayers.any((p) => p.getName == username)) {
+        gameSettingsX01.addPlayer(new Player(name: username));
+      }
+    });
   }
 
   bool _showAddButton(List<Player> players) {
