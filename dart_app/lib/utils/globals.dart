@@ -1,27 +1,68 @@
 library dartApp.globals;
 
+import 'package:dart_app/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-ItemScrollController scrollController =
-    ItemScrollController(); //for scrolling to player whos turn it is in game
-ScrollController scrollControllerPlayers = new ScrollController();
-ScrollController scrollControllerTeams = new ScrollController();
 ScrollController scrollControllerScoreTrainingPlayerEntries =
     new ScrollController();
+ScrollController scrollControllerSingleDoubleTrainingPlayerEntries =
+    new ScrollController();
+ScrollController scrollControllerGameX01MultiplePlayers =
+    new ScrollController();
 
-TextEditingController newPlayerController = new TextEditingController();
-TextEditingController newTeamController = new TextEditingController();
-
-TextEditingController editTeamController = new TextEditingController();
-TextEditingController editPlayerController = new TextEditingController();
-
-ItemScrollController newItemScrollController() {
-  scrollController = new ItemScrollController();
-  return scrollController;
+ScrollController newScrollControllerScoreTrainingPlayerEntries() {
+  scrollControllerScoreTrainingPlayerEntries = new ScrollController();
+  return scrollControllerScoreTrainingPlayerEntries;
 }
 
-ScrollController newScrollControllerPlayers() {
+ScrollController newScrollControllerSingleDoubleTrainingPlayerEntries() {
+  scrollControllerSingleDoubleTrainingPlayerEntries = new ScrollController();
+  return scrollControllerSingleDoubleTrainingPlayerEntries;
+}
+
+ScrollController newScrollControllerGameX01MultiplePlayers() {
+  scrollControllerGameX01MultiplePlayers = new ScrollController();
+  return scrollControllerGameX01MultiplePlayers;
+}
+
+// AUTH
+TextEditingController usernameTextController = new TextEditingController();
+TextEditingController emailTextController = new TextEditingController();
+TextEditingController passwordTextController = new TextEditingController();
+
+TextEditingController newTextControllerForUsername() {
+  usernameTextController = new TextEditingController();
+  return usernameTextController;
+}
+
+TextEditingController newTextControllerForEmail() {
+  emailTextController = new TextEditingController();
+  return emailTextController;
+}
+
+TextEditingController newTextControllerForPassword() {
+  passwordTextController = new TextEditingController();
+  return passwordTextController;
+}
+
+disposeControllersForAuth() {
+  usernameTextController.dispose();
+  emailTextController.dispose();
+  passwordTextController.dispose();
+}
+
+// GAMESETTINGS X01
+ScrollController scrollControllerPlayers = new ScrollController();
+ScrollController scrollControllerTeams = new ScrollController();
+
+TextEditingController newPlayerController = new TextEditingController();
+TextEditingController editPlayerController = new TextEditingController();
+TextEditingController newTeamController = new TextEditingController();
+TextEditingController editTeamController = new TextEditingController();
+TextEditingController customPointsController = new TextEditingController();
+TextEditingController mostScoredPointController = new TextEditingController();
+
+newScrollControllerPlayers() {
   scrollControllerPlayers = new ScrollController();
   return scrollControllerPlayers;
 }
@@ -31,23 +72,84 @@ ScrollController newScrollControllerTeams() {
   return scrollControllerTeams;
 }
 
-ScrollController newScrollControllerScoreTrainingPlayerEntries() {
-  scrollControllerScoreTrainingPlayerEntries = new ScrollController();
-  return scrollControllerScoreTrainingPlayerEntries;
+TextEditingController newTextControllerForAddingNewPlayerInGameSettingsX01() {
+  newPlayerController = new TextEditingController();
+  return newPlayerController;
 }
 
-ScrollController newScrollControllerSingleDoubleTrainingPlayerEntries() {
-  scrollControllerScoreTrainingPlayerEntries = new ScrollController();
-  return scrollControllerScoreTrainingPlayerEntries;
+TextEditingController newTextControllerForEditingPlayerInGameSettingsX01() {
+  editPlayerController = new TextEditingController();
+  return editPlayerController;
 }
 
-disposeScrollControllersForGamesettings() {
+TextEditingController newTextControllerForAddingNewTeamInGameSettingsX01() {
+  newTeamController = new TextEditingController();
+  return newTeamController;
+}
+
+TextEditingController newTextControllerForEditingTeamInGameSettingsX01() {
+  editTeamController = new TextEditingController();
+  return editTeamController;
+}
+
+TextEditingController newTextControllerForCustomPointsGameSettingsX01(
+    String text) {
+  customPointsController = new TextEditingController(text: text);
+  return customPointsController;
+}
+
+TextEditingController newTextControllerForMostScoredPointGameSettingsX01(
+    String text) {
+  mostScoredPointController = new TextEditingController(text: text);
+  return mostScoredPointController;
+}
+
+disposeControllersForGamesettingsX01() {
   scrollControllerPlayers.dispose();
   scrollControllerTeams.dispose();
+
   newPlayerController.dispose();
-  newTeamController.dispose();
   editPlayerController.dispose();
+  newTeamController.dispose();
   editTeamController.dispose();
+  customPointsController.dispose();
+}
+
+// GAMESETTINGS SCORE TRAINING
+TextEditingController maxRoundsOrPointsTextController =
+    new TextEditingController(text: DEFAULT_ROUNDS_SCORE_TRAINING.toString());
+
+TextEditingController newTextControllerMaxRoundsOrPointsGameSettingsSct(
+    String text) {
+  maxRoundsOrPointsTextController = new TextEditingController(text: text);
+  return maxRoundsOrPointsTextController;
+}
+
+disposeControllersForGamesettingsScoreTraining() {
+  maxRoundsOrPointsTextController.dispose();
+}
+
+// SINGLE DOUBLE TRAINING
+TextEditingController targetNumberTextController =
+    new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
+TextEditingController amountOfRoundsController = new TextEditingController(
+    text: DEFUALT_ROUNDS_FOR_TARGET_NUMBER.toString());
+
+TextEditingController newTextControllerTargetNumberGameSettingsSdt() {
+  targetNumberTextController =
+      new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
+  return targetNumberTextController;
+}
+
+TextEditingController newTextControllerAmountOfRoundsGameSettingsSdt() {
+  amountOfRoundsController =
+      new TextEditingController(text: DEFAULT_TARGET_NUMBER.toString());
+  return amountOfRoundsController;
+}
+
+disposeControllersForGamesettingsSingleDoubleTraining() {
+  targetNumberTextController.dispose();
+  amountOfRoundsController.dispose();
 }
 
 // maybe not best solution
@@ -57,3 +159,8 @@ int g_checkoutCount = 0;
 
 // for favouriteGames saving
 String g_gameId = '';
+
+// for bug with bot -> to proper show it on the ui
+String g_average = '-';
+String g_last_throw = '-';
+String g_thrown_darts = '-';
