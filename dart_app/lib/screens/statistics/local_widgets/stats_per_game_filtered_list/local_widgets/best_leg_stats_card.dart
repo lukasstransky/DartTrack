@@ -4,19 +4,22 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class BestLegStatsCard extends StatelessWidget {
-  const BestLegStatsCard({Key? key, required this.bestLeg, required this.game})
+  const BestLegStatsCard(
+      {Key? key,
+      required this.bestLeg,
+      required this.game,
+      required this.isWorstSelected})
       : super(key: key);
 
   final int bestLeg;
   final GameX01_P game;
+  final bool isWorstSelected;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/statisticsX01',
-            arguments: {'game': game});
-      },
+      onTap: () => Navigator.pushNamed(context, '/statisticsX01',
+          arguments: {'game': game}),
       child: Card(
         color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         child: Column(
@@ -72,10 +75,10 @@ class BestLegStatsCard extends StatelessWidget {
                 bottom: 5,
               ),
               child: Text(
-                'Darts for Leg: ' + bestLeg.toString(),
+                '${isWorstSelected ? 'Worst' : 'Best'} leg: ${bestLeg}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 13.sp,
+                  fontSize: 14.sp,
                   color: Utils.getTextColorDarken(context),
                 ),
               ),

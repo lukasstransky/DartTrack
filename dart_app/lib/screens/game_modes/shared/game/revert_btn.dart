@@ -1,4 +1,5 @@
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -7,6 +8,8 @@ import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class RevertBtn extends StatelessWidget {
@@ -23,6 +26,10 @@ class RevertBtn extends StatelessWidget {
     }
 
     if (game_p is GameX01_P) {
+      if (context.read<GameSettingsX01_P>().getVibrationFeedbackEnabled) {
+        HapticFeedback.lightImpact();
+      }
+
       RevertX01Helper.revertPoints(context);
 
       if (game_p.getCurrentPlayerToThrow is Bot) {

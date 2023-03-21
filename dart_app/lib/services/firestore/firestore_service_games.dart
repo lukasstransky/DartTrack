@@ -253,7 +253,7 @@ class FirestoreServiceGames {
 
     await collectionReference.get().then((openGames) => {
           openGames.docs.forEach((openGame) {
-            Map<String, dynamic> map =
+            final Map<String, dynamic> map =
                 (openGame.data() as Map<String, dynamic>);
 
             if (map.containsValue('X01')) {

@@ -41,8 +41,14 @@ class InGameSettingsX01 extends StatelessWidget {
                       HideShowX01(),
                       GeneralSettingsX01(),
                       InputMethodSettingsX01(),
-                      if (_showDisableCheckoutCounting(context))
-                        DisableCheckoutCountingX01(),
+                      Selector<GameSettingsX01_P, bool>(
+                        selector: (_, gameSettingsX01) =>
+                            gameSettingsX01.getCheckoutCountingFinallyDisabled,
+                        builder: (_, __, ___) =>
+                            _showDisableCheckoutCounting(context)
+                                ? DisableCheckoutCountingX01()
+                                : SizedBox.shrink(),
+                      ),
                     ],
                   ),
                 ),

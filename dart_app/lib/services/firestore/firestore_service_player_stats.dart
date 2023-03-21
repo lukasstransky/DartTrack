@@ -415,6 +415,12 @@ class FirestoreServicePlayerStats {
       String orderField, bool ascendingOrder, BuildContext context) async {
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final Set<String> validOrderFields = {
+      'highestFinish',
+      'bestLeg',
+      'worstFinish',
+      'worstLeg'
+    };
     final firestoreStats = context.read<StatsFirestoreX01_P>();
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestorePlayerStatsPath());
@@ -432,7 +438,7 @@ class FirestoreServicePlayerStats {
             final String currentGameId = element.get('gameId');
 
             //for overall values -> checkouts + thrown darts per leg
-            if (orderField == 'highestFinish' || orderField == 'bestLeg') {
+            if (validOrderFields.contains(orderField)) {
               final SplayTreeMap<String, int> checkouts =
                   SplayTreeMap<String, int>.from(element.get('checkouts'));
               final SplayTreeMap<String, int> thrownDartsPerLeg =

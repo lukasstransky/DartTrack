@@ -14,14 +14,17 @@ class FinishWaysX01 extends StatelessWidget {
   final PlayerOrTeamGameStatsX01? currPlayerOrTeamGameStatsX01;
 
   bool _checkoutPossible(int currentPoints) {
-    if (currentPoints <= 170 && !BOGEY_NUMBERS.contains(currentPoints))
+    if (currentPoints <= 170 && !BOGEY_NUMBERS.contains(currentPoints)) {
       return true;
+    }
 
     return false;
   }
 
   String _getFinishWay(int currentPoints) {
-    if (currentPoints != 0) return FINISH_WAYS[currentPoints]!.first;
+    if (currentPoints != 0) {
+      return FINISH_WAYS[currentPoints]!.first;
+    }
 
     return '';
   }
@@ -31,7 +34,9 @@ class FinishWaysX01 extends StatelessWidget {
     final GameX01_P gameX01 = context.read<GameX01_P>();
 
     for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics)
-      if (stats.getCurrentPoints <= 170) return true;
+      if (stats.getCurrentPoints <= 170) {
+        return true;
+      }
 
     return false;
   }
@@ -70,7 +75,7 @@ class FinishWaysX01 extends StatelessWidget {
       return SizedBox(
         height: 2.h,
         child: Text(
-          'No Finish possible!',
+          'No finish possible!',
           style: TextStyle(
             color: Utils.getTextColorDarken(context),
             fontSize: 13.sp,

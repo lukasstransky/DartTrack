@@ -2,7 +2,6 @@ import 'package:dart_app/screens/game_modes/game_modes_overview.dart';
 import 'package:dart_app/screens/settings/settings.dart';
 import 'package:dart_app/screens/statistics/statistics.dart';
 import 'package:dart_app/services/auth_service.dart';
-import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

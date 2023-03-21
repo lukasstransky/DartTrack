@@ -10,9 +10,11 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class StatsCardFiltered extends StatefulWidget {
-  const StatsCardFiltered(
-      {Key? key, required this.game, required this.orderField})
-      : super(key: key);
+  const StatsCardFiltered({
+    Key? key,
+    required this.game,
+    required this.orderField,
+  }) : super(key: key);
 
   final GameX01_P? game;
   final String orderField;
@@ -38,8 +40,12 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
             return playerStats.getCheckoutQuoteInPercent();
           case 'highestFinish':
             return playerStats.getHighestCheckout().toString();
+          case 'worstFinish':
+            return playerStats.getWorstCheckout();
           case 'bestLeg':
             return playerStats.getBestLeg();
+          case 'worstLeg':
+            return playerStats.getWorstLeg();
         }
       }
     }
@@ -53,10 +59,8 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
 
     for (PlayerOrTeamGameStatsX01 playerStats
         in widget.game!.getPlayerGameStatistics) {
-      if (playerStats.getPlayer.getName == username) {
-        if (playerStats.getGameWon) {
-          return true;
-        }
+      if (playerStats.getPlayer.getName == username && playerStats.getGameWon) {
+        return true;
       }
     }
 
@@ -73,13 +77,19 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
         result += 'First nine avg.: ';
         break;
       case 'checkoutInPercent':
-        result += 'Checkout in percent: ';
+        result += 'Checkout quote: ';
         break;
       case 'highestFinish':
-        result += 'Highest finish: ';
+        result += 'Best finish: ';
+        break;
+      case 'worstFinish':
+        result += 'Worst finish: ';
         break;
       case 'bestLeg':
-        result += 'Darts for leg: ';
+        result += 'Best leg: ';
+        break;
+      case 'worstLeg':
+        result += 'Worst leg: ';
         break;
     }
     result += _getValueOfOrderField();
@@ -90,10 +100,8 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/statisticsX01',
-            arguments: {'game': widget.game});
-      },
+      onTap: () => Navigator.pushNamed(context, '/statisticsX01',
+          arguments: {'game': widget.game}),
       child: Card(
         color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         child: Column(

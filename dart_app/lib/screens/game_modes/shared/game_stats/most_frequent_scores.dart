@@ -92,55 +92,60 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
   Widget build(BuildContext context) {
     final bool atLeastOneRoundPlayedWithThreeDartsMode =
         _atLeastOneRoundPlayedWithThreeDartsMode();
+    final bool moreThanFiveScores = _moreThanFiveScores();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
-          transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
-          child: Text(
-            'Most frequent scores ${widget.mostScoresPerDart ? 'per dart' : ''}',
-            style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
-              color: Colors.white,
+    return Padding(
+      padding: EdgeInsets.only(bottom: moreThanFiveScores ? 0 : 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+            transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
+            child: Text(
+              'Most frequent scores ${widget.mostScoresPerDart ? 'per dart' : ''}',
+              style: TextStyle(
+                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
-        if (widget.mostScoresPerDart && atLeastOneRoundPlayedWithThreeDartsMode)
-          AmountOfThreeDartModeRounds(game_p: widget.game_p),
-        MostFrequentScoresList(
-          mostScoresPerDart: widget.mostScoresPerDart,
-          game_p: widget.game_p,
-          atLeastOneRoundPlayedWithThreeDartsMode:
-              atLeastOneRoundPlayedWithThreeDartsMode,
-          showFirst10: _showFirst10,
-        ),
-        if (_moreThanFiveScores())
-          Container(
-            width: 100.w,
-            transform: Matrix4.translationValues(-5.w, 0.0, 0.0),
-            child: Center(
-              child: TextButton.icon(
-                onPressed: () {
-                  setState(() {
-                    _showFirst10 = !_showFirst10;
-                  });
-                },
-                icon: Icon(
-                  _showFirst10 ? Icons.expand_less : Icons.expand_more,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                label: Text(
-                  'Show ${_showFirst10 ? 'less' : 'more'}',
-                  style: TextStyle(
-                    color: Colors.white,
+          if (widget.mostScoresPerDart &&
+              atLeastOneRoundPlayedWithThreeDartsMode)
+            AmountOfThreeDartModeRounds(game_p: widget.game_p),
+          MostFrequentScoresList(
+            mostScoresPerDart: widget.mostScoresPerDart,
+            game_p: widget.game_p,
+            atLeastOneRoundPlayedWithThreeDartsMode:
+                atLeastOneRoundPlayedWithThreeDartsMode,
+            showFirst10: _showFirst10,
+          ),
+          if (moreThanFiveScores)
+            Container(
+              width: 100.w,
+              transform: Matrix4.translationValues(-5.w, 0.0, 0.0),
+              child: Center(
+                child: TextButton.icon(
+                  onPressed: () {
+                    setState(() {
+                      _showFirst10 = !_showFirst10;
+                    });
+                  },
+                  icon: Icon(
+                    _showFirst10 ? Icons.expand_less : Icons.expand_more,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  label: Text(
+                    'Show ${_showFirst10 ? 'less' : 'more'}',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

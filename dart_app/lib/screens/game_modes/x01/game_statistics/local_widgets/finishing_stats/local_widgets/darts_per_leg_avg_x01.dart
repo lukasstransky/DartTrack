@@ -16,8 +16,9 @@ class DartsPerLegAvgX01 extends StatelessWidget {
     if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01))
       stats = gameX01.getTeamStatsFromPlayer(stats.getPlayer.getName);
 
-    if (stats.getLegsWonTotal == 0) return '-';
-
+    if (stats.getLegsWonTotal == 0) {
+      return '-';
+    }
     int dartsPerLeg = 0;
     int games = 0;
     stats.getCheckouts.keys.forEach((key) {
@@ -25,7 +26,13 @@ class DartsPerLegAvgX01 extends StatelessWidget {
       games++;
     });
 
-    return (dartsPerLeg / games).toStringAsFixed(2);
+    final String result = (dartsPerLeg / games).toStringAsFixed(2);
+    final String decimalPlaces = result.substring(result.length - 2);
+
+    if (decimalPlaces == '00') {
+      return result.substring(0, result.length - 3);
+    }
+    return result;
   }
 
   @override

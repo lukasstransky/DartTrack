@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 class CheckoutStatsCard extends StatefulWidget {
-  const CheckoutStatsCard({Key? key, required this.finish, required this.game})
+  const CheckoutStatsCard(
+      {Key? key,
+      required this.finish,
+      required this.game,
+      required this.isWorstFinished})
       : super(key: key);
 
   final int finish;
   final GameX01_P game;
+  final bool isWorstFinished;
 
   @override
   State<CheckoutStatsCard> createState() => _CheckoutStatsCardState();
@@ -19,10 +24,8 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, '/statisticsX01',
-            arguments: {'game': widget.game});
-      },
+      onTap: () => Navigator.pushNamed(context, '/statisticsX01',
+          arguments: {'game': widget.game}),
       child: Card(
         color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         child: Column(
@@ -70,7 +73,7 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
                 bottom: 5,
               ),
               child: Text(
-                'Highest finish: ' + widget.finish.toString(),
+                '${widget.isWorstFinished ? 'Worst' : 'Best'} finish: ${widget.finish.toString()}',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 14.sp,

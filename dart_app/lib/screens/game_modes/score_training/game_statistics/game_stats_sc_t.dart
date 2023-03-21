@@ -145,16 +145,14 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                     Padding(
                       padding: EdgeInsets.only(
                         left: PADDING_LEFT_STATISTICS,
-                        top: PADDING_TOP_STATISTICS,
                       ),
                       child: MostFrequentScores(
                         game_p: _game as GameScoreTraining_P,
                         mostScoresPerDart: true,
                       ),
                     ),
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 20),
-                    child: SizedBox.shrink(),
+                  SizedBox(
+                    height: 3.h,
                   )
                 ],
               ),

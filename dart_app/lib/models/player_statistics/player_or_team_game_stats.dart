@@ -9,6 +9,7 @@ import 'package:dart_app/models/player_statistics/player_game_stats_single_doubl
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/utils.dart';
+import 'package:tuple/tuple.dart';
 
 class PlayerOrTeamGameStats {
   Player? _player;
@@ -94,11 +95,18 @@ class PlayerOrTeamGameStats {
         'allThrownDarts': stats.getAllThrownDarts,
       if (stats.getCheckouts.isNotEmpty)
         'highestFinish': stats.getHighestCheckout(),
-      if (stats.getCheckouts.isNotEmpty) 'checkouts': stats.getCheckouts,
       if (stats.getCheckouts.isNotEmpty)
+        'worstFinish': stats.getWorstCheckout(),
+      if (stats.getCheckouts.isNotEmpty)
+        'checkouts': stats.getCheckouts.entries
+            .map((entry) => '${entry.key};${entry.value}')
+            .toList(),
+      if (stats.getAmountOfDartsForWonLegs.isNotEmpty)
+        'amountOfDartsForWonLegs': stats.getAmountOfDartsForWonLegs,
+      if (stats.getAmountOfDartsForWonLegs.isNotEmpty)
         'bestLeg': int.parse(stats.getBestLeg()),
-      if (stats.getCheckouts.isNotEmpty)
-        'worstLeg': int.parse((stats.getWorstLeg())),
+      if (stats.getAmountOfDartsForWonLegs.isNotEmpty)
+        'worstLeg': int.parse(stats.getWorstLeg()),
       if (stats.getAllScores.isNotEmpty) 'allScores': stats.getAllScores,
       if (stats.getAllScoresPerDart.isNotEmpty)
         'allScoresPerDart': stats.getAllScoresPerDart,
@@ -111,10 +119,14 @@ class PlayerOrTeamGameStats {
       if (stats.getAllScoresPerDartAsStringCount.isNotEmpty)
         'allScoresPerDartAsStringCount': stats.getAllScoresPerDartAsStringCount,
       if (stats.getThrownDartsPerLeg.isNotEmpty)
-        'thrownDartsPerLeg': stats.getThrownDartsPerLeg,
+        'thrownDartsPerLeg': stats.getThrownDartsPerLeg.entries
+            .map((entry) => '${entry.key};${entry.value}')
+            .toList(),
       if (stats.getLegsWonTotal != 0) 'legsWonTotal': stats.getLegsWonTotal,
       if (stats.getAllScoresPerLeg.isNotEmpty)
-        'allScoresPerLeg': stats.getAllScoresPerLeg,
+        'allScoresPerLeg': stats.getAllScoresPerLeg.entries
+            .map((entry) => "${entry.key};${entry.value.join(',')}")
+            .toList(),
       if (stats.getGameWon) 'gameWon': stats.getGameWon,
       if (stats.getAllScoresCountForRound != 0)
         'allScoresCountForRound': stats.getAllScoresCountForRound,
@@ -123,7 +135,9 @@ class PlayerOrTeamGameStats {
         'dartsForWonLegCount': stats.getDartsForWonLegCount,
       if (stats.getGameDraw) 'gameDraw': true,
       if (stats.getPlayersWithCheckoutInLeg.isNotEmpty)
-        'playersWithCheckoutInLeg': stats.getPlayersWithCheckoutInLeg,
+        'playersWithCheckoutInLeg': stats.getPlayersWithCheckoutInLeg.entries
+            .map((entry) => '${entry.key};${entry.value}')
+            .toList(),
       if (stats.getThreeDartModeRoundsCount != 0)
         'threeDartModeRoundsCount': stats.getThreeDartModeRoundsCount,
       if (stats.getTotalRoundsCount != 0)
@@ -134,7 +148,9 @@ class PlayerOrTeamGameStats {
       if (stats.getLegsCount.isNotEmpty)
         result['legsCount'] = stats.getLegsCount;
       if (stats.getAmountOfFinishDarts.isNotEmpty)
-        result['amountOfFinishDarts'] = stats.getAmountOfFinishDarts;
+        result['amountOfFinishDarts'] = stats.getAmountOfFinishDarts.entries
+            .map((entry) => '${entry.key};${entry.value}')
+            .toList();
       if (stats.getAllScoresPerDartAsString.isNotEmpty)
         result['allScoresPerDartAsString'] = stats.getAllScoresPerDartAsString;
       if (stats.getAllRemainingPoints.isNotEmpty)
@@ -144,14 +160,19 @@ class PlayerOrTeamGameStats {
             Utils.convertAllRemainingScoresPerDartToSimpleList(
                 stats.getAllRemainingScoresPerDart);
       if (stats.getLegSetWithPlayerOrTeamWhoFinishedIt.isNotEmpty)
-        result['setLegWithPlayerOrTeamWhoFinishedIt'] =
-            stats.getLegSetWithPlayerOrTeamWhoFinishedIt;
+        result['setLegWithPlayerOrTeamWhoFinishedIt'] = stats
+            .getLegSetWithPlayerOrTeamWhoFinishedIt.entries
+            .map((entry) => '${entry.key};${entry.value}')
+            .toList();
       if (stats.getInputMethodForRounds.isNotEmpty)
         result['inputMethodForRounds'] = stats.getInputMethodForRounds
             .map((e) => e.toString().split('.').last)
             .toList();
       result['currentThrownDartsInLeg'] = stats.getCurrentThrownDartsInLeg;
-      //todo add _checkoutCountAtThrownDarts
+      result['checkoutCountAtThrownDarts'] =
+          stats.getCheckoutCountAtThrownDarts.map((tuple) {
+        return '${tuple.item1};${tuple.item2};${tuple.item3}';
+      }).toList();
     }
 
     return result;
@@ -255,6 +276,25 @@ class PlayerOrTeamGameStats {
       }
     }
 
+    List<Tuple3<String, int, int>> checkoutCountAtThrownDarts = [];
+    if (map['checkoutCountAtThrownDarts'] != null) {
+      checkoutCountAtThrownDarts = map['checkoutCountAtThrownDarts']
+          .map<Tuple3<String, int, int>>((str) {
+        List<String> parts = str.split(';');
+        return Tuple3(parts[0], int.parse(parts[1]), int.parse(parts[2]));
+      }).toList() as List<Tuple3<String, int, int>>;
+    }
+
+    SplayTreeMap<String, List<int>> allScoresPerLeg = SplayTreeMap.of({});
+    if (map['allScoresPerLeg'] != null) {
+      map['allScoresPerLeg'].forEach((string) {
+        String key = string.split(';')[0];
+        List<int> value =
+            List<int>.from(string.split(';')[1].split(',').map(int.parse));
+        allScoresPerLeg..putIfAbsent(key, () => value);
+      });
+    }
+
     return PlayerOrTeamGameStatsX01.Firestore(
       gameId: map['gameId'],
       dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
@@ -274,23 +314,31 @@ class PlayerOrTeamGameStats {
       allThrownDarts: map['allThrownDarts'] == null ? 0 : map['allThrownDarts'],
       thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
           ? new SplayTreeMap()
-          : SplayTreeMap<String, int>.from(map['thrownDartsPerLeg']),
+          : SplayTreeMap.fromIterable(
+              map['thrownDartsPerLeg'],
+              key: (string) => string.split(';')[0],
+              value: (string) => int.parse(string.split(';')[1]),
+            ),
       dartsForWonLegCount:
           map['dartsForWonLegCount'] == null ? 0 : map['dartsForWonLegCount'],
       gameWon: map['gameWon'] == null ? false : map['gameWon'],
       legsWon: map['legsWon'] == null ? 0 : map['legsWon'],
       legsWonTotal: map['legsWonTotal'] == null ? 0 : map['legsWonTotal'],
       setsWon: map['setsWon'] == null ? 0 : map['setsWon'],
-      allScoresPerLeg: map['allScoresPerLeg'] == null
-          ? new SplayTreeMap()
-          : SplayTreeMap<String, List<dynamic>>.from(
-              map['allScoresPerLeg'],
-            ),
+      allScoresPerLeg: allScoresPerLeg,
       legsCount: map['legsCount'] == null ? [] : map['legsCount'].cast<int>(),
       checkoutCount: map['checkoutDarts'] == null ? 0 : map['checkoutDarts'],
+      checkoutCountAtThrownDarts: checkoutCountAtThrownDarts,
       checkouts: map['checkouts'] == null
           ? new SplayTreeMap()
-          : SplayTreeMap<String, int>.from(map['checkouts']),
+          : SplayTreeMap.fromIterable(
+              map['checkouts'],
+              key: (string) => string.split(';')[0],
+              value: (string) => int.parse(string.split(';')[1]),
+            ),
+      amountOfDartsForWonLegs: map['amountOfDartsForWonLegs'] == null
+          ? []
+          : map['amountOfDartsForWonLegs'].cast<int>(),
       roundedScoresEven: map['roundedScoresEven'] == null
           ? {}
           : Map<String, int>.from(map['roundedScoresEven']),
@@ -309,7 +357,11 @@ class PlayerOrTeamGameStats {
           : map['allScoresPerDart'].cast<int>(),
       playersWithCheckoutInLeg: map['playersWithCheckoutInLeg'] == null
           ? {}
-          : Map<String, String>.from(map['playersWithCheckoutInLeg']),
+          : SplayTreeMap.fromIterable(
+              map['playersWithCheckoutInLeg'],
+              key: (string) => string.split(';')[0],
+              value: (string) => string.split(';')[1],
+            ),
       allScoresPerDartAsStringCount:
           map['allScoresPerDartAsStringCount'] == null
               ? {}
@@ -330,12 +382,19 @@ class PlayerOrTeamGameStats {
           map['totalRoundsCount'] == null ? 0 : map['totalRoundsCount'],
       amountOfFinishDarts: map['amountOfFinishDarts'] == null
           ? new SplayTreeMap()
-          : SplayTreeMap<String, int>.from(map['amountOfFinishDarts']),
+          : SplayTreeMap.fromIterable(
+              map['amountOfFinishDarts'],
+              key: (string) => string.split(';')[0],
+              value: (string) => int.parse(string.split(';')[1]),
+            ),
       setLegWithPlayerOrTeamWhoFinishedIt:
           map['setLegWithPlayerOrTeamWhoFinishedIt'] == null
               ? {}
-              : Map<String, String>.from(
-                  map['setLegWithPlayerOrTeamWhoFinishedIt']),
+              : SplayTreeMap.fromIterable(
+                  map['setLegWithPlayerOrTeamWhoFinishedIt'],
+                  key: (string) => string.split(';')[0],
+                  value: (string) => string.split(';')[1],
+                ),
       inputMethodForRounds: inputMethodForRounds,
     );
   }

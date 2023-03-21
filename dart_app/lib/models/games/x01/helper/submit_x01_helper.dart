@@ -91,6 +91,8 @@ class SubmitX01Helper {
             .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
           stats.setStartingPoints = currentStats.getCurrentPoints;
         }
+      } else {
+        currentStats.setStartingPoints = currentStats.getCurrentPoints;
       }
     } else {
       currentStats.setStartingPoints = currentStats.getCurrentPoints;
@@ -185,20 +187,11 @@ class SubmitX01Helper {
           g_thrown_darts = '-';
         }
 
-        if (shouldSubmitTeamStats) {
-          for (PlayerOrTeamGameStatsX01 stats
-              in gameX01.getTeamGameStatistics) {
-            stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
-            stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
-          }
-        }
-
-        if (!shouldSubmitTeamStats) {
-          for (PlayerOrTeamGameStatsX01 stats
-              in gameX01.getPlayerGameStatistics) {
-            stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
-            stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
-          }
+        for (PlayerOrTeamGameStatsX01 stats in shouldSubmitTeamStats
+            ? gameX01.getTeamGameStatistics
+            : gameX01.getPlayerGameStatistics) {
+          stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
+          stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
         }
       }
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
@@ -373,6 +366,10 @@ class SubmitX01Helper {
 
     // set amount of finish darts
     currentStats.getAmountOfFinishDarts[currentSetLeg] = thrownDarts;
+
+    // add to amount of darts for won legs
+    currentStats.getAmountOfDartsForWonLegs
+        .add(currentStats.getCurrentThrownDartsInLeg);
 
     // set thrown darts per leg & reset points
     for (PlayerOrTeamGameStatsX01 stats in (shouldSubmitTeamStats
@@ -637,13 +634,11 @@ class SubmitX01Helper {
       }
 
       // set next team
-      int jumpToIndex = 0;
       if (indexOfCurrentTeam + 1 == teams.length) {
         // round of all teams finished -> restart from beginning
         gameX01.setCurrentTeamToThrow = teams[0];
       } else {
         gameX01.setCurrentTeamToThrow = teams[indexOfCurrentTeam + 1];
-        jumpToIndex = indexOfCurrentTeam + 1;
       }
 
       // set next player of next team

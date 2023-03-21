@@ -1,8 +1,10 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -26,7 +28,12 @@ class PointBtnRoundX01 extends StatelessWidget {
     gameX01.notify();
   }
 
-  _pointBtnRoundClicked(BuildContext context) {
+  _pointBtnRoundClicked(BuildContext context) async {
+    if (context.read<GameSettingsX01_P>().getVibrationFeedbackEnabled &&
+        this.activeBtn as bool) {
+      HapticFeedback.lightImpact();
+    }
+
     this.activeBtn as bool
         ? _updateCurrentPointsSelected(context, point as String)
         : null;

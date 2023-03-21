@@ -27,7 +27,7 @@ class VibrationFeedbackX01 extends StatelessWidget {
                 gameSettingsX01.getVibrationFeedbackEnabled,
             builder: (_, vibrationFeedbackEnabled, __) => Switch(
               value: vibrationFeedbackEnabled,
-              onChanged: (value) {
+              onChanged: (value) async {
                 gameSettingsX01.setVibrationFeedbackEnabled = value;
                 gameSettingsX01.notify();
               },

@@ -139,9 +139,11 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       result['isOpenGame'] = getRevertPossible;
       result['playerOrTeamLegStartIndex'] = game.getPlayerOrTeamLegStartIndex;
       result['reachedSuddenDeath'] = game.getReachedSuddenDeath;
-      result['legSetWithPlayerOrTeamWhoFinishedIt'] =
-          game.getLegSetWithPlayerOrTeamWhoFinishedIt;
-
+      result['legSetWithPlayerOrTeamWhoFinishedIt'] = game
+          .getLegSetWithPlayerOrTeamWhoFinishedIt.entries
+          .map((entry) => '${entry.key};${entry.value}')
+          .toList();
+      ;
       if (settings.getSingleOrTeam == SingleOrTeamEnum.Team) {
         result['currentPlayerOfTeamsBeforeLegFinish'] =
             game.getCurrentPlayerOfTeamsBeforeLegFinish;

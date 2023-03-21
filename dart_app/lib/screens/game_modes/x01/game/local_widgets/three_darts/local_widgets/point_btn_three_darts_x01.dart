@@ -9,6 +9,7 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -24,6 +25,10 @@ class PointBtnThreeDartX01 extends StatelessWidget {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     if (activeBtn as bool && gameX01.getCanBePressed) {
+      if (gameSettingsX01.getVibrationFeedbackEnabled) {
+        HapticFeedback.lightImpact();
+      }
+
       UtilsPointBtnsThreeDarts.updateCurrentThreeDarts(
           gameX01.getCurrentThreeDarts, pointBtnText);
       gameX01.notify();

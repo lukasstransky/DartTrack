@@ -102,7 +102,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
   @override
   Widget build(BuildContext context) {
     final _padding = EdgeInsets.only(left: 20, bottom: 10);
-    final _paddingLastItem = EdgeInsets.only(left: 20, bottom: 30);
+    final _paddingOnlyLeft = EdgeInsets.only(left: 20);
 
     return Scaffold(
       appBar: _game!.getIsGameFinished
@@ -279,7 +279,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       ),
                     ),
                     Padding(
-                      padding: _paddingLastItem,
+                      padding: _paddingOnlyLeft,
                       child: MostFrequentScores(
                         mostScoresPerDart: false,
                         game_p: _game as GameX01_P,
@@ -287,7 +287,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                     ),
                     if (_oneScorePerDartAtLeast())
                       Padding(
-                        padding: _paddingLastItem,
+                        padding: _paddingOnlyLeft,
                         child: MostFrequentScores(
                           mostScoresPerDart: true,
                           game_p: _game as GameX01_P,
@@ -313,6 +313,9 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                         ),
                       ],
                     ],
+                    Container(
+                      height: 3.h,
+                    )
                   ],
                 ),
               ),

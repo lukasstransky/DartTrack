@@ -155,7 +155,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'Click card to view the details about a game',
+                      'To view details about a game, click on its card.',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),

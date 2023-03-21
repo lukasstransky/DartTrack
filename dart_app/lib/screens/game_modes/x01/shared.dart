@@ -245,7 +245,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               child: Text(
                                 '3',
                                 style: TextStyle(
-                                  color: selectedCheckoutCount == 0
+                                  color: selectedCheckoutCount == 3
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
                                 ),
@@ -376,15 +376,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 MaterialStateProperty.all(Colors.transparent),
                             shape: MaterialStateProperty.all(
                               RoundedRectangleBorder(
-                                side: selectedCheckoutCount > 2 ||
-                                        (selectedCheckoutCount == 2 &&
-                                            !isDoubleField)
-                                    ? BorderSide.none
-                                    : BorderSide(
-                                        color: Utils.getPrimaryColorDarken(
-                                            context),
-                                        width: 2,
-                                      ),
+                                side: BorderSide(
+                                  color: Utils.getPrimaryColorDarken(context),
+                                  width: 2,
+                                ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
                                 ),

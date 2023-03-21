@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -51,10 +52,10 @@ class PlayerTeamCard extends StatelessWidget {
     final GameX01_P gameX01_P = context.read<GameX01_P>();
 
     if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Single &&
-        gameX01_P.getCurrentPlayerToThrow == stats.getPlayer) {
+        Player.samePlayer(gameX01_P.getCurrentPlayerToThrow, stats.getPlayer)) {
       return true;
     } else if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        gameX01_P.getCurrentTeamToThrow == stats.getTeam) {
+        gameX01_P.getCurrentTeamToThrow.getName == stats.getTeam.getName) {
       return true;
     }
 
@@ -97,6 +98,7 @@ class PlayerTeamCard extends StatelessWidget {
             children: [
               Container(
                 width: 10.w,
+                transform: Matrix4.translationValues(0.0, -10.0, 0.0),
                 padding: EdgeInsets.only(left: 5),
                 alignment: Alignment.topLeft,
                 child: Image.asset('assets/dart_arrow.png',
@@ -166,25 +168,30 @@ class PlayerTeamCard extends StatelessWidget {
         children: [
           Container(
             padding: EdgeInsets.only(left: 10),
-            child: Row(
-              children: [
-                Text(
-                  'Average: ',
-                  style: TextStyle(
-                    color: Utils.getTextColorDarken(context),
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  '${stats.getAverage(gameSettingsX01_P)}',
-                  style: TextStyle(
-                    color: Utils.getTextColorDarken(context),
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
+            child: Selector<GameSettingsX01_P, bool>(
+              selector: (_, gameSettings) => gameSettings.getShowAverage,
+              builder: (_, showAverage, __) => showAverage
+                  ? Row(
+                      children: [
+                        Text(
+                          'Average: ',
+                          style: TextStyle(
+                            color: Utils.getTextColorDarken(context),
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          '${stats.getAverage(gameSettingsX01_P)}',
+                          style: TextStyle(
+                            color: Utils.getTextColorDarken(context),
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox.shrink(),
             ),
           ),
           Container(

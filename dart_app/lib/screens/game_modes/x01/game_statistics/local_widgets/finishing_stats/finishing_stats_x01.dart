@@ -36,14 +36,15 @@ class FinishingStatsX01 extends StatelessWidget {
             ),
           ),
         ),
-        if (gameSettingsX01.getEnableCheckoutCounting) ...[
-          CheckoutPercentX01(gameX01: gameX01),
-          CheckoutDartsX01(gameX01: gameX01),
-        ],
         HighestFinishX01(gameX01: gameX01),
         BestLegX01(gameX01: gameX01),
         WorstLegX01(gameX01: gameX01),
         DartsPerLegAvgX01(gameX01: gameX01),
+        if (gameSettingsX01.getEnableCheckoutCounting &&
+            !gameSettingsX01.getCheckoutCountingFinallyDisabled) ...[
+          CheckoutPercentX01(gameX01: gameX01),
+          CheckoutDartsX01(gameX01: gameX01),
+        ],
       ],
     );
   }

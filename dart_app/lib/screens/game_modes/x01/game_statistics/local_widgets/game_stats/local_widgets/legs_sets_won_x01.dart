@@ -68,7 +68,56 @@ class LegSetsWonX01 extends StatelessWidget {
             ],
           ),
         ),
-        if (setsEnabled)
+        if (setsEnabled) ...[
+          Padding(
+            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+            child: Row(
+              children: [
+                Container(
+                  width: WIDTH_HEADINGS_STATISTICS.w,
+                  alignment: Alignment.centerLeft,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: 'Legs won ',
+                            style: TextStyle(
+                              fontSize: FONTSIZE_STATISTICS.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Utils.getTextColorDarken(context),
+                            ),
+                          ),
+                          TextSpan(
+                            text: '(active set)',
+                            style: TextStyle(
+                              fontSize: 8.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Utils.getTextColorDarken(context),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                for (PlayerOrTeamGameStatsX01 stats
+                    in Utils.getPlayersOrTeamStatsListStatsScreen(
+                        gameX01, gameSettingsX01))
+                  Container(
+                    width: WIDTH_DATA_STATISTICS.w,
+                    child: Text(
+                      stats.getLegsWon.toString(),
+                      style: TextStyle(
+                        fontSize: FONTSIZE_STATISTICS.sp,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
           Padding(
             padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
             child: Row(
@@ -79,7 +128,7 @@ class LegSetsWonX01 extends StatelessWidget {
                   child: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      'Legs won',
+                      'Legs won total',
                       style: TextStyle(
                         fontSize: FONTSIZE_STATISTICS.sp,
                         fontWeight: FontWeight.bold,
@@ -104,6 +153,7 @@ class LegSetsWonX01 extends StatelessWidget {
               ],
             ),
           )
+        ]
       ],
     );
   }

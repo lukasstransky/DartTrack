@@ -55,6 +55,16 @@ class GameSettingsX01_P extends GameSettings_P {
     required bool drawMode,
     required bool setsEnabled,
     required InputMethod inputMethod,
+    required bool showAverage,
+    required bool showFinishWays,
+    required bool showLastThrow,
+    required bool showThrownDartsPerLeg,
+    required bool vibrationFeedbackEnabled,
+    required bool showInputMethodInGameScreen,
+    required bool showMostScoredPoints,
+    required List<String> mostScoredPoints,
+    required bool automaticallySubmitPoints,
+    required bool checkoutCountingFinallyDisabled,
     List<Player>? players,
     List<Team>? teams,
   }) {
@@ -71,7 +81,17 @@ class GameSettingsX01_P extends GameSettings_P {
     this._maxExtraLegs = maxExtraLegs;
     this._drawMode = drawMode;
     this._setsEnabled = setsEnabled;
-    this._inputMethod = inputMethod;
+    this._showAverage = showAverage;
+    this._showFinishWays = showFinishWays;
+    this._showLastThrow = showLastThrow;
+    this._showThrownDartsPerLeg = showThrownDartsPerLeg;
+    this._vibrationFeedbackEnabled = vibrationFeedbackEnabled;
+    this._showInputMethodInGameScreen = showInputMethodInGameScreen;
+    this._showMostScoredPoints = showMostScoredPoints;
+    this._mostScoredPoints = mostScoredPoints;
+    this._automaticallySubmitPoints = automaticallySubmitPoints;
+    this._checkoutCountingFinallyDisabled = checkoutCountingFinallyDisabled;
+
     if (players != null) {
       setPlayers = players;
     }

@@ -28,6 +28,12 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   String _orderField = '';
   bool _overallFilter = true;
   bool _ascendingOrder = true;
+  static const Set<String> _fieldsToShowOverallPerGameBtn = {
+    'highestFinish',
+    'bestLeg',
+    'worstFinish',
+    'worstLeg'
+  };
 
   @override
   didChangeDependencies() {
@@ -69,7 +75,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
         _orderField = 'highestFinish';
         break;
       case WORST_CHECKOUT_SCORE:
-        _orderField = 'highestFinish';
+        _orderField = 'worstFinish';
         _ascendingOrder = false;
         break;
       case BEST_DARTS_PER_LEG:
@@ -77,7 +83,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
         _ascendingOrder = false;
         break;
       case WORST_DARTS_PER_LEG:
-        _orderField = 'bestLeg';
+        _orderField = 'worstLeg';
         break;
     }
 
@@ -87,6 +93,9 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   }
 
   String getAppBarTitle() {
+    final StatsFirestoreX01_P statsFirestoreX01 =
+        context.read<StatsFirestoreX01_P>();
+
     switch (this._type) {
       case BEST_AVG:
         return 'Best averages';
@@ -103,13 +112,20 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
       case BEST_CHECKOUT_SCORE:
         return 'Best finishes';
       case WORST_CHECKOUT_SCORE:
+        statsFirestoreX01.filteredGames =
+            statsFirestoreX01.filteredGames.reversed.toList();
         return 'Worst finishes';
       case BEST_DARTS_PER_LEG:
         return 'Best legs';
       case WORST_DARTS_PER_LEG:
         return 'Worst legs';
     }
+
     return '';
+  }
+
+  bool _showOverallPerGameBtn() {
+    return _fieldsToShowOverallPerGameBtn.contains(_orderField);
   }
 
   @override
@@ -126,114 +142,8 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: 10),
-                    child: _orderField == 'highestFinish' ||
-                            _orderField == 'bestLeg'
-                        ? Row(
-                            children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: 4.h,
-                                  child: ElevatedButton(
-                                    onPressed: () => {
-                                      setState(() {
-                                        _overallFilter = !_overallFilter;
-                                      }),
-                                    },
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        'Overall',
-                                        style: TextStyle(
-                                          color: Utils
-                                              .getTextColorForGameSettingsBtn(
-                                                  _overallFilter, context),
-                                        ),
-                                      ),
-                                    ),
-                                    style: ButtonStyle(
-                                      splashFactory: NoSplash.splashFactory,
-                                      shadowColor: MaterialStateProperty.all(
-                                          Colors.transparent),
-                                      overlayColor: MaterialStateProperty.all(
-                                          Colors.transparent),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          side: BorderSide(
-                                            color: Utils.getPrimaryColorDarken(
-                                                context),
-                                            width:
-                                                GAME_SETTINGS_BTN_BORDER_WITH,
-                                          ),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(10.0),
-                                            bottomLeft: Radius.circular(10.0),
-                                          ),
-                                        ),
-                                      ),
-                                      backgroundColor: _overallFilter
-                                          ? Utils
-                                              .getPrimaryMaterialStateColorDarken(
-                                                  context)
-                                          : Utils.getColor(Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: SizedBox(
-                                  height: 4.h,
-                                  child: ElevatedButton(
-                                    onPressed: () => {
-                                      setState(() {
-                                        _overallFilter = !_overallFilter;
-                                      }),
-                                    },
-                                    child: FittedBox(
-                                      fit: BoxFit.fitWidth,
-                                      child: Text(
-                                        'Per game',
-                                        style: TextStyle(
-                                          color: Utils
-                                              .getTextColorForGameSettingsBtn(
-                                                  !_overallFilter, context),
-                                        ),
-                                      ),
-                                    ),
-                                    style: ButtonStyle(
-                                      splashFactory: NoSplash.splashFactory,
-                                      shadowColor: MaterialStateProperty.all(
-                                          Colors.transparent),
-                                      overlayColor: MaterialStateProperty.all(
-                                          Colors.transparent),
-                                      shape: MaterialStateProperty.all(
-                                        RoundedRectangleBorder(
-                                          side: BorderSide(
-                                            color: Utils.getPrimaryColorDarken(
-                                                context),
-                                            width:
-                                                GAME_SETTINGS_BTN_BORDER_WITH,
-                                          ),
-                                          borderRadius: BorderRadius.only(
-                                            topRight: Radius.circular(10.0),
-                                            bottomRight: Radius.circular(10.0),
-                                          ),
-                                        ),
-                                      ),
-                                      backgroundColor: !_overallFilter
-                                          ? Utils
-                                              .getPrimaryMaterialStateColorDarken(
-                                                  context)
-                                          : Utils.getColor(Theme.of(context)
-                                              .colorScheme
-                                              .primary),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          )
+                    child: _showOverallPerGameBtn()
+                        ? OverallPerGameBtns(context)
                         : SizedBox.shrink(),
                   ),
                   Padding(
@@ -244,12 +154,13 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Click card to view the details about a game',
+                        'To view details about a game, click on its card.',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
                   ),
-                  if (_orderField == 'highestFinish' &&
+                  if ((_orderField == 'highestFinish' ||
+                          _orderField == 'worstFinish') &&
                       _overallFilter &&
                       statisticsFirestore.checkoutWithGameId.isNotEmpty) ...[
                     for (int i = 0;
@@ -259,13 +170,17 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                         finish: statisticsFirestore.checkoutWithGameId
                             .elementAt(i)
                             .item1,
-                        game: GameX01_P.createGame(statisticsFirestore
-                            .getGameById(statisticsFirestore.checkoutWithGameId
-                                .elementAt(i)
-                                .item2)),
+                        game: GameX01_P.createGame(
+                          statisticsFirestore.getGameById(statisticsFirestore
+                              .checkoutWithGameId
+                              .elementAt(i)
+                              .item2),
+                        ),
+                        isWorstFinished: _orderField == 'worstFinish',
                       ),
                     ],
-                  ] else if (_orderField == 'bestLeg' &&
+                  ] else if ((_orderField == 'bestLeg' ||
+                          _orderField == 'worstLeg') &&
                       statisticsFirestore.thrownDartsWithGameId.isNotEmpty &&
                       _overallFilter) ...[
                     for (int i = 0;
@@ -281,13 +196,15 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                               .elementAt(i)
                               .item2),
                         ),
+                        isWorstSelected: _orderField == 'worstLeg',
                       ),
                     ],
                   ] else ...[
                     for (Game_P game in statisticsFirestore.filteredGames) ...[
                       StatsCardFiltered(
-                          game: GameX01_P.createGame(game),
-                          orderField: _orderField),
+                        game: GameX01_P.createGame(game),
+                        orderField: _orderField,
+                      ),
                     ],
                   ],
                 ],
@@ -296,6 +213,97 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
           ),
         ),
       ),
+    );
+  }
+
+  Row OverallPerGameBtns(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 4.h,
+            child: ElevatedButton(
+              onPressed: () => {
+                setState(() {
+                  _overallFilter = !_overallFilter;
+                }),
+              },
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  'Overall',
+                  style: TextStyle(
+                    color: Utils.getTextColorForGameSettingsBtn(
+                        _overallFilter, context),
+                  ),
+                ),
+              ),
+              style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Utils.getPrimaryColorDarken(context),
+                      width: GAME_SETTINGS_BTN_BORDER_WITH,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      bottomLeft: Radius.circular(10.0),
+                    ),
+                  ),
+                ),
+                backgroundColor: _overallFilter
+                    ? Utils.getPrimaryMaterialStateColorDarken(context)
+                    : Utils.getColor(Theme.of(context).colorScheme.primary),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 4.h,
+            child: ElevatedButton(
+              onPressed: () => {
+                setState(() {
+                  _overallFilter = !_overallFilter;
+                }),
+              },
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  'Per game',
+                  style: TextStyle(
+                    color: Utils.getTextColorForGameSettingsBtn(
+                        !_overallFilter, context),
+                  ),
+                ),
+              ),
+              style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    side: BorderSide(
+                      color: Utils.getPrimaryColorDarken(context),
+                      width: GAME_SETTINGS_BTN_BORDER_WITH,
+                    ),
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    ),
+                  ),
+                ),
+                backgroundColor: !_overallFilter
+                    ? Utils.getPrimaryMaterialStateColorDarken(context)
+                    : Utils.getColor(Theme.of(context).colorScheme.primary),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

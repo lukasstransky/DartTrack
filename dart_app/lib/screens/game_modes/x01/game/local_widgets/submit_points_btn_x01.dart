@@ -8,6 +8,7 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -49,42 +50,26 @@ class SubmitPointsBtnX01 extends StatelessWidget {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
+    late int currentPoints;
+    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      currentPoints = gameX01.getCurrentPlayerGameStats().getCurrentPoints;
+    } else {
+      currentPoints = gameX01.getCurrentTeamGameStats().getCurrentPoints;
+    }
+
+    if ((gameX01.getCurrentPointsSelected != 'Points' || currentPoints == 0) &&
+        gameSettingsX01.getVibrationFeedbackEnabled) {
+      HapticFeedback.lightImpact();
+    }
+
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       _submitPointsForInputMethodRound(
           gameX01.getCurrentPointsSelected, context);
-      if (gameSettingsX01.getPlayers.length > 2 ||
-          gameSettingsX01.getTeams.length > 2) {
-        _scrollToTopBottomIfNeccessary(gameX01, gameSettingsX01);
-      }
     } else if (_shouldOnPressedBeEnabled(gameSettingsX01)) {
       // if input method is three darts and points are not auto submitted (btn needs to be pressed)
       g_thrownDarts = g_thrownDarts == 0 ? 3 : g_thrownDarts;
       SubmitX01Helper.submitPoints(_getLastDartThrown(gameX01), context, false,
           g_thrownDarts, g_checkoutCount);
-    }
-  }
-
-  _scrollToTopBottomIfNeccessary(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    final int index = gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
-        ? gameSettingsX01.getPlayers.indexOf(gameX01.getCurrentPlayerToThrow)
-        : gameSettingsX01.getTeams.indexOf(gameX01.getCurrentTeamToThrow);
-    if (index == 3) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        scrollControllerGameX01MultiplePlayers.animateTo(
-          scrollControllerGameX01MultiplePlayers.position.maxScrollExtent,
-          duration: Duration(milliseconds: 800),
-          curve: Curves.easeInOut,
-        );
-      });
-    } else if (index == gameSettingsX01.getPlayers.length - 1) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        scrollControllerGameX01MultiplePlayers.animateTo(
-          scrollControllerGameX01MultiplePlayers.position.minScrollExtent,
-          duration: Duration(milliseconds: 800),
-          curve: Curves.easeInOut,
-        );
-      });
     }
   }
 
@@ -130,6 +115,7 @@ class SubmitPointsBtnX01 extends StatelessWidget {
                 gameSettingsX01.getCheckoutCountingFinallyDisabled == false) {
               final int count = gameX01
                   .getAmountOfCheckoutPossibilities(currentPointsSelected);
+
               if (count != -1) {
                 showDialogForCheckout(count, currentPointsSelected, context);
               } else {

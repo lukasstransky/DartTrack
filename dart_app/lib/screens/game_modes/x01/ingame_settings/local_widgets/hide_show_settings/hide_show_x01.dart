@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/local_widgets/hide_show_average_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/local_widgets/hide_show_finish_ways_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/local_widgets/hide_show_last_throw_x01.dart';
@@ -6,15 +7,27 @@ import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hi
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class HideShowX01 extends StatelessWidget {
   const HideShowX01({Key? key}) : super(key: key);
 
+  bool _showOtherOptions(BuildContext context) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final bool isSingleMode =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+
+    return (isSingleMode && gameSettingsX01.getPlayers.length == 2) ||
+        (!isSingleMode && gameSettingsX01.getTeams.length == 2);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bool showOtherOptions = _showOtherOptions(context);
+
     return Container(
-      height: 23.5.h,
+      height: showOtherOptions ? 23.5.h : 11.h,
       padding: EdgeInsets.only(top: 1.0.h, left: 0.5.h, right: 0.5.h),
       child: Card(
         elevation: 5,
@@ -36,9 +49,11 @@ class HideShowX01 extends StatelessWidget {
               ),
             ),
             HideShowAverageX01(),
-            HideShowFinishWaysX01(),
-            HideShowLastThrowX01(),
-            HideShowThrownDartsX01(),
+            if (showOtherOptions) ...[
+              HideShowFinishWaysX01(),
+              HideShowLastThrowX01(),
+              HideShowThrownDartsX01(),
+            ]
           ],
         ),
       ),

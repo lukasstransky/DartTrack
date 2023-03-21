@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
@@ -38,9 +40,10 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
   List<Tuple3<String, int, int>> _checkoutCountAtThrownDarts =
-      []; //to revert checkout count -> saves the current leg, amount of checkout counts + the thrown darts at this moment
+      []; //to revert checkout count -> saves the current leg, the thrown darts at this moment+  amount of checkout counts
   SplayTreeMap<String, int> _amountOfFinishDarts =
       new SplayTreeMap(); //saves for each leg the amount of finish darts (for reverting)
+  List<int> _amountOfDartsForWonLegs = [];
 
   Map<int, int> _roundedScoresEven = {
     0: 0,
@@ -111,7 +114,9 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
     required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
     required List<int> legsCount,
     required int checkoutCount,
+    required List<Tuple3<String, int, int>> checkoutCountAtThrownDarts,
     required SplayTreeMap<String, int> checkouts,
+    required List<int> amountOfDartsForWonLegs,
     required Map<String, int> roundedScoresEven,
     required Map<String, int> roundedScoresOdd,
     required Map<String, int> preciseScores,
@@ -149,7 +154,9 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
         allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<int>())));
     this._legsCount = legsCount;
     this._checkoutCount = checkoutCount;
+    this._checkoutCountAtThrownDarts = checkoutCountAtThrownDarts;
     this._checkouts = checkouts;
+    this._amountOfDartsForWonLegs = amountOfDartsForWonLegs;
     this._roundedScoresEven =
         roundedScoresEven.map((key, value) => MapEntry(int.parse(key), value));
     this._roundedScoresOdd =
@@ -322,6 +329,10 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
   set setAmountOfFinishDarts(SplayTreeMap<String, int> value) =>
       this._amountOfFinishDarts = value;
 
+  List<int> get getAmountOfDartsForWonLegs => this._amountOfDartsForWonLegs;
+  set setAmountOfDartsForWonLegs(List<int> value) =>
+      this._amountOfDartsForWonLegs = value;
+
   Map<String, String> get getPlayersWithCheckoutInLeg =>
       this._playersWithCheckoutInLeg;
   set setPlayersWithCheckoutInLeg(Map<String, String> value) =>
@@ -384,15 +395,21 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
   }
 
   int getHighestCheckout() {
-    int result = 0;
-
-    for (int checkOut in getCheckouts.values) {
-      if (checkOut > result) {
-        result = checkOut;
-      }
+    if (getCheckouts.isEmpty) {
+      return 0;
     }
 
-    return result;
+    return getCheckouts.values.reduce((int a, int b) => a > b ? a : b);
+  }
+
+  String getWorstCheckout() {
+    if (getCheckouts.isEmpty) {
+      return '-';
+    }
+
+    return getCheckouts.values
+        .reduce((int a, int b) => a < b ? a : b)
+        .toString();
   }
 
   String getFirstNinveAvg() {
@@ -421,34 +438,20 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
   }
 
   String getBestLeg() {
-    if (getLegsWonTotal == 0) {
+    if (getAmountOfDartsForWonLegs.isEmpty) {
       return '-';
     }
 
-    int bestLeg = -1;
-
-    _thrownDartsPerLeg.values.forEach((element) {
-      if (element < bestLeg || bestLeg == -1) {
-        bestLeg = element;
-      }
-    });
-
+    int bestLeg = getAmountOfDartsForWonLegs.reduce(min);
     return bestLeg.toString();
   }
 
   String getWorstLeg() {
-    if (getLegsWonTotal == 0) {
+    if (getAmountOfDartsForWonLegs.isEmpty) {
       return '-';
     }
 
-    int worstLeg = -1;
-
-    _thrownDartsPerLeg.values.forEach((element) {
-      if (element > worstLeg) {
-        worstLeg = element;
-      }
-    });
-
+    int worstLeg = getAmountOfDartsForWonLegs.reduce(max);
     return worstLeg.toString();
   }
 }

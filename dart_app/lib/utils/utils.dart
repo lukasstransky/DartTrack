@@ -600,7 +600,7 @@ class Utils {
           style: TextStyle(color: Colors.white),
         ),
         content: const Text(
-          'Do you want to save the game to finish it later?',
+          'Do you want to save the game for finishing it later?',
           style: TextStyle(color: Colors.white),
         ),
         actions: [

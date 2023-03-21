@@ -8,6 +8,7 @@ import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/l
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -116,7 +117,14 @@ class OtherX01 extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  if (_isBustClickable(gameX01)) SubmitX01Helper.bust(context);
+                  if (_isBustClickable(gameX01)) {
+                    if (context
+                        .read<GameSettingsX01_P>()
+                        .getVibrationFeedbackEnabled) {
+                      HapticFeedback.lightImpact();
+                    }
+                    SubmitX01Helper.bust(context);
+                  }
                 },
               ),
             ),

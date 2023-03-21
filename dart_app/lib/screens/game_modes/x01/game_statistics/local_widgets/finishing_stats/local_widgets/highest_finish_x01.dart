@@ -25,7 +25,7 @@ class HighestFinishX01 extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                'Highest finish',
+                'Best finish',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   fontWeight: FontWeight.bold,

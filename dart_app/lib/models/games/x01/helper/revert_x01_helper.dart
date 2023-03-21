@@ -14,9 +14,9 @@ import 'package:tuple/tuple.dart';
 class RevertX01Helper {
   /************************************************************/
   /********              PUBLIC METHODS                ********/
-  /************************************************************/
+  /// *********************************************************
 
-  static revertPoints(BuildContext context,
+  static void revertPoints(BuildContext context,
       [bool shouldRevertTeamStats = false]) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
@@ -78,7 +78,8 @@ class RevertX01Helper {
     bool alreadyReverted = false;
 
     // set current points selected count (prevent from entering more than 3 darts)
-    if (isCompleteRound) {
+    if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
+        isCompleteRound) {
       if (gameX01.getAmountOfDartsThrown() == 0 ||
           (shouldRevertTeamStats && gameX01.getAmountOfDartsThrown() == 2)) {
         currentStats.setPointsSelectedCount = 3;
@@ -92,9 +93,11 @@ class RevertX01Helper {
         setReverted = true;
       }
 
-      for (PlayerOrTeamGameStatsX01 stats in (shouldRevertTeamStats
+      currentStats.getAmountOfDartsForWonLegs.removeLast();
+
+      for (PlayerOrTeamGameStatsX01 stats in shouldRevertTeamStats
           ? gameX01.getTeamGameStatistics
-          : gameX01.getPlayerGameStatistics)) {
+          : gameX01.getPlayerGameStatistics) {
         // set points for each player before leg/set was finished
         if (stats.getAllRemainingPoints.isNotEmpty) {
           stats.setCurrentPoints = stats.getAllRemainingPoints.last;
@@ -236,7 +239,7 @@ class RevertX01Helper {
   }
 
   //only for cancel button in add checkout count dialog
-  static revertSomeStats(BuildContext context, int points) {
+  static void revertSomeStats(BuildContext context, int points) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final PlayerOrTeamGameStatsX01 stats = gameX01.getCurrentPlayerGameStats();
 
@@ -245,6 +248,9 @@ class RevertX01Helper {
     stats.setCurrentThrownDartsInLeg = stats.getCurrentThrownDartsInLeg - 1;
     stats.setAllThrownDarts = stats.getAllThrownDarts - 1;
     stats.setPointsSelectedCount = stats.getPointsSelectedCount - 1;
+    stats.getInputMethodForRounds.removeLast();
+    stats.getAllScoresPerDart.removeLast();
+    stats.setThreeDartModeRoundsCount = stats.getThreeDartModeRoundsCount - 1;
 
     if (stats.getCurrentThrownDartsInLeg <= 9) {
       stats.setFirstNineAvgPoints = stats.getFirstNineAvgPoints - points;
@@ -270,7 +276,7 @@ class RevertX01Helper {
   /********              PRIVATE METHODS               ********/
   /************************************************************/
 
-  static _setLastThrownDarts(List<String> points, GameX01_P gameX01) {
+  static void _setLastThrownDarts(List<String> points, GameX01_P gameX01) {
     for (int i = 0; i < points.length; i++) {
       gameX01.getCurrentThreeDarts[i] = points[i];
     }
@@ -281,8 +287,8 @@ class RevertX01Helper {
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = false;
     for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-      if (stats.getAllScores.length > 0 ||
-          stats.getAllScoresPerDart.length > 0) {
+      if (stats.getAllScores.isNotEmpty ||
+          stats.getAllScoresPerDart.isNotEmpty) {
         result = true;
       }
     }
@@ -309,7 +315,7 @@ class RevertX01Helper {
     return result;
   }
 
-  static _revertStats(
+  static void _revertStats(
       GameX01_P gameX01,
       GameSettingsX01_P gameSettingsX01,
       PlayerOrTeamGameStatsX01 currentStats,
@@ -330,7 +336,7 @@ class RevertX01Helper {
         final String lastKey =
             currentStats.getPlayersWithCheckoutInLeg.keys.last;
         currentStats.getPlayersWithCheckoutInLeg
-            .removeWhere((key, value) => key == lastKey);
+            .removeWhere((String key, String value) => key == lastKey);
       }
 
       // thrown darts per leg
@@ -351,8 +357,8 @@ class RevertX01Helper {
                 stats.getLegSetWithPlayerOrTeamWhoFinishedIt.values.last;
             final String keyOfLastElement =
                 stats.getLegSetWithPlayerOrTeamWhoFinishedIt.keys.last;
-            stats.getLegSetWithPlayerOrTeamWhoFinishedIt
-                .removeWhere((key, value) => key == keyOfLastElement);
+            stats.getLegSetWithPlayerOrTeamWhoFinishedIt.removeWhere(
+                (String key, String value) => key == keyOfLastElement);
 
             final bool isSingleMode =
                 gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
@@ -513,6 +519,7 @@ class RevertX01Helper {
 
       // rounded scores even
       List<int> keys = currentStats.getRoundedScoresEven.keys.toList();
+      keys.sort();
       if (points == 180) {
         currentStats.getRoundedScoresEven[180] -= 1;
       } else {
@@ -525,6 +532,7 @@ class RevertX01Helper {
 
       // rounded scores odd
       keys = currentStats.getRoundedScoresOdd.keys.toList();
+      keys.sort();
       if (points >= 170) {
         currentStats.getRoundedScoresOdd[170] -= 1;
       } else {
@@ -574,10 +582,18 @@ class RevertX01Helper {
       }
     }
 
-    return true;
+    // check for case if it got reverted to the beginning of game
+    for (PlayerOrTeamGameStatsX01 stats
+        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+      if (stats.getSetsWon > 0 || stats.getLegsWon > 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
-  static _setPreviousPlayerOrTeam(GameX01_P gameX01,
+  static void _setPreviousPlayerOrTeam(GameX01_P gameX01,
       GameSettingsX01_P gameSettingsX01, bool legSetOrGameReverted) {
     if (!(gameSettingsX01.getInputMethod == InputMethod.Round ||
         (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
@@ -614,7 +630,7 @@ class RevertX01Helper {
     final String keyOfLastElement =
         gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.keys.last;
     gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt
-        .removeWhere((key, value) => key == keyOfLastElement);
+        .removeWhere((String key, String value) => key == keyOfLastElement);
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
       for (Player player in gameSettingsX01.getPlayers) {
@@ -639,7 +655,8 @@ class RevertX01Helper {
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     final int indexOfCurrentPlayer = gameSettingsX01.getPlayers.indexOf(
         gameSettingsX01.getPlayers
-            .where((p) => p.getName == gameX01.getCurrentPlayerToThrow.getName)
+            .where((Player p) =>
+                p.getName == gameX01.getCurrentPlayerToThrow.getName)
             .first);
     int indexOfCurrentTeam = 0;
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
@@ -676,7 +693,7 @@ class RevertX01Helper {
           gameX01.getCurrentPlayerOfTeamsBeforeLegFinish.keys.last;
 
       gameX01.getCurrentPlayerOfTeamsBeforeLegFinish
-          .removeWhere((key, value) => key == lastKey);
+          .removeWhere((String key, List<String> value) => key == lastKey);
 
       // set previous player for each team, based on which player was the current player when leg was finished
       gameX01.getGameSettings.getTeams.asMap().forEach((index, value) => {

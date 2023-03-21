@@ -44,7 +44,7 @@ class WorstLegX01 extends StatelessWidget {
                     ? gameX01
                         .getTeamStatsFromPlayer(stats.getPlayer.getName)
                         .getWorstLeg()
-                    : stats.getBestLeg(),
+                    : stats.getWorstLeg(),
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Colors.white,

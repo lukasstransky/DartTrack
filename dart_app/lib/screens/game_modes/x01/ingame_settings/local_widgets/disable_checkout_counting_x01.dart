@@ -12,8 +12,8 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 12.h,
-      padding: EdgeInsets.only(top: 1.h),
+      height: 13.h,
+      padding: EdgeInsets.only(top: 2.h),
       margin: EdgeInsets.only(bottom: 5.h),
       child: Card(
         color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
@@ -22,9 +22,9 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(top: 0.5.h, left: 1.5.w, bottom: 1.h),
+              padding: EdgeInsets.only(top: 0.5.h, left: 1.5.w, bottom: 1.5.h),
               child: Text(
-                'Checkout Counting',
+                'Checkout counting',
                 style: TextStyle(
                   fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
                   color: Utils.getTextColorDarken(context),
@@ -44,7 +44,7 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
 
     return Container(
       height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
-      padding: EdgeInsets.only(left: 2.5.w),
+      padding: EdgeInsets.only(left: 1.5.w),
       child: Row(
         children: [
           ElevatedButton(
@@ -85,7 +85,7 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
             child: Padding(
               padding: EdgeInsets.only(left: 2.w),
               child: Text(
-                "(can't be re-enabled for this game)",
+                "(Can't be re-enabled for this game)",
                 style: new TextStyle(
                   fontSize: 10.sp,
                   color: Colors.white,

@@ -57,6 +57,24 @@ class GameSettings_P with ChangeNotifier {
     if (openGame) {
       result['inputMethod'] =
           gameSettings.getInputMethod.toString().split('.').last;
+      result['showAverage'] = gameSettings.getShowAverage;
+      if ((gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single &&
+              gameSettings.getPlayers == 2) ||
+          (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+              gameSettings.getTeams == 2)) {
+        result['showFinishWays'] = gameSettings.getShowFinishWays;
+        result['showLastThrow'] = gameSettings.getShowLastThrow;
+        result['showThrownDartsPerLeg'] = gameSettings.getShowThrownDartsPerLeg;
+      }
+      result['vibrationFeedback'] = gameSettings.getVibrationFeedbackEnabled;
+      result['showInputMethodInGameScreen'] =
+          gameSettings.getShowInputMethodInGameScreen;
+      result['showMostScoredPoints'] = gameSettings.getShowMostScoredPoints;
+      result['mostScoredPoints'] = gameSettings.getMostScoredPoints;
+      result['automaticallySubmitPoints'] =
+          gameSettings.getAutomaticallySubmitPoints;
+      result['checkoutCountingFinallyDisabled'] =
+          gameSettings.getCheckoutCountingFinallyDisabled;
     }
 
     return result;
@@ -166,7 +184,6 @@ class GameSettings_P with ChangeNotifier {
       suddenDeath: map['suddenDeath'] == null ? false : map['suddenDeath'],
       maxExtraLegs: map['maxExtraLegs'] == null ? 2 : map['maxExtraLegs'],
       drawMode: map['drawMode'] == null ? false : map['drawMode'],
-      inputMethod: inputMethod,
       players: map['players'] == null
           ? []
           : map['players'].map<Player>((item) {
@@ -177,6 +194,37 @@ class GameSettings_P with ChangeNotifier {
           : map['teams'].map<Team>((item) {
               return Team.fromMap(item);
             }).toList(),
+      inputMethod: inputMethod,
+      automaticallySubmitPoints: map['automaticallySubmitPoints'] == null
+          ? DEFAULT_AUTO_SUBMIT_POINTS
+          : map['automaticallySubmitPoints'],
+      checkoutCountingFinallyDisabled:
+          map['checkoutCountingFinallyDisabled'] == null
+              ? DEFAULT_CHECKOUT_COUNTING_FINALLY_DISABLED
+              : map['checkoutCountingFinallyDisabled'],
+      mostScoredPoints: map['mostScoredPoints'] == null
+          ? []
+          : map['mostScoredPoints'].cast<String>(),
+      showAverage:
+          map['showAverage'] == null ? DEFAULT_SHOW_AVG : map['showAverage'],
+      showFinishWays: map['showFinishWays'] == null
+          ? DEFAULT_SHOW_FINISH_WAYS
+          : map['showFinishWays'],
+      showInputMethodInGameScreen: map['showInputMethodInGameScreen'] == null
+          ? DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN
+          : map['showInputMethodInGameScreen'],
+      showLastThrow: map['showLastThrow'] == null
+          ? DEFAULT_SHOW_LAST_THROW
+          : map['showLastThrow'],
+      showMostScoredPoints: map['showMostScoredPoints'] == null
+          ? DEFAULT_SHOW_MOST_SCORED_POINTS
+          : map['showMostScoredPoints'],
+      showThrownDartsPerLeg: map['showThrownDartsPerLeg'] == null
+          ? DEFAULT_SHOW_THROWN_DARTS_PER_LEG
+          : map['showThrownDartsPerLeg'],
+      vibrationFeedbackEnabled: map['vibrationFeedback'] == null
+          ? DEFAULT_VIBRATION_FEEDBACK
+          : map['vibrationFeedback'],
     );
   }
 

@@ -7,8 +7,6 @@ ScrollController scrollControllerScoreTrainingPlayerEntries =
     new ScrollController();
 ScrollController scrollControllerSingleDoubleTrainingPlayerEntries =
     new ScrollController();
-ScrollController scrollControllerGameX01MultiplePlayers =
-    new ScrollController();
 
 ScrollController newScrollControllerScoreTrainingPlayerEntries() {
   scrollControllerScoreTrainingPlayerEntries = new ScrollController();
@@ -18,11 +16,6 @@ ScrollController newScrollControllerScoreTrainingPlayerEntries() {
 ScrollController newScrollControllerSingleDoubleTrainingPlayerEntries() {
   scrollControllerSingleDoubleTrainingPlayerEntries = new ScrollController();
   return scrollControllerSingleDoubleTrainingPlayerEntries;
-}
-
-ScrollController newScrollControllerGameX01MultiplePlayers() {
-  scrollControllerGameX01MultiplePlayers = new ScrollController();
-  return scrollControllerGameX01MultiplePlayers;
 }
 
 // AUTH

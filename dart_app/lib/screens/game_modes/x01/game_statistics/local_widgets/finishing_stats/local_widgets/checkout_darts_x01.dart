@@ -25,7 +25,7 @@ class CheckoutDartsX01 extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                'Checkout Darts',
+                'Checkout darts',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   fontWeight: FontWeight.bold,
