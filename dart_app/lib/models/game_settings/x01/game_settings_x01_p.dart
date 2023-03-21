@@ -31,14 +31,14 @@ class GameSettingsX01_P extends GameSettings_P {
   bool _vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
   bool _automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
   bool _showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
-  List<String> _mostScoredPoints = [];
+  List<String> _mostScoredPoints = <String>[];
   InputMethod _inputMethod = DEFAULT_INPUT_METHOD;
   bool _showInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
 
   bool _drawMode = DEFAULT_DRAW_MODE;
-  List<int> _teamNamingIds = [];
+  List<int> _teamNamingIds = <int>[];
 
-  GameSettingsX01_P() {}
+  GameSettingsX01_P();
 
   GameSettingsX01_P.firestore({
     required bool checkoutCounting,
@@ -68,29 +68,30 @@ class GameSettingsX01_P extends GameSettings_P {
     List<Player>? players,
     List<Team>? teams,
   }) {
-    this._enableCheckoutCounting = checkoutCounting;
-    this._legs = legs;
-    this._sets = sets;
-    this._modeIn = modeIn;
-    this._modeOut = modeOut;
-    this._mode = mode;
-    this._points = points;
-    this._singleOrTeam = singleOrTeam;
-    this._winByTwoLegsDifference = winByTwoLegsDifference;
-    this._suddenDeath = suddenDeath;
-    this._maxExtraLegs = maxExtraLegs;
-    this._drawMode = drawMode;
-    this._setsEnabled = setsEnabled;
-    this._showAverage = showAverage;
-    this._showFinishWays = showFinishWays;
-    this._showLastThrow = showLastThrow;
-    this._showThrownDartsPerLeg = showThrownDartsPerLeg;
-    this._vibrationFeedbackEnabled = vibrationFeedbackEnabled;
-    this._showInputMethodInGameScreen = showInputMethodInGameScreen;
-    this._showMostScoredPoints = showMostScoredPoints;
-    this._mostScoredPoints = mostScoredPoints;
-    this._automaticallySubmitPoints = automaticallySubmitPoints;
-    this._checkoutCountingFinallyDisabled = checkoutCountingFinallyDisabled;
+    _enableCheckoutCounting = checkoutCounting;
+    _legs = legs;
+    _sets = sets;
+    _modeIn = modeIn;
+    _modeOut = modeOut;
+    _mode = mode;
+    _points = points;
+    _singleOrTeam = singleOrTeam;
+    _winByTwoLegsDifference = winByTwoLegsDifference;
+    _suddenDeath = suddenDeath;
+    _maxExtraLegs = maxExtraLegs;
+    _drawMode = drawMode;
+    _setsEnabled = setsEnabled;
+    _showAverage = showAverage;
+    _showFinishWays = showFinishWays;
+    _showLastThrow = showLastThrow;
+    _showThrownDartsPerLeg = showThrownDartsPerLeg;
+    _vibrationFeedbackEnabled = vibrationFeedbackEnabled;
+    _showInputMethodInGameScreen = showInputMethodInGameScreen;
+    _showMostScoredPoints = showMostScoredPoints;
+    _mostScoredPoints = mostScoredPoints;
+    _automaticallySubmitPoints = automaticallySubmitPoints;
+    _checkoutCountingFinallyDisabled = checkoutCountingFinallyDisabled;
+    _inputMethod = inputMethod;
 
     if (players != null) {
       setPlayers = players;
@@ -100,137 +101,115 @@ class GameSettingsX01_P extends GameSettings_P {
     }
   }
 
-  SingleOrTeamEnum get getSingleOrTeam => this._singleOrTeam;
+  SingleOrTeamEnum get getSingleOrTeam => _singleOrTeam;
   set setSingleOrTeam(SingleOrTeamEnum _singleOrTeam) =>
       this._singleOrTeam = _singleOrTeam;
 
-  BestOfOrFirstToEnum get getMode => this._mode;
-  set setMode(BestOfOrFirstToEnum mode) => this._mode = mode;
+  BestOfOrFirstToEnum get getMode => _mode;
+  set setMode(BestOfOrFirstToEnum mode) => _mode = mode;
 
-  int get getPoints => this._points;
+  int get getPoints => _points;
   set setPoints(int points) => {
-        this._points = points,
-        this._customPoints = -1,
+        _points = points,
+        _customPoints = -1,
       };
 
-  int get getCustomPoints => this._customPoints;
-  set setCustomPoints(int customPoints) => {
-        this._customPoints = customPoints,
-      };
+  int get getCustomPoints => _customPoints;
+  set setCustomPoints(int customPoints) => _customPoints = customPoints;
 
-  int get getLegs => this._legs;
-  set setLegs(int legs) => {
-        this._legs = legs,
-      };
+  int get getLegs => _legs;
+  set setLegs(int legs) => _legs = legs;
 
-  int get getSets => this._sets;
-  set setSets(int sets) => {
-        this._sets = sets,
-      };
+  int get getSets => _sets;
+  set setSets(int sets) => _sets = sets;
 
-  bool get getSetsEnabled => this._setsEnabled;
-  set setSetsEnabled(bool setsEnabled) => this._setsEnabled = setsEnabled;
+  bool get getSetsEnabled => _setsEnabled;
+  set setSetsEnabled(bool setsEnabled) => _setsEnabled = setsEnabled;
 
-  ModeOutIn get getModeIn => this._modeIn;
-  set setModeIn(ModeOutIn modeIn) => this._modeIn = modeIn;
+  ModeOutIn get getModeIn => _modeIn;
+  set setModeIn(ModeOutIn modeIn) => _modeIn = modeIn;
 
-  ModeOutIn get getModeOut => this._modeOut;
-  set setModeOut(ModeOutIn modeOut) => this._modeOut = modeOut;
+  ModeOutIn get getModeOut => _modeOut;
+  set setModeOut(ModeOutIn modeOut) => _modeOut = modeOut;
 
-  bool get getWinByTwoLegsDifference => this._winByTwoLegsDifference;
+  bool get getWinByTwoLegsDifference => _winByTwoLegsDifference;
   set setWinByTwoLegsDifference(bool winByTwoLegsDifference) =>
-      this._winByTwoLegsDifference = winByTwoLegsDifference;
+      _winByTwoLegsDifference = winByTwoLegsDifference;
 
-  bool get getSuddenDeath => this._suddenDeath;
-  set setSuddenDeath(bool suddenDeath) => {
-        this._suddenDeath = suddenDeath,
-      };
+  bool get getSuddenDeath => _suddenDeath;
+  set setSuddenDeath(bool suddenDeath) => _suddenDeath = suddenDeath;
 
-  int get getMaxExtraLegs => this._maxExtraLegs;
-  set setMaxExtraLegs(int maxLegDifference) => {
-        this._maxExtraLegs = maxLegDifference,
-      };
+  int get getMaxExtraLegs => _maxExtraLegs;
+  set setMaxExtraLegs(int maxLegDifference) => _maxExtraLegs = maxLegDifference;
 
-  bool get getEnableCheckoutCounting => this._enableCheckoutCounting;
-  set setEnableCheckoutCounting(bool enableCheckoutCounting) => {
-        this._enableCheckoutCounting = enableCheckoutCounting,
-      };
+  bool get getEnableCheckoutCounting => _enableCheckoutCounting;
+  set setEnableCheckoutCounting(bool enableCheckoutCounting) =>
+      _enableCheckoutCounting = enableCheckoutCounting;
 
   bool get getCheckoutCountingFinallyDisabled =>
-      this._checkoutCountingFinallyDisabled;
+      _checkoutCountingFinallyDisabled;
   set setCheckoutCountingFinallyDisabled(
           bool checkoutCountingFinallyDisabled) =>
-      {
-        this._checkoutCountingFinallyDisabled = checkoutCountingFinallyDisabled,
-      };
+      _checkoutCountingFinallyDisabled = checkoutCountingFinallyDisabled;
 
-  bool get getShowAverage => this._showAverage;
-  set setShowAverage(bool showAverage) => {
-        this._showAverage = showAverage,
-      };
+  bool get getShowAverage => _showAverage;
+  set setShowAverage(bool showAverage) => _showAverage = showAverage;
 
-  bool get getShowFinishWays => this._showFinishWays;
-  set setShowFinishWays(bool showFinishWays) => {
-        this._showFinishWays = showFinishWays,
-      };
+  bool get getShowFinishWays => _showFinishWays;
+  set setShowFinishWays(bool showFinishWays) =>
+      _showFinishWays = showFinishWays;
 
-  bool get getShowThrownDartsPerLeg => this._showThrownDartsPerLeg;
-  set setShowThrownDartsPerLeg(bool showThrownDartsPerLeg) => {
-        this._showThrownDartsPerLeg = showThrownDartsPerLeg,
-      };
+  bool get getShowThrownDartsPerLeg => _showThrownDartsPerLeg;
+  set setShowThrownDartsPerLeg(bool showThrownDartsPerLeg) =>
+      _showThrownDartsPerLeg = showThrownDartsPerLeg;
 
-  bool get getShowLastThrow => this._showLastThrow;
-  set setShowLastThrow(bool showLastThrow) => {
-        this._showLastThrow = showLastThrow,
-      };
+  bool get getShowLastThrow => _showLastThrow;
+  set setShowLastThrow(bool showLastThrow) => _showLastThrow = showLastThrow;
 
-  bool get getVibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
-  set setVibrationFeedbackEnabled(bool vibrationFeedbackEnabled) => {
-        this._vibrationFeedbackEnabled = vibrationFeedbackEnabled,
-      };
+  bool get getVibrationFeedbackEnabled => _vibrationFeedbackEnabled;
+  set setVibrationFeedbackEnabled(bool vibrationFeedbackEnabled) =>
+      _vibrationFeedbackEnabled = vibrationFeedbackEnabled;
 
-  bool get getAutomaticallySubmitPoints => this._automaticallySubmitPoints;
-  set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) => {
-        this._automaticallySubmitPoints = automaticallySubmitPoints,
-      };
+  bool get getAutomaticallySubmitPoints => _automaticallySubmitPoints;
+  set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) =>
+      _automaticallySubmitPoints = automaticallySubmitPoints;
 
-  bool get getShowMostScoredPoints => this._showMostScoredPoints;
-  set setShowMostScoredPoints(bool showMostScoredPoints) => {
-        this._showMostScoredPoints = showMostScoredPoints,
-      };
+  bool get getShowMostScoredPoints => _showMostScoredPoints;
+  set setShowMostScoredPoints(bool showMostScoredPoints) =>
+      _showMostScoredPoints = showMostScoredPoints;
 
-  List<String> get getMostScoredPoints => this._mostScoredPoints;
-  set setMostScoredPoints(List<String> value) => this._mostScoredPoints = value;
+  List<String> get getMostScoredPoints => _mostScoredPoints;
+  set setMostScoredPoints(List<String> value) => _mostScoredPoints = value;
 
-  InputMethod get getInputMethod => this._inputMethod;
-  set setInputMethod(InputMethod inputMethod) =>
-      this._inputMethod = inputMethod;
+  InputMethod get getInputMethod => _inputMethod;
+  set setInputMethod(InputMethod inputMethod) => _inputMethod = inputMethod;
 
-  bool get getShowInputMethodInGameScreen => this._showInputMethodInGameScreen;
+  bool get getShowInputMethodInGameScreen => _showInputMethodInGameScreen;
   set setShowInputMethodInGameScreen(bool showInputMethodInGameScreen) {
-    this._showInputMethodInGameScreen = showInputMethodInGameScreen;
+    _showInputMethodInGameScreen = showInputMethodInGameScreen;
   }
 
-  bool get getDrawMode => this._drawMode;
-  set setDrawMode(bool value) => this._drawMode = value;
+  bool get getDrawMode => _drawMode;
+  set setDrawMode(bool value) => _drawMode = value;
 
-  List<int> get getTeamNamingIds => this._teamNamingIds;
-  set setTeamNamingIds(List<int> value) => this._teamNamingIds = value;
+  List<int> get getTeamNamingIds => _teamNamingIds;
+  set setTeamNamingIds(List<int> value) => _teamNamingIds = value;
 
-  removePlayer(Player playerToRemove, bool removeTeam) {
-    getPlayers.removeWhere((p) => p.getName == playerToRemove.getName);
+  void removePlayer(Player playerToRemove, bool removeTeam) {
+    getPlayers.removeWhere((Player p) => p.getName == playerToRemove.getName);
 
     //remove also player from team -> not same references as in single players list
-    if (this.getSingleOrTeam == SingleOrTeamEnum.Single) {
+    if (getSingleOrTeam == SingleOrTeamEnum.Single) {
       Team? emptyTeamToRemove;
-      for (Team team in this.getTeams) {
-        team.getPlayers.removeWhere((p) => p.getName == playerToRemove.getName);
+      for (Team team in getTeams) {
+        team.getPlayers
+            .removeWhere((Player p) => p.getName == playerToRemove.getName);
         if (team.getPlayers.isEmpty) {
           emptyTeamToRemove = team;
         }
       }
       if (emptyTeamToRemove != null) {
-        this.getTeams.remove(emptyTeamToRemove);
+        getTeams.remove(emptyTeamToRemove);
         checkTeamNamingIds(emptyTeamToRemove);
       }
     }
@@ -244,7 +223,8 @@ class GameSettingsX01_P extends GameSettings_P {
               playerToRemove.getName == 'Bot1' &&
               getCountOfBotPlayers() == 2) {
             getPlayers
-                .where((player) => player is Bot && player.getName == 'Bot2')
+                .where((Player player) =>
+                    player is Bot && player.getName == 'Bot2')
                 .first
                 .setName = 'Bot1';
           }
@@ -263,7 +243,7 @@ class GameSettingsX01_P extends GameSettings_P {
     notifyListeners();
   }
 
-  checkTeamNamingIds(Team team) {
+  void checkTeamNamingIds(Team team) {
     final String lastCharFromTeamName =
         team.getName.substring(team.getName.length - 1);
     if (!team.getName.startsWith('Team ') ||
@@ -290,7 +270,7 @@ class GameSettingsX01_P extends GameSettings_P {
     notifyListeners();
   }
 
-  _setNewTeamNamingId(int currentTeamNamingId, int newTeamNamingId) {
+  void _setNewTeamNamingId(int currentTeamNamingId, int newTeamNamingId) {
     for (Team team in getTeams) {
       final int teamNamingId =
           int.parse(team.getName.substring(team.getName.length - 1));
@@ -306,14 +286,14 @@ class GameSettingsX01_P extends GameSettings_P {
     notifyListeners();
   }
 
-  addPlayer(Player player) {
+  void addPlayer(Player player) {
     getPlayers.add(player);
     assignOrCreateTeamForPlayer(player);
     notifyListeners();
   }
 
   //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
-  assignOrCreateTeamForPlayer(Player player) {
+  void assignOrCreateTeamForPlayer(Player player) {
     if (getTeams.isEmpty || getPlayers.length == 2)
       _createTeamAndAddPlayer(player);
     else {
@@ -329,9 +309,9 @@ class GameSettingsX01_P extends GameSettings_P {
     }
   }
 
-  _createTeamAndAddPlayer(Player player) {
+  void _createTeamAndAddPlayer(Player player) {
     final int teamNameId = getTeamNamingIds.length + 1;
-    final Team team = new Team(name: 'Team $teamNameId');
+    final Team team = Team(name: 'Team $teamNameId');
 
     team.getPlayers.add(Player.clone(player));
     getTeams.add(team);
@@ -345,7 +325,8 @@ class GameSettingsX01_P extends GameSettings_P {
     return false;
   }
 
-  notify() {
+  @override
+  void notify() {
     notifyListeners();
   }
 
@@ -454,7 +435,7 @@ class GameSettingsX01_P extends GameSettings_P {
 
   Player getPlayerFromTeam(String playerName) {
     late Player result;
-    for (Team team in this.getTeams) {
+    for (Team team in getTeams) {
       for (Player player in team.getPlayers) {
         if (player.getName == playerName) {
           result = player;
@@ -466,7 +447,7 @@ class GameSettingsX01_P extends GameSettings_P {
 
   Player? getPlayerFromSingles(String playerName) {
     Player? result;
-    for (Player player in this.getPlayers) {
+    for (Player player in getPlayers) {
       if (player.getName == playerName) {
         result = player;
       }
