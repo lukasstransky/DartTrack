@@ -101,7 +101,6 @@ class RevertX01Helper {
         // set points for each player before leg/set was finished
         if (stats.getAllRemainingPoints.isNotEmpty) {
           stats.setCurrentPoints = stats.getAllRemainingPoints.last;
-          stats.setStartingPoints = stats.getAllRemainingPoints.last;
           stats.getAllRemainingPoints.removeLast();
         }
 
@@ -236,12 +235,18 @@ class RevertX01Helper {
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
       revertPoints(context, true);
     }
+
+    if (_isRevertedBackToBegin(gameX01, gameSettingsX01)) {
+      gameX01.init(context);
+    }
   }
 
   //only for cancel button in add checkout count dialog
   static void revertSomeStats(BuildContext context, int points) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
-    final PlayerOrTeamGameStatsX01 stats = gameX01.getCurrentPlayerGameStats();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final PlayerOrTeamGameStatsX01 stats =
+        Utils.getCurrentPlayerOrTeamStats(gameX01, gameSettingsX01);
 
     stats.setCurrentPoints = stats.getCurrentPoints + points;
     stats.setTotalPoints = stats.getTotalPoints - points;
@@ -286,7 +291,8 @@ class RevertX01Helper {
   static bool _isRevertPossible(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = false;
-    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
+    for (PlayerOrTeamGameStatsX01 stats
+        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
       if (stats.getAllScores.isNotEmpty ||
           stats.getAllScoresPerDart.isNotEmpty) {
         result = true;
@@ -479,20 +485,6 @@ class RevertX01Helper {
             currentStats.getAllScoresCountForRound - 1;
       }
 
-      // starting points
-      if (!legOrSetReverted) {
-        currentStats.setStartingPoints =
-            currentStats.getStartingPoints + points;
-
-        if (shouldRevertTeamStats) {
-          // set also for players in this team
-          for (PlayerOrTeamGameStatsX01 stats in gameX01
-              .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
-            stats.setStartingPoints = currentStats.getStartingPoints;
-          }
-        }
-      }
-
       // all scores
       if (currentStats.getAllScores.isNotEmpty) {
         currentStats.getAllScores.removeLast();
@@ -517,37 +509,39 @@ class RevertX01Helper {
         }
       }
 
-      // rounded scores even
-      List<int> keys = currentStats.getRoundedScoresEven.keys.toList();
-      keys.sort();
-      if (points == 180) {
-        currentStats.getRoundedScoresEven[180] -= 1;
-      } else {
-        for (int i = 0; i < keys.length - 1; i++) {
-          if (points >= keys[i] && points < keys[i + 1]) {
-            currentStats.getRoundedScoresEven[keys[i]] -= 1;
-          }
-        }
-      }
-
-      // rounded scores odd
-      keys = currentStats.getRoundedScoresOdd.keys.toList();
-      keys.sort();
-      if (points >= 170) {
-        currentStats.getRoundedScoresOdd[170] -= 1;
-      } else {
-        for (int i = 0; i < keys.length - 1; i++) {
-          if (points >= keys[i] && points < keys[i + 1]) {
-            currentStats.getRoundedScoresOdd[keys[i]] -= 1;
-          }
-        }
-      }
-
       // all scores per leg
-      final String lastKey = currentStats.getAllScoresPerLeg.lastKey();
-      currentStats.getAllScoresPerLeg[lastKey].removeLast();
-      if (currentStats.getAllScoresPerLeg[lastKey].isEmpty) {
-        currentStats.getAllScoresPerLeg.remove(lastKey);
+      if (currentStats.getAllScoresPerLeg.isNotEmpty) {
+        // rounded scores even
+        List<int> keys = currentStats.getRoundedScoresEven.keys.toList();
+        keys.sort();
+        if (points == 180) {
+          currentStats.getRoundedScoresEven[180] -= 1;
+        } else {
+          for (int i = 0; i < keys.length - 1; i++) {
+            if (points >= keys[i] && points < keys[i + 1]) {
+              currentStats.getRoundedScoresEven[keys[i]] -= 1;
+            }
+          }
+        }
+
+        // rounded scores odd
+        keys = currentStats.getRoundedScoresOdd.keys.toList();
+        keys.sort();
+        if (points >= 170) {
+          currentStats.getRoundedScoresOdd[170] -= 1;
+        } else {
+          for (int i = 0; i < keys.length - 1; i++) {
+            if (points >= keys[i] && points < keys[i + 1]) {
+              currentStats.getRoundedScoresOdd[keys[i]] -= 1;
+            }
+          }
+        }
+
+        final String lastKey = currentStats.getAllScoresPerLeg.lastKey();
+        currentStats.getAllScoresPerLeg[lastKey].removeLast();
+        if (currentStats.getAllScoresPerLeg[lastKey].isEmpty) {
+          currentStats.getAllScoresPerLeg.remove(lastKey);
+        }
       }
 
       // all remaining scores per dart
@@ -767,5 +761,17 @@ class RevertX01Helper {
         gameX01.setReachedSuddenDeath = false;
       }
     }
+  }
+
+  static _isRevertedBackToBegin(
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+    for (PlayerOrTeamGameStatsX01 stats
+        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+      if (stats.getAllScores.isNotEmpty ||
+          stats.getAllScoresPerDart.isNotEmpty) {
+        return false;
+      }
+    }
+    return true;
   }
 }

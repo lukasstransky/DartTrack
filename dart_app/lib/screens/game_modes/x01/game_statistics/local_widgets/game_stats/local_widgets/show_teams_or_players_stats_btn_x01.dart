@@ -21,15 +21,23 @@ class ShowTeamsOrPlayersStatsBtnX01 extends StatelessWidget {
         width: WIDTH_HEADINGS_STATISTICS.w - 10.w,
         child: ElevatedButton(
           onPressed: () {
-            context.read<GameX01_P>().setAreTeamStatsDisplayed =
-                !gameX01.getAreTeamStatsDisplayed;
-            context.read<GameX01_P>().notify();
+            final gameX01_p = context.read<GameX01_P>();
 
             // only for stats tab
-            if (gameX01.getIsGameFinished || gameX01.getIsOpenGame) {
+            if (gameX01.getIsOpenGame || gameX01.getIsGameFinished) {
               gameX01.setAreTeamStatsDisplayed =
                   !gameX01.getAreTeamStatsDisplayed;
               gameX01.notify();
+
+              if (gameX01_p.hashCode != gameX01.hashCode) {
+                gameX01_p.setAreTeamStatsDisplayed =
+                    !gameX01_p.getAreTeamStatsDisplayed;
+                gameX01_p.notify();
+              }
+            } else {
+              gameX01_p.setAreTeamStatsDisplayed =
+                  !gameX01_p.getAreTeamStatsDisplayed;
+              gameX01_p.notify();
             }
           },
           child: FittedBox(

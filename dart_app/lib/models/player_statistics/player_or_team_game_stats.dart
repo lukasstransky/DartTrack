@@ -303,7 +303,6 @@ class PlayerOrTeamGameStats {
       team: map['team'] == null ? null : Team.fromMap(map['team']),
       currentPoints: map['currentPoints'] == null ? 0 : map['currentPoints'],
       totalPoints: map['totalPoints'] == null ? 0 : map['totalPoints'],
-      startingPoints: map['startingPoints'] == null ? 0 : map['startingPoints'],
       firstNineAvgPoints:
           map['firstNineAvgPoints'] == null ? 0 : map['firstNineAvgPoints'],
       firstNineAvgCount:

@@ -735,4 +735,11 @@ class Utils {
 
     return Colors.transparent;
   }
+
+  static PlayerOrTeamGameStatsX01 getCurrentPlayerOrTeamStats(
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+    return gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single
+        ? gameX01.getCurrentPlayerGameStats()
+        : gameX01.getCurrentTeamGameStats();
+  }
 }

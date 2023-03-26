@@ -8,9 +8,10 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class PlayerEntryFinishX01 extends StatelessWidget {
+class PlayerEntryFinishX01 extends StatefulWidget {
   const PlayerEntryFinishX01(
       {Key? key,
       required this.i,
@@ -22,8 +23,26 @@ class PlayerEntryFinishX01 extends StatelessWidget {
   final GameX01_P gameX01;
   final bool openGame;
 
+  @override
+  State<PlayerEntryFinishX01> createState() => _PlayerEntryFinishX01State();
+}
+
+class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
+  List<PlayerOrTeamGameStatsX01> _playerStats = [];
+  List<PlayerOrTeamGameStatsX01> _teamStats = [];
+
+  @override
+  void initState() {
+    _playerStats = [...widget.gameX01.getPlayerGameStatistics];
+    _playerStats.sort();
+    _teamStats = [...widget.gameX01.getTeamGameStatistics];
+    _teamStats.sort();
+
+    super.initState();
+  }
+
   bool _firstElementNoDrawOrOpenGame(GameX01_P gameX01, BuildContext context) {
-    return i == 0 && !gameX01.isGameDraw(context) && !openGame;
+    return widget.i == 0 && !gameX01.isGameDraw(context) && !widget.openGame;
   }
 
   checkForSameAmountOfSetsLegs(int indexOfPlayerOrTeam) {
@@ -34,10 +53,11 @@ class PlayerEntryFinishX01 extends StatelessWidget {
     }
 
     final List<PlayerOrTeamGameStats> statsList =
-        Utils.getPlayersOrTeamStatsList(gameX01, gameX01.getGameSettings);
+        Utils.getPlayersOrTeamStatsList(
+            widget.gameX01, widget.gameX01.getGameSettings);
 
     for (int i = 1; i < indexOfPlayerOrTeam; i++) {
-      if (gameX01.getGameSettings.getSetsEnabled) {
+      if (widget.gameX01.getGameSettings.getSetsEnabled) {
         if ((statsList[i] as PlayerOrTeamGameStatsX01).getSetsWon ==
             (statsList[indexOfPlayerOrTeam] as PlayerOrTeamGameStatsX01)
                 .getSetsWon) {
@@ -60,13 +80,13 @@ class PlayerEntryFinishX01 extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
           left: 5.w,
-          bottom:
-              Utils.getPlayersOrTeamStatsList(gameX01, gameX01.getGameSettings)
-                              .length -
-                          1 ==
-                      i
-                  ? 1.h
-                  : 0),
+          bottom: Utils.getPlayersOrTeamStatsList(
+                              widget.gameX01, widget.gameX01.getGameSettings)
+                          .length -
+                      1 ==
+                  widget.i
+              ? 1.h
+              : 0),
       child: Column(
         children: [
           Row(
@@ -75,12 +95,12 @@ class PlayerEntryFinishX01 extends StatelessWidget {
                 width: 40.w,
                 child: Row(
                   children: [
-                    gameX01.isGameDraw(context)
+                    widget.gameX01.isGameDraw(context)
                         ? SizedBox.shrink()
                         : Container(
                             width: 5.w,
                             child: Text(
-                              '${checkForSameAmountOfSetsLegs(i)}.',
+                              '${checkForSameAmountOfSetsLegs(widget.i)}.',
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
@@ -88,7 +108,7 @@ class PlayerEntryFinishX01 extends StatelessWidget {
                               ),
                             ),
                           ),
-                    if (_firstElementNoDrawOrOpenGame(gameX01, context))
+                    if (_firstElementNoDrawOrOpenGame(widget.gameX01, context))
                       Container(
                         padding: EdgeInsets.only(left: 2.w, right: 1.w),
                         transform: Matrix4.translationValues(0.0, -2.0, 0.0),
@@ -98,13 +118,13 @@ class PlayerEntryFinishX01 extends StatelessWidget {
                           color: Color(0xffFFD700),
                         ),
                       )
-                    else if (gameX01.isGameDraw(context))
+                    else if (widget.gameX01.isGameDraw(context))
                       Container(
                         padding: EdgeInsets.only(left: 20),
                       )
                     else
                       Container(
-                        padding: openGame
+                        padding: widget.openGame
                             ? EdgeInsets.zero
                             : EdgeInsets.only(left: 2.w, right: 1.w),
                         transform: Matrix4.translationValues(0.0, -2.0, 0.0),
@@ -116,15 +136,19 @@ class PlayerEntryFinishX01 extends StatelessWidget {
                         ),
                       ),
                     DisplayTeamOrPlayerName(
-                      gameX01: gameX01,
-                      i: i,
+                      playerStats: _playerStats,
+                      teamStats: _teamStats,
+                      i: widget.i,
                       firstElementNoDrawOrOpenGame:
                           _firstElementNoDrawOrOpenGame,
                     ),
                   ],
                 ),
               ),
-              PlayerStats(gameX01: gameX01, i: i),
+              PlayerStats(
+                  gameX01: widget.gameX01,
+                  i: widget.i,
+                  openGame: widget.openGame),
             ],
           ),
         ],
@@ -136,25 +160,28 @@ class PlayerEntryFinishX01 extends StatelessWidget {
 class DisplayTeamOrPlayerName extends StatelessWidget {
   const DisplayTeamOrPlayerName(
       {Key? key,
-      required this.gameX01,
+      required this.playerStats,
+      required this.teamStats,
       required this.i,
       required this.firstElementNoDrawOrOpenGame})
       : super(key: key);
 
-  final GameX01_P gameX01;
+  final List<PlayerOrTeamGameStatsX01> playerStats;
+  final List<PlayerOrTeamGameStatsX01> teamStats;
   final int i;
   final Function firstElementNoDrawOrOpenGame;
 
   @override
   Widget build(BuildContext context) {
-    if (gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team)
+    if (context.read<GameSettingsX01_P>().getSingleOrTeam ==
+        SingleOrTeamEnum.Team)
       return Flexible(
         child: Padding(
           padding: EdgeInsets.only(left: 2.w),
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              gameX01.getTeamGameStatistics[i].getTeam.getName,
+              teamStats[i].getTeam.getName,
               style: TextStyle(
                 fontSize: 14.sp,
                 color: Utils.getTextColorDarken(context),
@@ -164,7 +191,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
           ),
         ),
       );
-    else if (gameX01.getPlayerGameStatistics[i].getPlayer is Bot)
+    else if (playerStats[i].getPlayer is Bot)
       return Flexible(
         child: Container(
           padding: EdgeInsets.only(left: 2.w),
@@ -173,7 +200,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  'Bot - lvl. ${gameX01.getPlayerGameStatistics[i].getPlayer.getLevel}',
+                  'Bot - lvl. ${playerStats[i].getPlayer.getLevel}',
                   style: TextStyle(
                     fontSize: 14.sp,
                     color: Utils.getTextColorDarken(context),
@@ -184,7 +211,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  '(${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${gameX01.getPlayerGameStatistics[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                  '(${playerStats[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerStats[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                   style: TextStyle(
                     fontSize: 8.sp,
                     color: Utils.getTextColorDarken(context),
@@ -203,7 +230,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              gameX01.getPlayerGameStatistics[i].getPlayer.getName,
+              playerStats[i].getPlayer.getName,
               style: TextStyle(
                 fontSize: 14.sp,
                 color: Utils.getTextColorDarken(context),
@@ -216,19 +243,40 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
   }
 }
 
-class PlayerStats extends StatelessWidget {
+class PlayerStats extends StatefulWidget {
   const PlayerStats({
     Key? key,
     required this.gameX01,
     required this.i,
+    required this.openGame,
   }) : super(key: key);
 
   final GameX01_P gameX01;
   final int i;
+  final bool openGame;
+
+  @override
+  State<PlayerStats> createState() => _PlayerStatsState();
+}
+
+class _PlayerStatsState extends State<PlayerStats> {
+  List<PlayerOrTeamGameStatsX01> _playersOrTeamStatsList = [];
+
+  @override
+  void initState() {
+    _playersOrTeamStatsList = [
+      ...Utils.getPlayersOrTeamStatsListStatsScreen(
+          widget.gameX01, widget.gameX01.getGameSettings)
+    ];
+    _playersOrTeamStatsList.sort();
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
+    final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
+    final int legsWon = _playersOrTeamStatsList[widget.i].getLegsWon;
 
     return Container(
       width: 40.w,
@@ -236,17 +284,29 @@ class PlayerStats extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            gameSettingsX01.getSetsEnabled
-                ? 'Sets: ${Utils.getPlayersOrTeamStatsListStatsScreen(gameX01, gameSettingsX01)[i].getSetsWon}'
-                : 'Legs: ${Utils.getPlayersOrTeamStatsListStatsScreen(gameX01, gameSettingsX01)[i].getLegsWon}',
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.white,
-            ),
+          Row(
+            children: [
+              Text(
+                gameSettingsX01.getSetsEnabled
+                    ? 'Sets: ${_playersOrTeamStatsList[widget.i].getSetsWon}'
+                    : 'Legs: ${legsWon}',
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Colors.white,
+                ),
+              ),
+              if (widget.openGame && gameSettingsX01.getSetsEnabled)
+                Text(
+                  ' Legs: ${legsWon}',
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    color: Colors.white,
+                  ),
+                ),
+            ],
           ),
           Text(
-            'Average: ${Utils.getPlayersOrTeamStatsListStatsScreen(gameX01, gameSettingsX01)[i].getAverage(gameSettingsX01)}',
+            'Average: ${_playersOrTeamStatsList[widget.i].getAverage(gameSettingsX01)}',
             style: TextStyle(
               fontSize: 12.sp,
               color: Colors.white,
@@ -254,7 +314,7 @@ class PlayerStats extends StatelessWidget {
           ),
           if (gameSettingsX01.getEnableCheckoutCounting)
             Text(
-              'Checkout: ${Utils.getPlayersOrTeamStatsListStatsScreen(gameX01, gameSettingsX01)[i].getCheckoutQuoteInPercent()}',
+              'Checkout: ${_playersOrTeamStatsList[widget.i].getCheckoutQuoteInPercent()}',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.white,

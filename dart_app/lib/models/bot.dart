@@ -66,8 +66,12 @@ class Bot extends Player {
     if (currentPoints <= scoreRangeUpperLimit &&
         !BOGEY_NUMBERS.contains(currentPoints) &&
         currentPoints <= 170) {
-      final double avg =
-          double.parse(stats.getAverage(gameX01.getGameSettings));
+      final String avgString = stats.getAverage(gameX01.getGameSettings);
+      double avg = 0.0;
+      if (avgString != '-') {
+        avg = double.parse(avgString);
+        ;
+      }
 
       // don't finish -> leave double field
       if (avg > preDefinedAverage) {

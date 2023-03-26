@@ -2,9 +2,6 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
-import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/multiple_player_team_stats/multiple_player_team_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btns_round_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/two_player_team_stats_x01.dart';
@@ -32,102 +29,9 @@ class GameX01State extends State<GameX01> {
 
     // only init game for new game, not for open game
     if (arguments.isNotEmpty && !arguments['openGame']) {
-      _init();
+      context.read<GameX01_P>().init(context);
     }
     super.didChangeDependencies();
-  }
-
-  _init() {
-    final GameX01_P gameX01 = context.read<GameX01_P>();
-    final GameSettingsX01_P gameSettings = context.read<GameSettingsX01_P>();
-
-    // if game is finished -> undo last throw will call init again
-    if (gameSettings.getPlayers.length !=
-        gameX01.getPlayerGameStatistics.length) {
-      gameX01.reset();
-
-      gameX01.setGameSettings = gameSettings;
-      gameX01.setPlayerGameStatistics = [];
-
-      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
-        gameX01.setCurrentPlayerToThrow = gameSettings.getPlayers.first;
-      } else {
-        gameX01.setCurrentTeamToThrow = gameSettings.getTeams.first;
-
-        // reverse players in teams
-        for (Team team in gameSettings.getTeams) {
-          team.setPlayers = team.getPlayers.reversed.toList();
-        }
-        // set players in correct order
-        List<Player> players = [];
-        for (Team team in gameSettings.getTeams) {
-          for (Player player in team.getPlayers) {
-            players.add(player);
-          }
-        }
-        gameSettings.setPlayers = players;
-
-        gameX01.setCurrentPlayerToThrow =
-            gameSettings.getTeams.first.getPlayers.first;
-      }
-
-      gameX01.setInit = true;
-      final int points = gameSettings.getPointsOrCustom();
-
-      for (Player player in gameSettings.getPlayers) {
-        gameX01.getPlayerGameStatistics.add(
-          new PlayerOrTeamGameStatsX01(
-            mode: 'X01',
-            player: player,
-            currentPoints: points,
-            dateTime: gameX01.getDateTime,
-          ),
-        );
-      }
-
-      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        for (Team team in gameSettings.getTeams) {
-          gameX01.getTeamGameStatistics.add(
-            new PlayerOrTeamGameStatsX01.Team(
-              team: team,
-              mode: 'X01',
-              currentPoints: points,
-              dateTime: gameX01.getDateTime,
-            ),
-          );
-          team.setCurrentPlayerToThrow = team.getPlayers.first;
-        }
-
-        for (PlayerOrTeamGameStats teamStats in gameX01.getTeamGameStatistics) {
-          teamStats.getTeam.setCurrentPlayerToThrow =
-              teamStats.getTeam.getPlayers.first;
-        }
-
-        // set team for player stats in order to sort them
-        for (PlayerOrTeamGameStats playerStats
-            in gameX01.getPlayerGameStatistics) {
-          Team team = gameSettings.findTeamForPlayer(
-              playerStats.getPlayer.getName, gameSettings);
-          playerStats.setTeam = team;
-        }
-
-        gameX01.getPlayerGameStatistics.sort((a, b) =>
-            (a.getTeam as Team).getName.compareTo((b.getTeam as Team).getName));
-      }
-
-      if (gameSettings.getInputMethod == InputMethod.ThreeDarts) {
-        gameX01.setCurrentPointType = PointType.Single;
-      }
-    }
-
-    // set starting points
-    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-      stats.setStartingPoints = stats.getCurrentPoints;
-    }
-
-    for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
-      stats.setStartingPoints = stats.getCurrentPoints;
-    }
   }
 
   _getTwoOrMultiplePlayerTeamStatsView(BuildContext context) {
@@ -220,7 +124,10 @@ class PlayerToThrowForTeamMode extends StatelessWidget {
             ),
           ),
           Selector<GameX01_P, Player>(
-            selector: (_, gameX01) => gameX01.getCurrentPlayerToThrow,
+            selector: (_, gameX01) {
+              final currentPlayer = gameX01.getCurrentPlayerToThrow;
+              return currentPlayer != null ? currentPlayer : Player(name: '');
+            },
             builder: (_, currentPlayerToThrow, __) => Text(
               currentPlayerToThrow.getName,
               style: TextStyle(

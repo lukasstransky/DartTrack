@@ -278,10 +278,18 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         teamGameStatistics: map['teamGameStatistics'] != null
             ? map['teamGameStatistics']
                 .map<PlayerOrTeamGameStats?>((item) {
-                  switch (mode) {
-                    case 'X01':
-                      return PlayerOrTeamGameStats.fromMapX01(item);
-                    //add other cases like cricket...
+                  List<List<String>> allRemainingScoresPerDart = [];
+                  if (mode == 'X01' || mode == 'Score training') {
+                    allRemainingScoresPerDart =
+                        Utils.convertSimpleListToAllRemainingScoresPerDart(
+                            item['allRemainingScoresPerDart'] != null
+                                ? item['allRemainingScoresPerDart']
+                                : []);
+                  }
+
+                  if (mode == 'X01') {
+                    return PlayerOrTeamGameStats.fromMapX01(
+                        item, allRemainingScoresPerDart);
                   }
                 })
                 .toList()

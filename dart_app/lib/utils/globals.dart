@@ -150,7 +150,7 @@ disposeControllersForGamesettingsSingleDoubleTraining() {
 int g_thrownDarts = 0;
 int g_checkoutCount = 0;
 
-// for favouriteGames saving
+// for favouriteGames saving + deleting (undo last throw btn)
 String g_gameId = '';
 
 // for bug with bot -> to proper show it on the ui

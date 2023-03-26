@@ -60,7 +60,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     }
 
     String tempMode = _mode.toLowerCase();
-    final String messagePart = 'No ${tempMode} games were played';
+    final String messagePart = 'No ${tempMode} games have been played';
     if (mode == 'X01') {
       switch (statsFirestore.currentFilterValue) {
         case FilterValue.Overall:
@@ -81,7 +81,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
       }
     }
 
-    return messagePart;
+    return '${messagePart} yet.';
   }
 
   void _deleteGame(Game_P game, dynamic statsFirestore) async {

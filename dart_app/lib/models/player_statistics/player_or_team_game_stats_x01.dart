@@ -10,10 +10,10 @@ import 'package:dart_app/models/team.dart';
 import 'dart:collection';
 import 'package:tuple/tuple.dart';
 
-class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
+class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
+    implements Comparable<PlayerOrTeamGameStatsX01> {
   int _currentPoints = 0;
   int _totalPoints = 0; //for average
-  int _startingPoints = 0; //for input method -> three darts
   int _pointsSelectedCount =
       0; //for input method -> three darts (to prevent user from entering more than 3 darts when spaming the keyboard)
 
@@ -100,7 +100,6 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
     required Team? team,
     required int currentPoints,
     required int totalPoints,
-    required int startingPoints,
     required int firstNineAvgPoints,
     required int firstNineAvgCount,
     required int currentThrownDartsInLeg,
@@ -139,7 +138,6 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
     this.setPlayer = player;
     this._currentPoints = currentPoints;
     this._totalPoints = totalPoints;
-    this._startingPoints = startingPoints;
     this._firstNineAvgPoints = firstNineAvgPoints;
     this._firstNineAvgCount = firstNineAvgCount;
     this._currentThrownDartsInLeg = currentThrownDartsInLeg;
@@ -212,10 +210,6 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
 
   int get getTotalPoints => this._totalPoints;
   set setTotalPoints(int totalPoints) => this._totalPoints = totalPoints;
-
-  int get getStartingPoints => this._startingPoints;
-  set setStartingPoints(int startingPoints) =>
-      this._startingPoints = startingPoints;
 
   int get getPointsSelectedCount => this._pointsSelectedCount;
   set setPointsSelectedCount(int pointsSelectedCount) =>
@@ -453,5 +447,18 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats {
 
     int worstLeg = getAmountOfDartsForWonLegs.reduce(max);
     return worstLeg.toString();
+  }
+
+  @override
+  int compareTo(PlayerOrTeamGameStatsX01 other) {
+    int setsCompare = other.getSetsWon.compareTo(getSetsWon);
+
+    if (setsCompare != 0) {
+      // if the sets are not equal, return the comparison result
+      return setsCompare;
+    } else {
+      // if the sets are equal, compare by the legs property
+      return other.getLegsWon.compareTo(getLegsWon);
+    }
   }
 }

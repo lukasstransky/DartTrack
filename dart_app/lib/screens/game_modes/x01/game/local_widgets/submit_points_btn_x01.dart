@@ -49,13 +49,9 @@ class SubmitPointsBtnX01 extends StatelessWidget {
   _submitPointsBtnClicked(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-
-    late int currentPoints;
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      currentPoints = gameX01.getCurrentPlayerGameStats().getCurrentPoints;
-    } else {
-      currentPoints = gameX01.getCurrentTeamGameStats().getCurrentPoints;
-    }
+    final PlayerOrTeamGameStatsX01 currentStats =
+        Utils.getCurrentPlayerOrTeamStats(gameX01, gameSettingsX01);
+    final int currentPoints = currentStats.getCurrentPoints;
 
     if ((gameX01.getCurrentPointsSelected != 'Points' || currentPoints == 0) &&
         gameSettingsX01.getVibrationFeedbackEnabled) {

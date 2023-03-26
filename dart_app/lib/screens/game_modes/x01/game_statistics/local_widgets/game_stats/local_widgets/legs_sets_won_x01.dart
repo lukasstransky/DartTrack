@@ -69,10 +69,10 @@ class LegSetsWonX01 extends StatelessWidget {
           ),
         ),
         if (setsEnabled) ...[
-          Padding(
-            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
-            child: Row(
-              children: [
+          if (!gameX01.getIsGameFinished)
+            Padding(
+              padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+              child: Row(children: [
                 Container(
                   width: WIDTH_HEADINGS_STATISTICS.w,
                   alignment: Alignment.centerLeft,
@@ -115,9 +115,8 @@ class LegSetsWonX01 extends StatelessWidget {
                       ),
                     ),
                   ),
-              ],
+              ]),
             ),
-          ),
           Padding(
             padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
             child: Row(

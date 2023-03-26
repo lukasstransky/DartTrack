@@ -59,6 +59,13 @@ class SubmitX01Helper {
     } else if (currentStats.getPlayer is Bot &&
         gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
       currentStats.getInputMethodForRounds.add(InputMethod.Round);
+
+      // add it also for team
+      final PlayerOrTeamGameStatsX01 teamStats = gameX01.getTeamGameStatistics
+          .where((PlayerOrTeamGameStats p) =>
+              p.getTeam.getName == currentStats.getTeam.getName)
+          .first as PlayerOrTeamGameStatsX01;
+      teamStats.getInputMethodForRounds.add(InputMethod.Round);
     }
 
     if (isInputMethodThreeDarts) {
@@ -81,21 +88,6 @@ class SubmitX01Helper {
         currentStats.setCurrentPoints =
             currentStats.getCurrentPoints - scoredPoints;
       }
-    }
-
-    // set starting points (3-darts-mode)
-    if (isInputMethodThreeDarts) {
-      if (_shouldUpdateStatsForPlayersOfSameTeam(
-          shouldSubmitTeamStats, gameSettingsX01)) {
-        for (PlayerOrTeamGameStatsX01 stats in gameX01
-            .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
-          stats.setStartingPoints = currentStats.getCurrentPoints;
-        }
-      } else {
-        currentStats.setStartingPoints = currentStats.getCurrentPoints;
-      }
-    } else {
-      currentStats.setStartingPoints = currentStats.getCurrentPoints;
     }
 
     //add delay for last dart for three darts input method
@@ -191,7 +183,6 @@ class SubmitX01Helper {
             ? gameX01.getTeamGameStatistics
             : gameX01.getPlayerGameStatistics) {
           stats.setCurrentPoints = gameSettingsX01.getPointsOrCustom();
-          stats.setStartingPoints = gameSettingsX01.getPointsOrCustom();
         }
       }
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
@@ -303,6 +294,7 @@ class SubmitX01Helper {
 
     // rounded score even
     List<int> keys = stats.getRoundedScoresEven.keys.toList();
+    keys.sort();
     if (totalPoints == 180) {
       stats.getRoundedScoresEven[keys[keys.length - 1]] += 1;
     } else {
@@ -315,6 +307,7 @@ class SubmitX01Helper {
 
     // rounded scores odd
     keys = stats.getRoundedScoresOdd.keys.toList();
+    keys.sort();
     if (totalPoints >= 170) {
       stats.getRoundedScoresOdd[keys[keys.length - 1]] += 1;
     } else {
@@ -436,7 +429,6 @@ class SubmitX01Helper {
 
     bool isGameFinished = false;
     if (_isGameWon(currentStats, gameX01, gameSettingsX01, context)) {
-      _sortPlayerStats(gameX01, gameSettingsX01);
       currentStats.setGameWon = true;
       isGameFinished = true;
 
@@ -456,6 +448,10 @@ class SubmitX01Helper {
           _getPlayerStatsByName(player.getName, gameX01).setGameDraw = true;
         }
       }
+    }
+
+    if (isGameFinished) {
+      gameX01.setIsGameFinished = true;
     }
 
     if ((isGameFinished || currentStats.getGameDraw)) {
@@ -563,25 +559,6 @@ class SubmitX01Helper {
     }
 
     return result;
-  }
-
-  // to show the right order in the finish screen
-  static _sortPlayerStats(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    //convert playerGameStatistics to playerOrTeamGameStatsX01 -> otherwise cant sort
-    List<PlayerOrTeamGameStatsX01> temp = [];
-    for (PlayerOrTeamGameStats stats in gameX01.getPlayerGameStatistics) {
-      temp.add(stats as PlayerOrTeamGameStatsX01);
-    }
-
-    //if sets are enabled -> sort after sets, otherwise after legs
-    if (gameSettingsX01.getSetsEnabled) {
-      temp.sort((a, b) => b.getSetsWon.compareTo(a.getSetsWon));
-    } else {
-      temp.sort((a, b) => b.getLegsWon.compareTo(a.getLegsWon));
-    }
-
-    gameX01.setPlayerGameStatistics = temp;
   }
 
   static bool _isGameDraw(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,

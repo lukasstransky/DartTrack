@@ -5,8 +5,7 @@ import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
-import 'package:dart_app/models/player.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
@@ -23,20 +22,6 @@ class UndoLastThrowBtn extends StatelessWidget {
 
   final GameMode gameMode;
 
-  _sortPlayerStatsBack(BuildContext context, GameX01_P gameX01_P) {
-    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-
-    List<PlayerOrTeamGameStatsX01> newOrderedStats = [];
-    for (Player player in gameSettingsX01.getPlayers) {
-      final PlayerOrTeamGameStatsX01 stats = gameX01_P.getPlayerGameStatistics
-          .where((element) => element.getPlayer.getName == player.getName)
-          .first;
-      newOrderedStats.add(stats);
-    }
-
-    gameX01_P.setPlayerGameStatistics = newOrderedStats;
-  }
-
   bool _didBotFinishGame(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     final String playerOrTeamWhoFinishedGame =
         gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.entries.last.value;
@@ -44,19 +29,28 @@ class UndoLastThrowBtn extends StatelessWidget {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
       return playerOrTeamWhoFinishedGame.startsWith('Bot');
     } else {
-      return gameSettingsX01.getTeams
-          .firstWhere((team) => team.getName == playerOrTeamWhoFinishedGame)
-          .getCurrentPlayerToThrow is Bot;
+      final Team teamWhoFinished = gameSettingsX01.getTeams
+          .firstWhere((team) => team.getName == playerOrTeamWhoFinishedGame);
+      final int indexOfCurrentPlayer = teamWhoFinished.getPlayers
+          .indexOf(teamWhoFinished.getCurrentPlayerToThrow);
+
+      if (indexOfCurrentPlayer == 0) {
+        return teamWhoFinished.getPlayers[teamWhoFinished.getPlayers.length - 1]
+            is Bot;
+      } else {
+        return teamWhoFinished.getPlayers[indexOfCurrentPlayer - 1] is Bot;
+      }
     }
   }
 
   _undoLastThrowBtnClicked(BuildContext context) async {
-    final firestoreServiceGames = await context.read<FirestoreServiceGames>();
+    final FirestoreServiceGames firestoreServiceGames =
+        await context.read<FirestoreServiceGames>();
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     if (gameMode == GameMode.X01) {
-      final game = context.read<GameX01_P>();
+      final GameX01_P game = context.read<GameX01_P>();
 
       game.setShowLoadingSpinner = true;
       game.notify();
@@ -70,9 +64,6 @@ class UndoLastThrowBtn extends StatelessWidget {
         await firestoreServiceGames.deleteGame(g_gameId, context,
             game.getTeamGameStatistics.length > 0 ? true : false);
       }
-
-      _sortPlayerStatsBack(context, game);
-
       if (_didBotFinishGame(game, context.read<GameSettingsX01_P>())) {
         RevertX01Helper.revertPoints(context);
         RevertX01Helper.revertPoints(context);
@@ -93,11 +84,13 @@ class UndoLastThrowBtn extends StatelessWidget {
         arguments: {'openGame': false},
       );
 
-      await firestoreServiceGames.deleteGame(
-        g_gameId,
-        context,
-        game.getTeamGameStatistics.length > 0 ? true : false,
-      );
+      if (username != 'Guest') {
+        await firestoreServiceGames.deleteGame(
+          g_gameId,
+          context,
+          game.getTeamGameStatistics.length > 0 ? true : false,
+        );
+      }
 
       game.revert(context);
       game.setShowLoadingSpinner = false;
@@ -117,11 +110,13 @@ class UndoLastThrowBtn extends StatelessWidget {
         },
       );
 
-      await firestoreServiceGames.deleteGame(
-        g_gameId,
-        context,
-        false,
-      );
+      if (username != 'Guest') {
+        await firestoreServiceGames.deleteGame(
+          g_gameId,
+          context,
+          false,
+        );
+      }
 
       final isRandomMode =
           game.getGameSettings.getMode == ModesSingleDoubleTraining.Random;

@@ -32,8 +32,10 @@ class FinishWaysX01 extends StatelessWidget {
   //for showing finish ways -> if one player is in finish area and the other one not -> text widget not centered
   bool _onePlayerInFinishArea(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics)
+    for (PlayerOrTeamGameStatsX01 stats
+        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
       if (stats.getCurrentPoints <= 170) {
         return true;
       }

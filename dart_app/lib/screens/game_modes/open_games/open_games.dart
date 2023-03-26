@@ -45,6 +45,8 @@ class _OpenGamesState extends State<OpenGames> {
       settings.setDrawMode = openGameSettings.getDrawMode;
       settings.setPlayers = openGameSettings.getPlayers;
       settings.setTeams = openGameSettings.getTeams;
+      settings.setSetsEnabled = openGameSettings.getSetsEnabled;
+      settings.setInputMethod = openGameSettings.getInputMethod;
 
       if (START_POINT_POSSIBILITIES.contains(openGameSettings.getPoints)) {
         settings.setPoints = openGameSettings.getPoints;
@@ -80,6 +82,7 @@ class _OpenGamesState extends State<OpenGames> {
       game.setCurrentTeamToThrow = openGame.getCurrentTeamToThrow;
     } else if (openGame.getName == 'Score training') {
       game = context.read<GameScoreTraining_P>();
+      game.setGameSettings = context.read<GameSettingsScoreTraining_P>();
     } else if (openGame.getName == 'Single training' ||
         openGame.getName == 'Double training') {
       game = context.read<GameSingleDoubleTraining_P>();
@@ -90,7 +93,6 @@ class _OpenGamesState extends State<OpenGames> {
     game.setDateTime = openGame.getDateTime;
     game.setGameId = openGame.getGameId;
     game.setName = openGame.getName;
-    game.setGameSettings = openGame.getGameSettings;
     game.setCurrentPlayerToThrow = openGame.getCurrentPlayerToThrow;
     game.setIsOpenGame = openGame.getIsOpenGame;
     game.setRevertPossible = openGame.getRevertPossible;
@@ -99,6 +101,7 @@ class _OpenGamesState extends State<OpenGames> {
       final game = context.read<GameX01_P>();
 
       openGame = openGame as GameX01_P;
+      game.setGameSettings = context.read<GameSettingsX01_P>();
       game.setPlayerOrTeamLegStartIndex = openGame.getPlayerOrTeamLegStartIndex;
       game.setReachedSuddenDeath = openGame.getReachedSuddenDeath;
       game.setCurrentPlayerOfTeamsBeforeLegFinish =
@@ -110,6 +113,7 @@ class _OpenGamesState extends State<OpenGames> {
       final game = context.read<GameSingleDoubleTraining_P>();
 
       openGame = openGame as GameSingleDoubleTraining_P;
+      game.setGameSettings = context.read<GameSettingsSingleDoubleTraining_P>();
       game.setCurrentFieldToHit = openGame.getCurrentFieldToHit;
       game.setRandomFieldsGenerated = openGame.getRandomFieldsGenerated;
       game.setAmountOfRoundsRemaining = openGame.getAmountOfRoundsRemaining;

@@ -5,6 +5,7 @@ import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
@@ -14,6 +15,26 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GameX01_P extends Game_P {
+  GameX01_P() : super(dateTime: DateTime.now(), name: 'X01');
+
+  String _currentPointsSelected = 'Points';
+  int _playerOrTeamLegStartIndex =
+      0; //to determine which player/team should begin next leg
+  bool _revertPossible = false;
+  bool _init = false;
+  bool _reachedSuddenDeath = false;
+  PointType _currentPointType =
+      PointType.Single; //only for input type -> three darts
+  bool _canBePressed =
+      true; //only for input type -> three darts + automatically submit points (to disable buttons when delay is active)
+  bool _areTeamStatsDisplayed =
+      true; // only for team mode -> to determine if team or player stats should be displayed in game stats
+  Map<String, List<String>> _currentPlayerOfTeamsBeforeLegFinish =
+      {}; // for reverting -> save current player whose turn it was before leg was finished for each team (e.g.: Leg 1; 'Strainski', 'a')
+  Map<String, String> _setLegWithPlayerOrTeamWhoFinishedIt =
+      {}; // for reverting -> to set correct previous player/team
+  bool botSubmittedPoints = false;
+
   factory GameX01_P.fromMapX01(map, mode, gameId, openGame) {
     final Game_P game = Game_P.fromMap(map, mode, gameId, openGame);
 
@@ -67,25 +88,6 @@ class GameX01_P extends Game_P {
 
     return gameX01;
   }
-  GameX01_P() : super(dateTime: DateTime.now(), name: 'X01');
-
-  String _currentPointsSelected = 'Points';
-  int _playerOrTeamLegStartIndex =
-      0; //to determine which player/team should begin next leg
-  bool _revertPossible = false;
-  bool _init = false;
-  bool _reachedSuddenDeath = false;
-  PointType _currentPointType =
-      PointType.Single; //only for input type -> three darts
-  bool _canBePressed =
-      true; //only for input type -> three darts + automatically submit points (to disable buttons when delay is active)
-  bool _areTeamStatsDisplayed =
-      true; // only for team mode -> to determine if team or player stats should be displayed in game stats
-  Map<String, List<String>> _currentPlayerOfTeamsBeforeLegFinish =
-      {}; // for reverting -> save current player whose turn it was before leg was finished for each team (e.g.: Leg 1; 'Strainski', 'a')
-  Map<String, String> _setLegWithPlayerOrTeamWhoFinishedIt =
-      {}; // for reverting -> to set correct previous player/team
-  bool botSubmittedPoints = false;
 
   /************************************************************/
   /********              GETTER & SETTER               ********/
@@ -171,6 +173,86 @@ class GameX01_P extends Game_P {
     g_average = '-';
     g_last_throw = '-';
     g_thrown_darts = '-';
+  }
+
+  init(BuildContext context) {
+    final GameSettingsX01_P gameSettings = context.read<GameSettingsX01_P>();
+
+    // if game is finished -> undo last throw will call init again
+    if (gameSettings.getPlayers.length != getPlayerGameStatistics.length) {
+      reset();
+
+      setGameSettings = gameSettings;
+      setPlayerGameStatistics = [];
+
+      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+        setCurrentPlayerToThrow = gameSettings.getPlayers.first;
+      } else {
+        setCurrentTeamToThrow = gameSettings.getTeams.first;
+
+        // reverse players in teams
+        for (Team team in gameSettings.getTeams) {
+          team.setPlayers = team.getPlayers.reversed.toList();
+        }
+        // set players in correct order
+        List<Player> players = [];
+        for (Team team in gameSettings.getTeams) {
+          for (Player player in team.getPlayers) {
+            players.add(player);
+          }
+        }
+        gameSettings.setPlayers = players;
+
+        setCurrentPlayerToThrow = gameSettings.getTeams.first.getPlayers.first;
+      }
+
+      setInit = true;
+      final int points = gameSettings.getPointsOrCustom();
+
+      for (Player player in gameSettings.getPlayers) {
+        getPlayerGameStatistics.add(
+          new PlayerOrTeamGameStatsX01(
+            mode: 'X01',
+            player: player,
+            currentPoints: points,
+            dateTime: getDateTime,
+          ),
+        );
+      }
+
+      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        for (Team team in gameSettings.getTeams) {
+          getTeamGameStatistics.add(
+            new PlayerOrTeamGameStatsX01.Team(
+              team: team,
+              mode: 'X01',
+              currentPoints: points,
+              dateTime: getDateTime,
+            ),
+          );
+          team.setCurrentPlayerToThrow = team.getPlayers.first;
+        }
+
+        for (PlayerOrTeamGameStats teamStats in getTeamGameStatistics) {
+          teamStats.getTeam.setCurrentPlayerToThrow =
+              teamStats.getTeam.getPlayers.first;
+        }
+
+        // set team for player stats in order to sort them
+        for (PlayerOrTeamGameStats playerStats in getPlayerGameStatistics) {
+          Team team = gameSettings.findTeamForPlayer(
+              playerStats.getPlayer.getName, gameSettings);
+          playerStats.setTeam = team;
+        }
+
+        getPlayerGameStatistics.sort((a, b) =>
+            (a.getTeam as Team).getName.compareTo((b.getTeam as Team).getName));
+      }
+
+      if (gameSettings.getInputMethod == InputMethod.ThreeDarts) {
+        setCurrentPointType = PointType.Single;
+      }
+    }
   }
 
   //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
@@ -265,9 +347,12 @@ class GameX01_P extends Game_P {
     }
 
     final stats = getCurrentPlayerGameStats();
+
     var currentPoints = stats.getCurrentPoints;
     if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-      currentPoints = stats.getStartingPoints;
+      final int thrownDarts =
+          int.parse(Utils.getCurrentThreeDartsCalculated(getCurrentThreeDarts));
+      currentPoints = stats.getCurrentPoints + thrownDarts;
     }
 
     //99 = special case
@@ -485,9 +570,11 @@ class GameX01_P extends Game_P {
   int _getAmountOfCheckoutPossibilitiesForInputMethodThreeDarts(
       int thrownPoints) {
     final stats = getCurrentPlayerGameStats();
+    final int thrownDarts =
+        int.parse(Utils.getCurrentThreeDartsCalculated(getCurrentThreeDarts));
 
-    var currentPoints = stats.getStartingPoints;
-    var doubleCount = 0;
+    int currentPoints = stats.getCurrentPoints + thrownDarts;
+    int doubleCount = 0;
 
     //check at which dart currentPoints were on a double field -> increment counter
     for (var point in getCurrentThreeDarts) {
@@ -503,23 +590,70 @@ class GameX01_P extends Game_P {
     return doubleCount;
   }
 
+  bool _twoPossibleCheckoutDarts(int currentPoints, int thrownPoints) {
+    // for single dart
+    for (int i = 1; i <= 20; i++) {
+      if (i > thrownPoints) {
+        break;
+      }
+
+      int result = currentPoints - i;
+      if (isDoubleField(result.toString())) {
+        return true;
+      }
+    }
+
+    // for double dart
+    for (int i = 2; i <= 40; i += 2) {
+      if (i > thrownPoints) {
+        break;
+      }
+
+      int result = currentPoints - i;
+      if (isDoubleField(result.toString())) {
+        return true;
+      }
+    }
+
+    // for tripple dart
+    for (int i = 3; i <= 20; i += 3) {
+      if (i > thrownPoints) {
+        break;
+      }
+
+      int result = currentPoints - i;
+      if (isDoubleField(result.toString())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   int _getAmountOfCheckoutPossibilitiesForInputMethodRound(int thrownPoints) {
-    final stats = getCurrentPlayerGameStats();
-    final currentPoints = stats.getCurrentPoints;
-    final result = currentPoints - thrownPoints;
+    final PlayerOrTeamGameStatsX01 stats =
+        Utils.getCurrentPlayerOrTeamStats(this, this.getGameSettings);
+    final int currentPoints = stats.getCurrentPoints;
+    final int result = currentPoints - thrownPoints;
 
     // double out
     if (getGameSettings.getModeOut == ModeOutIn.Double) {
+      if (result >= 51) {
+        return -1;
+      }
+
       if (isDoubleField(currentPoints.toString())) {
         return 3;
-      }
-      //these checkouts are possible with 3 darts & additionally with 2 darts (cause of bull)
-      else if (THREE_DART_FINISHES_WITH_BULL.contains(currentPoints) &&
+      } else if (currentPoints < 40 && currentPoints % 2 == 1) {
+        return 2;
+      } else if (_twoPossibleCheckoutDarts(currentPoints, thrownPoints)) {
+        return 2;
+      } else if (THREE_DART_FINISHES_WITH_BULL.contains(currentPoints) &&
           result <= 50) {
         return 2;
-      } else if (currentPoints <= 100 && result <= 50) {
+      } else if (result == 0 && currentPoints <= 100) {
         return 2;
-      } else if (currentPoints >= 102 && result <= 50) {
+      } else if (currentPoints >= 51 && result <= 50) {
         return 1;
       }
     }
@@ -548,11 +682,12 @@ class GameX01_P extends Game_P {
 
   //needed to set all scores per leg
   int _getCurrentSet(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    var result = 1;
+    int result = 1;
 
     for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsListStatsScreen(gameX01, gameSettingsX01))
+        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
       result += stats.getSetsWon;
+    }
 
     return result;
   }
