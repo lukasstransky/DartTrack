@@ -350,7 +350,7 @@ class _AutoSubmitOrScoredPointsSwitchX01State
                     RoundedRectangleBorder(
                       side: BorderSide(
                         color: Utils.getPrimaryColorDarken(context),
-                        width: 2,
+                        width: GENERAL_BORDER_WIDTH.w,
                       ),
                       borderRadius: BorderRadius.all(
                         Radius.circular(10.0),

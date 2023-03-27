@@ -63,7 +63,6 @@ class PointBtnRoundX01 extends StatelessWidget {
 
   _getBorder(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
-    const double borderWidth = 3;
 
     if (gameX01.getGameSettings.getShowMostScoredPoints &&
         gameX01.getGameSettings.getMostScoredPoints.isNotEmpty &&
@@ -76,7 +75,7 @@ class PointBtnRoundX01 extends StatelessWidget {
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: borderWidth,
+                width: GENERAL_BORDER_WIDTH.w,
               )
             : BorderSide.none,
         right: [
@@ -86,7 +85,7 @@ class PointBtnRoundX01 extends StatelessWidget {
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: borderWidth,
+                width: GENERAL_BORDER_WIDTH.w,
               )
             : BorderSide.none,
         bottom: [
@@ -99,7 +98,7 @@ class PointBtnRoundX01 extends StatelessWidget {
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: borderWidth,
+                width: GENERAL_BORDER_WIDTH.w,
               )
             : BorderSide.none,
         top: [
@@ -108,7 +107,7 @@ class PointBtnRoundX01 extends StatelessWidget {
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: borderWidth,
+                width: GENERAL_BORDER_WIDTH.w,
               )
             : BorderSide.none,
       );
@@ -123,7 +122,7 @@ class PointBtnRoundX01 extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       right: [
@@ -134,7 +133,7 @@ class PointBtnRoundX01 extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       bottom: [
@@ -150,7 +149,7 @@ class PointBtnRoundX01 extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       top: [
@@ -160,7 +159,7 @@ class PointBtnRoundX01 extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
     );

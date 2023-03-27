@@ -13,8 +13,6 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
   final String point;
 
   _getBorder(BuildContext context) {
-    const double borderWidth = 3;
-
     return Border(
       left: [
         '0',
@@ -24,7 +22,7 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       right: [
@@ -35,7 +33,7 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       bottom: [
@@ -51,7 +49,7 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       top: [
@@ -61,7 +59,7 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
       ].contains(point)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
     );

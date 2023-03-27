@@ -72,7 +72,7 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      width: 1.0,
+                      width: 0.5.w,
                       color: Utils.getTextColorDarken(context),
                     ),
                   ),
@@ -107,11 +107,11 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
-                        width: 1.0,
+                        width: 0.5.w,
                         color: Utils.getTextColorDarken(context),
                       ),
                       bottom: BorderSide(
-                        width: 1.0,
+                        width: 0.5.w,
                         color: Utils.getTextColorDarken(context),
                       ),
                     ),

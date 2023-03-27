@@ -226,7 +226,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                         ),
                     ],
                     Divider(
-                      height: 15,
+                      height: 1.5.h,
                       thickness: 1.5,
                       indent: 10,
                       endIndent: 10,

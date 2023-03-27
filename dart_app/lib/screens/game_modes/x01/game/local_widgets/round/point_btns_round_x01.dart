@@ -51,7 +51,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                       decoration: BoxDecoration(
                         border: Border(
                           top: BorderSide(
-                            width: 3,
+                            width: GENERAL_BORDER_WIDTH.w,
                             color: Utils.getPrimaryColorDarken(context),
                           ),
                         ),

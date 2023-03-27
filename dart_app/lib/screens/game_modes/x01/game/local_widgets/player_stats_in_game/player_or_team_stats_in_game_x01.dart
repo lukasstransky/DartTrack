@@ -144,12 +144,12 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
         border: Border(
           top: BorderSide(
             color: Utils.getPrimaryColorDarken(context),
-            width: 3,
+            width: GENERAL_BORDER_WIDTH.w,
           ),
           right: _shouldDisplayRightBorder(gameX01)
               ? BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 )
               : BorderSide.none,
         ),

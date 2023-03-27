@@ -62,7 +62,7 @@ class MasterInBtn extends StatelessWidget {
             RoundedRectangleBorder(
               side: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH,
+                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
               ),
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(BUTTON_BORDER_RADIUS),
@@ -95,10 +95,10 @@ class DoubleInBtn extends StatelessWidget {
           border: Border(
             top: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH),
+                width: GAME_SETTINGS_BTN_BORDER_WITH.w),
             bottom: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH),
+                width: GAME_SETTINGS_BTN_BORDER_WITH.w),
           ),
         ),
         child: ElevatedButton(
@@ -167,7 +167,7 @@ class SingleInBtn extends StatelessWidget {
             RoundedRectangleBorder(
               side: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH,
+                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
               ),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(BUTTON_BORDER_RADIUS),

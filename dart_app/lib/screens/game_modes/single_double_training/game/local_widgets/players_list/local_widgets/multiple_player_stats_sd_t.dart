@@ -63,8 +63,8 @@ class _MulitplePlayerStatsSingleDoubleTrainingState
             ),
           ),
           Divider(
-            height: 1,
-            thickness: 1,
+            height: 0.1.h,
+            thickness: 0.1.h,
             color: Colors.white,
           ),
           Selector<GameSingleDoubleTraining_P, List<PlayerOrTeamGameStats>>(
@@ -87,8 +87,8 @@ class _MulitplePlayerStatsSingleDoubleTrainingState
                     ),
                     index != playerStats.length - 1
                         ? Divider(
-                            height: 1,
-                            thickness: 1,
+                            height: 0.1.h,
+                            thickness: 0.1.h,
                             color: Colors.white,
                           )
                         : SizedBox.shrink(),

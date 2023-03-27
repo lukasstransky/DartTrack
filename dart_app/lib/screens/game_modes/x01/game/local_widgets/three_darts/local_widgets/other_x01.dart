@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
@@ -78,11 +79,11 @@ class OtherX01 extends StatelessWidget {
                 border: Border(
                   top: BorderSide(
                     color: Utils.getPrimaryColorDarken(context),
-                    width: 3,
+                    width: GENERAL_BORDER_WIDTH.w,
                   ),
                   right: BorderSide(
                     color: Utils.getPrimaryColorDarken(context),
-                    width: 3,
+                    width: GENERAL_BORDER_WIDTH.w,
                   ),
                 ),
               ),

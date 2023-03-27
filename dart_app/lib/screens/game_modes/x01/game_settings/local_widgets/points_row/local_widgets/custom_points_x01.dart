@@ -185,7 +185,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 RoundedRectangleBorder(
                   side: BorderSide(
                     color: Utils.getPrimaryColorDarken(context),
-                    width: GAME_SETTINGS_BTN_BORDER_WITH,
+                    width: GAME_SETTINGS_BTN_BORDER_WITH.w,
                   ),
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(BUTTON_BORDER_RADIUS),

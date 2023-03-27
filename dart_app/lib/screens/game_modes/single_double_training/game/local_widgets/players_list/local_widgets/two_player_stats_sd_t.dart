@@ -21,11 +21,11 @@ class TwoPlayerStatsSingleDoubleTraining extends StatelessWidget {
             border: Border(
               top: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH,
+                width: GENERAL_BORDER_WIDTH.w,
               ),
               right: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH,
+                width: GENERAL_BORDER_WIDTH.w,
               ),
             ),
           ),
@@ -39,7 +39,7 @@ class TwoPlayerStatsSingleDoubleTraining extends StatelessWidget {
             border: Border(
               top: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH,
+                width: GENERAL_BORDER_WIDTH.w,
               ),
             ),
           ),

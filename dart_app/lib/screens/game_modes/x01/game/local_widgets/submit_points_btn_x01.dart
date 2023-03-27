@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class SubmitPointsBtnX01 extends StatelessWidget {
   const SubmitPointsBtnX01({Key? key}) : super(key: key);
@@ -155,12 +156,13 @@ class SubmitPointsBtnX01 extends StatelessWidget {
           border: Border(
             top: BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: 3,
+              width: GENERAL_BORDER_WIDTH.w,
             ),
             left: BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width:
-                  gameSettingsX01.getInputMethod == InputMethod.Round ? 3 : 0,
+              width: gameSettingsX01.getInputMethod == InputMethod.Round
+                  ? GENERAL_BORDER_WIDTH.w
+                  : 0,
             ),
           ),
         ),

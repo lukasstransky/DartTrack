@@ -12,6 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../../../constants.dart';
+
 class RevertBtn extends StatelessWidget {
   const RevertBtn({
     Key? key,
@@ -50,11 +52,11 @@ class RevertBtn extends StatelessWidget {
         border: Border(
           top: BorderSide(
             color: Utils.getPrimaryColorDarken(context),
-            width: 3,
+            width: GENERAL_BORDER_WIDTH.w,
           ),
           right: BorderSide(
             color: Utils.getPrimaryColorDarken(context),
-            width: 3,
+            width: GENERAL_BORDER_WIDTH.w,
           ),
         ),
       ),

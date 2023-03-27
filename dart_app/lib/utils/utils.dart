@@ -413,7 +413,7 @@ class Utils {
             decoration: BoxDecoration(
               border: Border(
                 left: BorderSide(
-                  width: 1.5,
+                  width: 0.5.w,
                   color: getTextColorDarken(context),
                 ),
               ),
@@ -500,8 +500,6 @@ class Utils {
   }
 
   static getBorder(BuildContext context, String value) {
-    const double borderWidth = 3;
-
     return Border(
       right: [
         '0',
@@ -527,7 +525,7 @@ class Utils {
       ].contains(value)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       bottom: [
@@ -554,7 +552,7 @@ class Utils {
       ].contains(value)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       top: [
@@ -570,7 +568,7 @@ class Utils {
       ].contains(value)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: borderWidth,
+              width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
     );

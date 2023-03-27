@@ -53,11 +53,11 @@ class ThrownDartsWidget extends StatelessWidget {
               border: Border(
                 right: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
                 top: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
               ),
             ),
@@ -93,7 +93,7 @@ class ThrownDartsWidget extends StatelessWidget {
               border: Border(
                 top: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
               ),
             ),
@@ -129,11 +129,11 @@ class ThrownDartsWidget extends StatelessWidget {
               border: Border(
                 top: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
                 left: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
               ),
             ),

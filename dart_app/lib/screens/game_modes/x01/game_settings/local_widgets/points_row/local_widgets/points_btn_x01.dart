@@ -26,14 +26,14 @@ class PointsBtnX01 extends StatelessWidget {
                     left: points == 701
                         ? BorderSide(
                             color: Utils.getPrimaryColorDarken(context),
-                            width: GAME_SETTINGS_BTN_BORDER_WITH)
+                            width: GAME_SETTINGS_BTN_BORDER_WITH.w)
                         : BorderSide.none,
                     top: BorderSide(
                         color: Utils.getPrimaryColorDarken(context),
-                        width: GAME_SETTINGS_BTN_BORDER_WITH),
+                        width: GAME_SETTINGS_BTN_BORDER_WITH.w),
                     bottom: BorderSide(
                         color: Utils.getPrimaryColorDarken(context),
-                        width: GAME_SETTINGS_BTN_BORDER_WITH),
+                        width: GAME_SETTINGS_BTN_BORDER_WITH.w),
                   ),
                 )
               : null,
@@ -63,7 +63,7 @@ class PointsBtnX01 extends StatelessWidget {
                   side: points == 301
                       ? BorderSide(
                           color: Utils.getPrimaryColorDarken(context),
-                          width: GAME_SETTINGS_BTN_BORDER_WITH,
+                          width: GAME_SETTINGS_BTN_BORDER_WITH.w,
                         )
                       : BorderSide.none,
                   borderRadius: points == 301

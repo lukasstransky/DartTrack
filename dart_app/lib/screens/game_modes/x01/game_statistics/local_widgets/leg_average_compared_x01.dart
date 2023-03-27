@@ -68,7 +68,7 @@ class LegAvgComparedX01 extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border(
                     bottom: BorderSide(
-                      width: 1.5,
+                      width: 0.5.w,
                       color: Utils.getTextColorDarken(context),
                     ),
                   ),
@@ -95,11 +95,11 @@ class LegAvgComparedX01 extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(
-                        width: 1.5,
+                        width: 0.5.w,
                         color: Utils.getTextColorDarken(context),
                       ),
                       bottom: BorderSide(
-                        width: 1.5,
+                        width: 0.5.w,
                         color: Utils.getTextColorDarken(context),
                       ),
                     ),

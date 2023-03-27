@@ -109,7 +109,7 @@ class SingleBtn extends StatelessWidget {
             RoundedRectangleBorder(
               side: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH,
+                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
               ),
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
@@ -161,7 +161,7 @@ class TeamBtn extends StatelessWidget {
             RoundedRectangleBorder(
               side: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH,
+                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
               ),
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(BUTTON_BORDER_RADIUS),

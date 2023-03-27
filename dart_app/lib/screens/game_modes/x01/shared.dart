@@ -46,6 +46,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
           : currentPointsSelected;
   selectedCheckoutCount = gameX01.finishedLegSetOrGame(pointsThrown) ? 1 : 0;
   final bool isDoubleField = gameX01.isDoubleField(pointsThrown);
+  final double borderWidth = 0.5.w;
 
   showDialog(
     barrierDismissible: false,
@@ -115,7 +116,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 RoundedRectangleBorder(
                                   side: BorderSide(
                                     color: Utils.getPrimaryColorDarken(context),
-                                    width: 2,
+                                    width: borderWidth,
                                   ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
@@ -161,7 +162,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               RoundedRectangleBorder(
                                 side: BorderSide(
                                   color: Utils.getPrimaryColorDarken(context),
-                                  width: 2,
+                                  width: borderWidth,
                                 ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
@@ -216,7 +217,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 RoundedRectangleBorder(
                                   side: BorderSide(
                                     color: Utils.getPrimaryColorDarken(context),
-                                    width: 2,
+                                    width: borderWidth,
                                   ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
@@ -266,7 +267,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 RoundedRectangleBorder(
                                   side: BorderSide(
                                     color: Utils.getPrimaryColorDarken(context),
-                                    width: 2,
+                                    width: borderWidth,
                                   ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
@@ -331,7 +332,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 RoundedRectangleBorder(
                                   side: BorderSide(
                                     color: Utils.getPrimaryColorDarken(context),
-                                    width: 2,
+                                    width: borderWidth,
                                   ),
                                   borderRadius: BorderRadius.all(
                                     Radius.circular(10.0),
@@ -385,7 +386,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               RoundedRectangleBorder(
                                 side: BorderSide(
                                   color: Utils.getPrimaryColorDarken(context),
-                                  width: 2,
+                                  width: borderWidth,
                                 ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),
@@ -436,7 +437,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               RoundedRectangleBorder(
                                 side: BorderSide(
                                   color: Utils.getPrimaryColorDarken(context),
-                                  width: 2,
+                                  width: borderWidth,
                                 ),
                                 borderRadius: BorderRadius.all(
                                   Radius.circular(10.0),

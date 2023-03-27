@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -23,11 +24,11 @@ class ThrownDartsX01 extends StatelessWidget {
               border: Border(
                 right: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
                 top: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
               ),
             ),
@@ -63,7 +64,7 @@ class ThrownDartsX01 extends StatelessWidget {
               border: Border(
                 top: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
               ),
             ),
@@ -99,11 +100,11 @@ class ThrownDartsX01 extends StatelessWidget {
               border: Border(
                 top: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
                 left: BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
-                  width: 3,
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
               ),
             ),

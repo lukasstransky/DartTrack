@@ -68,7 +68,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
             child: Row(
               children: [
                 HeaderText(
-                  widht: HEADER_WIDTH,
+                  width: HEADER_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: 'Total points',
                 ),
@@ -87,7 +87,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
               child: Row(
                 children: [
                   HeaderText(
-                    widht: HEADER_WIDTH,
+                    width: HEADER_WIDTH,
                     fontSize: FONTSIZE,
                     textValue: 'Single hits',
                   ),
@@ -112,7 +112,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
             child: Row(
               children: [
                 HeaderText(
-                  widht: HEADER_WIDTH,
+                  width: HEADER_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: 'Double hits',
                 ),
@@ -138,7 +138,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
               child: Row(
                 children: [
                   HeaderText(
-                    widht: HEADER_WIDTH,
+                    width: HEADER_WIDTH,
                     fontSize: FONTSIZE,
                     textValue: 'Tripple hits',
                   ),
@@ -163,7 +163,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
             child: Row(
               children: [
                 HeaderText(
-                  widht: HEADER_WIDTH,
+                  width: HEADER_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: 'Missed',
                 ),
@@ -218,19 +218,19 @@ class ValueText extends StatelessWidget {
 class HeaderText extends StatelessWidget {
   const HeaderText({
     Key? key,
-    required this.widht,
+    required this.width,
     required this.fontSize,
     required this.textValue,
   }) : super(key: key);
 
-  final int widht;
+  final int width;
   final int fontSize;
   final String textValue;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: widht.w,
+      width: width.w,
       child: Text(
         textValue,
         style: TextStyle(

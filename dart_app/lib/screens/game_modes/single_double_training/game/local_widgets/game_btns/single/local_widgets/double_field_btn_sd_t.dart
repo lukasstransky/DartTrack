@@ -22,11 +22,11 @@ class DoubleFieldBtnSingleTraining extends StatelessWidget {
           border: Border(
             bottom: BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: GENERAL_BORDER_WIDTH,
+              width: GENERAL_BORDER_WIDTH.w,
             ),
             right: BorderSide(
               color: Utils.getPrimaryColorDarken(context),
-              width: GENERAL_BORDER_WIDTH,
+              width: GENERAL_BORDER_WIDTH.w,
             ),
           ),
         ),

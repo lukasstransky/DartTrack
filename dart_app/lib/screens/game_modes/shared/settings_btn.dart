@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class SettingsBtn extends StatelessWidget {
   const SettingsBtn({
@@ -38,7 +39,7 @@ class SettingsBtn extends StatelessWidget {
             RoundedRectangleBorder(
               side: BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH,
+                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
               ),
               borderRadius: BorderRadius.only(
                 topLeft: isLeftBtn

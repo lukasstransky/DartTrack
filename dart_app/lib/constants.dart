@@ -374,7 +374,7 @@ const int BTN_FONTSIZE_SD_T = 30;
 
 // general
 const int GENERAL_DARKEN = 35;
-const double GENERAL_BORDER_WIDTH = 3;
+const double GENERAL_BORDER_WIDTH = 1;
 const double PADDING_BOTTOM = 2;
 
 // game modes overview
@@ -384,7 +384,7 @@ const int GAME_MODES_OVERVIEW_FONTSIZE = 16;
 const int GAME_MODES_OVERVIEW_PADDING = 2;
 
 // game settings
-const double GAME_SETTINGS_BTN_BORDER_WITH = 2;
+const double GAME_SETTINGS_BTN_BORDER_WITH = 0.5;
 
 /************************************************************************************/
 /****************************          shared           *****************************/

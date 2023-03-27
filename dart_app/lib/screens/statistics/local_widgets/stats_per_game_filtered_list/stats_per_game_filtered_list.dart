@@ -246,7 +246,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                   RoundedRectangleBorder(
                     side: BorderSide(
                       color: Utils.getPrimaryColorDarken(context),
-                      width: GAME_SETTINGS_BTN_BORDER_WITH,
+                      width: GAME_SETTINGS_BTN_BORDER_WITH.w,
                     ),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10.0),
@@ -288,7 +288,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                   RoundedRectangleBorder(
                     side: BorderSide(
                       color: Utils.getPrimaryColorDarken(context),
-                      width: GAME_SETTINGS_BTN_BORDER_WITH,
+                      width: GAME_SETTINGS_BTN_BORDER_WITH.w,
                     ),
                     borderRadius: BorderRadius.only(
                       topRight: Radius.circular(10.0),

@@ -96,7 +96,7 @@ class _FilterBarState extends State<FilterBar> {
                           RoundedRectangleBorder(
                             side: BorderSide(
                               color: Utils.getPrimaryColorDarken(context),
-                              width: GAME_SETTINGS_BTN_BORDER_WITH,
+                              width: GAME_SETTINGS_BTN_BORDER_WITH.w,
                             ),
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(10.0),
@@ -119,14 +119,17 @@ class _FilterBarState extends State<FilterBar> {
                     decoration: BoxDecoration(
                       border: Border(
                         top: BorderSide(
-                            color: Utils.getPrimaryColorDarken(context),
-                            width: 2),
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: 0.5.w,
+                        ),
                         bottom: BorderSide(
-                            color: Utils.getPrimaryColorDarken(context),
-                            width: 2),
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: 0.5.w,
+                        ),
                         right: BorderSide(
-                            color: Utils.getPrimaryColorDarken(context),
-                            width: 2),
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: 0.5.w,
+                        ),
                       ),
                     ),
                     child: ElevatedButton(
@@ -175,11 +178,13 @@ class _FilterBarState extends State<FilterBar> {
                     decoration: BoxDecoration(
                       border: Border(
                         top: BorderSide(
-                            color: Utils.getPrimaryColorDarken(context),
-                            width: 2),
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: 0.5.w,
+                        ),
                         bottom: BorderSide(
-                            color: Utils.getPrimaryColorDarken(context),
-                            width: 2),
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: 0.5.w,
+                        ),
                       ),
                     ),
                     child: ElevatedButton(
@@ -260,7 +265,7 @@ class _FilterBarState extends State<FilterBar> {
                           RoundedRectangleBorder(
                             side: BorderSide(
                               color: Utils.getPrimaryColorDarken(context),
-                              width: GAME_SETTINGS_BTN_BORDER_WITH,
+                              width: GAME_SETTINGS_BTN_BORDER_WITH.w,
                             ),
                             borderRadius: BorderRadius.only(
                               topRight: Radius.circular(10.0),

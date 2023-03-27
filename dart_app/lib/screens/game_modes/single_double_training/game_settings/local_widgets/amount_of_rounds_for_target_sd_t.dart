@@ -188,7 +188,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                             RoundedRectangleBorder(
                               side: BorderSide(
                                 color: Utils.getPrimaryColorDarken(context),
-                                width: GAME_SETTINGS_BTN_BORDER_WITH,
+                                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
                               ),
                               borderRadius: BorderRadius.all(
                                 Radius.circular(10.0),

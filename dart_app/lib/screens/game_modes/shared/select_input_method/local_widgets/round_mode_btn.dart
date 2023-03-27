@@ -70,16 +70,16 @@ class RoundBtn extends StatelessWidget {
     }
 
     return Container(
-      width: 50.w - 0.5,
+      width: 50.w - 0.125.w,
       decoration: BoxDecoration(
         border: Border(
           top: BorderSide(
             color: Utils.getPrimaryColorDarken(context),
-            width: 3,
+            width: GENERAL_BORDER_WIDTH.w,
           ),
           right: BorderSide(
             color: Utils.getPrimaryColorDarken(context),
-            width: 3,
+            width: GENERAL_BORDER_WIDTH.w,
           ),
         ),
       ),

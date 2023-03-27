@@ -109,7 +109,7 @@ class PlayerToThrowForTeamMode extends StatelessWidget {
         border: Border(
           top: BorderSide(
             color: Utils.getPrimaryColorDarken(context),
-            width: 3.0,
+            width: GENERAL_BORDER_WIDTH.w,
           ),
         ),
       ),

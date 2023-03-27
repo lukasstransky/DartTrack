@@ -23,7 +23,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                 border: Border(
                   right: BorderSide(
                     color: Utils.getPrimaryColorDarken(context),
-                    width: 3,
+                    width: GENERAL_BORDER_WIDTH.w,
                   ),
                 ),
               ),
@@ -76,7 +76,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                 border: Border(
                   right: BorderSide(
                     color: Utils.getPrimaryColorDarken(context),
-                    width: 3,
+                    width: GENERAL_BORDER_WIDTH.w,
                   ),
                 ),
               ),

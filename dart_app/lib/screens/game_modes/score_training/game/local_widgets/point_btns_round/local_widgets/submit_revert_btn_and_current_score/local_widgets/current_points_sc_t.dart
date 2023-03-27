@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class CurrentPointsScoreTraining extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
-              width: 3,
+              width: GENERAL_BORDER_WIDTH.w,
               color: Utils.getPrimaryColorDarken(context),
             ),
           ),
