@@ -17,7 +17,7 @@ class HighestScoreStatsScoreTraining extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
       child: Row(
         children: [
           Container(

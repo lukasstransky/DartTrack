@@ -47,7 +47,7 @@ class CheckoutsX01 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(top: 1.h),
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
           child: Text(
             'Checkouts',
@@ -60,7 +60,7 @@ class CheckoutsX01 extends StatelessWidget {
         for (String setLegString in allSetLegStrings)
           if (_isSetLegFinished(setLegString, gameSettingsX01))
             Padding(
-              padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+              padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
               child: Row(
                 children: [
                   Container(

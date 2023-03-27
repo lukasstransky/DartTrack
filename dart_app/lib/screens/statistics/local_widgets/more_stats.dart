@@ -32,7 +32,7 @@ class _MoreStatsState extends State<MoreStats> {
   Widget build(BuildContext context) {
     return Consumer<StatsFirestoreX01_P>(
       builder: (_, statisticsFirestore, __) => Padding(
-        padding: EdgeInsets.only(top: 20),
+        padding: EdgeInsets.only(top: 2.h),
         child: Column(
           children: [
             Row(
@@ -72,7 +72,7 @@ class _MoreStatsState extends State<MoreStats> {
                 Container(
                   width: 30.w,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 1.h),
                     child: Column(
                       children: [
                         for (int i = (!_roundedScoresOdd ? 0 : 10);
@@ -83,7 +83,7 @@ class _MoreStatsState extends State<MoreStats> {
                               Expanded(
                                 child: Container(
                                   alignment: Alignment.centerRight,
-                                  padding: EdgeInsets.only(top: 5),
+                                  padding: EdgeInsets.only(top: 0.5.h),
                                   child: Text(
                                     i != 180
                                         ? i.toString() + '+'
@@ -105,8 +105,8 @@ class _MoreStatsState extends State<MoreStats> {
                                 child: Container(
                                   alignment: Alignment.centerRight,
                                   padding: EdgeInsets.only(
-                                    top: 5,
-                                    right: 10,
+                                    top: 0.5.h,
+                                    right: 2.5.w,
                                   ),
                                   child: Text(
                                     !_roundedScoresOdd
@@ -141,7 +141,7 @@ class _MoreStatsState extends State<MoreStats> {
                 Container(
                   width: 30.w,
                   child: Padding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 1.h),
                     child: Column(
                       children: [
                         for (int i = 1; i <= 10; i++)
@@ -151,7 +151,7 @@ class _MoreStatsState extends State<MoreStats> {
                                 width: 10.w,
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                    top: 5,
+                                    top: 0.5.h,
                                   ),
                                   child: Align(
                                     alignment: Alignment.centerLeft,
@@ -173,7 +173,7 @@ class _MoreStatsState extends State<MoreStats> {
                               Expanded(
                                 child: Padding(
                                   padding: EdgeInsets.only(
-                                    top: 5,
+                                    top: 0.5.h,
                                   ),
                                   child: Align(
                                     alignment: Alignment.centerRight,
@@ -252,7 +252,10 @@ class _MoreStatsState extends State<MoreStats> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(left: 5.w, top: 5),
+              padding: EdgeInsets.only(
+                left: 5.w,
+                top: 0.5.h,
+              ),
               child: Row(
                 children: [
                   Text(

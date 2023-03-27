@@ -17,9 +17,9 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
     final bool isRoundMode =
         context.read<GameSettingsScoreTraining_P>().getMode ==
             ScoreTrainingModeEnum.MaxRounds;
-    const int WIDTH = 60;
+    double WIDTH = 15.w;
     const int FONTSIZE = 18;
-    const double PADDING_TOP = 20;
+    double PADDING_TOP = 2.h;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

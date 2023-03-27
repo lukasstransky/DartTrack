@@ -40,7 +40,10 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
       children: [
         Container(
           height: 4.h,
-          padding: EdgeInsets.only(left: 5.w, right: 5.w),
+          padding: EdgeInsets.only(
+            left: 5.w,
+            right: 5.w,
+          ),
           child: Row(
             children: [
               Expanded(

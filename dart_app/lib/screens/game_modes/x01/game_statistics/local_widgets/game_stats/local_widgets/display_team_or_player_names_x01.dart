@@ -107,7 +107,7 @@ class DisplayTeamOrPlayerNamesX01 extends StatelessWidget {
                     !Utils.playerStatsDisplayedInTeamMode(
                         gameX01, gameSettingsX01))
                   Padding(
-                    padding: EdgeInsets.only(right: 5),
+                    padding: EdgeInsets.only(right: 1.w),
                     child: Icon(
                       Entypo.trophy,
                       size: 14.sp,

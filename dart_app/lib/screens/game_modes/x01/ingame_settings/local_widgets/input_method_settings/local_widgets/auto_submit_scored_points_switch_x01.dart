@@ -52,7 +52,10 @@ class _AutoSubmitOrScoredPointsSwitchX01State
             style: TextStyle(color: Colors.white),
           ),
           content: Container(
-            margin: EdgeInsets.only(left: 10.w, right: 10.w),
+            margin: EdgeInsets.only(
+              left: 10.w,
+              right: 10.w,
+            ),
             child: TextFormField(
               controller: mostScoredPointController,
               validator: (value) {
@@ -304,8 +307,12 @@ class _AutoSubmitOrScoredPointsSwitchX01State
   Container mostScoredPointValue(GameSettingsX01_P gameSettingsX01, int i) {
     return Container(
       width: 25.w,
-      padding:
-          (i == 2 || i == 3) ? EdgeInsets.only(top: 1.h, bottom: 1.h) : null,
+      padding: (i == 2 || i == 3)
+          ? EdgeInsets.only(
+              top: 1.h,
+              bottom: 1.h,
+            )
+          : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

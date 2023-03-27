@@ -271,7 +271,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       ),
       actions: [
         Padding(
-          padding: const EdgeInsets.only(right: 10),
+          padding: EdgeInsets.only(right: 2.5.w),
           child: Consumer<GameSettingsX01_P>(
             builder: (_, gameSettingsX01, __) => IconButton(
               splashColor: Colors.transparent,

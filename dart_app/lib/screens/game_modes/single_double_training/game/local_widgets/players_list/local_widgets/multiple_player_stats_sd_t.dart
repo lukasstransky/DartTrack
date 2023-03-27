@@ -35,7 +35,7 @@ class _MulitplePlayerStatsSingleDoubleTrainingState
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: EdgeInsets.only(bottom: 5),
+            padding: EdgeInsets.only(bottom: 0.5.h),
             child: Row(
               children: [
                 Expanded(
@@ -150,7 +150,7 @@ class PlayerEntry extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 5),
+              padding: EdgeInsets.only(left: 1.2.w),
               child: HeaderText(
                 textValue: playerStats.getPlayer.getName,
               ),

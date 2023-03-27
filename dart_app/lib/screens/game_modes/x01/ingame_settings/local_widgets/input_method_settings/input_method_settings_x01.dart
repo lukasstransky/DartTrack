@@ -38,7 +38,11 @@ class InputMethodSettingsX01 extends StatelessWidget {
           gameSettingsX01.getShowMostScoredPoints),
       builder: (_, t, __) => Container(
         height: _calcCardHeight(context, t.item1, t.item2).h,
-        padding: EdgeInsets.only(top: 2.0.h, left: 0.5.h, right: 0.5.h),
+        padding: EdgeInsets.only(
+          top: 2.0.h,
+          left: 0.5.h,
+          right: 0.5.h,
+        ),
         child: Card(
           margin: EdgeInsets.all(0), //card adds 1.h per default
           elevation: 5,
@@ -47,7 +51,10 @@ class InputMethodSettingsX01 extends StatelessWidget {
             children: [
               Container(
                 height: 5.h,
-                padding: EdgeInsets.only(top: 0.5.h, left: 1.5.w),
+                padding: EdgeInsets.only(
+                  top: 0.5.h,
+                  left: 1.5.w,
+                ),
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Input method',

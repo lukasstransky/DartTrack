@@ -18,7 +18,7 @@ class GameStatsX01 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Row(
             children: [
               ShowTeamsOrPlayersStatsBtnX01(gameX01: gameX01),
@@ -27,7 +27,7 @@ class GameStatsX01 extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
           child: Text(
             'Game',

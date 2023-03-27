@@ -7,6 +7,7 @@ import 'package:dart_app/screens/game_modes/score_training/game_statistics/local
 import 'package:dart_app/screens/game_modes/shared/game_stats/section_heading_text.dart';
 
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class MainStatsScoreTraining extends StatelessWidget {
   const MainStatsScoreTraining({
@@ -20,7 +21,7 @@ class MainStatsScoreTraining extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        left: PADDING_LEFT_STATISTICS,
+        left: PADDING_LEFT_STATISTICS.w,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

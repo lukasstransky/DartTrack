@@ -40,7 +40,7 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
 
     return Container(
       width: 100.w,
-      padding: EdgeInsets.only(top: 15, left: 3.w, right: 3.w),
+      padding: EdgeInsets.only(top: 1.5.h, left: 3.w, right: 3.w),
       child: ExpansionPanelList(
         expandedHeaderPadding: EdgeInsets.all(0),
         expansionCallback: (int index, bool isExpanded) {
@@ -79,7 +79,7 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
                                 color: Color(0xffFFD700),
                               ),
                               Padding(
-                                padding: EdgeInsets.only(left: 5),
+                                padding: EdgeInsets.only(left: 1.w),
                                 child: Text(
                                   Utils.getWinnerOfLeg(item.value,
                                               widget.gameX01, context)

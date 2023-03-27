@@ -126,7 +126,10 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                         i++) ...[
                       if (i == 0)
                         Padding(
-                          padding: EdgeInsets.only(bottom: 10, top: 5),
+                          padding: EdgeInsets.only(
+                            bottom: 1.h,
+                            top: 0.5.h,
+                          ),
                           child: Row(
                             children: [
                               Expanded(

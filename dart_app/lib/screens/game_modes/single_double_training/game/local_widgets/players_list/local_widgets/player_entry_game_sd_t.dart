@@ -38,9 +38,9 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
     final int VALUE_WIDTH = isTwoPlayers ? 6 : 9;
     const int ROW_WIDTH = 80;
     final _padding = EdgeInsets.only(
-      top: 20,
-      left: 10,
-      right: 10,
+      top: 2.h,
+      left: 2.5.w,
+      right: 2.5.w,
     );
 
     return Container(

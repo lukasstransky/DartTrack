@@ -76,7 +76,7 @@ class _GameStatsSingleDoubleTrainingState
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 1.h),
               child: Text(
                 _getHeader(),
                 style: TextStyle(
@@ -87,7 +87,7 @@ class _GameStatsSingleDoubleTrainingState
             ),
             if (_game!.getGameSettings.getIsTargetNumberEnabled)
               Container(
-                padding: EdgeInsets.only(top: 5),
+                padding: EdgeInsets.only(top: 0.5.h),
                 child: Text(
                   'Target number: ${_game!.getGameSettings.getTargetNumber} (${_game!.getGameSettings.getAmountOfRounds} rounds)',
                   style: TextStyle(
@@ -99,8 +99,8 @@ class _GameStatsSingleDoubleTrainingState
             Container(
               alignment: Alignment.center,
               padding: EdgeInsets.only(
-                top: 5,
-                bottom: 10,
+                top: 0.5.h,
+                bottom: 1.h,
               ),
               child: Text(
                 _game!.getFormattedDateTime(),

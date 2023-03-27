@@ -31,7 +31,7 @@ class LegBeginnerDartAssetX01 extends StatelessWidget {
     return Container(
       height: 6.h,
       alignment: Alignment.topLeft,
-      padding: EdgeInsets.only(left: 10),
+      padding: EdgeInsets.only(left: 2.w),
       child: _showLegBeginnerDartAsset(context)
           ? Image.asset(
               'assets/dart_arrow.png',

@@ -37,7 +37,12 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                             Icons.info_outline,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
-                          padding: const EdgeInsets.all(10),
+                          padding: EdgeInsets.only(
+                            top: 1.h,
+                            bottom: 1.h,
+                            left: 2.w,
+                            right: 2.w,
+                          ),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).colorScheme.primary,
@@ -79,7 +84,12 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                               Icons.info_outline,
                               color: Theme.of(context).colorScheme.secondary,
                             ),
-                            padding: const EdgeInsets.all(10),
+                            padding: EdgeInsets.only(
+                              top: 1.h,
+                              bottom: 1.h,
+                              left: 2.w,
+                              right: 2.w,
+                            ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Theme.of(context).colorScheme.primary,

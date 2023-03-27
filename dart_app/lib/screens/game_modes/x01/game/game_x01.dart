@@ -113,7 +113,7 @@ class PlayerToThrowForTeamMode extends StatelessWidget {
           ),
         ),
       ),
-      padding: EdgeInsets.only(left: 50),
+      padding: EdgeInsets.only(left: 13.w),
       child: Row(
         children: [
           Text(

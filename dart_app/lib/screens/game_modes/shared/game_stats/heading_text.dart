@@ -15,7 +15,7 @@ class HeadingTextGameStats extends StatelessWidget {
     return Container(
       width: WIDTH_HEADINGS_STATISTICS.w,
       alignment: Alignment.centerLeft,
-      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Text(

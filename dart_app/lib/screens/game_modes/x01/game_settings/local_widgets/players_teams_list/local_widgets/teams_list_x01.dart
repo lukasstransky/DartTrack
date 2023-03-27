@@ -81,7 +81,7 @@ class _TeamsListX01State extends State<TeamsListX01> {
                         children: [
                           Container(
                             width: 39.w,
-                            padding: EdgeInsets.only(left: 15),
+                            padding: EdgeInsets.only(left: 4.w),
                             child: FittedBox(
                               alignment: Alignment.centerLeft,
                               fit: BoxFit.scaleDown,

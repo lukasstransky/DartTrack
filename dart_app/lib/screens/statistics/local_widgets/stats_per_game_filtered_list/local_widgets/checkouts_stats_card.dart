@@ -33,10 +33,10 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top: 5,
-                left: 10,
-                right: 10,
-                bottom: 5,
+                top: 0.5.h,
+                left: 2.5.w,
+                right: 2.5.w,
+                bottom: 0.5.h,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -69,8 +69,8 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: 10,
-                bottom: 5,
+                left: 1.h,
+                bottom: 0.5.h,
               ),
               child: Text(
                 '${widget.isWorstFinished ? 'Worst' : 'Best'} finish: ${widget.finish.toString()}',

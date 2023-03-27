@@ -95,12 +95,12 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
     final bool moreThanFiveScores = _moreThanFiveScores();
 
     return Padding(
-      padding: EdgeInsets.only(bottom: moreThanFiveScores ? 0 : 10),
+      padding: EdgeInsets.only(bottom: moreThanFiveScores ? 0 : 1.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
             transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
             child: Text(
               'Most frequent scores ${widget.mostScoresPerDart ? 'per dart' : ''}',
@@ -161,12 +161,12 @@ class AmountOfThreeDartModeRounds extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
       child: Row(
         children: [
           Container(
             width: 40.w,
-            padding: EdgeInsets.only(top: 5),
+            padding: EdgeInsets.only(top: 0.5.h),
             alignment: Alignment.centerLeft,
             child: FittedBox(
               fit: BoxFit.scaleDown,
@@ -184,7 +184,7 @@ class AmountOfThreeDartModeRounds extends StatelessWidget {
               in Utils.getPlayerOrTeamStatsDynamic(game_p, context))
             Container(
               width: 30.w,
-              padding: EdgeInsets.only(top: 5),
+              padding: EdgeInsets.only(top: 0.5.h),
               alignment: Alignment.centerLeft,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
@@ -223,7 +223,7 @@ class MostFrequentScoresList extends StatelessWidget {
       padding: EdgeInsets.only(
           top: atLeastOneRoundPlayedWithThreeDartsMode && mostScoresPerDart
               ? 0
-              : PADDING_TOP_STATISTICS),
+              : PADDING_TOP_STATISTICS.h),
       child: Column(
         children: [
           for (int i = 0; i < (showFirst10 ? 10 : 5); i++)
@@ -231,7 +231,7 @@ class MostFrequentScoresList extends StatelessWidget {
               children: [
                 Container(
                   width: WIDTH_HEADINGS_STATISTICS.w,
-                  padding: EdgeInsets.only(top: 5),
+                  padding: EdgeInsets.only(top: 0.5.h),
                   alignment: Alignment.centerLeft,
                   child: Container(
                     width: 12.w,
@@ -253,7 +253,7 @@ class MostFrequentScoresList extends StatelessWidget {
                     in Utils.getPlayerOrTeamStatsDynamic(game_p, context))
                   Container(
                     width: WIDTH_DATA_STATISTICS.w,
-                    padding: EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.only(top: 0.5.h),
                     child: (mostScoresPerDart
                                 ? stats.getAllScoresPerDartAsStringCount.keys
                                     .length

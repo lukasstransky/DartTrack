@@ -39,7 +39,7 @@ class _FinishX01State extends State<FinishX01> {
           .postPlayerGameStatistics(gameX01, g_gameId, context);
     }
 
-    if (gameX01.getIsOpenGame) {
+    if (gameX01.getIsOpenGame && mounted) {
       await context
           .read<FirestoreServiceGames>()
           .deleteOpenGame(gameX01.getGameId, context);

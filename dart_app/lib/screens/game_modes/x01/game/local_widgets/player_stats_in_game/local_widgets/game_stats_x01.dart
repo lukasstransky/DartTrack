@@ -72,7 +72,7 @@ class GameStatsX01 extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(top: 0.5.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

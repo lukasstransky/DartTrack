@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class GameInfoSingleDoubleTraining extends StatelessWidget {
   const GameInfoSingleDoubleTraining({Key? key, required this.gameMode})
@@ -81,7 +82,7 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
     final bool isSingleTraining = gameMode == GameMode.SingleTraining;
 
     return Container(
-      padding: EdgeInsets.only(top: 5),
+      padding: EdgeInsets.only(top: 0.5.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -26,7 +26,7 @@ class RoundedScoresEven extends StatelessWidget {
       children: [
         Container(
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Text(
             'Rounded scores',
             style: TextStyle(
@@ -36,7 +36,7 @@ class RoundedScoresEven extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Row(
             children: [
               Column(
@@ -44,7 +44,7 @@ class RoundedScoresEven extends StatelessWidget {
                   for (int i = 0; i <= 180; i += 20)
                     Container(
                       width: WIDTH_HEADINGS_STATISTICS.w,
-                      padding: EdgeInsets.only(top: 5),
+                      padding: EdgeInsets.only(top: 0.5.h),
                       alignment: Alignment.centerLeft,
                       child: Container(
                         width: 12.w,
@@ -97,7 +97,7 @@ class RoundedScoresEven extends StatelessWidget {
                     for (int i = 0; i <= 180; i += 20)
                       Container(
                         width: WIDTH_DATA_STATISTICS.w,
-                        padding: EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.only(top: 0.5.h),
                         child: Text(
                           stats.getRoundedScoresEven[i].toString(),
                           style: TextStyle(

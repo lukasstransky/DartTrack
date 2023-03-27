@@ -99,7 +99,7 @@ class PlayerTeamCard extends StatelessWidget {
               Container(
                 width: 10.w,
                 transform: Matrix4.translationValues(0.0, -10.0, 0.0),
-                padding: EdgeInsets.only(left: 5),
+                padding: EdgeInsets.only(left: 1.w),
                 alignment: Alignment.topLeft,
                 child: Image.asset('assets/dart_arrow.png',
                     color: showLegBeginnerDartAsset
@@ -125,7 +125,7 @@ class PlayerTeamCard extends StatelessWidget {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(top: 15),
+                padding: EdgeInsets.only(top: 1.5.h),
                 width: 10.w,
                 child: Text(
                   '(${stats.getCurrentThrownDartsInLeg.toString()})',
@@ -142,7 +142,7 @@ class PlayerTeamCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.only(bottom: 3),
+                padding: EdgeInsets.only(bottom: 0.5.w),
                 child: Text(
                   gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Single
                       ? stats.getPlayer.getName
@@ -167,7 +167,7 @@ class PlayerTeamCard extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 2.w),
             child: Selector<GameSettingsX01_P, bool>(
               selector: (_, gameSettings) => gameSettings.getShowAverage,
               builder: (_, showAverage, __) => showAverage
@@ -195,7 +195,7 @@ class PlayerTeamCard extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 2.w),
             child: Row(
               children: [
                 Text(
@@ -231,14 +231,14 @@ class PlayerTeamCard extends StatelessWidget {
           if (gameSettingsX01_P.getSetsEnabled)
             Container(
               padding: EdgeInsets.only(
-                bottom: 5,
-                top: 5,
+                bottom: 0.5.h,
+                top: 0.5.h,
               ),
               child: _chip(context, 'Sets ${stats.getSetsWon}'),
             ),
           Container(
             padding: EdgeInsets.only(
-              bottom: gameSettingsX01_P.getSetsEnabled ? 5 : 0,
+              bottom: gameSettingsX01_P.getSetsEnabled ? 0.5.h : 0,
             ),
             child: _chip(context, 'Legs ${stats.getLegsWon}'),
           ),

@@ -14,7 +14,7 @@ class PointDistributionInfoSingleDoubleTraining extends StatelessWidget {
     final bool isSingleTraining = gameMode == GameMode.SingleTraining;
 
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 5),
+      padding: EdgeInsets.only(top: 2.h, bottom: 0.5.h),
       child: Center(
         child: Column(
           children: [

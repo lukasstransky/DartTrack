@@ -141,15 +141,15 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: EdgeInsets.only(top: 1.h),
                     child: _showOverallPerGameBtn()
                         ? OverallPerGameBtns(context)
                         : SizedBox.shrink(),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
-                      top: 10,
-                      left: 5,
+                      top: 1.h,
+                      left: 1.w,
                     ),
                     child: Align(
                       alignment: Alignment.centerLeft,

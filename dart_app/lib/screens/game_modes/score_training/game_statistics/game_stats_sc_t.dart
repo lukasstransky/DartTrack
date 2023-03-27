@@ -65,7 +65,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 1.h),
               child: Text(
                 context
                     .read<GameSettingsScoreTraining_P>()
@@ -77,7 +77,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 5),
+              padding: EdgeInsets.only(top: 0.5.h),
               child: Text(
                 _game!.getFormattedDateTime(),
                 style: TextStyle(
@@ -97,8 +97,8 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                       gameScoreTraining_P: _game as GameScoreTraining_P),
                   Container(
                     padding: EdgeInsets.only(
-                      left: PADDING_LEFT_STATISTICS,
-                      top: PADDING_TOP_STATISTICS,
+                      left: PADDING_LEFT_STATISTICS.w,
+                      top: PADDING_TOP_STATISTICS.h,
                     ),
                     child: !_roundedScoresOdd
                         ? RoundedScoresEven(
@@ -109,7 +109,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                           ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS),
+                    padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
                     child: Row(
                       children: [
                         const Text(
@@ -135,7 +135,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS),
+                    padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
                     child: MostFrequentScores(
                       game_p: _game as GameScoreTraining_P,
                       mostScoresPerDart: false,
@@ -144,7 +144,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                   if (_oneScorePerDartAtLeast())
                     Padding(
                       padding: EdgeInsets.only(
-                        left: PADDING_LEFT_STATISTICS,
+                        left: PADDING_LEFT_STATISTICS.w,
                       ),
                       child: MostFrequentScores(
                         game_p: _game as GameScoreTraining_P,

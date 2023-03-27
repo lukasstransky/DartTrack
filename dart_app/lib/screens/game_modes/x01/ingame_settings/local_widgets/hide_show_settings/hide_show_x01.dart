@@ -28,7 +28,11 @@ class HideShowX01 extends StatelessWidget {
 
     return Container(
       height: showOtherOptions ? 23.5.h : 11.h,
-      padding: EdgeInsets.only(top: 1.0.h, left: 0.5.h, right: 0.5.h),
+      padding: EdgeInsets.only(
+        top: 1.0.h,
+        left: 0.5.h,
+        right: 0.5.h,
+      ),
       child: Card(
         elevation: 5,
         margin: EdgeInsets.all(0),
@@ -37,7 +41,10 @@ class HideShowX01 extends StatelessWidget {
           children: [
             Container(
               height: 5.h,
-              padding: EdgeInsets.only(top: 0.5.h, left: 1.5.w),
+              padding: EdgeInsets.only(
+                top: 0.5.h,
+                left: 1.5.w,
+              ),
               alignment: Alignment.centerLeft,
               child: Text(
                 'Hide/Show',

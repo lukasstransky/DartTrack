@@ -12,7 +12,7 @@ class ValueTextGameStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
       width: WIDTH_DATA_STATISTICS.w,
       alignment: Alignment.centerLeft,
       child: FittedBox(

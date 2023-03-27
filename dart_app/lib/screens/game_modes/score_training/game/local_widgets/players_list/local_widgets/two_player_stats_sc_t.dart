@@ -79,7 +79,7 @@ class PlayerEntry extends StatelessWidget {
         context.read<GameSettingsScoreTraining_P>().getMode ==
             ScoreTrainingModeEnum.MaxRounds;
     const int FONTSIZE = 18;
-    const double PADDING_TOP = 10;
+    double PADDING_TOP = 1.h;
 
     return Container(
       color: _getBackgroundColor(context),

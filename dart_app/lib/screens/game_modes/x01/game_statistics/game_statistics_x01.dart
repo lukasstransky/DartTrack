@@ -101,8 +101,11 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
 
   @override
   Widget build(BuildContext context) {
-    final _padding = EdgeInsets.only(left: 20, bottom: 10);
-    final _paddingOnlyLeft = EdgeInsets.only(left: 20);
+    final _padding = EdgeInsets.only(
+      left: 5.w,
+      bottom: 1.h,
+    );
+    final _paddingOnlyLeft = EdgeInsets.only(left: 5.w);
 
     return Scaffold(
       appBar: _game!.getIsGameFinished
@@ -118,7 +121,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 10),
+              padding: EdgeInsets.only(top: 1.h),
               child: Text(
                 _getHeader(),
                 style: TextStyle(
@@ -128,7 +131,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 5),
+              padding: EdgeInsets.only(top: 0.5.h),
               child: Text(
                 _game!.getFormattedDateTime(),
                 style: TextStyle(
@@ -155,7 +158,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 5),
+                      padding: EdgeInsets.only(left: 1.w),
                       child: Chip(
                         backgroundColor: Utils.getPrimaryColorDarken(context),
                         label: Text(
@@ -170,7 +173,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                     ),
                     if (_game!.getGameSettings.getSuddenDeath)
                       Padding(
-                        padding: EdgeInsets.only(left: 5),
+                        padding: EdgeInsets.only(left: 1.w),
                         child: Chip(
                           backgroundColor: Utils.getPrimaryColorDarken(context),
                           label: Text(
@@ -183,7 +186,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       ),
                     if (_game!.getGameSettings.getDrawMode)
                       Padding(
-                        padding: EdgeInsets.only(left: 5),
+                        padding: EdgeInsets.only(left: 1.w),
                         child: Chip(
                           backgroundColor: Utils.getPrimaryColorDarken(context),
                           label: Text(
@@ -204,7 +207,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       if (!_game!.getGameSettings.getSuddenDeath &&
                           _game!.getGameSettings.getWinByTwoLegsDifference)
                         Padding(
-                          padding: EdgeInsets.only(left: 5),
+                          padding: EdgeInsets.only(left: 1.w),
                           child: Chip(
                             backgroundColor:
                                 Utils.getPrimaryColorDarken(context),
@@ -246,13 +249,13 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                         child: CheckoutsX01(gameX01: _game as GameX01_P),
                       ),
                     Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 5.w),
                       child: !_roundedScoresOdd
                           ? RoundedScoresEven(game_p: _game as GameX01_P)
                           : RoundedScoresOdd(game_p: _game as GameX01_P),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(left: 20),
+                      padding: EdgeInsets.only(left: 5.w),
                       child: Row(
                         children: [
                           const Text(
@@ -307,7 +310,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                               gameX01: _game as GameX01_P),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(bottom: 30),
+                          padding: EdgeInsets.only(bottom: 3.h),
                           child:
                               DetailedLegsListX01(gameX01: _game as GameX01_P),
                         ),

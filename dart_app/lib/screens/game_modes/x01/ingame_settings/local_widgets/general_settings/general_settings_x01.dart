@@ -12,7 +12,11 @@ class GeneralSettingsX01 extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 11.h,
-      padding: EdgeInsets.only(top: 2.0.h, left: 0.5.h, right: 0.5.h),
+      padding: EdgeInsets.only(
+        top: 2.0.h,
+        left: 0.5.h,
+        right: 0.5.h,
+      ),
       child: Card(
         elevation: 5,
         margin: EdgeInsets.all(0),
@@ -20,7 +24,10 @@ class GeneralSettingsX01 extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              padding: EdgeInsets.only(top: 0.5.h, left: 1.5.w),
+              padding: EdgeInsets.only(
+                top: 0.5.h,
+                left: 1.5.w,
+              ),
               alignment: Alignment.centerLeft,
               child: Text(
                 'General',

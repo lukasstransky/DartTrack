@@ -59,7 +59,7 @@ class _FilterBarState extends State<FilterBar> {
       selector: (_, statisticsFirestore) =>
           statisticsFirestore.currentFilterValue,
       builder: (_, currentFilterValue, __) => Padding(
-        padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+        padding: EdgeInsets.only(top: 1.h, left: 2.5.w, right: 2.5.w),
         child: Column(
           children: [
             Row(

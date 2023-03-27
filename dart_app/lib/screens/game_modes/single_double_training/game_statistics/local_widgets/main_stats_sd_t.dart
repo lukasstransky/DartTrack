@@ -19,7 +19,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
     final bool isSingleMode = game.getMode == GameMode.SingleTraining;
 
     return Padding(
-      padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS),
+      padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -58,7 +58,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                         textValue: stats.getTotalPoints.toString()),
                     if (isSingleMode)
                       Container(
-                        padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                        padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
                         width: WIDTH_DATA_STATISTICS.w,
                         alignment: Alignment.centerLeft,
                         child: Row(
@@ -87,7 +87,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                         ),
                       ),
                     Container(
-                      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
                       width: WIDTH_DATA_STATISTICS.w,
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -117,7 +117,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                     ),
                     if (isSingleMode)
                       Container(
-                        padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                        padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
                         width: WIDTH_DATA_STATISTICS.w,
                         alignment: Alignment.centerLeft,
                         child: Row(
@@ -146,7 +146,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                         ),
                       ),
                     Container(
-                      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
                       width: WIDTH_DATA_STATISTICS.w,
                       alignment: Alignment.centerLeft,
                       child: Row(

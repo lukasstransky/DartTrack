@@ -46,7 +46,10 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
               style: TextStyle(color: Colors.white),
             ),
             content: Container(
-              margin: EdgeInsets.only(left: 10.w, right: 10.w),
+              margin: EdgeInsets.only(
+                left: 10.w,
+                right: 10.w,
+              ),
               child: TextFormField(
                 controller: customPointsController,
                 validator: (value) {

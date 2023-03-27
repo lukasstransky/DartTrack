@@ -12,13 +12,14 @@ class AvgBestWorstStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Utils.getTextColorDarken(context);
-    //Color color = Colors.black;
+    final Color color = Utils.getTextColorDarken(context);
+    final _padding = EdgeInsets.only(top: 1.h, left: 2.5.w, right: 2.5.w);
+
     return Consumer<StatsFirestoreX01_P>(
       builder: (_, statisticsFirestore, __) => Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 20, left: 10, right: 10),
+            padding: EdgeInsets.only(top: 2.h, left: 2.5.w, right: 2.5.w),
             child: Row(
               children: [
                 Container(
@@ -65,7 +66,7 @@ class AvgBestWorstStats extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: _padding,
             child: Row(
               children: [
                 Container(
@@ -106,7 +107,7 @@ class AvgBestWorstStats extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: _padding,
             child: Row(
               children: [
                 Container(
@@ -149,7 +150,7 @@ class AvgBestWorstStats extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: _padding,
             child: Row(
               children: [
                 Container(
@@ -193,7 +194,7 @@ class AvgBestWorstStats extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: _padding,
             child: Row(
               children: [
                 Container(
@@ -235,7 +236,7 @@ class AvgBestWorstStats extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: _padding,
             child: Row(
               children: [
                 Container(

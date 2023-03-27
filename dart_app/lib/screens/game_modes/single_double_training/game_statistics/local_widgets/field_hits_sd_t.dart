@@ -58,17 +58,17 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
     int i = (isAscendingOrRandomMode || isTargetNumberEnabled) ? 1 : 20;
 
     return Container(
-      padding: const EdgeInsets.only(
-        left: PADDING_LEFT_STATISTICS,
-        top: PADDING_TOP_STATISTICS,
-        bottom: PADDING_BOTTOM,
+      padding: EdgeInsets.only(
+        left: PADDING_LEFT_STATISTICS.w,
+        top: PADDING_TOP_STATISTICS.h,
+        bottom: PADDING_BOTTOM.h,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 1.h),
             child: RichText(
               text: TextSpan(
                 text: 'Field hits',
@@ -90,7 +90,7 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(top: 10.0),
+            padding: EdgeInsets.only(top: 1.h),
             child: Column(
               children: [
                 for (i;
@@ -110,7 +110,8 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                       for (PlayerGameStatsSingleDoubleTraining stats
                           in game.getPlayerGameStatistics)
                         Container(
-                          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                          padding:
+                              EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
                           width: WIDTH_DATA_STATISTICS.w,
                           child: Row(
                             children: [

@@ -168,7 +168,7 @@ class _RoundsOrPointsInputScoreTrainingState
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: EdgeInsets.only(top: 1.h),
       width: 90.w,
       child: Row(
         children: [

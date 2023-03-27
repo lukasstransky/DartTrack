@@ -18,8 +18,8 @@ class PlayerNames extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        left: PADDING_LEFT_STATISTICS,
-        top: PADDING_TOP_STATISTICS,
+        left: PADDING_LEFT_STATISTICS.w,
+        top: PADDING_TOP_STATISTICS.h,
       ),
       child: Row(
         children: [

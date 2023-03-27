@@ -24,7 +24,7 @@ class _ScoringStatsX01State extends State<ScoringStatsX01> {
       children: [
         Container(
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-          padding: EdgeInsets.only(top: 10),
+          padding: EdgeInsets.only(top: 1.h),
           child: Text(
             'Scoring',
             style: TextStyle(

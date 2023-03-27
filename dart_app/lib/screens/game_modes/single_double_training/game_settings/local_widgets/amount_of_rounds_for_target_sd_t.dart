@@ -146,7 +146,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
       selector: (_, setttings) => setttings.getIsTargetNumberEnabled,
       builder: (_, isTargetNumberEnabled, __) => isTargetNumberEnabled
           ? Container(
-              margin: EdgeInsets.only(top: 10),
+              margin: EdgeInsets.only(top: 1.h),
               width: 90.w,
               child: Row(
                 children: [

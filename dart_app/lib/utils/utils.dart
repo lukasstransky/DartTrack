@@ -393,7 +393,12 @@ class Utils {
           Container(
             width: 25.w,
             child: Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.only(
+                top: 0.5.h,
+                bottom: 0.5.h,
+                left: 1.w,
+                right: 1.w,
+              ),
               child: Center(
                 child: Text(
                   setLegString,
@@ -625,7 +630,7 @@ class Utils {
               Row(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(right: 10),
+                    padding: EdgeInsets.only(right: 2.5.w),
                     child: TextButton(
                       onPressed: () => {
                         Navigator.of(context).pop(),

@@ -58,7 +58,9 @@ class SingleOrTeamX01 extends StatelessWidget {
           width: WIDTH_GAMESETTINGS.w,
           height: Utils.getHeightForWidget(gameSettingsX01).h,
           margin: EdgeInsets.only(
-              top: MARGIN_GAMESETTINGS.h, bottom: MARGIN_GAMESETTINGS.h),
+            top: MARGIN_GAMESETTINGS.h,
+            bottom: MARGIN_GAMESETTINGS.h,
+          ),
           child: Row(
             children: [
               SingleBtn(switchSingleOrTeamMode: _switchSingleOrTeamMode),

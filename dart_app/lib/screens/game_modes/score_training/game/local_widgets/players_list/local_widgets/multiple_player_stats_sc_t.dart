@@ -38,7 +38,7 @@ class _MulitplePlayerStatsScoreTrainingState
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.only(bottom: 5),
+            padding: EdgeInsets.only(bottom: 0.5.h),
             child: Row(
               children: [
                 Expanded(
@@ -140,7 +140,7 @@ class PlayerEntry extends StatelessWidget {
           Expanded(
             child: Container(
               alignment: Alignment.center,
-              padding: const EdgeInsets.only(left: 5),
+              padding: EdgeInsets.only(left: 0.5.w),
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(

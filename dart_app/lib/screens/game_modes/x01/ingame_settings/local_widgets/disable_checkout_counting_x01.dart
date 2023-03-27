@@ -22,7 +22,11 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(top: 0.5.h, left: 1.5.w, bottom: 1.5.h),
+              padding: EdgeInsets.only(
+                top: 0.5.h,
+                left: 1.5.w,
+                bottom: 1.5.h,
+              ),
               child: Text(
                 'Checkout counting',
                 style: TextStyle(

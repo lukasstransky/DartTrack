@@ -18,7 +18,11 @@ class GameDetailsX01 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: 1.h, left: 2.w, right: 2.w),
+          padding: EdgeInsets.only(
+            top: 1.h,
+            left: 2.w,
+            right: 2.w,
+          ),
           child: Row(
             children: [
               FittedBox(
@@ -110,7 +114,10 @@ class GameDetailsX01 extends StatelessWidget {
           ),
           if (gameSettingsX01.getSuddenDeath)
             Padding(
-              padding: EdgeInsets.only(left: 2.w, bottom: 1.h),
+              padding: EdgeInsets.only(
+                left: 2.w,
+                bottom: 1.h,
+              ),
               child: Row(
                 children: [
                   Text(

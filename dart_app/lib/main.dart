@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Color.fromARGB(255, 49, 89, 136);
+    final Color color = Color.fromARGB(255, 49, 89, 136);
 
     return MultiProvider(
       providers: [

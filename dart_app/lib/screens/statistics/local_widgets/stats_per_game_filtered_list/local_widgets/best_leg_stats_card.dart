@@ -27,9 +27,9 @@ class BestLegStatsCard extends StatelessWidget {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top: 5,
-                left: 10,
-                right: 10,
+                top: 0.5.h,
+                left: 2.5.w,
+                right: 2.5.w,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -60,8 +60,8 @@ class BestLegStatsCard extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: 10,
-                bottom: 5,
+                left: 2.5.w,
+                bottom: 0.5.h,
               ),
               child: Text(game.getGameSettings.getGameModeDetails(true),
                   style: TextStyle(
@@ -71,8 +71,8 @@ class BestLegStatsCard extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: 10,
-                bottom: 5,
+                left: 2.5.w,
+                bottom: 0.5.h,
               ),
               child: Text(
                 '${isWorstSelected ? 'Worst' : 'Best'} leg: ${bestLeg}',

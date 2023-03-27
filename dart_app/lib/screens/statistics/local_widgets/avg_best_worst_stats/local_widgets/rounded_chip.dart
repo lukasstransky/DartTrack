@@ -16,7 +16,10 @@ class RoundedChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 3.5.h,
-      padding: EdgeInsets.only(left: 5, right: 5),
+      padding: EdgeInsets.only(
+        left: 1.w,
+        right: 1.w,
+      ),
       child: GestureDetector(
         child: ElevatedButton(
           onPressed: () => {

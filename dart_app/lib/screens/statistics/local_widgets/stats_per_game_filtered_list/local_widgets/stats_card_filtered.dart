@@ -109,9 +109,9 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
           children: [
             Padding(
               padding: EdgeInsets.only(
-                top: 5,
-                left: 10,
-                right: 10,
+                top: 0.5.h,
+                left: 2.5.w,
+                right: 2.5.w,
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -120,7 +120,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                     children: [
                       if (_isGameWonByCurrentPlayer())
                         Padding(
-                          padding: EdgeInsets.only(right: 5),
+                          padding: EdgeInsets.only(right: 1.w),
                           child: Icon(
                             Entypo.trophy,
                             size: 12.sp,
@@ -155,7 +155,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: 10,
+                left: 2.5.w,
               ),
               child: Text(
                 widget.game!.getGameSettings.getGameModeDetails(true),
@@ -167,8 +167,8 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: 10,
-                bottom: 5,
+                left: 2.5.w,
+                bottom: 0.5.h,
               ),
               child: Text(
                 widget.game!.getGameSettings.getSingleOrTeam ==
@@ -183,8 +183,8 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
             ),
             Padding(
               padding: EdgeInsets.only(
-                left: 10,
-                bottom: 5,
+                left: 2.5.w,
+                bottom: 0.5.h,
               ),
               child: Text(
                 _getField(),

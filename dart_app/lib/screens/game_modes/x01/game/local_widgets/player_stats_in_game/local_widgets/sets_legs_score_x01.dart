@@ -19,7 +19,7 @@ class SetsLegsScoreX01 extends StatelessWidget {
         children: [
           _legsSetsWidget(context, false),
           Padding(
-            padding: EdgeInsets.only(left: 5),
+            padding: EdgeInsets.only(left: 1.w),
             child: _legsSetsWidget(context, true),
           )
         ],

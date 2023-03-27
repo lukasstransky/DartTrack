@@ -2,6 +2,7 @@ import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class OtherStats extends StatelessWidget {
   const OtherStats({Key? key}) : super(key: key);
@@ -36,7 +37,11 @@ class OtherStats extends StatelessWidget {
       builder: (_, statisticsFirestore, __) => Column(
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+            padding: EdgeInsets.only(
+              top: 1.h,
+              left: 2.5.w,
+              right: 2.5.w,
+            ),
             child: Row(
               children: [
                 Expanded(

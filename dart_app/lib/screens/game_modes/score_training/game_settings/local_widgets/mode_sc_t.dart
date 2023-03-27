@@ -18,7 +18,7 @@ class ModeScoreTraining extends StatelessWidget {
       padding: EdgeInsets.only(
         top: context.watch<GameSettingsScoreTraining_P>().getPlayers.length ==
                 MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING
-            ? 15
+            ? 1.h
             : 0,
       ),
       child: Center(

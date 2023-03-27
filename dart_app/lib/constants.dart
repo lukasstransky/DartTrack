@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 const Color primary = Color(0xff130536);
 
@@ -71,8 +72,8 @@ const int FONTSIZE_HEADING_STATISTICS = 18;
 const int FONTSIZE_STATISTICS = 13;
 const int WIDTH_HEADINGS_STATISTICS = 40;
 const int WIDTH_DATA_STATISTICS = 30;
-const double PADDING_TOP_STATISTICS = 10.0;
-const double PADDING_LEFT_STATISTICS = 20.0;
+const double PADDING_TOP_STATISTICS = 1;
+const double PADDING_LEFT_STATISTICS = 5;
 
 //Game Page
 const double POINTS_BUTTON_MARGIN = 1.0;
@@ -328,7 +329,7 @@ const int DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED = 5;
 
 const int DEFAULT_LIST_TILE_NEGATIVE_MARGIN = -4;
 
-const dialogContentPadding = EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 0.0);
+var dialogContentPadding = EdgeInsets.fromLTRB(6.w, 1.h, 6.w, 0);
 
 // Bot class
 const int AMOUNT_OF_GENERATED_SCORES = 2;
@@ -374,7 +375,7 @@ const int BTN_FONTSIZE_SD_T = 30;
 // general
 const int GENERAL_DARKEN = 35;
 const double GENERAL_BORDER_WIDTH = 3;
-const double PADDING_BOTTOM = 20;
+const double PADDING_BOTTOM = 2;
 
 // game modes overview
 const int GAME_MODES_OVERVIEW_WIDTH = 60;

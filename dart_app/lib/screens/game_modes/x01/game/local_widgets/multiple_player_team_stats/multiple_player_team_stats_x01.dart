@@ -50,7 +50,7 @@ class _MultiplePlayerTeamStatsX01State
             scrollDirection: Axis.vertical,
             itemCount: playerOrTeamStats.length,
             shrinkWrap: true,
-            padding: EdgeInsets.all(0.0),
+            padding: EdgeInsets.zero,
             itemBuilder: (BuildContext context, int index) {
               return PlayerTeamCard(
                 stats: playerOrTeamStats[index] as PlayerOrTeamGameStatsX01,

@@ -21,7 +21,10 @@ class LegAvgComparedX01 extends StatelessWidget {
       children: [
         Container(
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS, bottom: 10),
+          padding: EdgeInsets.only(
+            top: PADDING_TOP_STATISTICS.h,
+            bottom: 1.h,
+          ),
           alignment: Alignment.center,
           child: Text(
             'Averages per leg',
@@ -38,7 +41,12 @@ class LegAvgComparedX01 extends StatelessWidget {
             children: [
               Container(
                 width: 20.w,
-                padding: EdgeInsets.all(5),
+                padding: EdgeInsets.only(
+                  top: 0.5.h,
+                  bottom: 0.5.h,
+                  left: 1.w,
+                  right: 1.w,
+                ),
                 alignment: Alignment.center,
                 child: Utils.teamStatsDisplayed(gameX01, gameSettingsX01)
                     ? Text(
@@ -71,7 +79,12 @@ class LegAvgComparedX01 extends StatelessWidget {
                       gameX01, gameSettingsX01))
                 Container(
                   width: 25.w,
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.only(
+                    top: 0.5.h,
+                    bottom: 0.5.h,
+                    left: 1.w,
+                    right: 1.w,
+                  ),
                   alignment: Alignment.center,
                   child: Text(
                     Utils.getAverageForLeg(stats, setLegString),

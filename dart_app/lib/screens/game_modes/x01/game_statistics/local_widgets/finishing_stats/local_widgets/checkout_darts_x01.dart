@@ -16,7 +16,7 @@ class CheckoutDartsX01 extends StatelessWidget {
     final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
 
     return Padding(
-      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
       child: Row(
         children: [
           Container(

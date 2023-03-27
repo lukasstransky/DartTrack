@@ -8,6 +8,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 // HERE ARE METHODS DEFINED THAT ARE NEEDED BY MULTIPLE WIDGETS
 // instead of defining & passing callbacks...
@@ -87,7 +88,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       // button 0 for checkout darts
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(
+                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
                               setState(() => selectedCheckoutCount = 0);
@@ -132,7 +134,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                     // button 1 for checkout darts
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.all(5),
+                        margin: EdgeInsets.only(
+                            top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() => selectedCheckoutCount = 1);
@@ -178,7 +181,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       // button 2 for checkout darts
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(
+                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
                               setState(() {
@@ -232,7 +236,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       // button 3 for checkout darts
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(
+                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
                               setState(() => selectedCheckoutCount = 3);
@@ -298,7 +303,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       // button 1 for finish darts
                       Expanded(
                         child: Container(
-                          margin: EdgeInsets.all(5),
+                          margin: EdgeInsets.only(
+                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
                               if (selectedCheckoutCount <= 1)
@@ -349,7 +355,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                     // button 2 for finish darts
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.all(5),
+                        margin: EdgeInsets.only(
+                            top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                         child: ElevatedButton(
                           onPressed: () {
                             if (selectedCheckoutCount < 2 ||
@@ -402,7 +409,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                     // button 3 for finish darts
                     Expanded(
                       child: Container(
-                        margin: EdgeInsets.all(5),
+                        margin: EdgeInsets.only(
+                            top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                         child: ElevatedButton(
                           onPressed: () {
                             setState(() => selectedFinishCount = 3);

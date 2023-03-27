@@ -76,7 +76,7 @@ class PlayersTeamsListDialogsX01 {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 5),
+                            padding: EdgeInsets.only(left: 1.w),
                             child: Text(
                               'Bot - level ${playerToEdit.getLevel}',
                               style: TextStyle(
@@ -369,7 +369,7 @@ class PlayersTeamsListDialogsX01 {
                   Row(
                     children: [
                       Container(
-                        padding: EdgeInsets.only(right: 10),
+                        padding: EdgeInsets.only(right: 2.w),
                         child: TextButton(
                           onPressed: () {
                             gameSettingsX01.removePlayer(playerToDelete, false);

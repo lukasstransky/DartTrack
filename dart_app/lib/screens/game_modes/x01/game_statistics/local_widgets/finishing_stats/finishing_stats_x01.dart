@@ -24,7 +24,7 @@ class FinishingStatsX01 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
             child: Text(

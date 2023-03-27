@@ -22,7 +22,10 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
       children: [
         Container(
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS, bottom: 10),
+          padding: EdgeInsets.only(
+            top: PADDING_TOP_STATISTICS.h,
+            bottom: 1.h,
+          ),
           alignment: Alignment.center,
           child: Text(
             'Darts per leg',
@@ -41,7 +44,12 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
             children: [
               Container(
                 width: 20.w,
-                padding: EdgeInsets.all(5),
+                padding: EdgeInsets.only(
+                  top: 0.5.h,
+                  bottom: 0.5.h,
+                  left: 1.w,
+                  right: 1.w,
+                ),
                 alignment: Alignment.center,
                 child:
                     gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
@@ -76,7 +84,12 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                 Container(
                   width: 25.w,
                   alignment: Alignment.center,
-                  padding: EdgeInsets.all(5),
+                  padding: EdgeInsets.only(
+                    top: 0.5.h,
+                    bottom: 0.5.h,
+                    left: 1.w,
+                    right: 1.w,
+                  ),
                   child: Utils.getWinnerOfLeg(setLegString, gameX01, context) ==
                           (Utils.teamStatsDisplayed(gameX01, gameSettingsX01)
                               ? stats.getTeam.getName

@@ -68,7 +68,7 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                 .getIsTargetNumberEnabled)
               Container(
                 transform: Matrix4.translationValues(0.0, -5.0, 0.0),
-                padding: EdgeInsets.only(top: 3),
+                padding: EdgeInsets.only(top: 0.3.h),
                 child: Text(
                   '(Remaining rounds: ${tuple.item2})',
                   style: TextStyle(

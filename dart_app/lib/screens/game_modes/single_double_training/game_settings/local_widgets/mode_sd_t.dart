@@ -19,9 +19,9 @@ class ModeSingleDoubleTraining extends StatelessWidget {
                     .getPlayers
                     .length ==
                 MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING
-            ? 15
+            ? 1.5.h
             : 0,
-        bottom: 5,
+        bottom: 0.5.h,
       ),
       child: Center(
         child: Container(

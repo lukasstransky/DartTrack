@@ -144,13 +144,13 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
         child: Center(
           child: Container(
             width: 90.w,
-            padding: EdgeInsets.only(bottom: 20),
+            padding: EdgeInsets.only(bottom: 2.h),
             child: Column(
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 10,
-                    left: 5,
+                    top: 1.h,
+                    left: 1.w,
                   ),
                   child: Align(
                     alignment: Alignment.centerLeft,
@@ -162,8 +162,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    left: 5,
-                    bottom: 10,
+                    left: 1.w,
+                    bottom: 1.h,
                   ),
                   child: Align(
                     alignment: Alignment.centerLeft,

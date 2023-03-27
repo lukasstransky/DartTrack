@@ -106,7 +106,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
               currPlayerOrTeamGameStatsX01: this.currPlayerOrTeamGameStatsX01),
         ),
         Container(
-          padding: EdgeInsets.only(top: 5),
+          padding: EdgeInsets.only(top: 0.5.h),
           child: Text(
             currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
             style: TextStyle(

@@ -19,7 +19,7 @@ class RoundedScoresOdd extends StatelessWidget {
       children: [
         Container(
           transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Text(
             'Rounded scores',
             style: TextStyle(
@@ -29,7 +29,7 @@ class RoundedScoresOdd extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Row(
             children: [
               Column(
@@ -37,7 +37,7 @@ class RoundedScoresOdd extends StatelessWidget {
                   for (int i = 10; i <= 170; i += 20)
                     Container(
                       width: WIDTH_HEADINGS_STATISTICS.w,
-                      padding: EdgeInsets.only(top: 5),
+                      padding: EdgeInsets.only(top: 0.5.h),
                       child: Row(
                         children: [
                           Container(
@@ -67,7 +67,7 @@ class RoundedScoresOdd extends StatelessWidget {
                     for (int i = 10; i <= 170; i += 20)
                       Container(
                         width: WIDTH_DATA_STATISTICS.w,
-                        padding: EdgeInsets.only(top: 5),
+                        padding: EdgeInsets.only(top: 0.5.h),
                         child: Text(
                           stats.getRoundedScoresOdd[i].toString(),
                           style: TextStyle(

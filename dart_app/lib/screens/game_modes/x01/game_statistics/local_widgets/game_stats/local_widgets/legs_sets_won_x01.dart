@@ -32,11 +32,11 @@ class LegSetsWonX01 extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Row(
             children: [
               Container(
-                padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+                padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
                 width: WIDTH_HEADINGS_STATISTICS.w,
                 alignment: Alignment.centerLeft,
                 child: FittedBox(
@@ -71,7 +71,7 @@ class LegSetsWonX01 extends StatelessWidget {
         if (setsEnabled) ...[
           if (!gameX01.getIsGameFinished)
             Padding(
-              padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+              padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
               child: Row(children: [
                 Container(
                   width: WIDTH_HEADINGS_STATISTICS.w,
@@ -118,7 +118,7 @@ class LegSetsWonX01 extends StatelessWidget {
               ]),
             ),
           Padding(
-            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS),
+            padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
             child: Row(
               children: [
                 Container(
