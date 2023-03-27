@@ -4,6 +4,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class SingleDoubleOrTrippleBtns extends StatelessWidget {
   const SingleDoubleOrTrippleBtns({Key? key}) : super(key: key);
@@ -54,7 +55,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   child: Text(
                     'Single',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE,
+                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),
@@ -107,7 +108,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   child: Text(
                     'Double',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE,
+                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),
@@ -152,7 +153,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   child: Text(
                     'Tripple',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE,
+                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),

@@ -7,6 +7,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class SingleDoubleOrTrippleX01 extends StatelessWidget {
   const SingleDoubleOrTrippleX01({
@@ -64,7 +65,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                   child: Text(
                     'Single',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE,
+                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),
@@ -126,7 +127,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                   child: Text(
                     'Double',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE,
+                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),
@@ -180,7 +181,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                   child: Text(
                     'Tripple',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE,
+                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),

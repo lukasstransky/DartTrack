@@ -47,8 +47,8 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             color: Theme.of(context).colorScheme.primary,
                           ),
-                          textStyle: const TextStyle(
-                            fontSize: 18,
+                          textStyle: TextStyle(
+                            fontSize: 14.sp,
                             color: Colors.white,
                           ),
                           message: SUDDEN_DEATH_INFO,
@@ -94,8 +94,8 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                               color: Theme.of(context).colorScheme.primary,
                             ),
-                            textStyle: const TextStyle(
-                              fontSize: 18,
+                            textStyle: TextStyle(
+                              fontSize: 14.sp,
                               color: Colors.white,
                             ),
                             message: SUDDEN_DEATH_LEG_DIFFERENCE_INFO,

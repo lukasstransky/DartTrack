@@ -91,7 +91,9 @@ class FinishWaysX01 extends StatelessWidget {
         child: Text(
           '',
           style: TextStyle(
-              color: Theme.of(context).colorScheme.primary, fontSize: 13.sp),
+            color: Theme.of(context).colorScheme.primary,
+            fontSize: 13.sp,
+          ),
         ),
       );
     }

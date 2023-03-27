@@ -834,9 +834,7 @@ class SubmitX01Helper {
         content: RichText(
           text: TextSpan(
             text: 'The ',
-            style: TextStyle(
-              fontSize: 12.sp,
-            ),
+            style: TextStyle(fontSize: 12.sp),
             children: <TextSpan>[
               TextSpan(
                 text: 'Sudden death',
@@ -848,9 +846,7 @@ class SubmitX01Helper {
               TextSpan(
                 text:
                     ' leg is reached. The player who wins this leg also wins the game.',
-                style: TextStyle(
-                  fontSize: 12.sp,
-                ),
+                style: TextStyle(fontSize: 12.sp),
               )
             ],
           ),

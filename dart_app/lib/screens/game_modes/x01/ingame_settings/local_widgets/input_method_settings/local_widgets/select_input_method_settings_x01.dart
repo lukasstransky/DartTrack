@@ -135,7 +135,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: new TextStyle(
-                        fontSize: 11.0.sp,
+                        fontSize: 11.sp,
                         color: Colors.white70,
                       ),
                       children: <TextSpan>[
@@ -155,7 +155,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: new TextStyle(
-                        fontSize: 11.0.sp,
+                        fontSize: 11.sp,
                         color: Colors.white70,
                       ),
                       children: <TextSpan>[

@@ -32,6 +32,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
     final bool isSingleMode = game.getMode == GameMode.SingleTraining;
     final bool isTwoPlayers =
         game.getPlayerGameStatistics.length == 2 ? true : false;
+
     final int FONTSIZE = isTwoPlayers ? 12 : 18;
     final int FONTSIZE_PERCENTAGE = isTwoPlayers ? 8 : 12;
     final int HEADER_WIDTH = isTwoPlayers ? 28 : 45;

@@ -303,8 +303,9 @@ class OpenGames extends StatelessWidget {
                     child: Text(
                       openGamesFirestore.openGames.length.toString(),
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                          fontSize: 14.sp),
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: 14.sp,
+                      ),
                     ),
                     onPressed: () =>
                         Navigator.of(context).pushNamed('/openGames'),

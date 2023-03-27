@@ -151,8 +151,9 @@ class LoginRegisterBtn extends StatelessWidget {
             child: Text(
               isLogin ? 'Login' : 'Register',
               style: TextStyle(
-                  fontSize: 12.sp,
-                  color: Theme.of(context).colorScheme.secondary),
+                fontSize: 12.sp,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,

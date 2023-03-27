@@ -78,7 +78,7 @@ const double PADDING_LEFT_STATISTICS = 5;
 //Game Page
 const double POINTS_BUTTON_MARGIN = 1.0;
 const double ROUND_BUTTON_TEXT_SIZE = 30;
-const double THREE_DARTS_BUTTON_TEXT_SIZE = 18;
+const double THREE_DARTS_BUTTON_TEXT_SIZE = 14;
 
 enum PointType { Single, Double, Tripple }
 

@@ -80,13 +80,17 @@ class PlayersTeamsListDialogsX01 {
                             child: Text(
                               'Bot - level ${playerToEdit.getLevel}',
                               style: TextStyle(
-                                  fontSize: 12.sp, color: Colors.white),
+                                fontSize: 12.sp,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           Text(
                             ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                            style:
-                                TextStyle(fontSize: 9.sp, color: Colors.white),
+                            style: TextStyle(
+                              fontSize: 9.sp,
+                              color: Colors.white,
+                            ),
                           ),
                         ],
                       ),

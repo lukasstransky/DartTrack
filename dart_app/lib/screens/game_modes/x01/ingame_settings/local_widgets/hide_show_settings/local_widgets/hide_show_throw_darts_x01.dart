@@ -19,7 +19,9 @@ class HideShowThrownDartsX01 extends StatelessWidget {
           Text(
             'Thrown darts per leg',
             style: TextStyle(
-                fontSize: FONTSIZE_IN_GAME_SETTINGS.sp, color: Colors.white),
+              fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
+              color: Colors.white,
+            ),
           ),
           Spacer(),
           Selector<GameSettingsX01_P, bool>(

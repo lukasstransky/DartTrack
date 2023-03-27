@@ -74,9 +74,10 @@ class AvgBestWorstStats extends StatelessWidget {
                   child: Text(
                     'X01 avg.',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                        fontSize: 12.sp),
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                      fontSize: 12.sp,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -115,9 +116,10 @@ class AvgBestWorstStats extends StatelessWidget {
                   child: Text(
                     'First nine avg.',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                        fontSize: 12.sp),
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                      fontSize: 12.sp,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -158,9 +160,10 @@ class AvgBestWorstStats extends StatelessWidget {
                   child: Text(
                     'Checkout %',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                        fontSize: 12.sp),
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                      fontSize: 12.sp,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -202,9 +205,10 @@ class AvgBestWorstStats extends StatelessWidget {
                   child: Text(
                     'Checkouts',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                        fontSize: 12.sp),
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                      fontSize: 12.sp,
+                    ),
                   ),
                 ),
                 Expanded(
@@ -244,9 +248,10 @@ class AvgBestWorstStats extends StatelessWidget {
                   child: Text(
                     'Legs',
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: color,
-                        fontSize: 12.sp),
+                      fontWeight: FontWeight.bold,
+                      color: color,
+                      fontSize: 12.sp,
+                    ),
                   ),
                 ),
                 Expanded(

@@ -21,7 +21,10 @@ class LoginRegisterSwitch extends StatelessWidget {
             auth.getAuthMode == AuthMode.Login
                 ? 'Don\'t have an account? '
                 : 'Already have an account? ',
-            style: TextStyle(fontSize: 12.sp, color: Colors.white),
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.white,
+            ),
           ),
           GestureDetector(
             key: Key('loginRegisterSwitch'),

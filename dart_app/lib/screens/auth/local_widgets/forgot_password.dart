@@ -37,9 +37,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 Text(
                   'Forgot password',
                   style: TextStyle(
-                      fontSize: 20.sp,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white),
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 Container(
                   width: 80.w,

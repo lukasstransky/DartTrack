@@ -19,7 +19,9 @@ class HideShowFinishWaysX01 extends StatelessWidget {
           Text(
             'Finish ways',
             style: TextStyle(
-                fontSize: FONTSIZE_IN_GAME_SETTINGS.sp, color: Colors.white),
+              fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
+              color: Colors.white,
+            ),
           ),
           Spacer(),
           Selector<GameSettingsX01_P, bool>(

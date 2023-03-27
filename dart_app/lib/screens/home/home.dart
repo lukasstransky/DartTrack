@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class Home extends StatefulWidget {
   static const routeName = '/home';
@@ -75,7 +76,7 @@ class _HomeState extends State<Home> {
             label: 'Settings',
           ),
         ],
-        selectedFontSize: 20,
+        selectedFontSize: 15.sp,
         selectedIconTheme: IconThemeData(
             color: Theme.of(context).colorScheme.secondary, size: 35),
         selectedItemColor: Theme.of(context).colorScheme.secondary,

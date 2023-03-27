@@ -84,7 +84,9 @@ class AddPlayerTeamBtnDialogs {
                                     child: Text(
                                       ' (${_selectedBotAvgValue - BOT_AVG_SLIDER_VALUE_RANGE}-${_selectedBotAvgValue + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                                       style: TextStyle(
-                                          fontSize: 10.sp, color: Colors.white),
+                                        fontSize: 10.sp,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
                                 ] else ...[
