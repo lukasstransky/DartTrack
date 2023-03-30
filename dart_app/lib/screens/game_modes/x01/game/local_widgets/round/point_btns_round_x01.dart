@@ -32,67 +32,86 @@ class PointBtnsRoundX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<GameX01_P, GameSettingsX01_P>(
-      builder: (_, gameX01, gameSettingsX01, __) => Expanded(
-        child: Column(
-          children: [
-            Container(
-              height: 6.h,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    width: 25.w,
-                    child: RevertBtn(game_p: gameX01),
-                  ),
-                  Container(
-                    width: 50.w,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border: Border(
-                          top: BorderSide(
-                            width: GENERAL_BORDER_WIDTH.w,
-                            color: Utils.getPrimaryColorDarken(context),
+    final GameX01_P gameX01 = context.read<GameX01_P>();
+
+    return Expanded(
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          showInputMethodInGameScreen:
+              gameSettingsX01.getShowInputMethodInGameScreen,
+          showMostScoredPoints: gameSettingsX01.getShowMostScoredPoints,
+        ),
+        builder: (_, selectorModel, __) => Selector<GameX01_P, String>(
+          selector: (_, gameX01) => gameX01.getCurrentPointsSelected,
+          builder: (_, currentPointsSelected, __) => Column(
+            children: [
+              Container(
+                height: 6.h,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Container(
+                      width: 25.w,
+                      child: RevertBtn(game_p: gameX01),
+                    ),
+                    Container(
+                      width: 50.w,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border(
+                            top: BorderSide(
+                              width: GENERAL_BORDER_WIDTH.w,
+                              color: Utils.getPrimaryColorDarken(context),
+                            ),
                           ),
                         ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          gameX01.getCurrentPointsSelected,
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Utils.getTextColorDarken(context),
+                        child: Center(
+                          child: Text(
+                            currentPointsSelected,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.bold,
+                              color: Utils.getTextColorDarken(context),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    width: 25.w,
-                    child: SubmitPointsBtnX01(),
-                  ),
-                ],
+                    Container(
+                      width: 25.w,
+                      child: SubmitPointsBtnX01(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            if (gameSettingsX01.getShowInputMethodInGameScreen)
-              SelectInputMethod(mode: GameMode.X01),
-            firstRow(gameX01, gameSettingsX01),
-            secondRow(gameX01, gameSettingsX01),
-            thirdRow(gameX01, gameSettingsX01),
-            fourthRow(gameX01, context),
-          ],
+              if (selectorModel.showInputMethodInGameScreen)
+                SelectInputMethod(mode: GameMode.X01),
+              firstRow(
+                gameX01,
+                selectorModel.showMostScoredPoints,
+              ),
+              secondRow(
+                gameX01,
+                selectorModel.showMostScoredPoints,
+              ),
+              thirdRow(
+                gameX01,
+                selectorModel.showMostScoredPoints,
+              ),
+              fourthRow(gameX01, context),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Expanded firstRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+  Expanded firstRow(GameX01_P gameX01, bool showMostScoredPoints) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (gameSettingsX01.getShowMostScoredPoints)
+          if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
                       gameX01.getGameSettings.getMostScoredPoints[0])
@@ -126,7 +145,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                 : PointBtnRoundX01(
                     point: '3', activeBtn: true, mostScoredPointBtn: false),
           ),
-          if (gameSettingsX01.getShowMostScoredPoints)
+          if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
                       gameX01.getGameSettings.getMostScoredPoints[1])
@@ -144,12 +163,12 @@ class PointBtnsRoundX01 extends StatelessWidget {
     );
   }
 
-  Expanded secondRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+  Expanded secondRow(GameX01_P gameX01, bool showMostScoredPoints) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (gameSettingsX01.getShowMostScoredPoints)
+          if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
                       gameX01.getGameSettings.getMostScoredPoints[2])
@@ -183,7 +202,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                 : PointBtnRoundX01(
                     point: '6', activeBtn: true, mostScoredPointBtn: false),
           ),
-          if (gameSettingsX01.getShowMostScoredPoints)
+          if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
                       gameX01.getGameSettings.getMostScoredPoints[3])
@@ -201,12 +220,12 @@ class PointBtnsRoundX01 extends StatelessWidget {
     );
   }
 
-  Expanded thirdRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+  Expanded thirdRow(GameX01_P gameX01, bool showMostScoredPoints) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          if (gameSettingsX01.getShowMostScoredPoints)
+          if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
                       gameX01.getGameSettings.getMostScoredPoints[4])
@@ -240,7 +259,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                 : PointBtnRoundX01(
                     point: '9', activeBtn: true, mostScoredPointBtn: false),
           ),
-          if (gameSettingsX01.getShowMostScoredPoints)
+          if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
                       gameX01.getGameSettings.getMostScoredPoints[5])
@@ -362,4 +381,14 @@ class PointBtnsRoundX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final bool showInputMethodInGameScreen;
+  final bool showMostScoredPoints;
+
+  SelectorModel({
+    required this.showInputMethodInGameScreen,
+    required this.showMostScoredPoints,
+  });
 }

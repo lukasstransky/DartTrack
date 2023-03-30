@@ -6,38 +6,38 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class DrawModeX01 extends StatelessWidget {
-  double _getProperValueForTransformation(GameSettingsX01_P gameSettingsX01) {
-    if (_checkoutCountingPresent(gameSettingsX01) &&
-        _winByTwoLegsPresent(gameSettingsX01)) {
+  double _getProperValueForTransformation(SelectorModel selectorModel) {
+    if (_checkoutCountingPresent(selectorModel) &&
+        _winByTwoLegsPresent(selectorModel)) {
       return -3.0;
-    } else if (_noCheckoutCountAndWinByDiffPresent(gameSettingsX01)) {
+    } else if (_noCheckoutCountAndWinByDiffPresent(selectorModel)) {
       return 0.0;
-    } else if (_checkoutCountingPresent(gameSettingsX01) &&
-        !_winByTwoLegsPresent(gameSettingsX01)) {
+    } else if (_checkoutCountingPresent(selectorModel) &&
+        !_winByTwoLegsPresent(selectorModel)) {
       return -1.5;
-    } else if (!_checkoutCountingPresent(gameSettingsX01) &&
-        _winByTwoLegsPresent(gameSettingsX01)) {
+    } else if (!_checkoutCountingPresent(selectorModel) &&
+        _winByTwoLegsPresent(selectorModel)) {
       return -1.5;
     }
     return -3.0;
   }
 
-  bool _noCheckoutCountAndWinByDiffPresent(GameSettingsX01_P gameSettingsX01) {
-    if (!_checkoutCountingPresent(gameSettingsX01) &&
-        !_winByTwoLegsPresent(gameSettingsX01)) {
+  bool _noCheckoutCountAndWinByDiffPresent(SelectorModel selectorModel) {
+    if (!_checkoutCountingPresent(selectorModel) &&
+        !_winByTwoLegsPresent(selectorModel)) {
       return true;
     }
     return false;
   }
 
-  bool _checkoutCountingPresent(GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getModeOut == ModeOutIn.Double;
+  bool _checkoutCountingPresent(SelectorModel selectorModel) {
+    return selectorModel.modeOut == ModeOutIn.Double;
   }
 
-  bool _winByTwoLegsPresent(GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getLegs > 1 &&
-        !gameSettingsX01.getSetsEnabled &&
-        !gameSettingsX01.getDrawMode;
+  bool _winByTwoLegsPresent(SelectorModel selectorModel) {
+    return selectorModel.legs > 1 &&
+        !selectorModel.setsEnabled &&
+        !selectorModel.drawMode;
   }
 
   _drawModeSwitchPressed(GameSettingsX01_P gameSettingsX01, bool value) {
@@ -66,15 +66,22 @@ class DrawModeX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01_P>(
-      builder: (_, gameSettingsX01, __) {
-        if (!gameSettingsX01.getWinByTwoLegsDifference) {
+    return Selector<GameSettingsX01_P, SelectorModel>(
+      selector: (_, gameSettingsX01) => SelectorModel(
+        drawMode: gameSettingsX01.getDrawMode,
+        winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
+        legs: gameSettingsX01.getLegs,
+        modeOut: gameSettingsX01.getModeOut,
+        setsEnabled: gameSettingsX01.getSetsEnabled,
+      ),
+      builder: (_, selectorModel, __) {
+        if (!selectorModel.winByTwoLegsDifference) {
           return Container(
             width: WIDTH_GAMESETTINGS.w,
             transform: Matrix4.translationValues(
-                0.0, _getProperValueForTransformation(gameSettingsX01).h, 0.0),
+                0.0, _getProperValueForTransformation(selectorModel).h, 0.0),
             margin: EdgeInsets.only(
-                top: _noCheckoutCountAndWinByDiffPresent(gameSettingsX01)
+                top: _noCheckoutCountAndWinByDiffPresent(selectorModel)
                     ? MARGIN_GAMESETTINGS.h
                     : 0.h),
             child: Column(
@@ -93,9 +100,9 @@ class DrawModeX01 extends StatelessWidget {
                       activeColor: Theme.of(context).colorScheme.secondary,
                       inactiveThumbColor:
                           Theme.of(context).colorScheme.secondary,
-                      value: gameSettingsX01.getDrawMode,
-                      onChanged: (value) =>
-                          _drawModeSwitchPressed(gameSettingsX01, value),
+                      value: selectorModel.drawMode,
+                      onChanged: (value) => _drawModeSwitchPressed(
+                          context.read<GameSettingsX01_P>(), value),
                     ),
                   ],
                 ),
@@ -107,4 +114,20 @@ class DrawModeX01 extends StatelessWidget {
       },
     );
   }
+}
+
+class SelectorModel {
+  final ModeOutIn modeOut;
+  final bool winByTwoLegsDifference;
+  final int legs;
+  final bool setsEnabled;
+  final bool drawMode;
+
+  SelectorModel({
+    required this.modeOut,
+    required this.winByTwoLegsDifference,
+    required this.legs,
+    required this.setsEnabled,
+    required this.drawMode,
+  });
 }

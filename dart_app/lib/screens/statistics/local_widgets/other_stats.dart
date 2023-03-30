@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -32,9 +33,13 @@ class OtherStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = Utils.getTextColorDarken(context);
-    return Consumer<StatsFirestoreX01_P>(
-      builder: (_, statisticsFirestore, __) => Column(
+    final Color color = Utils.getTextColorDarken(context);
+    final StatsFirestoreX01_P statisticsFirestore =
+        context.read<StatsFirestoreX01_P>();
+
+    return Selector<StatsFirestoreX01_P, FilterValue>(
+      selector: (_, statsFirestoreX01) => statsFirestoreX01.currentFilterValue,
+      builder: (_, __, ___) => Column(
         children: [
           Padding(
             padding: EdgeInsets.only(

@@ -182,7 +182,7 @@ class PlayerTeamCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${stats.getAverage(gameSettingsX01_P)}',
+                          '${stats.getAverage()}',
                           style: TextStyle(
                             color: Utils.getTextColorDarken(context),
                             fontSize: 12.sp,

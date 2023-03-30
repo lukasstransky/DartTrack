@@ -53,18 +53,25 @@ class SingleOrTeamX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01_P>(
-        builder: (_, gameSettingsX01, __) => Container(
-          width: WIDTH_GAMESETTINGS.w,
-          height: Utils.getHeightForWidget(gameSettingsX01).h,
-          margin: EdgeInsets.only(
-            top: MARGIN_GAMESETTINGS.h,
-            bottom: MARGIN_GAMESETTINGS.h,
-          ),
-          child: Row(
+      child: Container(
+        width: WIDTH_GAMESETTINGS.w,
+        height: WIDGET_HEIGHT_GAMESETTINGS.h,
+        margin: EdgeInsets.only(
+          top: MARGIN_GAMESETTINGS.h,
+          bottom: MARGIN_GAMESETTINGS.h,
+        ),
+        child: Selector<GameSettingsX01_P, SingleOrTeamEnum>(
+          selector: (_, gameSettings) => gameSettings.getSingleOrTeam,
+          builder: (_, singleOrTeam, __) => Row(
             children: [
-              SingleBtn(switchSingleOrTeamMode: _switchSingleOrTeamMode),
-              TeamBtn(switchSingleOrTeamMode: _switchSingleOrTeamMode),
+              SingleBtn(
+                switchSingleOrTeamMode: _switchSingleOrTeamMode,
+                singleOrTeam: singleOrTeam,
+              ),
+              TeamBtn(
+                switchSingleOrTeamMode: _switchSingleOrTeamMode,
+                singleOrTeam: singleOrTeam,
+              ),
             ],
           ),
         ),
@@ -74,30 +81,33 @@ class SingleOrTeamX01 extends StatelessWidget {
 }
 
 class SingleBtn extends StatelessWidget {
-  const SingleBtn({Key? key, required Function this.switchSingleOrTeamMode})
-      : super(key: key);
+  const SingleBtn({
+    Key? key,
+    required Function this.switchSingleOrTeamMode,
+    required this.singleOrTeam,
+  }) : super(key: key);
 
   final Function switchSingleOrTeamMode;
+  final SingleOrTeamEnum singleOrTeam;
 
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettings = context.read<GameSettingsX01_P>();
-    final bool isSingle =
-        gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single;
 
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
-          if (!isSingle) {
+          if (singleOrTeam != SingleOrTeamEnum.Single) {
             switchSingleOrTeamMode(context, gameSettings);
           }
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Single ${gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single ? '(${gameSettings.getPlayers.length})' : ''}',
+            'Single ${singleOrTeam == SingleOrTeamEnum.Single ? '(${gameSettings.getPlayers.length})' : ''}',
             style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(isSingle, context),
+              color: Utils.getTextColorForGameSettingsBtn(
+                  singleOrTeam == SingleOrTeamEnum.Single, context),
             ),
           ),
         ),
@@ -117,7 +127,7 @@ class SingleBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: isSingle
+          backgroundColor: singleOrTeam == SingleOrTeamEnum.Single
               ? Utils.getPrimaryMaterialStateColorDarken(context)
               : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
@@ -127,29 +137,33 @@ class SingleBtn extends StatelessWidget {
 }
 
 class TeamBtn extends StatelessWidget {
-  const TeamBtn({Key? key, required Function this.switchSingleOrTeamMode})
-      : super(key: key);
+  const TeamBtn({
+    Key? key,
+    required Function this.switchSingleOrTeamMode,
+    required this.singleOrTeam,
+  }) : super(key: key);
 
   final Function switchSingleOrTeamMode;
+  final SingleOrTeamEnum singleOrTeam;
 
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettings = context.read<GameSettingsX01_P>();
-    final bool isTeam = gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team;
 
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
-          if (!isTeam) {
+          if (singleOrTeam != SingleOrTeamEnum.Team) {
             switchSingleOrTeamMode(context, gameSettings);
           }
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Team ${gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team ? '(${gameSettings.getTeams.length})' : ''}',
+            'Team ${singleOrTeam == SingleOrTeamEnum.Team ? '(${gameSettings.getTeams.length})' : ''}',
             style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(isTeam, context),
+              color: Utils.getTextColorForGameSettingsBtn(
+                  singleOrTeam == SingleOrTeamEnum.Team, context),
             ),
           ),
         ),
@@ -169,7 +183,7 @@ class TeamBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: isTeam
+          backgroundColor: singleOrTeam == SingleOrTeamEnum.Team
               ? Utils.getPrimaryMaterialStateColorDarken(context)
               : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),

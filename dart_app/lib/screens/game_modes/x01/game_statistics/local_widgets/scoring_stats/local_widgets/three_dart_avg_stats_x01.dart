@@ -41,7 +41,7 @@ class ThreeDartAvgStatsX01 extends StatelessWidget {
             Container(
               width: WIDTH_DATA_STATISTICS.w,
               child: Text(
-                stats.getAverage(gameSettingsX01),
+                stats.getAverage(),
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Colors.white,

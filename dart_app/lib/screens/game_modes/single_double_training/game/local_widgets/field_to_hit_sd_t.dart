@@ -6,7 +6,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class FieldToHitSingleDoubleTraining extends StatelessWidget {
   const FieldToHitSingleDoubleTraining({Key? key}) : super(key: key);
@@ -22,11 +21,13 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GameSingleDoubleTraining_P, Tuple2<int, int>>(
-      selector: (_, game) => new Tuple2(
-          game.getCurrentFieldToHit, game.getAmountOfRoundsRemaining),
-      builder: (_, tuple, __) => Container(
-        height: tuple.item2 == -1 ? 8.h : 10.h,
+    return Selector<GameSingleDoubleTraining_P, SelectorModel>(
+      selector: (_, game) => SelectorModel(
+        currentFieldToHit: game.getCurrentFieldToHit,
+        amountOfRoundsRemaining: game.getAmountOfRoundsRemaining,
+      ),
+      builder: (_, selectorModel, __) => Container(
+        height: selectorModel.currentFieldToHit == -1 ? 8.h : 10.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(
@@ -51,7 +52,9 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                       ),
                       children: <TextSpan>[
                         TextSpan(
-                          text: _getFieldToHit(tuple.item1.toString(), context),
+                          text: _getFieldToHit(
+                              selectorModel.currentFieldToHit.toString(),
+                              context),
                           style: TextStyle(
                             fontSize: 26.sp,
                             fontWeight: FontWeight.bold,
@@ -70,7 +73,7 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                 transform: Matrix4.translationValues(0.0, -5.0, 0.0),
                 padding: EdgeInsets.only(top: 0.3.h),
                 child: Text(
-                  '(Remaining rounds: ${tuple.item2})',
+                  '(Remaining rounds: ${selectorModel.amountOfRoundsRemaining})',
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 13.sp,
@@ -82,4 +85,14 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final int currentFieldToHit;
+  final int amountOfRoundsRemaining;
+
+  SelectorModel({
+    required this.currentFieldToHit,
+    required this.amountOfRoundsRemaining,
+  });
 }

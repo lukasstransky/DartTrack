@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class RoundsOrPointsInputScoreTraining extends StatefulWidget {
   const RoundsOrPointsInputScoreTraining({Key? key}) : super(key: key);
@@ -185,19 +184,19 @@ class _RoundsOrPointsInputScoreTrainingState
               ),
             ),
           ),
-          Selector<GameSettingsScoreTraining_P,
-              Tuple2<int, ScoreTrainingModeEnum>>(
-            selector: (_, gameSettingsScoreTraining_P) => Tuple2(
-                gameSettingsScoreTraining_P.getMaxRoundsOrPoints,
-                gameSettingsScoreTraining_P.getMode),
-            builder: (_, tuple, __) => Container(
+          Selector<GameSettingsScoreTraining_P, SelectorModel>(
+            selector: (_, gameSettings) => SelectorModel(
+              maxRoundsOrPoints: gameSettings.getMaxRoundsOrPoints,
+              mode: gameSettings.getMode,
+            ),
+            builder: (_, selectorModel, __) => Container(
               width: 20.w,
               child: ElevatedButton(
                 onPressed: () => _showDialogForRoundsOrPoints(context),
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    tuple.item1.toString(),
+                    selectorModel.maxRoundsOrPoints.toString(),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
                     ),
@@ -246,4 +245,14 @@ class _RoundsOrPointsInputScoreTrainingState
       ),
     );
   }
+}
+
+class SelectorModel {
+  final int maxRoundsOrPoints;
+  final ScoreTrainingModeEnum mode;
+
+  SelectorModel({
+    required this.maxRoundsOrPoints,
+    required this.mode,
+  });
 }

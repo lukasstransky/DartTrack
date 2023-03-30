@@ -257,7 +257,6 @@ class GameX01_P extends Game_P {
 
   //to determine if points button should be disabled -> e.g current points are 80 -> shouldnt be possible to press any other points buttons -> invalid points
   bool shouldPointBtnBeDisabled(String btnValueToCheck) {
-    //todo weird bug -> if solves it -> maybe have a look on it (starting game -> end it with cross -> click any button)
     if (getPlayerGameStatistics.isNotEmpty) {
       var stats = getCurrentPlayerGameStats();
 

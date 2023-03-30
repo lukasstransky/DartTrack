@@ -101,7 +101,6 @@ class FirestoreServiceGames {
 
     statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
     if (!statisticsFirestoreX01.noGamesPlayed) {
-      //todo not the best solution to load all statistics here (-> only precise scores are needed)
       context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
     }
     statisticsFirestoreX01.notify();
@@ -288,7 +287,7 @@ class FirestoreServiceGames {
   }
 
   /************************************************************************************/
-  /***********************         FAVOUTIRE GAMES            *************************/
+  /***********************         FAVOURITE GAMES            *************************/
   /************************************************************************************/
 
   Future<void> changeFavouriteStateOfGame(String gameId, bool state) async {

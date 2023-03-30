@@ -37,21 +37,25 @@ class SetsBtnX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
     return Expanded(
-      child: Consumer<GameSettingsX01_P>(
-        builder: (_, gameSettingsX01, __) => Container(
-          height: Utils.getHeightForWidget(gameSettingsX01).h,
-          child: ElevatedButton(
+      child: Container(
+        height: WIDGET_HEIGHT_GAMESETTINGS.h,
+        child: Selector<GameSettingsX01_P, bool>(
+          selector: (_, gameSettingsX01) => gameSettingsX01.getSetsEnabled,
+          builder: (_, setsEnabled, __) => ElevatedButton(
             onPressed: () => _setsBtnClicked(gameSettingsX01),
             child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  'Sets',
-                  style: TextStyle(
-                    color: Utils.getTextColorForGameSettingsBtn(
-                        gameSettingsX01.getSetsEnabled, context),
-                  ),
-                )),
+              fit: BoxFit.scaleDown,
+              child: Text(
+                'Sets',
+                style: TextStyle(
+                  color: Utils.getTextColorForGameSettingsBtn(
+                      setsEnabled, context),
+                ),
+              ),
+            ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
               shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -67,7 +71,7 @@ class SetsBtnX01 extends StatelessWidget {
                   ),
                 ),
               ),
-              backgroundColor: gameSettingsX01.getSetsEnabled
+              backgroundColor: setsEnabled
                   ? Utils.getPrimaryMaterialStateColorDarken(context)
                   : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),

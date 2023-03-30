@@ -10,16 +10,17 @@ class ModeInX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01_P>(
-        builder: (_, gameSettingsX01, __) => Container(
-          width: WIDTH_GAMESETTINGS.w,
-          height: Utils.getHeightForWidget(gameSettingsX01).h,
-          margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-          child: Row(
+      child: Container(
+        width: WIDTH_GAMESETTINGS.w,
+        height: WIDGET_HEIGHT_GAMESETTINGS.h,
+        margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
+        child: Selector<GameSettingsX01_P, ModeOutIn>(
+          selector: (_, gameSettings) => gameSettings.getModeIn,
+          builder: (_, modeIn, __) => Row(
             children: [
-              SingleInBtn(),
-              DoubleInBtn(),
-              MasterInBtn(),
+              SingleInBtn(modeIn: modeIn),
+              DoubleInBtn(modeIn: modeIn),
+              MasterInBtn(modeIn: modeIn),
             ],
           ),
         ),
@@ -31,12 +32,14 @@ class ModeInX01 extends StatelessWidget {
 class MasterInBtn extends StatelessWidget {
   const MasterInBtn({
     Key? key,
+    required this.modeIn,
   }) : super(key: key);
+
+  final ModeOutIn modeIn;
 
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isMasterModeIn = gameSettingsX01.getModeIn == ModeOutIn.Master;
 
     return Expanded(
       child: ElevatedButton(
@@ -49,8 +52,8 @@ class MasterInBtn extends StatelessWidget {
           child: Text(
             'Master in',
             style: TextStyle(
-              color:
-                  Utils.getTextColorForGameSettingsBtn(isMasterModeIn, context),
+              color: Utils.getTextColorForGameSettingsBtn(
+                  modeIn == ModeOutIn.Master, context),
             ),
           ),
         ),
@@ -70,7 +73,7 @@ class MasterInBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: isMasterModeIn
+          backgroundColor: modeIn == ModeOutIn.Master
               ? Utils.getPrimaryMaterialStateColorDarken(context)
               : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
@@ -82,12 +85,14 @@ class MasterInBtn extends StatelessWidget {
 class DoubleInBtn extends StatelessWidget {
   const DoubleInBtn({
     Key? key,
+    required this.modeIn,
   }) : super(key: key);
+
+  final ModeOutIn modeIn;
 
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isDoubleModeIn = gameSettingsX01.getModeIn == ModeOutIn.Double;
 
     return Expanded(
       child: Container(
@@ -112,7 +117,7 @@ class DoubleInBtn extends StatelessWidget {
               'Double in',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
-                    isDoubleModeIn, context),
+                    modeIn == ModeOutIn.Double, context),
               ),
             ),
           ),
@@ -123,7 +128,7 @@ class DoubleInBtn extends StatelessWidget {
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
-            backgroundColor: isDoubleModeIn
+            backgroundColor: modeIn == ModeOutIn.Double
                 ? Utils.getPrimaryMaterialStateColorDarken(context)
                 : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
@@ -136,12 +141,14 @@ class DoubleInBtn extends StatelessWidget {
 class SingleInBtn extends StatelessWidget {
   const SingleInBtn({
     Key? key,
+    required this.modeIn,
   }) : super(key: key);
+
+  final ModeOutIn modeIn;
 
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isSingleModeIn = gameSettingsX01.getModeIn == ModeOutIn.Single;
 
     return Expanded(
       child: ElevatedButton(
@@ -154,8 +161,8 @@ class SingleInBtn extends StatelessWidget {
           child: Text(
             'Single in',
             style: TextStyle(
-              color:
-                  Utils.getTextColorForGameSettingsBtn(isSingleModeIn, context),
+              color: Utils.getTextColorForGameSettingsBtn(
+                  modeIn == ModeOutIn.Single, context),
             ),
           ),
         ),
@@ -175,7 +182,7 @@ class SingleInBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: isSingleModeIn
+          backgroundColor: modeIn == ModeOutIn.Single
               ? Utils.getPrimaryMaterialStateColorDarken(context)
               : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),

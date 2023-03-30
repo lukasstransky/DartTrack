@@ -6,6 +6,7 @@ import 'package:dart_app/screens/game_modes/shared/game_settings/players_teams_l
 import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/rounds_or_points_input_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/start_game_btn.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/add_player_team_btn/add_player_btn.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/globals.dart';
 
@@ -25,13 +26,16 @@ class GameSettingsScoreTraining extends StatefulWidget {
 class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
   @override
   void initState() {
-    final settings = context.read<GameSettingsScoreTraining_P>();
+    final GameSettingsScoreTraining_P settings =
+        context.read<GameSettingsScoreTraining_P>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
-    settings.reset();
-    //todo add current logged in user
-    if (!settings.getPlayers.any((p) => p.getName == 'Strainski')) {
-      settings.getPlayers.add(new Player(name: 'Strainski'));
-    }
+    Future.delayed(Duration.zero, () {
+      if (!settings.getPlayers.any((p) => p.getName == username)) {
+        settings.getPlayers.add(Player(name: username));
+      }
+    });
 
     super.initState();
   }

@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class AdvancedSettingsX01 extends StatelessWidget {
-  double _getProperValueForTransformation(GameSettingsX01_P gameSettingsX01) {
-    int counter = _getCountOfPresentSwitchers(gameSettingsX01);
+  double _getProperValueForTransformation(SelectorModel selectorModel) {
+    int counter = _getCountOfPresentSwitchers(selectorModel);
     if (counter == 3) {
       return -3.5;
     } else if (counter == 2) {
@@ -17,36 +17,39 @@ class AdvancedSettingsX01 extends StatelessWidget {
     return 0;
   }
 
-  int _getCountOfPresentSwitchers(GameSettingsX01_P gameSettingsX01) {
+  int _getCountOfPresentSwitchers(SelectorModel selectorModel) {
     int counter = 0;
-    if (_checkoutCountingPresent(gameSettingsX01)) {
+    if (selectorModel.modeOut == ModeOutIn.Double) {
       counter++;
     }
-    if (_winByTwoLegsPresent(gameSettingsX01)) {
+    if (_winByTwoLegsPresent(selectorModel)) {
       counter++;
     }
-    if (!gameSettingsX01.getWinByTwoLegsDifference) {
+    if (!selectorModel.winByTwoLegsDifference) {
       counter++;
     }
     return counter;
   }
 
-  bool _checkoutCountingPresent(GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getModeOut == ModeOutIn.Double;
-  }
-
-  bool _winByTwoLegsPresent(GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getLegs > 1 &&
-        !gameSettingsX01.getSetsEnabled &&
-        !gameSettingsX01.getDrawMode;
+  bool _winByTwoLegsPresent(SelectorModel selectorModel) {
+    return selectorModel.legs > 1 &&
+        !selectorModel.setsEnabled &&
+        !selectorModel.drawMode;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01_P>(
-      builder: (_, gameSettingsX01, __) => Container(
+    return Selector<GameSettingsX01_P, SelectorModel>(
+      selector: (_, gameSettingsX01) => SelectorModel(
+        drawMode: gameSettingsX01.getDrawMode,
+        winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
+        legs: gameSettingsX01.getLegs,
+        modeOut: gameSettingsX01.getModeOut,
+        setsEnabled: gameSettingsX01.getSetsEnabled,
+      ),
+      builder: (_, selectorModel, __) => Container(
         transform: Matrix4.translationValues(
-            0.0, _getProperValueForTransformation(gameSettingsX01).h, 0.0),
+            0.0, _getProperValueForTransformation(selectorModel).h, 0.0),
         child: Padding(
           padding: EdgeInsets.only(left: 7.w),
           child: Align(
@@ -74,4 +77,20 @@ class AdvancedSettingsX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final ModeOutIn modeOut;
+  final bool winByTwoLegsDifference;
+  final int legs;
+  final bool setsEnabled;
+  final bool drawMode;
+
+  SelectorModel({
+    required this.modeOut,
+    required this.winByTwoLegsDifference,
+    required this.legs,
+    required this.setsEnabled,
+    required this.drawMode,
+  });
 }

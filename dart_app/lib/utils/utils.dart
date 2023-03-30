@@ -337,19 +337,6 @@ class Utils {
     return '';
   }
 
-  static double getHeightForWidget(GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        gameSettingsX01.getPlayers.length >= 4 &&
-        !gameSettingsX01.getSetsEnabled &&
-        gameSettingsX01.getLegs > 1 &&
-        !gameSettingsX01.getWinByTwoLegsDifference &&
-        !gameSettingsX01.getDrawMode &&
-        gameSettingsX01.getModeOut == ModeOutIn.Double) {
-      return WIDGET_HEIGHT_GAMESETTINGS_TEAM;
-    }
-    return WIDGET_HEIGHT_GAMESETTINGS;
-  }
-
   static dynamic getPlayersOrTeamStatsListStatsScreen(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
@@ -744,5 +731,17 @@ class Utils {
     return gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single
         ? gameX01.getCurrentPlayerGameStats()
         : gameX01.getCurrentTeamGameStats();
+  }
+
+  static bool highlightRoundedScore(
+      StatsFirestoreX01_P statisticsFirestore, int i, bool roundedScoresOdd) {
+    return statisticsFirestore.countOfGames > 0 &&
+        statisticsFirestore.countOfGames > 0 &&
+        (!roundedScoresOdd
+                ? statisticsFirestore.roundedScoresEven[i]
+                : statisticsFirestore.roundedScoresOdd[i]) ==
+            (!roundedScoresOdd
+                ? getMostOccurringValue(statisticsFirestore.roundedScoresEven)
+                : getMostOccurringValue(statisticsFirestore.roundedScoresOdd));
   }
 }

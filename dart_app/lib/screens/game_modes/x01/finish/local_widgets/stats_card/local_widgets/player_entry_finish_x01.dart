@@ -312,7 +312,7 @@ class _PlayerStatsState extends State<PlayerStats> {
             ],
           ),
           Text(
-            'Average: ${_playersOrTeamStatsList[widget.i].getAverage(gameSettingsX01)}',
+            'Average: ${_playersOrTeamStatsList[widget.i].getAverage()}',
             style: TextStyle(
               fontSize: 12.sp,
               color: Colors.white,

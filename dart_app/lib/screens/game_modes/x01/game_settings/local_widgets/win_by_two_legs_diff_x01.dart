@@ -219,11 +219,21 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01_P>(
-      builder: (_, gameSettingsX01, __) {
-        if (!gameSettingsX01.getSetsEnabled &&
-            gameSettingsX01.getLegs > 1 &&
-            !gameSettingsX01.getDrawMode) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
+    return Selector<GameSettingsX01_P, SelectorModel>(
+      selector: (_, gameSettingsX01) => SelectorModel(
+        drawMode: gameSettingsX01.getDrawMode,
+        legs: gameSettingsX01.getLegs,
+        maxExtraLegs: gameSettingsX01.getMaxExtraLegs,
+        setsEnabled: gameSettingsX01.getSetsEnabled,
+        suddenDeath: gameSettingsX01.getSuddenDeath,
+        winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
+      ),
+      builder: (_, selectorModel, __) {
+        if (!selectorModel.setsEnabled &&
+            selectorModel.legs > 1 &&
+            !selectorModel.drawMode) {
           return Container(
             margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
             width: WIDTH_GAMESETTINGS.w,
@@ -243,7 +253,7 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                       activeColor: Theme.of(context).colorScheme.secondary,
                       inactiveThumbColor:
                           Theme.of(context).colorScheme.secondary,
-                      value: gameSettingsX01.getWinByTwoLegsDifference,
+                      value: selectorModel.winByTwoLegsDifference,
                       onChanged: (value) {
                         if (value) {
                           _showDialogForSuddenDeath(context, gameSettingsX01);
@@ -254,15 +264,13 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (gameSettingsX01.getSuddenDeath)
+                if (selectorModel.suddenDeath)
                   Container(
                     transform: Matrix4.translationValues(0.0, -1.h, 0.0),
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      '(Sudden death leg after max. ${gameSettingsX01.getMaxExtraLegs} additional ' +
-                          (gameSettingsX01.getMaxExtraLegs == 1
-                              ? 'leg)'
-                              : 'legs)'),
+                      '(Sudden death leg after max. ${selectorModel.maxExtraLegs} additional ' +
+                          (selectorModel.maxExtraLegs == 1 ? 'leg)' : 'legs)'),
                       style: TextStyle(
                         fontSize: 8.sp,
                         color: Colors.white70,
@@ -277,4 +285,22 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
       },
     );
   }
+}
+
+class SelectorModel {
+  final bool setsEnabled;
+  final int legs;
+  final bool drawMode;
+  final bool winByTwoLegsDifference;
+  final bool suddenDeath;
+  final int maxExtraLegs;
+
+  SelectorModel({
+    required this.setsEnabled,
+    required this.legs,
+    required this.drawMode,
+    required this.winByTwoLegsDifference,
+    required this.suddenDeath,
+    required this.maxExtraLegs,
+  });
 }

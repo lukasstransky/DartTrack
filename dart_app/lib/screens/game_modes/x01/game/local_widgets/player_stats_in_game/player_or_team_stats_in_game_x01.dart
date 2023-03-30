@@ -172,10 +172,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
                   SetsLegsScoreX01(
                       currPlayerOrTeamGameStatsX01:
                           this.currPlayerOrTeamGameStatsX01),
-                  Consumer<GameSettingsX01_P>(
-                    builder: (_, gameSettings, __) => GameStatsX01(
-                        currentStats: this.currPlayerOrTeamGameStatsX01),
-                  ),
+                  GameStatsX01(currentStats: this.currPlayerOrTeamGameStatsX01),
                 ],
               ),
             ),

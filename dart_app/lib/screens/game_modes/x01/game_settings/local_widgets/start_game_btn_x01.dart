@@ -241,13 +241,13 @@ class StartGameBtnX01 extends StatelessWidget {
     return true;
   }
 
-  bool _activateStartGameBtn(GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getPlayers.length < 2) {
+  bool _activateStartGameBtn(SelectorModel selectorModel) {
+    if (selectorModel.players.length < 2) {
       return false;
-    } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      if (_anyEmptyTeam(gameSettingsX01)) {
+    } else if (selectorModel.singleOrTeam == SingleOrTeamEnum.Team) {
+      if (_anyEmptyTeam(selectorModel.teams)) {
         return false;
-      } else if (gameSettingsX01.getTeams.length < 2) {
+      } else if (selectorModel.teams.length < 2) {
         return false;
       }
     }
@@ -255,8 +255,8 @@ class StartGameBtnX01 extends StatelessWidget {
     return true;
   }
 
-  bool _anyEmptyTeam(GameSettingsX01_P gameSettingsX01) {
-    for (Team team in gameSettingsX01.getTeams) {
+  bool _anyEmptyTeam(List<Team> teams) {
+    for (Team team in teams) {
       if (team.getPlayers.isEmpty) {
         return true;
       }
@@ -288,20 +288,25 @@ class StartGameBtnX01 extends StatelessWidget {
   Widget build(BuildContext context) {
     final String currentUsername =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Expanded(
       child: Align(
         alignment: Alignment.bottomCenter,
-        child: Consumer<GameSettingsX01_P>(builder: (_, gameSettingsX01, __) {
-          return Container(
-            width: 60.w,
-            height: 5.h,
-            child: TextButton(
+        child: Container(
+          width: 60.w,
+          height: 5.h,
+          child: Selector<GameSettingsX01_P, SelectorModel>(
+            selector: (_, gameSettingsX01) => SelectorModel(
+              players: gameSettingsX01.getPlayers,
+              singleOrTeam: gameSettingsX01.getSingleOrTeam,
+              teams: gameSettingsX01.getTeams,
+            ),
+            builder: (_, selectorModel, __) => TextButton(
               child: Text(
                 'Start',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
               style: ButtonStyle(
                 splashFactory: NoSplash.splashFactory,
@@ -312,13 +317,13 @@ class StartGameBtnX01 extends StatelessWidget {
                     borderRadius: BorderRadius.circular(18.0),
                   ),
                 ),
-                backgroundColor: _activateStartGameBtn(gameSettingsX01)
+                backgroundColor: _activateStartGameBtn(selectorModel)
                     ? Utils.getPrimaryMaterialStateColorDarken(context)
                     : Utils.getColor(Utils.darken(
                         Theme.of(context).colorScheme.primary, 60)),
               ),
               onPressed: () {
-                if (_activateStartGameBtn(gameSettingsX01)) {
+                if (_activateStartGameBtn(selectorModel)) {
                   if (!gameSettingsX01.isCurrentUserInPlayers(context) &&
                       currentUsername != 'Guest') {
                     _showDialogNoUserInPlayerWarning(context, gameSettingsX01);
@@ -327,14 +332,24 @@ class StartGameBtnX01 extends StatelessWidget {
                   }
                 } else {
                   Fluttertoast.showToast(
-                      msg: 'At least two players are required!',
-                      toastLength: Toast.LENGTH_LONG);
+                    msg: 'At least two players are required!',
+                    toastLength: Toast.LENGTH_LONG,
+                  );
                 }
               },
             ),
-          );
-        }),
+          ),
+        ),
       ),
     );
   }
+}
+
+class SelectorModel {
+  final List<Player> players;
+  final SingleOrTeamEnum singleOrTeam;
+  final List<Team> teams;
+
+  SelectorModel(
+      {required this.players, required this.singleOrTeam, required this.teams});
 }

@@ -16,28 +16,34 @@ class PointsBtnX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
     return Expanded(
-      child: Consumer<GameSettingsX01_P>(
-        builder: (_, gameSettingsX01, __) => Container(
-          height: Utils.getHeightForWidget(gameSettingsX01).h,
-          decoration: points != 301
-              ? BoxDecoration(
-                  border: Border(
-                    left: points == 701
-                        ? BorderSide(
-                            color: Utils.getPrimaryColorDarken(context),
-                            width: GAME_SETTINGS_BTN_BORDER_WITH.w)
-                        : BorderSide.none,
-                    top: BorderSide(
-                        color: Utils.getPrimaryColorDarken(context),
-                        width: GAME_SETTINGS_BTN_BORDER_WITH.w),
-                    bottom: BorderSide(
-                        color: Utils.getPrimaryColorDarken(context),
-                        width: GAME_SETTINGS_BTN_BORDER_WITH.w),
-                  ),
-                )
-              : null,
-          child: ElevatedButton(
+      child: Container(
+        height: WIDGET_HEIGHT_GAMESETTINGS.h,
+        decoration: points != 301
+            ? BoxDecoration(
+                border: Border(
+                  left: points == 701
+                      ? BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GAME_SETTINGS_BTN_BORDER_WITH.w)
+                      : BorderSide.none,
+                  top: BorderSide(
+                      color: Utils.getPrimaryColorDarken(context),
+                      width: GAME_SETTINGS_BTN_BORDER_WITH.w),
+                  bottom: BorderSide(
+                      color: Utils.getPrimaryColorDarken(context),
+                      width: GAME_SETTINGS_BTN_BORDER_WITH.w),
+                ),
+              )
+            : null,
+        child: Selector<GameSettingsX01_P, SelectorModel>(
+          selector: (_, gameSettingsX01) => SelectorModel(
+            points: gameSettingsX01.getPoints,
+            customPoints: gameSettingsX01.getCustomPoints,
+          ),
+          builder: (_, selectorModel, __) => ElevatedButton(
             onPressed: () => {
               gameSettingsX01.setPoints = points,
               gameSettingsX01.notify(),
@@ -48,8 +54,8 @@ class PointsBtnX01 extends StatelessWidget {
                 points.toString(),
                 style: TextStyle(
                   color: Utils.getTextColorForGameSettingsBtn(
-                      gameSettingsX01.getPoints == points &&
-                          gameSettingsX01.getCustomPoints == -1,
+                      selectorModel.points == points &&
+                          selectorModel.customPoints == -1,
                       context),
                 ),
               ),
@@ -74,8 +80,8 @@ class PointsBtnX01 extends StatelessWidget {
                       : BorderRadius.zero,
                 ),
               ),
-              backgroundColor: gameSettingsX01.getPoints == points &&
-                      gameSettingsX01.getCustomPoints == -1
+              backgroundColor: selectorModel.points == points &&
+                      selectorModel.customPoints == -1
                   ? Utils.getPrimaryMaterialStateColorDarken(context)
                   : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),
@@ -84,4 +90,14 @@ class PointsBtnX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final int points;
+  final int customPoints;
+
+  SelectorModel({
+    required this.points,
+    required this.customPoints,
+  });
 }

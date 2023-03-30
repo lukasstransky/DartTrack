@@ -149,9 +149,14 @@ class SubmitPointsBtnX01 extends StatelessWidget {
             : MaterialStateProperty.all(
                 Utils.darken(Colors.green, 25),
               );
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    return Consumer2<GameX01_P, GameSettingsX01_P>(
-      builder: (_, gameX01, gameSettingsX01, __) => Container(
+    return Selector<GameX01_P, SelectorModel>(
+      selector: (_, gameX01_P) => SelectorModel(
+        currentPointsSelected: gameX01_P.getCurrentPointsSelected,
+        currentThreeDarts: gameX01_P.getCurrentThreeDarts,
+      ),
+      builder: (_, selectorModel, __) => Container(
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -186,4 +191,14 @@ class SubmitPointsBtnX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final String currentPointsSelected;
+  final List<String> currentThreeDarts;
+
+  SelectorModel({
+    required this.currentPointsSelected,
+    required this.currentThreeDarts,
+  });
 }

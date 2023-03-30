@@ -23,7 +23,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
   }
 
   _initTextController() {
-    final gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final String text = gameSettingsX01.getCustomPoints != -1
         ? gameSettingsX01.getCustomPoints.toString()
         : '';
@@ -47,8 +47,8 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
             ),
             content: Container(
               margin: EdgeInsets.only(
-                left: 10.w,
-                right: 10.w,
+                left: 5.w,
+                right: 5.w,
               ),
               child: TextFormField(
                 controller: customPointsController,
@@ -159,20 +159,21 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
 
   @override
   Widget build(BuildContext context) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
     return Expanded(
-      child: Consumer<GameSettingsX01_P>(
-        builder: (_, gameSettingsX01, __) => Container(
-          height: Utils.getHeightForWidget(gameSettingsX01).h,
-          child: ElevatedButton(
+      child: Container(
+        height: WIDGET_HEIGHT_GAMESETTINGS.h,
+        child: Selector<GameSettingsX01_P, int>(
+          selector: (_, gameSettingsX01) => gameSettingsX01.getCustomPoints,
+          builder: (_, customPoints, __) => ElevatedButton(
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                gameSettingsX01.getCustomPoints == -1
-                    ? 'Custom'
-                    : gameSettingsX01.getCustomPoints.toString(),
+                customPoints == -1 ? 'Custom' : customPoints.toString(),
                 style: TextStyle(
                   color: Utils.getTextColorForGameSettingsBtn(
-                      gameSettingsX01.getCustomPoints != -1, context),
+                      customPoints != -1, context),
                 ),
               ),
             ),
@@ -193,7 +194,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   ),
                 ),
               ),
-              backgroundColor: gameSettingsX01.getCustomPoints != -1
+              backgroundColor: customPoints != -1
                   ? Utils.getPrimaryMaterialStateColorDarken(context)
                   : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),

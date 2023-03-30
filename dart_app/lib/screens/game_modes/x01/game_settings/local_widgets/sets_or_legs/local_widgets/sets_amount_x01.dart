@@ -5,38 +5,43 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class SetsAmountX01 extends StatelessWidget {
-  _subtractBtnPressed(Tuple2 tuple, GameSettingsX01_P gameSettingsX01) {
-    if (tuple.item2 <= MIN_SETS) return;
-
-    //when draw mode is enabled -> prevent from sets being 0
-    if (gameSettingsX01.getDrawMode && tuple.item2 == (MIN_SETS + 1)) {
+  _subtractBtnPressed(
+      SelectorModel selectorModel, GameSettingsX01_P gameSettingsX01) {
+    if (selectorModel.sets <= MIN_SETS) {
       return;
     }
 
-    if (tuple.item1 == BestOfOrFirstToEnum.BestOf) {
-      gameSettingsX01.setSets = tuple.item2 - 2;
+    //when draw mode is enabled -> prevent from sets being 0
+    if (gameSettingsX01.getDrawMode && selectorModel.sets == (MIN_SETS + 1)) {
+      return;
+    }
+
+    if (selectorModel.mode == BestOfOrFirstToEnum.BestOf) {
+      gameSettingsX01.setSets = selectorModel.sets - 2;
     } else {
-      gameSettingsX01.setSets = tuple.item2 - 1;
+      gameSettingsX01.setSets = selectorModel.sets - 1;
     }
 
     gameSettingsX01.notify();
   }
 
-  _addBtnPressed(Tuple2 tuple, GameSettingsX01_P gameSettingsX01) {
-    if (tuple.item2 >= MAX_SETS) return;
-
-    //when draw mode is enabled -> prevent from being 1 more than max sets
-    if (gameSettingsX01.getDrawMode && tuple.item2 == (MAX_SETS - 1)) {
+  _addBtnPressed(
+      SelectorModel selectorModel, GameSettingsX01_P gameSettingsX01) {
+    if (selectorModel.sets >= MAX_SETS) {
       return;
     }
 
-    if (tuple.item1 == BestOfOrFirstToEnum.BestOf) {
-      gameSettingsX01.setSets = tuple.item2 + 2;
+    //when draw mode is enabled -> prevent from being 1 more than max sets
+    if (gameSettingsX01.getDrawMode && selectorModel.sets == (MAX_SETS - 1)) {
+      return;
+    }
+
+    if (selectorModel.mode == BestOfOrFirstToEnum.BestOf) {
+      gameSettingsX01.setSets = selectorModel.sets + 2;
     } else {
-      gameSettingsX01.setSets = tuple.item2 + 1;
+      gameSettingsX01.setSets = selectorModel.sets + 1;
     }
 
     gameSettingsX01.notify();
@@ -67,21 +72,24 @@ class SetsAmountX01 extends StatelessWidget {
                   color: Utils.getTextColorForGameSettingsPage()),
             ),
           ),
-          Selector<GameSettingsX01_P, Tuple2<BestOfOrFirstToEnum, int>>(
-            selector: (_, gameSettingsX01) =>
-                Tuple2(gameSettingsX01.getMode, gameSettingsX01.getSets),
-            builder: (_, tuple, __) => Row(
+          Selector<GameSettingsX01_P, SelectorModel>(
+            selector: (_, gameSettingsX01) => SelectorModel(
+              mode: gameSettingsX01.getMode,
+              sets: gameSettingsX01.getSets,
+            ),
+            builder: (_, selectorModel, __) => Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onPressed: () => _subtractBtnPressed(tuple, gameSettingsX01),
+                  onPressed: () =>
+                      _subtractBtnPressed(selectorModel, gameSettingsX01),
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.remove,
                       color: _shouldShowSubtractBtnGrey(
-                              tuple.item2, gameSettingsX01)
+                              selectorModel.sets, gameSettingsX01)
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.secondary),
                 ),
@@ -89,7 +97,7 @@ class SetsAmountX01 extends StatelessWidget {
                   width: 10.w,
                   alignment: Alignment.center,
                   child: Text(
-                    tuple.item2.toString(),
+                    selectorModel.sets.toString(),
                     style: TextStyle(
                         fontSize: 18.sp,
                         color: Utils.getTextColorForGameSettingsPage()),
@@ -98,11 +106,13 @@ class SetsAmountX01 extends StatelessWidget {
                 IconButton(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  onPressed: () => _addBtnPressed(tuple, gameSettingsX01),
+                  onPressed: () =>
+                      _addBtnPressed(selectorModel, gameSettingsX01),
                   padding: EdgeInsets.zero,
                   constraints: BoxConstraints(),
                   icon: Icon(Icons.add,
-                      color: _shouldShowAddBtnGrey(tuple.item2, gameSettingsX01)
+                      color: _shouldShowAddBtnGrey(
+                              selectorModel.sets, gameSettingsX01)
                           ? Theme.of(context).colorScheme.primary
                           : Theme.of(context).colorScheme.secondary),
                 ),
@@ -113,4 +123,14 @@ class SetsAmountX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final BestOfOrFirstToEnum mode;
+  final int sets;
+
+  SelectorModel({
+    required this.mode,
+    required this.sets,
+  });
 }

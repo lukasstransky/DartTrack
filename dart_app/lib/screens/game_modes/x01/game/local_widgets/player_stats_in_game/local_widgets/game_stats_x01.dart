@@ -64,7 +64,7 @@ class GameStatsX01 extends StatelessWidget {
     if (_isCurrentPlayerBot() &&
         (currentStats!.getAllScoresPerLeg.containsKey(setLegString) ||
             isCurrentPlayerBeginnerOfLeg)) {
-      g_average = currentStats!.getAverage(gameSettingsX01);
+      g_average = currentStats!.getAverage();
       g_last_throw = _getLastThrow(currentStats!.getAllScores);
       g_thrown_darts = currentStats!.getCurrentThrownDartsInLeg == 0
           ? '-'
@@ -73,59 +73,78 @@ class GameStatsX01 extends StatelessWidget {
 
     return Padding(
       padding: EdgeInsets.only(top: 0.5.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (gameSettingsX01.getShowAverage)
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'Average: ${_isCurrentPlayerBot() ? g_average : currentStats!.getAverage(gameSettingsX01)}',
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: Utils.getTextColorDarken(context),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          if (gameSettingsX01.getShowLastThrow)
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'Last throw: ${_isCurrentPlayerBot() ? g_last_throw : _getLastThrow(currentStats!.getAllScores)}',
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: Utils.getTextColorDarken(context),
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          if (gameSettingsX01.getShowThrownDartsPerLeg)
-            currentStats!.getCurrentThrownDartsInLeg != 0
-                ? FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      'Thrown darts: ${_isCurrentPlayerBot() ? g_thrown_darts : currentStats!.getCurrentThrownDartsInLeg.toString()}',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: Utils.getTextColorDarken(context),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  )
-                : FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      'Thrown darts: ${_isCurrentPlayerBot() ? g_thrown_darts : '-'}',
-                      style: TextStyle(
-                        fontSize: 13.sp,
-                        color: Utils.getTextColorDarken(context),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          showAverage: gameSettingsX01.getShowAverage,
+          showLastThrow: gameSettingsX01.getShowLastThrow,
+          showThrownDartsPerLeg: gameSettingsX01.getShowThrownDartsPerLeg,
+        ),
+        builder: (_, selectorModel, __) => Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (selectorModel.showAverage)
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'Average: ${_isCurrentPlayerBot() ? g_average : currentStats!.getAverage()}',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
                   ),
-        ],
+                ),
+              ),
+            if (selectorModel.showLastThrow)
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  'Last throw: ${_isCurrentPlayerBot() ? g_last_throw : _getLastThrow(currentStats!.getAllScores)}',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            if (selectorModel.showThrownDartsPerLeg)
+              currentStats!.getCurrentThrownDartsInLeg != 0
+                  ? FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'Thrown darts: ${_isCurrentPlayerBot() ? g_thrown_darts : currentStats!.getCurrentThrownDartsInLeg.toString()}',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: Utils.getTextColorDarken(context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        'Thrown darts: ${_isCurrentPlayerBot() ? g_thrown_darts : '-'}',
+                        style: TextStyle(
+                          fontSize: 13.sp,
+                          color: Utils.getTextColorDarken(context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+          ],
+        ),
       ),
     );
   }
+}
+
+class SelectorModel {
+  final bool showAverage;
+  final bool showLastThrow;
+  final bool showThrownDartsPerLeg;
+
+  SelectorModel({
+    required this.showAverage,
+    required this.showLastThrow,
+    required this.showThrownDartsPerLeg,
+  });
 }

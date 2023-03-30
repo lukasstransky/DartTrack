@@ -51,7 +51,7 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
 
     Future.delayed(Duration.zero, () {
       if (!gameSettingsX01.getPlayers.any((p) => p.getName == username)) {
-        gameSettingsX01.addPlayer(new Player(name: username));
+        gameSettingsX01.addPlayer(Player(name: username));
       }
     });
   }

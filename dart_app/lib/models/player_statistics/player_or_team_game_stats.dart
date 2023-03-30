@@ -76,7 +76,7 @@ class PlayerOrTeamGameStats {
       if (stats.getTeam != null) 'team': stats.getTeam.toMap(stats.getTeam),
       if (settings.getSetsEnabled) 'setsWon': stats.getSetsWon,
       if (stats.getAllScores.isNotEmpty)
-        'average': double.parse(stats.getAverage(settings)),
+        'average': double.parse(stats.getAverage()),
       if (stats.getAllScores.isNotEmpty)
         'firstNineAvgPoints': stats.getFirstNineAvgPoints,
       if (stats.getFirstNineAvgCount > 0)

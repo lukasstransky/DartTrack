@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
-import 'package:dart_app/screens/statistics/local_widgets/more_stats.dart';
+import 'package:dart_app/screens/statistics/local_widgets/more_stats/more_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/other_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/stats_per_game_btns.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -87,9 +87,11 @@ class _StatisticsState extends State<Statistics> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-      body: Consumer<StatsFirestoreX01_P>(
-        builder: (_, statisticsFirestore, __) =>
-            statisticsFirestore.avgBestWorstStatsLoaded || username == 'Guest'
+      body: Selector<StatsFirestoreX01_P, bool>(
+        selector: (_, statisticsFirestore) =>
+            statisticsFirestore.avgBestWorstStatsLoaded,
+        builder: (_, avgBestWorstStatsLoaded, __) =>
+            avgBestWorstStatsLoaded || username == 'Guest'
                 ? SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: Column(

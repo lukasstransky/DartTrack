@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -22,7 +23,6 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   @override
   initState() {
     _getOpenGames();
-    //todo move _getDefaultSettingsX01
     _getDefaultSettingsX01();
     super.initState();
   }
@@ -32,8 +32,10 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   }
 
   _getDefaultSettingsX01() async {
-    context.read<DefaultSettingsX01_P>().resetValues(
-        context.read<AuthService>().getUsernameFromSharedPreferences());
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
+    context.read<DefaultSettingsX01_P>().resetValues(username);
     await context
         .read<FirestoreServiceDefaultSettings>()
         .getDefaultSettingsX01(context);
@@ -285,51 +287,51 @@ class OpenGames extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<OpenGamesFirestore>(
-        builder: (_, openGamesFirestore, __) => Container(
-              width: 70.w,
-              padding: EdgeInsets.only(right: 3.w),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    'Open games: ',
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      color: Colors.white,
-                    ),
-                  ),
-                  ElevatedButton(
-                    child: Text(
-                      openGamesFirestore.openGames.length.toString(),
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontSize: 14.sp,
-                      ),
-                    ),
-                    onPressed: () =>
-                        Navigator.of(context).pushNamed('/openGames'),
-                    style: ButtonStyle(
-                      splashFactory: NoSplash.splashFactory,
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      backgroundColor: MaterialStateProperty.all(
-                        Utils.darken(Theme.of(context).colorScheme.primary,
-                            GENERAL_DARKEN),
-                      ),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+    return Container(
+      width: 70.w,
+      padding: EdgeInsets.only(right: 3.w),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Text(
+            'Open games: ',
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.white,
+            ),
+          ),
+          ElevatedButton(
+            child: Selector<OpenGamesFirestore, List<Game_P>>(
+              selector: (_, openGamesFirestore) => openGamesFirestore.openGames,
+              shouldRebuild: (previous, next) => true,
+              builder: (_, openGames, __) => Text(
+                openGames.length.toString(),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 14.sp,
+                ),
               ),
-            ));
+            ),
+            onPressed: () => Navigator.of(context).pushNamed('/openGames'),
+            style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              backgroundColor: MaterialStateProperty.all(
+                Utils.darken(
+                    Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
+              ),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

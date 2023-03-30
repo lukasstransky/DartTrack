@@ -9,7 +9,6 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class TeamsListX01 extends StatefulWidget {
   @override
@@ -37,18 +36,20 @@ class _TeamsListX01State extends State<TeamsListX01> {
   Widget build(BuildContext context) {
     final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    return Selector<GameSettingsX01_P, Tuple2<List<Team>, List<Player>>>(
-      selector: (_, gameSettingsX01) =>
-          Tuple2(gameSettingsX01.getTeams, gameSettingsX01.getPlayers),
+    return Selector<GameSettingsX01_P, SelectorModel>(
+      selector: (_, gameSettingsX01) => SelectorModel(
+        teams: gameSettingsX01.getTeams,
+        players: gameSettingsX01.getPlayers,
+      ),
       shouldRebuild: (previous, next) => true,
-      builder: (_, tuple, __) => ConstrainedBox(
+      builder: (_, selectorModel, __) => ConstrainedBox(
         constraints: BoxConstraints(maxHeight: 20.h),
         child: ListView.builder(
           shrinkWrap: true,
           controller: newScrollControllerTeams(),
-          itemCount: tuple.item1.length,
+          itemCount: selectorModel.teams.length,
           itemBuilder: (BuildContext context, int index) {
-            final Team team = tuple.item1[index];
+            final Team team = selectorModel.teams[index];
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -183,4 +184,14 @@ class _TeamsListX01State extends State<TeamsListX01> {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final List<Team> teams;
+  final List<Player> players;
+
+  SelectorModel({
+    required this.teams,
+    required this.players,
+  });
 }

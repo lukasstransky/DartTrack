@@ -5,7 +5,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class ModeSingleDoubleTraining extends StatelessWidget {
   const ModeSingleDoubleTraining({Key? key}) : super(key: key);
@@ -27,25 +26,28 @@ class ModeSingleDoubleTraining extends StatelessWidget {
         child: Container(
           width: WIDTH_GAMESETTINGS.w,
           height: WIDGET_HEIGHT_GAMESETTINGS.h,
-          child: Selector<GameSettingsSingleDoubleTraining_P,
-              Tuple2<ModesSingleDoubleTraining, bool>>(
-            selector: (_, settings) =>
-                new Tuple2(settings.getMode, settings.getIsTargetNumberEnabled),
-            builder: (_, tuple, __) => Row(
+          child: Selector<GameSettingsSingleDoubleTraining_P, SelectorModel>(
+            selector: (_, gameSettingsSingleDoubleTraining) => SelectorModel(
+              mode: gameSettingsSingleDoubleTraining.getMode,
+              isTargetNumberEnabled:
+                  gameSettingsSingleDoubleTraining.getIsTargetNumberEnabled,
+            ),
+            builder: (_, selectorModel, __) => Row(
               children: [
                 AscendingBtn(
                   isAscendingMode:
-                      tuple.item1 == ModesSingleDoubleTraining.Ascending,
-                  isTargetNumberEnabled: tuple.item2,
+                      selectorModel.mode == ModesSingleDoubleTraining.Ascending,
+                  isTargetNumberEnabled: selectorModel.isTargetNumberEnabled,
                 ),
                 DescendingBtn(
-                  isDescendingMode:
-                      tuple.item1 == ModesSingleDoubleTraining.Descending,
-                  isTargetNumberEnabled: tuple.item2,
+                  isDescendingMode: selectorModel.mode ==
+                      ModesSingleDoubleTraining.Descending,
+                  isTargetNumberEnabled: selectorModel.isTargetNumberEnabled,
                 ),
                 RandomBtn(
-                  isRandomBtn: tuple.item1 == ModesSingleDoubleTraining.Random,
-                  isTargetNumberEnabled: tuple.item2,
+                  isRandomBtn:
+                      selectorModel.mode == ModesSingleDoubleTraining.Random,
+                  isTargetNumberEnabled: selectorModel.isTargetNumberEnabled,
                 ),
               ],
             ),
@@ -215,4 +217,14 @@ class AscendingBtn extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final ModesSingleDoubleTraining mode;
+  final bool isTargetNumberEnabled;
+
+  SelectorModel({
+    required this.mode,
+    required this.isTargetNumberEnabled,
+  });
 }

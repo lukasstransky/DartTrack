@@ -66,7 +66,7 @@ class Bot extends Player {
     if (currentPoints <= scoreRangeUpperLimit &&
         !BOGEY_NUMBERS.contains(currentPoints) &&
         currentPoints <= 170) {
-      final String avgString = stats.getAverage(gameX01.getGameSettings);
+      final String avgString = stats.getAverage();
       double avg = 0.0;
       if (avgString != '-') {
         avg = double.parse(avgString);
@@ -169,8 +169,7 @@ class Bot extends Player {
       } else if (!shouldGenerateRandomScores) {
         // generate scores within specific range
         for (int i = 0; i < AMOUNT_OF_GENERATED_SCORES; i++) {
-          final double avg =
-              double.parse(stats.getAverage(gameX01.getGameSettings));
+          final double avg = double.parse(stats.getAverage());
 
           late int nextScore;
           if (avg <= preDefinedAverage) {

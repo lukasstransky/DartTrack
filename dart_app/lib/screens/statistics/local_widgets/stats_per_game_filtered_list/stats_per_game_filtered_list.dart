@@ -130,10 +130,14 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
 
   @override
   Widget build(BuildContext context) {
+    final StatsFirestoreX01_P statisticsFirestore =
+        context.read<StatsFirestoreX01_P>();
+
     return Scaffold(
       appBar: CustomAppBar(title: getAppBarTitle()),
-      body: Consumer<StatsFirestoreX01_P>(
-        builder: (_, statisticsFirestore, __) => SingleChildScrollView(
+      body: Selector<StatsFirestoreX01_P, List<Game_P>>(
+        selector: (_, statsFirestoreX01) => statsFirestoreX01.filteredGames,
+        builder: (_, filteredGames, ___) => SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Center(
             child: Container(
@@ -200,7 +204,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                       ),
                     ],
                   ] else ...[
-                    for (Game_P game in statisticsFirestore.filteredGames) ...[
+                    for (Game_P game in filteredGames) ...[
                       StatsCardFiltered(
                         game: GameX01_P.createGame(game),
                         orderField: _orderField,

@@ -1,5 +1,4 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -33,7 +32,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
       if (playerStats.getPlayer.getName == username) {
         switch (widget.orderField) {
           case 'average':
-            return playerStats.getAverage(context.read<GameSettingsX01_P>());
+            return playerStats.getAverage();
           case 'firstNineAvg':
             return playerStats.getFirstNinveAvg();
           case 'checkoutInPercent':

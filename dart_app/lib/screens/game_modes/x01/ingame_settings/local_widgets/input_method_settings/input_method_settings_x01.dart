@@ -9,7 +9,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class InputMethodSettingsX01 extends StatelessWidget {
   const InputMethodSettingsX01({Key? key}) : super(key: key);
@@ -32,12 +31,15 @@ class InputMethodSettingsX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<GameSettingsX01_P, Tuple2<InputMethod, bool>>(
-      selector: (_, gameSettingsX01) => new Tuple2(
-          gameSettingsX01.getInputMethod,
-          gameSettingsX01.getShowMostScoredPoints),
-      builder: (_, t, __) => Container(
-        height: _calcCardHeight(context, t.item1, t.item2).h,
+    return Selector<GameSettingsX01_P, SelectorModel>(
+      selector: (_, gameSettingsX01) => SelectorModel(
+        inputMethod: gameSettingsX01.getInputMethod,
+        showMostScoredPoints: gameSettingsX01.getShowMostScoredPoints,
+      ),
+      builder: (_, selectorModel, __) => Container(
+        height: _calcCardHeight(context, selectorModel.inputMethod,
+                selectorModel.showMostScoredPoints)
+            .h,
         padding: EdgeInsets.only(
           top: 2.0.h,
           left: 0.5.h,
@@ -74,4 +76,14 @@ class InputMethodSettingsX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final InputMethod inputMethod;
+  final bool showMostScoredPoints;
+
+  SelectorModel({
+    required this.inputMethod,
+    required this.showMostScoredPoints,
+  });
 }

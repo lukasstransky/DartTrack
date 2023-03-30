@@ -14,9 +14,12 @@ class AvgBestWorstStats extends StatelessWidget {
   Widget build(BuildContext context) {
     final Color color = Utils.getTextColorDarken(context);
     final _padding = EdgeInsets.only(top: 1.h, left: 2.5.w, right: 2.5.w);
+    final StatsFirestoreX01_P statisticsFirestore =
+        context.read<StatsFirestoreX01_P>();
 
-    return Consumer<StatsFirestoreX01_P>(
-      builder: (_, statisticsFirestore, __) => Column(
+    return Selector<StatsFirestoreX01_P, FilterValue>(
+      selector: (_, statsFirestoreX01) => statsFirestoreX01.currentFilterValue,
+      builder: (_, __, ___) => Column(
         children: [
           Padding(
             padding: EdgeInsets.only(top: 2.h, left: 2.5.w, right: 2.5.w),

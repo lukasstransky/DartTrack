@@ -9,6 +9,7 @@ import 'package:dart_app/screens/game_modes/single_double_training/game_settings
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/mode_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/point_distribution_info_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/target_number_sd_t.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/globals.dart';
 
@@ -31,13 +32,18 @@ class _GameSettingsSingleDoubleTrainingState
 
   @override
   void initState() {
-    final settings = context.read<GameSettingsSingleDoubleTraining_P>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final GameSettingsSingleDoubleTraining_P settings =
+        context.read<GameSettingsSingleDoubleTraining_P>();
     settings.reset();
 
-    //todo add current logged in user
-    if (!settings.getPlayers.any((p) => p.getName == 'Strainski')) {
-      settings.getPlayers.add(new Player(name: 'Strainski'));
-    }
+    Future.delayed(Duration.zero, () {
+      if (!settings.getPlayers.any((p) => p.getName == username)) {
+        settings.getPlayers.add(Player(name: username));
+      }
+    });
+
     super.initState();
   }
 

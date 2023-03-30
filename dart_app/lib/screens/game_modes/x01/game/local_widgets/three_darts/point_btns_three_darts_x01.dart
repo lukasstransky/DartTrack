@@ -1,7 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/shared/select_input_method/select_input_method.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/eleven_to_fifteen_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/one_to_five_x01.dart';
@@ -10,7 +9,6 @@ import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/l
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/six_to_ten_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/sixteen_to_twenty_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/thrown_darts_x01.dart';
-import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +24,12 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
       return SizedBox.shrink();
     }
 
-    return Consumer<GameX01_P>(
-      builder: (_, gameX01, __) => Expanded(
+    return Selector<GameX01_P, SelectorModel>(
+      selector: (_, gameX01) => SelectorModel(
+        currentThreeDarts: gameX01.getCurrentThreeDarts,
+        currentPointType: gameX01.getCurrentPointType,
+      ),
+      builder: (_, selectorModel, __) => Expanded(
         child: Column(
           children: [
             Container(
@@ -54,4 +56,14 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final List<String> currentThreeDarts;
+  final PointType currentPointType;
+
+  SelectorModel({
+    required this.currentThreeDarts,
+    required this.currentPointType,
+  });
 }

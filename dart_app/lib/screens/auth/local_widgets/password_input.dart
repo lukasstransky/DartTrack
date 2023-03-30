@@ -39,12 +39,6 @@ class _PasswordInputState extends State<PasswordInput> {
             if (value!.isEmpty) {
               return ('Password is required!');
             }
-            //todo eventually enable?
-            /*if (!RegExp(
-                              "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}\$") //Minimum eight characters, at least one letter and one number
-                          .hasMatch(value)) {
-                        return ("Please enter a valid password!");
-                      }*/
             return null;
           },
           style: TextStyle(color: Colors.white),

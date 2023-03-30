@@ -39,15 +39,22 @@ class BestOfOrFirstToX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01_P>(
-        builder: (_, gameSettingsX01, __) => Container(
-          width: WIDTH_GAMESETTINGS.w,
-          height: Utils.getHeightForWidget(gameSettingsX01).h,
-          margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-          child: Row(
+      child: Container(
+        width: WIDTH_GAMESETTINGS.w,
+        height: WIDGET_HEIGHT_GAMESETTINGS.h,
+        margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
+        child: Selector<GameSettingsX01_P, BestOfOrFirstToEnum>(
+          selector: (_, gameSettings) => gameSettings.getMode,
+          builder: (_, mode, __) => Row(
             children: [
-              BestOfBtn(switchBestOfOrFirstTo: _switchBestOfOrFirstTo),
-              FirstToBtn(switchBestOfOrFirstTo: _switchBestOfOrFirstTo)
+              BestOfBtn(
+                switchBestOfOrFirstTo: _switchBestOfOrFirstTo,
+                mode: mode,
+              ),
+              FirstToBtn(
+                switchBestOfOrFirstTo: _switchBestOfOrFirstTo,
+                mode: mode,
+              )
             ],
           ),
         ),
@@ -57,21 +64,23 @@ class BestOfOrFirstToX01 extends StatelessWidget {
 }
 
 class BestOfBtn extends StatelessWidget {
-  const BestOfBtn({Key? key, required Function this.switchBestOfOrFirstTo})
-      : super(key: key);
+  const BestOfBtn({
+    Key? key,
+    required Function this.switchBestOfOrFirstTo,
+    required BestOfOrFirstToEnum this.mode,
+  }) : super(key: key);
 
   final Function switchBestOfOrFirstTo;
+  final BestOfOrFirstToEnum mode;
 
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isBestOfMode =
-        gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf;
 
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
-          if (!isBestOfMode) {
+          if (mode != BestOfOrFirstToEnum.BestOf) {
             switchBestOfOrFirstTo(context, gameSettingsX01);
           }
         },
@@ -80,8 +89,8 @@ class BestOfBtn extends StatelessWidget {
           child: Text(
             'Best of',
             style: TextStyle(
-              color:
-                  Utils.getTextColorForGameSettingsBtn(isBestOfMode, context),
+              color: Utils.getTextColorForGameSettingsBtn(
+                  mode == BestOfOrFirstToEnum.BestOf, context),
             ),
           ),
         ),
@@ -101,7 +110,7 @@ class BestOfBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: isBestOfMode
+          backgroundColor: mode == BestOfOrFirstToEnum.BestOf
               ? Utils.getPrimaryMaterialStateColorDarken(context)
               : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
@@ -111,22 +120,26 @@ class BestOfBtn extends StatelessWidget {
 }
 
 class FirstToBtn extends StatelessWidget {
-  const FirstToBtn({Key? key, required Function this.switchBestOfOrFirstTo})
-      : super(key: key);
+  const FirstToBtn({
+    Key? key,
+    required Function this.switchBestOfOrFirstTo,
+    required BestOfOrFirstToEnum this.mode,
+  }) : super(key: key);
 
   final Function switchBestOfOrFirstTo;
+  final BestOfOrFirstToEnum mode;
 
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isFirstToMode =
-        gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo;
 
     return Expanded(
       child: SizedBox(
         child: ElevatedButton(
           onPressed: () {
-            if (!isFirstToMode) switchBestOfOrFirstTo(context, gameSettingsX01);
+            if (mode != BestOfOrFirstToEnum.FirstTo) {
+              switchBestOfOrFirstTo(context, gameSettingsX01);
+            }
           },
           child: FittedBox(
             fit: BoxFit.scaleDown,
@@ -134,7 +147,7 @@ class FirstToBtn extends StatelessWidget {
               'First to',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
-                    isFirstToMode, context),
+                    mode == BestOfOrFirstToEnum.FirstTo, context),
               ),
             ),
           ),
@@ -154,7 +167,7 @@ class FirstToBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: isFirstToMode
+            backgroundColor: mode == BestOfOrFirstToEnum.FirstTo
                 ? Utils.getPrimaryMaterialStateColorDarken(context)
                 : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),

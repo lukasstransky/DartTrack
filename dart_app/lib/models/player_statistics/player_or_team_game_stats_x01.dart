@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
-import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/team.dart';
@@ -349,7 +348,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
   set setTotalRoundsCount(int value) => this._totalRoundsCount = value;
 
   //calc average based on total points and all scores length
-  String getAverage(GameSettingsX01_P gameSettingsX01_P) {
+  String getAverage() {
     if (getTotalPoints == 0 || getAllScores.length == 0) {
       return '-';
     }

@@ -6,16 +6,16 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class CheckoutCountingX01 extends StatelessWidget {
-  bool _winByDiffWidgetIsPresent(GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getLegs > 1 &&
-        !gameSettingsX01.getSetsEnabled &&
-        !gameSettingsX01.getDrawMode;
+  bool _winByDiffWidgetIsPresent(SelectorModel selectorModel) {
+    return selectorModel.legs > 1 &&
+        !selectorModel.setsEnabled &&
+        !selectorModel.drawMode;
   }
 
-  bool _noWinByDiffWidgetIsPresent(GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getLegs == 1 ||
-        gameSettingsX01.getSetsEnabled ||
-        gameSettingsX01.getDrawMode) {
+  bool _noWinByDiffWidgetIsPresent(SelectorModel selectorModel) {
+    if (selectorModel.legs == 1 ||
+        selectorModel.setsEnabled ||
+        selectorModel.drawMode) {
       return true;
     }
     return false;
@@ -23,15 +23,24 @@ class CheckoutCountingX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GameSettingsX01_P>(
-      builder: (_, gameSettingsX01, __) {
-        if (gameSettingsX01.getModeOut == ModeOutIn.Double) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
+    return Selector<GameSettingsX01_P, SelectorModel>(
+      selector: (_, gameSettingsX01) => SelectorModel(
+        drawMode: gameSettingsX01.getDrawMode,
+        enableCheckoutCounting: gameSettingsX01.getEnableCheckoutCounting,
+        legs: gameSettingsX01.getLegs,
+        modeOut: gameSettingsX01.getModeOut,
+        setsEnabled: gameSettingsX01.getSetsEnabled,
+      ),
+      builder: (_, selectorModel, __) {
+        if (selectorModel.modeOut == ModeOutIn.Double) {
           return Container(
             width: WIDTH_GAMESETTINGS.w,
             transform: Matrix4.translationValues(0.0,
-                _winByDiffWidgetIsPresent(gameSettingsX01) ? -1.5.h : 0.0, 0.0),
+                _winByDiffWidgetIsPresent(selectorModel) ? -1.5.h : 0.0, 0.0),
             margin: EdgeInsets.only(
-                top: _noWinByDiffWidgetIsPresent(gameSettingsX01)
+                top: _noWinByDiffWidgetIsPresent(selectorModel)
                     ? MARGIN_GAMESETTINGS.h
                     : 0),
             child: Column(
@@ -48,7 +57,7 @@ class CheckoutCountingX01 extends StatelessWidget {
                       activeColor: Theme.of(context).colorScheme.secondary,
                       inactiveThumbColor:
                           Theme.of(context).colorScheme.secondary,
-                      value: gameSettingsX01.getEnableCheckoutCounting,
+                      value: selectorModel.enableCheckoutCounting,
                       onChanged: (value) {
                         gameSettingsX01.setEnableCheckoutCounting = value;
                         gameSettingsX01.notify();
@@ -64,4 +73,20 @@ class CheckoutCountingX01 extends StatelessWidget {
       },
     );
   }
+}
+
+class SelectorModel {
+  final ModeOutIn modeOut;
+  final bool enableCheckoutCounting;
+  final int legs;
+  final bool setsEnabled;
+  final bool drawMode;
+
+  SelectorModel({
+    required this.modeOut,
+    required this.enableCheckoutCounting,
+    required this.legs,
+    required this.setsEnabled,
+    required this.drawMode,
+  });
 }

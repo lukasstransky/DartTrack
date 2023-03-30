@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-import 'package:tuple/tuple.dart';
 
 class TargetNumberSingleDoubleTraining extends StatefulWidget {
   const TargetNumberSingleDoubleTraining({Key? key}) : super(key: key);
@@ -229,32 +228,46 @@ class _TargetNumberSingleDoubleTrainingState
               ),
             ],
           ),
-          Selector<GameSettingsSingleDoubleTraining_P, Tuple2<bool, int>>(
-            selector: (_, settings) => Tuple2(
-                settings.getIsTargetNumberEnabled, settings.getTargetNumber),
-            builder: (_, tuple, __) => tuple.item1
-                ? Row(
-                    children: [
-                      Text(
-                        '(Selected target number: ',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 10.sp,
-                        ),
-                      ),
-                      Text(
-                        '${tuple.item2.toString()})',
-                        style: TextStyle(
-                          color: Colors.white70,
-                          fontSize: 10.sp,
-                        ),
-                      ),
-                    ],
-                  )
-                : SizedBox.shrink(),
+          Selector<GameSettingsSingleDoubleTraining_P, SelectorModel>(
+            selector: (_, gameSettingsSingleDoubleTraining) => SelectorModel(
+              isTargetNumberEnabled:
+                  gameSettingsSingleDoubleTraining.getIsTargetNumberEnabled,
+              targetNumber: gameSettingsSingleDoubleTraining.getTargetNumber,
+            ),
+            builder: (_, selectorModel, __) =>
+                selectorModel.isTargetNumberEnabled
+                    ? Row(
+                        children: [
+                          Text(
+                            '(Selected target number: ',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                          Text(
+                            '${selectorModel.targetNumber.toString()})',
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                        ],
+                      )
+                    : SizedBox.shrink(),
           ),
         ],
       ),
     );
   }
+}
+
+class SelectorModel {
+  final bool isTargetNumberEnabled;
+  final int targetNumber;
+
+  SelectorModel({
+    required this.isTargetNumberEnabled,
+    required this.targetNumber,
+  });
 }

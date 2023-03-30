@@ -10,16 +10,17 @@ class ModeOutX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Consumer<GameSettingsX01_P>(
-        builder: (_, gameSettingsX01, __) => Container(
-          width: WIDTH_GAMESETTINGS.w,
-          height: Utils.getHeightForWidget(gameSettingsX01).h,
-          margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-          child: Row(
+      child: Container(
+        width: WIDTH_GAMESETTINGS.w,
+        height: WIDGET_HEIGHT_GAMESETTINGS.h,
+        margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
+        child: Selector<GameSettingsX01_P, ModeOutIn>(
+          selector: (_, gameSettings) => gameSettings.getModeOut,
+          builder: (_, modeOut, __) => Row(
             children: [
-              SingleOutBtn(),
-              DoubleOutBtn(),
-              MasterOutBtn(),
+              SingleOutBtn(modeOut: modeOut),
+              DoubleOutBtn(modeOut: modeOut),
+              MasterOutBtn(modeOut: modeOut),
             ],
           ),
         ),
@@ -29,7 +30,9 @@ class ModeOutX01 extends StatelessWidget {
 }
 
 class SingleOutBtn extends StatelessWidget {
-  const SingleOutBtn({Key? key}) : super(key: key);
+  const SingleOutBtn({Key? key, required this.modeOut}) : super(key: key);
+
+  final ModeOutIn modeOut;
 
   _singleOutClicked(GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.setModeOut = ModeOutIn.Single;
@@ -40,7 +43,6 @@ class SingleOutBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isSingleOutMode = gameSettingsX01.getModeOut == ModeOutIn.Single;
 
     return Expanded(
       child: ElevatedButton(
@@ -51,7 +53,7 @@ class SingleOutBtn extends StatelessWidget {
             'Single out',
             style: TextStyle(
               color: Utils.getTextColorForGameSettingsBtn(
-                  isSingleOutMode, context),
+                  modeOut == ModeOutIn.Single, context),
             ),
           ),
         ),
@@ -71,7 +73,7 @@ class SingleOutBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: isSingleOutMode
+          backgroundColor: modeOut == ModeOutIn.Single
               ? Utils.getPrimaryMaterialStateColorDarken(context)
               : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
@@ -81,7 +83,9 @@ class SingleOutBtn extends StatelessWidget {
 }
 
 class DoubleOutBtn extends StatelessWidget {
-  const DoubleOutBtn({Key? key}) : super(key: key);
+  const DoubleOutBtn({Key? key, required this.modeOut}) : super(key: key);
+
+  final ModeOutIn modeOut;
 
   _doubleOutClicked(GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.setEnableCheckoutCounting = false;
@@ -92,7 +96,6 @@ class DoubleOutBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isDoubleOutMode = gameSettingsX01.getModeOut == ModeOutIn.Double;
 
     return Expanded(
       child: Container(
@@ -114,7 +117,7 @@ class DoubleOutBtn extends StatelessWidget {
               'Double out',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
-                    isDoubleOutMode, context),
+                    modeOut == ModeOutIn.Double, context),
               ),
             ),
           ),
@@ -122,7 +125,7 @@ class DoubleOutBtn extends StatelessWidget {
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
             overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: isDoubleOutMode
+            backgroundColor: modeOut == ModeOutIn.Double
                 ? Utils.getPrimaryMaterialStateColorDarken(context)
                 : Utils.getColor(Theme.of(context).colorScheme.primary),
             shape: MaterialStateProperty.all(
@@ -136,7 +139,9 @@ class DoubleOutBtn extends StatelessWidget {
 }
 
 class MasterOutBtn extends StatelessWidget {
-  const MasterOutBtn({Key? key}) : super(key: key);
+  const MasterOutBtn({Key? key, required this.modeOut}) : super(key: key);
+
+  final ModeOutIn modeOut;
 
   _masterOutClicked(GameSettingsX01_P gameSettingsX01) {
     gameSettingsX01.setModeOut = ModeOutIn.Master;
@@ -147,7 +152,6 @@ class MasterOutBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isMasterOutMode = gameSettingsX01.getModeOut == ModeOutIn.Master;
 
     return Expanded(
       child: SizedBox(
@@ -159,7 +163,7 @@ class MasterOutBtn extends StatelessWidget {
               'Master out',
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
-                    isMasterOutMode, context),
+                    modeOut == ModeOutIn.Master, context),
               ),
             ),
           ),
@@ -179,7 +183,7 @@ class MasterOutBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: isMasterOutMode
+            backgroundColor: modeOut == ModeOutIn.Master
                 ? Utils.getPrimaryMaterialStateColorDarken(context)
                 : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),

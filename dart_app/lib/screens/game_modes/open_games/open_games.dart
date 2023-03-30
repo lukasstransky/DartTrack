@@ -178,10 +178,10 @@ class _OpenGamesState extends State<OpenGames> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: 'Open games'),
-      body: Consumer<OpenGamesFirestore>(
-        builder: (_, openGamesFirestore, __) => openGamesFirestore
-                    .openGames.length !=
-                0
+      body: Selector<OpenGamesFirestore, List<Game_P>>(
+        selector: (_, openGamesFirestore) => openGamesFirestore.openGames,
+        shouldRebuild: (previous, next) => true,
+        builder: (_, openGames, __) => openGames.length != 0
             ? SingleChildScrollView(
                 scrollDirection: Axis.vertical,
                 child: Center(
@@ -203,7 +203,7 @@ class _OpenGamesState extends State<OpenGames> {
                             ),
                           ),
                         ),
-                        for (Game_P game_p in openGamesFirestore.openGames) ...[
+                        for (Game_P game_p in openGames) ...[
                           Column(
                             children: [
                               Slidable(
