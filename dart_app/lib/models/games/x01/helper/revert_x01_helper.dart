@@ -16,11 +16,8 @@ class RevertX01Helper {
   /********              PUBLIC METHODS                ********/
   /// *********************************************************
 
-  static void revertPoints(BuildContext context,
+  static void revertPoints(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
       [bool shouldRevertTeamStats = false]) {
-    final GameX01_P gameX01 = context.read<GameX01_P>();
-    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-
     if (!_isRevertPossible(gameX01, gameSettingsX01) &&
         !shouldRevertTeamStats) {
       return;
@@ -233,11 +230,11 @@ class RevertX01Helper {
 
     if (!shouldRevertTeamStats &&
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      revertPoints(context, true);
+      revertPoints(gameX01, gameSettingsX01, true);
     }
 
     if (_isRevertedBackToBegin(gameX01, gameSettingsX01)) {
-      gameX01.init(context);
+      gameX01.init(gameSettingsX01);
     }
   }
 

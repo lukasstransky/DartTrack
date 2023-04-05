@@ -26,17 +26,7 @@ class GameSettingsScoreTraining extends StatefulWidget {
 class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
   @override
   void initState() {
-    final GameSettingsScoreTraining_P settings =
-        context.read<GameSettingsScoreTraining_P>();
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
-
-    Future.delayed(Duration.zero, () {
-      if (!settings.getPlayers.any((p) => p.getName == username)) {
-        settings.getPlayers.add(Player(name: username));
-      }
-    });
-
+    _addCurrentUserToPlayers();
     super.initState();
   }
 
@@ -44,6 +34,21 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
   void dispose() {
     disposeControllersForGamesettingsScoreTraining();
     super.dispose();
+  }
+
+  _addCurrentUserToPlayers() {
+    final GameSettingsScoreTraining_P settings =
+        context.read<GameSettingsScoreTraining_P>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
+    settings.reset();
+    Future.delayed(Duration.zero, () {
+      if (!settings.getPlayers.any((p) => p.getName == username)) {
+        settings.getPlayers.add(Player(name: username));
+        settings.notify();
+      }
+    });
   }
 
   @override

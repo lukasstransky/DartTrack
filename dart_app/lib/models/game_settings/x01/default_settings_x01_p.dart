@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 class DefaultSettingsX01_P with ChangeNotifier {
   String _id = '';
   bool _isSelected = false;
+  bool _loadSettings = true;
 
   late List<Player> _players;
   late SingleOrTeamEnum _singleOrTeam;
@@ -172,6 +173,9 @@ class DefaultSettingsX01_P with ChangeNotifier {
   get isSelected => this._isSelected;
 
   set isSelected(value) => this._isSelected = value;
+
+  bool get loadSettings => this._loadSettings;
+  set loadSettings(bool value) => this._loadSettings = value;
 
   List<Player> get players => this._players;
 

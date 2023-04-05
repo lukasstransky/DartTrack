@@ -23,6 +23,8 @@ class RevertBtn extends StatelessWidget {
   final Game_P game_p;
 
   _revertBtnPressed(BuildContext context) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
     if (!game_p.getRevertPossible) {
       return;
     }
@@ -32,10 +34,10 @@ class RevertBtn extends StatelessWidget {
         HapticFeedback.lightImpact();
       }
 
-      RevertX01Helper.revertPoints(context);
+      RevertX01Helper.revertPoints(game_p as GameX01_P, gameSettingsX01);
 
       if (game_p.getCurrentPlayerToThrow is Bot) {
-        RevertX01Helper.revertPoints(context);
+        RevertX01Helper.revertPoints(game_p as GameX01_P, gameSettingsX01);
       }
     } else if (game_p is GameScoreTraining_P) {
       (game_p as GameScoreTraining_P).revert(context);

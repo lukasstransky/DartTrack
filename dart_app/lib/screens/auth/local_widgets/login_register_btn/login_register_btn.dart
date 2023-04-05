@@ -51,7 +51,7 @@ class LoginRegisterBtn extends StatelessWidget {
             emailTextController.text, passwordTextController.text);
       } else {
         // store the username in shared preferences
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString('username', usernameTextController.text);
 
         await authService.register(

@@ -28,17 +28,30 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   }
 
   _getOpenGames() async {
-    await context.read<FirestoreServiceGames>().getOpenGames(context);
+    final OpenGamesFirestore openGamesFirestore =
+        context.read<OpenGamesFirestore>();
+
+    if (openGamesFirestore.getLoadOpenGames) {
+      await context
+          .read<FirestoreServiceGames>()
+          .getOpenGames(openGamesFirestore);
+      openGamesFirestore.setLoadOpenGames = false;
+    }
   }
 
   _getDefaultSettingsX01() async {
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final DefaultSettingsX01_P defaultSettingsX01 =
+        context.read<DefaultSettingsX01_P>();
 
-    context.read<DefaultSettingsX01_P>().resetValues(username);
-    await context
-        .read<FirestoreServiceDefaultSettings>()
-        .getDefaultSettingsX01(context);
+    if (defaultSettingsX01.loadSettings) {
+      defaultSettingsX01.resetValues(username);
+      await context
+          .read<FirestoreServiceDefaultSettings>()
+          .getDefaultSettingsX01(context);
+      defaultSettingsX01.loadSettings = false;
+    }
   }
 
   @override

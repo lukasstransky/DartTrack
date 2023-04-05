@@ -37,17 +37,16 @@ class _HomeState extends State<Home> {
   void didChangeDependencies() {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
+    final AuthService authService = context.read<AuthService>();
 
     // lead to some errors in the submit method (login_register_btn.dart)
     if (arguments.isNotEmpty) {
       final String email = arguments['email'];
 
       if (arguments['isLogin']) {
-        context.read<AuthService>().storeUsernameInSharedPreferences(email);
+        authService.storeUsernameInSharedPreferences(email);
       } else if (!arguments['isLogin']) {
-        context
-            .read<AuthService>()
-            .postUserToFirestore(email, arguments['username']);
+        authService.postUserToFirestore(email, arguments['username']);
       }
     }
     super.didChangeDependencies();

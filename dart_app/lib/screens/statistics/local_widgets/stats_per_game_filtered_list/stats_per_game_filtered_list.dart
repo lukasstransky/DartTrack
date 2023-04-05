@@ -28,6 +28,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   String _orderField = '';
   bool _overallFilter = true;
   bool _ascendingOrder = true;
+  bool _showLoadSpinner = true;
   static const Set<String> _fieldsToShowOverallPerGameBtn = {
     'highestFinish',
     'bestLeg',
@@ -87,9 +88,16 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
         break;
     }
 
+    setState(() {
+      _showLoadSpinner = true;
+    });
+    await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
     await context
         .read<FirestoreServicePlayerStats>()
         .getFilteredPlayerGameStatistics(_orderField, _ascendingOrder, context);
+    setState(() {
+      _showLoadSpinner = false;
+    });
   }
 
   String getAppBarTitle() {
@@ -130,92 +138,101 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
 
   @override
   Widget build(BuildContext context) {
-    final StatsFirestoreX01_P statisticsFirestore =
+    final StatsFirestoreX01_P statsFirestore =
         context.read<StatsFirestoreX01_P>();
 
     return Scaffold(
       appBar: CustomAppBar(title: getAppBarTitle()),
       body: Selector<StatsFirestoreX01_P, List<Game_P>>(
         selector: (_, statsFirestoreX01) => statsFirestoreX01.filteredGames,
-        builder: (_, filteredGames, ___) => SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Center(
-            child: Container(
-              width: 90.w,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 1.h),
-                    child: _showOverallPerGameBtn()
-                        ? OverallPerGameBtns(context)
-                        : SizedBox.shrink(),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 1.h,
-                      left: 1.w,
-                    ),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'To view details about a game, click on its card.',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  if ((_orderField == 'highestFinish' ||
-                          _orderField == 'worstFinish') &&
-                      _overallFilter &&
-                      statisticsFirestore.checkoutWithGameId.isNotEmpty) ...[
-                    for (int i = 0;
-                        i < statisticsFirestore.checkoutWithGameId.length;
-                        i++) ...[
-                      CheckoutStatsCard(
-                        finish: statisticsFirestore.checkoutWithGameId
-                            .elementAt(i)
-                            .item1,
-                        game: GameX01_P.createGame(
-                          statisticsFirestore.getGameById(statisticsFirestore
-                              .checkoutWithGameId
-                              .elementAt(i)
-                              .item2),
+        builder: (_, filteredGames, ___) => _showLoadSpinner
+            ? Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              )
+            : SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Center(
+                  child: Container(
+                    width: 90.w,
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(top: 1.h),
+                          child: _showOverallPerGameBtn()
+                              ? OverallPerGameBtns(context)
+                              : SizedBox.shrink(),
                         ),
-                        isWorstFinished: _orderField == 'worstFinish',
-                      ),
-                    ],
-                  ] else if ((_orderField == 'bestLeg' ||
-                          _orderField == 'worstLeg') &&
-                      statisticsFirestore.thrownDartsWithGameId.isNotEmpty &&
-                      _overallFilter) ...[
-                    for (int i = 0;
-                        i < statisticsFirestore.thrownDartsWithGameId.length;
-                        i++) ...[
-                      BestLegStatsCard(
-                        bestLeg: statisticsFirestore.thrownDartsWithGameId
-                            .elementAt(i)
-                            .item1,
-                        game: GameX01_P.createGame(
-                          statisticsFirestore.getGameById(statisticsFirestore
-                              .thrownDartsWithGameId
-                              .elementAt(i)
-                              .item2),
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 1.h,
+                            left: 1.w,
+                          ),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'To view details about a game, click on its card.',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
                         ),
-                        isWorstSelected: _orderField == 'worstLeg',
-                      ),
-                    ],
-                  ] else ...[
-                    for (Game_P game in filteredGames) ...[
-                      StatsCardFiltered(
-                        game: GameX01_P.createGame(game),
-                        orderField: _orderField,
-                      ),
-                    ],
-                  ],
-                ],
+                        if ((_orderField == 'highestFinish' ||
+                                _orderField == 'worstFinish') &&
+                            _overallFilter &&
+                            statsFirestore.checkoutWithGameId.isNotEmpty) ...[
+                          for (int i = 0;
+                              i < statsFirestore.checkoutWithGameId.length;
+                              i++) ...[
+                            CheckoutStatsCard(
+                              finish: statsFirestore.checkoutWithGameId
+                                  .elementAt(i)
+                                  .item1,
+                              game: GameX01_P.createGame(
+                                statsFirestore.getGameById(statsFirestore
+                                    .checkoutWithGameId
+                                    .elementAt(i)
+                                    .item2),
+                              ),
+                              isWorstFinished: _orderField == 'worstFinish',
+                            ),
+                          ],
+                        ] else if ((_orderField == 'bestLeg' ||
+                                _orderField == 'worstLeg') &&
+                            statsFirestore.thrownDartsWithGameId.isNotEmpty &&
+                            _overallFilter) ...[
+                          for (int i = 0;
+                              i < statsFirestore.thrownDartsWithGameId.length;
+                              i++) ...[
+                            BestLegStatsCard(
+                              bestLeg: statsFirestore.thrownDartsWithGameId
+                                  .elementAt(i)
+                                  .item1,
+                              game: GameX01_P.createGame(
+                                statsFirestore.getGameById(statsFirestore
+                                    .thrownDartsWithGameId
+                                    .elementAt(i)
+                                    .item2),
+                              ),
+                              isWorstSelected: _orderField == 'worstLeg',
+                            ),
+                          ],
+                        ] else ...[
+                          for (Game_P game in filteredGames) ...[
+                            Container(
+                              padding: EdgeInsets.only(bottom: 0.5.h),
+                              child: StatsCardFiltered(
+                                game: GameX01_P.createGame(game),
+                                orderField: _orderField,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }

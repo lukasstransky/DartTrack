@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
-import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
@@ -26,21 +27,25 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
   @override
   void initState() {
     _saveDataToFirestore();
-    context.read<StatsFirestoreScoreTraining_P>().gamesLoaded = false;
     super.initState();
   }
 
   _saveDataToFirestore() async {
     final gameScoreTraining_P = context.read<GameScoreTraining_P>();
 
-    if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
+    if (context
+        .read<GameSettingsScoreTraining_P>()
+        .isCurrentUserInPlayers(context)) {
       g_gameId = await context
           .read<FirestoreServiceGames>()
-          .postGame(gameScoreTraining_P, context);
+          .postGame(gameScoreTraining_P, context.read<OpenGamesFirestore>());
       await context
           .read<FirestoreServicePlayerStats>()
           .postPlayerGameStatistics(gameScoreTraining_P, g_gameId, context);
     }
+
+    // to load data in stats tab again if new game was added
+    context.read<StatsFirestoreScoreTraining_P>().loadGames = true;
   }
 
   @override

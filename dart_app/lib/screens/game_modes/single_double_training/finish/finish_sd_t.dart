@@ -1,6 +1,8 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
-import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
+import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
@@ -40,22 +42,32 @@ class _FinishSingleDoubleTrainingState
   @override
   void initState() {
     _saveDataToFirestore();
-    context.read<StatsFirestoreSingleDoubleTraining_P>().gamesLoaded = false;
     super.initState();
   }
 
   _saveDataToFirestore() async {
-    final game = context.read<GameSingleDoubleTraining_P>();
+    final GameSingleDoubleTraining_P game =
+        context.read<GameSingleDoubleTraining_P>();
 
-    if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
+    if (context
+        .read<GameSettingsSingleDoubleTraining_P>()
+        .isCurrentUserInPlayers(context)) {
       if (game.getMode == GameMode.DoubleTraining) {
         game.setName = 'Double training';
       }
-      g_gameId =
-          await context.read<FirestoreServiceGames>().postGame(game, context);
+      g_gameId = await context
+          .read<FirestoreServiceGames>()
+          .postGame(game, context.read<OpenGamesFirestore>());
       await context
           .read<FirestoreServicePlayerStats>()
           .postPlayerGameStatistics(game, g_gameId, context);
+    }
+
+    // to load data in stats tab again if new game was added
+    if (game.getMode == GameMode.SingleTraining) {
+      context.read<StatsFirestoreSingleTraining_P>().loadGames = true;
+    } else {
+      context.read<StatsFirestoreDoubleTraining_P>().loadGames = true;
     }
   }
 

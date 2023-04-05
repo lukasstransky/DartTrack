@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/more_stats/more_stats.dart';
@@ -13,6 +14,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class Statistics extends StatefulWidget {
   @override
@@ -25,8 +27,10 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   initState() {
-    context.read<StatsFirestoreX01_P>().currentFilterValue =
-        FilterValue.Overall;
+    final StatsFirestoreX01_P statsFirestore =
+        context.read<StatsFirestoreX01_P>();
+
+    statsFirestore.currentFilterValue = FilterValue.Overall;
     username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
@@ -34,17 +38,22 @@ class _StatisticsState extends State<Statistics> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showDialogWhenLoggedInAsGuest();
       });
-      context.read<StatsFirestoreX01_P>().resetAll();
+      statsFirestore.resetAll();
     } else {
-      _getPlayerGameStatistics();
-      _getGames();
+      if (statsFirestore.loadGames) {
+        _getPlayerGameStatistics(statsFirestore);
+        _getGames();
+        statsFirestore.loadGames = false;
+      }
     }
 
     super.initState();
   }
 
-  _getPlayerGameStatistics() async {
-    await context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
+  _getPlayerGameStatistics(StatsFirestoreX01_P statsFirestore) async {
+    await context
+        .read<FirestoreServicePlayerStats>()
+        .getX01Statistics(statsFirestore, username, true);
   }
 
   _getGames() async {
@@ -87,29 +96,39 @@ class _StatisticsState extends State<Statistics> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-      body: Selector<StatsFirestoreX01_P, bool>(
-        selector: (_, statisticsFirestore) =>
-            statisticsFirestore.avgBestWorstStatsLoaded,
-        builder: (_, avgBestWorstStatsLoaded, __) =>
-            avgBestWorstStatsLoaded || username == 'Guest'
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: [
-                        FilterBar(),
-                        OtherStats(),
-                        AvgBestWorstStats(),
-                        if (_showMoreStats) MoreStats(),
-                        showMoreStatsBtn(),
-                        StatsPerGameBtns()
-                      ],
-                    ),
-                  )
-                : Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
-                  ),
+      body: SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Column(
+          children: [
+            FilterBar(),
+            Selector<StatsFirestoreX01_P, SelectorModel>(
+              selector: (_, statsFirestoreX01) => SelectorModel(
+                avgBestWorstStatsLoaded:
+                    statsFirestoreX01.avgBestWorstStatsLoaded,
+                games: statsFirestoreX01.games,
+              ),
+              builder: (_, selectorModel, __) =>
+                  selectorModel.avgBestWorstStatsLoaded || username == 'Guest'
+                      ? Column(
+                          children: [
+                            OtherStats(),
+                            AvgBestWorstStats(),
+                            if (_showMoreStats) MoreStats(),
+                            showMoreStatsBtn(),
+                            StatsPerGameBtns()
+                          ],
+                        )
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height - 25.h,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -136,4 +155,14 @@ class _StatisticsState extends State<Statistics> {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final bool avgBestWorstStatsLoaded;
+  final List<Game_P> games;
+
+  SelectorModel({
+    required this.avgBestWorstStatsLoaded,
+    required this.games,
+  });
 }

@@ -49,6 +49,7 @@ class AuthService {
 
   Future<void> logout(BuildContext context) async {
     final String username = getUsernameFromSharedPreferences() ?? '';
+
     if (username == 'Guest') {
       await context.read<FirestoreServiceGames>().deleteAllOpenGames();
       await _firebaseAuth.currentUser!.delete();

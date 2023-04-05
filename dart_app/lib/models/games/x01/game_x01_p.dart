@@ -175,9 +175,7 @@ class GameX01_P extends Game_P {
     g_thrown_darts = '-';
   }
 
-  init(BuildContext context) {
-    final GameSettingsX01_P gameSettings = context.read<GameSettingsX01_P>();
-
+  init(GameSettingsX01_P gameSettings) {
     // if game is finished -> undo last throw will call init again
     if (gameSettings.getPlayers.length != getPlayerGameStatistics.length) {
       reset();

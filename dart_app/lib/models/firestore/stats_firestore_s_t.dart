@@ -1,7 +1,7 @@
 import 'package:dart_app/models/games/game.dart';
 import 'package:flutter/material.dart';
 
-class StatsFirestoreScoreTraining_P with ChangeNotifier {
+class StatsFirestoreSingleTraining_P with ChangeNotifier {
   List<Game_P> _games = [];
   bool _noGamesPlayed = false;
   bool _loadGames = true;

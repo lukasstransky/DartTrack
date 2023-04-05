@@ -4,7 +4,9 @@ import 'package:dart_app/models/game_settings/game_settings_single_double_traini
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class GameSettings_P with ChangeNotifier {
   List<Team> _teams = [];
@@ -310,5 +312,22 @@ class GameSettings_P with ChangeNotifier {
 
   notify() {
     notifyListeners();
+  }
+
+  bool isCurrentUserInPlayers(BuildContext context) {
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
+    if (currentUsername == 'Guest') {
+      return false;
+    }
+
+    for (Player player in getPlayers) {
+      if (player.getName == currentUsername) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

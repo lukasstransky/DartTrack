@@ -1,6 +1,7 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
-import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
@@ -112,7 +113,10 @@ class MyApp extends StatelessWidget {
           create: (_) => GameScoreTraining_P(),
         ),
         ChangeNotifierProvider(
-          create: (_) => StatsFirestoreSingleDoubleTraining_P(),
+          create: (_) => StatsFirestoreDoubleTraining_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StatsFirestoreSingleTraining_P(),
         ),
         ChangeNotifierProvider(
           create: (_) => StatsFirestoreScoreTraining_P(),

@@ -1,8 +1,10 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
-import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
@@ -639,10 +641,14 @@ class Utils {
                       game_p.setShowLoadingSpinner = true;
                       game_p.notify();
 
-                      await Future.delayed(Duration(milliseconds: 200));
+                      context.read<OpenGamesFirestore>().setLoadOpenGames =
+                          true;
+                      await Future.delayed(
+                          Duration(milliseconds: DEFEAULT_DELAY));
                       await context
                           .read<FirestoreServiceGames>()
                           .postOpenGame(game_p, context);
+
                       _resetValuesAndNavigateToHome(context, game_p);
                     },
                     child: Text(
@@ -709,8 +715,10 @@ class Utils {
       String mode, BuildContext context) {
     if (mode == 'X01') {
       return context.read<StatsFirestoreX01_P>();
-    } else if (mode == 'Single training' || mode == 'Double training') {
-      return context.read<StatsFirestoreSingleDoubleTraining_P>();
+    } else if (mode == 'Single training') {
+      return context.read<StatsFirestoreSingleTraining_P>();
+    } else if (mode == 'Double training') {
+      return context.read<StatsFirestoreDoubleTraining_P>();
     } else if (mode == 'Score training') {
       return context.read<StatsFirestoreScoreTraining_P>();
     }

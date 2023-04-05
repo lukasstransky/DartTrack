@@ -66,7 +66,9 @@ class _GameStatsSingleDoubleTrainingState
       appBar: _game!.getIsGameFinished
           ? CustomAppBarWithHeart(
               title: 'Statistics',
-              mode: 'SingleDoubleTraining',
+              mode: _game!.getMode == GameMode.SingleTraining
+                  ? 'Single training'
+                  : 'Double training',
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )

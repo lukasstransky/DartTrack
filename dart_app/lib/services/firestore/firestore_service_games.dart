@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
-import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -8,6 +9,7 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -25,7 +27,8 @@ class FirestoreServiceGames {
   /*****************************          GAMES            ****************************/
   /************************************************************************************/
 
-  Future<String> postGame(Game_P game, BuildContext context) async {
+  Future<String> postGame(
+      Game_P game, OpenGamesFirestore openGamesFirestore) async {
     final Game_P gameToSave = Game_P.Firestore(
       name: game.getName,
       isGameFinished: true,
@@ -41,7 +44,7 @@ class FirestoreServiceGames {
 
     // delete open game
     if (game.getIsOpenGame) {
-      deleteOpenGame(game.getGameId, context);
+      deleteOpenGame(game.getGameId, openGamesFirestore);
     }
 
     Map<String, dynamic> data = {};
@@ -98,10 +101,14 @@ class FirestoreServiceGames {
         .get();
     final StatsFirestoreX01_P statisticsFirestoreX01 =
         context.read<StatsFirestoreX01_P>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
     if (!statisticsFirestoreX01.noGamesPlayed) {
-      context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
+      context
+          .read<FirestoreServicePlayerStats>()
+          .getX01Statistics(statisticsFirestoreX01, username);
     }
     statisticsFirestoreX01.notify();
   }
@@ -109,6 +116,12 @@ class FirestoreServiceGames {
   Future<void> getGames(String mode, BuildContext context) async {
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(mode, context);
+
+    if (!statsFirestore.loadGames) {
+      return;
+    } else {
+      statsFirestore.loadGames = false;
+    }
 
     final CollectionReference collectionReference =
         _firestore.collection(_getFirestoreGamesPath());
@@ -120,7 +133,7 @@ class FirestoreServiceGames {
     if (games.docs.isEmpty) {
       statsFirestore.noGamesPlayed = true;
       if (mode != 'X01') {
-        statsFirestore.gamesLoaded = true;
+        statsFirestore.loadGames = true;
       }
       statsFirestore.notify();
     } else {
@@ -157,9 +170,10 @@ class FirestoreServiceGames {
         statsFirestore.games.add(game);
       });
 
-      if (statsFirestore is StatsFirestoreSingleDoubleTraining_P ||
+      if (statsFirestore is StatsFirestoreSingleTraining_P ||
+          statsFirestore is StatsFirestoreDoubleTraining_P ||
           statsFirestore is StatsFirestoreScoreTraining_P) {
-        statsFirestore.gamesLoaded = true;
+        statsFirestore.loadGames = true;
       }
 
       statsFirestore.notify();
@@ -224,13 +238,14 @@ class FirestoreServiceGames {
     }
   }
 
-  Future<void> deleteOpenGame(String gameId, BuildContext context) async {
+  Future<void> deleteOpenGame(
+      String gameId, OpenGamesFirestore openGamesFirestore) async {
     await _firestore
         .collection(_getFirestoreOpenGamesPath())
         .doc(gameId)
         .delete()
         .then((value) async => {
-              await getOpenGames(context),
+              await getOpenGames(openGamesFirestore),
             });
   }
 
@@ -243,10 +258,9 @@ class FirestoreServiceGames {
     });
   }
 
-  Future<void> getOpenGames(BuildContext context) async {
+  Future<void> getOpenGames(OpenGamesFirestore openGamesFirestore) async {
     final CollectionReference collectionReference =
         _firestore.collection(this._getFirestoreOpenGamesPath());
-    final openGamesFirestore = context.read<OpenGamesFirestore>();
 
     openGamesFirestore.reset();
 

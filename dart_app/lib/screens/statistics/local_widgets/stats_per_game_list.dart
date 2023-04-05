@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
-import 'package:dart_app/models/firestore/stats_firestore_sd_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -8,6 +9,7 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_stats_list.dart';
@@ -28,16 +30,12 @@ class StatsPerGameList extends StatefulWidget {
 
 class _StatsPerGameListState extends State<StatsPerGameList> {
   String _mode = '';
-  bool alreadyLoaded = false;
 
   @override
   didChangeDependencies() {
     super.didChangeDependencies();
-    if (!alreadyLoaded) {
-      _getMode();
-      _getGames();
-      alreadyLoaded = true;
-    }
+    _getMode();
+    _getGames();
   }
 
   _getMode() async {
@@ -48,8 +46,25 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   _getGames() async {
-    if (_mode != 'X01') {
+    if (_mode == 'X01') {
+      return;
+    }
+
+    late dynamic statsFirestore;
+
+    if (_mode == 'Single training') {
+      statsFirestore = context.read<StatsFirestoreSingleTraining_P>();
+    } else if (_mode == 'Double training') {
+      statsFirestore = context.read<StatsFirestoreDoubleTraining_P>();
+    } else if (_mode == 'Score training') {
+      statsFirestore = context.read<StatsFirestoreScoreTraining_P>();
+    }
+
+    if (statsFirestore.loadGames) {
+      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
       await context.read<FirestoreServiceGames>().getGames(_mode, context);
+
+      statsFirestore.loadGames = false;
     }
   }
 
@@ -100,7 +115,12 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
       statsFirestore.noGamesPlayed = true;
     }
 
-    await context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    await context.read<FirestoreServicePlayerStats>().getX01Statistics(
+          context.read<StatsFirestoreX01_P>(),
+          username,
+        );
 
     statsFirestore.notify();
   }
@@ -128,7 +148,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   _getWidget(dynamic statsFirestore, List<Game_P> games) {
-    if (_mode != 'X01' && !statsFirestore.gamesLoaded) {
+    if (_mode != 'X01' && statsFirestore.loadGames) {
       return Center(
         child: CircularProgressIndicator(
           color: Colors.white,
@@ -228,8 +248,10 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
     if (_mode == 'X01') {
       statsFirestore = context.watch<StatsFirestoreX01_P>();
-    } else if (_mode == 'Single training' || _mode == 'Double training') {
-      statsFirestore = context.watch<StatsFirestoreSingleDoubleTraining_P>();
+    } else if (_mode == 'Single training') {
+      statsFirestore = context.watch<StatsFirestoreSingleTraining_P>();
+    } else if (_mode == 'Double training') {
+      statsFirestore = context.watch<StatsFirestoreDoubleTraining_P>();
     } else if (_mode == 'Score training') {
       statsFirestore = context.watch<StatsFirestoreScoreTraining_P>();
     }

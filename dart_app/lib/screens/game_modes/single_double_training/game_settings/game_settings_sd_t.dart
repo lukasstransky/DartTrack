@@ -32,6 +32,17 @@ class _GameSettingsSingleDoubleTrainingState
 
   @override
   void initState() {
+    _addCurrentUserToPlayers();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    disposeControllersForGamesettingsSingleDoubleTraining();
+    super.dispose();
+  }
+
+  _addCurrentUserToPlayers() {
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
     final GameSettingsSingleDoubleTraining_P settings =
@@ -41,16 +52,9 @@ class _GameSettingsSingleDoubleTrainingState
     Future.delayed(Duration.zero, () {
       if (!settings.getPlayers.any((p) => p.getName == username)) {
         settings.getPlayers.add(Player(name: username));
+        settings.notify();
       }
     });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    disposeControllersForGamesettingsSingleDoubleTraining();
-    super.dispose();
   }
 
   @override

@@ -4,7 +4,6 @@ import 'package:dart_app/services/firestore/firestore_service_player_stats.dart'
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 class StatsFirestoreX01_P with ChangeNotifier {
@@ -73,6 +72,8 @@ class StatsFirestoreX01_P with ChangeNotifier {
   List<Game_P> _filteredGames = [];
   List<Game_P> _favouriteGames = [];
   bool _showFavouriteGames = false;
+
+  bool _loadGames = true;
 
   get countOfGamesWon => this._countOfGamesWon;
 
@@ -208,6 +209,10 @@ class StatsFirestoreX01_P with ChangeNotifier {
   List<Game_P> get favouriteGames => this._favouriteGames;
 
   set favouriteGames(List<Game_P> value) => this._favouriteGames = value;
+
+  bool get loadGames => this._loadGames;
+
+  set loadGames(bool loadGames) => this._loadGames = loadGames;
 
   DateTime getDateTimeFromCurrentFilterValue() {
     final DateTime now = new DateTime.now();
@@ -387,7 +392,11 @@ class StatsFirestoreX01_P with ChangeNotifier {
         .parse(customDateFilterRange.split(';').last);
   }
 
-  filterGamesByDate(FilterValue newFilterValue, BuildContext context) async {
+  filterGamesByDate(
+      FilterValue newFilterValue,
+      BuildContext context,
+      StatsFirestoreX01_P statsFirestoreX01,
+      FirestoreServicePlayerStats firestoreServicePlayerStats) async {
     this.currentFilterValue = newFilterValue;
     this.resetFilteredGames();
     this.favouriteGames = [];
@@ -444,9 +453,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
       this.noGamesPlayed = true;
     }
 
-    await context.read<FirestoreServicePlayerStats>().getX01Statistics(context);
-
-    this.notify();
+    notify();
   }
 
   sortGames() {

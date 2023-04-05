@@ -29,7 +29,7 @@ class GameX01State extends State<GameX01> {
 
     // only init game for new game, not for open game
     if (arguments.isNotEmpty && !arguments['openGame']) {
-      context.read<GameX01_P>().init(context);
+      context.read<GameX01_P>().init(context.read<GameSettingsX01_P>());
     }
     super.didChangeDependencies();
   }

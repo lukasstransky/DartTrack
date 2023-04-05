@@ -1,5 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -50,10 +52,43 @@ class _FilterBarState extends State<FilterBar> {
     });
   }
 
+  _filterBtnPressed(FilterValue filterValue) async {
+    final StatsFirestoreX01_P statisticsFirestore =
+        context.read<StatsFirestoreX01_P>();
+    final FirestoreServicePlayerStats firestoreServicePlayerStats =
+        context.read<FirestoreServicePlayerStats>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
+    _setCurrentDate();
+
+    statisticsFirestore.avgBestWorstStatsLoaded = false;
+    statisticsFirestore.notify();
+
+    _showDatePicker = false;
+    _showCustomBtnDateRange = false;
+    statisticsFirestore.filterGamesByDate(
+      filterValue,
+      context,
+      statisticsFirestore,
+      firestoreServicePlayerStats,
+    );
+
+    await firestoreServicePlayerStats.getX01Statistics(
+        statisticsFirestore, username, true);
+
+    statisticsFirestore.avgBestWorstStatsLoaded = true;
+    statisticsFirestore.notify();
+  }
+
   @override
   Widget build(BuildContext context) {
     final StatsFirestoreX01_P statisticsFirestore =
         context.read<StatsFirestoreX01_P>();
+    final FirestoreServicePlayerStats firestoreServicePlayerStats =
+        context.read<FirestoreServicePlayerStats>();
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     return Selector<StatsFirestoreX01_P, FilterValue>(
       selector: (_, statisticsFirestore) =>
@@ -64,168 +99,17 @@ class _FilterBarState extends State<FilterBar> {
           children: [
             Row(
               children: [
-                Expanded(
-                  child: Container(
-                    height: 4.h,
-                    child: ElevatedButton(
-                      onPressed: () => {
-                        _showDatePicker = false,
-                        _showCustomBtnDateRange = false,
-                        statisticsFirestore.filterGamesByDate(
-                            FilterValue.Overall, context),
-                      },
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          'Overall',
-                          style: TextStyle(
-                            fontSize: 9.sp,
-                            color: Utils.getTextColorForGameSettingsBtn(
-                                currentFilterValue == FilterValue.Overall,
-                                context),
-                          ),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        splashFactory: NoSplash.splashFactory,
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            side: BorderSide(
-                              color: Utils.getPrimaryColorDarken(context),
-                              width: GAME_SETTINGS_BTN_BORDER_WITH.w,
-                            ),
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(10.0),
-                              bottomLeft: Radius.circular(10.0),
-                            ),
-                          ),
-                        ),
-                        backgroundColor: currentFilterValue ==
-                                FilterValue.Overall
-                            ? Utils.getPrimaryMaterialStateColorDarken(context)
-                            : Utils.getColor(
-                                Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                  ),
+                OverallFilterBtn(
+                  currentFilterValue: currentFilterValue,
+                  filterBtnPressed: _filterBtnPressed,
                 ),
-                Expanded(
-                  child: Container(
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: Utils.getPrimaryColorDarken(context),
-                          width: 0.5.w,
-                        ),
-                        bottom: BorderSide(
-                          color: Utils.getPrimaryColorDarken(context),
-                          width: 0.5.w,
-                        ),
-                        right: BorderSide(
-                          color: Utils.getPrimaryColorDarken(context),
-                          width: 0.5.w,
-                        ),
-                      ),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () => {
-                        _showDatePicker = false,
-                        _showCustomBtnDateRange = false,
-                        statisticsFirestore.filterGamesByDate(
-                            FilterValue.Month, context),
-                      },
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          'Last 30 days',
-                          style: TextStyle(
-                            fontSize: 7.sp,
-                            color: Utils.getTextColorForGameSettingsBtn(
-                                currentFilterValue == FilterValue.Month,
-                                context),
-                          ),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        splashFactory: NoSplash.splashFactory,
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.zero,
-                            ),
-                          ),
-                        ),
-                        backgroundColor: currentFilterValue == FilterValue.Month
-                            ? Utils.getPrimaryMaterialStateColorDarken(context)
-                            : Utils.getColor(
-                                Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                  ),
+                MonthFilterBtn(
+                  currentFilterValue: currentFilterValue,
+                  filterBtnPressed: _filterBtnPressed,
                 ),
-                Expanded(
-                  child: Container(
-                    height: 4.h,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        top: BorderSide(
-                          color: Utils.getPrimaryColorDarken(context),
-                          width: 0.5.w,
-                        ),
-                        bottom: BorderSide(
-                          color: Utils.getPrimaryColorDarken(context),
-                          width: 0.5.w,
-                        ),
-                      ),
-                    ),
-                    child: ElevatedButton(
-                      onPressed: () => {
-                        _showDatePicker = false,
-                        _showCustomBtnDateRange = false,
-                        statisticsFirestore.filterGamesByDate(
-                            FilterValue.Year, context),
-                      },
-                      child: FittedBox(
-                        fit: BoxFit.scaleDown,
-                        child: Text(
-                          'Last 365 days',
-                          style: TextStyle(
-                            fontSize: 7.sp,
-                            color: Utils.getTextColorForGameSettingsBtn(
-                                currentFilterValue == FilterValue.Year,
-                                context),
-                          ),
-                        ),
-                      ),
-                      style: ButtonStyle(
-                        splashFactory: NoSplash.splashFactory,
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.zero,
-                            ),
-                          ),
-                        ),
-                        backgroundColor: currentFilterValue == FilterValue.Year
-                            ? Utils.getPrimaryMaterialStateColorDarken(context)
-                            : Utils.getColor(
-                                Theme.of(context).colorScheme.primary),
-                      ),
-                    ),
-                  ),
+                YearFilterBtn(
+                  currentFilterValue: currentFilterValue,
+                  filterBtnPressed: _filterBtnPressed,
                 ),
                 Expanded(
                   child: Container(
@@ -303,26 +187,235 @@ class _FilterBarState extends State<FilterBar> {
                       PickerDateRange(DateTime.now(), DateTime.now()),
                   showActionButtons: true,
                   onSubmit: (p0) async {
+                    statisticsFirestore.avgBestWorstStatsLoaded = false;
+                    statisticsFirestore.notify();
+
                     statisticsFirestore.customDateFilterRange = _range;
                     statisticsFirestore.filterGamesByDate(
-                        FilterValue.Custom, context);
-                    _showCustomBtnDateRange = true;
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      setState(() {
-                        _showDatePicker = false;
-                      });
+                      FilterValue.Custom,
+                      context,
+                      statisticsFirestore,
+                      firestoreServicePlayerStats,
+                    );
+
+                    setState(() {
+                      _showCustomBtnDateRange = true;
+                      _showDatePicker = false;
                     });
+
+                    await Future.delayed(
+                        Duration(milliseconds: DEFEAULT_DELAY));
+                    await firestoreServicePlayerStats.getX01Statistics(
+                        statisticsFirestore, username);
+
+                    statisticsFirestore.avgBestWorstStatsLoaded = true;
+                    statisticsFirestore.notify();
                   },
-                  onCancel: () {
+                  onCancel: () async {
+                    statisticsFirestore.avgBestWorstStatsLoaded = false;
+                    statisticsFirestore.notify();
+
                     _showDatePicker = false;
                     _showCustomBtnDateRange = false;
                     statisticsFirestore.filterGamesByDate(
-                        FilterValue.Overall, context);
+                      FilterValue.Overall,
+                      context,
+                      statisticsFirestore,
+                      firestoreServicePlayerStats,
+                    );
+
+                    await Future.delayed(
+                        Duration(milliseconds: DEFEAULT_DELAY));
+                    await firestoreServicePlayerStats.getX01Statistics(
+                        statisticsFirestore, username);
+
+                    statisticsFirestore.avgBestWorstStatsLoaded = true;
+                    statisticsFirestore.notify();
                   },
                   showTodayButton: true,
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class OverallFilterBtn extends StatelessWidget {
+  const OverallFilterBtn(
+      {Key? key,
+      required Function(FilterValue) this.filterBtnPressed,
+      required FilterValue this.currentFilterValue})
+      : super(key: key);
+
+  final Function(FilterValue) filterBtnPressed;
+  final FilterValue currentFilterValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 4.h,
+        child: ElevatedButton(
+          onPressed: () => filterBtnPressed(FilterValue.Overall),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Overall',
+              style: TextStyle(
+                fontSize: 9.sp,
+                color: Utils.getTextColorForGameSettingsBtn(
+                    currentFilterValue == FilterValue.Overall, context),
+              ),
+            ),
+          ),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GAME_SETTINGS_BTN_BORDER_WITH.w,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10.0),
+                  bottomLeft: Radius.circular(10.0),
+                ),
+              ),
+            ),
+            backgroundColor: currentFilterValue == FilterValue.Overall
+                ? Utils.getPrimaryMaterialStateColorDarken(context)
+                : Utils.getColor(Theme.of(context).colorScheme.primary),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MonthFilterBtn extends StatelessWidget {
+  const MonthFilterBtn(
+      {Key? key,
+      required Function(FilterValue) this.filterBtnPressed,
+      required FilterValue this.currentFilterValue})
+      : super(key: key);
+
+  final Function(FilterValue) filterBtnPressed;
+  final FilterValue currentFilterValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 4.h,
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: 0.5.w,
+            ),
+            bottom: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: 0.5.w,
+            ),
+            right: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: 0.5.w,
+            ),
+          ),
+        ),
+        child: ElevatedButton(
+          onPressed: () => filterBtnPressed(FilterValue.Month),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Last 30 days',
+              style: TextStyle(
+                fontSize: 7.sp,
+                color: Utils.getTextColorForGameSettingsBtn(
+                    currentFilterValue == FilterValue.Month, context),
+              ),
+            ),
+          ),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.zero,
+                ),
+              ),
+            ),
+            backgroundColor: currentFilterValue == FilterValue.Month
+                ? Utils.getPrimaryMaterialStateColorDarken(context)
+                : Utils.getColor(Theme.of(context).colorScheme.primary),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class YearFilterBtn extends StatelessWidget {
+  const YearFilterBtn(
+      {Key? key,
+      required Function(FilterValue) this.filterBtnPressed,
+      required FilterValue this.currentFilterValue})
+      : super(key: key);
+
+  final Function(FilterValue) filterBtnPressed;
+  final FilterValue currentFilterValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        height: 4.h,
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: 0.5.w,
+            ),
+            bottom: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: 0.5.w,
+            ),
+          ),
+        ),
+        child: ElevatedButton(
+          onPressed: () => filterBtnPressed(FilterValue.Year),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Last 365 days',
+              style: TextStyle(
+                fontSize: 7.sp,
+                color: Utils.getTextColorForGameSettingsBtn(
+                    currentFilterValue == FilterValue.Year, context),
+              ),
+            ),
+          ),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.zero,
+                ),
+              ),
+            ),
+            backgroundColor: currentFilterValue == FilterValue.Year
+                ? Utils.getPrimaryMaterialStateColorDarken(context)
+                : Utils.getColor(Theme.of(context).colorScheme.primary),
+          ),
         ),
       ),
     );

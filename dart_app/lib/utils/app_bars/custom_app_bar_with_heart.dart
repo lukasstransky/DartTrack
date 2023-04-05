@@ -97,57 +97,64 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
-    return AppBar(
-      elevation: 0,
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      title: Text(widget.title),
-      leading: widget.isFinishScreen
-          ? SizedBox.shrink()
-          : IconButton(
+    return Selector<GameX01_P, bool>(
+      selector: (context, gameX01) => gameX01.getShowLoadingSpinner,
+      builder: (context, showLoadingSpinner, _) => AppBar(
+        elevation: 0,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        title: Text(widget.title),
+        leading: widget.isFinishScreen
+            ? SizedBox.shrink()
+            : IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () {
+                  var route = ModalRoute.of(context);
+                  if (route != null) {
+                    Navigator.of(context).pop();
+                  }
+                },
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+        actions: [
+          if (widget.showHeart && username != 'Guest')
+            IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              onPressed: () async => {
+                if (!showLoadingSpinner) {_addGameToFavourites()}
+              },
+              icon: widget.isFavouriteGame
+                  ? Icon(
+                      MdiIcons.heart,
+                      color: Theme.of(context).colorScheme.secondary,
+                    )
+                  : Icon(
+                      MdiIcons.heartOutline,
+                      color: Theme.of(context).colorScheme.secondary,
+                    ),
+            ),
+          if (widget.isFinishScreen)
+            IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
-                var route = ModalRoute.of(context);
-                if (route != null) {
-                  Navigator.of(context).pop();
+                if (!showLoadingSpinner) {
+                  _resetGame(context);
+                  Navigator.of(context).pushNamed('/home');
                 }
               },
               icon: Icon(
-                Icons.arrow_back,
+                Icons.home,
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),
-      actions: [
-        if (widget.showHeart && username != 'Guest')
-          IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () async => _addGameToFavourites(),
-            icon: widget.isFavouriteGame
-                ? Icon(
-                    MdiIcons.heart,
-                    color: Theme.of(context).colorScheme.secondary,
-                  )
-                : Icon(
-                    MdiIcons.heartOutline,
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-          ),
-        if (widget.isFinishScreen)
-          IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-            onPressed: () {
-              _resetGame(context);
-              Navigator.of(context).pushNamed('/home');
-            },
-            icon: Icon(
-              Icons.home,
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }

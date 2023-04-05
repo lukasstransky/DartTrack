@@ -228,7 +228,9 @@ class _OpenGamesState extends State<OpenGames> {
                                           context
                                               .read<FirestoreServiceGames>()
                                               .deleteOpenGame(
-                                                  game_p.getGameId, context);
+                                                  game_p.getGameId,
+                                                  context.read<
+                                                      OpenGamesFirestore>());
                                         }
                                       },
                                       backgroundColor: Color(0xFFFE4A49),

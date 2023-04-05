@@ -1,4 +1,6 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
@@ -24,26 +26,40 @@ class _FinishX01State extends State<FinishX01> {
   void initState() {
     super.initState();
 
-    _saveDataToFirestore(context);
+    Future.delayed(Duration.zero, () {
+      _saveDataToFirestore(context);
+    });
   }
 
   _saveDataToFirestore(BuildContext context) async {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+    final FirestoreServiceGames firestoreServiceGames =
+        context.read<FirestoreServiceGames>();
+    final OpenGamesFirestore openGamesFirestore =
+        context.read<OpenGamesFirestore>();
+
+    gameX01.setShowLoadingSpinner = true;
+    gameX01.notify();
+    await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
 
     if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
-      g_gameId = await context
-          .read<FirestoreServiceGames>()
-          .postGame(gameX01, context);
+      g_gameId =
+          await firestoreServiceGames.postGame(gameX01, openGamesFirestore);
       await context
           .read<FirestoreServicePlayerStats>()
           .postPlayerGameStatistics(gameX01, g_gameId, context);
     }
 
     if (gameX01.getIsOpenGame && mounted) {
-      await context
-          .read<FirestoreServiceGames>()
-          .deleteOpenGame(gameX01.getGameId, context);
+      await firestoreServiceGames.deleteOpenGame(
+          gameX01.getGameId, openGamesFirestore);
     }
+
+    gameX01.setShowLoadingSpinner = false;
+    gameX01.notify();
+
+    // to load data in stats tab again if new game was added
+    context.read<StatsFirestoreX01_P>().loadGames = true;
   }
 
   @override
@@ -57,23 +73,36 @@ class _FinishX01State extends State<FinishX01> {
           isFinishScreen: true,
           showHeart: true,
         ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Center(
-            child: Container(
-              width: 90.w,
-              child: Column(
-                children: [
-                  StatsCardX01(
-                    isFinishScreen: true,
-                    gameX01: context.read<GameX01_P>(),
-                    isOpenGame: false,
-                  ),
-                  FinishScreenBtns(gameMode: GameMode.X01),
-                ],
-              ),
+        body: Stack(
+          children: [
+            Selector<GameX01_P, bool>(
+              selector: (_, game) => game.getShowLoadingSpinner,
+              builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Center(
+                        child: Container(
+                          width: 90.w,
+                          child: Column(
+                            children: [
+                              StatsCardX01(
+                                isFinishScreen: true,
+                                gameX01: context.read<GameX01_P>(),
+                                isOpenGame: false,
+                              ),
+                              FinishScreenBtns(gameMode: GameMode.X01),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
             ),
-          ),
+          ],
         ),
       ),
     );

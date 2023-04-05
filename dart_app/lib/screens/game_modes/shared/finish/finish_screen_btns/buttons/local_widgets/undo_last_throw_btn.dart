@@ -46,6 +46,7 @@ class UndoLastThrowBtn extends StatelessWidget {
   _undoLastThrowBtnClicked(BuildContext context) async {
     final FirestoreServiceGames firestoreServiceGames =
         await context.read<FirestoreServiceGames>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
@@ -64,13 +65,14 @@ class UndoLastThrowBtn extends StatelessWidget {
         await firestoreServiceGames.deleteGame(g_gameId, context,
             game.getTeamGameStatistics.length > 0 ? true : false);
       }
-      if (_didBotFinishGame(game, context.read<GameSettingsX01_P>())) {
-        RevertX01Helper.revertPoints(context);
-        RevertX01Helper.revertPoints(context);
+      if (_didBotFinishGame(game, gameSettingsX01)) {
+        RevertX01Helper.revertPoints(game, gameSettingsX01);
+        RevertX01Helper.revertPoints(game, gameSettingsX01);
       } else {
-        RevertX01Helper.revertPoints(context);
+        RevertX01Helper.revertPoints(game, gameSettingsX01);
       }
 
+      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
       game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.ScoreTraining) {

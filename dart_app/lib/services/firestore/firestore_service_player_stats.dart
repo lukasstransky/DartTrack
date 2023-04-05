@@ -97,11 +97,9 @@ class FirestoreServicePlayerStats {
         .update(firestoreMap);
   }
 
-  Future<void> getX01Statistics(BuildContext context) async {
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
-    final firestoreStats = context.read<StatsFirestoreX01_P>();
-
+  Future<void> getX01Statistics(
+      StatsFirestoreX01_P firestoreStats, String username,
+      [bool delay = false]) async {
     firestoreStats.resetValues();
 
     int counter = 0;
@@ -388,6 +386,10 @@ class FirestoreServicePlayerStats {
                     firestoreStats.allScoresPerDartAsStringCount),
           },
         );
+
+    if (delay) {
+      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
+    }
 
     firestoreStats.avgBestWorstStatsLoaded = true;
     firestoreStats.notify();
