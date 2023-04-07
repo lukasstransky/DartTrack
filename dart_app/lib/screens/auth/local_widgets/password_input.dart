@@ -6,19 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class PasswordInput extends StatefulWidget {
+class PasswordInput extends StatelessWidget {
   const PasswordInput({Key? key}) : super(key: key);
-
-  @override
-  State<PasswordInput> createState() => _PasswordInputState();
-}
-
-class _PasswordInputState extends State<PasswordInput> {
-  @override
-  void initState() {
-    super.initState();
-    newTextControllerForPassword();
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -64,11 +64,13 @@ class LoginRegisterBtn extends StatelessWidget {
         'username': usernameTextController.text,
       });
 
+      auth.setAuthMode = AuthMode.Login;
+      auth.setPasswordVisible = false;
+      auth.setShowLoadingSpinner = false;
+
       emailTextController.clear();
       passwordTextController.clear();
       usernameTextController.clear();
-
-      disposeControllersForAuth();
 
       // hide loading spinner
       context.loaderOverlay.hide();

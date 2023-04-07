@@ -49,6 +49,7 @@ const int DEFAULT_LEGS_DRAW_MODE = 6;
 
 const int WIDTH_GAMESETTINGS = 80;
 const double WIDGET_HEIGHT_GAMESETTINGS = 4;
+const double WIDGET_HEIGHT_GAMESETTINGS_TEAMS = 3.5;
 const double MARGIN_GAMESETTINGS = 1.0;
 const double BUTTON_BORDER_RADIUS = 10.0;
 
@@ -391,4 +392,4 @@ const double GAME_SETTINGS_BTN_BORDER_WITH = 0.5;
 const int THROWN_DARTS_WIDGET_HEIGHT = 6;
 
 const int DEFEAULT_DELAY =
-    300; // for async rerquests -> to show loading spinner
+    200; // for async rerquests -> to show loading spinner

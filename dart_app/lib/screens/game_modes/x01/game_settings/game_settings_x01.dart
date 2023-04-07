@@ -98,7 +98,7 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
                 AdvancedSettingsX01(),
               ],
             ),
-            StartGameBtnX01(),
+            StartGameBtnX01()
           ],
         ),
       ),

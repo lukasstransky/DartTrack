@@ -6,19 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class UsernameInput extends StatefulWidget {
+class UsernameInput extends StatelessWidget {
   const UsernameInput({Key? key}) : super(key: key);
-
-  @override
-  State<UsernameInput> createState() => _UsernameInputState();
-}
-
-class _UsernameInputState extends State<UsernameInput> {
-  @override
-  void initState() {
-    super.initState();
-    newTextControllerForUsername();
-  }
 
   @override
   Widget build(BuildContext context) {

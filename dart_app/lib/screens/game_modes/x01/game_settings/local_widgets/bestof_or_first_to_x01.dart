@@ -39,21 +39,26 @@ class BestOfOrFirstToX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: WIDTH_GAMESETTINGS.w,
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-        child: Selector<GameSettingsX01_P, BestOfOrFirstToEnum>(
-          selector: (_, gameSettings) => gameSettings.getMode,
-          builder: (_, mode, __) => Row(
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          mode: gameSettingsX01.getMode,
+          singleOrTeam: gameSettingsX01.getSingleOrTeam,
+        ),
+        builder: (_, selectorModel, __) => Container(
+          width: WIDTH_GAMESETTINGS.w,
+          height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
+              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
+              : WIDGET_HEIGHT_GAMESETTINGS.h,
+          margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
+          child: Row(
             children: [
               BestOfBtn(
                 switchBestOfOrFirstTo: _switchBestOfOrFirstTo,
-                mode: mode,
+                mode: selectorModel.mode,
               ),
               FirstToBtn(
                 switchBestOfOrFirstTo: _switchBestOfOrFirstTo,
-                mode: mode,
+                mode: selectorModel.mode,
               )
             ],
           ),
@@ -175,4 +180,14 @@ class FirstToBtn extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final BestOfOrFirstToEnum mode;
+  final SingleOrTeamEnum singleOrTeam;
+
+  SelectorModel({
+    required this.mode,
+    required this.singleOrTeam,
+  });
 }

@@ -38,12 +38,6 @@ TextEditingController newTextControllerForPassword() {
   return passwordTextController;
 }
 
-disposeControllersForAuth() {
-  usernameTextController.dispose();
-  emailTextController.dispose();
-  passwordTextController.dispose();
-}
-
 // GAMESETTINGS X01
 ScrollController scrollControllerPlayers = new ScrollController();
 ScrollController scrollControllerTeams = new ScrollController();
@@ -157,3 +151,5 @@ String g_gameId = '';
 String g_average = '-';
 String g_last_throw = '-';
 String g_thrown_darts = '-';
+
+int counter = 0;

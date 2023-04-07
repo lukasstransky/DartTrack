@@ -40,11 +40,16 @@ class SetsBtnX01 extends StatelessWidget {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Expanded(
-      child: Container(
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        child: Selector<GameSettingsX01_P, bool>(
-          selector: (_, gameSettingsX01) => gameSettingsX01.getSetsEnabled,
-          builder: (_, setsEnabled, __) => ElevatedButton(
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          setsEnabled: gameSettingsX01.getSetsEnabled,
+          singleOrTeam: gameSettingsX01.getSingleOrTeam,
+        ),
+        builder: (_, selectorModel, __) => Container(
+          height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
+              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
+              : WIDGET_HEIGHT_GAMESETTINGS.h,
+          child: ElevatedButton(
             onPressed: () => _setsBtnClicked(gameSettingsX01),
             child: FittedBox(
               fit: BoxFit.scaleDown,
@@ -52,7 +57,7 @@ class SetsBtnX01 extends StatelessWidget {
                 'Sets',
                 style: TextStyle(
                   color: Utils.getTextColorForGameSettingsBtn(
-                      setsEnabled, context),
+                      selectorModel.setsEnabled, context),
                 ),
               ),
             ),
@@ -71,7 +76,7 @@ class SetsBtnX01 extends StatelessWidget {
                   ),
                 ),
               ),
-              backgroundColor: setsEnabled
+              backgroundColor: selectorModel.setsEnabled
                   ? Utils.getPrimaryMaterialStateColorDarken(context)
                   : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),
@@ -80,4 +85,14 @@ class SetsBtnX01 extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final bool setsEnabled;
+  final SingleOrTeamEnum singleOrTeam;
+
+  SelectorModel({
+    required this.setsEnabled,
+    required this.singleOrTeam,
+  });
 }

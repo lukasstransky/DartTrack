@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class EmailInput extends StatefulWidget {
+class EmailInput extends StatelessWidget {
   final bool isForgotPasswordScreen;
   final bool isRegisterScreen;
 
@@ -15,17 +15,6 @@ class EmailInput extends StatefulWidget {
       this.isForgotPasswordScreen = false,
       this.isRegisterScreen = false})
       : super(key: key);
-
-  @override
-  State<EmailInput> createState() => _EmailInputState();
-}
-
-class _EmailInputState extends State<EmailInput> {
-  @override
-  void initState() {
-    super.initState();
-    newTextControllerForEmail();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +34,10 @@ class _EmailInputState extends State<EmailInput> {
               .hasMatch(value)) {
             emailTextController.clear();
             return ('Please enter a valid email!');
-          } else if (widget.isRegisterScreen && auth.getEmailAlreadyExists) {
+          } else if (isRegisterScreen && auth.getEmailAlreadyExists) {
             emailTextController.clear();
             return 'Email already exists!';
-          } else if (widget.isForgotPasswordScreen &&
-              !auth.getEmailAlreadyExists) {
+          } else if (isForgotPasswordScreen && !auth.getEmailAlreadyExists) {
             emailTextController.clear();
             return 'Email does not exist!';
           }

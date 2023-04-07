@@ -210,8 +210,17 @@ class _OpenGamesState extends State<OpenGames> {
                                 key: UniqueKey(),
                                 child: _getCard(game_p),
                                 startActionPane: ActionPane(
-                                  dismissible:
-                                      DismissiblePane(onDismissed: () {}),
+                                  extentRatio: 0.01,
+                                  dismissible: DismissiblePane(onDismissed: () {
+                                    if (mounted) {
+                                      context
+                                          .read<FirestoreServiceGames>()
+                                          .deleteOpenGame(
+                                              game_p.getGameId,
+                                              context
+                                                  .read<OpenGamesFirestore>());
+                                    }
+                                  }),
                                   motion: const ScrollMotion(),
                                   children: [
                                     SlidableAction(
@@ -223,16 +232,7 @@ class _OpenGamesState extends State<OpenGames> {
                                       label: 'Play',
                                     ),
                                     SlidableAction(
-                                      onPressed: (context) {
-                                        if (mounted) {
-                                          context
-                                              .read<FirestoreServiceGames>()
-                                              .deleteOpenGame(
-                                                  game_p.getGameId,
-                                                  context.read<
-                                                      OpenGamesFirestore>());
-                                        }
-                                      },
+                                      onPressed: (context) {},
                                       backgroundColor: Color(0xFFFE4A49),
                                       foregroundColor: Colors.white,
                                       icon: Icons.delete,

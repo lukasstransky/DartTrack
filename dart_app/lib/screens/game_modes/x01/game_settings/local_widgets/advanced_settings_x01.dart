@@ -8,7 +8,7 @@ class AdvancedSettingsX01 extends StatelessWidget {
   double _getProperValueForTransformation(SelectorModel selectorModel) {
     int counter = _getCountOfPresentSwitchers(selectorModel);
     if (counter == 3) {
-      return -3.5;
+      return -3;
     } else if (counter == 2) {
       return -2;
     } else if (counter == 1) {

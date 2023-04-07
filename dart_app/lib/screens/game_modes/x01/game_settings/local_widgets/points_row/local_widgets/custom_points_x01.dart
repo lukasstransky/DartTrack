@@ -162,18 +162,25 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Expanded(
-      child: Container(
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        child: Selector<GameSettingsX01_P, int>(
-          selector: (_, gameSettingsX01) => gameSettingsX01.getCustomPoints,
-          builder: (_, customPoints, __) => ElevatedButton(
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          customPoints: gameSettingsX01.getCustomPoints,
+          singleOrTeam: gameSettingsX01.getSingleOrTeam,
+        ),
+        builder: (_, selectorModel, __) => Container(
+          height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
+              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
+              : WIDGET_HEIGHT_GAMESETTINGS.h,
+          child: ElevatedButton(
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                customPoints == -1 ? 'Custom' : customPoints.toString(),
+                selectorModel.customPoints == -1
+                    ? 'Custom'
+                    : selectorModel.customPoints.toString(),
                 style: TextStyle(
                   color: Utils.getTextColorForGameSettingsBtn(
-                      customPoints != -1, context),
+                      selectorModel.customPoints != -1, context),
                 ),
               ),
             ),
@@ -194,7 +201,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   ),
                 ),
               ),
-              backgroundColor: customPoints != -1
+              backgroundColor: selectorModel.customPoints != -1
                   ? Utils.getPrimaryMaterialStateColorDarken(context)
                   : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),
@@ -203,4 +210,14 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final int customPoints;
+  final SingleOrTeamEnum singleOrTeam;
+
+  SelectorModel({
+    required this.customPoints,
+    required this.singleOrTeam,
+  });
 }

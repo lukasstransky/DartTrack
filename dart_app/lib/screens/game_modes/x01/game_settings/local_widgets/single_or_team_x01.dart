@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -53,24 +54,30 @@ class SingleOrTeamX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: WIDTH_GAMESETTINGS.w,
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        margin: EdgeInsets.only(
-          top: MARGIN_GAMESETTINGS.h,
-          bottom: MARGIN_GAMESETTINGS.h,
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          singleOrTeam: gameSettingsX01.getSingleOrTeam,
+          players: gameSettingsX01.getPlayers,
+          teams: gameSettingsX01.getTeams,
         ),
-        child: Selector<GameSettingsX01_P, SingleOrTeamEnum>(
-          selector: (_, gameSettings) => gameSettings.getSingleOrTeam,
-          builder: (_, singleOrTeam, __) => Row(
+        builder: (_, selectorModel, __) => Container(
+          width: WIDTH_GAMESETTINGS.w,
+          height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
+              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
+              : WIDGET_HEIGHT_GAMESETTINGS.h,
+          margin: EdgeInsets.only(
+            top: MARGIN_GAMESETTINGS.h,
+            bottom: MARGIN_GAMESETTINGS.h,
+          ),
+          child: Row(
             children: [
               SingleBtn(
                 switchSingleOrTeamMode: _switchSingleOrTeamMode,
-                singleOrTeam: singleOrTeam,
+                singleOrTeam: selectorModel.singleOrTeam,
               ),
               TeamBtn(
                 switchSingleOrTeamMode: _switchSingleOrTeamMode,
-                singleOrTeam: singleOrTeam,
+                singleOrTeam: selectorModel.singleOrTeam,
               ),
             ],
           ),
@@ -190,4 +197,16 @@ class TeamBtn extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final SingleOrTeamEnum singleOrTeam;
+  final List<Player> players;
+  final List<Team> teams;
+
+  SelectorModel({
+    required this.singleOrTeam,
+    required this.players,
+    required this.teams,
+  });
 }

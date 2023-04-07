@@ -752,4 +752,10 @@ class Utils {
                 ? getMostOccurringValue(statisticsFirestore.roundedScoresEven)
                 : getMostOccurringValue(statisticsFirestore.roundedScoresOdd));
   }
+
+  static bool shouldShrinkWidget(GameSettingsX01_P gameSettingsX01) {
+    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        gameSettingsX01.getTeams.length >= 2 &&
+        gameSettingsX01.getPlayers.length >= 4;
+  }
 }

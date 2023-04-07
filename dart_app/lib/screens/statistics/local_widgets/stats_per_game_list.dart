@@ -207,13 +207,14 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                         key: UniqueKey(),
                         child: _getCard(game),
                         startActionPane: ActionPane(
-                          dismissible: DismissiblePane(onDismissed: () {}),
+                          extentRatio: 0.1,
+                          dismissible: DismissiblePane(onDismissed: () {
+                            _deleteGame(game, statsFirestore);
+                          }),
                           motion: const ScrollMotion(),
                           children: [
                             SlidableAction(
-                              onPressed: (context) async {
-                                _deleteGame(game, statsFirestore);
-                              },
+                              onPressed: (context) {},
                               backgroundColor: Color(0xFFFE4A49),
                               foregroundColor: Colors.white,
                               icon: Icons.delete,

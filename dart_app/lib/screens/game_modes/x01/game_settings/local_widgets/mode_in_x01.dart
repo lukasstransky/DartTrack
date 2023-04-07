@@ -10,17 +10,22 @@ class ModeInX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: WIDTH_GAMESETTINGS.w,
-        height: WIDGET_HEIGHT_GAMESETTINGS.h,
-        margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-        child: Selector<GameSettingsX01_P, ModeOutIn>(
-          selector: (_, gameSettings) => gameSettings.getModeIn,
-          builder: (_, modeIn, __) => Row(
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          modeIn: gameSettingsX01.getModeIn,
+          singleOrTeam: gameSettingsX01.getSingleOrTeam,
+        ),
+        builder: (_, selectorModel, __) => Container(
+          width: WIDTH_GAMESETTINGS.w,
+          height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
+              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
+              : WIDGET_HEIGHT_GAMESETTINGS.h,
+          margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
+          child: Row(
             children: [
-              SingleInBtn(modeIn: modeIn),
-              DoubleInBtn(modeIn: modeIn),
-              MasterInBtn(modeIn: modeIn),
+              SingleInBtn(modeIn: selectorModel.modeIn),
+              DoubleInBtn(modeIn: selectorModel.modeIn),
+              MasterInBtn(modeIn: selectorModel.modeIn),
             ],
           ),
         ),
@@ -189,4 +194,14 @@ class SingleInBtn extends StatelessWidget {
       ),
     );
   }
+}
+
+class SelectorModel {
+  final ModeOutIn modeIn;
+  final SingleOrTeamEnum singleOrTeam;
+
+  SelectorModel({
+    required this.modeIn,
+    required this.singleOrTeam,
+  });
 }
