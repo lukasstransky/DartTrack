@@ -30,7 +30,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   bool _isFavouriteGame = false;
   bool _revertPossible = false;
   List<String> _currentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
-  bool _showLoadingSpinner = false; // to show loading spinner
+  bool _showLoadingSpinner = false;
 
   Game_P({
     required String name,

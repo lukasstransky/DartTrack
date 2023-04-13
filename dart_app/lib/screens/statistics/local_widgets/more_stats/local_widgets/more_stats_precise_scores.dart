@@ -12,6 +12,13 @@ class MoreStatsPreciseScores extends StatelessWidget {
 
   final bool showAllScoesPerDartWithCount;
 
+  bool _shouldHighlightRankNumber(StatsFirestoreX01_P statisticsFirestore) {
+    if (showAllScoesPerDartWithCount) {
+      return statisticsFirestore.allScoresPerDartAsStringCount.isNotEmpty;
+    }
+    return statisticsFirestore.games.isNotEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
     final StatsFirestoreX01_P statisticsFirestore =
@@ -28,28 +35,26 @@ class MoreStatsPreciseScores extends StatelessWidget {
                 children: [
                   Container(
                     width: 10.w,
-                    child: Padding(
-                      padding: EdgeInsets.only(top: 0.5.h),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          i.toString() + '.',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.bold,
-                            color: i == 1
-                                ? Theme.of(context).colorScheme.secondary
-                                : Utils.getTextColorDarken(context),
-                          ),
+                    padding: EdgeInsets.only(top: 0.5.h),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        '${i.toString()}.',
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          fontWeight: FontWeight.bold,
+                          color:
+                              _shouldHighlightRankNumber(statisticsFirestore) &&
+                                      i == 1
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Utils.getTextColorDarken(context),
                         ),
                       ),
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        top: 0.5,
-                      ),
+                    child: Container(
+                      padding: EdgeInsets.only(top: 0.5),
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: showAllScoesPerDartWithCount
@@ -74,7 +79,9 @@ class MoreStatsPreciseScores extends StatelessWidget {
                                         'x)',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: statisticsFirestore.countOfGames > 0 &&
+                                  color: statisticsFirestore
+                                              .allScoresPerDartAsStringCount
+                                              .isNotEmpty &&
                                           i == 1
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
@@ -99,7 +106,8 @@ class MoreStatsPreciseScores extends StatelessWidget {
                                         'x)',
                                 style: TextStyle(
                                   fontSize: 12.sp,
-                                  color: i == 1
+                                  color: statisticsFirestore.games.isNotEmpty &&
+                                          i == 1
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
                                 ),

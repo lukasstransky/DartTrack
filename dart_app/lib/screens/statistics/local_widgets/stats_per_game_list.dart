@@ -30,6 +30,7 @@ class StatsPerGameList extends StatefulWidget {
 
 class _StatsPerGameListState extends State<StatsPerGameList> {
   String _mode = '';
+  bool _showLoadingSpinner = false;
 
   @override
   didChangeDependencies() {
@@ -46,13 +47,11 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   _getGames() async {
-    if (_mode == 'X01') {
-      return;
-    }
-
     late dynamic statsFirestore;
 
-    if (_mode == 'Single training') {
+    if (_mode == 'X01') {
+      statsFirestore = context.read<StatsFirestoreX01_P>();
+    } else if (_mode == 'Single training') {
       statsFirestore = context.read<StatsFirestoreSingleTraining_P>();
     } else if (_mode == 'Double training') {
       statsFirestore = context.read<StatsFirestoreDoubleTraining_P>();
@@ -60,12 +59,22 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
       statsFirestore = context.read<StatsFirestoreScoreTraining_P>();
     }
 
+    setState(() {
+      _showLoadingSpinner = true;
+    });
+
     if (statsFirestore.loadGames) {
-      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
-      await context.read<FirestoreServiceGames>().getGames(_mode, context);
+      await context.read<FirestoreServiceGames>().getGames(
+          _mode, context, context.read<FirestoreServicePlayerStats>());
 
       statsFirestore.loadGames = false;
+    } else {
+      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY + 200));
     }
+
+    setState(() {
+      _showLoadingSpinner = false;
+    });
   }
 
   String _getMessage(dynamic statsFirestore, String mode) {
@@ -100,9 +109,6 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   void _deleteGame(Game_P game, dynamic statsFirestore) async {
-    await context.read<FirestoreServiceGames>().deleteGame(game.getGameId,
-        context, game.getTeamGameStatistics.length > 0 ? true : false);
-
     final Game_P toDelete = statsFirestore.games
         .where(((g) => g.getGameId == game.getGameId))
         .first;
@@ -115,14 +121,20 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
       statsFirestore.noGamesPlayed = true;
     }
 
+    setState(() {});
+
+    await context.read<FirestoreServiceGames>().deleteGame(game.getGameId,
+        context, game.getTeamGameStatistics.length > 0 ? true : false);
+
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final StatsFirestoreX01_P statsFirestoreX01 =
+        context.read<StatsFirestoreX01_P>();
+
     await context.read<FirestoreServicePlayerStats>().getX01Statistics(
-          context.read<StatsFirestoreX01_P>(),
+          statsFirestoreX01,
           username,
         );
-
-    statsFirestore.notify();
   }
 
   _getCard(Game_P game) {
@@ -148,8 +160,10 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   _getWidget(dynamic statsFirestore, List<Game_P> games) {
-    if (_mode != 'X01' && statsFirestore.loadGames) {
-      return Center(
+    Widget widgetToReturn;
+
+    if (_showLoadingSpinner) {
+      widgetToReturn = Center(
         child: CircularProgressIndicator(
           color: Colors.white,
         ),
@@ -159,7 +173,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
         (!statsFirestore.showFavouriteGames && games.isNotEmpty)) {
       statsFirestore.sortGames();
 
-      return SingleChildScrollView(
+      widgetToReturn = SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Center(
           child: Container(
@@ -175,7 +189,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'To view details about a game, click on its card.',
+                      'To view the details about a game, click on it\'s card.',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -231,7 +245,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
         ),
       );
     } else {
-      return Center(
+      widgetToReturn = Center(
         child: Text(
           _getMessage(statsFirestore, _mode),
           textAlign: TextAlign.center,
@@ -241,6 +255,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
         ),
       );
     }
+
+    return widgetToReturn;
   }
 
   @override
@@ -248,13 +264,13 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     late dynamic statsFirestore;
 
     if (_mode == 'X01') {
-      statsFirestore = context.watch<StatsFirestoreX01_P>();
+      statsFirestore = context.read<StatsFirestoreX01_P>();
     } else if (_mode == 'Single training') {
-      statsFirestore = context.watch<StatsFirestoreSingleTraining_P>();
+      statsFirestore = context.read<StatsFirestoreSingleTraining_P>();
     } else if (_mode == 'Double training') {
-      statsFirestore = context.watch<StatsFirestoreDoubleTraining_P>();
+      statsFirestore = context.read<StatsFirestoreDoubleTraining_P>();
     } else if (_mode == 'Score training') {
-      statsFirestore = context.watch<StatsFirestoreScoreTraining_P>();
+      statsFirestore = context.read<StatsFirestoreScoreTraining_P>();
     }
 
     List<Game_P> games = statsFirestore.games;

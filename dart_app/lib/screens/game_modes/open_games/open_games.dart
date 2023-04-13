@@ -210,16 +210,8 @@ class _OpenGamesState extends State<OpenGames> {
                                 key: UniqueKey(),
                                 child: _getCard(game_p),
                                 startActionPane: ActionPane(
-                                  extentRatio: 0.01,
                                   dismissible: DismissiblePane(onDismissed: () {
-                                    if (mounted) {
-                                      context
-                                          .read<FirestoreServiceGames>()
-                                          .deleteOpenGame(
-                                              game_p.getGameId,
-                                              context
-                                                  .read<OpenGamesFirestore>());
-                                    }
+                                    setState(() {});
                                   }),
                                   motion: const ScrollMotion(),
                                   children: [
@@ -232,7 +224,16 @@ class _OpenGamesState extends State<OpenGames> {
                                       label: 'Play',
                                     ),
                                     SlidableAction(
-                                      onPressed: (context) {},
+                                      onPressed: (context) {
+                                        if (mounted) {
+                                          context
+                                              .read<FirestoreServiceGames>()
+                                              .deleteOpenGame(
+                                                  game_p.getGameId,
+                                                  context.read<
+                                                      OpenGamesFirestore>());
+                                        }
+                                      },
                                       backgroundColor: Color(0xFFFE4A49),
                                       foregroundColor: Colors.white,
                                       icon: Icons.delete,

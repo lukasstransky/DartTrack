@@ -1,7 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
-import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
-import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -113,7 +110,8 @@ class FirestoreServiceGames {
     statisticsFirestoreX01.notify();
   }
 
-  Future<void> getGames(String mode, BuildContext context) async {
+  Future<void> getGames(String mode, BuildContext context,
+      FirestoreServicePlayerStats firestoreServicePlayerStats) async {
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(mode, context);
 
@@ -132,9 +130,7 @@ class FirestoreServiceGames {
 
     if (games.docs.isEmpty) {
       statsFirestore.noGamesPlayed = true;
-      if (mode != 'X01') {
-        statsFirestore.loadGames = true;
-      }
+      statsFirestore.loadGames = true;
       statsFirestore.notify();
     } else {
       statsFirestore.noGamesPlayed = false;
@@ -142,8 +138,6 @@ class FirestoreServiceGames {
       await Future.forEach(games.docs, (QueryDocumentSnapshot element) async {
         final Game_P game =
             Game_P.fromMap(element.data(), mode, element.id, false);
-        final FirestoreServicePlayerStats firestoreServicePlayerStats =
-            context.read<FirestoreServicePlayerStats>();
 
         PlayerOrTeamGameStats? playerOrTeamGameStatistics;
         for (String playerGameStatsId in element.get('playerGameStatsIds')) {
@@ -170,12 +164,7 @@ class FirestoreServiceGames {
         statsFirestore.games.add(game);
       });
 
-      if (statsFirestore is StatsFirestoreSingleTraining_P ||
-          statsFirestore is StatsFirestoreDoubleTraining_P ||
-          statsFirestore is StatsFirestoreScoreTraining_P) {
-        statsFirestore.loadGames = true;
-      }
-
+      statsFirestore.loadGames = true;
       statsFirestore.notify();
     }
   }

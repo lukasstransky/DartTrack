@@ -35,7 +35,9 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
       await context
           .read<FirestoreServiceGames>()
           .getOpenGames(openGamesFirestore);
+      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
       openGamesFirestore.setLoadOpenGames = false;
+      setState(() {});
     }
   }
 
@@ -51,33 +53,45 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
           .read<FirestoreServiceDefaultSettings>()
           .getDefaultSettingsX01(context);
       defaultSettingsX01.loadSettings = false;
+      setState(() {});
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final DefaultSettingsX01_P defaultSettingsX01 =
+        context.read<DefaultSettingsX01_P>();
+    final OpenGamesFirestore openGamesFirestore =
+        context.read<OpenGamesFirestore>();
+
     return Scaffold(
       appBar: CustomAppBar(showBackBtn: false, title: 'Game modes'),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          OpenGames(),
-          Expanded(
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  X01Btn(),
-                  CricketBtn(),
-                  SingleTrainingBtn(),
-                  DoubleTrainingBtn(),
-                  ScoreTrainingBtn(),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
+      body:
+          defaultSettingsX01.loadSettings || openGamesFirestore.getLoadOpenGames
+              ? Center(
+                  child: CircularProgressIndicator(
+                  color: Colors.white,
+                ))
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    OpenGames(),
+                    Expanded(
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            X01Btn(),
+                            CricketBtn(),
+                            SingleTrainingBtn(),
+                            DoubleTrainingBtn(),
+                            ScoreTrainingBtn(),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
     );
   }
 }

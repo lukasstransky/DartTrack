@@ -101,11 +101,11 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
 
   @override
   Widget build(BuildContext context) {
-    final _padding = EdgeInsets.only(
+    final EdgeInsets _padding = EdgeInsets.only(
       left: 5.w,
       bottom: 1.h,
     );
-    final _paddingOnlyLeft = EdgeInsets.only(left: 5.w);
+    final EdgeInsets _paddingOnlyLeft = EdgeInsets.only(left: 5.w);
 
     return Scaffold(
       appBar: _game!.getIsGameFinished
@@ -147,47 +147,61 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Chip(
+                      shape: StadiumBorder(
+                        side: BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                        ),
+                      ),
                       backgroundColor: Utils.getPrimaryColorDarken(context),
                       label: Text(
                         _game!.getGameSettings.getModeIn == ModeOutIn.Single
                             ? 'Single in'
                             : 'Double in',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 1.w),
+                    Container(
+                      padding: EdgeInsets.only(left: 1.5.w),
                       child: Chip(
+                        shape: StadiumBorder(
+                          side: BorderSide(
+                            color: Utils.getPrimaryColorDarken(context),
+                          ),
+                        ),
                         backgroundColor: Utils.getPrimaryColorDarken(context),
                         label: Text(
                           _game!.getGameSettings.getModeOut == ModeOutIn.Single
                               ? 'Single out'
                               : 'Double out',
-                          style: TextStyle(
-                            color: Colors.white,
-                          ),
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
                     if (_game!.getGameSettings.getSuddenDeath)
-                      Padding(
-                        padding: EdgeInsets.only(left: 1.w),
+                      Container(
+                        padding: EdgeInsets.only(left: 1.5.w),
                         child: Chip(
+                          shape: StadiumBorder(
+                            side: BorderSide(
+                              color: Utils.getPrimaryColorDarken(context),
+                            ),
+                          ),
                           backgroundColor: Utils.getPrimaryColorDarken(context),
                           label: Text(
                             'Sudden death',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
                     if (_game!.getGameSettings.getDrawMode)
-                      Padding(
-                        padding: EdgeInsets.only(left: 1.w),
+                      Container(
+                        padding: EdgeInsets.only(left: 1.5.w),
                         child: Chip(
+                          shape: StadiumBorder(
+                            side: BorderSide(
+                              color: Utils.getPrimaryColorDarken(context),
+                            ),
+                          ),
                           backgroundColor: Utils.getPrimaryColorDarken(context),
                           label: Text(
                             'Draw enabled',

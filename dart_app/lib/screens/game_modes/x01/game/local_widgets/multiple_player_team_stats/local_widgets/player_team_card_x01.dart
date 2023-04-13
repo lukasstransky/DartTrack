@@ -27,7 +27,7 @@ class PlayerTeamCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           side: BorderSide(
             color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
-            width: GENERAL_BORDER_WIDTH.w,
+            width: 0.5.w,
           ),
           borderRadius: BorderRadius.circular(12.0),
         ),

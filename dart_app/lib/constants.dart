@@ -392,4 +392,4 @@ const double GAME_SETTINGS_BTN_BORDER_WITH = 0.5;
 const int THROWN_DARTS_WIDGET_HEIGHT = 6;
 
 const int DEFEAULT_DELAY =
-    200; // for async rerquests -> to show loading spinner
+    100; // for async rerquests -> to show loading spinner

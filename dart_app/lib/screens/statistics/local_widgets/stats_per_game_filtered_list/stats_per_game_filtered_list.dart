@@ -28,7 +28,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   String _orderField = '';
   bool _overallFilter = true;
   bool _ascendingOrder = true;
-  bool _showLoadSpinner = true;
+  bool _showLoadSpinner = false;
   static const Set<String> _fieldsToShowOverallPerGameBtn = {
     'highestFinish',
     'bestLeg',
@@ -172,7 +172,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                           child: Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'To view details about a game, click on its card.',
+                              'To view the details about a game, click on it\'s card.',
                               style: TextStyle(color: Colors.white),
                             ),
                           ),

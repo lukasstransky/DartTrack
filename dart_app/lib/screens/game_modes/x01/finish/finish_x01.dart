@@ -37,6 +37,8 @@ class _FinishX01State extends State<FinishX01> {
         context.read<FirestoreServiceGames>();
     final OpenGamesFirestore openGamesFirestore =
         context.read<OpenGamesFirestore>();
+    final StatsFirestoreX01_P statsFirestoreX01 =
+        context.read<StatsFirestoreX01_P>();
 
     gameX01.setShowLoadingSpinner = true;
     gameX01.notify();
@@ -59,7 +61,8 @@ class _FinishX01State extends State<FinishX01> {
     gameX01.notify();
 
     // to load data in stats tab again if new game was added
-    context.read<StatsFirestoreX01_P>().loadGames = true;
+    statsFirestoreX01.loadGames = true;
+    statsFirestoreX01.loadPlayerStats = true;
   }
 
   @override

@@ -61,11 +61,13 @@ class SubmitX01Helper {
       currentStats.getInputMethodForRounds.add(InputMethod.Round);
 
       // add it also for team
-      final PlayerOrTeamGameStatsX01 teamStats = gameX01.getTeamGameStatistics
-          .where((PlayerOrTeamGameStats p) =>
-              p.getTeam.getName == currentStats.getTeam.getName)
-          .first as PlayerOrTeamGameStatsX01;
-      teamStats.getInputMethodForRounds.add(InputMethod.Round);
+      if (shouldSubmitTeamStats) {
+        final PlayerOrTeamGameStatsX01 teamStats = gameX01.getTeamGameStatistics
+            .where((PlayerOrTeamGameStats p) =>
+                p.getTeam.getName == currentStats.getTeam.getName)
+            .first as PlayerOrTeamGameStatsX01;
+        teamStats.getInputMethodForRounds.add(InputMethod.Round);
+      }
     }
 
     if (isInputMethodThreeDarts) {
@@ -805,7 +807,7 @@ class SubmitX01Helper {
   static bool _gameWonBestOfWithLegs(
       int legsWon, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
-        ((legsWon * 2) - 1) == gameSettingsX01.getLegs;
+        ((legsWon * 2) - 1) >= gameSettingsX01.getLegs;
   }
 
   static bool _gameWonBestOfWithLegsWithDrawMode(
@@ -885,10 +887,8 @@ class SubmitX01Helper {
           _gameWonBestOfWithSets(stats.getSetsWon, gameSettingsX01);
     } else if (!gameSettingsX01.getSetsEnabled) {
       // leg mode
-      if (_gameWonBestOfWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
-        return true;
-      } else if (_gameWonFirstToWithLegs(
-          stats.getLegsWonTotal, gameSettingsX01)) {
+      if (_gameWonFirstToWithLegs(stats.getLegsWonTotal, gameSettingsX01) ||
+          _gameWonBestOfWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
         if (!gameSettingsX01.getWinByTwoLegsDifference) {
           return true;
         }
@@ -916,8 +916,15 @@ class SubmitX01Helper {
 
     for (PlayerOrTeamGameStatsX01 stats
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
-      final int legsForSuddenDeath =
-          gameSettingsX01.getLegs + gameSettingsX01.getMaxExtraLegs;
+      late double legsForSuddenDeath;
+      if (gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo) {
+        legsForSuddenDeath =
+            (gameSettingsX01.getLegs + gameSettingsX01.getMaxExtraLegs)
+                .toDouble();
+      } else {
+        legsForSuddenDeath = ((gameSettingsX01.getLegs + 1) / 2) +
+            gameSettingsX01.getMaxExtraLegs;
+      }
 
       if (stats.getLegsWon != legsForSuddenDeath) {
         result = false;

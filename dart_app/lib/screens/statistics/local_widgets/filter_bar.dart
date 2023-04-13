@@ -115,7 +115,7 @@ class _FilterBarState extends State<FilterBar> {
                   child: Container(
                     height: 4.h,
                     child: ElevatedButton(
-                      onPressed: () => {
+                      onPressed: () {
                         setState(
                           () {
                             _showDatePicker = true;
@@ -123,7 +123,7 @@ class _FilterBarState extends State<FilterBar> {
                             statisticsFirestore.currentFilterValue =
                                 FilterValue.Custom;
                           },
-                        ),
+                        );
                       },
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
@@ -172,9 +172,21 @@ class _FilterBarState extends State<FilterBar> {
               Theme(
                 data: ThemeData(),
                 child: SfDateRangePicker(
-                  confirmText: 'Ok',
+                  confirmText: 'Select',
                   cancelText: 'Cancel',
                   todayHighlightColor: Colors.white,
+                  monthCellStyle: DateRangePickerMonthCellStyle(
+                    todayTextStyle: TextStyle(
+                      fontSize: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                  yearCellStyle: DateRangePickerYearCellStyle(
+                    todayCellDecoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 1),
+                        shape: BoxShape.circle),
+                    todayTextStyle: const TextStyle(color: Colors.white),
+                  ),
                   rangeSelectionColor:
                       Utils.darken(Theme.of(context).colorScheme.primary, 20),
                   endRangeSelectionColor: Utils.getPrimaryColorDarken(context),
@@ -217,6 +229,7 @@ class _FilterBarState extends State<FilterBar> {
 
                     _showDatePicker = false;
                     _showCustomBtnDateRange = false;
+                    _setCurrentDate();
                     statisticsFirestore.filterGamesByDate(
                       FilterValue.Overall,
                       context,
@@ -258,7 +271,11 @@ class OverallFilterBtn extends StatelessWidget {
       child: Container(
         height: 4.h,
         child: ElevatedButton(
-          onPressed: () => filterBtnPressed(FilterValue.Overall),
+          onPressed: () {
+            if (currentFilterValue != FilterValue.Overall) {
+              filterBtnPressed(FilterValue.Overall);
+            }
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
@@ -328,7 +345,11 @@ class MonthFilterBtn extends StatelessWidget {
           ),
         ),
         child: ElevatedButton(
-          onPressed: () => filterBtnPressed(FilterValue.Month),
+          onPressed: () {
+            if (currentFilterValue != FilterValue.Month) {
+              filterBtnPressed(FilterValue.Month);
+            }
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
@@ -389,7 +410,11 @@ class YearFilterBtn extends StatelessWidget {
           ),
         ),
         child: ElevatedButton(
-          onPressed: () => filterBtnPressed(FilterValue.Year),
+          onPressed: () {
+            if (currentFilterValue != FilterValue.Year) {
+              filterBtnPressed(FilterValue.Year);
+            }
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(

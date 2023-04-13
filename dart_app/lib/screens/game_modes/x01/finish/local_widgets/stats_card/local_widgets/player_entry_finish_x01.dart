@@ -8,7 +8,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerEntryFinishX01 extends StatefulWidget {
@@ -145,6 +144,8 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                       playerStats: _playerStats,
                       teamStats: _teamStats,
                       i: widget.i,
+                      singleOrTeamEnum:
+                          widget.gameX01.getGameSettings.getSingleOrTeam,
                       firstElementNoDrawOrOpenGame:
                           _firstElementNoDrawOrOpenGame,
                     ),
@@ -164,23 +165,24 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
 }
 
 class DisplayTeamOrPlayerName extends StatelessWidget {
-  const DisplayTeamOrPlayerName(
-      {Key? key,
-      required this.playerStats,
-      required this.teamStats,
-      required this.i,
-      required this.firstElementNoDrawOrOpenGame})
-      : super(key: key);
+  const DisplayTeamOrPlayerName({
+    Key? key,
+    required this.playerStats,
+    required this.teamStats,
+    required this.i,
+    required this.singleOrTeamEnum,
+    required this.firstElementNoDrawOrOpenGame,
+  }) : super(key: key);
 
   final List<PlayerOrTeamGameStatsX01> playerStats;
   final List<PlayerOrTeamGameStatsX01> teamStats;
   final int i;
+  final SingleOrTeamEnum singleOrTeamEnum;
   final Function firstElementNoDrawOrOpenGame;
 
   @override
   Widget build(BuildContext context) {
-    if (context.read<GameSettingsX01_P>().getSingleOrTeam ==
-        SingleOrTeamEnum.Team)
+    if (singleOrTeamEnum == SingleOrTeamEnum.Team)
       return Flexible(
         child: Padding(
           padding: EdgeInsets.only(left: 2.w),

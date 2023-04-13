@@ -23,7 +23,6 @@ class BestOfOrFirstToX01 extends StatelessWidget {
       }
     } else {
       settings.setMode = BestOfOrFirstToEnum.BestOf;
-      settings.setWinByTwoLegsDifference = false;
 
       if (settings.getSetsEnabled) {
         settings.setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;

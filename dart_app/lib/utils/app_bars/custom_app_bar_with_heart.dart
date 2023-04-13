@@ -37,13 +37,13 @@ class CustomAppBarWithHeart extends StatefulWidget with PreferredSizeWidget {
 
 class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
   _changeFavouriteStateOfGame(String gameId, bool state) async {
-    await context
-        .read<FirestoreServiceGames>()
-        .changeFavouriteStateOfGame(gameId, state);
-
     setState(() {
       widget.isFavouriteGame = state;
     });
+
+    await context
+        .read<FirestoreServiceGames>()
+        .changeFavouriteStateOfGame(gameId, state);
   }
 
   Game_P _getGameById(String gameId, dynamic statsFirestore) {
@@ -125,8 +125,10 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
             IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onPressed: () async => {
-                if (!showLoadingSpinner) {_addGameToFavourites()}
+              onPressed: () async {
+                if (!showLoadingSpinner) {
+                  _addGameToFavourites();
+                }
               },
               icon: widget.isFavouriteGame
                   ? Icon(

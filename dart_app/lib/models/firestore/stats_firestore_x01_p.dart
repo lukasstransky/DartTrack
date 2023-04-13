@@ -72,8 +72,8 @@ class StatsFirestoreX01_P with ChangeNotifier {
   List<Game_P> _filteredGames = [];
   List<Game_P> _favouriteGames = [];
   bool _showFavouriteGames = false;
-
   bool _loadGames = true;
+  bool _loadPlayerStats = true;
 
   get countOfGamesWon => this._countOfGamesWon;
 
@@ -213,6 +213,11 @@ class StatsFirestoreX01_P with ChangeNotifier {
   bool get loadGames => this._loadGames;
 
   set loadGames(bool loadGames) => this._loadGames = loadGames;
+
+  bool get loadPlayerStats => this._loadPlayerStats;
+
+  set loadPlayerStats(bool loadPlayerStats) =>
+      this._loadPlayerStats = loadPlayerStats;
 
   DateTime getDateTimeFromCurrentFilterValue() {
     final DateTime now = new DateTime.now();
@@ -396,7 +401,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
       FilterValue newFilterValue,
       BuildContext context,
       StatsFirestoreX01_P statsFirestoreX01,
-      FirestoreServicePlayerStats firestoreServicePlayerStats) async {
+      FirestoreServicePlayerStats firestoreServicePlayerStats) {
     this.currentFilterValue = newFilterValue;
     this.resetFilteredGames();
     this.favouriteGames = [];

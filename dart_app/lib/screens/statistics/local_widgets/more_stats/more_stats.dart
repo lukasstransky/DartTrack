@@ -73,33 +73,59 @@ class _MoreStatsState extends State<MoreStats> {
               ],
             ),
             Container(
-              transform: Matrix4.translationValues(0.0, -10.0, 0.0),
-              child: Padding(
-                padding: EdgeInsets.only(left: 5.w),
-                child: Row(
-                  children: [
-                    Text(
-                      'Show all scores per dart',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+              padding: EdgeInsets.only(
+                left: 5.w,
+                top: 2.h,
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    'Show odd rounded scores',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.sp,
                     ),
-                    Switch(
-                      thumbColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.secondary),
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveThumbColor:
-                          Theme.of(context).colorScheme.secondary,
-                      value: _showAllScoesPerDartWithCount,
-                      onChanged: (value) {
-                        setState(() {
-                          _showAllScoesPerDartWithCount =
-                              !_showAllScoesPerDartWithCount;
-                        });
-                      },
+                  ),
+                  Switch(
+                    thumbColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.secondary),
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
+                    value: _roundedScoresOdd,
+                    onChanged: (value) {
+                      setState(() {
+                        _roundedScoresOdd = !_roundedScoresOdd;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 5.w),
+              child: Row(
+                children: [
+                  Text(
+                    'Show all scores per dart',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.sp,
                     ),
-                  ],
-                ),
+                  ),
+                  Switch(
+                    thumbColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.secondary),
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
+                    value: _showAllScoesPerDartWithCount,
+                    onChanged: (value) {
+                      setState(() {
+                        _showAllScoesPerDartWithCount =
+                            !_showAllScoesPerDartWithCount;
+                      });
+                    },
+                  ),
+                ],
               ),
             ),
           ],

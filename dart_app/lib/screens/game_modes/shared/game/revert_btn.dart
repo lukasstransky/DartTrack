@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
@@ -11,8 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
-
-import '../../../../constants.dart';
 
 class RevertBtn extends StatelessWidget {
   const RevertBtn({
@@ -62,26 +61,29 @@ class RevertBtn extends StatelessWidget {
           ),
         ),
       ),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
+      child: Selector<GameX01_P, bool>(
+        selector: (_, game) => game.getRevertPossible,
+        builder: (_, revertPossible, __) => ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
             ),
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            backgroundColor: revertPossible
+                ? MaterialStateProperty.all(Colors.red)
+                : MaterialStateProperty.all(Utils.darken(Colors.red, 25)),
+            overlayColor: revertPossible
+                ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
+                : MaterialStateProperty.all(Colors.transparent),
           ),
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          backgroundColor: game_p.getRevertPossible
-              ? MaterialStateProperty.all(Colors.red)
-              : MaterialStateProperty.all(Utils.darken(Colors.red, 25)),
-          overlayColor: game_p.getRevertPossible
-              ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
-              : MaterialStateProperty.all(Colors.transparent),
+          child: Icon(
+            Icons.undo,
+            color: Utils.getTextColorDarken(context),
+          ),
+          onPressed: () => _revertBtnPressed(context),
         ),
-        child: Icon(
-          Icons.undo,
-          color: Utils.getTextColorDarken(context),
-        ),
-        onPressed: () => _revertBtnPressed(context),
       ),
     );
   }

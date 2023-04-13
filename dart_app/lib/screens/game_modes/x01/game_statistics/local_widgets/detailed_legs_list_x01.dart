@@ -40,75 +40,84 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
 
     return Container(
       width: 100.w,
-      padding: EdgeInsets.only(top: 1.5.h, left: 3.w, right: 3.w),
-      child: ExpansionPanelList(
-        expandedHeaderPadding: EdgeInsets.all(0),
-        expansionCallback: (int index, bool isExpanded) {
-          setState(() {
-            _items[index].isExpanded = !isExpanded;
-          });
-        },
-        children: _items
-            .map<ExpansionPanel>(
-              (item) => ExpansionPanel(
-                backgroundColor: Utils.darken(
-                  Theme.of(context).colorScheme.primary,
-                  20,
-                ),
-                canTapOnHeader: true,
-                headerBuilder: (_, isExpanded) => ListTile(
-                  title: Container(
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: gameSettingsX01.getSets != 0 ? 32.w : 20.w,
-                          child: Text(
-                            item.value,
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.white,
+      padding: EdgeInsets.only(
+        top: 1.5.h,
+        left: 3.w,
+        right: 3.w,
+      ),
+      child: Theme(
+        data: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+          colorScheme: Theme.of(context).colorScheme,
+        ),
+        child: ExpansionPanelList(
+          expandedHeaderPadding: EdgeInsets.all(0),
+          expansionCallback: (int index, bool isExpanded) {
+            setState(() {
+              _items[index].isExpanded = !isExpanded;
+            });
+          },
+          children: _items
+              .map<ExpansionPanel>(
+                (item) => ExpansionPanel(
+                  backgroundColor:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 20),
+                  canTapOnHeader: true,
+                  headerBuilder: (_, isExpanded) => ListTile(
+                    title: Container(
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: gameSettingsX01.getSets != 0 ? 32.w : 20.w,
+                            child: Text(
+                              item.value,
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Icon(
-                                Entypo.trophy,
-                                size: 14.sp,
-                                color: Color(0xffFFD700),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(left: 1.w),
-                                child: Text(
-                                  Utils.getWinnerOfLeg(item.value,
-                                              widget.gameX01, context)
-                                          .contains('Bot')
-                                      ? 'Bot'
-                                      : Utils.getWinnerOfLeg(
-                                          item.value, widget.gameX01, context),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.sp,
+                          Expanded(
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Entypo.trophy,
+                                  size: 14.sp,
+                                  color: Color(0xffFFD700),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 1.w),
+                                  child: Text(
+                                    Utils.getWinnerOfLeg(item.value,
+                                                widget.gameX01, context)
+                                            .contains('Bot')
+                                        ? 'Bot'
+                                        : Utils.getWinnerOfLeg(item.value,
+                                            widget.gameX01, context),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 14.sp,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
                   ),
+                  body: DetailedLegX01(
+                      setLegString: item.value,
+                      winnerOfLeg: Utils.getWinnerOfLeg(
+                          item.value, widget.gameX01, context),
+                      gameX01: widget.gameX01),
+                  isExpanded: item.isExpanded,
                 ),
-                body: DetailedLegX01(
-                    setLegString: item.value,
-                    winnerOfLeg: Utils.getWinnerOfLeg(
-                        item.value, widget.gameX01, context),
-                    gameX01: widget.gameX01),
-                isExpanded: item.isExpanded,
-              ),
-            )
-            .toList(),
+              )
+              .toList(),
+        ),
       ),
     );
   }

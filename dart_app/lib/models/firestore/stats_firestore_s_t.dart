@@ -5,6 +5,7 @@ class StatsFirestoreSingleTraining_P with ChangeNotifier {
   List<Game_P> _games = [];
   bool _noGamesPlayed = false;
   bool _loadGames = true;
+  bool _gameDeleted = false; // to hide loading spinner
 
   List<Game_P> _favouriteGames = [];
   bool _showFavouriteGames = false;
@@ -17,6 +18,9 @@ class StatsFirestoreSingleTraining_P with ChangeNotifier {
 
   List<Game_P> get games => this._games;
   set games(List<Game_P> value) => this._games = value;
+
+  bool get gameDeleted => this._gameDeleted;
+  set gameDeleted(bool value) => this._gameDeleted = value;
 
   List<Game_P> get favouriteGames => this._favouriteGames;
   set favouriteGames(List<Game_P> value) => this._favouriteGames = value;

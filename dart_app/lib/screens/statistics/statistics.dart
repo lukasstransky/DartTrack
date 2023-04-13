@@ -8,7 +8,6 @@ import 'package:dart_app/screens/statistics/local_widgets/other_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/stats_per_game_btns.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
-import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -40,10 +39,9 @@ class _StatisticsState extends State<Statistics> {
       });
       statsFirestore.resetAll();
     } else {
-      if (statsFirestore.loadGames) {
+      if (statsFirestore.loadPlayerStats) {
         _getPlayerGameStatistics(statsFirestore);
-        _getGames();
-        statsFirestore.loadGames = false;
+        statsFirestore.loadPlayerStats = false;
       }
     }
 
@@ -54,10 +52,6 @@ class _StatisticsState extends State<Statistics> {
     await context
         .read<FirestoreServicePlayerStats>()
         .getX01Statistics(statsFirestore, username, true);
-  }
-
-  _getGames() async {
-    await context.read<FirestoreServiceGames>().getGames('X01', context);
   }
 
   _showDialogWhenLoggedInAsGuest() {
@@ -148,8 +142,7 @@ class _StatisticsState extends State<Statistics> {
         label: Text(
           _showMoreStats ? 'Less stats' : 'More stats',
           style: TextStyle(
-            color: Utils.getTextColorDarken(context),
-            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
       ),

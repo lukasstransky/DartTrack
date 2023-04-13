@@ -169,6 +169,7 @@ class GameX01_P extends Game_P {
     setRevertPossible = false;
     setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
     setShowLoadingSpinner = false;
+    setDateTime = DateTime.now();
 
     g_average = '-';
     g_last_throw = '-';
@@ -435,6 +436,10 @@ class GameX01_P extends Game_P {
 
   bool _shouldPointBtnBeDisabledRound(
       String btnValueToCheck, PlayerOrTeamGameStatsX01 stats) {
+    if (stats.getPlayer is Bot) {
+      return false;
+    }
+
     // DOUBLE IN
     if (stats.getCurrentPoints == getGameSettings.getPointsOrCustom() &&
         (getGameSettings.getModeIn == ModeOutIn.Double ||

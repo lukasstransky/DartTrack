@@ -153,3 +153,6 @@ String g_last_throw = '-';
 String g_thrown_darts = '-';
 
 int counter = 0;
+
+// for not showing loading spinner when deleting a game
+bool gameDeleted = false;
