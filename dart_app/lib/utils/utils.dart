@@ -638,10 +638,11 @@ class Utils {
                     onPressed: () async {
                       Navigator.of(context, rootNavigator: true).pop();
 
+                      game_p.setShowLoadingSpinner = true;
+                      game_p.notify();
+
                       context.read<OpenGamesFirestore>().setLoadOpenGames =
                           true;
-                      await Future.delayed(
-                          Duration(milliseconds: DEFEAULT_DELAY));
                       await context
                           .read<FirestoreServiceGames>()
                           .postOpenGame(game_p, context);
