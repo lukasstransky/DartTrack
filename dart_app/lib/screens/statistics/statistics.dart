@@ -88,40 +88,43 @@ class _StatisticsState extends State<Statistics> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            FilterBar(),
-            Selector<StatsFirestoreX01_P, SelectorModel>(
-              selector: (_, statsFirestoreX01) => SelectorModel(
-                avgBestWorstStatsLoaded:
-                    statsFirestoreX01.avgBestWorstStatsLoaded,
-                games: statsFirestoreX01.games,
-              ),
-              builder: (_, selectorModel, __) =>
-                  selectorModel.avgBestWorstStatsLoaded || username == 'Guest'
-                      ? Column(
-                          children: [
-                            OtherStats(),
-                            AvgBestWorstStats(),
-                            if (_showMoreStats) MoreStats(),
-                            showMoreStatsBtn(),
-                            StatsPerGameBtns()
-                          ],
-                        )
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height - 25.h,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              FilterBar(),
+              Selector<StatsFirestoreX01_P, SelectorModel>(
+                selector: (_, statsFirestoreX01) => SelectorModel(
+                  avgBestWorstStatsLoaded:
+                      statsFirestoreX01.avgBestWorstStatsLoaded,
+                  games: statsFirestoreX01.games,
+                ),
+                builder: (_, selectorModel, __) =>
+                    selectorModel.avgBestWorstStatsLoaded || username == 'Guest'
+                        ? Column(
+                            children: [
+                              OtherStats(),
+                              AvgBestWorstStats(),
+                              if (_showMoreStats) MoreStats(),
+                              showMoreStatsBtn(),
+                              StatsPerGameBtns()
+                            ],
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height - 25.h,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

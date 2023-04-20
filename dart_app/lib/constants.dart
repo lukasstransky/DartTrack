@@ -8,6 +8,16 @@ enum GameMode { X01, ScoreTraining, SingleTraining, DoubleTraining, Cricket }
 // single training
 enum ModesSingleDoubleTraining { Ascending, Descending, Random }
 
+// cricket
+enum CricketMode { Standard, CutThroat, NoScore }
+
+const int DEFAULT_SETS_FIRST_TO_SETS_ENABLED_CRICKET = 2;
+const int DEFAULT_LEGS_FIRST_TO_SETS_ENABLED_CRICKET = 2;
+const int DEFAULT_SETS_BEST_OF_SETS_ENABLED_CRICKET = 3;
+const int DEFAULT_LEGS_BEST_OF_SETS_ENABLED_CRICKET = 3;
+const int DEFAULT_LEGS_FIRST_TO_NO_SETS_CRICKET = 3;
+const int DEFAULT_LEGS_BEST_OF_NO_SETS_CRICKET = 5;
+
 //Auth Page
 enum AuthMode { Register, Login }
 

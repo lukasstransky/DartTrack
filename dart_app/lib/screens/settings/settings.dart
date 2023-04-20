@@ -60,7 +60,9 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
         appBar: CustomAppBar(showBackBtn: false, title: 'Settings'),
         body: Center(
           child: Column(
@@ -103,6 +105,8 @@ class SettingsPage extends StatelessWidget {
               ),
             ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
@@ -32,6 +33,18 @@ class AddPlayerTeamBtnDialogs {
           gameSettings_P.getPlayers.length <= 1;
     }
     return false;
+  }
+
+  static SingleOrTeamEnum _getSingleOrTeam(GameSettings_P gameSettings_P) {
+    late SingleOrTeamEnum singleOrTeam;
+
+    if (gameSettings_P is GameSettingsX01_P) {
+      singleOrTeam = gameSettings_P.getSingleOrTeam;
+    } else if (gameSettings_P is GameSettingsCricket_P) {
+      singleOrTeam = gameSettings_P.getSingleOrTeam;
+    }
+
+    return singleOrTeam;
   }
 
   static showDialogForAddingPlayer(
@@ -174,9 +187,7 @@ class AddPlayerTeamBtnDialogs {
           actions: [
             Row(
               children: [
-                gameSettings_P is GameSettingsX01_P &&
-                        gameSettings_P.getSingleOrTeam ==
-                            SingleOrTeamEnum.Team &&
+                _getSingleOrTeam(gameSettings_P) == SingleOrTeamEnum.Team &&
                         gameSettings_P.getTeams.length < 4
                     ? Expanded(
                         child: Align(
@@ -271,8 +282,7 @@ class AddPlayerTeamBtnDialogs {
     Navigator.of(context).pop();
 
     // assign player to team
-    if (gameSettings_P is GameSettingsX01_P &&
-        gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+    if (_getSingleOrTeam(gameSettings_P) == SingleOrTeamEnum.Team) {
       final Team? team = _checkIfMultipleTeamsToAdd(gameSettings_P.getTeams);
 
       if (team != null) {
@@ -282,7 +292,8 @@ class AddPlayerTeamBtnDialogs {
             playerToAdd, gameSettings_P.getTeams, gameSettings_P, context);
       }
     } else {
-      if (gameSettings_P is GameSettingsX01_P) {
+      if (gameSettings_P is GameSettingsX01_P ||
+          gameSettings_P is GameSettingsCricket_P) {
         gameSettings_P.addPlayer(playerToAdd);
       } else {
         // for modes like score training no team should be assigned to a player
@@ -305,7 +316,7 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static showDialogForAddingTeam(
-      GameSettingsX01_P gameSettingsX01, BuildContext context) {
+      GameSettings_P gameSettings, BuildContext context) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -332,7 +343,7 @@ class AddPlayerTeamBtnDialogs {
                         if (value!.isEmpty) {
                           return ('Please enter a team name!');
                         }
-                        if (gameSettingsX01.checkIfTeamNameExists(value)) {
+                        if (gameSettings.checkIfTeamNameExists(value)) {
                           return 'Teamname already exists!';
                         }
 
@@ -371,7 +382,7 @@ class AddPlayerTeamBtnDialogs {
             actions: [
               Row(
                 children: [
-                  if (gameSettingsX01.getTeams.isNotEmpty)
+                  if (gameSettings.getTeams.isNotEmpty)
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -386,7 +397,7 @@ class AddPlayerTeamBtnDialogs {
                           onPressed: () {
                             Navigator.of(context).pop();
                             showDialogForAddingPlayerOrTeam(
-                                gameSettingsX01, context);
+                                gameSettings, context);
                           },
                         ),
                       ),
@@ -417,7 +428,7 @@ class AddPlayerTeamBtnDialogs {
                         ),
                         TextButton(
                           onPressed: () => {
-                            _submitNewTeam(gameSettingsX01, context),
+                            _submitNewTeam(gameSettings, context),
                             newTeamController.clear(),
                           },
                           child: Text(
@@ -443,17 +454,16 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static _submitNewTeam(
-      GameSettingsX01_P gameSettingsX01, BuildContext context) {
+  static _submitNewTeam(GameSettings_P gameSettings, BuildContext context) {
     if (!_formKeyNewTeam.currentState!.validate()) return;
 
     _formKeyNewTeam.currentState!.save();
 
-    gameSettingsX01.getTeams.add(new Team(name: newTeamController.text));
-    gameSettingsX01.notify();
+    gameSettings.getTeams.add(new Team(name: newTeamController.text));
+    gameSettings.notify();
 
     // scroll to bottom
-    if (gameSettingsX01.getTeams.length > 2) {
+    if (gameSettings.getTeams.length > 2) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         scrollControllerTeams.animateTo(
           scrollControllerTeams.position.maxScrollExtent,
@@ -466,18 +476,19 @@ class AddPlayerTeamBtnDialogs {
     Navigator.of(context).pop();
   }
 
-  static _addNewPlayerToSpecificTeam(Player playerToAdd, Team? teamForNewPlayer,
-      GameSettingsX01_P gameSettingsX01) {
-    gameSettingsX01.getPlayers.add(playerToAdd);
-    for (Team team in gameSettingsX01.getTeams)
-      if (team == teamForNewPlayer)
+  static _addNewPlayerToSpecificTeam(
+      Player playerToAdd, Team? teamForNewPlayer, GameSettings_P gameSettings) {
+    gameSettings.getPlayers.add(playerToAdd);
+    for (Team team in gameSettings.getTeams)
+      if (team == teamForNewPlayer) {
         team.getPlayers.add(Player.clone(playerToAdd));
+      }
 
-    gameSettingsX01.notify();
+    gameSettings.notify();
   }
 
   static showDialogForAddingPlayerOrTeam(
-      GameSettingsX01_P gameSettingsX01, BuildContext context) {
+      GameSettings_P gameSettings, BuildContext context) {
     String? teamOrPlayer = 'player';
 
     showDialog(
@@ -496,7 +507,7 @@ class AddPlayerTeamBtnDialogs {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (gameSettingsX01.getTeams.length < MAX_TEAMS)
+                  if (gameSettings.getTeams.length < MAX_TEAMS)
                     Theme(
                       data: Theme.of(context).copyWith(
                         unselectedWidgetColor:
@@ -519,7 +530,7 @@ class AddPlayerTeamBtnDialogs {
                         },
                       ),
                     ),
-                  if (gameSettingsX01.getTeams.length > 0)
+                  if (gameSettings.getTeams.length > 0)
                     Theme(
                       data: Theme.of(context).copyWith(
                         unselectedWidgetColor:
@@ -569,11 +580,11 @@ class AddPlayerTeamBtnDialogs {
                 Navigator.of(context).pop(),
                 if (teamOrPlayer == 'team')
                   {
-                    showDialogForAddingTeam(gameSettingsX01, context),
+                    showDialogForAddingTeam(gameSettings, context),
                   }
                 else
                   {
-                    showDialogForAddingPlayer(gameSettingsX01, context),
+                    showDialogForAddingPlayer(gameSettings, context),
                   }
               },
               style: ButtonStyle(
@@ -587,9 +598,9 @@ class AddPlayerTeamBtnDialogs {
     );
   }
 
-  static Team _getTeamWithLeastPlayers(GameSettingsX01_P gameSettingsX01) {
-    Team teamWithLeastPlayers = gameSettingsX01.getTeams[0];
-    for (Team team in gameSettingsX01.getTeams) {
+  static Team _getTeamWithLeastPlayers(GameSettings_P gameSettings) {
+    Team teamWithLeastPlayers = gameSettings.getTeams[0];
+    for (Team team in gameSettings.getTeams) {
       if (team.getPlayers.length < teamWithLeastPlayers.getPlayers.length) {
         teamWithLeastPlayers = team;
       }
@@ -617,18 +628,18 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static _submitNewTeamForPlayer(Player player, Team? selectedTeam,
-      GameSettingsX01_P gameSettings, BuildContext context) {
+      GameSettings_P gameSettings, BuildContext context) {
     _addNewPlayerToSpecificTeam(player, selectedTeam, gameSettings);
 
     Navigator.of(context).pop();
   }
 
   static _showDialogForSelectingTeam(Player playerToAdd, List<Team> teams,
-      GameSettingsX01_P gameSettingsX01, BuildContext context) {
+      GameSettings_P gameSettings, BuildContext context) {
     Team? selectedTeam;
     if (teams.length >= 2) {
       selectedTeam =
-          AddPlayerTeamBtnDialogs._getTeamWithLeastPlayers(gameSettingsX01);
+          AddPlayerTeamBtnDialogs._getTeamWithLeastPlayers(gameSettings);
     }
     teams = teams.reversed.toList();
 
@@ -707,7 +718,7 @@ class AddPlayerTeamBtnDialogs {
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        showDialogForAddingPlayer(gameSettingsX01, context);
+                        showDialogForAddingPlayer(gameSettings, context);
                       },
                     ),
                   ),
@@ -733,7 +744,7 @@ class AddPlayerTeamBtnDialogs {
                     ),
                     TextButton(
                       onPressed: () => _submitNewTeamForPlayer(
-                          playerToAdd, selectedTeam, gameSettingsX01, context),
+                          playerToAdd, selectedTeam, gameSettings, context),
                       child: Text(
                         'Submit',
                         style: TextStyle(

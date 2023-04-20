@@ -2,8 +2,8 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/mode_sc_t.dart';
-import 'package:dart_app/screens/game_modes/shared/game_settings/players_teams_list/players_list.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_settings/local_widgets/rounds_or_points_input_sc_t.dart';
+import 'package:dart_app/screens/game_modes/shared/game_settings/players_teams_list/players_list/players_list.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/start_game_btn.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/add_player_team_btn/add_player_btn.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -57,7 +57,7 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         title: 'Score training settings',
-        showInfoIcon: true,
+        showInfoIconScoreTraining: true,
       ),
       body: SafeArea(
         child: Column(

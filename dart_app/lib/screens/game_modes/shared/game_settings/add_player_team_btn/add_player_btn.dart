@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
@@ -26,7 +27,7 @@ class AddPlayerBtn extends StatelessWidget {
     return false;
   }
 
-  _addPlayerTeamBtnPressed(GameSettingsX01_P settings, BuildContext context) {
+  _addPlayerTeamBtnPressed(dynamic settings, BuildContext context) {
     if (settings.getSingleOrTeam == SingleOrTeamEnum.Single ||
         settings.getTeams.length == MAX_TEAMS) {
       AddPlayerTeamBtnDialogs.showDialogForAddingPlayer(settings, context);
@@ -75,6 +76,8 @@ class AddPlayerBtn extends StatelessWidget {
                     context);
                 break;
               case GameMode.Cricket:
+                _addPlayerTeamBtnPressed(
+                    context.read<GameSettingsCricket_P>(), context);
                 break;
             }
           },

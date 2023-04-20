@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
@@ -12,7 +13,7 @@ import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
-class PlayersTeamsListDialogsX01 {
+class PlayersTeamsListDialogs {
   static final GlobalKey<FormState> _formKeyEditPlayer = GlobalKey<FormState>();
   static final GlobalKey<FormState> _formKeyEditTeam = GlobalKey<FormState>();
 
@@ -199,9 +200,9 @@ class PlayersTeamsListDialogsX01 {
     );
   }
 
-  static showDialogForEditingTeam(BuildContext context, Team teamToEdit,
-      GameSettingsX01_P gameSettingsX01) {
-    String cancelName = teamToEdit.getName;
+  static showDialogForEditingTeam(
+      BuildContext context, Team teamToEdit, GameSettings_P gameSettings) {
+    final String cancelName = teamToEdit.getName;
 
     showDialog(
       barrierDismissible: false,
@@ -231,7 +232,7 @@ class PlayersTeamsListDialogsX01 {
                         if (value!.isEmpty) {
                           return ('Please enter a name!');
                         }
-                        if (gameSettingsX01.checkIfTeamNameExists(value)) {
+                        if (gameSettings.checkIfTeamNameExists(value)) {
                           return 'Team name already exists!';
                         }
 
@@ -282,10 +283,10 @@ class PlayersTeamsListDialogsX01 {
                               Navigator.of(context).pop();
                               if (teamToEdit.getPlayers.length > 0) {
                                 _showDialogForDeletingTeam(
-                                    context, gameSettingsX01, teamToEdit);
+                                    context, gameSettings, teamToEdit);
                               } else {
-                                gameSettingsX01.checkTeamNamingIds(teamToEdit);
-                                _deleteTeam(teamToEdit, gameSettingsX01);
+                                gameSettings.checkTeamNamingIds(teamToEdit);
+                                _deleteTeam(teamToEdit, gameSettings);
                               }
                             }),
                       ],
@@ -312,7 +313,7 @@ class PlayersTeamsListDialogsX01 {
               ),
               TextButton(
                 onPressed: () =>
-                    _submitEditedTeam(context, gameSettingsX01, teamToEdit),
+                    _submitEditedTeam(context, gameSettings, teamToEdit),
                 child: Text(
                   'Submit',
                   style:
@@ -333,7 +334,7 @@ class PlayersTeamsListDialogsX01 {
   static showDialogForDeletingTeamAsLastPlayer(
       BuildContext context,
       Team teamToMaybeDelete,
-      GameSettingsX01_P gameSettingsX01,
+      GameSettings_P gameSettings,
       Player playerToDelete) {
     showDialog(
         barrierDismissible: false,
@@ -376,7 +377,7 @@ class PlayersTeamsListDialogsX01 {
                         padding: EdgeInsets.only(right: 2.w),
                         child: TextButton(
                           onPressed: () {
-                            gameSettingsX01.removePlayer(playerToDelete, false);
+                            gameSettings.removePlayer(playerToDelete, false);
                             Navigator.of(context).pop();
                           },
                           child: Text(
@@ -393,10 +394,10 @@ class PlayersTeamsListDialogsX01 {
                       ),
                       TextButton(
                         onPressed: () {
-                          gameSettingsX01.checkTeamNamingIds(teamToMaybeDelete);
-                          gameSettingsX01.getTeams
+                          gameSettings.checkTeamNamingIds(teamToMaybeDelete);
+                          gameSettings.getTeams
                               .removeWhere((team) => team == teamToMaybeDelete);
-                          gameSettingsX01.removePlayer(playerToDelete, true);
+                          gameSettings.removePlayer(playerToDelete, true);
                           Navigator.of(context).pop();
                         },
                         child: Text(
@@ -418,13 +419,13 @@ class PlayersTeamsListDialogsX01 {
         });
   }
 
-  static showDialogForSwitchingTeam(BuildContext context, Player playerToSwap,
-      GameSettingsX01_P gameSettingsX01) {
-    Team? newTeam =
-        _checkIfSwappingOnlyToOneTeamPossible(playerToSwap, gameSettingsX01);
+  static showDialogForSwitchingTeam(
+      BuildContext context, Player playerToSwap, GameSettings_P gameSettings) {
+    final Team? newTeam =
+        _checkIfSwappingOnlyToOneTeamPossible(playerToSwap, gameSettings);
     if (newTeam == null) {
       List<Team> possibleTeamsToSwap =
-          _getPossibleTeamsToSwap(playerToSwap, gameSettingsX01);
+          _getPossibleTeamsToSwap(playerToSwap, gameSettings);
       Team? selectedTeam = possibleTeamsToSwap[0];
 
       showDialog(
@@ -480,7 +481,7 @@ class PlayersTeamsListDialogsX01 {
               ),
               TextButton(
                 onPressed: () => _swapTeam(
-                    context, playerToSwap, selectedTeam, gameSettingsX01),
+                    context, playerToSwap, selectedTeam, gameSettings),
                 child: Text(
                   'Submit',
                   style:
@@ -496,7 +497,7 @@ class PlayersTeamsListDialogsX01 {
         },
       );
     } else {
-      _swapTeam(context, playerToSwap, newTeam, gameSettingsX01);
+      _swapTeam(context, playerToSwap, newTeam, gameSettings);
     }
   }
 
@@ -504,8 +505,8 @@ class PlayersTeamsListDialogsX01 {
   /*****************               PRIVATE METHODS             *********************/
   /*********************************************************************************/
 
-  static _saveEdit(BuildContext context, GameSettings_P gameSettings_P,
-      Player playerToEdit) {
+  static _saveEdit(
+      BuildContext context, dynamic gameSettings_P, Player playerToEdit) {
     if (!_formKeyEditPlayer.currentState!.validate()) {
       return;
     }
@@ -513,15 +514,16 @@ class PlayersTeamsListDialogsX01 {
 
     if (!(playerToEdit is Bot)) {
       // player from team is not the same refernce as in the single players list, therefore also needs to be updated and vice versa
-      if (gameSettings_P is GameSettingsX01_P) {
+      if (gameSettings_P is GameSettingsX01_P ||
+          gameSettings_P is GameSettingsCricket_P) {
         if (gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
-          Player? playerFromSingles =
+          final Player? playerFromSingles =
               gameSettings_P.getPlayerFromSingles(playerToEdit.getName);
           if (playerFromSingles != null) {
             playerFromSingles.setName = editPlayerController.text;
           }
         }
-        Player playerFromTeam =
+        final Player playerFromTeam =
             gameSettings_P.getPlayerFromTeam(playerToEdit.getName);
         playerFromTeam.setName = editPlayerController.text;
       }
@@ -534,51 +536,53 @@ class PlayersTeamsListDialogsX01 {
     Navigator.of(context).pop();
   }
 
-  static _submitEditedTeam(BuildContext context,
-      GameSettingsX01_P gameSettingsX01, Team teamToEdit) {
-    if (!_formKeyEditTeam.currentState!.validate()) return;
+  static _submitEditedTeam(
+      BuildContext context, GameSettings_P gameSettings, Team teamToEdit) {
+    if (!_formKeyEditTeam.currentState!.validate()) {
+      return;
+    }
 
     _formKeyEditTeam.currentState!.save();
 
     teamToEdit.setName = editTeamController.text;
-    gameSettingsX01.notify();
+    gameSettings.notify();
     Navigator.of(context).pop();
   }
 
   static _swapTeam(BuildContext context, Player playerToSwap, Team? newTeam,
-      GameSettingsX01_P gameSettingsX01) {
+      GameSettings_P gameSettings) {
     final Team? currentTeam =
-        _getTeamOfPlayer(playerToSwap, gameSettingsX01.getTeams);
+        _getTeamOfPlayer(playerToSwap, gameSettings.getTeams);
 
-    for (Team team in gameSettingsX01.getTeams) {
+    for (Team team in gameSettings.getTeams) {
       if (team == currentTeam) team.getPlayers.remove(playerToSwap);
       if (team == newTeam) team.getPlayers.add(playerToSwap);
     }
 
-    gameSettingsX01.notify();
+    gameSettings.notify();
 
-    if (gameSettingsX01.getTeams.length > 2) {
+    if (gameSettings.getTeams.length > 2) {
       Navigator.of(context).pop();
     }
   }
 
-  static _deleteTeam(Team teamToDelete, GameSettingsX01_P gameSettingsX01) {
-    gameSettingsX01.getTeams.remove(teamToDelete);
+  static _deleteTeam(Team teamToDelete, GameSettings_P gameSettings) {
+    gameSettings.getTeams.remove(teamToDelete);
     for (Player playerToDelete in teamToDelete.getPlayers) {
-      gameSettingsX01.getPlayers
+      gameSettings.getPlayers
           .removeWhere((p) => p.getName == playerToDelete.getName);
     }
 
-    gameSettingsX01.notify();
+    gameSettings.notify();
   }
 
   static List<Team> _getPossibleTeamsToSwap(
-      Player playerToSwap, GameSettingsX01_P gameSettingsX01) {
+      Player playerToSwap, GameSettings_P gameSettings) {
     final Team? currentTeam =
-        _getTeamOfPlayer(playerToSwap, gameSettingsX01.getTeams);
+        _getTeamOfPlayer(playerToSwap, gameSettings.getTeams);
     List<Team> result = [];
 
-    for (Team team in gameSettingsX01.getTeams) {
+    for (Team team in gameSettings.getTeams) {
       if (team != currentTeam) result.add(team);
     }
 
@@ -587,13 +591,13 @@ class PlayersTeamsListDialogsX01 {
 
   //for swaping team -> if only one other team is available then the current one -> swap immediately instead of showing 1 radio button
   static Team? _checkIfSwappingOnlyToOneTeamPossible(
-      Player playerToSwap, GameSettingsX01_P gameSettingsX01) {
+      Player playerToSwap, GameSettings_P gameSettings) {
     final Team? currentTeam =
-        _getTeamOfPlayer(playerToSwap, gameSettingsX01.getTeams);
+        _getTeamOfPlayer(playerToSwap, gameSettings.getTeams);
     int count = 0;
     Team? resultTeam;
 
-    for (Team team in gameSettingsX01.getTeams) {
+    for (Team team in gameSettings.getTeams) {
       if (team.getPlayers.length < MAX_PLAYERS_PER_TEAM &&
           team != currentTeam) {
         count++;
@@ -616,8 +620,8 @@ class PlayersTeamsListDialogsX01 {
     return null;
   }
 
-  static _showDialogForDeletingTeam(BuildContext context,
-      GameSettingsX01_P gameSettingsX01, Team teamToEdit) {
+  static _showDialogForDeletingTeam(
+      BuildContext context, GameSettings_P gameSettings, Team teamToEdit) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -653,7 +657,10 @@ class PlayersTeamsListDialogsX01 {
                       onPressed: () {
                         Navigator.of(context).pop();
                         showDialogForEditingTeam(
-                            context, teamToEdit, gameSettingsX01);
+                          context,
+                          teamToEdit,
+                          gameSettings,
+                        );
                       },
                     ),
                   ),
@@ -680,8 +687,8 @@ class PlayersTeamsListDialogsX01 {
                       ),
                       TextButton(
                         onPressed: () {
-                          gameSettingsX01.checkTeamNamingIds(teamToEdit);
-                          _deleteTeam(teamToEdit, gameSettingsX01);
+                          gameSettings.checkTeamNamingIds(teamToEdit);
+                          _deleteTeam(teamToEdit, gameSettings);
                           Navigator.of(context).pop();
                         },
                         child: Text(

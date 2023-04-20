@@ -1,24 +1,25 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/single_or_team_btn.dart';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SingleOrTeamX01 extends StatelessWidget {
+class SingleOrTeamBtnCricket extends StatelessWidget {
+  const SingleOrTeamBtnCricket({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Selector<GameSettingsX01_P, SelectorModel>(
-        selector: (_, gameSettingsX01) => SelectorModel(
-          singleOrTeam: gameSettingsX01.getSingleOrTeam,
-          players: gameSettingsX01.getPlayers,
-          teams: gameSettingsX01.getTeams,
+      child: Selector<GameSettingsCricket_P, SelectorModel>(
+        selector: (_, gameSettingsCricket) => SelectorModel(
+          singleOrTeam: gameSettingsCricket.getSingleOrTeam,
+          players: gameSettingsCricket.getPlayers,
+          teams: gameSettingsCricket.getTeams,
         ),
         builder: (_, selectorModel, __) => SingleOrTeamBtn(
-            gameSettingsProvider: context.read<GameSettingsX01_P>()),
+            gameSettingsProvider: context.read<GameSettingsCricket_P>()),
       ),
     );
   }

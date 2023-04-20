@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
@@ -84,7 +85,7 @@ class PlayersListEntry extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                   onPressed: () =>
-                      PlayersTeamsListDialogsX01.showDialogForEditingPlayer(
+                      PlayersTeamsListDialogs.showDialogForEditingPlayer(
                           context, player, settings),
                 ),
                 IconButton(
@@ -95,17 +96,14 @@ class PlayersListEntry extends StatelessWidget {
                     Icons.highlight_remove,
                     color: Theme.of(context).colorScheme.secondary,
                   ),
-                  onPressed: () => {
-                    if (settings is GameSettingsX01_P)
-                      {
-                        (settings as GameSettingsX01_P)
-                            .removePlayer(player, true),
-                      }
-                    else
-                      {
-                        settings.getPlayers.remove(player),
-                        settings.notify(),
-                      }
+                  onPressed: () {
+                    if (settings is GameSettingsX01_P ||
+                        settings is GameSettingsCricket_P) {
+                      settings.removePlayer(player, true, true);
+                    } else {
+                      settings.getPlayers.remove(player);
+                      settings.notify();
+                    }
                   },
                 ),
               ],

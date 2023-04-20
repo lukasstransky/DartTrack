@@ -6,7 +6,7 @@ import 'package:dart_app/models/team.dart';
 
 class GameSettingsX01_P extends GameSettings_P {
   SingleOrTeamEnum _singleOrTeam = DEFAULT_SINGLE_OR_TEAM;
-  BestOfOrFirstToEnum _mode = DEFAULT_MODE;
+  BestOfOrFirstToEnum _bestOfOrFirstTo = DEFAULT_MODE;
   int _points = DEFAULT_POINTS;
   int _customPoints = DEFAULT_CUSTOM_POINTS;
   int _legs = DEFAULT_LEGS;
@@ -30,9 +30,7 @@ class GameSettingsX01_P extends GameSettings_P {
   List<String> _mostScoredPoints = <String>[];
   InputMethod _inputMethod = DEFAULT_INPUT_METHOD;
   bool _showInputMethodInGameScreen = DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN;
-
   bool _drawMode = DEFAULT_DRAW_MODE;
-  List<int> _teamNamingIds = <int>[];
 
   GameSettingsX01_P();
 
@@ -69,7 +67,7 @@ class GameSettingsX01_P extends GameSettings_P {
     _sets = sets;
     _modeIn = modeIn;
     _modeOut = modeOut;
-    _mode = mode;
+    _bestOfOrFirstTo = mode;
     _points = points;
     _singleOrTeam = singleOrTeam;
     _winByTwoLegsDifference = winByTwoLegsDifference;
@@ -101,8 +99,9 @@ class GameSettingsX01_P extends GameSettings_P {
   set setSingleOrTeam(SingleOrTeamEnum _singleOrTeam) =>
       this._singleOrTeam = _singleOrTeam;
 
-  BestOfOrFirstToEnum get getMode => _mode;
-  set setMode(BestOfOrFirstToEnum mode) => _mode = mode;
+  BestOfOrFirstToEnum get getBestOfOrFirstTo => _bestOfOrFirstTo;
+  set setBestOfOrFirstTo(BestOfOrFirstToEnum bestOfOrFirstTo) =>
+      _bestOfOrFirstTo = bestOfOrFirstTo;
 
   int get getPoints => _points;
   set setPoints(int points) => {
@@ -188,139 +187,6 @@ class GameSettingsX01_P extends GameSettings_P {
   bool get getDrawMode => _drawMode;
   set setDrawMode(bool value) => _drawMode = value;
 
-  List<int> get getTeamNamingIds => _teamNamingIds;
-  set setTeamNamingIds(List<int> value) => _teamNamingIds = value;
-
-  void removePlayer(Player playerToRemove, bool removeTeam) {
-    getPlayers.removeWhere((Player p) => p.getName == playerToRemove.getName);
-
-    //remove also player from team -> not same references as in single players list
-    if (getSingleOrTeam == SingleOrTeamEnum.Single) {
-      Team? emptyTeamToRemove;
-      for (Team team in getTeams) {
-        team.getPlayers
-            .removeWhere((Player p) => p.getName == playerToRemove.getName);
-        if (team.getPlayers.isEmpty) {
-          emptyTeamToRemove = team;
-        }
-      }
-      if (emptyTeamToRemove != null) {
-        getTeams.remove(emptyTeamToRemove);
-        checkTeamNamingIds(emptyTeamToRemove);
-      }
-    }
-
-    //remove player from team
-    outerLoop:
-    for (Team team in getTeams) {
-      for (Player player in team.getPlayers) {
-        if (player == playerToRemove) {
-          if (playerToRemove is Bot &&
-              playerToRemove.getName == 'Bot1' &&
-              getCountOfBotPlayers() == 2) {
-            getPlayers
-                .where((Player player) =>
-                    player is Bot && player.getName == 'Bot2')
-                .first
-                .setName = 'Bot1';
-          }
-
-          team.getPlayers.remove(playerToRemove);
-
-          if (team.getPlayers.isEmpty && removeTeam) {
-            getTeams.remove(team);
-            checkTeamNamingIds(team);
-          }
-          break outerLoop;
-        }
-      }
-    }
-
-    notifyListeners();
-  }
-
-  void checkTeamNamingIds(Team team) {
-    final String lastCharFromTeamName =
-        team.getName.substring(team.getName.length - 1);
-    if (!team.getName.startsWith('Team ') ||
-        int.tryParse(lastCharFromTeamName) == null) {
-      return;
-    }
-
-    int teamNamingId = int.parse(lastCharFromTeamName);
-    getTeamNamingIds.remove(teamNamingId);
-
-    if (getTeamNamingIds.isEmpty || getTeamNamingIds.last == teamNamingId)
-      return;
-
-    int idCounter = 1;
-    for (teamNamingId in getTeamNamingIds) {
-      if (teamNamingId != idCounter) {
-        final int index = getTeamNamingIds.indexOf(teamNamingId);
-        getTeamNamingIds[index] = idCounter;
-        _setNewTeamNamingId(teamNamingId, idCounter);
-      }
-      idCounter++;
-    }
-
-    notifyListeners();
-  }
-
-  void _setNewTeamNamingId(int currentTeamNamingId, int newTeamNamingId) {
-    for (Team team in getTeams) {
-      final int teamNamingId =
-          int.parse(team.getName.substring(team.getName.length - 1));
-
-      if (teamNamingId == currentTeamNamingId) {
-        final String newTeamName =
-            team.getName.substring(0, team.getName.length - 1) +
-                newTeamNamingId.toString();
-        team.setName = newTeamName;
-      }
-    }
-
-    notifyListeners();
-  }
-
-  void addPlayer(Player player) {
-    getPlayers.add(player);
-    assignOrCreateTeamForPlayer(player);
-    notifyListeners();
-  }
-
-  //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
-  void assignOrCreateTeamForPlayer(Player player) {
-    if (getTeams.isEmpty || getPlayers.length == 2)
-      _createTeamAndAddPlayer(player);
-    else {
-      bool foundTeamWithLessTwoPlayers = false;
-      for (Team team in getTeams) {
-        if (team.getPlayers.length < MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING) {
-          team.getPlayers.add(Player.clone(player));
-          foundTeamWithLessTwoPlayers = true;
-          break;
-        }
-      }
-      if (!foundTeamWithLessTwoPlayers) _createTeamAndAddPlayer(player);
-    }
-  }
-
-  void _createTeamAndAddPlayer(Player player) {
-    final int teamNameId = getTeamNamingIds.length + 1;
-    final Team team = Team(name: 'Team $teamNameId');
-
-    team.getPlayers.add(Player.clone(player));
-    getTeams.add(team);
-    getTeamNamingIds.add(teamNameId);
-  }
-
-  bool checkIfTeamNameExists(String? teamNameToCheck) {
-    for (Team team in getTeams)
-      if (team.getName == teamNameToCheck) return true;
-
-    return false;
-  }
-
   @override
   void notify() {
     notifyListeners();
@@ -390,7 +256,7 @@ class GameSettingsX01_P extends GameSettings_P {
   String getGameMode() {
     String result = '';
 
-    if (getMode == BestOfOrFirstToEnum.BestOf) {
+    if (getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
       result += 'Best of ';
     } else {
       result += 'First to ';
@@ -412,28 +278,6 @@ class GameSettingsX01_P extends GameSettings_P {
     return result;
   }
 
-  Player getPlayerFromTeam(String playerName) {
-    late Player result;
-    for (Team team in getTeams) {
-      for (Player player in team.getPlayers) {
-        if (player.getName == playerName) {
-          result = player;
-        }
-      }
-    }
-    return result;
-  }
-
-  Player? getPlayerFromSingles(String playerName) {
-    Player? result;
-    for (Player player in getPlayers) {
-      if (player.getName == playerName) {
-        result = player;
-      }
-    }
-    return result;
-  }
-
   Team findTeamForPlayer(
       String playerNameToFind, GameSettingsX01_P gameSettingsX01) {
     late Team result;
@@ -444,5 +288,71 @@ class GameSettingsX01_P extends GameSettings_P {
     }
 
     return result;
+  }
+
+  switchSingleOrTeamMode() {
+    if (getSingleOrTeam == SingleOrTeamEnum.Single) {
+      setSingleOrTeam = SingleOrTeamEnum.Team;
+    } else {
+      setSingleOrTeam = SingleOrTeamEnum.Single;
+    }
+
+    notify();
+  }
+
+  switchBestOfOrFirstTo() {
+    if (getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
+      setBestOfOrFirstTo = BestOfOrFirstToEnum.FirstTo;
+
+      if (getDrawMode) {
+        setDrawMode = false;
+      }
+
+      if (getSetsEnabled) {
+        setLegs = DEFAULT_LEGS_FIRST_TO_SETS_ENABLED;
+        setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
+      } else {
+        setLegs = DEFAULT_LEGS_FIRST_TO_NO_SETS;
+      }
+    } else {
+      setBestOfOrFirstTo = BestOfOrFirstToEnum.BestOf;
+
+      if (getSetsEnabled) {
+        setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+        setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED;
+      } else {
+        setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
+      }
+    }
+
+    notify();
+  }
+
+  setsBtnClicked() {
+    setSetsEnabled = !getSetsEnabled;
+    setWinByTwoLegsDifference = false;
+    setSuddenDeath = false;
+    setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
+
+    if (getDrawMode) {
+      setSets = DEFAULT_SETS_DRAW_MODE;
+      setLegs = getSetsEnabled
+          ? DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED
+          : DEFAULT_LEGS_DRAW_MODE;
+    } else {
+      if (getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo) {
+        setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED;
+        setLegs = getSetsEnabled
+            ? DEFAULT_LEGS_FIRST_TO_SETS_ENABLED
+            : DEFAULT_LEGS_FIRST_TO_NO_SETS;
+      } else {
+        setSets = DEFAULT_SETS_BEST_OF_SETS_ENABLED;
+        setLegs = getSetsEnabled
+            ? setLegs = DEFAULT_LEGS_BEST_OF_SETS_ENABLED
+            : setSets = DEFAULT_LEGS_BEST_OF_NO_SETS;
+      }
+    }
+
+    notify();
   }
 }

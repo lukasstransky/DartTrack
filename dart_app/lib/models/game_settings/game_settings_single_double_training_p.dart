@@ -10,8 +10,8 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
   int _targetNumber = DEFAULT_TARGET_NUMBER;
   bool _isTargetNumberEnabled = false;
   int _amountOfRounds = DEFUALT_ROUNDS_FOR_TARGET_NUMBER;
-  GlobalKey<FormState> _formKeyTargetNumber = GlobalKey<FormState>();
 
+  GlobalKey<FormState> _formKeyTargetNumber = GlobalKey<FormState>();
   GlobalKey<FormState> _formKeyAmountOfRounds = GlobalKey<FormState>();
 
   GameSettingsSingleDoubleTraining_P() {}

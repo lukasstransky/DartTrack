@@ -2,6 +2,7 @@ import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
@@ -13,6 +14,7 @@ import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
+import 'package:dart_app/screens/game_modes/cricket/game_settings/game_settings_c.dart';
 import 'package:dart_app/screens/game_modes/score_training/finish/finish_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/game_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_settings/game_settings_sc_t.dart';
@@ -127,6 +129,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => GameSettingsSingleDoubleTraining_P(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => GameSettingsCricket_P(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -166,6 +171,7 @@ class MyApp extends StatelessWidget {
                 FinishSingleDoubleTraining(),
             GameStatsSingleDoubleTraining.routeName: (ctx) =>
                 GameStatsSingleDoubleTraining(),
+            GameSettingsCricket.routeName: (ctx) => GameSettingsCricket(),
           },
           home: AuthWrapper(),
         );

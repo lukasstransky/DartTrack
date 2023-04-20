@@ -10,10 +10,14 @@ import 'package:provider/provider.dart';
 
 class GameSettings_P with ChangeNotifier {
   List<Team> _teams = [];
+  List<int> _teamNamingIds = <int>[];
   List<Player> _players = [];
 
   List<Team> get getTeams => this._teams;
   set setTeams(List<Team> value) => this._teams = value;
+
+  List<int> get getTeamNamingIds => _teamNamingIds;
+  set setTeamNamingIds(List<int> value) => _teamNamingIds = value;
 
   List<Player> get getPlayers => this._players;
   set setPlayers(List<Player> value) => this._players = value;
@@ -30,7 +34,7 @@ class GameSettings_P with ChangeNotifier {
       if (gameSettings.getSetsEnabled) 'sets': gameSettings.getSets,
       'setsEnabled': gameSettings.getSetsEnabled,
       'points': gameSettings.getPointsOrCustom(),
-      'mode': gameSettings.getMode.toString().split('.').last,
+      'mode': gameSettings.getBestOfOrFirstTo.toString().split('.').last,
       'modeIn': gameSettings.getModeIn
           .toString()
           .split('.')
@@ -329,5 +333,156 @@ class GameSettings_P with ChangeNotifier {
     }
 
     return false;
+  }
+
+  bool checkIfTeamNameExists(String? teamNameToCheck) {
+    for (Team team in getTeams)
+      if (team.getName == teamNameToCheck) {
+        return true;
+      }
+
+    return false;
+  }
+
+  void checkTeamNamingIds(Team team) {
+    final List<String> parts = team.getName.split(' ');
+
+    if (parts.length == 1) {
+      return;
+    }
+
+    final String teamNameNumber = parts[1];
+    if (!team.getName.startsWith('Team ') ||
+        int.tryParse(teamNameNumber) == null) {
+      return;
+    }
+
+    int teamNamingId = int.parse(teamNameNumber);
+    getTeamNamingIds.remove(teamNamingId);
+
+    if (getTeamNamingIds.isEmpty || getTeamNamingIds.last == teamNamingId) {
+      return;
+    }
+
+    int idCounter = 1;
+    for (teamNamingId in getTeamNamingIds) {
+      if (teamNamingId != idCounter) {
+        final int index = getTeamNamingIds.indexOf(teamNamingId);
+        getTeamNamingIds[index] = idCounter;
+        _setNewTeamNamingId(teamNamingId, idCounter);
+      }
+      idCounter++;
+    }
+
+    notifyListeners();
+  }
+
+  void _setNewTeamNamingId(int currentTeamNamingId, int newTeamNamingId) {
+    for (Team team in getTeams) {
+      final int teamNamingId =
+          int.parse(team.getName.substring(team.getName.length - 1));
+
+      if (teamNamingId == currentTeamNamingId) {
+        final String newTeamName =
+            team.getName.substring(0, team.getName.length - 1) +
+                newTeamNamingId.toString();
+        team.setName = newTeamName;
+      }
+    }
+
+    notifyListeners();
+  }
+
+  void removePlayer(Player playerToRemove, bool removeTeam,
+      [bool isSinglesTab = false]) {
+    getPlayers.removeWhere((Player p) => p.getName == playerToRemove.getName);
+
+    //remove also player from team -> not same references as in single players list
+    if (isSinglesTab) {
+      Team? emptyTeamToRemove;
+      for (Team team in getTeams) {
+        team.getPlayers
+            .removeWhere((Player p) => p.getName == playerToRemove.getName);
+        if (team.getPlayers.isEmpty) {
+          emptyTeamToRemove = team;
+        }
+      }
+      if (emptyTeamToRemove != null) {
+        getTeams.remove(emptyTeamToRemove);
+        checkTeamNamingIds(emptyTeamToRemove);
+      }
+    }
+
+    //remove player from team
+    outerLoop:
+    for (Team team in getTeams) {
+      for (Player player in team.getPlayers) {
+        if (player == playerToRemove) {
+          team.getPlayers.remove(playerToRemove);
+
+          if (team.getPlayers.isEmpty && removeTeam) {
+            getTeams.remove(team);
+            checkTeamNamingIds(team);
+          }
+          break outerLoop;
+        }
+      }
+    }
+
+    notifyListeners();
+  }
+
+  void addPlayer(Player player) {
+    getPlayers.add(player);
+    assignOrCreateTeamForPlayer(player);
+    notify();
+  }
+
+  //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
+  void assignOrCreateTeamForPlayer(Player player) {
+    if (getTeams.isEmpty || getPlayers.length == 2)
+      _createTeamAndAddPlayer(player);
+    else {
+      bool foundTeamWithLessTwoPlayers = false;
+      for (Team team in getTeams) {
+        if (team.getPlayers.length < MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING) {
+          team.getPlayers.add(Player.clone(player));
+          foundTeamWithLessTwoPlayers = true;
+          break;
+        }
+      }
+      if (!foundTeamWithLessTwoPlayers) _createTeamAndAddPlayer(player);
+    }
+  }
+
+  void _createTeamAndAddPlayer(Player player) {
+    final int teamNameId = getTeamNamingIds.length + 1;
+    final Team team = Team(name: 'Team $teamNameId');
+
+    team.getPlayers.add(Player.clone(player));
+    getTeams.add(team);
+    getTeamNamingIds.add(teamNameId);
+  }
+
+  Player getPlayerFromTeam(String playerName) {
+    late Player result;
+    for (Team team in getTeams) {
+      for (Player player in team.getPlayers) {
+        if (player.getName == playerName) {
+          result = player;
+        }
+      }
+    }
+    return result;
+  }
+
+  Player? getPlayerFromSingles(String playerName) {
+    Player? result;
+    for (Player player in getPlayers) {
+      if (player.getName == playerName) {
+        result = player;
+      }
+    }
+    return result;
   }
 }

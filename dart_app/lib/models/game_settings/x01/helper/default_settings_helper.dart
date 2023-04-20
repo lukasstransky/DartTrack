@@ -24,7 +24,7 @@ class DefaultSettingsHelper {
     defaultSettingsX01.inputMethod = settingsX01.getInputMethod;
     defaultSettingsX01.legs = settingsX01.getLegs;
     defaultSettingsX01.maxExtraLegs = settingsX01.getMaxExtraLegs;
-    defaultSettingsX01.mode = settingsX01.getMode;
+    defaultSettingsX01.mode = settingsX01.getBestOfOrFirstTo;
     defaultSettingsX01.modeIn = settingsX01.getModeIn;
     defaultSettingsX01.modeOut = settingsX01.getModeOut;
     defaultSettingsX01.points = settingsX01.getPoints;
@@ -78,7 +78,7 @@ class DefaultSettingsHelper {
     settingsX01.setInputMethod = defaultSettingsX01.inputMethod;
     settingsX01.setLegs = defaultSettingsX01.legs;
     settingsX01.setMaxExtraLegs = defaultSettingsX01.maxExtraLegs;
-    settingsX01.setMode = defaultSettingsX01.mode;
+    settingsX01.setBestOfOrFirstTo = defaultSettingsX01.mode;
     settingsX01.setModeIn = defaultSettingsX01.modeIn;
     settingsX01.setModeOut = defaultSettingsX01.modeOut;
     settingsX01.setPoints = defaultSettingsX01.points;
@@ -126,7 +126,7 @@ class DefaultSettingsHelper {
         defaultSettingsX01.inputMethod == settingsX01.getInputMethod &&
         defaultSettingsX01.legs == settingsX01.getLegs &&
         defaultSettingsX01.maxExtraLegs == settingsX01.getMaxExtraLegs &&
-        defaultSettingsX01.mode == settingsX01.getMode &&
+        defaultSettingsX01.mode == settingsX01.getBestOfOrFirstTo &&
         defaultSettingsX01.modeIn == settingsX01.getModeIn &&
         defaultSettingsX01.modeOut == settingsX01.getModeOut &&
         defaultSettingsX01.points == settingsX01.getPoints &&
@@ -170,7 +170,7 @@ class DefaultSettingsHelper {
         settingsX01.getInputMethod == DEFAULT_INPUT_METHOD &&
         settingsX01.getLegs == DEFAULT_LEGS &&
         settingsX01.getMaxExtraLegs == DEFAULT_MAX_EXTRA_LEGS &&
-        settingsX01.getMode == DEFAULT_MODE &&
+        settingsX01.getBestOfOrFirstTo == DEFAULT_MODE &&
         settingsX01.getModeIn == DEFAULT_MODE_IN &&
         settingsX01.getModeOut == DEFAULT_MODE_OUT &&
         settingsX01.getPoints == DEFAULT_POINTS &&

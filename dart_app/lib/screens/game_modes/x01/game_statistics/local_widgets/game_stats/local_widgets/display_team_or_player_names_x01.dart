@@ -22,13 +22,15 @@ class DisplayTeamOrPlayerNamesX01 extends StatelessWidget {
 
     // set mode
     if (gameSettingsX01.getSetsEnabled) {
-      if (gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+      if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
           ((stats.getSetsWon * 2) - 1) == gameSettingsX01.getSets) {
         return true;
-      } else if (gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
+      } else if (gameSettingsX01.getBestOfOrFirstTo ==
+              BestOfOrFirstToEnum.FirstTo &&
           gameSettingsX01.getSets == stats.getSetsWon) {
         return true;
-      } else if (gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+      } else if (gameSettingsX01.getBestOfOrFirstTo ==
+              BestOfOrFirstToEnum.BestOf &&
           stats.getSetsWon == (gameSettingsX01.getSets / 2) + 1) {
         return true;
       }
@@ -47,14 +49,15 @@ class DisplayTeamOrPlayerNamesX01 extends StatelessWidget {
         }
       } else {
         // leg mode
-        if (gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+        if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
             ((stats.getLegsWonTotal * 2) - 1) == gameSettingsX01.getLegs) {
           return true;
-        } else if (gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
+        } else if (gameSettingsX01.getBestOfOrFirstTo ==
+                BestOfOrFirstToEnum.FirstTo &&
             stats.getLegsWonTotal >= gameSettingsX01.getLegs) {
           return true;
         } else if (gameSettingsX01.getDrawMode &&
-            gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+            gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
             stats.getLegsWonTotal == (gameSettingsX01.getLegs / 2) + 1) {
           return true;
         }

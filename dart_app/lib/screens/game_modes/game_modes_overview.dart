@@ -64,34 +64,37 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
     final OpenGamesFirestore openGamesFirestore =
         context.read<OpenGamesFirestore>();
 
-    return Scaffold(
-      appBar: CustomAppBar(showBackBtn: false, title: 'Game modes'),
-      body:
-          defaultSettingsX01.loadSettings || openGamesFirestore.getLoadOpenGames
-              ? Center(
-                  child: CircularProgressIndicator(
-                  color: Colors.white,
-                ))
-              : Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    OpenGames(),
-                    Expanded(
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            X01Btn(),
-                            CricketBtn(),
-                            SingleTrainingBtn(),
-                            DoubleTrainingBtn(),
-                            ScoreTrainingBtn(),
-                          ],
-                        ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: CustomAppBar(showBackBtn: false, title: 'Game modes'),
+        body: defaultSettingsX01.loadSettings ||
+                openGamesFirestore.getLoadOpenGames
+            ? Center(
+                child: CircularProgressIndicator(
+                color: Colors.white,
+              ))
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  OpenGames(),
+                  Expanded(
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          X01Btn(),
+                          CricketBtn(),
+                          SingleTrainingBtn(),
+                          DoubleTrainingBtn(),
+                          ScoreTrainingBtn(),
+                        ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
+              ),
+      ),
     );
   }
 }
@@ -244,7 +247,7 @@ class CricketBtn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => Navigator.of(context).pushNamed('/cricket'),
+          onPressed: () => Navigator.of(context).pushNamed('/settingsCricket'),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),

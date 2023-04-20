@@ -35,6 +35,14 @@ class StartGameBtn extends StatelessWidget {
                     : 'Double training',
               },
             );
+          } else if (mode == GameMode.Cricket) {
+            Navigator.of(context).pushNamed(
+              '/gameCricket',
+              arguments: {
+                'openGame': false,
+                'mode': mode,
+              },
+            );
           }
         },
         child: FittedBox(

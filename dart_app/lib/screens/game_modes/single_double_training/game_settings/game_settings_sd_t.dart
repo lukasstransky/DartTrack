@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/add_player_team_btn/add_player_btn.dart';
-import 'package:dart_app/screens/game_modes/shared/game_settings/players_teams_list/players_list.dart';
+import 'package:dart_app/screens/game_modes/shared/game_settings/players_teams_list/players_list/players_list.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/start_game_btn.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/amount_of_rounds_for_target_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/game_info_sd_t.dart';

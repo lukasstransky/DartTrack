@@ -49,7 +49,7 @@ class DrawModeX01 extends StatelessWidget {
         gameSettingsX01.setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
       }
     } else {
-      gameSettingsX01.setMode = BestOfOrFirstToEnum.BestOf;
+      gameSettingsX01.setBestOfOrFirstTo = BestOfOrFirstToEnum.BestOf;
       gameSettingsX01.setSets = DEFAULT_SETS_DRAW_MODE;
 
       if (gameSettingsX01.getSetsEnabled) {

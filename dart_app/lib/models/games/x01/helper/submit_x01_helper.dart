@@ -526,9 +526,9 @@ class SubmitX01Helper {
     }
 
     // update won sets
-    if (gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
+    if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
             gameSettingsX01.getLegs == currentStats.getLegsWon ||
-        gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+        gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
             (gameSettingsX01.getLegs + 1) / 2 == currentStats.getLegsWon) {
       // save leg count of each player -> in case a user wants to revert a set
       if (shouldSubmitTeamStats) {
@@ -786,39 +786,39 @@ class SubmitX01Helper {
 
   static bool _gameWonFirstToWithSets(
       int setsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
+    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
         gameSettingsX01.getSetsEnabled &&
         gameSettingsX01.getSets == setsWon;
   }
 
   static bool _gameWonFirstToWithLegs(
       int legsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo &&
+    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
         legsWon >= gameSettingsX01.getLegs;
   }
 
   static bool _gameWonBestOfWithSets(
       int setsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
         gameSettingsX01.getSetsEnabled &&
         ((setsWon * 2) - 1) == gameSettingsX01.getSets;
   }
 
   static bool _gameWonBestOfWithLegs(
       int legsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
         ((legsWon * 2) - 1) >= gameSettingsX01.getLegs;
   }
 
   static bool _gameWonBestOfWithLegsWithDrawMode(
       int legsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
         legsWon == (gameSettingsX01.getLegs / 2) + 1;
   }
 
   static bool _gameWonBestOfWithSetsWithDrawMode(
       int setsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getMode == BestOfOrFirstToEnum.BestOf &&
+    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
         setsWon == (gameSettingsX01.getSets / 2) + 1;
   }
 
@@ -917,7 +917,7 @@ class SubmitX01Helper {
     for (PlayerOrTeamGameStatsX01 stats
         in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
       late double legsForSuddenDeath;
-      if (gameSettingsX01.getMode == BestOfOrFirstToEnum.FirstTo) {
+      if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo) {
         legsForSuddenDeath =
             (gameSettingsX01.getLegs + gameSettingsX01.getMaxExtraLegs)
                 .toDouble();

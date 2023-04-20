@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final bool showBackBtn;
   final String title;
-  final bool showInfoIcon;
+  final bool showInfoIconScoreTraining;
+  final bool showInfoIconCricket;
 
-  const CustomAppBar(
-      {this.showBackBtn = true,
-      required this.title,
-      this.showInfoIcon = false});
+  const CustomAppBar({
+    this.showBackBtn = true,
+    required this.title,
+    this.showInfoIconScoreTraining = false,
+    this.showInfoIconCricket = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,21 +45,83 @@ class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
         ],
       ),
       actions: [
-        if (showInfoIcon)
+        if (showInfoIconScoreTraining || showInfoIconCricket)
           IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onPressed: () =>
-                  AppBarDialogHelper.showDialogForInfoAboutScoreTraining(
-                      context),
-              icon: Icon(
-                Icons.info_outline,
-                color: Theme.of(context).colorScheme.secondary,
-              )),
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+            onPressed: () {
+              if (showInfoIconScoreTraining) {
+                AppBarDialogHelper.showDialogForInfoAboutScoreTraining(context);
+              } else if (showInfoIconCricket) {
+                AppBarDialogHelper.showDialogForInfoAboutCricket(context);
+              }
+            },
+            icon: Icon(
+              Icons.info_outline,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
+          ),
       ],
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class CricketDialog extends StatefulWidget {
+  @override
+  _CricketDialogState createState() => _CricketDialogState();
+}
+
+class _CricketDialogState extends State<CricketDialog> {
+  final PageController _pageController = PageController(initialPage: 0);
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Cricket Game from Darts'),
+      content: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (details.velocity.pixelsPerSecond.dx > 0) {
+            _pageController.previousPage(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          } else {
+            _pageController.nextPage(
+              duration: Duration(milliseconds: 300),
+              curve: Curves.easeOut,
+            );
+          }
+        },
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.height * 0.5,
+          child: PageView(
+            controller: _pageController,
+            children: [
+              Container(
+                child: Text('Page 1'),
+              ),
+              Container(
+                child: Text('Page 2'),
+              ),
+              Container(
+                child: Text('Page 3'),
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Close'),
+        ),
+      ],
+    );
+  }
 }
