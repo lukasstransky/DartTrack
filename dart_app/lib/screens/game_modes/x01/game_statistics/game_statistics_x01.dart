@@ -45,7 +45,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
     String result = '';
 
     //mode
-    _game!.getGameSettings.getMode == BestOfOrFirstToEnum.BestOf
+    _game!.getGameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf
         ? result += 'Best of '
         : result += 'First to ';
 

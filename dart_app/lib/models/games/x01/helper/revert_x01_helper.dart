@@ -74,15 +74,6 @@ class RevertX01Helper {
         shouldRevertTeamStats); // in order to revert only 1 dart or full round
     bool alreadyReverted = false;
 
-    // set current points selected count (prevent from entering more than 3 darts)
-    if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
-        isCompleteRound) {
-      if (gameX01.getAmountOfDartsThrown() == 0 ||
-          (shouldRevertTeamStats && gameX01.getAmountOfDartsThrown() == 2)) {
-        currentStats.setPointsSelectedCount = 3;
-      }
-    }
-
     if (legSetOrGameReverted) {
       bool setReverted = false;
 
@@ -166,6 +157,15 @@ class RevertX01Helper {
     if (shouldRevertTeamStats && !alreadyReverted) {
       _revertStats(gameX01, gameSettingsX01, currentStats, lastPoints, false,
           isCompleteRound, shouldRevertTeamStats);
+    }
+
+    // set points selected count
+    if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+      if (legSetOrGameReverted) {
+        currentStats.setPointsSelectedCount = gameX01.getAmountOfDartsThrown();
+      } else if (isCompleteRound) {
+        currentStats.setPointsSelectedCount = 3;
+      }
     }
 
     if (!legSetOrGameReverted &&

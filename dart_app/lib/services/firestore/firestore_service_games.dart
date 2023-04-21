@@ -117,8 +117,6 @@ class FirestoreServiceGames {
 
     if (!statsFirestore.loadGames) {
       return;
-    } else {
-      statsFirestore.loadGames = false;
     }
 
     final CollectionReference collectionReference =
@@ -130,7 +128,6 @@ class FirestoreServiceGames {
 
     if (games.docs.isEmpty) {
       statsFirestore.noGamesPlayed = true;
-      statsFirestore.loadGames = true;
       statsFirestore.notify();
     } else {
       statsFirestore.noGamesPlayed = false;
@@ -164,7 +161,9 @@ class FirestoreServiceGames {
         statsFirestore.games.add(game);
       });
 
-      statsFirestore.loadGames = true;
+      if (mode == 'X01') {
+        statsFirestore.gamesLoaded = true;
+      }
       statsFirestore.notify();
     }
   }

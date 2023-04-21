@@ -7,6 +7,7 @@ import 'package:dart_app/screens/statistics/local_widgets/more_stats/more_stats.
 import 'package:dart_app/screens/statistics/local_widgets/other_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/stats_per_game_btns.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -43,6 +44,10 @@ class _StatisticsState extends State<Statistics> {
         _getPlayerGameStatistics(statsFirestore);
         statsFirestore.loadPlayerStats = false;
       }
+      if (statsFirestore.loadGames) {
+        _getGames();
+        statsFirestore.loadGames = false;
+      }
     }
 
     super.initState();
@@ -52,6 +57,12 @@ class _StatisticsState extends State<Statistics> {
     await context
         .read<FirestoreServicePlayerStats>()
         .getX01Statistics(statsFirestore, username, true);
+  }
+
+  _getGames() async {
+    await context
+        .read<FirestoreServiceGames>()
+        .getGames('X01', context, context.read<FirestoreServicePlayerStats>());
   }
 
   _showDialogWhenLoggedInAsGuest() {
@@ -101,10 +112,13 @@ class _StatisticsState extends State<Statistics> {
                 selector: (_, statsFirestoreX01) => SelectorModel(
                   avgBestWorstStatsLoaded:
                       statsFirestoreX01.avgBestWorstStatsLoaded,
+                  gamesLoaded: statsFirestoreX01.gamesLoaded,
                   games: statsFirestoreX01.games,
                 ),
                 builder: (_, selectorModel, __) =>
-                    selectorModel.avgBestWorstStatsLoaded || username == 'Guest'
+                    (selectorModel.avgBestWorstStatsLoaded &&
+                                selectorModel.gamesLoaded) ||
+                            username == 'Guest'
                         ? Column(
                             children: [
                               OtherStats(),
@@ -155,10 +169,12 @@ class _StatisticsState extends State<Statistics> {
 
 class SelectorModel {
   final bool avgBestWorstStatsLoaded;
+  final bool gamesLoaded;
   final List<Game_P> games;
 
   SelectorModel({
     required this.avgBestWorstStatsLoaded,
+    required this.gamesLoaded,
     required this.games,
   });
 }

@@ -72,7 +72,8 @@ class StatsFirestoreX01_P with ChangeNotifier {
   List<Game_P> _filteredGames = [];
   List<Game_P> _favouriteGames = [];
   bool _showFavouriteGames = false;
-  bool _loadGames = true;
+  bool _loadGames = true; // to indicate if games should be loaded
+  bool _gamesLoaded = true; // for loading spinner if games are already loaded
   bool _loadPlayerStats = true;
 
   get countOfGamesWon => this._countOfGamesWon;
@@ -213,6 +214,10 @@ class StatsFirestoreX01_P with ChangeNotifier {
   bool get loadGames => this._loadGames;
 
   set loadGames(bool loadGames) => this._loadGames = loadGames;
+
+  bool get gamesLoaded => this._gamesLoaded;
+
+  set gamesLoaded(bool value) => this._gamesLoaded = value;
 
   bool get loadPlayerStats => this._loadPlayerStats;
 

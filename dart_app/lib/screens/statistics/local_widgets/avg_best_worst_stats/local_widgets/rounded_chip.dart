@@ -7,10 +7,12 @@ class RoundedChip extends StatelessWidget {
     Key? key,
     required this.value,
     required this.type,
+    this.darkenBackground = false,
   }) : super(key: key);
 
   final String value;
   final String type;
+  final bool darkenBackground;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +49,9 @@ class RoundedChip extends StatelessWidget {
               ),
             ),
             backgroundColor: MaterialStateProperty.all(
-                Utils.darken(Theme.of(context).colorScheme.primary, 15)),
+              Utils.darken(Theme.of(context).colorScheme.primary,
+                  darkenBackground ? 25 : 15),
+            ),
           ),
         ),
       ),

@@ -89,6 +89,7 @@ class AvgBestWorstStats extends StatelessWidget {
                         ? statisticsFirestore.avg.toStringAsFixed(2)
                         : '-',
                     type: '',
+                    darkenBackground: true,
                   ),
                 ),
                 Expanded(
@@ -131,6 +132,7 @@ class AvgBestWorstStats extends StatelessWidget {
                         ? statisticsFirestore.firstNineAvg.toStringAsFixed(2)
                         : '-',
                     type: '',
+                    darkenBackground: true,
                   ),
                 ),
                 Expanded(
@@ -176,6 +178,7 @@ class AvgBestWorstStats extends StatelessWidget {
                             .toStringAsFixed(2)
                         : '-',
                     type: '',
+                    darkenBackground: true,
                   ),
                 ),
                 Expanded(
@@ -221,6 +224,7 @@ class AvgBestWorstStats extends StatelessWidget {
                             .toStringAsFixed(2)
                         : '-',
                     type: '',
+                    darkenBackground: true,
                   ),
                 ),
                 Expanded(
@@ -263,6 +267,7 @@ class AvgBestWorstStats extends StatelessWidget {
                         ? statisticsFirestore.dartsPerLegAvg.toStringAsFixed(2)
                         : '-',
                     type: '',
+                    darkenBackground: true,
                   ),
                 ),
                 Expanded(
