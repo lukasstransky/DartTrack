@@ -1,6 +1,7 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
+import 'package:dart_app/utils/utils_dialogs.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,7 +21,7 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
         title: Column(
           children: [
             Text(
-              gameSettingsX01.getGameMode(),
+              Utils.getBestOfOrFirstToString(gameSettingsX01),
               style: TextStyle(fontSize: 12.sp),
             ),
             Text(
@@ -51,7 +52,8 @@ class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
             IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onPressed: () => Utils.showDialogForSavingGame(context, gameX01),
+              onPressed: () =>
+                  UtilsDialogs.showDialogForSavingGame(context, gameX01),
               icon: Icon(
                 Icons.close_sharp,
                 color: Theme.of(context).colorScheme.secondary,

@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -5,7 +6,7 @@ import 'package:sizer/sizer.dart';
 
 class CustomAppBarStatsList extends StatefulWidget with PreferredSizeWidget {
   final String title;
-  final String mode;
+  final GameMode mode;
 
   const CustomAppBarStatsList({required this.title, required this.mode});
 

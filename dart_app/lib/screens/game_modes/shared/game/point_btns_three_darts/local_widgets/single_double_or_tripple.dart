@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -7,11 +8,22 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SingleDoubleOrTrippleBtns extends StatelessWidget {
-  const SingleDoubleOrTrippleBtns({Key? key}) : super(key: key);
+  const SingleDoubleOrTrippleBtns({
+    Key? key,
+    required this.mode,
+  }) : super(key: key);
+
+  final GameMode mode;
 
   @override
   Widget build(BuildContext context) {
-    final gameScoreTraining_P = context.read<GameScoreTraining_P>();
+    late dynamic gameProvider;
+
+    if (mode == GameMode.ScoreTraining) {
+      gameProvider = context.read<GameScoreTraining_P>();
+    } else if (mode == GameMode.Cricket) {
+      gameProvider = context.read<GameCricket_P>();
+    }
 
     return Expanded(
       child: Row(
@@ -34,22 +46,22 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                       borderRadius: BorderRadius.zero,
                     ),
                   ),
-                  backgroundColor: gameScoreTraining_P.getCurrentPointType ==
-                              PointType.Single ||
-                          gameScoreTraining_P.getAmountOfDartsThrown() == 3
-                      ? MaterialStateProperty.all(Utils.darken(
-                          Theme.of(context).colorScheme.primary, 25))
-                      : MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary),
-                  overlayColor: gameScoreTraining_P.getCurrentPointType ==
-                              PointType.Single ||
-                          gameScoreTraining_P.getAmountOfDartsThrown() == 3
-                      ? MaterialStateProperty.all(Colors.transparent)
-                      : Utils.getColorOrPressed(
-                          Theme.of(context).colorScheme.primary,
-                          Utils.darken(
-                              Theme.of(context).colorScheme.primary, 25),
-                        ),
+                  backgroundColor:
+                      gameProvider.getCurrentPointType == PointType.Single ||
+                              gameProvider.getAmountOfDartsThrown() == 3
+                          ? MaterialStateProperty.all(Utils.darken(
+                              Theme.of(context).colorScheme.primary, 25))
+                          : MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                  overlayColor:
+                      gameProvider.getCurrentPointType == PointType.Single ||
+                              gameProvider.getAmountOfDartsThrown() == 3
+                          ? MaterialStateProperty.all(Colors.transparent)
+                          : Utils.getColorOrPressed(
+                              Theme.of(context).colorScheme.primary,
+                              Utils.darken(
+                                  Theme.of(context).colorScheme.primary, 25),
+                            ),
                 ),
                 child: FittedBox(
                   child: Text(
@@ -62,9 +74,9 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  if (gameScoreTraining_P.getAmountOfDartsThrown() != 3) {
-                    gameScoreTraining_P.setCurrentPointType = PointType.Single;
-                    gameScoreTraining_P.notify();
+                  if (gameProvider.getAmountOfDartsThrown() != 3) {
+                    gameProvider.setCurrentPointType = PointType.Single;
+                    gameProvider.notify();
                   }
                 },
               ),
@@ -87,22 +99,22 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                       borderRadius: BorderRadius.zero,
                     ),
                   ),
-                  backgroundColor: gameScoreTraining_P.getCurrentPointType ==
-                              PointType.Double ||
-                          gameScoreTraining_P.getAmountOfDartsThrown() == 3
-                      ? MaterialStateProperty.all(Utils.darken(
-                          Theme.of(context).colorScheme.primary, 25))
-                      : MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary),
-                  overlayColor: gameScoreTraining_P.getCurrentPointType ==
-                              PointType.Double ||
-                          gameScoreTraining_P.getAmountOfDartsThrown() == 3
-                      ? MaterialStateProperty.all(Colors.transparent)
-                      : Utils.getColorOrPressed(
-                          Theme.of(context).colorScheme.primary,
-                          Utils.darken(
-                              Theme.of(context).colorScheme.primary, 25),
-                        ),
+                  backgroundColor:
+                      gameProvider.getCurrentPointType == PointType.Double ||
+                              gameProvider.getAmountOfDartsThrown() == 3
+                          ? MaterialStateProperty.all(Utils.darken(
+                              Theme.of(context).colorScheme.primary, 25))
+                          : MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                  overlayColor:
+                      gameProvider.getCurrentPointType == PointType.Double ||
+                              gameProvider.getAmountOfDartsThrown() == 3
+                          ? MaterialStateProperty.all(Colors.transparent)
+                          : Utils.getColorOrPressed(
+                              Theme.of(context).colorScheme.primary,
+                              Utils.darken(
+                                  Theme.of(context).colorScheme.primary, 25),
+                            ),
                 ),
                 child: FittedBox(
                   child: Text(
@@ -115,9 +127,9 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  if (gameScoreTraining_P.getAmountOfDartsThrown() != 3) {
-                    gameScoreTraining_P.setCurrentPointType = PointType.Double;
-                    gameScoreTraining_P.notify();
+                  if (gameProvider.getAmountOfDartsThrown() != 3) {
+                    gameProvider.setCurrentPointType = PointType.Double;
+                    gameProvider.notify();
                   }
                 },
               ),
@@ -132,22 +144,22 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                       borderRadius: BorderRadius.zero,
                     ),
                   ),
-                  backgroundColor: gameScoreTraining_P.getCurrentPointType ==
-                              PointType.Tripple ||
-                          gameScoreTraining_P.getAmountOfDartsThrown() == 3
-                      ? MaterialStateProperty.all(Utils.darken(
-                          Theme.of(context).colorScheme.primary, 25))
-                      : MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary),
-                  overlayColor: gameScoreTraining_P.getCurrentPointType ==
-                              PointType.Tripple ||
-                          gameScoreTraining_P.getAmountOfDartsThrown() == 3
-                      ? MaterialStateProperty.all(Colors.transparent)
-                      : Utils.getColorOrPressed(
-                          Theme.of(context).colorScheme.primary,
-                          Utils.darken(
-                              Theme.of(context).colorScheme.primary, 25),
-                        ),
+                  backgroundColor:
+                      gameProvider.getCurrentPointType == PointType.Tripple ||
+                              gameProvider.getAmountOfDartsThrown() == 3
+                          ? MaterialStateProperty.all(Utils.darken(
+                              Theme.of(context).colorScheme.primary, 25))
+                          : MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.primary),
+                  overlayColor:
+                      gameProvider.getCurrentPointType == PointType.Tripple ||
+                              gameProvider.getAmountOfDartsThrown() == 3
+                          ? MaterialStateProperty.all(Colors.transparent)
+                          : Utils.getColorOrPressed(
+                              Theme.of(context).colorScheme.primary,
+                              Utils.darken(
+                                  Theme.of(context).colorScheme.primary, 25),
+                            ),
                 ),
                 child: FittedBox(
                   child: Text(
@@ -160,9 +172,9 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   ),
                 ),
                 onPressed: () {
-                  if (gameScoreTraining_P.getAmountOfDartsThrown() != 3) {
-                    gameScoreTraining_P.setCurrentPointType = PointType.Tripple;
-                    gameScoreTraining_P.notify();
+                  if (gameProvider.getAmountOfDartsThrown() != 3) {
+                    gameProvider.setCurrentPointType = PointType.Tripple;
+                    gameProvider.notify();
                   }
                 },
               ),

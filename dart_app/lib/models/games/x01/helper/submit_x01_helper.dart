@@ -147,10 +147,13 @@ class SubmitX01Helper {
       final bool gameFinished = tuple.item2;
 
       if (!legSetOrGameFinished) {
+        final bool shouldSetNextPlayerOrTeam =
+            _shouldSetNextPlayerOrTeam(gameX01, gameSettingsX01, currentStats);
         if (shouldSubmitTeamStats) {
-          _setNextTeamAndPlayer(currentStats, gameX01, gameSettingsX01);
+          gameSettingsX01.setNextTeamAndPlayer(
+              gameX01, shouldSetNextPlayerOrTeam);
         } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-          _setNextPlayer(currentStats, gameX01, gameSettingsX01);
+          gameSettingsX01.setNextPlayer(gameX01, shouldSetNextPlayerOrTeam);
         }
       }
 
@@ -321,8 +324,7 @@ class SubmitX01Helper {
     }
 
     // set all scores per leg
-    final String key =
-        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01);
+    final String key = Utils.getCurrentSetLegAsString(gameX01, gameSettingsX01);
     if (stats.getAllScoresPerLeg.containsKey(key)) {
       // add to value list
       stats.getAllScoresPerLeg[key].add(totalPoints);
@@ -353,7 +355,7 @@ class SubmitX01Helper {
 
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final String currentSetLeg =
-        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01);
+        Utils.getCurrentSetLegAsString(gameX01, gameSettingsX01);
     final bool isSingleMode =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
             ? true
@@ -402,8 +404,7 @@ class SubmitX01Helper {
       if (!isSingleMode) {
         playerOrTeamName = gameX01.getCurrentTeamToThrow.getName;
       }
-      gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt[currentSetLeg] =
-          playerOrTeamName;
+      gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.add(playerOrTeamName);
     }
 
     // add checkout to list
@@ -423,7 +424,7 @@ class SubmitX01Helper {
       for (Team team in gameSettingsX01.getTeams) {
         players.add(team.getCurrentPlayerToThrow.getName);
       }
-      gameX01.getCurrentPlayerOfTeamsBeforeLegFinish[currentSetLeg] = players;
+      gameX01.getCurrentPlayerOfTeamsBeforeLegFinish.add(players);
     }
 
     _updateLegsSets(
@@ -477,19 +478,7 @@ class SubmitX01Helper {
       return new Tuple2(true, isGameFinished);
     }
 
-    // set player leg start index
-    if (isSingleMode &&
-        gameX01.getPlayerOrTeamLegStartIndex ==
-            gameSettingsX01.getPlayers.length - 1) {
-      gameX01.setPlayerOrTeamLegStartIndex = 0;
-    } else if (!isSingleMode &&
-        gameX01.getPlayerOrTeamLegStartIndex ==
-            gameSettingsX01.getTeams.length - 1) {
-      gameX01.setPlayerOrTeamLegStartIndex = 0;
-    } else {
-      gameX01.setPlayerOrTeamLegStartIndex =
-          gameX01.getPlayerOrTeamLegStartIndex + 1;
-    }
+    Utils.setPlayerTeamLegStartIndex(gameX01, gameSettingsX01, isSingleMode);
 
     // set team/player
     if (!isSingleMode) {
@@ -584,73 +573,6 @@ class SubmitX01Helper {
     return true;
   }
 
-  static _setNextTeamAndPlayer(PlayerOrTeamGameStatsX01 stats,
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    final List<Team> teams = gameSettingsX01.getTeams;
-    int indexOfCurrentTeam = -1;
-    for (int i = 0; i < teams.length; i++) {
-      if (teams[i].getName == gameX01.getCurrentTeamToThrow.getName) {
-        indexOfCurrentTeam = i;
-      }
-    }
-
-    final List<Player> players = gameX01.getCurrentTeamToThrow.getPlayers;
-    int indexOfCurrentPlayerInCurrentTeam = -1;
-    for (int i = 0; i < players.length; i++) {
-      if (players[i].getName == gameX01.getCurrentPlayerToThrow.getName) {
-        indexOfCurrentPlayerInCurrentTeam = i;
-      }
-    }
-
-    if (_shouldSetNextPlayerOrTeam(gameX01, gameSettingsX01, stats)) {
-      // set next player of current team
-      if (indexOfCurrentPlayerInCurrentTeam + 1 == players.length) {
-        // round of all players finished -> restart from beginning
-        gameX01.getCurrentTeamToThrow.setCurrentPlayerToThrow = players[0];
-      } else {
-        gameX01.getCurrentTeamToThrow.setCurrentPlayerToThrow =
-            players[indexOfCurrentPlayerInCurrentTeam + 1];
-      }
-
-      // set next team
-      if (indexOfCurrentTeam + 1 == teams.length) {
-        // round of all teams finished -> restart from beginning
-        gameX01.setCurrentTeamToThrow = teams[0];
-      } else {
-        gameX01.setCurrentTeamToThrow = teams[indexOfCurrentTeam + 1];
-      }
-
-      // set next player of next team
-      gameX01.setCurrentPlayerToThrow =
-          gameX01.getCurrentTeamToThrow.getCurrentPlayerToThrow;
-
-      if (gameX01.getCurrentPlayerToThrow is Bot) {
-        gameX01.setBotSubmittedPoints = false;
-      }
-    }
-  }
-
-  static _setNextPlayer(PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01,
-      GameSettingsX01_P gameSettingsX01) {
-    final List<Player> players = gameSettingsX01.getPlayers;
-
-    if (_shouldSetNextPlayerOrTeam(gameX01, gameSettingsX01, stats)) {
-      final int indexOfCurrentPlayer =
-          players.indexOf(gameX01.getCurrentPlayerToThrow);
-
-      if (indexOfCurrentPlayer + 1 == players.length) {
-        //round of all players finished -> restart from beginning
-        gameX01.setCurrentPlayerToThrow = players[0];
-      } else {
-        gameX01.setCurrentPlayerToThrow = players[indexOfCurrentPlayer + 1];
-      }
-
-      if (gameX01.getCurrentPlayerToThrow is Bot) {
-        gameX01.setBotSubmittedPoints = false;
-      }
-    }
-  }
-
   // case 1 -> input method is round
   // case 2 -> input method is three darts -> 3 darts entered
   // case 3 -> input method is three darts -> 1 or 2 darts entered & finished leg/set/game
@@ -694,7 +616,7 @@ class SubmitX01Helper {
     }
 
     final Tuple3<String, int, int> tuple = Tuple3<String, int, int>(
-        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01),
+        Utils.getCurrentSetLegAsString(gameX01, gameSettingsX01),
         stats.getCurrentThrownDartsInLeg,
         checkoutCount);
 
@@ -784,32 +706,6 @@ class SubmitX01Helper {
     }
   }
 
-  static bool _gameWonFirstToWithSets(
-      int setsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
-        gameSettingsX01.getSetsEnabled &&
-        gameSettingsX01.getSets == setsWon;
-  }
-
-  static bool _gameWonFirstToWithLegs(
-      int legsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
-        legsWon >= gameSettingsX01.getLegs;
-  }
-
-  static bool _gameWonBestOfWithSets(
-      int setsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
-        gameSettingsX01.getSetsEnabled &&
-        ((setsWon * 2) - 1) == gameSettingsX01.getSets;
-  }
-
-  static bool _gameWonBestOfWithLegs(
-      int legsWon, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
-        ((legsWon * 2) - 1) >= gameSettingsX01.getLegs;
-  }
-
   static bool _gameWonBestOfWithLegsWithDrawMode(
       int legsWon, GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
@@ -883,12 +779,13 @@ class SubmitX01Helper {
           _gameWonBestOfWithSetsWithDrawMode(stats.getSetsWon, gameSettingsX01);
     } else if (gameSettingsX01.getSetsEnabled) {
       // set mode
-      return _gameWonFirstToWithSets(stats.getSetsWon, gameSettingsX01) ||
-          _gameWonBestOfWithSets(stats.getSetsWon, gameSettingsX01);
+      return Utils.gameWonFirstToWithSets(stats.getSetsWon, gameSettingsX01) ||
+          Utils.gameWonBestOfWithSets(stats.getSetsWon, gameSettingsX01);
     } else if (!gameSettingsX01.getSetsEnabled) {
       // leg mode
-      if (_gameWonFirstToWithLegs(stats.getLegsWonTotal, gameSettingsX01) ||
-          _gameWonBestOfWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
+      if (Utils.gameWonFirstToWithLegs(
+              stats.getLegsWonTotal, gameSettingsX01) ||
+          Utils.gameWonBestOfWithLegs(stats.getLegsWonTotal, gameSettingsX01)) {
         if (!gameSettingsX01.getWinByTwoLegsDifference) {
           return true;
         }
@@ -914,8 +811,8 @@ class SubmitX01Helper {
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = true;
 
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
       late double legsForSuddenDeath;
       if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo) {
         legsForSuddenDeath =

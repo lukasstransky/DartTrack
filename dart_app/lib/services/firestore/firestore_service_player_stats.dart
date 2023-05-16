@@ -2,12 +2,14 @@ import 'dart:collection';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -48,6 +50,9 @@ class FirestoreServicePlayerStats {
       } else if (playerStats is PlayerGameStatsSingleDoubleTraining) {
         data = playerOrTeamStatsToSave.toMapSingleDoubleTraining(
             playerStats, gameId, false);
+      } else if (playerStats is PlayerOrTeamGameStatsCricket) {
+        data = playerOrTeamStatsToSave.toMapCricket(
+            playerStats, context.read<GameSettingsCricket_P>(), gameId, false);
       }
 
       // save playerGameStats to firestore
@@ -70,6 +75,9 @@ class FirestoreServicePlayerStats {
         if (teamStats is PlayerOrTeamGameStatsX01) {
           data = playerOrTeamStatsToSave.toMapX01(teamStats,
               GameX01_P.createGame(game), gameSettingsX01, gameId, false);
+        } else if (teamStats is PlayerOrTeamGameStatsCricket) {
+          data = playerOrTeamStatsToSave.toMapCricket(
+              teamStats, context.read<GameSettingsCricket_P>(), gameId, false);
         }
 
         await _firestore
@@ -140,7 +148,7 @@ class FirestoreServicePlayerStats {
         _firestore.collection(_getFirestorePlayerStatsPath());
     Query query = collectionReference
         .where('player.name', isEqualTo: username)
-        .where('mode', isEqualTo: 'X01');
+        .where('mode', isEqualTo: GameMode.X01.name);
 
     if (firestoreStats.currentFilterValue == FilterValue.Year ||
         firestoreStats.currentFilterValue == FilterValue.Month) {
@@ -397,7 +405,7 @@ class FirestoreServicePlayerStats {
 
   Future<PlayerOrTeamGameStats?> getPlayerOrTeamGameStatisticById(
       String playerOrTeamGameStatsId,
-      String mode,
+      GameMode mode,
       bool loadTeamGameStats) async {
     final CollectionReference collectionReference = _firestore.collection(
         loadTeamGameStats
@@ -406,13 +414,15 @@ class FirestoreServicePlayerStats {
     PlayerOrTeamGameStats? result;
 
     await collectionReference.doc(playerOrTeamGameStatsId).get().then((value) {
-      if (mode == 'X01') {
+      if (mode == GameMode.X01) {
         result = PlayerOrTeamGameStats.fromMapX01(value.data());
-      } else if (mode == 'Cricket') {
-      } else if (mode == 'Single training' || mode == 'Double training') {
+      } else if (mode == GameMode.Cricket) {
+        result = PlayerOrTeamGameStats.fromMapCricket(value.data());
+      } else if (mode == GameMode.SingleTraining ||
+          mode == GameMode.DoubleTraining) {
         result =
             PlayerOrTeamGameStats.fromMapSingleDoubleTraining(value.data());
-      } else if (mode == 'Score training') {
+      } else if (mode == GameMode.ScoreTraining) {
         result = PlayerOrTeamGameStats.fromMapScoreTraining(value.data());
       }
     });

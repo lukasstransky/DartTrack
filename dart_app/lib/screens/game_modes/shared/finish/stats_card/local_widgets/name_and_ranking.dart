@@ -1,3 +1,6 @@
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -11,14 +14,14 @@ class NameAndRanking extends StatelessWidget {
     Key? key,
     required this.i,
     required this.game,
-    required this.playerStats,
+    required this.stats,
     required this.isOpenGame,
-    required this.isDraw,
+    this.isDraw = false,
   }) : super(key: key);
 
   final int i;
   final Game_P game;
-  final PlayerOrTeamGameStats playerStats;
+  final PlayerOrTeamGameStats stats;
   final bool isOpenGame;
   final bool isDraw;
 
@@ -26,13 +29,11 @@ class NameAndRanking extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        padding: EdgeInsets.only(
-          left: 5.w,
-        ),
+        padding: EdgeInsets.only(left: 5.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            game.getPlayerGameStatistics.length > 1 && !isDraw
+            !isDraw
                 ? Container(
                     width: 5.w,
                     child: Text(
@@ -45,10 +46,7 @@ class NameAndRanking extends StatelessWidget {
                     ),
                   )
                 : SizedBox.shrink(),
-            if (i == 0 &&
-                !isOpenGame &&
-                game.getPlayerGameStatistics.length > 1 &&
-                !isDraw)
+            if (i == 0 && !isOpenGame && !isDraw)
               Container(
                 padding: EdgeInsets.only(left: 3.w),
                 transform: Matrix4.translationValues(0.0, -2.0, 0.0),
@@ -64,7 +62,7 @@ class NameAndRanking extends StatelessWidget {
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    playerStats.getPlayer.getName,
+                    _getPlayerOrTeamName(game.getGameSettings, stats),
                     style: TextStyle(
                       fontSize: i == 0 && !isOpenGame ? 14.sp : 12.sp,
                       color: Utils.getTextColorDarken(context),
@@ -79,4 +77,14 @@ class NameAndRanking extends StatelessWidget {
       ),
     );
   }
+}
+
+String _getPlayerOrTeamName(
+    GameSettings_P gameSettings, PlayerOrTeamGameStats stats) {
+  if (gameSettings is GameSettingsCricket_P &&
+      gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+    return stats.getTeam.getName;
+  }
+
+  return stats.getPlayer.getName;
 }

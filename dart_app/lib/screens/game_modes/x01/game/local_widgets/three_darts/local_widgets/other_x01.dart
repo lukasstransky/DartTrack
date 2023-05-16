@@ -49,7 +49,10 @@ class OtherX01 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: RevertBtn(game_p: gameX01),
+            child: Selector<GameX01_P, bool>(
+              selector: (_, game) => game.getRevertPossible,
+              builder: (_, revertPossible, __) => RevertBtn(game_p: gameX01),
+            ),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('25')

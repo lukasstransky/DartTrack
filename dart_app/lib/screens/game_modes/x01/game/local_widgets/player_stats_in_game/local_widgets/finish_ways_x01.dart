@@ -34,8 +34,8 @@ class FinishWaysX01 extends StatelessWidget {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01))
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team))
       if (stats.getCurrentPoints <= 170) {
         return true;
       }

@@ -13,7 +13,7 @@ class GameScoreTraining_P extends Game_P {
   PointType _currentPointType = PointType.Single;
 
   GameScoreTraining_P()
-      : super(dateTime: DateTime.now(), name: 'Score training');
+      : super(dateTime: DateTime.now(), name: GameMode.ScoreTraining.name);
 
   String get getCurrentPointsSelected => this._currentPointsSelected;
   set setCurrentPointsSelected(String value) =>
@@ -48,7 +48,7 @@ class GameScoreTraining_P extends Game_P {
       for (Player player in getGameSettings.getPlayers) {
         getPlayerGameStatistics.add(
           new PlayerGameStatsScoreTraining(
-            mode: 'Score training',
+            mode: GameMode.ScoreTraining.name,
             player: player,
             dateTime: getDateTime,
             roundOrPointsLeft: getGameSettings.getMaxRoundsOrPoints,
@@ -65,11 +65,6 @@ class GameScoreTraining_P extends Game_P {
         setCurrentPointType = PointType.Single;
       }
     }
-  }
-
-  PlayerGameStatsScoreTraining getCurrentPlayerGameStats() {
-    return getPlayerGameStatistics.firstWhere(
-        (stats) => stats.getPlayer.getName == getCurrentPlayerToThrow.getName);
   }
 
   _setAllRemainingScoresPerDart(PlayerGameStatsScoreTraining stats) {
@@ -91,7 +86,8 @@ class GameScoreTraining_P extends Game_P {
 
   submitPoints(BuildContext context) {
     final PlayerGameStatsScoreTraining stats = getCurrentPlayerGameStats();
-    final settings = context.read<GameSettingsScoreTraining_P>();
+    final GameSettingsScoreTraining_P settings =
+        context.read<GameSettingsScoreTraining_P>();
 
     setRevertPossible = true;
 
@@ -309,22 +305,6 @@ class GameScoreTraining_P extends Game_P {
     setShowLoadingSpinner = false;
   }
 
-  int getAmountOfDartsThrown() {
-    int count = 0;
-
-    if (getCurrentThreeDarts[0] != 'Dart 1') {
-      count++;
-    }
-    if (getCurrentThreeDarts[1] != 'Dart 2') {
-      count++;
-    }
-    if (getCurrentThreeDarts[2] != 'Dart 3') {
-      count++;
-    }
-
-    return count;
-  }
-
   bool _isCompleteRound(GameSettingsScoreTraining_P settings) {
     if (settings.getInputMethod == InputMethod.Round) {
       return true;
@@ -516,5 +496,10 @@ class GameScoreTraining_P extends Game_P {
     notify();
 
     return result;
+  }
+
+  PlayerGameStatsScoreTraining getCurrentPlayerGameStats() {
+    return getPlayerGameStatistics.firstWhere(
+        (stats) => stats.getPlayer.getName == getCurrentPlayerToThrow.getName);
   }
 }

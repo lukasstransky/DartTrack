@@ -14,6 +14,13 @@ class SixteenToTwentyBtnsThreeDarts extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          if (mode == GameMode.Cricket)
+            Expanded(
+              child: PointBtnThreeDarts(
+                pointValue: '15',
+                mode: mode,
+              ),
+            ),
           Expanded(
             child: PointBtnThreeDarts(
               pointValue: '16',

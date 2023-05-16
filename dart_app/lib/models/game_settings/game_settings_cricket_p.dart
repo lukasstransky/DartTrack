@@ -1,20 +1,19 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
+import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/team.dart';
 
 class GameSettingsCricket_P extends GameSettings_P {
-  SingleOrTeamEnum _singleOrTeam = SingleOrTeamEnum.Single;
-  SetsOrLegsEnum _setsOrLegs = SetsOrLegsEnum.Legs;
-  BestOfOrFirstToEnum _bestOfOrFirstTo = BestOfOrFirstToEnum.FirstTo;
-  CricketMode _mode = CricketMode.Standard;
-  int _legs = 3;
-  int _sets = 2;
-  bool _setsEnabled = false;
+  SingleOrTeamEnum _singleOrTeam = DEFAULT_SINGLE_OR_TEAM_CRICKET;
+  BestOfOrFirstToEnum _bestOfOrFirstTo = DEFAULT_BEST_OF_OR_FIRST_TO_CRICKET;
+  CricketMode _mode = DEFAULT_CRICKET_MODE;
+  int _legs = DEFAULT_LEGS_FIRST_TO_NO_SETS_CRICKET;
+  int _sets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED_CRICKET;
+  bool _setsEnabled = DEFAULT_SETS_ENABLED_CRICKET;
 
   SingleOrTeamEnum get getSingleOrTeam => this._singleOrTeam;
   set setSingleOrTeam(SingleOrTeamEnum value) => this._singleOrTeam = value;
-
-  SetsOrLegsEnum get getSetsOrLegs => this._setsOrLegs;
-  set setSetsOrLegs(SetsOrLegsEnum value) => this._setsOrLegs = value;
 
   BestOfOrFirstToEnum get getBestOfOrFirstTo => this._bestOfOrFirstTo;
   set setBestOfOrFirstTo(BestOfOrFirstToEnum value) =>
@@ -34,10 +33,40 @@ class GameSettingsCricket_P extends GameSettings_P {
 
   GameSettingsCricket_P() {}
 
+  GameSettingsCricket_P.firestore({
+    required SingleOrTeamEnum singleOrTeam,
+    required BestOfOrFirstToEnum bestOfOrFirstTo,
+    required CricketMode mode,
+    required int legs,
+    required int sets,
+    required bool setsEnabled,
+    List<Player>? players,
+    List<Team>? teams,
+  }) {
+    this.setSingleOrTeam = singleOrTeam;
+    this.setBestOfOrFirstTo = bestOfOrFirstTo;
+    this.setMode = mode;
+    this.setLegs = legs;
+    this.setSets = sets;
+    this.setSetsEnabled = setsEnabled;
+
+    if (players != null) {
+      setPlayers = players;
+    }
+    if (teams != null) {
+      setTeams = teams;
+    }
+  }
+
   switchSingleOrTeamMode() {
     if (getSingleOrTeam == SingleOrTeamEnum.Single) {
       setSingleOrTeam = SingleOrTeamEnum.Team;
     } else {
+      if (getPlayers.length > 4) {
+        for (int i = 4; i < getPlayers.length; i++) {
+          removePlayer(getPlayers.elementAt(i), true, true);
+        }
+      }
       setSingleOrTeam = SingleOrTeamEnum.Single;
     }
 
@@ -70,11 +99,11 @@ class GameSettingsCricket_P extends GameSettings_P {
 
   reset() {
     setSingleOrTeam = SingleOrTeamEnum.Single;
-    setSetsOrLegs = SetsOrLegsEnum.Legs;
     setBestOfOrFirstTo = BestOfOrFirstToEnum.FirstTo;
     setMode = CricketMode.Standard;
-    setLegs = 3;
-    setSets = 2;
+    setLegs = DEFAULT_LEGS_FIRST_TO_NO_SETS_CRICKET;
+    setSets = DEFAULT_SETS_FIRST_TO_SETS_ENABLED_CRICKET;
+    setSetsEnabled = false;
 
     setPlayers = [];
     setTeams = [];
@@ -96,5 +125,9 @@ class GameSettingsCricket_P extends GameSettings_P {
     }
 
     notify();
+  }
+
+  String getModeStringFinishScreen(bool isOpenGame, GameCricket_P game) {
+    return '${getMode.name} mode';
   }
 }

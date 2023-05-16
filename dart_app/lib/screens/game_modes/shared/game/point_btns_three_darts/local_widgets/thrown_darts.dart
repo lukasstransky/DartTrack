@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -13,8 +14,9 @@ class ThrownDarts extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget widget;
     if (mode == GameMode.ScoreTraining) {
-      return Selector<GameScoreTraining_P, List<String>>(
+      widget = Selector<GameScoreTraining_P, List<String>>(
         selector: (_, game) => game.getCurrentThreeDarts,
         shouldRebuild: (previous, next) => true,
         builder: (_, currentThreeDarts, __) =>
@@ -22,15 +24,27 @@ class ThrownDarts extends StatelessWidget {
       );
     } else if (mode == GameMode.SingleTraining ||
         mode == GameMode.DoubleTraining) {
-      return Selector<GameSingleDoubleTraining_P, List<String>>(
+      widget = Selector<GameSingleDoubleTraining_P, List<String>>(
         selector: (_, game) => game.getCurrentThreeDarts,
         shouldRebuild: (previous, next) => true,
         builder: (_, currentThreeDarts, __) =>
             ThrownDartsWidget(currentThreeDarts: currentThreeDarts),
       );
+    } else if (mode == GameMode.Cricket) {
+      widget = Selector<GameCricket_P, List<String>>(
+        selector: (_, game) => game.getCurrentThreeDarts,
+        shouldRebuild: (previous, next) => true,
+        builder: (_, currentThreeDarts, __) =>
+            ThrownDartsWidget(currentThreeDarts: currentThreeDarts),
+      );
+    } else {
+      return SizedBox.shrink();
     }
 
-    return SizedBox.shrink();
+    return Container(
+      height: THROWN_DARTS_WIDGET_HEIGHT.h,
+      child: widget,
+    );
   }
 }
 

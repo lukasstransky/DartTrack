@@ -1,11 +1,13 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -61,7 +63,13 @@ class PlayerOrTeamGameStats {
 
   Map<String, dynamic> toMapX01(PlayerOrTeamGameStatsX01 stats, GameX01_P game,
       GameSettingsX01_P settings, String gameId, bool openGame) {
-    String checkoutQuote = stats.getCheckoutQuoteInPercent();
+    final String checkoutQuote = stats.getCheckoutQuoteInPercent();
+    final Map<String, int> roundedScoresEven =
+        Utils.getMapWithStringKey(stats.getRoundedScoresEven);
+    final Map<String, int> roundedScoresOdd =
+        Utils.getMapWithStringKey(stats.getRoundedScoresOdd);
+    final Map<String, int> preciseScores =
+        Utils.getMapWithStringKey(stats.getPreciseScores);
 
     Map<String, dynamic> result = {
       'mode': _mode,
@@ -110,12 +118,9 @@ class PlayerOrTeamGameStats {
       if (stats.getAllScores.isNotEmpty) 'allScores': stats.getAllScores,
       if (stats.getAllScoresPerDart.isNotEmpty)
         'allScoresPerDart': stats.getAllScoresPerDart,
-      if (stats.getRoundedScoresEven.isNotEmpty)
-        'roundedScoresEven': _getRoundedScoresEvenWithStringKey(stats),
-      if (stats.getRoundedScoresOdd.isNotEmpty)
-        'roundedScoresOdd': _getRoundedScoresOddWithStringKey(stats),
-      if (stats.getPreciseScores.isNotEmpty)
-        'preciseScores': _getPreciseScoresWithStringKey(stats),
+      if (roundedScoresEven.isNotEmpty) 'roundedScoresEven': roundedScoresEven,
+      if (roundedScoresOdd.isNotEmpty) 'roundedScoresOdd': roundedScoresOdd,
+      if (preciseScores.isNotEmpty) 'preciseScores': preciseScores,
       if (stats.getAllScoresPerDartAsStringCount.isNotEmpty)
         'allScoresPerDartAsStringCount': stats.getAllScoresPerDartAsStringCount,
       if (stats.getThrownDartsPerLeg.isNotEmpty)
@@ -157,7 +162,7 @@ class PlayerOrTeamGameStats {
         result['allRemainingPoints'] = stats.getAllRemainingPoints;
       if (stats.getAllRemainingScoresPerDart.isNotEmpty)
         result['allRemainingScoresPerDart'] =
-            Utils.convertAllRemainingScoresPerDartToSimpleList(
+            Utils.convertDoubleListToSimpleList(
                 stats.getAllRemainingScoresPerDart);
       if (stats.getLegSetWithPlayerOrTeamWhoFinishedIt.isNotEmpty)
         result['setLegWithPlayerOrTeamWhoFinishedIt'] = stats
@@ -180,6 +185,13 @@ class PlayerOrTeamGameStats {
 
   Map<String, dynamic> toMapScoreTraining(
       PlayerGameStatsScoreTraining stats, String gameId, bool openGame) {
+    final Map<String, int> roundedScoresEven =
+        Utils.getMapWithStringKey(stats.getRoundedScoresEven);
+    final Map<String, int> roundedScoresOdd =
+        Utils.getMapWithStringKey(stats.getRoundedScoresOdd);
+    final Map<String, int> preciseScores =
+        Utils.getMapWithStringKey(stats.getPreciseScores);
+
     Map<String, dynamic> result = {
       'player': stats.getPlayer.toMap(stats.getPlayer),
       'mode': getMode,
@@ -188,12 +200,9 @@ class PlayerOrTeamGameStats {
       if (stats.getCurrentScore != 0) 'currentScore': stats.getCurrentScore,
       if (stats.getAllScoresPerDartAsStringCount.isNotEmpty)
         'allScoresPerDartAsStringCount': stats.getAllScoresPerDartAsStringCount,
-      if (stats._getRoundedScoresEvenWithStringKey(stats).isNotEmpty)
-        'roundedScoresEven': _getRoundedScoresEvenWithStringKey(stats),
-      if (stats._getRoundedScoresOddWithStringKey(stats).isNotEmpty)
-        'roundedScoresOdd': _getRoundedScoresOddWithStringKey(stats),
-      if (stats._getPreciseScoresWithStringKey(stats).isNotEmpty)
-        'preciseScores': _getPreciseScoresWithStringKey(stats),
+      if (roundedScoresEven.isNotEmpty) 'roundedScoresEven': roundedScoresEven,
+      if (roundedScoresOdd.isNotEmpty) 'roundedScoresOdd': roundedScoresOdd,
+      if (preciseScores.isNotEmpty) 'preciseScores': preciseScores,
       if (stats.getThrownDarts != 0) 'thrownDarts': stats.getThrownDarts,
       if (stats.getThreeDartModeRoundsCount != 0)
         'threeDartModeRoundsCount': stats.getThreeDartModeRoundsCount,
@@ -217,7 +226,7 @@ class PlayerOrTeamGameStats {
             .toList();
       if (stats.getAllRemainingScoresPerDart.isNotEmpty)
         result['allRemainingScoresPerDart'] =
-            Utils.convertAllRemainingScoresPerDartToSimpleList(
+            Utils.convertDoubleListToSimpleList(
                 stats.getAllRemainingScoresPerDart);
       if (stats.getAllScoresPerDartAsString.isNotEmpty)
         result['allScoresPerDartAsString'] = stats.getAllScoresPerDartAsString;
@@ -245,6 +254,57 @@ class PlayerOrTeamGameStats {
 
     if (openGame) {
       result['allHits'] = stats.getAllHits;
+    }
+
+    return result;
+  }
+
+  Map<String, dynamic> toMapCricket(PlayerOrTeamGameStatsCricket stats,
+      GameSettingsCricket_P settings, String gameId, bool openGame) {
+    Map<String, dynamic> result = {
+      if (stats.getPlayer != null)
+        'player': stats.getPlayer.toMap(stats.getPlayer),
+      'mode': getMode,
+      'gameId': gameId,
+      'dateTime': getDateTime,
+      if (stats.getPlayer != null)
+        'player': stats.getPlayer.toMap(stats.getPlayer),
+      if (stats.getTeam != null) 'team': stats.getTeam.toMap(stats.getTeam),
+      if (stats.getCurrentPoints != 0) 'currentPoints': stats.getCurrentPoints,
+      if (stats.getTotalPoints != 0) 'totalPoints': stats.getTotalPoints,
+      if (stats.getPointsPerLeg.isNotEmpty)
+        'pointsPerLeg': stats.getPointsPerLeg,
+      if (stats.getScoresOfNumbers.isNotEmpty)
+        'scoresOfNumbers': Utils.getMapWithStringKey(stats.getScoresOfNumbers),
+      if (stats.getPointsPerNumbers.isNotEmpty)
+        'pointsPerNumbers':
+            Utils.getMapWithStringKey(stats.getPointsPerNumbers),
+      if (stats.getLegsWon != 0) 'legsWon': stats.getLegsWon,
+      if (settings.getSetsEnabled) 'setsWon': stats.getSetsWon,
+      if (settings.getSetsEnabled) 'legsWonTotal': stats.getLegsWonTotal,
+      if (stats.getThrownDarts != 0) 'thrownDarts': stats.getThrownDarts,
+      if (stats.getTotalMarks != 0) 'totalMarks': stats.getTotalMarks,
+    };
+
+    if (openGame) {
+      if (stats.getThrownDartsInLeg != 0)
+        result['thrownDartsInLeg'] = stats.getThrownDartsInLeg;
+      if (stats.getThrownDartsPerLeg.isNotEmpty)
+        result['thrownDartsPerLeg'] = stats.getThrownDartsPerLeg;
+
+      if (stats.getAllScoresPerDart.isNotEmpty)
+        result['allScoresPerDart'] = stats.getAllScoresPerDart;
+      if (stats.getScoresOfNumbersPerLeg.isNotEmpty)
+        result['scoresOfNumbersPerLeg'] =
+            stats.getScoresOfNumbersPerLeg.map((map) {
+          return map.map((key, value) => MapEntry(key.toString(), value));
+        }).toList();
+      if (stats.getCurrentThreeDartsBeforeLegFinished.isNotEmpty)
+        result['currentThreeDartsBeforeLegFinished'] =
+            Utils.convertDoubleListToSimpleList(
+                stats.getCurrentThreeDartsBeforeLegFinished);
+      if (stats.getAmountOfLegsPerSet.isNotEmpty)
+        result['amountOfLegsPerSet'] = stats.getAmountOfLegsPerSet;
     }
 
     return result;
@@ -465,42 +525,62 @@ class PlayerOrTeamGameStats {
       dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
       mode: map['mode'],
       player: Player.fromMap(map['player']),
-      totalPoints: map['totalPoints'],
-      thrownDarts: map['thrownDarts'],
+      totalPoints: map['totalPoints'] != null ? map['totalPoints'] : 0,
+      thrownDarts: map['thrownDarts'] != null ? map['thrownDarts'] : 0,
       singleHits: map['singleHits'] != null ? map['singleHits'] : 0,
-      doubleHits: map['doubleHits'],
+      doubleHits: map['doubleHits'] != null ? map['doubleHits'] : 0,
       trippleHits: map['trippleHits'] != null ? map['trippleHits'] : 0,
-      missedHits: map['missedHits'],
+      missedHits: map['missedHits'] != null ? map['missedHits'] : 0,
       fieldHits: fieldHits,
       allHits: map['allHits'] != null ? map['allHits'].cast<String>() : [],
-      highestPoints: map['highestPoints'],
+      highestPoints: map['highestPoints'] != null ? map['highestPoints'] : 0,
     );
   }
 
-  Map<String, int> _getRoundedScoresOddWithStringKey(dynamic stats) {
-    Map<String, int> result = {};
-    for (var entry in stats.getRoundedScoresOdd.entries) {
-      result[entry.key.toString()] = entry.value;
-    }
-
-    return result;
-  }
-
-  Map<String, int> _getRoundedScoresEvenWithStringKey(dynamic stats) {
-    Map<String, int> result = {};
-    for (var entry in stats.getRoundedScoresEven.entries) {
-      result[entry.key.toString()] = entry.value;
-    }
-
-    return result;
-  }
-
-  Map<String, int> _getPreciseScoresWithStringKey(dynamic stats) {
-    Map<String, int> result = {};
-    for (var entry in stats.getPreciseScores.entries) {
-      result[entry.key.toString()] = entry.value;
-    }
-
-    return result;
+  factory PlayerOrTeamGameStats.fromMapCricket(map) {
+    return PlayerOrTeamGameStatsCricket.Firestore(
+      gameId: map['gameId'],
+      dateTime: DateTime.parse(map['dateTime'].toDate().toString()),
+      mode: map['mode'],
+      player: map['player'] == null ? null : Player.fromMap(map['player']),
+      team: map['team'] == null ? null : Team.fromMap(map['team']),
+      allScoresPerDart: map['allScoresPerDart'] != null
+          ? map['allScoresPerDart'].cast<String>()
+          : [],
+      amountOfLegsPerSet: map['amountOfLegsPerSet'] != null
+          ? map['amountOfLegsPerSet'].cast<int>()
+          : [],
+      currentPoints: map['currentPoints'] != null ? map['currentPoints'] : 0,
+      totalPoints: map['totalPoints'] != null ? map['totalPoints'] : 0,
+      legsWon: map['legsWon'] != null ? map['legsWon'] : 0,
+      legsWonTotal: map['legsWonTotal'] != null ? map['legsWonTotal'] : 0,
+      pointsPerLeg:
+          map['pointsPerLeg'] != null ? map['pointsPerLeg'].cast<int>() : [],
+      pointsPerNumbers: map['pointsPerNumbers'] != null
+          ? Map<String, int>.from(map['pointsPerNumbers'])
+          : {},
+      scoresOfNumbers: map['scoresOfNumbers'] != null
+          ? Map<String, int>.from(map['scoresOfNumbers'])
+          : {},
+      setsWon: map['setsWon'] != null ? map['setsWon'] : 0,
+      thrownDarts: map['thrownDarts'] != null ? map['thrownDarts'] : 0,
+      totalMarks: map['totalMarks'] != null ? map['totalMarks'] : 0,
+      thrownDartsInLeg:
+          map['thrownDartsInLeg'] != null ? map['thrownDartsInLeg'] : 0,
+      thrownDartsPerLeg: map['thrownDartsPerLeg'] != null
+          ? map['thrownDartsPerLeg'].cast<int>()
+          : [],
+      scoresOfNumbersPerLeg: map['scoresOfNumbersPerLeg'] != null
+          ? (map['scoresOfNumbersPerLeg'] as List<dynamic>).map((leg) {
+              return Map<int, int>.from(
+                  leg.map((k, v) => MapEntry(int.parse(k), v)));
+            }).toList()
+          : [],
+      currentThreeDartsBeforeLegFinished:
+          map['currentThreeDartsBeforeLegFinished'] != null
+              ? Utils.convertSimpleListBackToDoubleList(
+                  map['currentThreeDartsBeforeLegFinished'])
+              : [],
+    );
   }
 }

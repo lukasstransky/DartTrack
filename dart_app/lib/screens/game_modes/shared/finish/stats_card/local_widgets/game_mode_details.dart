@@ -1,6 +1,8 @@
+import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/games/game.dart';
-import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 
 import 'package:flutter/material.dart';
@@ -18,26 +20,13 @@ class GameModeDetails extends StatelessWidget {
   final bool isOpenGame;
   final bool isDraw;
 
-  String _getMode() {
-    String result = '';
-
-    if (isDraw) {
-      result = 'Draw - ';
-    }
-    if (game is GameSingleDoubleTraining_P) {
-      result += game.getName;
-    } else if (game is GameScoreTraining_P) {
-      result += 'Score training';
-    }
-
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
     final bool isTargetNumberEnabled = game is GameSingleDoubleTraining_P &&
         (game.getGameSettings as GameSettingsSingleDoubleTraining_P)
             .getIsTargetNumberEnabled;
+    final bool setsEnabled =
+        game is GameCricket_P && game.getGameSettings.getSetsEnabled;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -69,6 +58,20 @@ class GameModeDetails extends StatelessWidget {
             ],
           ),
         ),
+        if (setsEnabled)
+          Container(
+            padding: EdgeInsets.only(
+              left: 2.w,
+            ),
+            child: Text(
+              _getBestOfOrFirstToStringWithSetsAndLegs(),
+              style: TextStyle(
+                fontSize: 14.sp,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         Container(
           padding: EdgeInsets.only(
             left: 2.w,
@@ -100,5 +103,59 @@ class GameModeDetails extends StatelessWidget {
           ),
       ],
     );
+  }
+
+  String _getMode() {
+    String result = '';
+
+    if (isDraw) {
+      result = 'Draw - ';
+    }
+
+    result += game.getName;
+
+    if (game is GameCricket_P && !game.getGameSettings.getSetsEnabled) {
+      final GameSettingsCricket_P settings = game.getGameSettings;
+      if (settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
+        result += ' - Best of ';
+      } else {
+        result += ' - First to ';
+      }
+
+      if (settings.getLegs > 1) {
+        result += '${settings.getLegs.toString()} legs';
+      } else {
+        result += '${settings.getLegs.toString()} leg';
+      }
+    }
+
+    return result;
+  }
+
+  String _getBestOfOrFirstToStringWithSetsAndLegs() {
+    final GameSettingsCricket_P settings =
+        game.getGameSettings as GameSettingsCricket_P;
+
+    String result = '';
+
+    if (settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
+      result += 'Best of ';
+    } else {
+      result += 'First to ';
+    }
+
+    if (settings.getSets > 1) {
+      result += '${settings.getSets.toString()} sets - ';
+    } else {
+      result += '${settings.getSets.toString()} set - ';
+    }
+
+    if (settings.getLegs > 1) {
+      result += '${settings.getLegs.toString()} legs';
+    } else {
+      result += '${settings.getLegs.toString()} leg';
+    }
+
+    return result;
   }
 }

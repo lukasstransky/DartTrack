@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -43,6 +44,12 @@ class NewGameBtn extends StatelessWidget {
           'openGame': false,
           'mode': game.getName,
         },
+      );
+    } else if (gameMode == GameMode.Cricket) {
+      context.read<GameCricket_P>().reset();
+      Navigator.of(context).pushNamed(
+        '/gameCricket',
+        arguments: {'openGame': false},
       );
     }
   }

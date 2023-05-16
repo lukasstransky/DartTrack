@@ -11,9 +11,7 @@ import 'package:sizer/sizer.dart';
 class PlayersListScoreTraining extends StatelessWidget {
   const PlayersListScoreTraining({Key? key}) : super(key: key);
 
-  _getWidget(List<PlayerOrTeamGameStats> stats) {
-    final int length = stats.length;
-
+  _getWidget(int length) {
     if (length == 1) {
       return OnePlayerStatsScoreTraining();
     } else if (length == 2) {
@@ -30,7 +28,7 @@ class PlayersListScoreTraining extends StatelessWidget {
       shouldRebuild: (previous, next) => true,
       builder: (_, stats, __) => Container(
         height: 35.h,
-        child: _getWidget(stats),
+        child: _getWidget(stats.length),
       ),
     );
   }

@@ -1,4 +1,6 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -21,7 +23,7 @@ class CustomAppBarWithHeart extends StatefulWidget with PreferredSizeWidget {
       this.showHeart = true});
 
   final String title;
-  final String mode;
+  final GameMode mode;
   final String? gameId; // optional, passed from game.statistics
   final bool isFinishScreen;
   final bool showHeart;
@@ -36,59 +38,16 @@ class CustomAppBarWithHeart extends StatefulWidget with PreferredSizeWidget {
 }
 
 class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
-  _changeFavouriteStateOfGame(String gameId, bool state) async {
-    setState(() {
-      widget.isFavouriteGame = state;
-    });
+  @override
+  void initState() {
+    super.initState();
+    if (widget.gameId != null && widget.gameId!.isNotEmpty) {
+      final dynamic statsFirestore =
+          Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
 
-    await context
-        .read<FirestoreServiceGames>()
-        .changeFavouriteStateOfGame(gameId, state);
-  }
-
-  Game_P _getGameById(String gameId, dynamic statsFirestore) {
-    return statsFirestore.games.where(((g) => g.getGameId == gameId)).first;
-  }
-
-  _addGameToFavourites() {
-    final dynamic statsFirestore =
-        Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
-    final String gameId =
-        widget.gameId != null ? widget.gameId as String : g_gameId;
-
-    if (widget.isFavouriteGame) {
-      _changeFavouriteStateOfGame(gameId, false);
-
-      if (!widget.isFinishScreen) {
-        final Game_P game = _getGameById(gameId, statsFirestore);
-        game.setIsFavouriteGame = false;
-
-        // remove game from the favourites
-        statsFirestore.favouriteGames.remove(game);
-      }
-    } else {
-      _changeFavouriteStateOfGame(gameId, true);
-
-      if (!widget.isFinishScreen) {
-        final Game_P game = _getGameById(gameId, statsFirestore);
-        game.setIsFavouriteGame = true;
-
-        // add game to the favourites
-        statsFirestore.favouriteGames.add(game);
-      }
-    }
-
-    statsFirestore.notify();
-  }
-
-  _resetGame(BuildContext context) {
-    if (widget.mode == 'X01') {
-      context.read<GameX01_P>().reset();
-    } else if (widget.mode == 'Score training') {
-      context.read<GameScoreTraining_P>().reset();
-    } else if (widget.mode == 'Single training' ||
-        widget.mode == 'Double training') {
-      context.read<GameSingleDoubleTraining_P>().reset();
+      widget.isFavouriteGame = statsFirestore.games
+          .firstWhere((game) => game.getGameId == widget.gameId)
+          .getIsFavouriteGame;
     }
   }
 
@@ -158,5 +117,71 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         ],
       ),
     );
+  }
+
+  _changeFavouriteStateOfGame(String gameId, bool state) async {
+    setState(() {
+      widget.isFavouriteGame = state;
+    });
+
+    if (widget.gameId != null) {
+      final dynamic statsFirestore =
+          Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
+      statsFirestore.games
+          .firstWhere((game) => game.getGameId == gameId)
+          .setIsFavouriteGame = state;
+    }
+
+    await context
+        .read<FirestoreServiceGames>()
+        .changeFavouriteStateOfGame(gameId, state);
+  }
+
+  Game_P _getGameById(String gameId, dynamic statsFirestore) {
+    return statsFirestore.games.where(((g) => g.getGameId == gameId)).first;
+  }
+
+  _addGameToFavourites() {
+    final dynamic statsFirestore =
+        Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
+    final String gameId =
+        widget.gameId != null ? widget.gameId as String : g_gameId;
+
+    if (widget.isFavouriteGame) {
+      _changeFavouriteStateOfGame(gameId, false);
+
+      if (!widget.isFinishScreen) {
+        final Game_P game = _getGameById(gameId, statsFirestore);
+        game.setIsFavouriteGame = false;
+
+        // remove game from the favourites
+        statsFirestore.favouriteGames.remove(game);
+      }
+    } else {
+      _changeFavouriteStateOfGame(gameId, true);
+
+      if (!widget.isFinishScreen) {
+        final Game_P game = _getGameById(gameId, statsFirestore);
+        game.setIsFavouriteGame = true;
+
+        // add game to the favourites
+        statsFirestore.favouriteGames.add(game);
+      }
+    }
+
+    statsFirestore.notify();
+  }
+
+  _resetGame(BuildContext context) {
+    if (widget.mode == GameMode.X01) {
+      context.read<GameX01_P>().reset();
+    } else if (widget.mode == GameMode.ScoreTraining) {
+      context.read<GameScoreTraining_P>().reset();
+    } else if (widget.mode == GameMode.SingleTraining ||
+        widget.mode == GameMode.DoubleTraining) {
+      context.read<GameSingleDoubleTraining_P>().reset();
+    } else if (widget.mode == GameMode.Cricket) {
+      context.read<GameCricket_P>().reset();
+    }
   }
 }

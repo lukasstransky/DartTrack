@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -24,7 +25,7 @@ class UndoLastThrowBtn extends StatelessWidget {
 
   bool _didBotFinishGame(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     final String playerOrTeamWhoFinishedGame =
-        gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.entries.last.value;
+        gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.last;
 
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
       return playerOrTeamWhoFinishedGame.startsWith('Bot');
@@ -126,6 +127,28 @@ class UndoLastThrowBtn extends StatelessWidget {
         game.setRandomModeFinished = false;
       }
       game.revert(context, isRandomMode);
+      game.setShowLoadingSpinner = false;
+      game.notify();
+    } else if (gameMode == GameMode.Cricket) {
+      final game = context.read<GameCricket_P>();
+
+      game.setShowLoadingSpinner = true;
+      game.notify();
+
+      Navigator.of(context).pushNamed(
+        '/gameCricket',
+        arguments: {'openGame': false},
+      );
+
+      if (username != 'Guest') {
+        await firestoreServiceGames.deleteGame(
+          g_gameId,
+          context,
+          game.getTeamGameStatistics.length > 0 ? true : false,
+        );
+      }
+
+      game.revert();
       game.setShowLoadingSpinner = false;
       game.notify();
     }

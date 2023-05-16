@@ -57,7 +57,7 @@ class GameStatsX01 extends StatelessWidget {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final String setLegString =
-        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01);
+        Utils.getCurrentSetLegAsString(gameX01, gameSettingsX01);
     final bool isCurrentPlayerBeginnerOfLeg =
         getPlayerTeamStartIndex(gameX01, gameSettingsX01);
 

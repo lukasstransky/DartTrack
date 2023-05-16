@@ -18,7 +18,7 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isSingleMode = game.getMode == GameMode.SingleTraining;
 
-    return Padding(
+    return Container(
       padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,24 +29,13 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
               Column(
                 children: [
                   Container(
-                    child: HeadingTextGameStats(
-                      textValue: 'Total points',
-                    ),
-                  ),
+                      child: HeadingTextGameStats(textValue: 'Total points')),
                   if (isSingleMode)
-                    HeadingTextGameStats(
-                      textValue: 'Single hits',
-                    ),
-                  HeadingTextGameStats(
-                    textValue: 'Double hits',
-                  ),
+                    HeadingTextGameStats(textValue: 'Single hits'),
+                  HeadingTextGameStats(textValue: 'Double hits'),
                   if (isSingleMode)
-                    HeadingTextGameStats(
-                      textValue: 'Tripple hits',
-                    ),
-                  HeadingTextGameStats(
-                    textValue: 'Missed',
-                  ),
+                    HeadingTextGameStats(textValue: 'Tripple hits'),
+                  HeadingTextGameStats(textValue: 'Missed'),
                 ],
               ),
               for (PlayerGameStatsSingleDoubleTraining stats

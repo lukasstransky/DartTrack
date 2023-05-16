@@ -12,12 +12,12 @@ class StatsCricketBtn extends StatelessWidget {
     return Container(
       width: 40.w,
       child: ElevatedButton(
-        onPressed: () => Navigator.of(context)
-            .pushNamed('/statsPerGameList', arguments: {'mode': 'Cricket'}),
+        onPressed: () => Navigator.of(context).pushNamed('/statsPerGameList',
+            arguments: {'mode': GameMode.Cricket}),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Cricket',
+            GameMode.Cricket.name,
             style: TextStyle(
                 fontSize: 12.sp,
                 color: Theme.of(context).colorScheme.secondary),

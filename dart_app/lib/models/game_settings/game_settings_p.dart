@@ -1,7 +1,11 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -24,99 +28,119 @@ class GameSettings_P with ChangeNotifier {
 
   GameSettings_P() {}
 
-  Map<String, dynamic> toMapX01(GameSettingsX01_P gameSettings, bool openGame) {
+  Map<String, dynamic> toMapX01(GameSettingsX01_P settings, bool openGame) {
     Map<String, dynamic> result = {
-      'players': gameSettings.getPlayers.map((player) {
+      'players': settings.getPlayers.map((player) {
         return player.toMap(player);
       }).toList(),
-      'singleOrTeam': gameSettings.getSingleOrTeam.toString().split('.').last,
-      'legs': gameSettings.getLegs,
-      if (gameSettings.getSetsEnabled) 'sets': gameSettings.getSets,
-      'setsEnabled': gameSettings.getSetsEnabled,
-      'points': gameSettings.getPointsOrCustom(),
-      'mode': gameSettings.getBestOfOrFirstTo.toString().split('.').last,
-      'modeIn': gameSettings.getModeIn
+      'singleOrTeam': settings.getSingleOrTeam.toString().split('.').last,
+      'legs': settings.getLegs,
+      if (settings.getSetsEnabled) 'sets': settings.getSets,
+      'setsEnabled': settings.getSetsEnabled,
+      'points': settings.getPointsOrCustom(),
+      'mode': settings.getBestOfOrFirstTo.toString().split('.').last,
+      'modeIn':
+          settings.getModeIn.toString().split('.').last.replaceAll('Field', ''),
+      'modeOut': settings.getModeOut
           .toString()
           .split('.')
           .last
           .replaceAll('Field', ''),
-      'modeOut': gameSettings.getModeOut
-          .toString()
-          .split('.')
-          .last
-          .replaceAll('Field', ''),
-      'winByTwoLegsDifference': gameSettings.getWinByTwoLegsDifference,
-      if (gameSettings.getWinByTwoLegsDifference && gameSettings.getSuddenDeath)
-        'suddenDeath': gameSettings.getSuddenDeath,
-      if (gameSettings.getWinByTwoLegsDifference && gameSettings.getSuddenDeath)
-        'maxExtraLegs': gameSettings.getMaxExtraLegs,
-      'checkoutCounting': gameSettings.getEnableCheckoutCounting,
-      'drawMode': gameSettings.getDrawMode,
+      'winByTwoLegsDifference': settings.getWinByTwoLegsDifference,
+      if (settings.getWinByTwoLegsDifference && settings.getSuddenDeath)
+        'suddenDeath': settings.getSuddenDeath,
+      if (settings.getWinByTwoLegsDifference && settings.getSuddenDeath)
+        'maxExtraLegs': settings.getMaxExtraLegs,
+      'checkoutCounting': settings.getEnableCheckoutCounting,
+      'drawMode': settings.getDrawMode,
     };
 
-    if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      result['teams'] = gameSettings.getTeams.map((team) {
+    if (settings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      result['teams'] = settings.getTeams.map((team) {
         return team.toMap(team);
       }).toList();
     }
 
     if (openGame) {
       result['inputMethod'] =
-          gameSettings.getInputMethod.toString().split('.').last;
-      result['showAverage'] = gameSettings.getShowAverage;
-      if ((gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single &&
-              gameSettings.getPlayers == 2) ||
-          (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team &&
-              gameSettings.getTeams == 2)) {
-        result['showFinishWays'] = gameSettings.getShowFinishWays;
-        result['showLastThrow'] = gameSettings.getShowLastThrow;
-        result['showThrownDartsPerLeg'] = gameSettings.getShowThrownDartsPerLeg;
+          settings.getInputMethod.toString().split('.').last;
+      result['showAverage'] = settings.getShowAverage;
+      if ((settings.getSingleOrTeam == SingleOrTeamEnum.Single &&
+              settings.getPlayers == 2) ||
+          (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+              settings.getTeams == 2)) {
+        result['showFinishWays'] = settings.getShowFinishWays;
+        result['showLastThrow'] = settings.getShowLastThrow;
+        result['showThrownDartsPerLeg'] = settings.getShowThrownDartsPerLeg;
       }
-      result['vibrationFeedback'] = gameSettings.getVibrationFeedbackEnabled;
+      result['vibrationFeedback'] = settings.getVibrationFeedbackEnabled;
       result['showInputMethodInGameScreen'] =
-          gameSettings.getShowInputMethodInGameScreen;
-      result['showMostScoredPoints'] = gameSettings.getShowMostScoredPoints;
-      result['mostScoredPoints'] = gameSettings.getMostScoredPoints;
+          settings.getShowInputMethodInGameScreen;
+      result['showMostScoredPoints'] = settings.getShowMostScoredPoints;
+      result['mostScoredPoints'] = settings.getMostScoredPoints;
       result['automaticallySubmitPoints'] =
-          gameSettings.getAutomaticallySubmitPoints;
+          settings.getAutomaticallySubmitPoints;
       result['checkoutCountingFinallyDisabled'] =
-          gameSettings.getCheckoutCountingFinallyDisabled;
+          settings.getCheckoutCountingFinallyDisabled;
     }
 
     return result;
   }
 
   Map<String, dynamic> toMapScoreTraining(
-      GameSettingsScoreTraining_P gameSettings, bool openGame) {
+      GameSettingsScoreTraining_P settings, bool openGame) {
     Map<String, dynamic> result = {
-      'players': gameSettings.getPlayers.map((player) {
+      'players': settings.getPlayers.map((player) {
         return player.toMap(player);
       }).toList(),
-      'mode': gameSettings.getMode.toString().split('.').last,
-      'maxRoundsOrPoints': gameSettings.getMaxRoundsOrPoints,
+      'mode': settings.getMode.toString().split('.').last,
+      'maxRoundsOrPoints': settings.getMaxRoundsOrPoints,
     };
 
     if (openGame) {
       result['inputMethod'] =
-          gameSettings.getInputMethod.toString().split('.').last;
+          settings.getInputMethod.toString().split('.').last;
     }
 
     return result;
   }
 
   Map<String, dynamic> toMapSingleDoubleTraining(
-      GameSettingsSingleDoubleTraining_P gameSettings, bool openGame) {
+      GameSettingsSingleDoubleTraining_P settings, bool openGame) {
     Map<String, dynamic> result = {
-      'players': gameSettings.getPlayers.map((player) {
+      'players': settings.getPlayers.map((player) {
         return player.toMap(player);
       }).toList(),
     };
 
-    if (gameSettings.getIsTargetNumberEnabled) {
-      result['targetNumber'] = gameSettings.getTargetNumber;
-      result['amountOfRounds'] = gameSettings.getAmountOfRounds;
+    if (settings.getIsTargetNumberEnabled) {
+      result['targetNumber'] = settings.getTargetNumber;
+      result['amountOfRounds'] = settings.getAmountOfRounds;
     } else {
-      result['mode'] = gameSettings.getMode.toString().split('.').last;
+      result['mode'] = settings.getMode.toString().split('.').last;
+    }
+
+    return result;
+  }
+
+  Map<String, dynamic> toMapCricket(
+      GameSettingsCricket_P settings, bool openGame) {
+    Map<String, dynamic> result = {
+      'players': settings.getPlayers.map((player) {
+        return player.toMap(player);
+      }).toList(),
+      'singleOrTeam': settings.getSingleOrTeam.toString().split('.').last,
+      'legs': settings.getLegs,
+      if (settings.getSetsEnabled) 'sets': settings.getSets,
+      'setsEnabled': settings.getSetsEnabled,
+      'bestOfOrFirstTo': settings.getBestOfOrFirstTo.toString().split('.').last,
+      'mode': settings.getMode.name,
+    };
+
+    if (settings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      result['teams'] = settings.getTeams.map((team) {
+        return team.toMap(team);
+      }).toList();
     }
 
     return result;
@@ -306,6 +330,51 @@ class GameSettings_P with ChangeNotifier {
     );
   }
 
+  factory GameSettings_P.fromMapCricket(map) {
+    late CricketMode cricketMode;
+
+    switch (map['mode']) {
+      case 'Standard':
+        cricketMode = CricketMode.Standard;
+        break;
+      case 'Cut throat':
+        cricketMode = CricketMode.CutThroat;
+        break;
+      case 'No score':
+        cricketMode = CricketMode.NoScore;
+        break;
+    }
+
+    return GameSettingsCricket_P.firestore(
+      singleOrTeam: map['singleOrTeam'] == 'Single'
+          ? SingleOrTeamEnum.Single
+          : SingleOrTeamEnum.Team,
+      bestOfOrFirstTo: map['bestOfOrFirstTo'] == 'BestOf'
+          ? BestOfOrFirstToEnum.BestOf
+          : BestOfOrFirstToEnum.FirstTo,
+      mode: cricketMode,
+      legs: map['legs'] != null
+          ? map['legs']
+          : DEFAULT_LEGS_FIRST_TO_NO_SETS_CRICKET,
+      sets: map['sets'] != null
+          ? map['sets']
+          : DEFAULT_SETS_FIRST_TO_SETS_ENABLED_CRICKET,
+      setsEnabled: map['setsEnabled'] != null
+          ? map['setsEnabled']
+          : DEFAULT_SETS_ENABLED_CRICKET,
+      players: map['players'] == null
+          ? []
+          : map['players'].map<Player>((item) {
+              return Player.fromMap(item);
+            }).toList(),
+      teams: map['teams'] == null
+          ? []
+          : map['teams'].map<Team>((item) {
+              return Team.fromMap(item);
+            }).toList(),
+    );
+  }
+
   bool checkIfPlayerNameExists(String playerNameToCheck) {
     for (Player player in getPlayers)
       if (player.getName == playerNameToCheck) {
@@ -484,5 +553,83 @@ class GameSettings_P with ChangeNotifier {
       }
     }
     return result;
+  }
+
+  Team findTeamForPlayer(String playerNameToFind) {
+    late Team result;
+    for (Team team in getTeams) {
+      for (Player player in team.getPlayers) {
+        if (player.getName == playerNameToFind) {
+          result = team;
+        }
+      }
+    }
+
+    return result;
+  }
+
+  setNextTeamAndPlayer(Game_P game, bool shouldSetNextPlayerOrTeam) {
+    final List<Team> teams = getTeams;
+    int indexOfCurrentTeam = -1;
+    for (int i = 0; i < teams.length; i++) {
+      if (teams[i].getName == game.getCurrentTeamToThrow.getName) {
+        indexOfCurrentTeam = i;
+      }
+    }
+
+    final List<Player> players = game.getCurrentTeamToThrow.getPlayers;
+    int indexOfCurrentPlayerInCurrentTeam = -1;
+    for (int i = 0; i < players.length; i++) {
+      if (players[i].getName == game.getCurrentPlayerToThrow.getName) {
+        indexOfCurrentPlayerInCurrentTeam = i;
+      }
+    }
+
+    if (shouldSetNextPlayerOrTeam) {
+      // set next player of current team
+      if (indexOfCurrentPlayerInCurrentTeam + 1 == players.length) {
+        // round of all players finished -> restart from beginning
+        game.getCurrentTeamToThrow.setCurrentPlayerToThrow = players[0];
+      } else {
+        game.getCurrentTeamToThrow.setCurrentPlayerToThrow =
+            players[indexOfCurrentPlayerInCurrentTeam + 1];
+      }
+
+      // set next team
+      if (indexOfCurrentTeam + 1 == teams.length) {
+        // round of all teams finished -> restart from beginning
+        game.setCurrentTeamToThrow = teams[0];
+      } else {
+        game.setCurrentTeamToThrow = teams[indexOfCurrentTeam + 1];
+      }
+
+      // set next player of next team
+      game.setCurrentPlayerToThrow =
+          game.getCurrentTeamToThrow.getCurrentPlayerToThrow;
+
+      if (game is GameX01_P && game.getCurrentPlayerToThrow is Bot) {
+        game.setBotSubmittedPoints = false;
+      }
+    }
+  }
+
+  setNextPlayer(Game_P game, bool shouldSetNextPlayerOrTeam) {
+    final List<Player> players = getPlayers;
+
+    if (shouldSetNextPlayerOrTeam) {
+      final int indexOfCurrentPlayer =
+          players.indexOf(game.getCurrentPlayerToThrow);
+
+      if (indexOfCurrentPlayer + 1 == players.length) {
+        //round of all players finished -> restart from beginning
+        game.setCurrentPlayerToThrow = players[0];
+      } else {
+        game.setCurrentPlayerToThrow = players[indexOfCurrentPlayer + 1];
+      }
+
+      if (game is GameX01_P && game.getCurrentPlayerToThrow is Bot) {
+        game.setBotSubmittedPoints = false;
+      }
+    }
   }
 }

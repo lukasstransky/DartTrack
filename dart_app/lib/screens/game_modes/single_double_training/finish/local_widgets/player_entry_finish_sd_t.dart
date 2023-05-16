@@ -33,7 +33,7 @@ class PlayerEntryFinishSingleDoubleTraining extends StatelessWidget {
           NameAndRanking(
             i: i,
             game: game,
-            playerStats: playerStats,
+            stats: playerStats,
             isOpenGame: isOpenGame,
             isDraw: isDraw,
           ),

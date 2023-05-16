@@ -14,12 +14,12 @@ class StatsScoreTrainingBtn extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           Navigator.of(context).pushNamed('/statsPerGameList',
-              arguments: {'mode': 'Score training'});
+              arguments: {'mode': GameMode.ScoreTraining});
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Score training',
+            GameMode.ScoreTraining.name,
             style: TextStyle(
               fontSize: 12.sp,
               color: Theme.of(context).colorScheme.secondary,

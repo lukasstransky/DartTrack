@@ -129,7 +129,8 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                       FittedBox(
                         fit: BoxFit.scaleDown,
                         child: Text(
-                          widget.game!.getGameSettings.getGameMode(),
+                          Utils.getBestOfOrFirstToString(
+                              widget.game!.getGameSettings),
                           style: TextStyle(
                             fontSize: 12.sp,
                             color: Colors.white,

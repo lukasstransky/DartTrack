@@ -10,7 +10,6 @@ import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/l
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class PointBtnsThreeDarts extends StatelessWidget {
   const PointBtnsThreeDarts({Key? key, required this.mode}) : super(key: key);
@@ -26,28 +25,13 @@ class PointBtnsThreeDarts extends StatelessWidget {
         shouldRebuild: (previous, next) => true,
         builder: (_, currentThreeDarts, __) => Column(
           children: [
-            Container(
-              height: THROWN_DARTS_WIDGET_HEIGHT.h,
-              child: ThrownDarts(
-                mode: mode,
-              ),
-            ),
-            OtherBtns(
-              mode: mode,
-            ),
-            OneToFiveBtnsThreeDarts(
-              mode: mode,
-            ),
-            SixToTenBtnsThreeDarts(
-              mode: mode,
-            ),
-            ElevenToFifteenBtnsThreeDarts(
-              mode: mode,
-            ),
-            SixteenToTwentyBtnsThreeDarts(
-              mode: mode,
-            ),
-            SingleDoubleOrTrippleBtns(),
+            ThrownDarts(mode: mode),
+            OtherBtns(mode: mode),
+            OneToFiveBtnsThreeDarts(mode: mode),
+            SixToTenBtnsThreeDarts(mode: mode),
+            ElevenToFifteenBtnsThreeDarts(mode: mode),
+            SixteenToTwentyBtnsThreeDarts(mode: mode),
+            SingleDoubleOrTrippleBtns(mode: mode),
           ],
         ),
       ),

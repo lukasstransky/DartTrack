@@ -172,7 +172,11 @@ class PointBtnThreeDartX01 extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        border: Utils.getBorder(context, point as String),
+        border: Utils.getBorder(
+          context,
+          point as String,
+          GameMode.X01,
+        ),
       ),
       child: ElevatedButton(
         style: ButtonStyle(

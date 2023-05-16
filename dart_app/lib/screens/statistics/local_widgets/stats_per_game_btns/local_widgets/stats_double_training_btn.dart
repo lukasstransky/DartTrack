@@ -13,11 +13,11 @@ class StatsDoubleTrainingBtn extends StatelessWidget {
       width: 40.w,
       child: ElevatedButton(
         onPressed: () => Navigator.of(context).pushNamed('/statsPerGameList',
-            arguments: {'mode': 'Double training'}),
+            arguments: {'mode': GameMode.DoubleTraining}),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'Double training',
+            GameMode.DoubleTraining.name,
             style: TextStyle(
                 fontSize: 12.sp,
                 color: Theme.of(context).colorScheme.secondary),

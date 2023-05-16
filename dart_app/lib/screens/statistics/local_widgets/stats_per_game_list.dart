@@ -1,8 +1,10 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/stats_firestore_c.dart';
+import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
-import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -13,6 +15,7 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_stats_list.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -29,7 +32,7 @@ class StatsPerGameList extends StatefulWidget {
 }
 
 class _StatsPerGameListState extends State<StatsPerGameList> {
-  String _mode = '';
+  GameMode _mode = GameMode.X01;
   bool _showLoadingSpinner = false;
 
   @override
@@ -39,25 +42,27 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     _getGames();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBarStatsList(
+        title: '${_mode.name} games',
+        mode: _mode,
+      ),
+      body: _getWidgetWithSelector(),
+    );
+  }
+
   _getMode() async {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
             <String, dynamic>{})
         as Map; // extract arguments that are passed into in order to get game mode (X01, Cricket...)
-    _mode = arguments.entries.first.value.toString();
+    _mode = arguments.entries.first.value;
   }
 
   _getGames() async {
-    late dynamic statsFirestore;
-
-    if (_mode == 'X01') {
-      statsFirestore = context.read<StatsFirestoreX01_P>();
-    } else if (_mode == 'Single training') {
-      statsFirestore = context.read<StatsFirestoreSingleTraining_P>();
-    } else if (_mode == 'Double training') {
-      statsFirestore = context.read<StatsFirestoreDoubleTraining_P>();
-    } else if (_mode == 'Score training') {
-      statsFirestore = context.read<StatsFirestoreScoreTraining_P>();
-    }
+    final dynamic statsFirestore =
+        Utils.getFirestoreStatsProviderBasedOnMode(_mode, context);
 
     setState(() {
       _showLoadingSpinner = true;
@@ -77,18 +82,18 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     });
   }
 
-  String _getMessage(dynamic statsFirestore, String mode) {
+  String _getMessage(dynamic statsFirestore, GameMode mode) {
     if (statsFirestore.showFavouriteGames &&
         statsFirestore.favouriteGames.isEmpty) {
       return 'There are currently no games selected as favourite.';
     }
 
-    String tempMode = _mode.toLowerCase();
-    final String messagePart = 'No ${tempMode} games have been played';
-    if (mode == 'X01') {
+    final String modeLowerCase = _mode.name.toLowerCase();
+    final String messagePart = 'No ${modeLowerCase} games have been played';
+    if (mode == GameMode.X01) {
       switch (statsFirestore.currentFilterValue) {
         case FilterValue.Overall:
-          return 'No ${tempMode} games have been played yet.';
+          return 'No ${modeLowerCase} games have been played yet.';
         case FilterValue.Month:
           return '${messagePart} in the last 30 days.';
         case FilterValue.Year:
@@ -138,22 +143,29 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   _getCard(Game_P game) {
-    if (_mode == 'X01') {
+    if (_mode == GameMode.X01) {
       return StatsCardX01(
         isFinishScreen: false,
         gameX01: GameX01_P.createGame(game),
         isOpenGame: false,
       );
-    } else if (_mode == 'Score training') {
+    } else if (_mode == GameMode.ScoreTraining) {
       return StatsCard(
         isFinishScreen: false,
         game: GameScoreTraining_P.createGame(game),
         isOpenGame: false,
       );
-    } else if (_mode == 'Single training' || _mode == 'Double training') {
+    } else if (_mode == GameMode.SingleTraining ||
+        _mode == GameMode.DoubleTraining) {
       return StatsCard(
         isFinishScreen: false,
         game: GameSingleDoubleTraining_P.createGame(game),
+        isOpenGame: false,
+      );
+    } else if (_mode == GameMode.Cricket) {
+      return StatsCard(
+        isFinishScreen: false,
+        game: GameCricket_P.createGame(game),
         isOpenGame: false,
       );
     }
@@ -259,32 +271,46 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     return widgetToReturn;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    late dynamic statsFirestore;
-
-    if (_mode == 'X01') {
-      statsFirestore = context.read<StatsFirestoreX01_P>();
-    } else if (_mode == 'Single training') {
-      statsFirestore = context.read<StatsFirestoreSingleTraining_P>();
-    } else if (_mode == 'Double training') {
-      statsFirestore = context.read<StatsFirestoreDoubleTraining_P>();
-    } else if (_mode == 'Score training') {
-      statsFirestore = context.read<StatsFirestoreScoreTraining_P>();
-    }
+  _getWidgetWithSelector() {
+    final dynamic statsFirestore =
+        Utils.getFirestoreStatsProviderBasedOnMode(_mode, context);
 
     List<Game_P> games = statsFirestore.games;
-    if (_mode == 'X01' &&
+    if (_mode == GameMode.X01 &&
         statsFirestore.currentFilterValue != FilterValue.Overall) {
       games = statsFirestore.filteredGames;
     }
 
-    return Scaffold(
-      appBar: CustomAppBarStatsList(
-        title: '${_mode} games',
-        mode: _mode,
-      ),
-      body: _getWidget(statsFirestore, games),
-    );
+    if (_mode == GameMode.Cricket) {
+      return Selector<StatsFirestoreCricket_P, bool>(
+        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
+        builder: (_, showFavouriteGames, __) =>
+            _getWidget(statsFirestore, games),
+      );
+    } else if (_mode == GameMode.X01) {
+      return Selector<StatsFirestoreX01_P, bool>(
+        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
+        builder: (_, showFavouriteGames, __) =>
+            _getWidget(statsFirestore, games),
+      );
+    } else if (_mode == GameMode.ScoreTraining) {
+      return Selector<StatsFirestoreScoreTraining_P, bool>(
+        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
+        builder: (_, showFavouriteGames, __) =>
+            _getWidget(statsFirestore, games),
+      );
+    } else if (_mode == GameMode.SingleTraining) {
+      return Selector<StatsFirestoreSingleTraining_P, bool>(
+        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
+        builder: (_, showFavouriteGames, __) =>
+            _getWidget(statsFirestore, games),
+      );
+    } else if (_mode == GameMode.DoubleTraining) {
+      return Selector<StatsFirestoreDoubleTraining_P, bool>(
+        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
+        builder: (_, showFavouriteGames, __) =>
+            _getWidget(statsFirestore, games),
+      );
+    }
   }
 }

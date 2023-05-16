@@ -22,7 +22,7 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
           result += 1;
           break;
         case 'D':
-          result += game.getName == 'Double training' ||
+          result += game.getName == GameMode.DoubleTraining.name ||
                   game.getMode == GameMode.DoubleTraining
               ? 1
               : 2;

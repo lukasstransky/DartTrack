@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -51,6 +53,8 @@ class FirestoreServiceGames {
       data = gameToSave.toMapScoreTraining(game, false);
     } else if (game is GameSingleDoubleTraining_P) {
       data = gameToSave.toMapSingleDoubleTraining(game, false);
+    } else if (game is GameCricket_P) {
+      data = gameToSave.toMapCricket(game, false);
     }
 
     String gameId = '';
@@ -94,7 +98,7 @@ class FirestoreServiceGames {
   Future<void> checkIfAtLeastOneX01GameIsPlayed(BuildContext context) async {
     final QuerySnapshot<Object?> games = await _firestore
         .collection(this._getFirestoreGamesPath())
-        .where('name', isEqualTo: 'X01')
+        .where('name', isEqualTo: GameMode.X01.name)
         .get();
     final StatsFirestoreX01_P statisticsFirestoreX01 =
         context.read<StatsFirestoreX01_P>();
@@ -110,7 +114,7 @@ class FirestoreServiceGames {
     statisticsFirestoreX01.notify();
   }
 
-  Future<void> getGames(String mode, BuildContext context,
+  Future<void> getGames(GameMode mode, BuildContext context,
       FirestoreServicePlayerStats firestoreServicePlayerStats) async {
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(mode, context);
@@ -121,7 +125,7 @@ class FirestoreServiceGames {
 
     final CollectionReference collectionReference =
         _firestore.collection(_getFirestoreGamesPath());
-    final Query query = collectionReference.where('name', isEqualTo: mode);
+    final Query query = collectionReference.where('name', isEqualTo: mode.name);
     final QuerySnapshot<Object?> games = await query.get();
 
     statsFirestore.resetGames();
@@ -161,7 +165,7 @@ class FirestoreServiceGames {
         statsFirestore.games.add(game);
       });
 
-      if (mode == 'X01') {
+      if (mode == GameMode.X01) {
         statsFirestore.gamesLoaded = true;
       }
       statsFirestore.notify();
@@ -207,6 +211,8 @@ class FirestoreServiceGames {
       data = gameToSave.toMapScoreTraining(game_p, true);
     } else if (game_p is GameSingleDoubleTraining_P) {
       data = gameToSave.toMapSingleDoubleTraining(game_p, true);
+    } else if (game_p is GameCricket_P) {
+      data = gameToSave.toMapCricket(game_p, true);
     }
 
     // update (e.g. save game again that was already open)
@@ -254,31 +260,9 @@ class FirestoreServiceGames {
 
     await collectionReference.get().then((openGames) => {
           openGames.docs.forEach((openGame) {
-            final Map<String, dynamic> map =
-                (openGame.data() as Map<String, dynamic>);
-
-            if (map.containsValue('X01')) {
-              final GameX01_P game = GameX01_P.fromMapX01(
-                  openGame.data(), 'X01', openGame.id, true);
-
-              openGamesFirestore.openGames.add(game);
-            } else if (map.containsValue('Score training')) {
-              final Game_P game = Game_P.fromMap(
-                  openGame.data(), 'Score training', openGame.id, true);
-
-              openGamesFirestore.openGames.add(game);
-            } else if (map.containsValue('Single training') ||
-                map.containsValue('Double training')) {
-              final String mode = map.containsValue('Single training')
-                  ? 'Single training'
-                  : 'Double training';
-              final GameSingleDoubleTraining_P game =
-                  GameSingleDoubleTraining_P.fromMapSingleDoubleTraining(
-                      openGame.data(), mode, openGame.id, true);
-
-              openGamesFirestore.openGames.add(game);
-            }
-
+            final game = _createGameFromMap(
+                openGame.data() as Map<String, dynamic>, openGame);
+            openGamesFirestore.openGames.add(game);
             openGamesFirestore.notify();
           })
         });
@@ -286,6 +270,30 @@ class FirestoreServiceGames {
     openGamesFirestore.openGames.sort();
     openGamesFirestore.init = true;
     openGamesFirestore.notify();
+  }
+
+  Game_P _createGameFromMap(
+      Map<String, dynamic> map, DocumentSnapshot openGame) {
+    if (map.containsValue(GameMode.X01.name)) {
+      return GameX01_P.fromMapX01(
+          openGame.data(), GameMode.X01, openGame.id, true);
+    } else if (map.containsValue(GameMode.ScoreTraining.name)) {
+      return Game_P.fromMap(
+          openGame.data(), GameMode.ScoreTraining, openGame.id, true);
+    } else if (map.containsValue(GameMode.SingleTraining.name) ||
+        map.containsValue(GameMode.DoubleTraining.name)) {
+      final GameMode mode = map.containsValue(GameMode.SingleTraining.name)
+          ? GameMode.SingleTraining
+          : GameMode.DoubleTraining;
+
+      return GameSingleDoubleTraining_P.fromMapSingleDoubleTraining(
+          openGame.data(), mode, openGame.id, true);
+    } else if (map.containsValue(GameMode.Cricket.name)) {
+      return GameCricket_P.fromMapCricket(
+          openGame.data(), GameMode.Cricket, openGame.id, true);
+    } else {
+      throw Exception('Unknown game mode');
+    }
   }
 
   /************************************************************************************/

@@ -2,13 +2,20 @@ import 'package:dart_app/constants.dart';
 
 class UtilsPointBtnsThreeDarts {
   // calculate points based on single, double, tripple
-  static String calculatePoints(String pointValue, PointType pointType) {
+  static String calculatePoints(String pointValue, PointType pointType,
+      [GameMode? mode]) {
     int points;
 
     if (pointValue == 'Bull') {
       points = 50;
     } else if (pointValue == '25') {
-      points = 25;
+      if (mode != null &&
+          mode == GameMode.Cricket &&
+          pointType == PointType.Double) {
+        points = 50;
+      } else {
+        points = 25;
+      }
     } else {
       points = int.parse(pointValue);
 

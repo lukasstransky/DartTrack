@@ -1,19 +1,21 @@
 import 'dart:collection';
 
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/firestore/stats_firestore_c.dart';
 import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
-import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -340,7 +342,7 @@ class Utils {
   }
 
   static dynamic getPlayersOrTeamStatsListStatsScreen(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+      dynamic gameX01, dynamic gameSettingsX01) {
     if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameX01.getAreTeamStatsDisplayed) {
       return gameX01.getTeamGameStatistics;
@@ -349,25 +351,23 @@ class Utils {
     return gameX01.getPlayerGameStatistics;
   }
 
-  static dynamic getPlayersOrTeamStatsList(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      return gameX01.getTeamGameStatistics;
+  static dynamic getPlayersOrTeamStatsList(Game_P game, bool isTeamMode) {
+    if (isTeamMode) {
+      return game.getTeamGameStatistics;
     }
 
-    return gameX01.getPlayerGameStatistics;
+    return game.getPlayerGameStatistics;
   }
 
-  static bool teamStatsDisplayed(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        gameX01.getAreTeamStatsDisplayed;
+  static bool teamStatsDisplayed(dynamic game, dynamic gameSettings) {
+    return gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        game.getAreTeamStatsDisplayed;
   }
 
   static bool playerStatsDisplayedInTeamMode(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        !gameX01.getAreTeamStatsDisplayed;
+      dynamic game, dynamic gameSettings) {
+    return gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        !game.getAreTeamStatsDisplayed;
   }
 
   static Row setLegStrings(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
@@ -488,7 +488,7 @@ class Utils {
     return text;
   }
 
-  static getBorder(BuildContext context, String value) {
+  static getBorder(BuildContext context, String value, GameMode mode) {
     return Border(
       right: [
         '0',
@@ -504,12 +504,13 @@ class Utils {
         '12',
         '13',
         '14',
+        mode == GameMode.Cricket ? '15' : '',
         '16',
         '17',
         '18',
         '19',
         '25',
-        'Bull',
+        mode == GameMode.Cricket ? '' : 'Bull',
         'Bust',
       ].contains(value)
           ? BorderSide(
@@ -552,6 +553,12 @@ class Utils {
         '4',
         '5',
         '25',
+        mode == GameMode.Cricket ? '15' : '',
+        mode == GameMode.Cricket ? '16' : '',
+        mode == GameMode.Cricket ? '17' : '',
+        mode == GameMode.Cricket ? '18' : '',
+        mode == GameMode.Cricket ? '19' : '',
+        mode == GameMode.Cricket ? '20' : '',
         'Bull',
         'Bust',
       ].contains(value)
@@ -580,102 +587,8 @@ class Utils {
     }
   }
 
-  static showDialogForSavingGame(BuildContext context, Game_P game_p) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context1) => AlertDialog(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
-        title: const Text(
-          'End game',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: const Text(
-          'Do you want to save the game for finishing it later?',
-          style: TextStyle(color: Colors.white),
-        ),
-        actions: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                alignment: Alignment.centerLeft,
-                child: TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: Text(
-                    'Continue',
-                    style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor:
-                        Utils.getPrimaryMaterialStateColorDarken(context),
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(right: 2.5.w),
-                    child: TextButton(
-                      onPressed: () => {
-                        Navigator.of(context).pop(),
-                        _resetValuesAndNavigateToHome(context, game_p)
-                      },
-                      child: Text(
-                        'No',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            Utils.getPrimaryMaterialStateColorDarken(context),
-                      ),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () async {
-                      Navigator.of(context, rootNavigator: true).pop();
-
-                      game_p.setShowLoadingSpinner = true;
-                      game_p.notify();
-
-                      context.read<OpenGamesFirestore>().setLoadOpenGames =
-                          true;
-                      await context
-                          .read<FirestoreServiceGames>()
-                          .postOpenGame(game_p, context);
-
-                      _resetValuesAndNavigateToHome(context, game_p);
-                    },
-                    child: Text(
-                      'Yes',
-                      style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary),
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor:
-                          Utils.getPrimaryMaterialStateColorDarken(context),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  static _resetValuesAndNavigateToHome(BuildContext context, dynamic game_p) {
-    game_p.reset();
-    Navigator.of(context).pushNamed('/home');
-  }
-
   // converts List<"value;value;value"> back to List<List<String>>
-  static List<List<String>> convertSimpleListToAllRemainingScoresPerDart(
-      dynamic list) {
+  static List<List<String>> convertSimpleListBackToDoubleList(dynamic list) {
     List<List<String>> result = [];
 
     for (String value in list) {
@@ -692,8 +605,7 @@ class Utils {
 
   // List<List<String>> can't be stored on firebase
   // converts to List<"value;value;value">
-  static List<String> convertAllRemainingScoresPerDartToSimpleList(
-      List<List<String>> list) {
+  static List<String> convertDoubleListToSimpleList(List<List<String>> list) {
     List<String> result = [];
 
     for (List<String> item in list) {
@@ -710,15 +622,17 @@ class Utils {
   }
 
   static dynamic getFirestoreStatsProviderBasedOnMode(
-      String mode, BuildContext context) {
-    if (mode == 'X01') {
+      GameMode mode, BuildContext context) {
+    if (mode == GameMode.X01) {
       return context.read<StatsFirestoreX01_P>();
-    } else if (mode == 'Single training') {
+    } else if (mode == GameMode.SingleTraining) {
       return context.read<StatsFirestoreSingleTraining_P>();
-    } else if (mode == 'Double training') {
+    } else if (mode == GameMode.DoubleTraining) {
       return context.read<StatsFirestoreDoubleTraining_P>();
-    } else if (mode == 'Score training') {
+    } else if (mode == GameMode.ScoreTraining) {
       return context.read<StatsFirestoreScoreTraining_P>();
+    } else if (mode == GameMode.Cricket) {
+      return context.read<StatsFirestoreCricket_P>();
     }
   }
 
@@ -755,5 +669,221 @@ class Utils {
     return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
         gameSettingsX01.getTeams.length >= 2 &&
         gameSettingsX01.getPlayers.length >= 4;
+  }
+
+  static String getBestOfOrFirstToString(dynamic gameSettings) {
+    String result = '';
+
+    if (gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
+      result += 'Best of ';
+    } else {
+      result += 'First to ';
+    }
+
+    if (gameSettings.getSetsEnabled) {
+      if (gameSettings.getSets > 1) {
+        result += '${gameSettings.getSets.toString()} sets - ';
+      } else {
+        result += '${gameSettings.getSets.toString()} set - ';
+      }
+    }
+    if (gameSettings.getLegs > 1) {
+      result += '${gameSettings.getLegs.toString()} legs';
+    } else {
+      result += '${gameSettings.getLegs.toString()} leg';
+    }
+
+    return result;
+  }
+
+  static Color getBackgroundColorForCurrentPlayerOrTeam(
+      Game_P game,
+      dynamic gameSettings,
+      PlayerOrTeamGameStats playerOrTeamGameStats,
+      BuildContext context) {
+    if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      if (playerOrTeamGameStats.getPlayer != null &&
+          Player.samePlayer(
+              game.getCurrentPlayerToThrow, playerOrTeamGameStats.getPlayer)) {
+        return Utils.lighten(Theme.of(context).colorScheme.primary, 20);
+      }
+    } else {
+      if (playerOrTeamGameStats.getTeam == null ||
+          game.getCurrentTeamToThrow == null) {
+        return Colors.transparent;
+      }
+      if (playerOrTeamGameStats.getTeam.getName ==
+          game.getCurrentTeamToThrow.getName) {
+        return Utils.lighten(Theme.of(context).colorScheme.primary, 20);
+      }
+    }
+
+    return Colors.transparent;
+  }
+
+  // for x01 & cricket
+  static void setPlayerTeamLegStartIndex(
+      dynamic game, GameSettings_P gameSettings, bool isSingleMode) {
+    if (isSingleMode &&
+        game.getPlayerOrTeamLegStartIndex ==
+            gameSettings.getPlayers.length - 1) {
+      game.setPlayerOrTeamLegStartIndex = 0;
+    } else if (!isSingleMode &&
+        game.getPlayerOrTeamLegStartIndex == gameSettings.getTeams.length - 1) {
+      game.setPlayerOrTeamLegStartIndex = 0;
+    } else {
+      game.setPlayerOrTeamLegStartIndex = game.getPlayerOrTeamLegStartIndex + 1;
+    }
+  }
+
+  static bool gameWonFirstToWithSets(int setsWon, dynamic gameSettings) {
+    return gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
+        gameSettings.getSetsEnabled &&
+        gameSettings.getSets == setsWon;
+  }
+
+  static bool gameWonFirstToWithLegs(int legsWon, dynamic gameSettings) {
+    return gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
+        legsWon >= gameSettings.getLegs;
+  }
+
+  static bool gameWonBestOfWithSets(int setsWon, dynamic gameSettings) {
+    return gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+        gameSettings.getSetsEnabled &&
+        ((setsWon * 2) - 1) == gameSettings.getSets;
+  }
+
+  static bool gameWonBestOfWithLegs(int legsWon, dynamic gameSettings) {
+    return gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+        ((legsWon * 2) - 1) >= gameSettings.getLegs;
+  }
+
+  static bool showLeftBorderCricket(
+      int i, GameSettingsCricket_P gameSettingsCricket) {
+    final int playersLength = gameSettingsCricket.getPlayers.length;
+    final int teamsLength = gameSettingsCricket.getTeams.length;
+    final bool isSingleMode =
+        gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single;
+
+    if (i == 0) {
+      return false;
+    } else if ((playersLength == 4 || (!isSingleMode && teamsLength == 4)) &&
+        i == 2) {
+      return false;
+    } else if (playersLength == 2 || (!isSingleMode && teamsLength == 2)) {
+      return false;
+    }
+    return true;
+  }
+
+  //returns e.g. 'Leg 1' or 'Set 1 Leg 2'
+  static String getCurrentSetLegAsString(dynamic game, dynamic settings) {
+    final num currentLeg = _getCurrentLeg(game, settings);
+
+    num currentSet = -1;
+    String key = '';
+
+    if (settings.getSetsEnabled) {
+      currentSet = _getCurrentSet(game, settings);
+      key += 'Set ' + currentSet.toString() + ' - ';
+    }
+    key += 'Leg ' + currentLeg.toString();
+
+    return key;
+  }
+
+  static num _getCurrentLeg(dynamic game, dynamic settings) {
+    num result = 1;
+
+    if (settings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      for (dynamic stats in game.getPlayerGameStatistics) {
+        result += stats.getLegsWon;
+      }
+    } else {
+      for (dynamic stats in game.getTeamGameStatistics) {
+        result += stats.getLegsWon;
+      }
+
+      return result;
+    }
+
+    return result;
+  }
+
+  static num _getCurrentSet(dynamic game, dynamic settings) {
+    num result = 1;
+
+    for (dynamic stats in getPlayersOrTeamStatsList(
+        game, settings.getSingleOrTeam == SingleOrTeamEnum.Team)) {
+      result += stats.getSetsWon;
+    }
+
+    return result;
+  }
+
+  static Map<String, int> getMapWithStringKey(Map<int, int> sourceMap) {
+    Map<String, int> result = {};
+    for (var entry in sourceMap.entries) {
+      result[entry.key.toString()] = entry.value;
+    }
+    return result;
+  }
+
+  static bool hasPlayerOrTeamWonTheGame(
+      dynamic stats, dynamic game, dynamic settings) {
+    if (game is GameScoreTraining_P || game is GameSingleDoubleTraining_P) {
+      if (!game.getIsGameFinished) {
+        return false;
+      }
+      return game.getPlayerGameStatistics.indexOf(stats) == 0 ? true : false;
+    }
+
+    // win check for x01 & cricket
+    if (playerStatsDisplayedInTeamMode(game, settings)) {
+      return false;
+    }
+
+    // set mode
+    if (settings.getSetsEnabled) {
+      if (settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+          ((stats.getSetsWon * 2) - 1) == settings.getSets) {
+        return true;
+      } else if (settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
+          settings.getSets == stats.getSetsWon) {
+        return true;
+      } else if (settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+          stats.getSetsWon == (settings.getSets / 2) + 1) {
+        return true;
+      }
+    } else {
+      // win by two legs difference
+      if (game is GameX01_P && settings.getWinByTwoLegsDifference) {
+        if (settings.getSuddenDeath) {
+          final int amountOfLegsForSuddenDeathWin = settings.getLegs +
+              settings.getMaxExtraLegs +
+              1; // + 1 = sudden death leg
+
+          return stats.getLegsWon == amountOfLegsForSuddenDeathWin;
+        } else {
+          return game.isLegDifferenceAtLeastTwo(stats, game, settings);
+        }
+      } else {
+        // leg mode
+        if (settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+            ((stats.getLegsWonTotal * 2) - 1) == settings.getLegs) {
+          return true;
+        } else if (settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
+            stats.getLegsWon >= settings.getLegs) {
+          return true;
+        } else if (game is GameX01_P &&
+            settings.getDrawMode &&
+            settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+            stats.getLegsWonTotal == (settings.getLegs / 2) + 1) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 }

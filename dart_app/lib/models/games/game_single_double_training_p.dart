@@ -20,7 +20,7 @@ class GameSingleDoubleTraining_P extends Game_P {
   final _random = new Random();
 
   GameSingleDoubleTraining_P()
-      : super(dateTime: DateTime.now(), name: 'Single training');
+      : super(dateTime: DateTime.now(), name: GameMode.SingleTraining.name);
 
   int get getCurrentFieldToHit => this._currentFieldToHit;
   set setCurrentFieldToHit(int value) => this._currentFieldToHit = value;
@@ -59,7 +59,7 @@ class GameSingleDoubleTraining_P extends Game_P {
     newGame.setIsGameFinished = game.getIsGameFinished;
     newGame.setIsOpenGame = game.getIsOpenGame;
     newGame.setIsFavouriteGame = game.getIsFavouriteGame;
-    if (game.getName == 'Single training') {
+    if (game.getName == GameMode.SingleTraining.name) {
       newGame.setMode = GameMode.SingleTraining;
     } else {
       newGame.setMode = GameMode.DoubleTraining;
@@ -76,7 +76,7 @@ class GameSingleDoubleTraining_P extends Game_P {
   }
 
   factory GameSingleDoubleTraining_P.fromMapSingleDoubleTraining(
-      map, mode, gameId, openGame) {
+      dynamic map, GameMode mode, String gameId, bool openGame) {
     final Game_P game = Game_P.fromMap(map, mode, gameId, openGame);
 
     GameSingleDoubleTraining_P gameSingleDouble =
@@ -142,8 +142,8 @@ class GameSingleDoubleTraining_P extends Game_P {
         final PlayerGameStatsSingleDoubleTraining stats =
             new PlayerGameStatsSingleDoubleTraining(
           mode: mode == GameMode.SingleTraining
-              ? 'Single training'
-              : 'Double training',
+              ? GameMode.SingleTraining.name
+              : GameMode.DoubleTraining.name,
           player: player,
           dateTime: getDateTime,
         );
@@ -185,22 +185,6 @@ class GameSingleDoubleTraining_P extends Game_P {
     setShowLoadingSpinner = false;
   }
 
-  int getAmountOfDartsThrown() {
-    int count = 0;
-
-    if (getCurrentThreeDarts[0] != 'Dart 1') {
-      count++;
-    }
-    if (getCurrentThreeDarts[1] != 'Dart 2') {
-      count++;
-    }
-    if (getCurrentThreeDarts[2] != 'Dart 3') {
-      count++;
-    }
-
-    return count;
-  }
-
   int _getRandomValue(int min, int max) {
     if (getRandomFieldsGenerated.length == 20) {
       setRandomModeFinished = true;
@@ -221,7 +205,7 @@ class GameSingleDoubleTraining_P extends Game_P {
         (stats) => stats.getPlayer.getName == getCurrentPlayerToThrow.getName);
   }
 
-  bool _isGameFinished() {
+  bool isGameFinished() {
     if (getGameSettings.getMode == ModesSingleDoubleTraining.Ascending &&
         getCurrentFieldToHit == 21) {
       return true;
@@ -299,7 +283,7 @@ class GameSingleDoubleTraining_P extends Game_P {
       stats.getFieldHits[key] = stats.getFieldHits[key]! + fieldValue;
     }
 
-    bool isGameFinished = false;
+    bool _isGameFinished = false;
     if (getCurrentThreeDarts[2] != 'Dart 3') {
       // set highest points for round
       final int pointsForRound = stats.getPointsForSpecificField(
@@ -357,8 +341,8 @@ class GameSingleDoubleTraining_P extends Game_P {
             setAmountOfRoundsRemaining = getAmountOfRoundsRemaining - 1;
           }
 
-          isGameFinished = _isGameFinished();
-          if (isGameFinished) {
+          _isGameFinished = isGameFinished();
+          if (_isGameFinished) {
             Navigator.of(context).pushNamed(
               '/finishSingleDoubleTraining',
               arguments: {
@@ -376,18 +360,18 @@ class GameSingleDoubleTraining_P extends Game_P {
         UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(getCurrentThreeDarts);
         setCanBePressed = true;
 
-        if (!isGameFinished) {
+        if (!_isGameFinished) {
           notify();
         }
       });
     } else {
-      if (!isGameFinished) {
+      if (!_isGameFinished) {
         notify();
       }
     }
   }
 
-  _isRevertPossible() {
+  bool _isRevertPossible() {
     bool result = false;
     for (PlayerGameStatsSingleDoubleTraining stats in getPlayerGameStatistics) {
       if (stats.getAllHits.isNotEmpty) {

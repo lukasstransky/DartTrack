@@ -30,6 +30,10 @@ class _StatsCardX01State extends State<StatsCardX01> {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
+    final int playerOrTeamStatsLength = Utils.getPlayersOrTeamStatsList(
+            widget.gameX01,
+            gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)
+        .length;
 
     return Container(
       padding: EdgeInsets.only(top: widget.isFinishScreen ? 15.h : 0.h),
@@ -51,29 +55,16 @@ class _StatsCardX01State extends State<StatsCardX01> {
                     i: i, gameX01: widget.gameX01, openGame: widget.isOpenGame),
                 if (i == 0) ListDivider(),
               ],
-              if (Utils.getPlayersOrTeamStatsList(
-                          widget.gameX01, gameSettingsX01)
-                      .length >
-                  2) ...[
+              if (playerOrTeamStatsLength > 2) ...[
                 if (_showAllPlayersOrTeams) ...[
                   ListDivider(),
-                  for (int i = 2;
-                      i <
-                          Utils.getPlayersOrTeamStatsList(
-                                  widget.gameX01, gameSettingsX01)
-                              .length;
-                      i++) ...[
+                  for (int i = 2; i < playerOrTeamStatsLength; i++) ...[
                     PlayerEntryFinishX01(
                       i: i,
                       gameX01: widget.gameX01,
                       openGame: widget.isOpenGame,
                     ),
-                    if (i !=
-                        Utils.getPlayersOrTeamStatsList(
-                                    widget.gameX01, gameSettingsX01)
-                                .length -
-                            1)
-                      ListDivider(),
+                    if (i != playerOrTeamStatsLength - 1) ListDivider(),
                   ]
                 ],
                 Center(

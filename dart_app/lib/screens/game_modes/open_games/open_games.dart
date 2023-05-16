@@ -1,9 +1,11 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -68,6 +70,17 @@ class _OpenGamesState extends State<OpenGames> {
       settings.setIsTargetNumberEnabled =
           openGameSettings.getIsTargetNumberEnabled;
       settings.setAmountOfRounds = openGameSettings.getAmountOfRounds;
+    } else if (openGameSettings is GameSettingsCricket_P) {
+      final settings = context.read<GameSettingsCricket_P>();
+
+      settings.setPlayers = openGameSettings.getPlayers;
+      settings.setTeams = openGameSettings.getTeams;
+      settings.setSingleOrTeam = openGameSettings.getSingleOrTeam;
+      settings.setBestOfOrFirstTo = openGameSettings.getBestOfOrFirstTo;
+      settings.setMode = openGameSettings.getMode;
+      settings.setLegs = openGameSettings.getLegs;
+      settings.setSets = openGameSettings.getSets;
+      settings.setSetsEnabled = openGameSettings.getSetsEnabled;
     }
   }
 
@@ -75,17 +88,52 @@ class _OpenGamesState extends State<OpenGames> {
     _setNewGameSettingsFromOpenGame(openGame.getGameSettings);
 
     late Game_P game;
-    if (openGame.getName == 'X01') {
+    if (openGame.getName == GameMode.X01.name) {
       game = context.read<GameX01_P>();
+      openGame = openGame as GameX01_P;
+      game = game as GameX01_P;
 
       game.setTeamGameStatistics = openGame.getTeamGameStatistics;
       game.setCurrentTeamToThrow = openGame.getCurrentTeamToThrow;
-    } else if (openGame.getName == 'Score training') {
+      game.setGameSettings = context.read<GameSettingsX01_P>();
+      game.setPlayerOrTeamLegStartIndex = openGame.getPlayerOrTeamLegStartIndex;
+      game.setReachedSuddenDeath = openGame.getReachedSuddenDeath;
+      game.setCurrentPlayerOfTeamsBeforeLegFinish =
+          openGame.getCurrentPlayerOfTeamsBeforeLegFinish;
+      game.setLegSetWithPlayerOrTeamWhoFinishedIt =
+          openGame.getLegSetWithPlayerOrTeamWhoFinishedIt;
+    } else if (openGame.getName == GameMode.ScoreTraining.name) {
       game = context.read<GameScoreTraining_P>();
+
       game.setGameSettings = context.read<GameSettingsScoreTraining_P>();
-    } else if (openGame.getName == 'Single training' ||
-        openGame.getName == 'Double training') {
+    } else if (openGame.getName == GameMode.SingleTraining.name ||
+        openGame.getName == GameMode.DoubleTraining.name) {
       game = context.read<GameSingleDoubleTraining_P>();
+      game = game as GameSingleDoubleTraining_P;
+      openGame = openGame as GameSingleDoubleTraining_P;
+
+      game.setGameSettings = context.read<GameSettingsSingleDoubleTraining_P>();
+      game.setCurrentFieldToHit = openGame.getCurrentFieldToHit;
+      game.setRandomFieldsGenerated = openGame.getRandomFieldsGenerated;
+      game.setAmountOfRoundsRemaining = openGame.getAmountOfRoundsRemaining;
+      game.setAllFieldsToHit = openGame.getAllFieldsToHit;
+      game.setMode = openGame.getName == GameMode.SingleTraining.name
+          ? GameMode.SingleTraining
+          : GameMode.DoubleTraining;
+      game.setRandomModeFinished = false;
+    } else if (openGame.getName == GameMode.Cricket.name) {
+      game = context.read<GameCricket_P>();
+      game = game as GameCricket_P;
+      openGame = openGame as GameCricket_P;
+
+      game.setGameSettings = context.read<GameSettingsCricket_P>();
+      game.setTeamGameStatistics = openGame.getTeamGameStatistics;
+      game.setCurrentTeamToThrow = openGame.getCurrentTeamToThrow;
+      game.setPlayerOrTeamLegStartIndex = openGame.getPlayerOrTeamLegStartIndex;
+      game.setLegSetWithPlayerOrTeamWhoFinishedIt =
+          openGame.getLegSetWithPlayerOrTeamWhoFinishedIt;
+      game.setCurrentPlayerOfTeamsBeforeLegFinish =
+          openGame.getCurrentPlayerOfTeamsBeforeLegFinish;
     }
 
     game.setCurrentThreeDarts = openGame.getCurrentThreeDarts;
@@ -96,52 +144,34 @@ class _OpenGamesState extends State<OpenGames> {
     game.setCurrentPlayerToThrow = openGame.getCurrentPlayerToThrow;
     game.setIsOpenGame = openGame.getIsOpenGame;
     game.setRevertPossible = openGame.getRevertPossible;
-
-    if (openGame.getName == 'X01') {
-      final game = context.read<GameX01_P>();
-
-      openGame = openGame as GameX01_P;
-      game.setGameSettings = context.read<GameSettingsX01_P>();
-      game.setPlayerOrTeamLegStartIndex = openGame.getPlayerOrTeamLegStartIndex;
-      game.setReachedSuddenDeath = openGame.getReachedSuddenDeath;
-      game.setCurrentPlayerOfTeamsBeforeLegFinish =
-          openGame.getCurrentPlayerOfTeamsBeforeLegFinish;
-      game.setLegSetWithPlayerOrTeamWhoFinishedIt =
-          openGame.getLegSetWithPlayerOrTeamWhoFinishedIt;
-    } else if (openGame.getName == 'Single training' ||
-        openGame.getName == 'Double training') {
-      final game = context.read<GameSingleDoubleTraining_P>();
-
-      openGame = openGame as GameSingleDoubleTraining_P;
-      game.setGameSettings = context.read<GameSettingsSingleDoubleTraining_P>();
-      game.setCurrentFieldToHit = openGame.getCurrentFieldToHit;
-      game.setRandomFieldsGenerated = openGame.getRandomFieldsGenerated;
-      game.setAmountOfRoundsRemaining = openGame.getAmountOfRoundsRemaining;
-      game.setAllFieldsToHit = openGame.getAllFieldsToHit;
-      game.setMode = openGame.getName == 'Single training'
-          ? GameMode.SingleTraining
-          : GameMode.DoubleTraining;
-      game.setRandomModeFinished = false;
-    }
   }
 
   _continueGame(Game_P game_p) {
+    context.read<OpenGamesFirestore>().setLoadOpenGames = true;
     _setNewGameValuesFromOpenGame(game_p, context);
 
-    if (game_p.getName == 'X01') {
+    if (game_p.getName == GameMode.X01.name) {
       Navigator.of(context).pushNamed(
         '/gameX01',
         arguments: {'openGame': true},
       );
-    } else if (game_p.getName == 'Score training') {
+    } else if (game_p.getName == GameMode.ScoreTraining.name) {
       Navigator.of(context).pushNamed(
         '/gameScoreTraining',
         arguments: {'openGame': true},
       );
-    } else if (game_p.getName == 'Single training' ||
-        game_p.getName == 'Double training') {
+    } else if (game_p.getName == GameMode.SingleTraining.name ||
+        game_p.getName == GameMode.DoubleTraining.name) {
       Navigator.of(context).pushNamed(
         '/gameSingleDoubleTraining',
+        arguments: {
+          'openGame': true,
+          'mode': game_p.getName,
+        },
+      );
+    } else if (game_p.getName == GameMode.Cricket.name) {
+      Navigator.of(context).pushNamed(
+        '/gameCricket',
         arguments: {
           'openGame': true,
           'mode': game_p.getName,
@@ -151,26 +181,31 @@ class _OpenGamesState extends State<OpenGames> {
   }
 
   _getCard(Game_P game) {
-    if (game.getName == 'X01') {
+    if (game.getName == GameMode.X01.name) {
       return StatsCardX01(
         isFinishScreen: false,
         gameX01: GameX01_P.createGame(game),
         isOpenGame: true,
       );
-    } else {
-      if (game.getName == 'Score training') {
-        return StatsCard(
-          isFinishScreen: false,
-          game: GameScoreTraining_P.createGame(game),
-          isOpenGame: true,
-        );
-      } else {
-        return StatsCard(
-          isFinishScreen: false,
-          game: GameSingleDoubleTraining_P.createGame(game),
-          isOpenGame: true,
-        );
-      }
+    } else if (game.getName == GameMode.ScoreTraining.name) {
+      return StatsCard(
+        isFinishScreen: false,
+        game: GameScoreTraining_P.createGame(game),
+        isOpenGame: true,
+      );
+    } else if (game.getName == GameMode.SingleTraining.name ||
+        game.getName == GameMode.DoubleTraining.name) {
+      return StatsCard(
+        isFinishScreen: false,
+        game: GameSingleDoubleTraining_P.createGame(game),
+        isOpenGame: true,
+      );
+    } else if (game.getName == GameMode.Cricket.name) {
+      return StatsCard(
+        isFinishScreen: false,
+        game: GameCricket_P.createGame(game),
+        isOpenGame: true,
+      );
     }
   }
 

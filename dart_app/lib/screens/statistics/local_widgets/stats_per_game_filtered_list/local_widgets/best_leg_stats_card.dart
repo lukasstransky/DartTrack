@@ -37,7 +37,7 @@ class BestLegStatsCard extends StatelessWidget {
                   FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      game.getGameSettings.getGameMode(),
+                      Utils.getBestOfOrFirstToString(game.getGameSettings),
                       style: TextStyle(
                         fontSize: 12.sp,
                         color: Colors.white,

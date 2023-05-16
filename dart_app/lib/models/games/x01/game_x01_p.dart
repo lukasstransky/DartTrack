@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
@@ -15,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GameX01_P extends Game_P {
-  GameX01_P() : super(dateTime: DateTime.now(), name: 'X01');
+  GameX01_P() : super(dateTime: DateTime.now(), name: GameMode.X01.name);
 
   String _currentPointsSelected = 'Points';
   int _playerOrTeamLegStartIndex =
@@ -29,13 +27,14 @@ class GameX01_P extends Game_P {
       true; //only for input type -> three darts + automatically submit points (to disable buttons when delay is active)
   bool _areTeamStatsDisplayed =
       true; // only for team mode -> to determine if team or player stats should be displayed in game stats
-  Map<String, List<String>> _currentPlayerOfTeamsBeforeLegFinish =
-      {}; // for reverting -> save current player whose turn it was before leg was finished for each team (e.g.: Leg 1; 'Strainski', 'a')
-  Map<String, String> _setLegWithPlayerOrTeamWhoFinishedIt =
-      {}; // for reverting -> to set correct previous player/team
+  List<List<String>> _currentPlayerOfTeamsBeforeLegFinish =
+      []; // for reverting -> save current player whose turn it was before leg was finished for each team (e.g.: Leg 1; 'Strainski', 'a')
+  List<String> _setLegWithPlayerOrTeamWhoFinishedIt =
+      []; // for reverting -> to set correct previous player/team
   bool botSubmittedPoints = false;
 
-  factory GameX01_P.fromMapX01(map, mode, gameId, openGame) {
+  factory GameX01_P.fromMapX01(
+      dynamic map, GameMode mode, String gameId, bool openGame) {
     final Game_P game = Game_P.fromMap(map, mode, gameId, openGame);
 
     GameX01_P gameX01 = new GameX01_P();
@@ -56,17 +55,12 @@ class GameX01_P extends Game_P {
     gameX01.setReachedSuddenDeath = map['reachedSuddenDeath'];
     gameX01.setCurrentPlayerOfTeamsBeforeLegFinish =
         map['currentPlayerOfTeamsBeforeLegFinish'] != null
-            ? SplayTreeMap<String, List<dynamic>>.from(
-                    map['currentPlayerOfTeamsBeforeLegFinish'])
-                .map((key, value) => MapEntry(key, value.cast<String>()))
-            : new SplayTreeMap();
-    gameX01.setLegSetWithPlayerOrTeamWhoFinishedIt = gameX01
-            .setLegSetWithPlayerOrTeamWhoFinishedIt =
+            ? Utils.convertSimpleListBackToDoubleList(
+                map['currentPlayerOfTeamsBeforeLegFinish'])
+            : [];
+    gameX01.setLegSetWithPlayerOrTeamWhoFinishedIt =
         map['legSetWithPlayerOrTeamWhoFinishedIt'] != null
-            ? Map.fromEntries(
-                (map['legSetWithPlayerOrTeamWhoFinishedIt'] as List<dynamic>)
-                    .map<MapEntry<String, String>>((string) =>
-                        MapEntry(string.split(';')[0], string.split(';')[1])))
+            ? map['legSetWithPlayerOrTeamWhoFinishedIt'].cast<String>()
             : {};
 
     return gameX01;
@@ -127,14 +121,14 @@ class GameX01_P extends Game_P {
   bool get getAreTeamStatsDisplayed => _areTeamStatsDisplayed;
   set setAreTeamStatsDisplayed(bool value) => _areTeamStatsDisplayed = value;
 
-  Map<String, List<String>> get getCurrentPlayerOfTeamsBeforeLegFinish =>
+  List<List<String>> get getCurrentPlayerOfTeamsBeforeLegFinish =>
       _currentPlayerOfTeamsBeforeLegFinish;
-  set setCurrentPlayerOfTeamsBeforeLegFinish(Map<String, List<String>> value) =>
+  set setCurrentPlayerOfTeamsBeforeLegFinish(List<List<String>> value) =>
       _currentPlayerOfTeamsBeforeLegFinish = value;
 
-  Map<String, String> get getLegSetWithPlayerOrTeamWhoFinishedIt =>
+  List<String> get getLegSetWithPlayerOrTeamWhoFinishedIt =>
       _setLegWithPlayerOrTeamWhoFinishedIt;
-  set setLegSetWithPlayerOrTeamWhoFinishedIt(Map<String, String> value) =>
+  set setLegSetWithPlayerOrTeamWhoFinishedIt(List<String> value) =>
       _setLegWithPlayerOrTeamWhoFinishedIt = value;
 
   bool get getBotSubmittedPoints => botSubmittedPoints;
@@ -154,8 +148,8 @@ class GameX01_P extends Game_P {
     UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(getCurrentThreeDarts);
     setCanBePressed = true;
     setAreTeamStatsDisplayed = true;
-    setCurrentPlayerOfTeamsBeforeLegFinish = {};
-    setLegSetWithPlayerOrTeamWhoFinishedIt = {};
+    setCurrentPlayerOfTeamsBeforeLegFinish = [];
+    setLegSetWithPlayerOrTeamWhoFinishedIt = [];
     setBotSubmittedPoints = false;
 
     setGameId = '';
@@ -211,7 +205,7 @@ class GameX01_P extends Game_P {
       for (Player player in gameSettings.getPlayers) {
         getPlayerGameStatistics.add(
           new PlayerOrTeamGameStatsX01(
-            mode: 'X01',
+            mode: GameMode.X01.name,
             player: player,
             currentPoints: points,
             dateTime: getDateTime,
@@ -224,7 +218,7 @@ class GameX01_P extends Game_P {
           getTeamGameStatistics.add(
             new PlayerOrTeamGameStatsX01.Team(
               team: team,
-              mode: 'X01',
+              mode: GameMode.X01.name,
               currentPoints: points,
               dateTime: getDateTime,
             ),
@@ -239,8 +233,8 @@ class GameX01_P extends Game_P {
 
         // set team for player stats in order to sort them
         for (PlayerOrTeamGameStats playerStats in getPlayerGameStatistics) {
-          Team team = gameSettings.findTeamForPlayer(
-              playerStats.getPlayer.getName, gameSettings);
+          final Team team =
+              gameSettings.findTeamForPlayer(playerStats.getPlayer.getName);
           playerStats.setTeam = team;
         }
 
@@ -380,51 +374,19 @@ class GameX01_P extends Game_P {
     return false;
   }
 
-  //needed for allScoresPerLeg + CheckoutCountAtThrownDarts
-  //returns e.g. 'Leg 1' or 'Set 1 Leg 2'
-  String getCurrentSetLegAsString(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    final currentLeg = _getCurrentLeg(gameX01, gameSettingsX01);
-
-    var currentSet = -1;
-    var key = '';
-
-    if (gameSettingsX01.getSetsEnabled) {
-      currentSet = _getCurrentSet(gameX01, gameSettingsX01);
-      key += 'Set ' + currentSet.toString() + ' - ';
-    }
-    key += 'Leg ' + currentLeg.toString();
-
-    return key;
-  }
-
-  int getAmountOfDartsThrown() {
-    var count = 0;
-
-    if (getCurrentThreeDarts[0] != 'Dart 1') {
-      count++;
-    }
-    if (getCurrentThreeDarts[1] != 'Dart 2') {
-      count++;
-    }
-    if (getCurrentThreeDarts[2] != 'Dart 3') {
-      count++;
-    }
-
-    return count;
-  }
-
   List<String> getAllLegSetStringsExceptCurrentOne(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    final currentSetLegString =
-        getCurrentSetLegAsString(gameX01, gameSettingsX01);
+    final String currentSetLegString =
+        Utils.getCurrentSetLegAsString(gameX01, gameSettingsX01);
 
     var result = <String>[];
     for (String key in Utils.getPlayersOrTeamStatsListStatsScreen(
             gameX01, gameSettingsX01)[0]
         .getAllScoresPerLeg
         .keys) {
-      if (key != currentSetLegString) result.add(key);
+      if (key != currentSetLegString) {
+        result.add(key);
+      }
     }
 
     return result;
@@ -663,37 +625,6 @@ class GameX01_P extends Game_P {
     return -1;
   }
 
-  //needed to set all scores per leg
-  int _getCurrentLeg(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    var result = 1;
-
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      for (PlayerOrTeamGameStatsX01 stats in getPlayerGameStatistics) {
-        result += stats.getLegsWon;
-      }
-    } else {
-      for (PlayerOrTeamGameStatsX01 stats in getTeamGameStatistics) {
-        result += stats.getLegsWon;
-      }
-
-      return result;
-    }
-
-    return result;
-  }
-
-  //needed to set all scores per leg
-  int _getCurrentSet(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    int result = 1;
-
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
-      result += stats.getSetsWon;
-    }
-
-    return result;
-  }
-
   PlayerOrTeamGameStatsX01 getPlayerGameStats(
       PlayerOrTeamGameStatsX01? statsToFind) {
     late PlayerOrTeamGameStatsX01 result;
@@ -722,8 +653,8 @@ class GameX01_P extends Game_P {
     var result = <PlayerOrTeamGameStatsX01>[];
 
     for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-      final teamOfPlayer = gameSettingsX01.findTeamForPlayer(
-          stats.getPlayer.getName, gameSettingsX01);
+      final teamOfPlayer =
+          gameSettingsX01.findTeamForPlayer(stats.getPlayer.getName);
 
       if (teamOfPlayer.getName == gameX01.getCurrentTeamToThrow.getName) {
         result.add(stats);
@@ -734,8 +665,10 @@ class GameX01_P extends Game_P {
   }
 
   bool isGameDraw(BuildContext context) {
+    final bool isTeamMode = context.read<GameSettingsX01_P>().getSingleOrTeam ==
+        SingleOrTeamEnum.Team;
     for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
-        context.read<GameX01_P>(), context.read<GameSettingsX01_P>())) {
+        context.read<GameX01_P>(), isTeamMode)) {
       if (stats.getGameDraw) {
         return true;
       }
@@ -746,8 +679,8 @@ class GameX01_P extends Game_P {
   //for win by two legs diff -> checks if leg won difference is at least 2 at each player -> return true (valid win)
   bool isLegDifferenceAtLeastTwo(PlayerOrTeamGameStatsX01 playerToCheck,
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
       if (stats != playerToCheck &&
           (playerToCheck.getLegsWon - 2) < stats.getLegsWon) {
         return false;

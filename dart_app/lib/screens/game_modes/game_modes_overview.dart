@@ -109,7 +109,7 @@ class ScoreTrainingBtn extends StatelessWidget {
       height: GAME_MODES_OVERVIEW_HEIGHT.h,
       child: ElevatedButton(
         child: Text(
-          'Score training',
+          GameMode.ScoreTraining.name,
           style: TextStyle(
               fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
               color: Theme.of(context).colorScheme.secondary),
@@ -150,7 +150,7 @@ class DoubleTrainingBtn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'Double training',
+            GameMode.DoubleTraining.name,
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
@@ -195,7 +195,7 @@ class SingleTrainingBtn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'Single training',
+            GameMode.SingleTraining.name,
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
@@ -242,7 +242,7 @@ class CricketBtn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'Cricket',
+            GameMode.Cricket.name,
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
@@ -284,7 +284,7 @@ class X01Btn extends StatelessWidget {
         height: GAME_MODES_OVERVIEW_HEIGHT.h,
         child: ElevatedButton(
           child: Text(
-            'X01',
+            GameMode.X01.name,
             style: TextStyle(
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),

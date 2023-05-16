@@ -13,11 +13,11 @@ class StatsX01Btn extends StatelessWidget {
       width: 40.w,
       child: ElevatedButton(
         onPressed: () => Navigator.of(context)
-            .pushNamed('/statsPerGameList', arguments: {'mode': 'X01'}),
+            .pushNamed('/statsPerGameList', arguments: {'mode': GameMode.X01}),
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
-            'X01',
+            GameMode.X01.name,
             style: TextStyle(
                 fontSize: 12.sp,
                 color: Theme.of(context).colorScheme.secondary),

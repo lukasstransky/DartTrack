@@ -2,7 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/field_hits_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/main_stats_sd_t.dart';
-import 'package:dart_app/screens/game_modes/shared/game_stats/player_names.dart';
+import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -34,41 +34,13 @@ class _GameStatsSingleDoubleTrainingState
     }
   }
 
-  String _getHeader() {
-    String result = '';
-
-    // single or double training
-    result +=
-        '${_game!.getMode == GameMode.SingleTraining ? 'Single' : 'Double'} training';
-
-    if (!_game!.getGameSettings.getIsTargetNumberEnabled) {
-      result += ' - ';
-      //asc, desc or random
-      switch (_game!.getGameSettings.getMode) {
-        case ModesSingleDoubleTraining.Ascending:
-          result += 'ascending';
-          break;
-        case ModesSingleDoubleTraining.Descending:
-          result += 'descending';
-          break;
-        case ModesSingleDoubleTraining.Random:
-          result += 'random';
-          break;
-      }
-    }
-
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _game!.getIsGameFinished
           ? CustomAppBarWithHeart(
               title: 'Statistics',
-              mode: _game!.getMode == GameMode.SingleTraining
-                  ? 'Single training'
-                  : 'Double training',
+              mode: _game!.getMode,
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )
@@ -102,7 +74,7 @@ class _GameStatsSingleDoubleTrainingState
               alignment: Alignment.center,
               padding: EdgeInsets.only(
                 top: 0.5.h,
-                bottom: 1.h,
+                bottom: 2.h,
               ),
               child: Text(
                 _game!.getFormattedDateTime(),
@@ -120,7 +92,7 @@ class _GameStatsSingleDoubleTrainingState
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PlayerNames(game: _game!),
+                    PlayerOrTeamNames(game: _game!),
                     MainStatsSingleDoubleTraining(game: _game!),
                     FieldHitsSingleDoubleTraining(game: _game!),
                   ],
@@ -131,5 +103,31 @@ class _GameStatsSingleDoubleTrainingState
         ),
       ),
     );
+  }
+
+  String _getHeader() {
+    String result = '';
+
+    // single or double training
+    result +=
+        '${_game!.getMode == GameMode.SingleTraining ? 'Single' : 'Double'} training';
+
+    if (!_game!.getGameSettings.getIsTargetNumberEnabled) {
+      result += ' - ';
+      //asc, desc or random
+      switch (_game!.getGameSettings.getMode) {
+        case ModesSingleDoubleTraining.Ascending:
+          result += 'ascending';
+          break;
+        case ModesSingleDoubleTraining.Descending:
+          result += 'descending';
+          break;
+        case ModesSingleDoubleTraining.Random:
+          result += 'random';
+          break;
+      }
+    }
+
+    return result;
   }
 }

@@ -25,7 +25,7 @@ class CheckoutsX01 extends StatelessWidget {
   bool _isSetLegFinished(
       String setLegString, GameSettingsX01_P gameSettingsX01) {
     if (setLegString !=
-        gameX01.getCurrentSetLegAsString(gameX01, gameSettingsX01)) {
+        Utils.getCurrentSetLegAsString(gameX01, gameSettingsX01)) {
       return true;
     }
 

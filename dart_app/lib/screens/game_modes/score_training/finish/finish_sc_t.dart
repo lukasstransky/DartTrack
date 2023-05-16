@@ -31,17 +31,26 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
   }
 
   _saveDataToFirestore() async {
-    final gameScoreTraining_P = context.read<GameScoreTraining_P>();
+    final GameScoreTraining_P game = context.read<GameScoreTraining_P>();
+    final FirestoreServiceGames firestoreServiceGames =
+        context.read<FirestoreServiceGames>();
+    final OpenGamesFirestore openGamesFirestore =
+        context.read<OpenGamesFirestore>();
 
     if (context
         .read<GameSettingsScoreTraining_P>()
         .isCurrentUserInPlayers(context)) {
-      g_gameId = await context
-          .read<FirestoreServiceGames>()
-          .postGame(gameScoreTraining_P, context.read<OpenGamesFirestore>());
+      g_gameId = await firestoreServiceGames.postGame(game, openGamesFirestore);
+      game.getPlayerGameStatistics.sort();
+      game.setIsGameFinished = true;
       await context
           .read<FirestoreServicePlayerStats>()
-          .postPlayerGameStatistics(gameScoreTraining_P, g_gameId, context);
+          .postPlayerGameStatistics(game, g_gameId, context);
+    }
+
+    if (game.getIsOpenGame && mounted) {
+      await firestoreServiceGames.deleteOpenGame(
+          game.getGameId, openGamesFirestore);
     }
 
     // to load data in stats tab again if new game was added
@@ -55,7 +64,7 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
       child: Scaffold(
         appBar: CustomAppBarWithHeart(
           title: 'Finished game',
-          mode: 'Score training',
+          mode: GameMode.ScoreTraining,
           isFinishScreen: true,
           showHeart: true,
         ),

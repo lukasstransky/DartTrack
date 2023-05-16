@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/cricket/game_settings/local_widgets/best_of_or_first_to_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game_settings/local_widgets/mode_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game_settings/local_widgets/players_teams_list_c.dart';
@@ -29,6 +30,61 @@ class _GameSettingsCricketState extends State<GameSettingsCricket> {
     _addCurrentUserToPlayers();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: CustomAppBar(
+        title: 'Cricket settings',
+        showInfoIconCricket: true,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            SingleOrTeamBtnCricket(),
+            PlayersTeamsListCricket(),
+            Selector<GameSettingsCricket_P, SelectorModelAddPlayerBtn>(
+                selector: (_, gameSettingsCricket) => SelectorModelAddPlayerBtn(
+                      players: gameSettingsCricket.getPlayers,
+                      singleOrTeam: gameSettingsCricket.getSingleOrTeam,
+                      teams: gameSettingsCricket.getTeams,
+                    ),
+                builder: (_, selectorModel, __) =>
+                    _showAddPlayerTeamBtn(selectorModel)
+                        ? AddPlayerBtn(mode: GameMode.Cricket)
+                        : SizedBox.shrink()),
+            ModeCricket(),
+            BestOfOrFirstToCricket(),
+            SetsLegsCricket(),
+            Selector<GameSettingsCricket_P, SelectorModelStartGameBtnCricket>(
+              selector: (_, gameSettingsCricket) =>
+                  SelectorModelStartGameBtnCricket(
+                players: gameSettingsCricket.getPlayers,
+                singleOrTeam: gameSettingsCricket.getSingleOrTeam,
+                teams: gameSettingsCricket.getTeams,
+              ),
+              builder: (_, selectorModel, __) => StartGameBtn(
+                  mode: GameMode.Cricket, selectorModel: selectorModel),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  bool _showAddPlayerTeamBtn(SelectorModelAddPlayerBtn selectorModel) {
+    if (selectorModel.singleOrTeam == SingleOrTeamEnum.Single) {
+      if (selectorModel.players.length == MAX_PLAYERS_CRICKET) {
+        return false;
+      }
+    } else {
+      if (selectorModel.players.length == MAX_PLAYERS_CRICKET_TEAM_MODE) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
   _addCurrentUserToPlayers() {
     final String username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
@@ -43,27 +99,28 @@ class _GameSettingsCricketState extends State<GameSettingsCricket> {
       }
     });
   }
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: 'Cricket settings',
-        showInfoIconCricket: true,
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            SingleOrTeamBtnCricket(),
-            PlayersTeamsListCricket(),
-            AddPlayerBtn(mode: GameMode.Cricket),
-            ModeCricket(),
-            BestOfOrFirstToCricket(),
-            SetsLegsCricket(),
-            StartGameBtn(mode: GameMode.Cricket),
-          ],
-        ),
-      ),
-    );
-  }
+class SelectorModelStartGameBtnCricket {
+  final List<Player> players;
+  final SingleOrTeamEnum singleOrTeam;
+  final List<Team> teams;
+
+  SelectorModelStartGameBtnCricket({
+    required this.players,
+    required this.singleOrTeam,
+    required this.teams,
+  });
+}
+
+class SelectorModelAddPlayerBtn {
+  final List<Player> players;
+  final SingleOrTeamEnum singleOrTeam;
+  final List<Team> teams;
+
+  SelectorModelAddPlayerBtn({
+    required this.players,
+    required this.singleOrTeam,
+    required this.teams,
+  });
 }

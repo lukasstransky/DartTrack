@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 class OpenGamesFirestore with ChangeNotifier {
   List<Game_P> _openGames = [];
   bool _init = false;
-  bool loadOpenGames = true;
+  bool _loadOpenGames = true;
 
   List<Game_P> get openGames => this._openGames;
   set openGames(List<Game_P> value) => this._openGames = value;
@@ -14,9 +14,9 @@ class OpenGamesFirestore with ChangeNotifier {
   get init => this._init;
   set init(value) => this._init = value;
 
-  bool get getLoadOpenGames => this.loadOpenGames;
+  bool get getLoadOpenGames => this._loadOpenGames;
   set setLoadOpenGames(bool loadOpenGames) =>
-      this.loadOpenGames = loadOpenGames;
+      this._loadOpenGames = loadOpenGames;
 
   notify() {
     notifyListeners();

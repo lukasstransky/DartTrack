@@ -35,16 +35,14 @@ class AddPlayerTeamBtnDialogs {
     return false;
   }
 
-  static SingleOrTeamEnum _getSingleOrTeam(GameSettings_P gameSettings_P) {
-    late SingleOrTeamEnum singleOrTeam;
-
+  static bool _isTeamMode(GameSettings_P gameSettings_P) {
     if (gameSettings_P is GameSettingsX01_P) {
-      singleOrTeam = gameSettings_P.getSingleOrTeam;
+      return gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Team;
     } else if (gameSettings_P is GameSettingsCricket_P) {
-      singleOrTeam = gameSettings_P.getSingleOrTeam;
+      return gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Team;
     }
 
-    return singleOrTeam;
+    return false;
   }
 
   static showDialogForAddingPlayer(
@@ -187,7 +185,7 @@ class AddPlayerTeamBtnDialogs {
           actions: [
             Row(
               children: [
-                _getSingleOrTeam(gameSettings_P) == SingleOrTeamEnum.Team &&
+                _isTeamMode(gameSettings_P) == SingleOrTeamEnum.Team &&
                         gameSettings_P.getTeams.length < 4
                     ? Expanded(
                         child: Align(
@@ -211,43 +209,45 @@ class AddPlayerTeamBtnDialogs {
                       )
                     : SizedBox.shrink(),
                 Expanded(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(right: 3.w),
-                      child: TextButton(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(right: 3.w),
+                        child: TextButton(
+                          child: Text(
+                            'Cancel',
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary),
+                          ),
+                          onPressed: () {
+                            _resetBotAvgValue();
+                            newPlayerController.clear();
+                            Navigator.of(context).pop();
+                          },
+                          style: ButtonStyle(
+                            backgroundColor:
+                                Utils.getPrimaryMaterialStateColorDarken(
+                                    context),
+                          ),
+                        ),
+                      ),
+                      TextButton(
                         child: Text(
-                          'Cancel',
+                          'Submit',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                         ),
-                        onPressed: () {
-                          _resetBotAvgValue();
-                          newPlayerController.clear();
-                          Navigator.of(context).pop();
-                        },
+                        onPressed: () => _submitNewPlayer(
+                            gameSettings_P, context, newPlayer),
                         style: ButtonStyle(
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
                         ),
                       ),
-                    ),
-                    TextButton(
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
-                      ),
-                      onPressed: () =>
-                          _submitNewPlayer(gameSettings_P, context, newPlayer),
-                      style: ButtonStyle(
-                        backgroundColor:
-                            Utils.getPrimaryMaterialStateColorDarken(context),
-                      ),
-                    ),
-                  ],
-                ))
+                    ],
+                  ),
+                )
               ],
             ),
           ],
@@ -282,7 +282,7 @@ class AddPlayerTeamBtnDialogs {
     Navigator.of(context).pop();
 
     // assign player to team
-    if (_getSingleOrTeam(gameSettings_P) == SingleOrTeamEnum.Team) {
+    if (_isTeamMode(gameSettings_P)) {
       final Team? team = _checkIfMultipleTeamsToAdd(gameSettings_P.getTeams);
 
       if (team != null) {

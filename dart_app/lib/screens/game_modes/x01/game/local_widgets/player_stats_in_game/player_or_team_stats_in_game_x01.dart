@@ -2,11 +2,10 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/finish_ways_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/game_stats_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/leg_beginner_asset_x01.dart';
+import 'package:dart_app/screens/game_modes/shared/game/leg_beginner_asset.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_in_game/local_widgets/sets_legs_score_x01.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -20,26 +19,6 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       : super(key: key);
 
   final PlayerOrTeamGameStatsX01? currPlayerOrTeamGameStatsX01;
-
-  Color _getBackgroundColor(GameX01_P gameX01,
-      GameSettingsX01_P gameSettingsX01, BuildContext context) {
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      if (Player.samePlayer(gameX01.getCurrentPlayerToThrow,
-          this.currPlayerOrTeamGameStatsX01!.getPlayer)) {
-        return Utils.lighten(Theme.of(context).colorScheme.primary, 20);
-      }
-    } else {
-      if (this.currPlayerOrTeamGameStatsX01!.getTeam == null) {
-        return Colors.transparent;
-      }
-      if (this.currPlayerOrTeamGameStatsX01!.getTeam.getName ==
-          gameX01.getCurrentTeamToThrow.getName) {
-        return Utils.lighten(Theme.of(context).colorScheme.primary, 20);
-      }
-    }
-
-    return Colors.transparent;
-  }
 
   bool _shouldDisplayRightBorder(GameX01_P gameX01) {
     return gameX01.getPlayerGameStatistics
@@ -156,13 +135,16 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       ),
       width: 50.w,
       child: Container(
-        color: _getBackgroundColor(gameX01, gameSettingsX01, context),
+        color: Utils.getBackgroundColorForCurrentPlayerOrTeam(
+            gameX01, gameSettingsX01, currPlayerOrTeamGameStatsX01!, context),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            LegBeginnerDartAssetX01(
-                currPlayerOrTeamGameStatsX01:
-                    this.currPlayerOrTeamGameStatsX01),
+            LegBeginnerDartAsset(
+              playerOrTeamStats: this.currPlayerOrTeamGameStatsX01,
+              game: gameX01,
+              gameSettings: gameSettingsX01,
+            ),
             Container(
               transform: Matrix4.translationValues(
                   0.0, isSingleMode ? -15 : -25.0, 0.0),

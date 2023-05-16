@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -27,6 +28,9 @@ class StatisticsBtn extends StatelessWidget {
         gameMode == GameMode.DoubleTraining) {
       Navigator.of(context).pushNamed('/statisticsSingleDoubleTraining',
           arguments: {'game': context.read<GameSingleDoubleTraining_P>()});
+    } else if (gameMode == GameMode.Cricket) {
+      Navigator.of(context).pushNamed('/statisticsCricket',
+          arguments: {'game': context.read<GameCricket_P>()});
     }
   }
 

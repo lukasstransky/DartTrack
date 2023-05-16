@@ -48,19 +48,30 @@ class _FinishSingleDoubleTrainingState
   _saveDataToFirestore() async {
     final GameSingleDoubleTraining_P game =
         context.read<GameSingleDoubleTraining_P>();
+    final FirestoreServiceGames firestoreServiceGames =
+        context.read<FirestoreServiceGames>();
+    final OpenGamesFirestore openGamesFirestore =
+        context.read<OpenGamesFirestore>();
 
     if (context
         .read<GameSettingsSingleDoubleTraining_P>()
         .isCurrentUserInPlayers(context)) {
       if (game.getMode == GameMode.DoubleTraining) {
-        game.setName = 'Double training';
+        game.setName = GameMode.DoubleTraining.name;
       }
+      game.getPlayerGameStatistics.sort();
+      game.setIsGameFinished = true;
       g_gameId = await context
           .read<FirestoreServiceGames>()
           .postGame(game, context.read<OpenGamesFirestore>());
       await context
           .read<FirestoreServicePlayerStats>()
           .postPlayerGameStatistics(game, g_gameId, context);
+    }
+
+    if (game.getIsOpenGame && mounted) {
+      await firestoreServiceGames.deleteOpenGame(
+          game.getGameId, openGamesFirestore);
     }
 
     // to load data in stats tab again if new game was added
@@ -78,7 +89,7 @@ class _FinishSingleDoubleTrainingState
       child: Scaffold(
         appBar: CustomAppBarWithHeart(
           title: 'Finished game',
-          mode: 'Single training',
+          mode: GameMode.SingleTraining,
           isFinishScreen: true,
           showHeart: true,
         ),

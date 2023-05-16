@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -20,6 +21,46 @@ class RevertBtn extends StatelessWidget {
   }) : super(key: key);
 
   final Game_P game_p;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 25.w,
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Utils.getPrimaryColorDarken(context),
+            width: GENERAL_BORDER_WIDTH.w,
+          ),
+          right: BorderSide(
+            color: Utils.getPrimaryColorDarken(context),
+            width: GENERAL_BORDER_WIDTH.w,
+          ),
+        ),
+      ),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          backgroundColor: game_p.getRevertPossible
+              ? MaterialStateProperty.all(Colors.red)
+              : MaterialStateProperty.all(Utils.darken(Colors.red, 25)),
+          overlayColor: game_p.getRevertPossible
+              ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
+              : MaterialStateProperty.all(Colors.transparent),
+        ),
+        child: Icon(
+          Icons.undo,
+          color: Utils.getTextColorDarken(context),
+        ),
+        onPressed: () => _revertBtnPressed(context),
+      ),
+    );
+  }
 
   _revertBtnPressed(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
@@ -42,49 +83,8 @@ class RevertBtn extends StatelessWidget {
       (game_p as GameScoreTraining_P).revert(context);
     } else if (game_p is GameSingleDoubleTraining_P) {
       (game_p as GameSingleDoubleTraining_P).revert(context, false);
+    } else if (game_p is GameCricket_P) {
+      (game_p as GameCricket_P).revert();
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 25.w,
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Utils.getPrimaryColorDarken(context),
-            width: GENERAL_BORDER_WIDTH.w,
-          ),
-          right: BorderSide(
-            color: Utils.getPrimaryColorDarken(context),
-            width: GENERAL_BORDER_WIDTH.w,
-          ),
-        ),
-      ),
-      child: Selector<GameX01_P, bool>(
-        selector: (_, game) => game.getRevertPossible,
-        builder: (_, revertPossible, __) => ElevatedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-            ),
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: revertPossible
-                ? MaterialStateProperty.all(Colors.red)
-                : MaterialStateProperty.all(Utils.darken(Colors.red, 25)),
-            overlayColor: revertPossible
-                ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
-                : MaterialStateProperty.all(Colors.transparent),
-          ),
-          child: Icon(
-            Icons.undo,
-            color: Utils.getTextColorDarken(context),
-          ),
-          onPressed: () => _revertBtnPressed(context),
-        ),
-      ),
-    );
   }
 }

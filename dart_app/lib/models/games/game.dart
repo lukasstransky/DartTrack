@@ -1,6 +1,8 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -8,6 +10,7 @@ import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -139,14 +142,12 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       result['isOpenGame'] = getRevertPossible;
       result['playerOrTeamLegStartIndex'] = game.getPlayerOrTeamLegStartIndex;
       result['reachedSuddenDeath'] = game.getReachedSuddenDeath;
-      result['legSetWithPlayerOrTeamWhoFinishedIt'] = game
-          .getLegSetWithPlayerOrTeamWhoFinishedIt.entries
-          .map((entry) => '${entry.key};${entry.value}')
-          .toList();
-      ;
+      result['legSetWithPlayerOrTeamWhoFinishedIt'] =
+          game.getLegSetWithPlayerOrTeamWhoFinishedIt;
       if (settings.getSingleOrTeam == SingleOrTeamEnum.Team) {
         result['currentPlayerOfTeamsBeforeLegFinish'] =
-            game.getCurrentPlayerOfTeamsBeforeLegFinish;
+            Utils.convertDoubleListToSimpleList(
+                game.getCurrentPlayerOfTeamsBeforeLegFinish);
         result['teamGameStatistics'] = getTeamGameStatistics.map((item) {
           return item.toMapX01(
               item as PlayerOrTeamGameStatsX01, game, settings, '', openGame);
@@ -192,9 +193,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   Map<String, dynamic> toMapSingleDoubleTraining(
       GameSingleDoubleTraining_P game, bool openGame) {
     Map<String, dynamic> result = {
-      'name': game.getMode == GameMode.SingleTraining
-          ? 'Single training'
-          : 'Double training',
+      'name': game.getMode.name,
       'dateTime': getDateTime,
       'isFavouriteGame': getIsFavouriteGame,
     };
@@ -227,19 +226,69 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
     return result;
   }
 
-  factory Game_P.fromMap(map, mode, gameId, openGame) {
-    late GameSettings_P gameSettings;
+  Map<String, dynamic> toMapCricket(GameCricket_P game, bool openGame) {
+    final GameSettingsCricket_P settings =
+        getGameSettings as GameSettingsCricket_P;
 
-    if (mode == 'X01') {
-      gameSettings = GameSettings_P.fromMapX01(map['gameSettings']);
-    } else if (mode == 'Score training') {
-      gameSettings = GameSettings_P.fromMapScoreTraining(map['gameSettings']);
-    } else if (mode == 'Single training' || mode == 'Double training') {
-      gameSettings =
-          GameSettings_P.fromMapSingleDoubleTraining(map['gameSettings']);
+    Map<String, dynamic> result = {
+      'name': GameMode.Cricket.name,
+      'dateTime': getDateTime,
+      'isFavouriteGame': getIsFavouriteGame,
+      'gameSettings':
+          game.getGameSettings.toMapCricket(game.getGameSettings, openGame),
+    };
+
+    if (openGame) {
+      result['currentThreeDarts'] = getCurrentThreeDarts;
+      result['isOpenGame'] = getIsOpenGame;
+      result['playerGameStatistics'] = getPlayerGameStatistics.map((item) {
+        return item.toMapCricket(
+            item as PlayerOrTeamGameStatsCricket, settings, '', openGame);
+      }).toList();
+      result['currentPlayerToThrow'] =
+          getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player);
+      result['revertPossible'] = getIsOpenGame;
+      result['isOpenGame'] = getRevertPossible;
+      result['playerOrTeamLegStartIndex'] = game.getPlayerOrTeamLegStartIndex;
+      result['legSetWithPlayerOrTeamWhoFinishedIt'] =
+          game.getLegSetWithPlayerOrTeamWhoFinishedIt;
+      if (settings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        result['currentPlayerOfTeamsBeforeLegFinish'] =
+            Utils.convertDoubleListToSimpleList(
+                game.getCurrentPlayerOfTeamsBeforeLegFinish);
+        result['teamGameStatistics'] = getTeamGameStatistics.map((item) {
+          return item.toMapCricket(
+              item as PlayerOrTeamGameStatsCricket, settings, '', openGame);
+        }).toList();
+        result['currentTeamToThrow'] =
+            getCurrentTeamToThrow!.toMap(getCurrentTeamToThrow as Team);
+      }
+    } else {
+      result['isGameFinished'] = true;
     }
 
-    DateTime dateTime = DateTime.parse(map['dateTime'].toDate().toString());
+    return result;
+  }
+
+  factory Game_P.fromMap(
+      dynamic map, GameMode mode, String gameId, bool openGame) {
+    late GameSettings_P gameSettings;
+    dynamic gameSettingsMap = map['gameSettings'];
+
+    if (mode == GameMode.X01) {
+      gameSettings = GameSettings_P.fromMapX01(gameSettingsMap);
+    } else if (mode == GameMode.ScoreTraining) {
+      gameSettings = GameSettings_P.fromMapScoreTraining(gameSettingsMap);
+    } else if (mode == GameMode.SingleTraining ||
+        mode == GameMode.DoubleTraining) {
+      gameSettings =
+          GameSettings_P.fromMapSingleDoubleTraining(gameSettingsMap);
+    } else if (mode == GameMode.Cricket) {
+      gameSettings = GameSettings_P.fromMapCricket(gameSettingsMap);
+    }
+
+    final DateTime dateTime =
+        DateTime.parse(map['dateTime'].toDate().toString());
 
     if (openGame) {
       return Game_P.Firestore(
@@ -253,23 +302,25 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         playerGameStatistics: map['playerGameStatistics']
             .map<PlayerOrTeamGameStats?>((item) {
               List<List<String>> allRemainingScoresPerDart = [];
-              if (mode == 'X01' || mode == 'Score training') {
+              if (mode == GameMode.X01 || mode == GameMode.ScoreTraining) {
                 allRemainingScoresPerDart =
-                    Utils.convertSimpleListToAllRemainingScoresPerDart(
+                    Utils.convertSimpleListBackToDoubleList(
                         item['allRemainingScoresPerDart'] != null
                             ? item['allRemainingScoresPerDart']
                             : []);
               }
 
-              if (mode == 'X01') {
+              if (mode == GameMode.X01) {
                 return PlayerOrTeamGameStats.fromMapX01(
                     item, allRemainingScoresPerDart);
-              } else if (mode == 'Score training') {
+              } else if (mode == GameMode.ScoreTraining) {
                 return PlayerOrTeamGameStats.fromMapScoreTraining(
                     item, allRemainingScoresPerDart);
-              } else if (mode == 'Single training' ||
-                  mode == 'Double training') {
+              } else if (mode == GameMode.SingleTraining ||
+                  mode == GameMode.DoubleTraining) {
                 return PlayerOrTeamGameStats.fromMapSingleDoubleTraining(item);
+              } else if (mode == GameMode.Cricket) {
+                return PlayerOrTeamGameStats.fromMapCricket(item);
               }
             })
             .toList()
@@ -279,17 +330,19 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
             ? map['teamGameStatistics']
                 .map<PlayerOrTeamGameStats?>((item) {
                   List<List<String>> allRemainingScoresPerDart = [];
-                  if (mode == 'X01' || mode == 'Score training') {
+                  if (mode == GameMode.X01 || mode == GameMode.ScoreTraining) {
                     allRemainingScoresPerDart =
-                        Utils.convertSimpleListToAllRemainingScoresPerDart(
+                        Utils.convertSimpleListBackToDoubleList(
                             item['allRemainingScoresPerDart'] != null
                                 ? item['allRemainingScoresPerDart']
                                 : []);
                   }
 
-                  if (mode == 'X01') {
+                  if (mode == GameMode.X01) {
                     return PlayerOrTeamGameStats.fromMapX01(
                         item, allRemainingScoresPerDart);
+                  } else if (mode == GameMode.Cricket) {
+                    return PlayerOrTeamGameStats.fromMapCricket(item);
                   }
                 })
                 .toList()
@@ -342,5 +395,21 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
 
   notify() {
     notifyListeners();
+  }
+
+  int getAmountOfDartsThrown() {
+    var count = 0;
+
+    if (getCurrentThreeDarts[0] != 'Dart 1') {
+      count++;
+    }
+    if (getCurrentThreeDarts[1] != 'Dart 2') {
+      count++;
+    }
+    if (getCurrentThreeDarts[2] != 'Dart 3') {
+      count++;
+    }
+
+    return count;
   }
 }

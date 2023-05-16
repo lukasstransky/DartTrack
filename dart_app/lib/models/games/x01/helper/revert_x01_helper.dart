@@ -2,9 +2,8 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/models/player.dart';
+import 'package:dart_app/models/games/x01/helper/revert_helper.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
-import 'package:dart_app/models/team.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -288,8 +287,8 @@ class RevertX01Helper {
   static bool _isRevertPossible(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = false;
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
       if (stats.getAllScores.isNotEmpty ||
           stats.getAllScoresPerDart.isNotEmpty) {
         result = true;
@@ -559,8 +558,8 @@ class RevertX01Helper {
 
   static bool _allPlayersTeamsHaveStartPoints(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
       if (stats.getCurrentPoints != gameSettingsX01.getPointsOrCustom()) {
         return false;
       } else if (stats.getAllScoresPerDart.isNotEmpty &&
@@ -574,8 +573,8 @@ class RevertX01Helper {
     }
 
     // check for case if it got reverted to the beginning of game
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
       if (stats.getSetsWon > 0 || stats.getLegsWon > 0) {
         return true;
       }
@@ -593,130 +592,11 @@ class RevertX01Helper {
     }
 
     if (legSetOrGameReverted) {
-      _setPreviousPlayerOrTeamLegSetReverted(gameX01, gameSettingsX01);
+      RevertHelper.setPreviousPlayerOrTeamLegSetReverted(
+          gameX01, gameSettingsX01);
     } else {
-      _setPreviousPlayerOrTeamNoLegSetReverted(gameX01, gameSettingsX01);
-    }
-  }
-
-  static _setPreviousPlayerOrTeamLegSetReverted(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    // set start player/team index
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single &&
-        gameX01.getPlayerOrTeamLegStartIndex == 0) {
-      gameX01.setPlayerOrTeamLegStartIndex =
-          gameSettingsX01.getPlayers.length - 1;
-    } else if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        gameX01.getPlayerOrTeamLegStartIndex == 0) {
-      gameX01.setPlayerOrTeamLegStartIndex =
-          gameSettingsX01.getTeams.length - 1;
-    } else {
-      gameX01.setPlayerOrTeamLegStartIndex =
-          gameX01.getPlayerOrTeamLegStartIndex - 1;
-    }
-
-    // set current player/team to throw
-    final String playerOrTeamNameToFind =
-        gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.values.last;
-    final String keyOfLastElement =
-        gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt.keys.last;
-    gameX01.getLegSetWithPlayerOrTeamWhoFinishedIt
-        .removeWhere((String key, String value) => key == keyOfLastElement);
-
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      for (Player player in gameSettingsX01.getPlayers) {
-        if (player.getName == playerOrTeamNameToFind) {
-          gameX01.setCurrentPlayerToThrow = player;
-          break;
-        }
-      }
-    } else {
-      for (Team team in gameSettingsX01.getTeams) {
-        if (team.getName == playerOrTeamNameToFind) {
-          gameX01.setCurrentTeamToThrow = team;
-          break;
-        }
-      }
-
-      _setPreviousPlayerOfAllTeams(gameX01, true);
-    }
-  }
-
-  static _setPreviousPlayerOrTeamNoLegSetReverted(
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    final int indexOfCurrentPlayer = gameSettingsX01.getPlayers.indexOf(
-        gameSettingsX01.getPlayers
-            .where((Player p) =>
-                p.getName == gameX01.getCurrentPlayerToThrow.getName)
-            .first);
-    int indexOfCurrentTeam = 0;
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      indexOfCurrentTeam =
-          gameSettingsX01.getTeams.indexOf(gameX01.getCurrentTeamToThrow);
-    }
-
-    if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single) {
-      // set previous player
-      if ((indexOfCurrentPlayer - 1) < 0) {
-        gameX01.setCurrentPlayerToThrow = gameSettingsX01.getPlayers.last;
-      } else {
-        gameX01.setCurrentPlayerToThrow =
-            gameSettingsX01.getPlayers[indexOfCurrentPlayer - 1];
-      }
-    } else {
-      // set previous team
-      if ((indexOfCurrentTeam - 1) < 0) {
-        gameX01.setCurrentTeamToThrow = gameSettingsX01.getTeams.last;
-      } else {
-        gameX01.setCurrentTeamToThrow =
-            gameSettingsX01.getTeams[indexOfCurrentTeam - 1];
-      }
-
-      _setPreviousPlayerOfAllTeams(gameX01, false);
-    }
-  }
-
-  static _setPreviousPlayerOfAllTeams(GameX01_P gameX01, bool setForAllTeams) {
-    if (setForAllTeams) {
-      final List<String> playerNames =
-          gameX01.getCurrentPlayerOfTeamsBeforeLegFinish.entries.last.value;
-      final String lastKey =
-          gameX01.getCurrentPlayerOfTeamsBeforeLegFinish.keys.last;
-
-      gameX01.getCurrentPlayerOfTeamsBeforeLegFinish
-          .removeWhere((String key, List<String> value) => key == lastKey);
-
-      // set previous player for each team, based on which player was the current player when leg was finished
-      gameX01.getGameSettings.getTeams.asMap().forEach((index, value) => {
-            value.setCurrentPlayerToThrow =
-                gameX01.getGameSettings.getPlayerFromTeam(playerNames[index])
-          });
-    } else {
-      _setPreviousPlayerForTeam(gameX01.getCurrentTeamToThrow);
-    }
-
-    // set previous player overall
-    gameX01.setCurrentPlayerToThrow =
-        gameX01.getCurrentTeamToThrow.getCurrentPlayerToThrow;
-  }
-
-  static _setPreviousPlayerForTeam(Team team) {
-    // get index of current player in team
-    final List<Player> players = team.getPlayers;
-    int indexOfCurrentPlayerInCurrentTeam = -1;
-    for (int i = 0; i < players.length; i++) {
-      if (players[i].getName == team.getCurrentPlayerToThrow.getName) {
-        indexOfCurrentPlayerInCurrentTeam = i;
-        break;
-      }
-    }
-
-    // set previous player of team
-    if ((indexOfCurrentPlayerInCurrentTeam - 1) < 0) {
-      team.setCurrentPlayerToThrow = players.last;
-    } else {
-      team.setCurrentPlayerToThrow =
-          players[indexOfCurrentPlayerInCurrentTeam - 1];
+      RevertHelper.setPreviousPlayerOrTeamNoLegSetReverted(
+          gameX01, gameSettingsX01);
     }
   }
 
@@ -741,8 +621,8 @@ class RevertX01Helper {
       GameSettingsX01_P gameSettingsX01, GameX01_P gameX01) {
     if (gameSettingsX01.getSuddenDeath) {
       int amountOfLegsWon = 0;
-      for (PlayerOrTeamGameStatsX01 stats
-          in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+      for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+          gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
         amountOfLegsWon += stats.getLegsWon;
       }
 
@@ -762,8 +642,8 @@ class RevertX01Helper {
 
   static _isRevertedBackToBegin(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    for (PlayerOrTeamGameStatsX01 stats
-        in Utils.getPlayersOrTeamStatsList(gameX01, gameSettingsX01)) {
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
       if (stats.getAllScores.isNotEmpty ||
           stats.getAllScoresPerDart.isNotEmpty) {
         return false;

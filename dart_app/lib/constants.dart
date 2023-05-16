@@ -5,18 +5,45 @@ const Color primary = Color(0xff130536);
 
 enum GameMode { X01, ScoreTraining, SingleTraining, DoubleTraining, Cricket }
 
+extension NameGetter on GameMode {
+  String get name {
+    switch (this) {
+      case GameMode.X01:
+        return 'X01';
+      case GameMode.ScoreTraining:
+        return 'Score training';
+      case GameMode.SingleTraining:
+        return 'Single training';
+      case GameMode.DoubleTraining:
+        return 'Double training';
+      case GameMode.Cricket:
+        return 'Cricket';
+      default:
+        return '';
+    }
+  }
+}
+
 // single training
 enum ModesSingleDoubleTraining { Ascending, Descending, Random }
 
 // cricket
 enum CricketMode { Standard, CutThroat, NoScore }
 
-const int DEFAULT_SETS_FIRST_TO_SETS_ENABLED_CRICKET = 2;
-const int DEFAULT_LEGS_FIRST_TO_SETS_ENABLED_CRICKET = 2;
-const int DEFAULT_SETS_BEST_OF_SETS_ENABLED_CRICKET = 3;
-const int DEFAULT_LEGS_BEST_OF_SETS_ENABLED_CRICKET = 3;
-const int DEFAULT_LEGS_FIRST_TO_NO_SETS_CRICKET = 3;
-const int DEFAULT_LEGS_BEST_OF_NO_SETS_CRICKET = 5;
+extension NameGetterCricketMode on CricketMode {
+  String get name {
+    switch (this) {
+      case CricketMode.Standard:
+        return 'Standard';
+      case CricketMode.CutThroat:
+        return 'Cut throat';
+      case CricketMode.NoScore:
+        return 'No score';
+      default:
+        return '';
+    }
+  }
+}
 
 //Auth Page
 enum AuthMode { Register, Login }
@@ -30,8 +57,6 @@ enum ModeOutIn { Single, Double, Master }
 
 enum BestOfOrFirstToEnum { BestOf, FirstTo }
 
-enum SetsOrLegsEnum { Sets, Legs }
-
 enum NewPlayer { Bot, Guest }
 
 const String SUDDEN_DEATH_INFO =
@@ -43,6 +68,8 @@ const int MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING = 2;
 const int DEFAULT_BOT_AVG_SLIDER_VALUE = 50;
 const int BOT_AVG_SLIDER_VALUE_RANGE = 2;
 const int MAX_PLAYERS_X01 = 8;
+const int MAX_PLAYERS_CRICKET = 4;
+const int MAX_PLAYERS_CRICKET_TEAM_MODE = 8;
 const int MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING = 5;
 const int MAX_TEAMS = 4;
 const int MAX_PLAYERS_PER_TEAM = 4;
@@ -377,6 +404,22 @@ const int MAX_ROUNDS_SINGLE_TRAINING_NUMBERS = 3;
 const int MIN_ROUNDS_SINGLE_TRAINING = 5;
 
 const int BTN_FONTSIZE_SD_T = 30;
+
+/************************************************************************************/
+/**********************          cricket settings           *************************/
+/************************************************************************************/
+
+const SingleOrTeamEnum DEFAULT_SINGLE_OR_TEAM_CRICKET = SingleOrTeamEnum.Single;
+const BestOfOrFirstToEnum DEFAULT_BEST_OF_OR_FIRST_TO_CRICKET =
+    BestOfOrFirstToEnum.FirstTo;
+const CricketMode DEFAULT_CRICKET_MODE = CricketMode.Standard;
+const int DEFAULT_SETS_FIRST_TO_SETS_ENABLED_CRICKET = 2;
+const int DEFAULT_LEGS_FIRST_TO_SETS_ENABLED_CRICKET = 2;
+const int DEFAULT_SETS_BEST_OF_SETS_ENABLED_CRICKET = 3;
+const int DEFAULT_LEGS_BEST_OF_SETS_ENABLED_CRICKET = 3;
+const int DEFAULT_LEGS_FIRST_TO_NO_SETS_CRICKET = 1;
+const int DEFAULT_LEGS_BEST_OF_NO_SETS_CRICKET = 5;
+const bool DEFAULT_SETS_ENABLED_CRICKET = false;
 
 /************************************************************************************/
 /***********************          styling constants            **********************/

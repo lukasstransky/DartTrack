@@ -14,59 +14,6 @@ class DisplayTeamOrPlayerNamesX01 extends StatelessWidget {
 
   final GameX01_P gameX01;
 
-  bool _hasPlayerOrTeamWonTheGame(PlayerOrTeamGameStatsX01 stats,
-      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    if (Utils.playerStatsDisplayedInTeamMode(gameX01, gameSettingsX01)) {
-      return false;
-    }
-
-    // set mode
-    if (gameSettingsX01.getSetsEnabled) {
-      if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
-          ((stats.getSetsWon * 2) - 1) == gameSettingsX01.getSets) {
-        return true;
-      } else if (gameSettingsX01.getBestOfOrFirstTo ==
-              BestOfOrFirstToEnum.FirstTo &&
-          gameSettingsX01.getSets == stats.getSetsWon) {
-        return true;
-      } else if (gameSettingsX01.getBestOfOrFirstTo ==
-              BestOfOrFirstToEnum.BestOf &&
-          stats.getSetsWon == (gameSettingsX01.getSets / 2) + 1) {
-        return true;
-      }
-    } else {
-      // win by two legs difference
-      if (gameSettingsX01.getWinByTwoLegsDifference) {
-        if (gameSettingsX01.getSuddenDeath) {
-          final int amountOfLegsForSuddenDeathWin = gameSettingsX01.getLegs +
-              gameSettingsX01.getMaxExtraLegs +
-              1; // + 1 = sudden death leg
-
-          return stats.getLegsWon == amountOfLegsForSuddenDeathWin;
-        } else {
-          return gameX01.isLegDifferenceAtLeastTwo(
-              stats, gameX01, gameSettingsX01);
-        }
-      } else {
-        // leg mode
-        if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
-            ((stats.getLegsWonTotal * 2) - 1) == gameSettingsX01.getLegs) {
-          return true;
-        } else if (gameSettingsX01.getBestOfOrFirstTo ==
-                BestOfOrFirstToEnum.FirstTo &&
-            stats.getLegsWonTotal >= gameSettingsX01.getLegs) {
-          return true;
-        } else if (gameSettingsX01.getDrawMode &&
-            gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
-            stats.getLegsWonTotal == (gameSettingsX01.getLegs / 2) + 1) {
-          return true;
-        }
-      }
-    }
-
-    return false;
-  }
-
   Column _getBotWithLevel(
       PlayerOrTeamGameStatsX01 stats, BuildContext context) {
     return Column(
@@ -103,12 +50,9 @@ class DisplayTeamOrPlayerNamesX01 extends StatelessWidget {
           Container(
             width: WIDTH_DATA_STATISTICS.w,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (_hasPlayerOrTeamWonTheGame(
-                        stats, gameX01, gameSettingsX01) &&
-                    !Utils.playerStatsDisplayedInTeamMode(
-                        gameX01, gameSettingsX01))
+                if (Utils.hasPlayerOrTeamWonTheGame(
+                    stats, gameX01, gameSettingsX01))
                   Padding(
                     padding: EdgeInsets.only(right: 1.w),
                     child: Icon(
@@ -120,6 +64,7 @@ class DisplayTeamOrPlayerNamesX01 extends StatelessWidget {
                 if (Utils.playerStatsDisplayedInTeamMode(
                     gameX01, gameSettingsX01)) ...[
                   Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (stats.getPlayer is Bot) ...[
                         _getBotWithLevel(stats, context)
@@ -134,7 +79,7 @@ class DisplayTeamOrPlayerNamesX01 extends StatelessWidget {
                         ),
                       ],
                       Text(
-                        '${gameSettingsX01.findTeamForPlayer(stats.getPlayer.getName, gameSettingsX01).getName}',
+                        '(${gameSettingsX01.findTeamForPlayer(stats.getPlayer.getName).getName})',
                         style: TextStyle(
                           fontSize: 11.sp,
                           color: Utils.getTextColorDarken(context),

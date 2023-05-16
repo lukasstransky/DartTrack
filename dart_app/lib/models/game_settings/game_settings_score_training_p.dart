@@ -104,8 +104,8 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
 
   String getModeStringStatsScreen() {
     if (getMode == ScoreTrainingModeEnum.MaxRounds) {
-      return 'Best of ${getMaxRoundsOrPoints} rounds';
+      return 'Score training - Best of ${getMaxRoundsOrPoints} rounds';
     }
-    return 'First to ${getMaxRoundsOrPoints} points';
+    return 'Score training - First to ${getMaxRoundsOrPoints} points';
   }
 }

@@ -1,4 +1,5 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/firestore/stats_firestore_c.dart';
 import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
@@ -7,6 +8,7 @@ import 'package:dart_app/models/game_settings/game_settings_score_training_p.dar
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -14,6 +16,8 @@ import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
+import 'package:dart_app/screens/game_modes/cricket/finish/finish_c.dart';
+import 'package:dart_app/screens/game_modes/cricket/game/game_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game_settings/game_settings_c.dart';
 import 'package:dart_app/screens/game_modes/score_training/finish/finish_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/game_sc_t.dart';
@@ -43,6 +47,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:sizer/sizer.dart';
 
+import 'screens/game_modes/cricket/statistics/game_statistics_c.dart';
 import 'screens/game_modes/single_double_training/finish/finish_sd_t.dart';
 import 'screens/game_modes/single_double_training/game/game_sd_t.dart';
 
@@ -132,6 +137,12 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => GameSettingsCricket_P(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => GameCricket_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => StatsFirestoreCricket_P(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -172,6 +183,9 @@ class MyApp extends StatelessWidget {
             GameStatsSingleDoubleTraining.routeName: (ctx) =>
                 GameStatsSingleDoubleTraining(),
             GameSettingsCricket.routeName: (ctx) => GameSettingsCricket(),
+            GameCricket.routeName: (ctx) => GameCricket(),
+            FinishCricket.routeName: (ctx) => FinishCricket(),
+            StatisticsCricket.routeName: (ctx) => StatisticsCricket(),
           },
           home: AuthWrapper(),
         );

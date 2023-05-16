@@ -31,7 +31,7 @@ class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
         <String, dynamic>{}) as Map;
 
     if (arguments.isNotEmpty) {
-      _mode = arguments['mode'] == 'Single training'
+      _mode = arguments['mode'] == GameMode.SingleTraining.name
           ? GameMode.SingleTraining
           : GameMode.DoubleTraining;
       if (!arguments['openGame']) {

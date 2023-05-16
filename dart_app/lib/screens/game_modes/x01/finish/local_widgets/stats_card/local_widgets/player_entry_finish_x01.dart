@@ -53,7 +53,9 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
 
     final List<PlayerOrTeamGameStats> statsList =
         Utils.getPlayersOrTeamStatsList(
-            widget.gameX01, widget.gameX01.getGameSettings);
+            widget.gameX01,
+            widget.gameX01.getGameSettings.getSingleOrTeam ==
+                SingleOrTeamEnum.Team);
 
     for (int i = 1; i < indexOfPlayerOrTeam; i++) {
       if (widget.gameX01.getGameSettings.getSetsEnabled) {
@@ -80,7 +82,9 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
       padding: EdgeInsets.only(
           left: 5.w,
           bottom: Utils.getPlayersOrTeamStatsList(
-                              widget.gameX01, widget.gameX01.getGameSettings)
+                              widget.gameX01,
+                              widget.gameX01.getGameSettings.getSingleOrTeam ==
+                                  SingleOrTeamEnum.Team)
                           .length -
                       1 ==
                   widget.i
@@ -109,10 +113,7 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                           ),
                     if (_firstElementNoDrawOrOpenGame(widget.gameX01, context))
                       Container(
-                        padding: EdgeInsets.only(
-                          left: 2.w,
-                          right: 1.w,
-                        ),
+                        padding: EdgeInsets.only(left: 2.w),
                         transform: Matrix4.translationValues(0.0, -2.0, 0.0),
                         child: Icon(
                           Entypo.trophy,
@@ -128,10 +129,7 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                       Container(
                         padding: widget.openGame
                             ? EdgeInsets.zero
-                            : EdgeInsets.only(
-                                left: 2.w,
-                                right: 1.w,
-                              ),
+                            : EdgeInsets.only(left: 2.w),
                         transform: Matrix4.translationValues(0.0, -2.0, 0.0),
                         child: Icon(
                           Entypo.trophy,

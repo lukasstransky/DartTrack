@@ -111,7 +111,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
       appBar: _game!.getIsGameFinished
           ? CustomAppBarWithHeart(
               title: 'Statistics',
-              mode: 'X01',
+              mode: GameMode.X01,
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )

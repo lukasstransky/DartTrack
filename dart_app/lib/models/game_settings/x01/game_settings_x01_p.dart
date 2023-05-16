@@ -253,43 +253,6 @@ class GameSettingsX01_P extends GameSettings_P {
     return '(Sudden death - after max. ${getMaxExtraLegs.toString()} leg${getMaxExtraLegs > 1 ? 's' : ''})';
   }
 
-  String getGameMode() {
-    String result = '';
-
-    if (getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
-      result += 'Best of ';
-    } else {
-      result += 'First to ';
-    }
-
-    if (getSetsEnabled) {
-      if (getSets > 1) {
-        result += '${getSets.toString()} sets - ';
-      } else {
-        result += '${getSets.toString()} set - ';
-      }
-    }
-    if (getLegs > 1) {
-      result += '${getLegs.toString()} legs';
-    } else {
-      result += '${getLegs.toString()} leg';
-    }
-
-    return result;
-  }
-
-  Team findTeamForPlayer(
-      String playerNameToFind, GameSettingsX01_P gameSettingsX01) {
-    late Team result;
-    for (Team team in gameSettingsX01.getTeams) {
-      for (Player player in team.getPlayers) {
-        if (player.getName == playerNameToFind) result = team;
-      }
-    }
-
-    return result;
-  }
-
   switchSingleOrTeamMode() {
     if (getSingleOrTeam == SingleOrTeamEnum.Single) {
       setSingleOrTeam = SingleOrTeamEnum.Team;

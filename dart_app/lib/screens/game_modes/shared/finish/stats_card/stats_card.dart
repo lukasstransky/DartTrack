@@ -1,10 +1,13 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
+import 'package:dart_app/screens/game_modes/cricket/finish/local_widgets/player_entry_finish_c.dart';
 import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/player_entry_finish_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/local_widgets/game_mode_details.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/finish/local_widgets/player_entry_finish_sd_t.dart';
@@ -30,30 +33,114 @@ class StatsCard extends StatefulWidget {
 
 class _StatsCardState extends State<StatsCard> {
   bool _showAllPlayersOrTeams = false;
-  int _playersLength = 0;
-  List<PlayerOrTeamGameStats> _playerStats = [];
+  int _playersOrTeamsLength = 0;
+  List<PlayerOrTeamGameStats> _playerOrTeamStats = [];
 
   @override
   void initState() {
-    _playersLength = widget.game.getPlayerGameStatistics.length;
-    _playerStats = [...widget.game.getPlayerGameStatistics];
-    _playerStats.sort();
+    if (widget.game is GameCricket_P &&
+        widget.game.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      _playersOrTeamsLength = widget.game.getTeamGameStatistics.length;
+      _playerOrTeamStats = [...widget.game.getTeamGameStatistics];
+    } else {
+      _playersOrTeamsLength = widget.game.getPlayerGameStatistics.length;
+      _playerOrTeamStats = [...widget.game.getPlayerGameStatistics];
+    }
+    _playerOrTeamStats.sort();
 
     super.initState();
   }
 
-  _multipleWinners(int i) {
-    return (_playerStats[i] as PlayerGameStatsSingleDoubleTraining)
-            .getTotalPoints ==
-        (_playerStats[0] as PlayerGameStatsSingleDoubleTraining).getTotalPoints;
+  @override
+  Widget build(BuildContext context) {
+    final bool isDraw = _isDraw();
+
+    return Container(
+      padding: EdgeInsets.only(top: widget.isFinishScreen ? 10.h : 0),
+      child: GestureDetector(
+        onTap: () {
+          if (!widget.isFinishScreen) {
+            String route = '';
+            if (widget.game is GameSingleDoubleTraining_P) {
+              route = '/statisticsSingleDoubleTraining';
+            } else if (widget.game is GameScoreTraining_P) {
+              route = '/statisticsScoreTraining';
+            } else if (widget.game is GameCricket_P) {
+              route = '/statisticsCricket';
+            }
+
+            Navigator.pushNamed(context, route,
+                arguments: {'game': widget.game});
+          }
+        },
+        child: Container(
+          child: Card(
+            margin: EdgeInsets.zero,
+            color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
+            child: Column(
+              children: [
+                GameModeDetails(
+                  game: widget.game,
+                  isOpenGame: widget.isOpenGame,
+                  isDraw: isDraw,
+                ),
+                for (int i = 0; i < 2; i++) ...[
+                  if (i <= (_playersOrTeamsLength - 1))
+                    _getPlayerOrTeamEntry(i, isDraw),
+                  if (i == 0 && _playersOrTeamsLength != 1) ListDivider(),
+                ],
+                if (_showAllPlayersOrTeams) ...[
+                  for (int i = 2; i < _playersOrTeamsLength; i++) ...[
+                    ListDivider(),
+                    _getPlayerOrTeamEntry(i, isDraw),
+                  ],
+                ],
+                if (_playersOrTeamsLength > 2)
+                  Center(
+                    child: TextButton.icon(
+                      onPressed: () {
+                        setState(() {
+                          _showAllPlayersOrTeams = !_showAllPlayersOrTeams;
+                        });
+                      },
+                      icon: Icon(
+                        _showAllPlayersOrTeams
+                            ? Icons.expand_less
+                            : Icons.expand_more,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      label: Text(
+                        _showAllPlayersOrTeams
+                            ? 'Show less players'
+                            : 'Show all players',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
-  _getPlayerEntry(int i, bool isDraw) {
+  _multipleWinners(int i) {
+    return (_playerOrTeamStats[i] as PlayerGameStatsSingleDoubleTraining)
+            .getTotalPoints ==
+        (_playerOrTeamStats[0] as PlayerGameStatsSingleDoubleTraining)
+            .getTotalPoints;
+  }
+
+  _getPlayerOrTeamEntry(int i, bool isDraw) {
     if (widget.game is GameSingleDoubleTraining_P) {
       return PlayerEntryFinishSingleDoubleTraining(
         i: _multipleWinners(i) ? 0 : i,
         game: widget.game as GameSingleDoubleTraining_P,
-        playerStats: _playerStats[i] as PlayerGameStatsSingleDoubleTraining,
+        playerStats:
+            _playerOrTeamStats[i] as PlayerGameStatsSingleDoubleTraining,
         isOpenGame: widget.isOpenGame,
         isDraw: isDraw,
       );
@@ -61,9 +148,16 @@ class _StatsCardState extends State<StatsCard> {
       return PlayerEntryFinishScoreTraining(
         i: i,
         game: widget.game as GameScoreTraining_P,
-        playerStats: _playerStats[i] as PlayerGameStatsScoreTraining,
+        playerStats: _playerOrTeamStats[i] as PlayerGameStatsScoreTraining,
         isOpenGame: widget.isOpenGame,
         isDraw: isDraw,
+      );
+    } else if (widget.game is GameCricket_P) {
+      return PlayerOrTeamEntryFinishCricket(
+        i: i,
+        game: widget.game as GameCricket_P,
+        stats: _playerOrTeamStats[i] as PlayerOrTeamGameStatsCricket,
+        isOpenGame: widget.isOpenGame,
       );
     }
   }
@@ -105,78 +199,6 @@ class _StatsCardState extends State<StatsCard> {
     }
 
     return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isDraw = _isDraw();
-
-    return Container(
-      padding: EdgeInsets.only(top: widget.isFinishScreen ? 10.h : 0),
-      child: GestureDetector(
-        onTap: () {
-          if (!widget.isFinishScreen) {
-            String route = '';
-            if (widget.game is GameSingleDoubleTraining_P) {
-              route = '/statisticsSingleDoubleTraining';
-            } else if (widget.game is GameScoreTraining_P) {
-              route = '/statisticsScoreTraining';
-            }
-            Navigator.pushNamed(context, route,
-                arguments: {'game': widget.game});
-          }
-        },
-        child: Container(
-          child: Card(
-            margin: EdgeInsets.zero,
-            color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
-            child: Column(
-              children: [
-                GameModeDetails(
-                  game: widget.game,
-                  isOpenGame: widget.isOpenGame,
-                  isDraw: isDraw,
-                ),
-                for (int i = 0; i < 2; i++) ...[
-                  if (i <= (_playersLength - 1)) _getPlayerEntry(i, isDraw),
-                  if (i == 0 && _playersLength != 1) ListDivider(),
-                ],
-                if (_showAllPlayersOrTeams) ...[
-                  for (int i = 2; i < _playersLength; i++) ...[
-                    ListDivider(),
-                    _getPlayerEntry(i, isDraw),
-                  ],
-                ],
-                if (_playersLength > 2)
-                  Center(
-                    child: TextButton.icon(
-                      onPressed: () {
-                        setState(() {
-                          _showAllPlayersOrTeams = !_showAllPlayersOrTeams;
-                        });
-                      },
-                      icon: Icon(
-                        _showAllPlayersOrTeams
-                            ? Icons.expand_less
-                            : Icons.expand_more,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      label: Text(
-                        _showAllPlayersOrTeams
-                            ? 'Show less players'
-                            : 'Show all players',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
 

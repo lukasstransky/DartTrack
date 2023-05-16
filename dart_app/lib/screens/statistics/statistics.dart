@@ -60,9 +60,8 @@ class _StatisticsState extends State<Statistics> {
   }
 
   _getGames() async {
-    await context
-        .read<FirestoreServiceGames>()
-        .getGames('X01', context, context.read<FirestoreServicePlayerStats>());
+    await context.read<FirestoreServiceGames>().getGames(
+        GameMode.X01, context, context.read<FirestoreServicePlayerStats>());
   }
 
   _showDialogWhenLoggedInAsGuest() {

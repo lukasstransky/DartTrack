@@ -4,7 +4,7 @@ import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_statistics/local_widgets/game_stats_score_training/main_stats_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/most_frequent_scores.dart';
-import 'package:dart_app/screens/game_modes/shared/game_stats/player_names.dart';
+import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_even.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_odd.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
@@ -55,7 +55,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
       appBar: _game!.getIsGameFinished
           ? CustomAppBarWithHeart(
               title: 'Statistics',
-              mode: 'Score training',
+              mode: GameMode.ScoreTraining,
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )
@@ -77,7 +77,10 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(top: 0.5.h),
+              padding: EdgeInsets.only(
+                top: 0.5.h,
+                bottom: 2.h,
+              ),
               child: Text(
                 _game!.getFormattedDateTime(),
                 style: TextStyle(
@@ -92,7 +95,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  PlayerNames(game: _game!),
+                  PlayerOrTeamNames(game: _game!),
                   MainStatsScoreTraining(
                       gameScoreTraining_P: _game as GameScoreTraining_P),
                   Container(
