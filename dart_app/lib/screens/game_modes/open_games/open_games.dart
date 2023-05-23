@@ -10,6 +10,8 @@ import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
+import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -137,6 +139,23 @@ class _OpenGamesState extends State<OpenGames> {
     }
 
     game.setCurrentThreeDarts = openGame.getCurrentThreeDarts;
+    // in order to have same references (hash code) for team
+    if ((game is GameCricket_P || game is GameX01_P) &&
+        game.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      for (PlayerOrTeamGameStatsCricket stats
+          in openGame.getPlayerGameStatistics) {
+        final Team team =
+            game.getGameSettings.findTeamForPlayer(stats.getPlayer.getName);
+        stats.setTeam = team;
+
+        for (PlayerOrTeamGameStatsCricket teamStats
+            in openGame.getTeamGameStatistics) {
+          if (teamStats.getTeam.getName == team.getName) {
+            teamStats.setTeam = team;
+          }
+        }
+      }
+    }
     game.setPlayerGameStatistics = openGame.getPlayerGameStatistics;
     game.setDateTime = openGame.getDateTime;
     game.setGameId = openGame.getGameId;

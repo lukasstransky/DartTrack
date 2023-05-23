@@ -19,18 +19,27 @@ class StatisticsBtn extends StatelessWidget {
 
   _statisticsBtnClicked(BuildContext context) {
     if (gameMode == GameMode.X01) {
-      Navigator.of(context).pushNamed('/statisticsX01',
-          arguments: {'game': context.read<GameX01_P>()});
+      Navigator.of(context).pushNamed('/statisticsX01', arguments: {
+        'game': context.read<GameX01_P>(),
+        'showSimpleAppBar': true
+      });
     } else if (gameMode == GameMode.ScoreTraining) {
-      Navigator.of(context).pushNamed('/statisticsScoreTraining',
-          arguments: {'game': context.read<GameScoreTraining_P>()});
+      Navigator.of(context).pushNamed('/statisticsScoreTraining', arguments: {
+        'game': context.read<GameScoreTraining_P>(),
+        'showSimpleAppBar': true
+      });
     } else if (gameMode == GameMode.SingleTraining ||
         gameMode == GameMode.DoubleTraining) {
       Navigator.of(context).pushNamed('/statisticsSingleDoubleTraining',
-          arguments: {'game': context.read<GameSingleDoubleTraining_P>()});
+          arguments: {
+            'game': context.read<GameSingleDoubleTraining_P>(),
+            'showSimpleAppBar': true
+          });
     } else if (gameMode == GameMode.Cricket) {
-      Navigator.of(context).pushNamed('/statisticsCricket',
-          arguments: {'game': context.read<GameCricket_P>()});
+      Navigator.of(context).pushNamed('/statisticsCricket', arguments: {
+        'game': context.read<GameCricket_P>(),
+        'showSimpleAppBar': true
+      });
     }
   }
 

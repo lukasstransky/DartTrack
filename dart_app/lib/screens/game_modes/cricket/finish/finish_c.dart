@@ -73,8 +73,6 @@ class _FinishCricketState extends State<FinishCricket> {
       g_gameId = await context
           .read<FirestoreServiceGames>()
           .postGame(game, context.read<OpenGamesFirestore>());
-      game.getPlayerGameStatistics.sort();
-      game.getTeamGameStatistics.sort();
       game.setIsGameFinished = true;
       await context
           .read<FirestoreServicePlayerStats>()

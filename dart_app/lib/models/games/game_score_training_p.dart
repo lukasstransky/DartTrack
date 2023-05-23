@@ -294,6 +294,11 @@ class GameScoreTraining_P extends Game_P {
     setCurrentPointType = PointType.Single;
 
     setGameId = '';
+    setName = '';
+    setDateTime = DateTime.now();
+    if (getGameSettings != null) {
+      getGameSettings.reset();
+    }
     setGameSettings = null;
     setPlayerGameStatistics = [];
     setCurrentPlayerToThrow = null;

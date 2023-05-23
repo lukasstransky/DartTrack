@@ -63,15 +63,17 @@ class PointBtnRoundX01 extends StatelessWidget {
 
   _getBorder(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+    final GameSettingsX01_P gameSettingsX01_P =
+        context.read<GameSettingsX01_P>();
 
-    if (gameX01.getGameSettings.getShowMostScoredPoints &&
-        gameX01.getGameSettings.getMostScoredPoints.isNotEmpty &&
+    if (gameSettingsX01_P.getShowMostScoredPoints &&
+        gameSettingsX01_P.getMostScoredPoints.isNotEmpty &&
         this.mostScoredPointBtn as bool) {
       return Border(
         left: [
-          gameX01.getGameSettings.getMostScoredPoints[1],
-          gameX01.getGameSettings.getMostScoredPoints[3],
-          gameX01.getGameSettings.getMostScoredPoints[5],
+          gameSettingsX01_P.getMostScoredPoints[1],
+          gameSettingsX01_P.getMostScoredPoints[3],
+          gameSettingsX01_P.getMostScoredPoints[5],
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
@@ -79,9 +81,9 @@ class PointBtnRoundX01 extends StatelessWidget {
               )
             : BorderSide.none,
         right: [
-          gameX01.getGameSettings.getMostScoredPoints[0],
-          gameX01.getGameSettings.getMostScoredPoints[2],
-          gameX01.getGameSettings.getMostScoredPoints[4],
+          gameSettingsX01_P.getMostScoredPoints[0],
+          gameSettingsX01_P.getMostScoredPoints[2],
+          gameSettingsX01_P.getMostScoredPoints[4],
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
@@ -89,12 +91,12 @@ class PointBtnRoundX01 extends StatelessWidget {
               )
             : BorderSide.none,
         bottom: [
-          gameX01.getGameSettings.getMostScoredPoints[0],
-          gameX01.getGameSettings.getMostScoredPoints[1],
-          gameX01.getGameSettings.getMostScoredPoints[2],
-          gameX01.getGameSettings.getMostScoredPoints[3],
-          gameX01.getGameSettings.getMostScoredPoints[4],
-          gameX01.getGameSettings.getMostScoredPoints[5],
+          gameSettingsX01_P.getMostScoredPoints[0],
+          gameSettingsX01_P.getMostScoredPoints[1],
+          gameSettingsX01_P.getMostScoredPoints[2],
+          gameSettingsX01_P.getMostScoredPoints[3],
+          gameSettingsX01_P.getMostScoredPoints[4],
+          gameSettingsX01_P.getMostScoredPoints[5],
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
@@ -102,8 +104,8 @@ class PointBtnRoundX01 extends StatelessWidget {
               )
             : BorderSide.none,
         top: [
-          gameX01.getGameSettings.getMostScoredPoints[0],
-          gameX01.getGameSettings.getMostScoredPoints[1],
+          gameSettingsX01_P.getMostScoredPoints[0],
+          gameSettingsX01_P.getMostScoredPoints[1],
         ].contains(point)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),

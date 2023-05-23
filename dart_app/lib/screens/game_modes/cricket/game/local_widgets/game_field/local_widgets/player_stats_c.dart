@@ -91,6 +91,28 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (_gameSettingsCricket.getSetsEnabled)
+                      Row(
+                        children: [
+                          Container(
+                            width: _width.w,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'Sets:',
+                                style: _textStyle,
+                              ),
+                            ),
+                          ),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${playerOrTeamGameStatistics[i].getSetsWon.toString()}',
+                              style: _textStyle,
+                            ),
+                          ),
+                        ],
+                      ),
                     if (_gameSettingsCricket.getSetsEnabled ||
                         _gameSettingsCricket.getLegs > 1)
                       Row(
@@ -109,28 +131,6 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
                             fit: BoxFit.scaleDown,
                             child: Text(
                               '${playerOrTeamGameStatistics[i].getLegsWon.toString()}',
-                              style: _textStyle,
-                            ),
-                          ),
-                        ],
-                      ),
-                    if (_gameSettingsCricket.getSetsEnabled)
-                      Row(
-                        children: [
-                          Container(
-                            width: _width.w,
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              child: Text(
-                                'Sets:',
-                                style: _textStyle,
-                              ),
-                            ),
-                          ),
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              '${playerOrTeamGameStatistics[i].getSetsWon.toString()}',
                               style: _textStyle,
                             ),
                           ),

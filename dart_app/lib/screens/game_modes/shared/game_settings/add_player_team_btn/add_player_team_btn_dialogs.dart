@@ -336,6 +336,7 @@ class AddPlayerTeamBtnDialogs {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     TextFormField(
+                      autofocus: true,
                       controller:
                           newTextControllerForAddingNewTeamInGameSettingsX01(),
                       textInputAction: TextInputAction.done,
@@ -513,28 +514,34 @@ class AddPlayerTeamBtnDialogs {
                         unselectedWidgetColor:
                             Utils.getPrimaryColorDarken(context),
                       ),
-                      child: RadioListTile(
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        title: Container(
-                          transform: Matrix4.translationValues(
-                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: Text(
-                            'Team',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                      child: Theme(
+                        data: ThemeData(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                         ),
-                        value: 'team',
-                        groupValue: teamOrPlayer,
-                        onChanged: (String? value) {
-                          setState(() => teamOrPlayer = value);
-                        },
+                        child: RadioListTile(
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          title: Container(
+                            transform: Matrix4.translationValues(
+                                DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                            child: Text(
+                              'Team',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          value: 'team',
+                          groupValue: teamOrPlayer,
+                          onChanged: (String? value) {
+                            setState(() => teamOrPlayer = value);
+                          },
+                        ),
                       ),
                     ),
                   if (gameSettings.getTeams.length > 0)
                     Theme(
-                      data: Theme.of(context).copyWith(
-                        unselectedWidgetColor:
-                            Utils.getPrimaryColorDarken(context),
+                      data: ThemeData(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                       ),
                       child: RadioListTile(
                         activeColor: Theme.of(context).colorScheme.secondary,
@@ -670,9 +677,9 @@ class AddPlayerTeamBtnDialogs {
 
                         if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM) {
                           return Theme(
-                            data: Theme.of(context).copyWith(
-                              unselectedWidgetColor:
-                                  Utils.getPrimaryColorDarken(context),
+                            data: ThemeData(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
                             ),
                             child: RadioListTile(
                               activeColor:
@@ -788,6 +795,7 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: true,
       controller: newPlayerController,
       textInputAction: TextInputAction.done,
       validator: (value) {

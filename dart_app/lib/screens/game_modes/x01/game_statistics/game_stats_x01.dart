@@ -29,6 +29,7 @@ class GameStatisticsX01 extends StatefulWidget {
 class _GameStatisticsX01State extends State<GameStatisticsX01> {
   GameX01_P? _game;
   bool _roundedScoresOdd = false;
+  bool _showSimpleAppBar = false;
 
   @override
   didChangeDependencies() {
@@ -37,7 +38,11 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
         <String, dynamic>{}) as Map;
 
     if (arguments.isNotEmpty) {
-      _game = arguments['game'];
+      if (arguments.containsKey('game')) {
+        _game = arguments['game'];
+      }
+      if (arguments.containsKey('showSimpleAppBar'))
+        _showSimpleAppBar = arguments['showSimpleAppBar'];
     }
   }
 
@@ -108,7 +113,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
     final EdgeInsets _paddingOnlyLeft = EdgeInsets.only(left: 5.w);
 
     return Scaffold(
-      appBar: _game!.getIsGameFinished
+      appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
               title: 'Statistics',
               mode: GameMode.X01,

@@ -153,6 +153,12 @@ class GameX01_P extends Game_P {
     setBotSubmittedPoints = false;
 
     setGameId = '';
+    setName = '';
+    setDateTime = DateTime.now();
+    if (getGameSettings != null) {
+      getGameSettings.reset();
+    }
+    setGameSettings = null;
     setPlayerGameStatistics = [];
     setTeamGameStatistics = [];
     setCurrentPlayerToThrow = null;
@@ -163,7 +169,6 @@ class GameX01_P extends Game_P {
     setRevertPossible = false;
     setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
     setShowLoadingSpinner = false;
-    setDateTime = DateTime.now();
 
     g_average = '-';
     g_last_throw = '-';

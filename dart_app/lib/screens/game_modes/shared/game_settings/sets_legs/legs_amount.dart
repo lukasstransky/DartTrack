@@ -12,32 +12,11 @@ class LegsAmount extends StatelessWidget {
 
   final dynamic gameSettings;
 
-  _subtractBtnPressed() {
-    if (gameSettings.getLegs <= MIN_LEGS) {
-      return;
-    }
-
-    //when draw mode is enabled -> prevent from legs being 0
-    if (gameSettings is GameSettingsX01_P &&
-        gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
-        gameSettings.getDrawMode &&
-        gameSettings.getLegs == (MIN_LEGS + 1)) {
-      return;
-    }
-
-    if (gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
-      gameSettings.setLegs = gameSettings.getLegs - 2;
-    } else {
-      gameSettings.setLegs = gameSettings.getLegs - 1;
-    }
-
-    if (gameSettings is GameSettingsX01_P && gameSettings.getLegs == MIN_LEGS) {
-      gameSettings.setWinByTwoLegsDifference = false;
-      gameSettings.setSuddenDeath = false;
-      gameSettings.setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
-    }
-
-    gameSettings.notify();
+  _shouldShowAddBtn() {
+    return gameSettings.getLegs == MAX_LEGS ||
+        gameSettings.getLegs == (MAX_LEGS - 1) &&
+            gameSettings is GameSettingsX01_P &&
+            gameSettings.getDrawMode;
   }
 
   _addBtnPressed() {
@@ -63,16 +42,49 @@ class LegsAmount extends StatelessWidget {
 
   _shouldShowSubtractBtn() {
     return gameSettings.getLegs == MIN_LEGS ||
-        gameSettings.getLegs == (MIN_LEGS + 1) &&
+        (gameSettings.getSetsEnabled &&
+            gameSettings.getLegs == MIN_LEGS_SETS_ENABLED_FIRST_TO &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo) ||
+        (gameSettings.getSetsEnabled &&
+            gameSettings.getLegs == MIN_LEGS_SETS_ENABLED_BEST_OF &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) ||
+        (gameSettings.getLegs == (MIN_LEGS + 1) &&
             gameSettings is GameSettingsX01_P &&
-            gameSettings.getDrawMode;
+            gameSettings.getDrawMode);
   }
 
-  _shouldShowAddBtn() {
-    return gameSettings.getLegs == MAX_LEGS ||
-        gameSettings.getLegs == (MAX_LEGS - 1) &&
-            gameSettings is GameSettingsX01_P &&
-            gameSettings.getDrawMode;
+  _subtractBtnPressed() {
+    if (gameSettings.getLegs <= MIN_LEGS ||
+        (gameSettings.getSetsEnabled &&
+            gameSettings.getLegs <= MIN_LEGS_SETS_ENABLED_BEST_OF &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) ||
+        (gameSettings.getSetsEnabled &&
+            gameSettings.getLegs <= MIN_LEGS_SETS_ENABLED_FIRST_TO &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo)) {
+      return;
+    }
+
+    //when draw mode is enabled -> prevent from legs being 0
+    if (gameSettings is GameSettingsX01_P &&
+        gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+        gameSettings.getDrawMode &&
+        gameSettings.getLegs == (MIN_LEGS + 1)) {
+      return;
+    }
+
+    if (gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
+      gameSettings.setLegs = gameSettings.getLegs - 2;
+    } else {
+      gameSettings.setLegs = gameSettings.getLegs - 1;
+    }
+
+    if (gameSettings is GameSettingsX01_P && gameSettings.getLegs == MIN_LEGS) {
+      gameSettings.setWinByTwoLegsDifference = false;
+      gameSettings.setSuddenDeath = false;
+      gameSettings.setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
+    }
+
+    gameSettings.notify();
   }
 
   @override

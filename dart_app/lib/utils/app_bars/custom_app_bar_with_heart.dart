@@ -45,9 +45,12 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
       final dynamic statsFirestore =
           Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
 
-      widget.isFavouriteGame = statsFirestore.games
-          .firstWhere((game) => game.getGameId == widget.gameId)
-          .getIsFavouriteGame;
+      for (dynamic game in statsFirestore.games) {
+        if (game.getGameId == widget.gameId) {
+          widget.isFavouriteGame = game.getIsFavouriteGame;
+          break;
+        }
+      }
     }
   }
 

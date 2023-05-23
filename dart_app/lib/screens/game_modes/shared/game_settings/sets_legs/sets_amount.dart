@@ -12,27 +12,6 @@ class SetsAmount extends StatelessWidget {
 
   final dynamic gameSettings;
 
-  _subtractBtnPressed() {
-    if (gameSettings.getSets <= MIN_SETS) {
-      return;
-    }
-
-    //when draw mode is enabled -> prevent from sets being 0
-    if (gameSettings is GameSettingsX01_P &&
-        gameSettings.getDrawMode &&
-        gameSettings.getSets == (MIN_SETS + 1)) {
-      return;
-    }
-
-    if (gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
-      gameSettings.setSets = gameSettings.getSets - 2;
-    } else {
-      gameSettings.setSets = gameSettings.getSets - 1;
-    }
-
-    gameSettings.notify();
-  }
-
   _addBtnPressed() {
     if (gameSettings.getSets >= MAX_SETS) {
       return;
@@ -54,18 +33,45 @@ class SetsAmount extends StatelessWidget {
     gameSettings.notify();
   }
 
-  _shouldShowSubtractBtnGrey() {
-    return gameSettings.getSets == MIN_SETS ||
-        gameSettings.getSets == (MIN_SETS + 1) &&
+  _shouldShowAddBtn() {
+    return gameSettings.getSets == MAX_SETS ||
+        (gameSettings.getSets == (MAX_SETS - 1) &&
             gameSettings is GameSettingsX01_P &&
-            gameSettings.getDrawMode;
+            gameSettings.getDrawMode);
   }
 
-  _shouldShowAddBtnGrey() {
-    return gameSettings.getSets == MAX_SETS ||
-        gameSettings.getSets == (MAX_SETS - 1) &&
+  _shouldShowSubtractBtn() {
+    return (gameSettings.getSets == MIN_SETS_BEST_OF &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) ||
+        (gameSettings.getSets == MIN_SETS_FIRST_TO &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo) ||
+        (gameSettings.getSets == (MIN_SETS + 1) &&
             gameSettings is GameSettingsX01_P &&
-            gameSettings.getDrawMode;
+            gameSettings.getDrawMode);
+  }
+
+  _subtractBtnPressed() {
+    if ((gameSettings.getSets <= MIN_SETS_BEST_OF &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) ||
+        (gameSettings.getSets <= MIN_SETS_FIRST_TO &&
+            gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo)) {
+      return;
+    }
+
+    //when draw mode is enabled -> prevent from sets being 0
+    if (gameSettings is GameSettingsX01_P &&
+        gameSettings.getDrawMode &&
+        gameSettings.getSets == (MIN_SETS + 1)) {
+      return;
+    }
+
+    if (gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) {
+      gameSettings.setSets = gameSettings.getSets - 2;
+    } else {
+      gameSettings.setSets = gameSettings.getSets - 1;
+    }
+
+    gameSettings.notify();
   }
 
   @override
@@ -91,7 +97,7 @@ class SetsAmount extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
                 icon: Icon(Icons.remove,
-                    color: _shouldShowSubtractBtnGrey()
+                    color: _shouldShowSubtractBtn()
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.secondary),
               ),
@@ -112,7 +118,7 @@ class SetsAmount extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
                 icon: Icon(Icons.add,
-                    color: _shouldShowAddBtnGrey()
+                    color: _shouldShowAddBtn()
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.secondary),
               ),

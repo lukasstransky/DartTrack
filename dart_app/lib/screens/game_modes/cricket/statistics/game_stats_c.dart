@@ -24,6 +24,7 @@ class StatisticsCricket extends StatefulWidget {
 
 class _StatisticsCricketState extends State<StatisticsCricket> {
   GameCricket_P? _game;
+  bool _showSimpleAppBar = false;
 
   @override
   didChangeDependencies() {
@@ -32,14 +33,18 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
         <String, dynamic>{}) as Map;
 
     if (arguments.isNotEmpty) {
-      _game = arguments['game'];
+      if (arguments.containsKey('game')) {
+        _game = arguments['game'];
+      }
+      if (arguments.containsKey('showSimpleAppBar'))
+        _showSimpleAppBar = arguments['showSimpleAppBar'];
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _game!.getIsGameFinished
+      appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
               title: 'Statistics',
               mode: GameMode.Cricket,

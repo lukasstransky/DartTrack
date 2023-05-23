@@ -29,10 +29,11 @@ class LegBeginnerDartAsset extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isGameX01 = game is GameX01_P;
+
     return Container(
-      height: isGameX01 ? 6.h : 4.h,
+      height: isGameX01 ? 6.h : 5.h,
       alignment: Alignment.topLeft,
-      transform: Matrix4.translationValues(0.0, isGameX01 ? 0 : -1.0.h, 0.0),
+      transform: Matrix4.translationValues(0.0, isGameX01 ? 0 : -1.5.h, 0.0),
       padding: EdgeInsets.only(left: isGameX01 ? 2.w : 0),
       child: _showLegBeginnerDartAsset(context)
           ? Image.asset(

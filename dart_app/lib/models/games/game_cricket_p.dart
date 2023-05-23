@@ -180,6 +180,12 @@ class GameCricket_P extends Game_P {
     setLegSetWithPlayerOrTeamWhoFinishedIt = [];
 
     setGameId = '';
+    setName = '';
+    setDateTime = DateTime.now();
+    if (getGameSettings != null) {
+      getGameSettings.reset();
+    }
+    setGameSettings = null;
     setPlayerGameStatistics = [];
     setTeamGameStatistics = [];
     setCurrentPlayerToThrow = null;
@@ -190,7 +196,6 @@ class GameCricket_P extends Game_P {
     setRevertPossible = false;
     setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
     setShowLoadingSpinner = false;
-    setDateTime = DateTime.now();
   }
 
   PlayerOrTeamGameStatsCricket getCurrentPlayerGameStats() {
@@ -558,6 +563,16 @@ class GameCricket_P extends Game_P {
               .getScoresOfNumbers[thrownDartToRevertWithoutPointTypeParsed]! -
           numberScoreToSubtract;
 
+      if (shouldRevertTeamStats) {
+        for (PlayerOrTeamGameStatsCricket playerStats
+            in getPlayerGameStatistics) {
+          if (playerStats.getTeam.getName == currentStats.getTeam.getName) {
+            playerStats.setScoresOfNumbers =
+                Map.from(currentStats.getScoresOfNumbers);
+          }
+        }
+      }
+
       // revert total marks
       currentStats.setTotalMarks =
           currentStats.getTotalMarks - numberScoreToSubtract;
@@ -756,21 +771,31 @@ class GameCricket_P extends Game_P {
       // set score of number
       final int newScoreOfNumber = numberScore + scoreToAdd;
       currentStats.getScoresOfNumbers[scoredFieldParsed] = newScoreOfNumber;
+      // update score of numbers for all players in team -> proper update points for players from team
+      if (shouldSubmitTeamStats) {
+        for (PlayerOrTeamGameStatsCricket playerStats
+            in getPlayerGameStatistics) {
+          if (playerStats.getTeam.getName == currentStats.getTeam.getName) {
+            playerStats.setScoresOfNumbers =
+                Map.from(currentStats.getScoresOfNumbers);
+          }
+        }
+      }
 
       // set total marks
       currentStats.setTotalMarks = currentStats.getTotalMarks + scoreToAdd;
 
       if ([0, 1, 2].contains(numberScore)) {
-        if (_scoreNumberOpen(
-                scoredFieldParsed, settings.getMode, currentStats) &&
+        if (_scoreNumberOpen(scoredFieldParsed, settings.getMode, currentStats,
+                shouldSubmitTeamStats) &&
             (newScoreOfNumber == 4 || newScoreOfNumber == 5)) {
           final int scoredPoints =
               newScoreOfNumber == 4 ? scoredFieldParsed : 2 * scoredFieldParsed;
           _updatePointsBasedOnMode(settings, currentStats, scoredPoints,
               scoredFieldParsed, shouldSubmitTeamStats);
         }
-      } else if (_scoreNumberOpen(
-          scoredFieldParsed, settings.getMode, currentStats)) {
+      } else if (_scoreNumberOpen(scoredFieldParsed, settings.getMode,
+          currentStats, shouldSubmitTeamStats)) {
         final int scoredPoints =
             int.parse(UtilsPointBtnsThreeDarts.calculatePoints(
           scoredField,
@@ -813,7 +838,10 @@ class GameCricket_P extends Game_P {
   }
 
   bool _scoreNumberOpen(int scoredField, CricketMode cricketMode,
-      PlayerOrTeamGameStatsCricket currentStats) {
+      PlayerOrTeamGameStatsCricket currentStats, bool shouldSubmitTeamStats) {
+    final bool isTeamMode =
+        this.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team;
+
     if (cricketMode == CricketMode.NoScore) {
       return false;
     }
@@ -822,9 +850,19 @@ class GameCricket_P extends Game_P {
       return false;
     }
 
-    for (PlayerOrTeamGameStatsCricket stats in Utils.getPlayersOrTeamStatsList(
-        this, this.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team)) {
-      if (stats != currentStats) {
+    PlayerOrTeamGameStatsCricket statsToCompare = currentStats;
+    // for team mode when submitting player points -> to not compare current player stats with the team stats
+    if (!shouldSubmitTeamStats && isTeamMode) {
+      for (PlayerOrTeamGameStatsCricket teamStats in getTeamGameStatistics) {
+        if (teamStats.getTeam.getName == currentStats.getTeam.getName) {
+          statsToCompare = teamStats;
+        }
+      }
+    }
+
+    for (PlayerOrTeamGameStatsCricket stats
+        in Utils.getPlayersOrTeamStatsList(this, isTeamMode)) {
+      if (stats != statsToCompare) {
         final int? numberScore = stats.getScoresOfNumbers[scoredField];
         if (numberScore != null && numberScore < 3) {
           return true;

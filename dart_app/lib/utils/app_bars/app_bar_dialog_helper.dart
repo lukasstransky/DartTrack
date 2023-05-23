@@ -110,19 +110,12 @@ class _CricketDialogState extends State<CricketDialog> {
                           ),
                           SizedBox(height: 1.h),
                           Text(
-                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye.',
+                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye. \nIn standard mode, the player with the highest score wins, but it is also possible to play two additional modes (Cut throat, No score), which are also explained here.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12.sp,
                             ),
                           ),
-                          Text(
-                            'In standard mode, the player with the highest score wins, but it is also possible to play two additional modes (Cut throat, No score), which are also explained here.',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 12.sp,
-                            ),
-                          )
                         ],
                       ),
                     ),
@@ -141,10 +134,8 @@ class _CricketDialogState extends State<CricketDialog> {
                           ),
                           SizedBox(height: 1.h),
                           Text(
-                            'In order to score points, a number has to be "opened". The first player who hits a number three times using any combination of singles (= 1), doubles (= 2), or triples (= 3) has opened the number and any additional hits will score points equal to the number hit.',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
+                            'In order to score points, a number has to be "opened". A player opens a number by hitting it three times with any combination of singles, doubles, or triples. \nOnce open, further hits on the number score points equal to it\'s value, until it\'s closed.',
+                            style: TextStyle(color: Colors.white),
                           ),
                         ],
                       ),

@@ -129,9 +129,9 @@ class UtilsDialogs {
                     final player = players[index];
 
                     return Theme(
-                      data: Theme.of(context).copyWith(
-                        unselectedWidgetColor:
-                            Utils.getPrimaryColorDarken(context),
+                      data: ThemeData(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                       ),
                       child: RadioListTile(
                         activeColor: Theme.of(context).colorScheme.secondary,
@@ -186,22 +186,29 @@ class UtilsDialogs {
                 itemBuilder: (BuildContext context, int index) {
                   final team = teams[index];
 
-                  return RadioListTile(
-                    title: Container(
-                      transform: Matrix4.translationValues(
-                          DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                      child: Text(
-                        team.getName,
-                        style: TextStyle(
-                          color: Colors.white,
+                  return Theme(
+                    data: ThemeData(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: RadioListTile(
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      title: Container(
+                        transform: Matrix4.translationValues(
+                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                        child: Text(
+                          team.getName,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
+                      value: team,
+                      groupValue: selectedTeam,
+                      onChanged: (Team? value) {
+                        setState(() => selectedTeam = value);
+                      },
                     ),
-                    value: team,
-                    groupValue: selectedTeam,
-                    onChanged: (Team? value) {
-                      setState(() => selectedTeam = value);
-                    },
                   );
                 },
               ),

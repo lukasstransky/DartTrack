@@ -19,9 +19,11 @@ class GameFieldCricket extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameCricket_P _gameCricket = context.read<GameCricket_P>();
+    final GameSettingsCricket_P _gameSettingsCricket =
+        context.read<GameSettingsCricket_P>();
     final _playerOrTeamGameStatistics = Utils.getPlayersOrTeamStatsList(
         _gameCricket,
-        _gameCricket.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team);
+        _gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Team);
     final int _halfLength = _playerOrTeamGameStatistics.length ~/ 2;
     final bool _evenPlayersOrTeams =
         _playerOrTeamGameStatistics.length % 2 == 0;
@@ -39,7 +41,7 @@ class GameFieldCricket extends StatelessWidget {
             playerOrTeamGameStatistics: _playerOrTeamGameStatistics,
           ),
           Container(
-            height: _getHeight(_gameCricket.getGameSettings),
+            height: _getHeight(_gameSettingsCricket),
             child: Row(
               children: [
                 if (!_evenPlayersOrTeams) FieldsToHit(oddPlayersOrTeams: true),

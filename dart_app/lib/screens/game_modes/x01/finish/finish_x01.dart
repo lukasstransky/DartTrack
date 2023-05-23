@@ -47,8 +47,6 @@ class _FinishX01State extends State<FinishX01> {
     if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
       g_gameId =
           await firestoreServiceGames.postGame(gameX01, openGamesFirestore);
-      gameX01.getPlayerGameStatistics.sort();
-      gameX01.getTeamGameStatistics.sort();
       gameX01.setIsGameFinished = true;
       await context
           .read<FirestoreServicePlayerStats>()

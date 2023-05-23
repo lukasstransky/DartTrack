@@ -88,32 +88,17 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (!_isNoScoreMode) ...[
-                      Row(
-                        children: [
-                          Flexible(
-                            flex: 5,
-                            child: LegBeginnerDartAsset(
-                              playerOrTeamStats: playerOrTeamGameStatistics[i],
-                              game: gameCricket,
-                              gameSettings: gameSettingsCricket,
-                            ),
+                      Container(
+                        padding: EdgeInsets.only(bottom: 0.5.h),
+                        child: Text(
+                          playerOrTeamGameStatistics[i]
+                              .getCurrentPoints
+                              .toString(),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.sp,
                           ),
-                          Flexible(
-                            flex: 6,
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                playerOrTeamGameStatistics[i]
-                                    .getCurrentPoints
-                                    .toString(),
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16.sp,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                       PlayerOrTeamName(
                         isNoScoreMode: _isNoScoreMode,
@@ -242,6 +227,7 @@ class PlayerOrTeamName extends StatelessWidget {
     }
 
     return Container(
+      padding: EdgeInsets.only(left: 0.5.h, right: 0.5.h),
       transform:
           isNoScoreMode ? null : Matrix4.translationValues(0.0, -0.5.h, 0.0),
       child: FittedBox(

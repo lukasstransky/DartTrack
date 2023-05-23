@@ -174,6 +174,11 @@ class GameSingleDoubleTraining_P extends Game_P {
     setCanBePressed = true;
 
     setGameId = '';
+    setName = '';
+    setDateTime = DateTime.now();
+    if (getGameSettings != null) {
+      getGameSettings.reset();
+    }
     setGameSettings = null;
     setPlayerGameStatistics = [];
     setCurrentPlayerToThrow = null;

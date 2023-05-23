@@ -413,55 +413,6 @@ class GameSettings_P with ChangeNotifier {
     return false;
   }
 
-  void checkTeamNamingIds(Team team) {
-    final List<String> parts = team.getName.split(' ');
-
-    if (parts.length == 1) {
-      return;
-    }
-
-    final String teamNameNumber = parts[1];
-    if (!team.getName.startsWith('Team ') ||
-        int.tryParse(teamNameNumber) == null) {
-      return;
-    }
-
-    int teamNamingId = int.parse(teamNameNumber);
-    getTeamNamingIds.remove(teamNamingId);
-
-    if (getTeamNamingIds.isEmpty || getTeamNamingIds.last == teamNamingId) {
-      return;
-    }
-
-    int idCounter = 1;
-    for (teamNamingId in getTeamNamingIds) {
-      if (teamNamingId != idCounter) {
-        final int index = getTeamNamingIds.indexOf(teamNamingId);
-        getTeamNamingIds[index] = idCounter;
-        _setNewTeamNamingId(teamNamingId, idCounter);
-      }
-      idCounter++;
-    }
-
-    notifyListeners();
-  }
-
-  void _setNewTeamNamingId(int currentTeamNamingId, int newTeamNamingId) {
-    for (Team team in getTeams) {
-      final int teamNamingId =
-          int.parse(team.getName.substring(team.getName.length - 1));
-
-      if (teamNamingId == currentTeamNamingId) {
-        final String newTeamName =
-            team.getName.substring(0, team.getName.length - 1) +
-                newTeamNamingId.toString();
-        team.setName = newTeamName;
-      }
-    }
-
-    notifyListeners();
-  }
-
   void removePlayer(Player playerToRemove, bool removeTeam,
       [bool isSinglesTab = false]) {
     getPlayers.removeWhere((Player p) => p.getName == playerToRemove.getName);
@@ -478,7 +429,6 @@ class GameSettings_P with ChangeNotifier {
       }
       if (emptyTeamToRemove != null) {
         getTeams.remove(emptyTeamToRemove);
-        checkTeamNamingIds(emptyTeamToRemove);
       }
     }
 
@@ -491,7 +441,6 @@ class GameSettings_P with ChangeNotifier {
 
           if (team.getPlayers.isEmpty && removeTeam) {
             getTeams.remove(team);
-            checkTeamNamingIds(team);
           }
           break outerLoop;
         }

@@ -10,7 +10,6 @@ import 'package:dart_app/utils/app_bars/custom_app_bar_game.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class GameCricket extends StatefulWidget {
   static const routeName = '/gameCricket';
@@ -67,11 +66,9 @@ class _GameCricketState extends State<GameCricket> {
                         currentThreeDarts: gameCricket.getCurrentThreeDarts,
                         pointType: gameCricket.getCurrentPointType,
                       ),
-                      builder: (_, currentPointType, __) => Container(
-                        height: _getHeightForSingleDoubleTrippleBtns(),
-                        child: SingleDoubleOrTrippleBtns(
-                          mode: GameMode.Cricket,
-                        ),
+                      builder: (_, currentPointType, __) =>
+                          SingleDoubleOrTrippleBtns(
+                        mode: GameMode.Cricket,
                       ),
                     ),
                   ],
@@ -79,16 +76,6 @@ class _GameCricketState extends State<GameCricket> {
         ),
       ),
     );
-  }
-
-  double _getHeightForSingleDoubleTrippleBtns() {
-    final CricketMode mode =
-        context.read<GameCricket_P>().getGameSettings.getMode;
-
-    if (mode == CricketMode.NoScore) {
-      return 8.h;
-    }
-    return 6.h;
   }
 }
 

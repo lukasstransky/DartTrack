@@ -318,4 +318,6 @@ class GameSettingsX01_P extends GameSettings_P {
 
     notify();
   }
+
+  reset() {}
 }

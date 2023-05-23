@@ -27,6 +27,7 @@ class GameStatsScoreTraining extends StatefulWidget {
 class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
   GameScoreTraining_P? _game;
   bool _roundedScoresOdd = false;
+  bool _showSimpleAppBar = false;
 
   @override
   didChangeDependencies() {
@@ -35,7 +36,11 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
         <String, dynamic>{}) as Map;
 
     if (arguments.isNotEmpty) {
-      _game = arguments['game'];
+      if (arguments.containsKey('game')) {
+        _game = arguments['game'];
+      }
+      if (arguments.containsKey('showSimpleAppBar'))
+        _showSimpleAppBar = arguments['showSimpleAppBar'];
     }
   }
 
@@ -52,7 +57,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _game!.getIsGameFinished
+      appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
               title: 'Statistics',
               mode: GameMode.ScoreTraining,

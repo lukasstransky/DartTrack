@@ -29,7 +29,7 @@ import 'package:dart_app/screens/game_modes/single_double_training/game_statisti
 import 'package:dart_app/screens/game_modes/x01/finish/finish_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/game_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings_x01.dart';
 import 'package:dart_app/screens/home/home.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
@@ -47,7 +47,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:sizer/sizer.dart';
 
-import 'screens/game_modes/cricket/statistics/game_statistics_c.dart';
+import 'screens/game_modes/cricket/statistics/game_stats_c.dart';
 import 'screens/game_modes/single_double_training/finish/finish_sd_t.dart';
 import 'screens/game_modes/single_double_training/game/game_sd_t.dart';
 

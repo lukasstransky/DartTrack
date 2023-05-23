@@ -59,7 +59,6 @@ class _FinishSingleDoubleTrainingState
       if (game.getMode == GameMode.DoubleTraining) {
         game.setName = GameMode.DoubleTraining.name;
       }
-      game.getPlayerGameStatistics.sort();
       game.setIsGameFinished = true;
       g_gameId = await context
           .read<FirestoreServiceGames>()

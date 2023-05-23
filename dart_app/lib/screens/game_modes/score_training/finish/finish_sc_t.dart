@@ -41,7 +41,6 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
         .read<GameSettingsScoreTraining_P>()
         .isCurrentUserInPlayers(context)) {
       g_gameId = await firestoreServiceGames.postGame(game, openGamesFirestore);
-      game.getPlayerGameStatistics.sort();
       game.setIsGameFinished = true;
       await context
           .read<FirestoreServicePlayerStats>()

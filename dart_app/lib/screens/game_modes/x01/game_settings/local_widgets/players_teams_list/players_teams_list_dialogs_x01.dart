@@ -116,6 +116,7 @@ class PlayersTeamsListDialogs {
                 );
               } else {
                 return TextFormField(
+                  autofocus: true,
                   controller:
                       newTextControllerForEditingPlayerInGameSettingsX01()
                         ..text = playerToEdit.getName,
@@ -285,7 +286,6 @@ class PlayersTeamsListDialogs {
                                 _showDialogForDeletingTeam(
                                     context, gameSettings, teamToEdit);
                               } else {
-                                gameSettings.checkTeamNamingIds(teamToEdit);
                                 _deleteTeam(teamToEdit, gameSettings);
                               }
                             }),
@@ -394,7 +394,6 @@ class PlayersTeamsListDialogs {
                       ),
                       TextButton(
                         onPressed: () {
-                          gameSettings.checkTeamNamingIds(teamToMaybeDelete);
                           gameSettings.getTeams
                               .removeWhere((team) => team == teamToMaybeDelete);
                           gameSettings.removePlayer(playerToDelete, true);
@@ -442,24 +441,30 @@ class PlayersTeamsListDialogs {
             content: StatefulBuilder(
               builder: (context, setState) {
                 return Container(
-                  width: double.maxFinite,
+                  width: 0.6.w,
                   child: ListView.builder(
                     shrinkWrap: true,
                     itemCount: possibleTeamsToSwap.length,
                     itemBuilder: (BuildContext context, int index) {
                       final Team team = possibleTeamsToSwap[index];
 
-                      return RadioListTile(
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        title: Text(
-                          team.getName,
-                          style: TextStyle(color: Colors.white),
+                      return Theme(
+                        data: ThemeData(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
                         ),
-                        value: team,
-                        groupValue: selectedTeam,
-                        onChanged: (Team? value) {
-                          setState(() => selectedTeam = value);
-                        },
+                        child: RadioListTile(
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          title: Text(
+                            team.getName,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          value: team,
+                          groupValue: selectedTeam,
+                          onChanged: (Team? value) {
+                            setState(() => selectedTeam = value);
+                          },
+                        ),
                       );
                     },
                   ),
@@ -687,7 +692,6 @@ class PlayersTeamsListDialogs {
                       ),
                       TextButton(
                         onPressed: () {
-                          gameSettings.checkTeamNamingIds(teamToEdit);
                           _deleteTeam(teamToEdit, gameSettings);
                           Navigator.of(context).pop();
                         },

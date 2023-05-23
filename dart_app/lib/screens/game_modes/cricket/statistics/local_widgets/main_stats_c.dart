@@ -30,16 +30,20 @@ class MainStatsCricket extends StatelessWidget {
                 children: [
                   if (gameSettings.getMode != CricketMode.NoScore)
                     HeadingTextGameStats(textValue: 'Total points'),
-                  if (gameSettings.getMode != CricketMode.NoScore)
+                  if (gameSettings.getMode != CricketMode.NoScore &&
+                      gameSettings.getLegs > 1 &&
+                      !game.getIsGameFinished)
                     HeadingTextGameStats(textValue: 'Current points'),
-                  if (gameSettings.getSetsEnabled)
-                    HeadingTextGameStats(textValue: 'Sets'),
+                  if (gameSettings.getSetsEnabled) ...[
+                    HeadingTextGameStats(textValue: 'Sets won'),
+                    if (!game.getIsGameFinished)
+                      _getHeader(context, 'Legs won ', '(active set)'),
+                  ],
                   if (gameSettings.getLegs > 1)
                     HeadingTextGameStats(
                         textValue:
                             'Legs won ${gameSettings.getSetsEnabled ? 'total' : ''}'),
-                  _getLegsWonHeadingForActiveSet(gameSettings, context),
-                  HeadingTextGameStats(textValue: 'MPR'),
+                  _getHeader(context, 'MPR ', '(marks per round)'),
                   HeadingTextGameStats(textValue: 'Thrown darts'),
                 ],
               ),
@@ -52,18 +56,24 @@ class MainStatsCricket extends StatelessWidget {
                     if (gameSettings.getMode != CricketMode.NoScore)
                       ValueTextGameStats(
                           textValue: stats.getTotalPoints.toString()),
-                    if (gameSettings.getMode != CricketMode.NoScore)
+                    if (gameSettings.getMode != CricketMode.NoScore &&
+                        gameSettings.getLegs > 1 &&
+                        !game.getIsGameFinished)
                       ValueTextGameStats(
                           textValue: stats.getCurrentPoints.toString()),
                     if (gameSettings.getSetsEnabled) ...[
                       ValueTextGameStats(
-                          textValue: stats.getSetsWon.toString()),
+                          textValue: _getSetsWon(gameSettings, stats)),
+                      if (!game.getIsGameFinished)
+                        ValueTextGameStats(
+                            textValue: _getLegsWon(gameSettings, stats)),
                       ValueTextGameStats(
-                          textValue: stats.getLegsWonTotal.toString()),
+                          textValue: _getLegsWonTotal(gameSettings, stats)),
+                    ] else ...[
+                      if (gameSettings.getLegs > 1)
+                        ValueTextGameStats(
+                            textValue: stats.getLegsWon.toString()),
                     ],
-                    if (gameSettings.getLegs > 1)
-                      ValueTextGameStats(
-                          textValue: stats.getLegsWon.toString()),
                     ValueTextGameStats(textValue: stats.getMarksPerRound()),
                     ValueTextGameStats(
                         textValue: stats.getThrownDarts.toString()),
@@ -76,40 +86,81 @@ class MainStatsCricket extends StatelessWidget {
     );
   }
 
-  _getLegsWonHeadingForActiveSet(
-      GameSettingsCricket_P gameSettingsCricket, BuildContext context) {
-    if (gameSettingsCricket.getSetsEnabled) {
-      return Container(
-        width: WIDTH_HEADINGS_STATISTICS.w,
-        alignment: Alignment.centerLeft,
-        padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'Legs won ',
-                  style: TextStyle(
-                    fontSize: FONTSIZE_STATISTICS.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Utils.getTextColorDarken(context),
-                  ),
+  String _getSetsWon(
+      GameSettingsCricket_P settings, PlayerOrTeamGameStatsCricket stats) {
+    if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        !game.getAreTeamStatsDisplayed) {
+      for (PlayerOrTeamGameStatsCricket teamStats
+          in game.getTeamGameStatistics) {
+        if (stats.getTeam.getName == teamStats.getTeam.getName) {
+          return teamStats.getSetsWon.toString();
+        }
+      }
+    }
+
+    return stats.getSetsWon.toString();
+  }
+
+  String _getLegsWonTotal(
+      GameSettingsCricket_P settings, PlayerOrTeamGameStatsCricket stats) {
+    if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        !game.getAreTeamStatsDisplayed) {
+      for (PlayerOrTeamGameStatsCricket teamStats
+          in game.getTeamGameStatistics) {
+        if (stats.getTeam.getName == teamStats.getTeam.getName) {
+          return teamStats.getLegsWonTotal.toString();
+        }
+      }
+    }
+
+    return stats.getLegsWonTotal.toString();
+  }
+
+  String _getLegsWon(
+      GameSettingsCricket_P settings, PlayerOrTeamGameStatsCricket stats) {
+    if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        !game.getAreTeamStatsDisplayed) {
+      for (PlayerOrTeamGameStatsCricket teamStats
+          in game.getTeamGameStatistics) {
+        if (stats.getTeam.getName == teamStats.getTeam.getName) {
+          return teamStats.getLegsWon.toString();
+        }
+      }
+    }
+
+    return stats.getLegsWon.toString();
+  }
+
+  _getHeader(BuildContext context, String firstText, String secondText) {
+    return Container(
+      width: WIDTH_HEADINGS_STATISTICS.w,
+      alignment: Alignment.centerLeft,
+      padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: firstText,
+                style: TextStyle(
+                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Utils.getTextColorDarken(context),
                 ),
-                TextSpan(
-                  text: '(active set)',
-                  style: TextStyle(
-                    fontSize: 8.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Utils.getTextColorDarken(context),
-                  ),
+              ),
+              TextSpan(
+                text: secondText,
+                style: TextStyle(
+                  fontSize: 8.sp,
+                  fontWeight: FontWeight.bold,
+                  color: Utils.getTextColorDarken(context),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
-    }
-    return SizedBox.shrink();
+      ),
+    );
   }
 }

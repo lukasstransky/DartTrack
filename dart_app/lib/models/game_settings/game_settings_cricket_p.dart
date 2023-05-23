@@ -107,6 +107,7 @@ class GameSettingsCricket_P extends GameSettings_P {
 
     setPlayers = [];
     setTeams = [];
+    setTeamNamingIds = [];
   }
 
   setsBtnClicked() {
