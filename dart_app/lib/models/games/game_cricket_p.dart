@@ -179,8 +179,6 @@ class GameCricket_P extends Game_P {
     setCurrentPlayerOfTeamsBeforeLegFinish = [];
     setLegSetWithPlayerOrTeamWhoFinishedIt = [];
 
-    setGameId = '';
-    setName = '';
     setDateTime = DateTime.now();
     if (getGameSettings != null) {
       getGameSettings.reset();

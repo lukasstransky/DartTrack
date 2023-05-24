@@ -486,7 +486,7 @@ class PlayersTeamsListDialogs {
               ),
               TextButton(
                 onPressed: () => _swapTeam(
-                    context, playerToSwap, selectedTeam, gameSettings),
+                    context, playerToSwap, selectedTeam, gameSettings, true),
                 child: Text(
                   'Submit',
                   style:
@@ -502,7 +502,7 @@ class PlayersTeamsListDialogs {
         },
       );
     } else {
-      _swapTeam(context, playerToSwap, newTeam, gameSettings);
+      _swapTeam(context, playerToSwap, newTeam, gameSettings, false);
     }
   }
 
@@ -555,18 +555,22 @@ class PlayersTeamsListDialogs {
   }
 
   static _swapTeam(BuildContext context, Player playerToSwap, Team? newTeam,
-      GameSettings_P gameSettings) {
+      GameSettings_P gameSettings, bool closeDialog) {
     final Team? currentTeam =
         _getTeamOfPlayer(playerToSwap, gameSettings.getTeams);
 
     for (Team team in gameSettings.getTeams) {
-      if (team == currentTeam) team.getPlayers.remove(playerToSwap);
-      if (team == newTeam) team.getPlayers.add(playerToSwap);
+      if (team == currentTeam) {
+        team.getPlayers.remove(playerToSwap);
+      }
+      if (team == newTeam) {
+        team.getPlayers.add(playerToSwap);
+      }
     }
 
     gameSettings.notify();
 
-    if (gameSettings.getTeams.length > 2) {
+    if (closeDialog) {
       Navigator.of(context).pop();
     }
   }

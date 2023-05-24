@@ -20,7 +20,7 @@ class LegAvgComparedX01 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+          transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
           padding: EdgeInsets.only(
             top: PADDING_TOP_STATISTICS.h,
             bottom: 1.h,

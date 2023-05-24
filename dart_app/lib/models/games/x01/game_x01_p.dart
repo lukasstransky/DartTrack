@@ -70,6 +70,7 @@ class GameX01_P extends Game_P {
     GameX01_P gameX01 = new GameX01_P();
 
     gameX01.setDateTime = game!.getDateTime;
+    gameX01.setName = game.getName;
     gameX01.setGameId = game.getGameId;
     gameX01.setGameSettings = game.getGameSettings;
     gameX01.setPlayerGameStatistics = game.getPlayerGameStatistics;
@@ -152,8 +153,6 @@ class GameX01_P extends Game_P {
     setLegSetWithPlayerOrTeamWhoFinishedIt = [];
     setBotSubmittedPoints = false;
 
-    setGameId = '';
-    setName = '';
     setDateTime = DateTime.now();
     if (getGameSettings != null) {
       getGameSettings.reset();

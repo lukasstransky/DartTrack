@@ -114,7 +114,6 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                     if (_firstElementNoDrawOrOpenGame(widget.gameX01, context))
                       Container(
                         padding: EdgeInsets.only(left: 2.w),
-                        transform: Matrix4.translationValues(0.0, -2.0, 0.0),
                         child: Icon(
                           Entypo.trophy,
                           size: 14.sp,
@@ -130,7 +129,6 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                         padding: widget.openGame
                             ? EdgeInsets.zero
                             : EdgeInsets.only(left: 2.w),
-                        transform: Matrix4.translationValues(0.0, -2.0, 0.0),
                         child: Icon(
                           Entypo.trophy,
                           size: 14.sp,

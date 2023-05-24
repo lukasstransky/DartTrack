@@ -87,7 +87,7 @@ class PlayerEntry extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            transform: Matrix4.translationValues(0.0, -20.0, 0.0),
+            transform: Matrix4.translationValues(0.0, -2.5.h, 0.0),
             child: Text(
               playerStats.getPlayer.getName,
               style: TextStyle(

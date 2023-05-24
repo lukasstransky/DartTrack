@@ -26,6 +26,7 @@ class GameScoreTraining_P extends Game_P {
     GameScoreTraining_P gameScoreTraining_P = new GameScoreTraining_P();
 
     gameScoreTraining_P.setDateTime = game_p.getDateTime;
+    gameScoreTraining_P.setName = game_p.getName;
     gameScoreTraining_P.setGameId = game_p.getGameId;
     gameScoreTraining_P.setGameSettings = game_p.getGameSettings;
     gameScoreTraining_P.setPlayerGameStatistics =
@@ -293,8 +294,6 @@ class GameScoreTraining_P extends Game_P {
     setCurrentPointsSelected = 'Points';
     setCurrentPointType = PointType.Single;
 
-    setGameId = '';
-    setName = '';
     setDateTime = DateTime.now();
     if (getGameSettings != null) {
       getGameSettings.reset();

@@ -46,7 +46,7 @@ class FinishWaysX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        transform: Matrix4.translationValues(0.0, 10.0, 0.0),
+        transform: Matrix4.translationValues(0.0, 1.h, 0.0),
         child: _getTextWidget(context));
   }
 

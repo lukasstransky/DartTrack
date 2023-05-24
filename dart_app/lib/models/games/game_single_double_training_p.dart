@@ -173,8 +173,6 @@ class GameSingleDoubleTraining_P extends Game_P {
     setRandomModeFinished = false;
     setCanBePressed = true;
 
-    setGameId = '';
-    setName = '';
     setDateTime = DateTime.now();
     if (getGameSettings != null) {
       getGameSettings.reset();

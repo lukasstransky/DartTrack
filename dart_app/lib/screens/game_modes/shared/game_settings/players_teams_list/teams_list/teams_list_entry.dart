@@ -125,22 +125,19 @@ class TeamsListEntry extends StatelessWidget {
                                 .showDialogForSwitchingTeam(
                                     context, player, gameSettings),
                           ),
-                        Container(
-                          transform: Matrix4.translationValues(0.0, 1, 0.0),
-                          child: IconButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              Icons.highlight_remove,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            onPressed: () => _deleteIconClicked(
-                              team,
-                              player,
-                              gameSettings,
-                              context,
-                            ),
+                        IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            Icons.highlight_remove,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          onPressed: () => _deleteIconClicked(
+                            team,
+                            player,
+                            gameSettings,
+                            context,
                           ),
                         ),
                       ],

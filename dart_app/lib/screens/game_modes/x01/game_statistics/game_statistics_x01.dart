@@ -107,10 +107,11 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
   @override
   Widget build(BuildContext context) {
     final EdgeInsets _padding = EdgeInsets.only(
-      left: 5.w,
+      left: PADDING_LEFT_STATISTICS.w,
       bottom: 1.h,
     );
-    final EdgeInsets _paddingOnlyLeft = EdgeInsets.only(left: 5.w);
+    final EdgeInsets _paddingOnlyLeft =
+        EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w);
 
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar

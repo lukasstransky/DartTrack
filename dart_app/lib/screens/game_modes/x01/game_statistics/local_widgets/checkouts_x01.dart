@@ -47,8 +47,8 @@ class CheckoutsX01 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          padding: EdgeInsets.only(top: 1.h),
-          transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+          padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
+          transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
           child: Text(
             'Checkouts',
             style: TextStyle(

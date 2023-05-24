@@ -49,7 +49,6 @@ class NameAndRanking extends StatelessWidget {
             if (i == 0 && !isOpenGame && !isDraw)
               Container(
                 padding: EdgeInsets.only(left: 3.w),
-                transform: Matrix4.translationValues(0.0, -2.0, 0.0),
                 child: Icon(
                   Entypo.trophy,
                   size: 12.sp,

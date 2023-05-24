@@ -98,7 +98,7 @@ class PlayerTeamCard extends StatelessWidget {
             children: [
               Container(
                 width: 10.w,
-                transform: Matrix4.translationValues(0.0, -10.0, 0.0),
+                transform: Matrix4.translationValues(0.0, -1.25.h, 0.0),
                 padding: EdgeInsets.only(left: 1.w),
                 alignment: Alignment.topLeft,
                 child: Image.asset('assets/dart_arrow.png',
@@ -108,7 +108,7 @@ class PlayerTeamCard extends StatelessWidget {
               ),
               Expanded(
                 child: Container(
-                  transform: Matrix4.translationValues(0.0, 3.0, 0.0),
+                  transform: Matrix4.translationValues(0.0, 0.5.h, 0.0),
                   child: Center(
                     child: FittedBox(
                       fit: BoxFit.scaleDown,

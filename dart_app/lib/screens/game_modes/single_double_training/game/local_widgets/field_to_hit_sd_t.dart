@@ -70,7 +70,7 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                 .read<GameSettingsSingleDoubleTraining_P>()
                 .getIsTargetNumberEnabled)
               Container(
-                transform: Matrix4.translationValues(0.0, -5.0, 0.0),
+                transform: Matrix4.translationValues(0.0, -0.5.h, 0.0),
                 padding: EdgeInsets.only(top: 0.3.h),
                 child: Text(
                   '(Remaining rounds: ${selectorModel.amountOfRoundsRemaining})',

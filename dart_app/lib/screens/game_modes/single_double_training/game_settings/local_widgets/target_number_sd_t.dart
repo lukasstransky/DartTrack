@@ -191,7 +191,7 @@ class _TargetNumberSingleDoubleTrainingState
             children: [
               Container(
                 width: 8.w,
-                transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+                transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
                 child: IconButton(
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,

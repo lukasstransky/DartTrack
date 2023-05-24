@@ -30,7 +30,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
     return Column(
       children: [
         Container(
-          transform: Matrix4.translationValues(0.0, 5.0, 0.0),
+          transform: Matrix4.translationValues(0.0, 0.5.h, 0.0),
           child: Column(
             children: [
               Text(
@@ -64,7 +64,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
           ),
         ),
         Container(
-          transform: Matrix4.translationValues(0.0, -15.0, 0.0),
+          transform: Matrix4.translationValues(0.0, -1.5.h, 0.0),
           child: Selector<GameSettingsX01_P, bool>(
             selector: (_, gameSettings) => gameSettings.getShowFinishWays,
             builder: (_, __, ___) => FinishWaysX01(
@@ -95,7 +95,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
           ),
         ),
         Container(
-          transform: Matrix4.translationValues(0.0, -5.0, 0.0),
+          transform: Matrix4.translationValues(0.0, -0.5.h, 0.0),
           child: Text(
             currPlayerOrTeamGameStatsX01!.getPlayer is Bot
                 ? 'Bot - level ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} '

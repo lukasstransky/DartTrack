@@ -23,16 +23,14 @@ class FinishingStatsX01 extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+        Container(
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
-          child: Container(
-            transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
-            child: Text(
-              'Finishing',
-              style: TextStyle(
-                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
-                color: Colors.white,
-              ),
+          transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
+          child: Text(
+            'Finishing',
+            style: TextStyle(
+              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              color: Colors.white,
             ),
           ),
         ),

@@ -28,7 +28,7 @@ class GameStatsX01 extends StatelessWidget {
         ),
         Container(
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
-          transform: Matrix4.translationValues(-10.0, 0.0, 0.0),
+          transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
           child: Text(
             'Game',
             style: TextStyle(
