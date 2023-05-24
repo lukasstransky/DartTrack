@@ -11,7 +11,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class CustomAppBarX01Settings extends StatefulWidget with PreferredSizeWidget {
+class CustomAppBarX01Settings extends StatefulWidget
+    implements PreferredSizeWidget {
   @override
   State<CustomAppBarX01Settings> createState() =>
       _CustomAppBarX01SettingsState();

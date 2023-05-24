@@ -62,7 +62,6 @@ class PointBtnRoundX01 extends StatelessWidget {
   }
 
   _getBorder(BuildContext context) {
-    final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01_P =
         context.read<GameSettingsX01_P>();
 

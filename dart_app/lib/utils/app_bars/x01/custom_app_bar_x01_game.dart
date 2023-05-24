@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class CustomAppBarX01Game extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBarX01Game extends StatelessWidget
+    implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final gameX01 = context.read<GameX01_P>();

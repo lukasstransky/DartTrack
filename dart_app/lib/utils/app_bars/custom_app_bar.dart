@@ -1,7 +1,7 @@
 import 'package:dart_app/utils/app_bars/app_bar_dialog_helper.dart';
 import 'package:flutter/material.dart';
 
-class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackBtn;
   final String title;
   final bool showInfoIconScoreTraining;

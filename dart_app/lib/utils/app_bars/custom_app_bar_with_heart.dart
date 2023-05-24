@@ -13,7 +13,8 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:provider/provider.dart';
 
 //ignore: must_be_immutable
-class CustomAppBarWithHeart extends StatefulWidget with PreferredSizeWidget {
+class CustomAppBarWithHeart extends StatefulWidget
+    implements PreferredSizeWidget {
   CustomAppBarWithHeart(
       {required this.title,
       required this.mode,

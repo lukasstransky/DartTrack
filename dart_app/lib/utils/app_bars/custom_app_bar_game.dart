@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class CustomAppBarGame extends StatelessWidget with PreferredSizeWidget {
+class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBarGame({Key? key, required this.mode}) : super(key: key);
 
   final GameMode mode;

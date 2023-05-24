@@ -19,7 +19,6 @@ class DefaultFirebaseOptions {
     if (kIsWeb) {
       return web;
     }
-    // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
@@ -27,6 +26,8 @@ class DefaultFirebaseOptions {
         return ios;
       case TargetPlatform.macOS:
         return macos;
+      default:
+        break;
     }
 
     throw UnsupportedError(
@@ -58,8 +59,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '576943166736',
     projectId: 'flutter-dartapp',
     storageBucket: 'flutter-dartapp.appspot.com',
-    androidClientId: '576943166736-tvniocq83o5l4sei7pn316bgroc13cbn.apps.googleusercontent.com',
-    iosClientId: '576943166736-26qb5j9psb4l8nmqd34n3aac69guun7p.apps.googleusercontent.com',
+    androidClientId:
+        '576943166736-tvniocq83o5l4sei7pn316bgroc13cbn.apps.googleusercontent.com',
+    iosClientId:
+        '576943166736-26qb5j9psb4l8nmqd34n3aac69guun7p.apps.googleusercontent.com',
     iosBundleId: 'com.example.dartApp',
   );
 
@@ -69,8 +72,10 @@ class DefaultFirebaseOptions {
     messagingSenderId: '576943166736',
     projectId: 'flutter-dartapp',
     storageBucket: 'flutter-dartapp.appspot.com',
-    androidClientId: '576943166736-tvniocq83o5l4sei7pn316bgroc13cbn.apps.googleusercontent.com',
-    iosClientId: '576943166736-26qb5j9psb4l8nmqd34n3aac69guun7p.apps.googleusercontent.com',
+    androidClientId:
+        '576943166736-tvniocq83o5l4sei7pn316bgroc13cbn.apps.googleusercontent.com',
+    iosClientId:
+        '576943166736-26qb5j9psb4l8nmqd34n3aac69guun7p.apps.googleusercontent.com',
     iosBundleId: 'com.example.dartApp',
   );
 }
