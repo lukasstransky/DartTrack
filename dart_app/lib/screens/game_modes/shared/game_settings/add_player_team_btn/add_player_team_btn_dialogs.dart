@@ -86,7 +86,7 @@ class AddPlayerTeamBtnDialogs {
                               children: [
                                 if (newPlayer == NewPlayer.Bot) ...[
                                   Text(
-                                    'Bot - level ${Utils.getLevelForBot(_selectedBotAvgValue)}',
+                                    'Bot - lvl. ${Utils.getLevelForBot(_selectedBotAvgValue)}',
                                     style: TextStyle(color: Colors.white),
                                   ),
                                   Container(
@@ -185,7 +185,7 @@ class AddPlayerTeamBtnDialogs {
           actions: [
             Row(
               children: [
-                _isTeamMode(gameSettings_P) == SingleOrTeamEnum.Team &&
+                _isTeamMode(gameSettings_P) &&
                         gameSettings_P.getTeams.length < 4
                     ? Expanded(
                         child: Align(
@@ -221,11 +221,16 @@ class AddPlayerTeamBtnDialogs {
                                 color: Theme.of(context).colorScheme.secondary),
                           ),
                           onPressed: () {
+                            Navigator.of(context).pop();
                             _resetBotAvgValue();
                             newPlayerController.clear();
-                            Navigator.of(context).pop();
                           },
                           style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                             backgroundColor:
                                 Utils.getPrimaryMaterialStateColorDarken(
                                     context),
@@ -241,6 +246,11 @@ class AddPlayerTeamBtnDialogs {
                         onPressed: () => _submitNewPlayer(
                             gameSettings_P, context, newPlayer),
                         style: ButtonStyle(
+                          splashFactory: NoSplash.splashFactory,
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent),
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
                         ),
@@ -258,6 +268,7 @@ class AddPlayerTeamBtnDialogs {
 
   static _submitNewPlayer(GameSettings_P gameSettings_P, BuildContext context,
       NewPlayer? newPlayer) async {
+    newPlayerController.text = newPlayerController.text.trim();
     if (!_formKeyNewPlayer.currentState!.validate()) {
       return;
     }
@@ -281,7 +292,6 @@ class AddPlayerTeamBtnDialogs {
 
     Navigator.of(context).pop();
 
-    // assign player to team
     if (_isTeamMode(gameSettings_P)) {
       final Team? team = _checkIfMultipleTeamsToAdd(gameSettings_P.getTeams);
 
@@ -301,7 +311,7 @@ class AddPlayerTeamBtnDialogs {
         gameSettings_P.notify();
       }
 
-      //scroll automatically smoothly to top in single player
+      //scroll automatically to new player
       await Future.delayed(const Duration(milliseconds: 100));
       SchedulerBinding.instance.addPostFrameCallback((_) {
         if (scrollControllerPlayers.hasClients)
@@ -317,6 +327,14 @@ class AddPlayerTeamBtnDialogs {
 
   static showDialogForAddingTeam(
       GameSettings_P gameSettings, BuildContext context) {
+    bool showBackBtn = false;
+    for (Team team in gameSettings.getTeams) {
+      if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM &&
+          gameSettings.getPlayers.length < MAX_PLAYERS_X01) {
+        showBackBtn = true;
+      }
+    }
+
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -341,7 +359,7 @@ class AddPlayerTeamBtnDialogs {
                           newTextControllerForAddingNewTeamInGameSettingsX01(),
                       textInputAction: TextInputAction.done,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value!.trim().isEmpty) {
                           return ('Please enter a team name!');
                         }
                         if (gameSettings.checkIfTeamNameExists(value)) {
@@ -383,7 +401,7 @@ class AddPlayerTeamBtnDialogs {
             actions: [
               Row(
                 children: [
-                  if (gameSettings.getTeams.isNotEmpty)
+                  if (showBackBtn)
                     Expanded(
                       child: Align(
                         alignment: Alignment.centerLeft,
@@ -410,9 +428,9 @@ class AddPlayerTeamBtnDialogs {
                         Padding(
                           padding: EdgeInsets.only(right: 3.w),
                           child: TextButton(
-                            onPressed: () => {
-                              newTeamController.clear(),
-                              Navigator.of(context).pop(),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              newTeamController.clear();
                             },
                             child: Text(
                               'Cancel',
@@ -421,6 +439,11 @@ class AddPlayerTeamBtnDialogs {
                                       Theme.of(context).colorScheme.secondary),
                             ),
                             style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
                               backgroundColor:
                                   Utils.getPrimaryMaterialStateColorDarken(
                                       context),
@@ -438,6 +461,11 @@ class AddPlayerTeamBtnDialogs {
                                 color: Theme.of(context).colorScheme.secondary),
                           ),
                           style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                             backgroundColor:
                                 Utils.getPrimaryMaterialStateColorDarken(
                                     context),
@@ -456,7 +484,10 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static _submitNewTeam(GameSettings_P gameSettings, BuildContext context) {
-    if (!_formKeyNewTeam.currentState!.validate()) return;
+    newTeamController.text = newTeamController.text.trim();
+    if (!_formKeyNewTeam.currentState!.validate()) {
+      return;
+    }
 
     _formKeyNewTeam.currentState!.save();
 
@@ -573,6 +604,9 @@ class AddPlayerTeamBtnDialogs {
               ),
               onPressed: () => Navigator.of(context).pop(),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),
@@ -583,18 +617,18 @@ class AddPlayerTeamBtnDialogs {
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
-              onPressed: () => {
-                Navigator.of(context).pop(),
-                if (teamOrPlayer == 'team')
-                  {
-                    showDialogForAddingTeam(gameSettings, context),
-                  }
-                else
-                  {
-                    showDialogForAddingPlayer(gameSettings, context),
-                  }
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (teamOrPlayer == 'team') {
+                  showDialogForAddingTeam(gameSettings, context);
+                } else {
+                  showDialogForAddingPlayer(gameSettings, context);
+                }
               },
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),
@@ -744,6 +778,11 @@ class AddPlayerTeamBtnDialogs {
                               color: Theme.of(context).colorScheme.secondary),
                         ),
                         style: ButtonStyle(
+                          splashFactory: NoSplash.splashFactory,
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent),
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
                         ),
@@ -758,6 +797,11 @@ class AddPlayerTeamBtnDialogs {
                             color: Theme.of(context).colorScheme.secondary),
                       ),
                       style: ButtonStyle(
+                        splashFactory: NoSplash.splashFactory,
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         backgroundColor:
                             Utils.getPrimaryMaterialStateColorDarken(context),
                       ),
@@ -799,7 +843,7 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
       controller: newPlayerController,
       textInputAction: TextInputAction.done,
       validator: (value) {
-        if (value!.isEmpty) {
+        if (value!.trim().isEmpty) {
           return ('Please enter a name!');
         }
         if (widget.gameSettings_P.checkIfPlayerNameExists(value)) {

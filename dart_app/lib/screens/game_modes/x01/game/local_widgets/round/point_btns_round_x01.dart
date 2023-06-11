@@ -33,6 +33,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Expanded(
       child: Selector<GameSettingsX01_P, SelectorModel>(
@@ -88,14 +89,17 @@ class PointBtnsRoundX01 extends StatelessWidget {
                 SelectInputMethod(mode: GameMode.X01),
               firstRow(
                 gameX01,
+                gameSettingsX01,
                 selectorModel.showMostScoredPoints,
               ),
               secondRow(
                 gameX01,
+                gameSettingsX01,
                 selectorModel.showMostScoredPoints,
               ),
               thirdRow(
                 gameX01,
+                gameSettingsX01,
                 selectorModel.showMostScoredPoints,
               ),
               fourthRow(gameX01, context),
@@ -106,7 +110,8 @@ class PointBtnsRoundX01 extends StatelessWidget {
     );
   }
 
-  Expanded firstRow(GameX01_P gameX01, bool showMostScoredPoints) {
+  Expanded firstRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
+      bool showMostScoredPoints) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,13 +119,13 @@ class PointBtnsRoundX01 extends StatelessWidget {
           if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
-                      gameX01.getGameSettings.getMostScoredPoints[0])
+                      gameSettingsX01.getMostScoredPoints[0])
                   ? PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[0],
+                      point: gameSettingsX01.getMostScoredPoints[0],
                       activeBtn: false,
                       mostScoredPointBtn: true)
                   : PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[0],
+                      point: gameSettingsX01.getMostScoredPoints[0],
                       activeBtn: true,
                       mostScoredPointBtn: true),
             ),
@@ -148,13 +153,13 @@ class PointBtnsRoundX01 extends StatelessWidget {
           if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
-                      gameX01.getGameSettings.getMostScoredPoints[1])
+                      gameSettingsX01.getMostScoredPoints[1])
                   ? PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[1],
+                      point: gameSettingsX01.getMostScoredPoints[1],
                       activeBtn: false,
                       mostScoredPointBtn: true)
                   : PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[1],
+                      point: gameSettingsX01.getMostScoredPoints[1],
                       activeBtn: true,
                       mostScoredPointBtn: true),
             ),
@@ -163,7 +168,8 @@ class PointBtnsRoundX01 extends StatelessWidget {
     );
   }
 
-  Expanded secondRow(GameX01_P gameX01, bool showMostScoredPoints) {
+  Expanded secondRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
+      bool showMostScoredPoints) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -171,13 +177,13 @@ class PointBtnsRoundX01 extends StatelessWidget {
           if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
-                      gameX01.getGameSettings.getMostScoredPoints[2])
+                      gameSettingsX01.getMostScoredPoints[2])
                   ? PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[2],
+                      point: gameSettingsX01.getMostScoredPoints[2],
                       activeBtn: false,
                       mostScoredPointBtn: true)
                   : PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[2],
+                      point: gameSettingsX01.getMostScoredPoints[2],
                       activeBtn: true,
                       mostScoredPointBtn: true),
             ),
@@ -205,13 +211,13 @@ class PointBtnsRoundX01 extends StatelessWidget {
           if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
-                      gameX01.getGameSettings.getMostScoredPoints[3])
+                      gameSettingsX01.getMostScoredPoints[3])
                   ? PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[3],
+                      point: gameSettingsX01.getMostScoredPoints[3],
                       activeBtn: false,
                       mostScoredPointBtn: true)
                   : PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[3],
+                      point: gameSettingsX01.getMostScoredPoints[3],
                       activeBtn: true,
                       mostScoredPointBtn: true),
             ),
@@ -220,7 +226,8 @@ class PointBtnsRoundX01 extends StatelessWidget {
     );
   }
 
-  Expanded thirdRow(GameX01_P gameX01, bool showMostScoredPoints) {
+  Expanded thirdRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
+      bool showMostScoredPoints) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -228,13 +235,13 @@ class PointBtnsRoundX01 extends StatelessWidget {
           if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
-                      gameX01.getGameSettings.getMostScoredPoints[4])
+                      gameSettingsX01.getMostScoredPoints[4])
                   ? PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[4],
+                      point: gameSettingsX01.getMostScoredPoints[4],
                       activeBtn: false,
                       mostScoredPointBtn: true)
                   : PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[4],
+                      point: gameSettingsX01.getMostScoredPoints[4],
                       activeBtn: true,
                       mostScoredPointBtn: true),
             ),
@@ -262,13 +269,13 @@ class PointBtnsRoundX01 extends StatelessWidget {
           if (showMostScoredPoints)
             Expanded(
               child: gameX01.shouldPointBtnBeDisabled(
-                      gameX01.getGameSettings.getMostScoredPoints[5])
+                      gameSettingsX01.getMostScoredPoints[5])
                   ? PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[5],
+                      point: gameSettingsX01.getMostScoredPoints[5],
                       activeBtn: false,
                       mostScoredPointBtn: true)
                   : PointBtnRoundX01(
-                      point: gameX01.getGameSettings.getMostScoredPoints[5],
+                      point: gameSettingsX01.getMostScoredPoints[5],
                       activeBtn: true,
                       mostScoredPointBtn: true),
             ),

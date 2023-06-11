@@ -32,9 +32,7 @@ class AdvancedSettingsX01 extends StatelessWidget {
   }
 
   bool _winByTwoLegsPresent(SelectorModel selectorModel) {
-    return selectorModel.legs > 1 &&
-        !selectorModel.setsEnabled &&
-        !selectorModel.drawMode;
+    return selectorModel.legs > 1 && !selectorModel.drawMode;
   }
 
   @override

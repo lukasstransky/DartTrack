@@ -7,15 +7,11 @@ import 'package:sizer/sizer.dart';
 
 class CheckoutCountingX01 extends StatelessWidget {
   bool _winByDiffWidgetIsPresent(SelectorModel selectorModel) {
-    return selectorModel.legs > 1 &&
-        !selectorModel.setsEnabled &&
-        !selectorModel.drawMode;
+    return selectorModel.legs > 1 && !selectorModel.drawMode;
   }
 
   bool _noWinByDiffWidgetIsPresent(SelectorModel selectorModel) {
-    if (selectorModel.legs == 1 ||
-        selectorModel.setsEnabled ||
-        selectorModel.drawMode) {
+    if (selectorModel.legs == 1 || selectorModel.drawMode) {
       return true;
     }
     return false;

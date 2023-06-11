@@ -123,6 +123,9 @@ class _RoundsOrPointsInputScoreTrainingState
                 ),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),
@@ -136,6 +139,9 @@ class _RoundsOrPointsInputScoreTrainingState
                 ),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),

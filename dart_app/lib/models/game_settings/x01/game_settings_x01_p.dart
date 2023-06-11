@@ -293,9 +293,6 @@ class GameSettingsX01_P extends GameSettings_P {
 
   setsBtnClicked() {
     setSetsEnabled = !getSetsEnabled;
-    setWinByTwoLegsDifference = false;
-    setSuddenDeath = false;
-    setMaxExtraLegs = DEFAULT_MAX_EXTRA_LEGS;
 
     if (getDrawMode) {
       setSets = DEFAULT_SETS_DRAW_MODE;

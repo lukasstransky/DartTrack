@@ -5,7 +5,7 @@ const Color primary = Color(0xff130536);
 
 enum GameMode { X01, ScoreTraining, SingleTraining, DoubleTraining, Cricket }
 
-extension NameGetter on GameMode {
+extension NameGetterGameMode on GameMode {
   String get name {
     switch (this) {
       case GameMode.X01:
@@ -97,7 +97,7 @@ const double BUTTON_BORDER_RADIUS = 10.0;
 const String FIRST_DEFAULT_MOST_SCORED_POINT = '60';
 const String SECOND_DEFAULT_MOST_SCORED_POINT = '26';
 const String THIRD_DEFAULT_MOST_SCORED_POINT = '45';
-const String FOURTH_DEFAULT_MOST_SCORED_POINT = '30';
+const String FOURTH_DEFAULT_MOST_SCORED_POINT = '7';
 const String FIFTH_DEFAULT_MOST_SCORED_POINT = '59';
 const String SIXTH_DEFAULT_MOST_SCORED_POINT = '100';
 
@@ -135,6 +135,19 @@ const List<int> NO_SCORES_POSSIBLE = [
   163
 ];
 const List<int> BOGEY_NUMBERS = [169, 168, 166, 165, 163, 162, 159];
+const List<int> DOUBLE_IN_IMPOSSIBLE_SCORES = [
+  151,
+  153,
+  155,
+  157,
+  159,
+  162,
+  163,
+  165,
+  166,
+  168,
+  169
+];
 const List<int> START_POINT_POSSIBILITIES = [301, 501, 701];
 //needed for checkout counting -> if player finishes with an only three dart finish -> dont show dialog
 //these checkouts are possible with 3 darts & additionally with 2 darts (cause of bull)
@@ -356,7 +369,7 @@ final mostScoredPoints = <String>[
 List<String> DEFAULT_MOST_SCORED_POINTS =
     List<String>.of([...mostScoredPoints]);
 const InputMethod DEFAULT_INPUT_METHOD = InputMethod.Round;
-const bool DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN = false;
+const bool DEFAULT_SHOW_INPUT_METHOD_IN_GAME_SCREEN = true;
 const bool DEFAULT_DRAW_MODE = false;
 
 const int DEFAULT_SETS_FIRST_TO_SETS_ENABLED = 3;

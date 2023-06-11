@@ -34,6 +34,8 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   bool _revertPossible = false;
   List<String> _currentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
   bool _showLoadingSpinner = false;
+  List<String> _setLegWithPlayerOrTeamWhoFinishedIt =
+      []; // currently only used for x01
 
   Game_P({
     required String name,
@@ -53,6 +55,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       required List<PlayerOrTeamGameStats> teamGameStatistics,
       required bool revertPossible,
       required List<String> currentThreeDarts,
+      required List<String> setLegWithPlayerOrTeamWhoFinishedIt,
       Player? currentPlayerToThrow,
       Team? currentTeamToThrow})
       : this._gameId = gameId,
@@ -67,7 +70,9 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         this._revertPossible = revertPossible,
         this._currentPlayerToThrow = currentPlayerToThrow,
         this._currentTeamToThrow = currentTeamToThrow,
-        this._currentThreeDarts = currentThreeDarts;
+        this._currentThreeDarts = currentThreeDarts,
+        this._setLegWithPlayerOrTeamWhoFinishedIt =
+            setLegWithPlayerOrTeamWhoFinishedIt;
 
   get getGameId => this._gameId;
   set setGameId(String? gameId) => this._gameId = gameId;
@@ -118,6 +123,11 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   bool get getShowLoadingSpinner => this._showLoadingSpinner;
   set setShowLoadingSpinner(bool value) => this._showLoadingSpinner = value;
 
+  List<String> get getLegSetWithPlayerOrTeamWhoFinishedIt =>
+      _setLegWithPlayerOrTeamWhoFinishedIt;
+  set setLegSetWithPlayerOrTeamWhoFinishedIt(List<String> value) =>
+      _setLegWithPlayerOrTeamWhoFinishedIt = value;
+
   Map<String, dynamic> toMapX01(GameX01_P game, bool openGame) {
     final GameSettingsX01_P settings = getGameSettings as GameSettingsX01_P;
 
@@ -128,6 +138,8 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
     };
 
     result['gameSettings'] = settings.toMapX01(game.getGameSettings, openGame);
+    result['legSetWithPlayerOrTeamWhoFinishedIt'] =
+        game.getLegSetWithPlayerOrTeamWhoFinishedIt;
 
     if (openGame) {
       result['currentThreeDarts'] = getCurrentThreeDarts;
@@ -142,8 +154,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       result['isOpenGame'] = getRevertPossible;
       result['playerOrTeamLegStartIndex'] = game.getPlayerOrTeamLegStartIndex;
       result['reachedSuddenDeath'] = game.getReachedSuddenDeath;
-      result['legSetWithPlayerOrTeamWhoFinishedIt'] =
-          game.getLegSetWithPlayerOrTeamWhoFinishedIt;
+
       if (settings.getSingleOrTeam == SingleOrTeamEnum.Team) {
         result['currentPlayerOfTeamsBeforeLegFinish'] =
             Utils.convertDoubleListToSimpleList(
@@ -358,6 +369,10 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         currentThreeDarts: map['currentThreeDarts'] != null
             ? map['currentThreeDarts'].cast<String>()
             : ['Dart 1', 'Dart 2', 'Dart 3'],
+        setLegWithPlayerOrTeamWhoFinishedIt:
+            map['legSetWithPlayerOrTeamWhoFinishedIt'] != null
+                ? map['legSetWithPlayerOrTeamWhoFinishedIt'].cast<String>()
+                : [],
       );
     }
 
@@ -373,6 +388,10 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       playerGameStatistics: [],
       teamGameStatistics: [],
       currentThreeDarts: [],
+      setLegWithPlayerOrTeamWhoFinishedIt:
+          map['legSetWithPlayerOrTeamWhoFinishedIt'] != null
+              ? map['legSetWithPlayerOrTeamWhoFinishedIt'].cast<String>()
+              : [],
     );
   }
 

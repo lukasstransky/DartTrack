@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -14,6 +15,10 @@ class GameDetailsX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
+    final List<PlayerOrTeamGameStats> statsList =
+        Utils.getPlayersOrTeamStatsList(gameX01,
+            gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team);
+    final bool isDraw = gameX01.isGameDraw(statsList);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -29,7 +34,7 @@ class GameDetailsX01 extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  'X01 ${gameX01.isGameDraw(context) ? '- Draw' : ''}${(gameSettingsX01.getSetsEnabled || gameX01.isGameDraw(context)) ? '' : '- ' + Utils.getBestOfOrFirstToString(gameSettingsX01)}',
+                  'X01 ${isDraw ? '- Draw' : ''}${(gameSettingsX01.getSetsEnabled || isDraw) ? '' : '- ' + Utils.getBestOfOrFirstToString(gameSettingsX01)}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 14.sp,
@@ -51,7 +56,7 @@ class GameDetailsX01 extends StatelessWidget {
             ],
           ),
         ),
-        if (gameSettingsX01.getSetsEnabled || gameX01.isGameDraw(context))
+        if (gameSettingsX01.getSetsEnabled || isDraw)
           Padding(
             padding: EdgeInsets.only(left: 2.w),
             child: Text(
@@ -90,7 +95,7 @@ class GameDetailsX01 extends StatelessWidget {
             ),
           ),
         ),
-        if (gameSettingsX01.getDrawMode && !gameX01.isGameDraw(context))
+        if (gameSettingsX01.getDrawMode && !isDraw)
           Padding(
             padding: EdgeInsets.only(left: 2.w),
             child: Text(

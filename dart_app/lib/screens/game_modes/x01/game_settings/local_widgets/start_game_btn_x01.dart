@@ -61,8 +61,20 @@ class StartGameBtnX01 extends StatelessWidget {
                         context, gameSettingsX01, GameMode.X01);
                   }
                 } else {
+                  String msg = '';
+                  if (gameSettingsX01.getSingleOrTeam ==
+                      SingleOrTeamEnum.Team) {
+                    if (_emptyTeamPresent(gameSettingsX01)) {
+                      msg = 'Empty teams are not allowed!';
+                    } else {
+                      msg = 'At least two teams are required!';
+                    }
+                  } else {
+                    msg = 'At least two players are required!';
+                  }
+
                   Fluttertoast.showToast(
-                    msg: 'At least two players are required!',
+                    msg: msg,
                     toastLength: Toast.LENGTH_LONG,
                   );
                 }
@@ -72,6 +84,15 @@ class StartGameBtnX01 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _emptyTeamPresent(GameSettingsX01_P gameSettingsX01) {
+    for (Team team in gameSettingsX01.getTeams) {
+      if (team.getPlayers.isEmpty) {
+        return true;
+      }
+    }
+    return false;
   }
 
   bool _activateStartGameBtn(SelectorModel selectorModel) {

@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/screens/game_modes/shared/overall/custom_chip.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -63,17 +64,12 @@ class PlayerTeamCard extends StatelessWidget {
   }
 
   Widget _chip(BuildContext context, String label) {
-    return Chip(
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      backgroundColor: Utils.getPrimaryColorDarken(context),
-      label: Text(
-        label,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 10.sp,
+    return CustomChip(
+        label: Text(
+          label,
+          style: TextStyle(color: Colors.white),
         ),
-      ),
-    );
+        color: Utils.getPrimaryColorDarken(context));
   }
 
   bool _showLegBeginnerDartAsset(
@@ -141,16 +137,22 @@ class PlayerTeamCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 0.5.w),
-                child: Text(
-                  gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Single
-                      ? stats.getPlayer.getName
-                      : stats.getTeam.getName,
-                  style: TextStyle(
-                    color: Utils.getTextColorDarken(context),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.bold,
+              Flexible(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Container(
+                    padding: EdgeInsets.only(bottom: 0.5.w, left: 2.w),
+                    child: Text(
+                      gameSettingsX01_P.getSingleOrTeam ==
+                              SingleOrTeamEnum.Single
+                          ? stats.getPlayer.getName
+                          : stats.getTeam.getName,
+                      style: TextStyle(
+                        color: Utils.getTextColorDarken(context),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ),

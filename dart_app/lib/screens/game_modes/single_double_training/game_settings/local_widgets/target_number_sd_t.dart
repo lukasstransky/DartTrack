@@ -53,6 +53,9 @@ class _TargetNumberSingleDoubleTrainingState
               ),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
             ),
@@ -128,11 +131,11 @@ class _TargetNumberSingleDoubleTrainingState
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () {   Navigator.of(context).pop();
                 Future.delayed(Duration(milliseconds: 300), () {
                   targetNumberTextController.text = backupString;
                 });
-                Navigator.of(context).pop();
+             
               },
               child: Text(
                 'Cancel',
@@ -141,6 +144,9 @@ class _TargetNumberSingleDoubleTrainingState
                 ),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),
@@ -154,6 +160,9 @@ class _TargetNumberSingleDoubleTrainingState
                 ),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),

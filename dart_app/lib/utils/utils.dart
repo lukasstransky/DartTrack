@@ -16,6 +16,7 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -108,11 +109,6 @@ class Utils {
     return result;
   }
 
-  static Map<int, int> sortMapIntIntByElement(Map<dynamic, dynamic> mapToSort) {
-    return new SplayTreeMap<int, int>.from(
-        mapToSort, (a, b) => mapToSort[b] > mapToSort[a] ? 1 : -1);
-  }
-
   static Map<String, int> sortMapStringInt(Map<dynamic, dynamic> mapToSort) {
     mapToSort = Map.from(mapToSort);
     return new SplayTreeMap<String, int>.from(
@@ -120,41 +116,23 @@ class Utils {
   }
 
   static String getWinnerOfLeg(
-      String setLegString, Game_P? game, BuildContext context) {
-    final bool isSingleMode =
-        game!.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Single;
-
-    int currentPoints;
-    for (PlayerOrTeamGameStatsX01 playerOrTeamStats
-        in Utils.getPlayersOrTeamStatsListStatsScreen(
-            game as GameX01_P, game.getGameSettings)) {
-      if (Utils.playerStatsDisplayedInTeamMode(game, game.getGameSettings)) {
-        PlayerOrTeamGameStatsX01 teamStats =
-            (game).getTeamStatsFromPlayer(playerOrTeamStats.getPlayer.getName);
-        if (teamStats.getPlayersWithCheckoutInLeg.containsKey(setLegString))
-          return teamStats.getPlayersWithCheckoutInLeg[setLegString] as String;
-      }
-
-      currentPoints = game.getGameSettings.getPointsOrCustom();
-
-      if (!playerOrTeamStats.getAllScoresPerLeg.containsKey(setLegString)) {
-        return '';
-      }
-
-      for (int score in playerOrTeamStats.getAllScoresPerLeg[setLegString]) {
-        currentPoints -= score;
-      }
-
-      if (currentPoints == 0) {
-        if (isSingleMode) {
-          return playerOrTeamStats.getPlayer.getName;
-        } else {
-          return playerOrTeamStats.getTeam.getName;
+      String setLegString, GameX01_P game, BuildContext context, int index) {
+    final String playerOrTeam =
+        game.getLegSetWithPlayerOrTeamWhoFinishedIt[index];
+    if (Utils.playerStatsDisplayedInTeamMode(game, game.getGameSettings)) {
+      for (PlayerOrTeamGameStatsX01 stats in game.getPlayerGameStatistics) {
+        final Team team =
+            game.getGameSettings.findTeamForPlayer(stats.getPlayer.getName);
+        if (team.getName == playerOrTeam) {
+          if (stats.getCheckouts.containsKey(setLegString)) {
+            return stats.getPlayer.getName;
+          }
         }
       }
+      return '';
+    } else {
+      return playerOrTeam;
     }
-
-    return '';
   }
 
   static String getAverageForLeg(
@@ -371,16 +349,16 @@ class Utils {
   }
 
   static Row setLegStrings(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
-      BuildContext context) {
+      BuildContext context, double width) {
     return Row(
       children: [
         SizedBox(
-          width: 20.w,
+          width: width.w,
         ),
         for (String setLegString in gameX01.getAllLegSetStringsExceptCurrentOne(
             gameX01, gameSettingsX01))
           Container(
-            width: 25.w,
+            width: gameSettingsX01.getSetsEnabled ? 25.w : 20.w,
             child: Padding(
               padding: EdgeInsets.only(
                 top: 0.5.h,
@@ -488,10 +466,11 @@ class Utils {
     return text;
   }
 
-  static getBorder(BuildContext context, String value, GameMode mode) {
+  static getBorder(BuildContext context, String value, GameMode mode,
+      [bool autoSubmitPoints = false]) {
     return Border(
       right: [
-        '0',
+        autoSubmitPoints ? '' : '0',
         '1',
         '2',
         '3',
@@ -667,8 +646,8 @@ class Utils {
 
   static bool shouldShrinkWidget(GameSettingsX01_P gameSettingsX01) {
     return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        gameSettingsX01.getTeams.length >= 2 &&
-        gameSettingsX01.getPlayers.length >= 4;
+        (gameSettingsX01.getPlayers.length >= 4 ||
+            gameSettingsX01.getTeams.length >= 3);
   }
 
   static String getBestOfOrFirstToString(dynamic gameSettings) {

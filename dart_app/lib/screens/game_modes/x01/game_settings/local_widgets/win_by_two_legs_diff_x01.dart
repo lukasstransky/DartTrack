@@ -9,214 +9,6 @@ import 'package:sizer/sizer.dart';
 final GlobalKey<FormState> _formKeyLegDifference = GlobalKey<FormState>();
 
 class WinByTwoLegsDifferenceX01 extends StatelessWidget {
-  _showDialogForSuddenDeath(
-      BuildContext context, GameSettingsX01_P gameSettingsX01) {
-    showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (context) => Form(
-        key: _formKeyLegDifference,
-        child: AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: dialogContentPadding,
-          title: const Text(
-            'Sudden death',
-            style: TextStyle(color: Colors.white),
-          ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 1.w),
-                        child: Tooltip(
-                          child: Icon(
-                            Icons.info_outline,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          padding: EdgeInsets.only(
-                            top: 1.h,
-                            bottom: 1.h,
-                            left: 2.w,
-                            right: 2.w,
-                          ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Theme.of(context).colorScheme.primary,
-                          ),
-                          textStyle: TextStyle(
-                            fontSize: 14.sp,
-                            color: Colors.white,
-                          ),
-                          message: SUDDEN_DEATH_INFO,
-                          preferBelow: false,
-                        ),
-                      ),
-                      const Text(
-                        'Enable sudden death',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      Switch(
-                        thumbColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary),
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        inactiveThumbColor:
-                            Theme.of(context).colorScheme.secondary,
-                        value: gameSettingsX01.getSuddenDeath,
-                        onChanged: (value) {
-                          setState(() {
-                            gameSettingsX01.setSuddenDeath = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                  if (gameSettingsX01.getSuddenDeath == true)
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(right: 1.w),
-                          child: Tooltip(
-                            child: Icon(
-                              Icons.info_outline,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            padding: EdgeInsets.only(
-                              top: 1.h,
-                              bottom: 1.h,
-                              left: 2.w,
-                              right: 2.w,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).colorScheme.primary,
-                            ),
-                            textStyle: TextStyle(
-                              fontSize: 14.sp,
-                              color: Colors.white,
-                            ),
-                            message: SUDDEN_DEATH_LEG_DIFFERENCE_INFO,
-                            preferBelow: false,
-                          ),
-                        ),
-                        const Text(
-                          'After max. legs',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 3.w),
-                          child: IconButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onPressed: () {
-                              setState(() {
-                                if (gameSettingsX01.getMaxExtraLegs == 1)
-                                  return;
-                                gameSettingsX01.setMaxExtraLegs =
-                                    gameSettingsX01.getMaxExtraLegs - 1;
-                                ;
-                              });
-                            },
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            icon: Icon(Icons.remove,
-                                color: gameSettingsX01.getMaxExtraLegs > 1
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Theme.of(context).colorScheme.primary),
-                          ),
-                        ),
-                        Container(
-                          width: 5.w,
-                          child: Center(
-                            child: Text(
-                              gameSettingsX01.getMaxExtraLegs.toString(),
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () {
-                            if (gameSettingsX01.getMaxExtraLegs >=
-                                MAX_EXTRA_LEGS) return;
-                            setState(() {
-                              gameSettingsX01.setMaxExtraLegs =
-                                  gameSettingsX01.getMaxExtraLegs + 1;
-                              ;
-                            });
-                          },
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                          icon: Icon(Icons.add,
-                              color: gameSettingsX01.getMaxExtraLegs !=
-                                      MAX_EXTRA_LEGS
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context).colorScheme.primary),
-                        ),
-                      ],
-                    ),
-                ],
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                _resetWinByTwoLegsDifference(gameSettingsX01);
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Cancel',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
-              ),
-              style: ButtonStyle(
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                _submitWinByTwoLegsDifference(gameSettingsX01);
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'Submit',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
-              ),
-              style: ButtonStyle(
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  _resetWinByTwoLegsDifference(GameSettingsX01_P gameSettingsX01) {
-    gameSettingsX01.setWinByTwoLegsDifference = false;
-    gameSettingsX01.setSuddenDeath = false;
-    gameSettingsX01.setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
-
-    gameSettingsX01.notify();
-  }
-
-  _submitWinByTwoLegsDifference(GameSettingsX01_P gameSettingsX01) {
-    gameSettingsX01.setWinByTwoLegsDifference = true;
-
-    gameSettingsX01.notify();
-  }
-
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
@@ -231,9 +23,7 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
         winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
       ),
       builder: (_, selectorModel, __) {
-        if (!selectorModel.setsEnabled &&
-            selectorModel.legs > 1 &&
-            !selectorModel.drawMode) {
+        if (selectorModel.legs > 1 && !selectorModel.drawMode) {
           return Container(
             margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
             width: WIDTH_GAMESETTINGS.w,
@@ -285,6 +75,260 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
       },
     );
   }
+}
+
+_showDialogForSuddenDeath(
+    BuildContext context, GameSettingsX01_P gameSettingsX01) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) => Form(
+      key: _formKeyLegDifference,
+      child: AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        contentPadding: dialogContentPadding,
+        title: const Text(
+          'Sudden death',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        Icons.info_outline,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      onPressed: () => _showInfoDialogForSuddenDeath(context),
+                    ),
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: const Text(
+                          'Enable sudden death',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
+                      value: gameSettingsX01.getSuddenDeath,
+                      onChanged: (value) {
+                        setState(() {
+                          gameSettingsX01.setSuddenDeath = value;
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                if (gameSettingsX01.getSuddenDeath == true)
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.info_outline,
+                          color: Theme.of(context).colorScheme.secondary,
+                        ),
+                        onPressed: () =>
+                            _showInfoDialogForMaxExtraLegs(context),
+                      ),
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: const Text(
+                            'After max. legs',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 3.w),
+                        child: IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () {
+                            setState(() {
+                              if (gameSettingsX01.getMaxExtraLegs == 1) return;
+                              gameSettingsX01.setMaxExtraLegs =
+                                  gameSettingsX01.getMaxExtraLegs - 1;
+                              ;
+                            });
+                          },
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          icon: Icon(Icons.remove,
+                              color: gameSettingsX01.getMaxExtraLegs > 1
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Theme.of(context).colorScheme.primary),
+                        ),
+                      ),
+                      Container(
+                        width: 10.w,
+                        child: Center(
+                          child: Text(
+                            gameSettingsX01.getMaxExtraLegs.toString(),
+                            style: TextStyle(
+                              fontSize: 18.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          if (gameSettingsX01.getMaxExtraLegs >= MAX_EXTRA_LEGS)
+                            return;
+                          setState(() {
+                            gameSettingsX01.setMaxExtraLegs =
+                                gameSettingsX01.getMaxExtraLegs + 1;
+                            ;
+                          });
+                        },
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        icon: Icon(Icons.add,
+                            color: gameSettingsX01.getMaxExtraLegs !=
+                                    MAX_EXTRA_LEGS
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.primary),
+                      ),
+                    ],
+                  ),
+              ],
+            );
+          },
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              _resetWinByTwoLegsDifference(gameSettingsX01);
+            },
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              _submitWinByTwoLegsDifference(gameSettingsX01);
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Submit',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+_resetWinByTwoLegsDifference(GameSettingsX01_P gameSettingsX01) {
+  gameSettingsX01.setWinByTwoLegsDifference = false;
+  gameSettingsX01.setSuddenDeath = false;
+  gameSettingsX01.setMaxExtraLegs = STANDARD_MAX_EXTRA_LEGS;
+
+  gameSettingsX01.notify();
+}
+
+_submitWinByTwoLegsDifference(GameSettingsX01_P gameSettingsX01) {
+  gameSettingsX01.setWinByTwoLegsDifference = true;
+
+  gameSettingsX01.notify();
+}
+
+_showInfoDialogForSuddenDeath(BuildContext context) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      contentPadding: dialogContentPadding,
+      title: Text(
+        'Information',
+        style: TextStyle(color: Colors.white),
+      ),
+      content: Text(
+        SUDDEN_DEATH_INFO,
+        style: TextStyle(color: Colors.white),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(
+            'Continue',
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+_showInfoDialogForMaxExtraLegs(BuildContext context) {
+  showDialog(
+    barrierDismissible: false,
+    context: context,
+    builder: (context) => AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      contentPadding: dialogContentPadding,
+      title: Text(
+        'Information',
+        style: TextStyle(color: Colors.white),
+      ),
+      content: Text(
+        SUDDEN_DEATH_LEG_DIFFERENCE_INFO,
+        style: TextStyle(color: Colors.white),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: Text(
+            'Continue',
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 class SelectorModel {

@@ -66,6 +66,7 @@ class UndoLastThrowBtn extends StatelessWidget {
         await firestoreServiceGames.deleteGame(g_gameId, context,
             game.getTeamGameStatistics.length > 0 ? true : false);
       }
+
       if (_didBotFinishGame(game, gameSettingsX01)) {
         RevertX01Helper.revertPoints(game, gameSettingsX01);
         RevertX01Helper.revertPoints(game, gameSettingsX01);

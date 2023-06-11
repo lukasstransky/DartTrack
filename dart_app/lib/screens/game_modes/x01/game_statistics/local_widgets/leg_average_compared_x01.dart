@@ -15,6 +15,8 @@ class LegAvgComparedX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
+    final double _width =
+        gameSettingsX01.playerOrTeamNameWithMoreThanEightChars() ? 30 : 25;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,7 +42,7 @@ class LegAvgComparedX01 extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 20.w,
+                width: _width.w,
                 padding: EdgeInsets.only(
                   top: 0.5.h,
                   bottom: 0.5.h,
@@ -49,20 +51,26 @@ class LegAvgComparedX01 extends StatelessWidget {
                 ),
                 alignment: Alignment.center,
                 child: Utils.teamStatsDisplayed(gameX01, gameSettingsX01)
-                    ? Text(
-                        stats.getTeam.getName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Utils.getTextColorDarken(context),
+                    ? FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          stats.getTeam.getName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Utils.getTextColorDarken(context),
+                          ),
                         ),
                       )
-                    : Text(
-                        stats.getPlayer is Bot
-                            ? 'Bot'
-                            : stats.getPlayer.getName,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Utils.getTextColorDarken(context),
+                    : FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          stats.getPlayer is Bot
+                              ? 'Bot'
+                              : stats.getPlayer.getName,
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Utils.getTextColorDarken(context),
+                          ),
                         ),
                       ),
                 decoration: BoxDecoration(
@@ -78,7 +86,7 @@ class LegAvgComparedX01 extends StatelessWidget {
                   in gameX01.getAllLegSetStringsExceptCurrentOne(
                       gameX01, gameSettingsX01))
                 Container(
-                  width: 25.w,
+                  width: gameSettingsX01.getSetsEnabled ? 25.w : 20.w,
                   padding: EdgeInsets.only(
                     top: 0.5.h,
                     bottom: 0.5.h,
@@ -107,7 +115,7 @@ class LegAvgComparedX01 extends StatelessWidget {
                 ),
             ],
           ),
-        Utils.setLegStrings(gameX01, gameSettingsX01, context),
+        Utils.setLegStrings(gameX01, gameSettingsX01, context, _width),
       ],
     );
   }

@@ -16,25 +16,26 @@ class AddPlayerBtn extends StatelessWidget {
 
   final GameMode mode;
 
-  // checks if its possible to add an player to a team -> e.g. there is 1 team with the MAX players in the team -> should not be possible to add a player, instead only possible to add a team
-  bool _possibleToAddPlayerToSomeTeam(List<Team> teams) {
-    for (Team team in teams) {
+  bool _shouldShowOnlyDialogForAddingTeam(dynamic settings) {
+    if (settings.getPlayers.length >= 8) {
+      return true;
+    }
+
+    for (Team team in settings.getTeams) {
       if (team.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
-        return true;
+        return false;
       }
     }
 
-    return false;
+    return true;
   }
 
   _addPlayerTeamBtnPressed(dynamic settings, BuildContext context) {
     if (settings.getSingleOrTeam == SingleOrTeamEnum.Single ||
         settings.getTeams.length == MAX_TEAMS) {
       AddPlayerTeamBtnDialogs.showDialogForAddingPlayer(settings, context);
-    }
-    // case -> team full of players -> should not be possible to add a player, instead only allow to add team
-    else if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        !_possibleToAddPlayerToSomeTeam(settings.getTeams)) {
+    } else if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        _shouldShowOnlyDialogForAddingTeam(settings)) {
       AddPlayerTeamBtnDialogs.showDialogForAddingTeam(settings, context);
     } else {
       AddPlayerTeamBtnDialogs.showDialogForAddingPlayerOrTeam(

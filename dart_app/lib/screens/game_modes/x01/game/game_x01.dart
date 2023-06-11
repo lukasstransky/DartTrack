@@ -128,12 +128,20 @@ class PlayerToThrowForTeamMode extends StatelessWidget {
               final currentPlayer = gameX01.getCurrentPlayerToThrow;
               return currentPlayer != null ? currentPlayer : Player(name: '');
             },
-            builder: (_, currentPlayerToThrow, __) => Text(
-              currentPlayerToThrow.getName,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.sp,
-                fontWeight: FontWeight.bold,
+            builder: (_, currentPlayerToThrow, __) => Flexible(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Container(
+                  padding: EdgeInsets.only(right: 2.w),
+                  child: Text(
+                    currentPlayerToThrow.getName,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ),
             ),
           ),

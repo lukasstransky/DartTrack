@@ -193,7 +193,7 @@ class FirestoreServicePlayerStats {
             //checkout score
             if ((element.data() as Map<String, dynamic>)
                 .containsKey('checkouts')) {
-              for (int checkoutScore in SplayTreeMap.fromIterable(
+              for (int checkoutScore in LinkedHashMap.fromIterable(
                 element.get('checkouts'),
                 key: (string) => string.split(';')[0],
                 value: (string) => int.parse(string.split(';')[1]),
@@ -218,7 +218,7 @@ class FirestoreServicePlayerStats {
             //legs
             if ((element.data() as Map<String, dynamic>)
                 .containsKey('thrownDartsPerLeg')) {
-              for (int thrownDarts in SplayTreeMap.fromIterable(
+              for (int thrownDarts in LinkedHashMap.fromIterable(
                 element.get('thrownDartsPerLeg'),
                 key: (string) => string.split(';')[0],
                 value: (string) => int.parse(string.split(';')[1]),
@@ -437,14 +437,14 @@ class FirestoreServicePlayerStats {
 
             //for overall values -> checkouts + thrown darts per leg
             if (validOrderFields.contains(orderField)) {
-              final SplayTreeMap<String, int> checkouts =
-                  SplayTreeMap.fromIterable(
+              final LinkedHashMap<String, int> checkouts =
+                  LinkedHashMap.fromIterable(
                 element.get('checkouts'),
                 key: (string) => string.split(';')[0],
                 value: (string) => int.parse(string.split(';')[1]),
               );
-              final SplayTreeMap<String, int> thrownDartsPerLeg =
-                  SplayTreeMap.fromIterable(
+              final LinkedHashMap<String, int> thrownDartsPerLeg =
+                  LinkedHashMap.fromIterable(
                 element.get('thrownDartsPerLeg'),
                 key: (string) => string.split(';')[0],
                 value: (string) => int.parse(string.split(';')[1]),

@@ -45,110 +45,113 @@ class OtherX01 extends StatelessWidget {
     }
 
     return Expanded(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Selector<GameX01_P, bool>(
-              selector: (_, game) => game.getRevertPossible,
-              builder: (_, revertPossible, __) => RevertBtn(game_p: gameX01),
-            ),
-          ),
-          Expanded(
-            child: gameX01.shouldPointBtnBeDisabled('25')
-                ? PointBtnThreeDartX01(
-                    point: '25',
-                    activeBtn: false,
-                  )
-                : PointBtnThreeDartX01(
-                    point: '25',
-                    activeBtn: true,
-                  ),
-          ),
-          Expanded(
-            child: gameX01.shouldPointBtnBeDisabled('Bull')
-                ? PointBtnThreeDartX01(
-                    point: 'Bull',
-                    activeBtn: false,
-                  )
-                : PointBtnThreeDartX01(
-                    point: 'Bull',
-                    activeBtn: true,
-                  ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GENERAL_BORDER_WIDTH.w,
-                  ),
-                  right: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GENERAL_BORDER_WIDTH.w,
-                  ),
-                ),
-              ),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  backgroundColor: _isBustClickable(gameX01)
-                      ? MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary)
-                      : MaterialStateProperty.all(Utils.darken(
-                          Theme.of(context).colorScheme.primary, 25)),
-                  overlayColor: _isBustClickable(gameX01)
-                      ? Utils.getColorOrPressed(
-                          Theme.of(context).colorScheme.primary,
-                          Utils.darken(
-                              Theme.of(context).colorScheme.primary, 25),
-                        )
-                      : MaterialStateProperty.all(Colors.transparent),
-                ),
-                child: FittedBox(
-                  child: Text(
-                    'Bust',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Utils.getTextColorDarken(context),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  if (_isBustClickable(gameX01)) {
-                    if (context
-                        .read<GameSettingsX01_P>()
-                        .getVibrationFeedbackEnabled) {
-                      HapticFeedback.lightImpact();
-                    }
-                    SubmitX01Helper.bust(context);
-                  }
-                },
-              ),
-            ),
-          ),
-          Expanded(
-            child: gameX01.shouldPointBtnBeDisabled('0')
-                ? PointBtnThreeDartX01(
-                    point: '0',
-                    activeBtn: false,
-                  )
-                : PointBtnThreeDartX01(
-                    point: '0',
-                    activeBtn: true,
-                  ),
-          ),
-          if (!gameSettingsX01.getAutomaticallySubmitPoints)
+      child: Selector<GameSettingsX01_P, bool>(
+        selector: (_, game) => game.getAutomaticallySubmitPoints,
+        builder: (_, automaticallySubmitPoints, __) => Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
             Expanded(
-              child: SubmitPointsBtnX01(),
+              child: Selector<GameX01_P, bool>(
+                selector: (_, game) => game.getRevertPossible,
+                builder: (_, revertPossible, __) => RevertBtn(game_p: gameX01),
+              ),
             ),
-        ],
+            Expanded(
+              child: gameX01.shouldPointBtnBeDisabled('25')
+                  ? PointBtnThreeDartX01(
+                      point: '25',
+                      activeBtn: false,
+                    )
+                  : PointBtnThreeDartX01(
+                      point: '25',
+                      activeBtn: true,
+                    ),
+            ),
+            Expanded(
+              child: gameX01.shouldPointBtnBeDisabled('Bull')
+                  ? PointBtnThreeDartX01(
+                      point: 'Bull',
+                      activeBtn: false,
+                    )
+                  : PointBtnThreeDartX01(
+                      point: 'Bull',
+                      activeBtn: true,
+                    ),
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: Utils.getPrimaryColorDarken(context),
+                      width: GENERAL_BORDER_WIDTH.w,
+                    ),
+                    right: BorderSide(
+                      color: Utils.getPrimaryColorDarken(context),
+                      width: GENERAL_BORDER_WIDTH.w,
+                    ),
+                  ),
+                ),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                    ),
+                    backgroundColor: _isBustClickable(gameX01)
+                        ? MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.primary)
+                        : MaterialStateProperty.all(Utils.darken(
+                            Theme.of(context).colorScheme.primary, 25)),
+                    overlayColor: _isBustClickable(gameX01)
+                        ? Utils.getColorOrPressed(
+                            Theme.of(context).colorScheme.primary,
+                            Utils.darken(
+                                Theme.of(context).colorScheme.primary, 25),
+                          )
+                        : MaterialStateProperty.all(Colors.transparent),
+                  ),
+                  child: FittedBox(
+                    child: Text(
+                      'Bust',
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        color: Utils.getTextColorDarken(context),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    if (_isBustClickable(gameX01)) {
+                      if (context
+                          .read<GameSettingsX01_P>()
+                          .getVibrationFeedbackEnabled) {
+                        HapticFeedback.lightImpact();
+                      }
+                      SubmitX01Helper.bust(context);
+                    }
+                  },
+                ),
+              ),
+            ),
+            Expanded(
+              child: gameX01.shouldPointBtnBeDisabled('0')
+                  ? PointBtnThreeDartX01(
+                      point: '0',
+                      activeBtn: false,
+                    )
+                  : PointBtnThreeDartX01(
+                      point: '0',
+                      activeBtn: true,
+                    ),
+            ),
+            if (!gameSettingsX01.getAutomaticallySubmitPoints)
+              Expanded(
+                child: SubmitPointsBtnX01(),
+              ),
+          ],
+        ),
       ),
     );
   }

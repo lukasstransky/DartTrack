@@ -17,8 +17,7 @@ class RevertX01Helper {
 
   static void revertPoints(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
       [bool shouldRevertTeamStats = false]) {
-    if (!_isRevertPossible(gameX01, gameSettingsX01) &&
-        !shouldRevertTeamStats) {
+    if (!isRevertPossible(gameX01, gameSettingsX01) && !shouldRevertTeamStats) {
       return;
     }
 
@@ -137,7 +136,7 @@ class RevertX01Helper {
           alreadyReverted = true;
         } else {
           // set current thrown darts for each player before leg/set was finished
-          final String lastKey = stats.getThrownDartsPerLeg.lastKey();
+          final String lastKey = stats.getThrownDartsPerLeg.keys.last;
 
           stats.setCurrentThrownDartsInLeg =
               stats.getThrownDartsPerLeg[lastKey];
@@ -225,7 +224,7 @@ class RevertX01Helper {
 
     gameX01.setCurrentPointsSelected = 'Points';
     // if 1 score is left -> enters this if & removes last score -> without this call the revert btn is still highlighted
-    _isRevertPossible(gameX01, gameSettingsX01);
+    isRevertPossible(gameX01, gameSettingsX01);
 
     if (!shouldRevertTeamStats &&
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
@@ -284,11 +283,12 @@ class RevertX01Helper {
   }
 
   //returns true if at least one player has a score left
-  static bool _isRevertPossible(
+  static bool isRevertPossible(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = false;
-    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
-        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
+    dynamic playersOrTeamsList = Utils.getPlayersOrTeamStatsList(
+        gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team);
+    for (PlayerOrTeamGameStatsX01 stats in playersOrTeamsList) {
       if (stats.getAllScores.isNotEmpty ||
           stats.getAllScoresPerDart.isNotEmpty) {
         result = true;
@@ -330,7 +330,7 @@ class RevertX01Helper {
     if (legOrSetReverted) {
       // checkout
       if (currentStats.getCheckouts.isNotEmpty) {
-        currentStats.getCheckouts.remove(currentStats.getCheckouts.lastKey());
+        currentStats.getCheckouts.remove(currentStats.getCheckouts.keys.last);
       }
 
       // player with checkout in leg
@@ -343,7 +343,7 @@ class RevertX01Helper {
 
       // thrown darts per leg
       if (currentStats.getThrownDartsPerLeg.isNotEmpty) {
-        final String lastKey = currentStats.getThrownDartsPerLeg.lastKey();
+        final String lastKey = currentStats.getThrownDartsPerLeg.keys.last;
 
         currentThrownDartsInLeg = currentStats.getThrownDartsPerLeg[lastKey];
         final int? amountOfFinishDarts =
@@ -533,7 +533,7 @@ class RevertX01Helper {
           }
         }
 
-        final String lastKey = currentStats.getAllScoresPerLeg.lastKey();
+        final String lastKey = currentStats.getAllScoresPerLeg.keys.last;
         currentStats.getAllScoresPerLeg[lastKey].removeLast();
         if (currentStats.getAllScoresPerLeg[lastKey].isEmpty) {
           currentStats.getAllScoresPerLeg.remove(lastKey);

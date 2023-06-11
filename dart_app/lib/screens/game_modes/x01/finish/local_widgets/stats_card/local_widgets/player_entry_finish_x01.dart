@@ -40,22 +40,16 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
     super.initState();
   }
 
-  bool _firstElementNoDrawOrOpenGame(GameX01_P gameX01, BuildContext context) {
-    return widget.i == 0 && !gameX01.isGameDraw(context) && !widget.openGame;
+  bool _firstElementNoDrawOrOpenGame(GameX01_P gameX01, dynamic statsList) {
+    return widget.i == 0 && !gameX01.isGameDraw(statsList) && !widget.openGame;
   }
 
-  checkForSameAmountOfSetsLegs(int indexOfPlayerOrTeam) {
+  checkForSameAmountOfSetsLegs(int indexOfPlayerOrTeam, dynamic statsList) {
     if (indexOfPlayerOrTeam == 0) {
       return 1;
     } else if (indexOfPlayerOrTeam == 1) {
       return 2;
     }
-
-    final List<PlayerOrTeamGameStats> statsList =
-        Utils.getPlayersOrTeamStatsList(
-            widget.gameX01,
-            widget.gameX01.getGameSettings.getSingleOrTeam ==
-                SingleOrTeamEnum.Team);
 
     for (int i = 1; i < indexOfPlayerOrTeam; i++) {
       if (widget.gameX01.getGameSettings.getSetsEnabled) {
@@ -78,6 +72,12 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
 
   @override
   Widget build(BuildContext context) {
+    final List<PlayerOrTeamGameStats> statsList =
+        Utils.getPlayersOrTeamStatsList(
+            widget.gameX01,
+            widget.gameX01.getGameSettings.getSingleOrTeam ==
+                SingleOrTeamEnum.Team);
+
     return Padding(
       padding: EdgeInsets.only(
           left: 5.w,
@@ -98,12 +98,13 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                 width: 40.w,
                 child: Row(
                   children: [
-                    widget.gameX01.isGameDraw(context)
+                    widget.gameX01.isGameDraw(statsList) ||
+                            widget.gameX01.getIsOpenGame
                         ? SizedBox.shrink()
                         : Container(
                             width: 5.w,
                             child: Text(
-                              '${checkForSameAmountOfSetsLegs(widget.i)}.',
+                              '${checkForSameAmountOfSetsLegs(widget.i, statsList)}.',
                               style: TextStyle(
                                 fontSize: 14.sp,
                                 fontWeight: FontWeight.bold,
@@ -111,7 +112,8 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                               ),
                             ),
                           ),
-                    if (_firstElementNoDrawOrOpenGame(widget.gameX01, context))
+                    if (_firstElementNoDrawOrOpenGame(
+                        widget.gameX01, statsList))
                       Container(
                         padding: EdgeInsets.only(left: 2.w),
                         child: Icon(
@@ -120,7 +122,7 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                           color: Color(0xffFFD700),
                         ),
                       )
-                    else if (widget.gameX01.isGameDraw(context))
+                    else if (widget.gameX01.isGameDraw(statsList))
                       Container(
                         padding: EdgeInsets.only(left: 5.w),
                       )
@@ -142,8 +144,6 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                       i: widget.i,
                       singleOrTeamEnum:
                           widget.gameX01.getGameSettings.getSingleOrTeam,
-                      firstElementNoDrawOrOpenGame:
-                          _firstElementNoDrawOrOpenGame,
                     ),
                   ],
                 ),
@@ -167,14 +167,12 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
     required this.teamStats,
     required this.i,
     required this.singleOrTeamEnum,
-    required this.firstElementNoDrawOrOpenGame,
   }) : super(key: key);
 
   final List<PlayerOrTeamGameStatsX01> playerStats;
   final List<PlayerOrTeamGameStatsX01> teamStats;
   final int i;
   final SingleOrTeamEnum singleOrTeamEnum;
-  final Function firstElementNoDrawOrOpenGame;
 
   @override
   Widget build(BuildContext context) {

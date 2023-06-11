@@ -48,45 +48,63 @@ class PlayerOrTeamNames extends StatelessWidget {
                 if (game is GameCricket_P) ...[
                   if (Utils.playerStatsDisplayedInTeamMode(
                       game, game.getGameSettings)) ...[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          stats.getPlayer.getName,
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              stats.getPlayer.getName,
+                              style: TextStyle(
+                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Utils.getTextColorDarken(context),
+                              ),
+                            ),
+                          ),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '(${game.getGameSettings.findTeamForPlayer(stats.getPlayer.getName).getName})',
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                color: Utils.getTextColorDarken(context),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ] else ...[
+                    Flexible(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          Utils.teamStatsDisplayed(game, game.getGameSettings)
+                              ? stats.getTeam.getName
+                              : stats.getPlayer.getName,
                           style: TextStyle(
                             fontSize: FONTSIZE_STATISTICS.sp,
                             fontWeight: FontWeight.bold,
                             color: Utils.getTextColorDarken(context),
                           ),
                         ),
-                        Text(
-                          '(${game.getGameSettings.findTeamForPlayer(stats.getPlayer.getName).getName})',
-                          style: TextStyle(
-                            fontSize: 11.sp,
-                            color: Utils.getTextColorDarken(context),
-                          ),
-                        )
-                      ],
-                    ),
-                  ] else ...[
-                    Text(
-                      Utils.teamStatsDisplayed(game, game.getGameSettings)
-                          ? stats.getTeam.getName
-                          : stats.getPlayer.getName,
-                      style: TextStyle(
-                        fontSize: FONTSIZE_STATISTICS.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Utils.getTextColorDarken(context),
                       ),
                     ),
                   ]
                 ] else ...[
-                  Text(
-                    stats.getPlayer.getName,
-                    style: TextStyle(
-                      fontSize: FONTSIZE_STATISTICS.sp,
-                      color: Utils.getTextColorDarken(context),
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        stats.getPlayer.getName,
+                        style: TextStyle(
+                          fontSize: FONTSIZE_STATISTICS.sp,
+                          color: Utils.getTextColorDarken(context),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ),
                 ],

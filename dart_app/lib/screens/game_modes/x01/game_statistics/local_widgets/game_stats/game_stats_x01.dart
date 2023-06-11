@@ -1,6 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
-import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/display_team_or_player_names_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/player_or_team_names_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/game_stats/local_widgets/legs_sets_won_x01.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/show_teams_or_players_stats_btn.dart';
 
@@ -22,7 +22,7 @@ class GameStatsX01 extends StatelessWidget {
           child: Row(
             children: [
               ShowTeamsOrPlayersStatsBtn(game: gameX01),
-              DisplayTeamOrPlayerNamesX01(gameX01: gameX01),
+              PlayerOrTeamNamesX01(gameX01: gameX01),
             ],
           ),
         ),

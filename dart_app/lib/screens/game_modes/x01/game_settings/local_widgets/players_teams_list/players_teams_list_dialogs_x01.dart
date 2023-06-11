@@ -45,10 +45,12 @@ class PlayersTeamsListDialogs {
       GameSettings_P gameSettings_P) {
     //store values as "backup" if user modifies the avg. or name & then clicks on cancel
     String cancelName = '';
+    int cancelLvl = 0;
     int cancelAverage = 0;
 
     if (playerToEdit is Bot) {
       cancelAverage = playerToEdit.getPreDefinedAverage;
+      cancelLvl = playerToEdit.getLevel;
     } else {
       cancelName = playerToEdit.getName;
     }
@@ -79,7 +81,7 @@ class PlayersTeamsListDialogs {
                           Padding(
                             padding: EdgeInsets.only(left: 1.w),
                             child: Text(
-                              'Bot - level ${playerToEdit.getLevel}',
+                              'Bot - lvl. ${playerToEdit.getLevel}',
                               style: TextStyle(
                                 fontSize: 12.sp,
                                 color: Colors.white,
@@ -122,7 +124,7 @@ class PlayersTeamsListDialogs {
                         ..text = playerToEdit.getName,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
-                    if (value!.isEmpty) {
+                    if (value!.trim().isEmpty) {
                       return ('Please enter a name!');
                     }
                     if (gameSettings_P.checkIfPlayerNameExists(value)) {
@@ -162,16 +164,14 @@ class PlayersTeamsListDialogs {
           ),
           actions: [
             TextButton(
-              onPressed: () => {
-                if (playerToEdit is Bot)
-                  {
-                    playerToEdit.setPreDefinedAverage = cancelAverage,
-                  }
-                else
-                  {
-                    playerToEdit.setName = cancelName,
-                  },
-                Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (playerToEdit is Bot) {
+                  playerToEdit.setPreDefinedAverage = cancelAverage;
+                  playerToEdit.setLevel = cancelLvl;
+                } else {
+                  playerToEdit.setName = cancelName;
+                }
               },
               child: Text(
                 'Cancel',
@@ -179,6 +179,9 @@ class PlayersTeamsListDialogs {
                     TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),
@@ -191,6 +194,9 @@ class PlayersTeamsListDialogs {
                     TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),
@@ -230,7 +236,7 @@ class PlayersTeamsListDialogs {
                             ..text = teamToEdit.getName,
                       textInputAction: TextInputAction.done,
                       validator: (value) {
-                        if (value!.isEmpty) {
+                        if (value!.trim().isEmpty) {
                           return ('Please enter a name!');
                         }
                         if (gameSettings.checkIfTeamNameExists(value)) {
@@ -298,8 +304,8 @@ class PlayersTeamsListDialogs {
             actions: [
               TextButton(
                 onPressed: () {
-                  teamToEdit.setName = cancelName;
                   Navigator.of(context).pop();
+                  teamToEdit.setName = cancelName;
                 },
                 child: Text(
                   'Cancel',
@@ -307,6 +313,9 @@ class PlayersTeamsListDialogs {
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),
@@ -320,6 +329,9 @@ class PlayersTeamsListDialogs {
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),
@@ -480,6 +492,9 @@ class PlayersTeamsListDialogs {
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),
@@ -493,6 +508,9 @@ class PlayersTeamsListDialogs {
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),
@@ -512,12 +530,15 @@ class PlayersTeamsListDialogs {
 
   static _saveEdit(
       BuildContext context, dynamic gameSettings_P, Player playerToEdit) {
+    editPlayerController.text = editPlayerController.text.trim();
     if (!_formKeyEditPlayer.currentState!.validate()) {
       return;
     }
     _formKeyEditPlayer.currentState!.save();
 
     if (!(playerToEdit is Bot)) {
+      final String editPlayerControllerText = editPlayerController.text;
+
       // player from team is not the same refernce as in the single players list, therefore also needs to be updated and vice versa
       if (gameSettings_P is GameSettingsX01_P ||
           gameSettings_P is GameSettingsCricket_P) {
@@ -525,15 +546,15 @@ class PlayersTeamsListDialogs {
           final Player? playerFromSingles =
               gameSettings_P.getPlayerFromSingles(playerToEdit.getName);
           if (playerFromSingles != null) {
-            playerFromSingles.setName = editPlayerController.text;
+            playerFromSingles.setName = editPlayerControllerText;
           }
         }
         final Player playerFromTeam =
             gameSettings_P.getPlayerFromTeam(playerToEdit.getName);
-        playerFromTeam.setName = editPlayerController.text;
+        playerFromTeam.setName = editPlayerControllerText;
       }
 
-      playerToEdit.setName = editPlayerController.text;
+      playerToEdit.setName = editPlayerControllerText;
     }
 
     gameSettings_P.notify();
@@ -543,6 +564,7 @@ class PlayersTeamsListDialogs {
 
   static _submitEditedTeam(
       BuildContext context, GameSettings_P gameSettings, Team teamToEdit) {
+    editTeamController.text = editTeamController.text.trim();
     if (!_formKeyEditTeam.currentState!.validate()) {
       return;
     }
@@ -688,6 +710,11 @@ class PlayersTeamsListDialogs {
                                 color: Theme.of(context).colorScheme.secondary),
                           ),
                           style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                             backgroundColor:
                                 Utils.getPrimaryMaterialStateColorDarken(
                                     context),
@@ -705,6 +732,11 @@ class PlayersTeamsListDialogs {
                               color: Theme.of(context).colorScheme.secondary),
                         ),
                         style: ButtonStyle(
+                          splashFactory: NoSplash.splashFactory,
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent),
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
                         ),

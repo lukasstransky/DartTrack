@@ -91,10 +91,10 @@ class SubmitPointsBtnX01 extends StatelessWidget {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     final PlayerOrTeamGameStatsX01 stats = gameX01.getCurrentPlayerGameStats();
 
-    //double in -> check for 1, 3, 5 -> invalid
+    //double in, master in -> check for 1 -> invalid
     if ((gameSettingsX01.getModeIn == ModeOutIn.Double ||
             gameSettingsX01.getModeIn == ModeOutIn.Master) &&
-        _areInvalidDoubleInPoints(currentPointsSelected) &&
+        currentPointsSelected == '1' &&
         stats.getCurrentPoints == gameSettingsX01.getPointsOrCustom()) {
       Fluttertoast.showToast(
           msg: 'Invalid score for double in!', toastLength: Toast.LENGTH_SHORT);
@@ -129,16 +129,6 @@ class SubmitPointsBtnX01 extends StatelessWidget {
         }
       }
     }
-  }
-
-  bool _areInvalidDoubleInPoints(String pointsSelected) {
-    if (pointsSelected == '1' ||
-        pointsSelected == '3' ||
-        pointsSelected == '5') {
-      return true;
-    }
-
-    return false;
   }
 
   @override

@@ -55,6 +55,7 @@ class _GameSettingsSingleDoubleTrainingState
         settings.notify();
       }
     });
+    settings.setLoggedInPlayerToFirstOne(username);
   }
 
   @override

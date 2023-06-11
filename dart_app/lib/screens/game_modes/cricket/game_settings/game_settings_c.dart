@@ -98,6 +98,7 @@ class _GameSettingsCricketState extends State<GameSettingsCricket> {
         gameSettingsCricket.notify();
       }
     });
+    gameSettingsCricket.setLoggedInPlayerToFirstOne(username);
   }
 }
 

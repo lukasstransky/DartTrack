@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/local_widgets/hide_show_average_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/local_widgets/hide_show_finish_ways_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/local_widgets/hide_show_last_throw_x01.dart';
@@ -15,11 +16,13 @@ class HideShowX01 extends StatelessWidget {
 
   bool _showOtherOptions(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
     final bool isSingleMode =
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
 
     return (isSingleMode && gameSettingsX01.getPlayers.length == 2) ||
-        (!isSingleMode && gameSettingsX01.getTeams.length == 2);
+        (!isSingleMode && gameSettingsX01.getTeams.length == 2) ||
+        !gameX01.getInit;
   }
 
   @override

@@ -92,203 +92,223 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
+    final dynamic playersOrTeamsList =
+        Utils.getPlayersOrTeamStatsListStatsScreen(
+            widget.gameX01, gameSettingsX01);
+    final bool twoPlayersOrTeams = playersOrTeamsList.length == 2;
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
-                in Utils.getPlayersOrTeamStatsListStatsScreen(
-                    widget.gameX01, gameSettingsX01))
-              Container(
-                width: 43.w,
-                padding: EdgeInsets.all(2.w),
-                child: Column(
-                  children: [
-                    Text(
-                      _getPlayerOrTeamName(playerOrTeamGameStatsX01,
-                          widget.gameX01, gameSettingsX01),
+    return twoPlayersOrTeams
+        ? LayoutBuilder(
+            builder: (context, constraints) => SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
+                      in playersOrTeamsList)
+                    Container(
+                      width: constraints.maxWidth / playersOrTeamsList.length,
+                      child: bodyData(
+                          playerOrTeamGameStatsX01, gameSettingsX01, context),
+                    )
+                ],
+              ),
+            ),
+          )
+        : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  for (PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01
+                      in playersOrTeamsList)
+                    Container(
+                      width: 43.w,
+                      padding: EdgeInsets.all(2.w),
+                      child: bodyData(
+                          playerOrTeamGameStatsX01, gameSettingsX01, context),
+                    ),
+                ],
+              ),
+            ),
+          );
+  }
+
+  Column bodyData(PlayerOrTeamGameStatsX01 playerOrTeamGameStatsX01,
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          _getPlayerOrTeamName(
+              playerOrTeamGameStatsX01, widget.gameX01, gameSettingsX01),
+          style: TextStyle(
+            fontSize: 15.sp,
+            color: Colors.white,
+          ),
+        ),
+        for (int i = 0;
+            i <
+                (playerOrTeamGameStatsX01.getAllScoresPerLeg
+                        .containsKey(widget.setLegString)
+                    ? playerOrTeamGameStatsX01
+                        .getAllScoresPerLeg[widget.setLegString].length
+                    : 0);
+            i++) ...[
+          if (i == 0)
+            Padding(
+              padding: EdgeInsets.only(
+                bottom: 1.h,
+                top: 0.5.h,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Score',
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            color: Utils.getTextColorDarken(context),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Left',
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            color: Utils.getTextColorDarken(context),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      playerOrTeamGameStatsX01
+                          .getAllScoresPerLeg[widget.setLegString]
+                          .elementAt(i)
+                          .toString(),
                       style: TextStyle(
-                        fontSize: 15.sp,
                         color: Colors.white,
                       ),
                     ),
-                    for (int i = 0;
-                        i <
-                            (playerOrTeamGameStatsX01.getAllScoresPerLeg
-                                    .containsKey(widget.setLegString)
-                                ? playerOrTeamGameStatsX01
-                                    .getAllScoresPerLeg[widget.setLegString]
-                                    .length
-                                : 0);
-                        i++) ...[
-                      if (i == 0)
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 1.h,
-                            top: 0.5.h,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Center(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'Score',
-                                      style: TextStyle(
-                                        fontSize: 11.sp,
-                                        color:
-                                            Utils.getTextColorDarken(context),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Expanded(
-                                child: Center(
-                                  child: FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    child: Text(
-                                      'Left',
-                                      style: TextStyle(
-                                        fontSize: 11.sp,
-                                        color:
-                                            Utils.getTextColorDarken(context),
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              child: Center(
-                                child: Text(
-                                  playerOrTeamGameStatsX01
-                                      .getAllScoresPerLeg[widget.setLegString]
-                                      .elementAt(i)
-                                      .toString(),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              child: Center(
-                                child: Text(
-                                  _getCurrentValue(
-                                      playerOrTeamGameStatsX01
-                                          .getAllScoresPerLeg[
-                                              widget.setLegString]
-                                          .elementAt(i),
-                                      i,
-                                      playerOrTeamGameStatsX01),
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      if (i ==
-                              playerOrTeamGameStatsX01
-                                      .getAllScoresPerLeg[widget.setLegString]
-                                      .length -
-                                  1 &&
-                          _emptyRowNeeded(
-                              playerOrTeamGameStatsX01
-                                  .getAllScoresPerLeg[widget.setLegString]
-                                  .length,
-                              widget.gameX01,
-                              gameSettingsX01))
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Center(
-                                child: Text(''),
-                              ),
-                            ),
-                          ],
-                        ),
-                    ],
-                    Divider(
-                      height: 1.5.h,
-                      thickness: 1.5,
-                      indent: 10,
-                      endIndent: 10,
-                      color: Utils.getTextColorDarken(context),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              'Avg.',
-                              style: TextStyle(
-                                color: Utils.getTextColorDarken(context),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              'Darts',
-                              style: TextStyle(
-                                color: Utils.getTextColorDarken(context),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              Utils.getAverageForLeg(playerOrTeamGameStatsX01,
-                                  widget.setLegString),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              _getThrownDartsForLeg(playerOrTeamGameStatsX01),
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
               ),
+              Expanded(
+                child: Container(
+                  child: Center(
+                    child: Text(
+                      _getCurrentValue(
+                          playerOrTeamGameStatsX01
+                              .getAllScoresPerLeg[widget.setLegString]
+                              .elementAt(i),
+                          i,
+                          playerOrTeamGameStatsX01),
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          if (i ==
+                  playerOrTeamGameStatsX01
+                          .getAllScoresPerLeg[widget.setLegString].length -
+                      1 &&
+              _emptyRowNeeded(
+                  playerOrTeamGameStatsX01
+                      .getAllScoresPerLeg[widget.setLegString].length,
+                  widget.gameX01,
+                  gameSettingsX01))
+            Row(
+              children: [
+                Expanded(
+                  child: Center(
+                    child: Text(''),
+                  ),
+                ),
+              ],
+            ),
+        ],
+        Divider(
+          height: 1.5.h,
+          thickness: 1.5,
+          indent: 10,
+          endIndent: 10,
+          color: Utils.getTextColorDarken(context),
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  'Avg.',
+                  style: TextStyle(
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: Text(
+                  'Darts',
+                  style: TextStyle(
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
           ],
         ),
-      ),
+        Row(
+          children: [
+            Expanded(
+              child: Center(
+                child: Text(
+                  Utils.getAverageForLeg(
+                      playerOrTeamGameStatsX01, widget.setLegString),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: Center(
+                child: Text(
+                  _getThrownDartsForLeg(playerOrTeamGameStatsX01),
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

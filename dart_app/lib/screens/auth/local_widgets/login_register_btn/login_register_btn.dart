@@ -34,6 +34,7 @@ class LoginRegisterBtn extends StatelessWidget {
           await authService.emailAlreadyExists(emailTextController.text);
     }
 
+    emailTextController.text = emailTextController.text.trim();
     if (!loginRegisterPageFormKey.currentState!.validate()) {
       return;
     }
@@ -44,8 +45,6 @@ class LoginRegisterBtn extends StatelessWidget {
     auth.notify();
 
     try {
-      emailTextController.text = emailTextController.text.trim();
-
       if (auth.getAuthMode == AuthMode.Login) {
         await authService.login(
             emailTextController.text, passwordTextController.text);

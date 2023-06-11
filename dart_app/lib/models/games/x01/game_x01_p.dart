@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/x01/helper/sudden_death_starter.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
@@ -9,8 +10,6 @@ import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class GameX01_P extends Game_P {
   GameX01_P() : super(dateTime: DateTime.now(), name: GameMode.X01.name);
@@ -29,9 +28,9 @@ class GameX01_P extends Game_P {
       true; // only for team mode -> to determine if team or player stats should be displayed in game stats
   List<List<String>> _currentPlayerOfTeamsBeforeLegFinish =
       []; // for reverting -> save current player whose turn it was before leg was finished for each team (e.g.: Leg 1; 'Strainski', 'a')
-  List<String> _setLegWithPlayerOrTeamWhoFinishedIt =
-      []; // for reverting -> to set correct previous player/team
   bool botSubmittedPoints = false;
+  SuddenDeathStarter?
+      suddenDeathStarter; // only needed for reverting sudden death from finish screen
 
   factory GameX01_P.fromMapX01(
       dynamic map, GameMode mode, String gameId, bool openGame) {
@@ -80,6 +79,8 @@ class GameX01_P extends Game_P {
     gameX01.setIsGameFinished = game.getIsGameFinished;
     gameX01.setIsOpenGame = game.getIsOpenGame;
     gameX01.setIsFavouriteGame = game.getIsFavouriteGame;
+    gameX01.setLegSetWithPlayerOrTeamWhoFinishedIt =
+        game.getLegSetWithPlayerOrTeamWhoFinishedIt;
 
     return gameX01;
   }
@@ -127,14 +128,13 @@ class GameX01_P extends Game_P {
   set setCurrentPlayerOfTeamsBeforeLegFinish(List<List<String>> value) =>
       _currentPlayerOfTeamsBeforeLegFinish = value;
 
-  List<String> get getLegSetWithPlayerOrTeamWhoFinishedIt =>
-      _setLegWithPlayerOrTeamWhoFinishedIt;
-  set setLegSetWithPlayerOrTeamWhoFinishedIt(List<String> value) =>
-      _setLegWithPlayerOrTeamWhoFinishedIt = value;
-
   bool get getBotSubmittedPoints => botSubmittedPoints;
   set setBotSubmittedPoints(bool botSubmittedPoints) =>
       this.botSubmittedPoints = botSubmittedPoints;
+
+  SuddenDeathStarter? get getSuddenDeathStarter => this.suddenDeathStarter;
+  set setSuddenDeathStarter(SuddenDeathStarter? suddenDeathStarter) =>
+      this.suddenDeathStarter = suddenDeathStarter;
 
   /************************************************************/
   /********                 METHDODS                   ********/
@@ -386,7 +386,7 @@ class GameX01_P extends Game_P {
     var result = <String>[];
     for (String key in Utils.getPlayersOrTeamStatsListStatsScreen(
             gameX01, gameSettingsX01)[0]
-        .getAllScoresPerLeg
+        .getThrownDartsPerLeg
         .keys) {
       if (key != currentSetLegString) {
         result.add(key);
@@ -406,24 +406,16 @@ class GameX01_P extends Game_P {
       return false;
     }
 
+    final int currentPointsAndBtnToCheck = getCurrentPointsSelected != 'Points'
+        ? int.parse(getCurrentPointsSelected + btnValueToCheck)
+        : int.parse(btnValueToCheck);
+
     // DOUBLE IN
     if (stats.getCurrentPoints == getGameSettings.getPointsOrCustom() &&
-        (getGameSettings.getModeIn == ModeOutIn.Double ||
-            getGameSettings.getModeIn == ModeOutIn.Master)) {
-      if (getCurrentPointsSelected == 'Points') {
-        if (btnValueToCheck == '7' ||
-            btnValueToCheck == '9' ||
-            btnValueToCheck == '0') {
-          return true;
-        }
-      } else {
-        final result = int.parse(getCurrentPointsSelected + btnValueToCheck);
-
-        if (getGameSettings.getModeIn == ModeOutIn.Double) {
-          return !isDoubleField(result.toString());
-        }
-
-        return !(isDoubleField(result.toString()) || isTrippleField(result));
+        getGameSettings.getModeIn == ModeOutIn.Double) {
+      if (DOUBLE_IN_IMPOSSIBLE_SCORES.contains(currentPointsAndBtnToCheck) ||
+          currentPointsAndBtnToCheck > 170) {
+        return true;
       }
     }
 
@@ -439,10 +431,15 @@ class GameX01_P extends Game_P {
           ? int.parse(getCurrentPointsSelected)
           : int.parse(getCurrentPointsSelected + btnValueToCheck);
 
+      // should be able to left 1 point when playing single out
+      if (getGameSettings.getModeOut == ModeOutIn.Single &&
+          stats.getCurrentPoints - result == 1) {
+        return false;
+      }
+
       if (result > 180 ||
           result > stats.getCurrentPoints ||
-          NO_SCORES_POSSIBLE.contains(result) ||
-          stats.getCurrentPoints - result == 1) {
+          NO_SCORES_POSSIBLE.contains(result)) {
         return true;
       }
 
@@ -645,7 +642,9 @@ class GameX01_P extends Game_P {
 
     for (PlayerOrTeamGameStatsX01 teamStats in getTeamGameStatistics) {
       for (Player player in teamStats.getTeam.getPlayers) {
-        if (player.getName == playerName) result = teamStats;
+        if (player.getName == playerName) {
+          result = teamStats;
+        }
       }
     }
 
@@ -668,11 +667,8 @@ class GameX01_P extends Game_P {
     return result;
   }
 
-  bool isGameDraw(BuildContext context) {
-    final bool isTeamMode = context.read<GameSettingsX01_P>().getSingleOrTeam ==
-        SingleOrTeamEnum.Team;
-    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
-        context.read<GameX01_P>(), isTeamMode)) {
+  bool isGameDraw(dynamic playersOrTeamsList) {
+    for (PlayerOrTeamGameStatsX01 stats in playersOrTeamsList) {
       if (stats.getGameDraw) {
         return true;
       }

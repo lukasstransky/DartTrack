@@ -4,6 +4,7 @@ import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/players_teams_list_dialogs_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -17,8 +18,7 @@ class TeamsListEntry extends StatelessWidget {
   final Team team;
   final GameSettings_P gameSettings;
 
-  _deleteIconClicked(Team team, Player player, GameSettings_P gameSettings,
-      BuildContext context) {
+  _deleteIconClicked(Team team, Player player, BuildContext context) {
     if (team.getPlayers.length == 1) {
       PlayersTeamsListDialogs.showDialogForDeletingTeamAsLastPlayer(
           context, team, gameSettings, player);
@@ -27,8 +27,34 @@ class TeamsListEntry extends StatelessWidget {
     }
   }
 
+  bool _areTwoTeamsWithMaxPlayers() {
+    if (gameSettings.getTeams.length == 2) {
+      for (Team team in gameSettings.getTeams) {
+        if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  bool _atLeastOneTeamToSwap(Player player) {
+    final Team teamOfPlayer = gameSettings.findTeamForPlayer(player.getName);
+    for (Team team in gameSettings.getTeams) {
+      if (team != teamOfPlayer) {
+        if (team.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bool areTwoTeamsWithMaxPlayers = _areTwoTeamsWithMaxPlayers();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -50,6 +76,7 @@ class TeamsListEntry extends StatelessWidget {
           physics: ClampingScrollPhysics(),
           itemBuilder: (BuildContext context, int index) {
             final Player player = team.getPlayers[index];
+            final bool atLeastOneTeamToSwap = _atLeastOneTeamToSwap(player);
 
             return Container(
               padding: EdgeInsets.only(left: 2.w),
@@ -68,7 +95,7 @@ class TeamsListEntry extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  'Bot - level ${player.getLevel}',
+                                  'Bot - lvl. ${player.getLevel}',
                                   style: TextStyle(
                                     fontSize: 10.sp,
                                     color: Colors.white,
@@ -114,17 +141,26 @@ class TeamsListEntry extends StatelessWidget {
                         ),
                         if (gameSettings.getTeams.length > 1)
                           IconButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              Icons.swap_vert,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            onPressed: () => PlayersTeamsListDialogs
-                                .showDialogForSwitchingTeam(
-                                    context, player, gameSettings),
-                          ),
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              padding: EdgeInsets.zero,
+                              icon: Icon(
+                                Icons.swap_vert,
+                                color: !areTwoTeamsWithMaxPlayers &&
+                                        atLeastOneTeamToSwap
+                                    ? Theme.of(context).colorScheme.secondary
+                                    : Utils.darken(
+                                        Theme.of(context).colorScheme.secondary,
+                                        30),
+                              ),
+                              onPressed: () {
+                                if (!areTwoTeamsWithMaxPlayers &&
+                                    atLeastOneTeamToSwap) {
+                                  PlayersTeamsListDialogs
+                                      .showDialogForSwitchingTeam(
+                                          context, player, gameSettings);
+                                }
+                              }),
                         IconButton(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
@@ -136,7 +172,6 @@ class TeamsListEntry extends StatelessWidget {
                           onPressed: () => _deleteIconClicked(
                             team,
                             player,
-                            gameSettings,
                             context,
                           ),
                         ),

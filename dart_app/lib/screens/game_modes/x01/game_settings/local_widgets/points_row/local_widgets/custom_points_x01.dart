@@ -57,7 +57,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                     return ('Please enter some points!');
                   }
                   if (int.parse(value) < CUSTOM_POINTS_MIN_NUMBER) {
-                    return ('Minimum points are 100!');
+                    return ('Minimum points are ${CUSTOM_POINTS_MIN_NUMBER}!');
                   }
                   return null;
                 },
@@ -69,7 +69,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 ],
                 style: TextStyle(color: Colors.white),
                 decoration: InputDecoration(
-                  hintText: 'max. 9999',
+                  hintText: 'min. ${CUSTOM_POINTS_MIN_NUMBER}',
                   fillColor:
                       Utils.darken(Theme.of(context).colorScheme.primary, 10),
                   filled: true,
@@ -88,15 +88,16 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
             ),
             actions: [
               TextButton(
-                onPressed: () => {
-                  Navigator.of(context).pop(),
-                },
+                onPressed: () => Navigator.of(context).pop(),
                 child: Text(
                   'Cancel',
                   style:
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),
@@ -109,6 +110,9 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                  shadowColor: MaterialStateProperty.all(Colors.transparent),
+                  overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
                 ),

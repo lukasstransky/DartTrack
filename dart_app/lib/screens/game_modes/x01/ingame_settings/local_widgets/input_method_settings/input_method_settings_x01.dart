@@ -1,7 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
-import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/auto_submit_scored_points_switch_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/auto_submit_or_most_scored_points/auto_submit_scored_points_switch_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/select_input_method_settings_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/local_widgets/show_input_method_switch_x01.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -15,15 +14,8 @@ class InputMethodSettingsX01 extends StatelessWidget {
 
   int _calcCardHeight(BuildContext context, InputMethod inputMethod,
       bool showMostScoredPoints) {
-    final StatsFirestoreX01_P statisticsFirestoreX01 =
-        context.read<StatsFirestoreX01_P>();
-
     if (inputMethod == InputMethod.Round && showMostScoredPoints) {
-      if (!statisticsFirestoreX01.noGamesPlayed) {
-        return 48;
-      } else {
-        return 43;
-      }
+      return 48;
     }
 
     return 28;

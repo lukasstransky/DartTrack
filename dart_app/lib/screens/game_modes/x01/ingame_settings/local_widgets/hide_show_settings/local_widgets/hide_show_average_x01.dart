@@ -9,7 +9,7 @@ class HideShowAverageX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Container(
       padding: EdgeInsets.only(left: 2.5.w),

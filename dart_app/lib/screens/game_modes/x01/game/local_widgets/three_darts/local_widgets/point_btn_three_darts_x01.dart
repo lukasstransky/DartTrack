@@ -176,6 +176,7 @@ class PointBtnThreeDartX01 extends StatelessWidget {
           context,
           point as String,
           GameMode.X01,
+          context.read<GameSettingsX01_P>().getAutomaticallySubmitPoints,
         ),
       ),
       child: ElevatedButton(

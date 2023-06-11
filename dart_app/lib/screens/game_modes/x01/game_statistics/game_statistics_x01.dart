@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/screens/game_modes/shared/overall/custom_chip.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/finishing_stats/finishing_stats_x01.dart';
@@ -104,6 +105,17 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
     return false;
   }
 
+  String getModeString(ModeOutIn mode, bool isOut) {
+    switch (mode) {
+      case ModeOutIn.Single:
+        return isOut ? 'Single out' : 'Single in';
+      case ModeOutIn.Double:
+        return isOut ? 'Double out' : 'Double in';
+      case ModeOutIn.Master:
+        return isOut ? 'Master out' : 'Master in';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final EdgeInsets _padding = EdgeInsets.only(
@@ -149,75 +161,54 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
             ),
             Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Chip(
-                      shape: StadiumBorder(
-                        side: BorderSide(
+                Container(
+                  padding: EdgeInsets.only(top: 1.h),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomChip(
+                        label: Text(
+                          getModeString(
+                              _game!.getGameSettings.getModeIn, false),
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        color: Utils.getPrimaryColorDarken(context),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(left: 1.5.w),
+                        child: CustomChip(
+                          label: Text(
+                            getModeString(
+                                _game!.getGameSettings.getModeOut, true),
+                            style: TextStyle(color: Colors.white),
+                          ),
                           color: Utils.getPrimaryColorDarken(context),
                         ),
                       ),
-                      backgroundColor: Utils.getPrimaryColorDarken(context),
-                      label: Text(
-                        _game!.getGameSettings.getModeIn == ModeOutIn.Single
-                            ? 'Single in'
-                            : 'Double in',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    Container(
-                      padding: EdgeInsets.only(left: 1.5.w),
-                      child: Chip(
-                        shape: StadiumBorder(
-                          side: BorderSide(
+                      if (_game!.getGameSettings.getSuddenDeath)
+                        Container(
+                          padding: EdgeInsets.only(left: 1.5.w),
+                          child: CustomChip(
+                            label: Text(
+                              'Sudden death',
+                              style: TextStyle(color: Colors.white),
+                            ),
                             color: Utils.getPrimaryColorDarken(context),
                           ),
                         ),
-                        backgroundColor: Utils.getPrimaryColorDarken(context),
-                        label: Text(
-                          _game!.getGameSettings.getModeOut == ModeOutIn.Single
-                              ? 'Single out'
-                              : 'Double out',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    if (_game!.getGameSettings.getSuddenDeath)
-                      Container(
-                        padding: EdgeInsets.only(left: 1.5.w),
-                        child: Chip(
-                          shape: StadiumBorder(
-                            side: BorderSide(
-                              color: Utils.getPrimaryColorDarken(context),
+                      if (_game!.getGameSettings.getDrawMode)
+                        Container(
+                          padding: EdgeInsets.only(left: 1.5.w),
+                          child: CustomChip(
+                            label: Text(
+                              'Draw enabled',
+                              style: TextStyle(color: Colors.white),
                             ),
-                          ),
-                          backgroundColor: Utils.getPrimaryColorDarken(context),
-                          label: Text(
-                            'Sudden death',
-                            style: TextStyle(color: Colors.white),
+                            color: Utils.getPrimaryColorDarken(context),
                           ),
                         ),
-                      ),
-                    if (_game!.getGameSettings.getDrawMode)
-                      Container(
-                        padding: EdgeInsets.only(left: 1.5.w),
-                        child: Chip(
-                          shape: StadiumBorder(
-                            side: BorderSide(
-                              color: Utils.getPrimaryColorDarken(context),
-                            ),
-                          ),
-                          backgroundColor: Utils.getPrimaryColorDarken(context),
-                          label: Text(
-                            'Draw enabled',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
+                    ],
+                  ),
                 ),
                 Container(
                   transform: Matrix4.translationValues(0.0, -8, 0.0),
@@ -227,16 +218,13 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       if (!_game!.getGameSettings.getSuddenDeath &&
                           _game!.getGameSettings.getWinByTwoLegsDifference)
                         Padding(
-                          padding: EdgeInsets.only(left: 1.w),
-                          child: Chip(
-                            backgroundColor:
-                                Utils.getPrimaryColorDarken(context),
+                          padding: EdgeInsets.only(left: 1.w, top: 2.h),
+                          child: CustomChip(
                             label: Text(
                               'Win by two legs difference',
-                              style: TextStyle(
-                                color: Colors.white,
-                              ),
+                              style: TextStyle(color: Colors.white),
                             ),
+                            color: Utils.getPrimaryColorDarken(context),
                           ),
                         ),
                     ],

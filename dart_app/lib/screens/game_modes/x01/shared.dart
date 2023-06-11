@@ -33,7 +33,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
       if (gameSettingsX01.getModeOut == ModeOutIn.Master) {
         selectedFinishCount =
             gameX01.isTrippleField(int.parse(currentPointsSelected)) ? 1 : 2;
-      } else {
+      } else if (gameSettingsX01.getModeOut == ModeOutIn.Single &&
+          currentPointsSelected == '1')
+        selectedFinishCount = 1;
+      else {
         selectedFinishCount =
             gameX01.isDoubleField(currentPointsSelected) ? 1 : 2;
       }
@@ -297,10 +300,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                 ),
                 Row(
                   children: [
-                    if (gameX01.isDoubleField(currentPointsSelected) ||
-                        (gameSettingsX01.getModeOut == ModeOutIn.Master &&
-                            gameX01.isTrippleField(
-                                int.parse(currentPointsSelected))))
+                    if (_shouldDisplayOneFinishDartBtn(
+                        currentPointsSelected, gameSettingsX01, gameX01))
                       // button 1 for finish darts
                       Expanded(
                         child: Container(
@@ -482,6 +483,9 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
           ),
         ),
@@ -507,10 +511,22 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
           ),
         ),
       ],
     ),
   );
+}
+
+_shouldDisplayOneFinishDartBtn(String currentPointsSelected,
+    GameSettingsX01_P gameSettingsX01, GameX01_P gameX01) {
+  return (currentPointsSelected == '1' &&
+          gameSettingsX01.getModeOut == ModeOutIn.Single) ||
+      gameX01.isDoubleField(currentPointsSelected) ||
+      (gameSettingsX01.getModeOut == ModeOutIn.Master &&
+          gameX01.isTrippleField(int.parse(currentPointsSelected)));
 }

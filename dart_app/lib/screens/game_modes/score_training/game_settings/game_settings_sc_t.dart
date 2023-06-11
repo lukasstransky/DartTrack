@@ -49,6 +49,7 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
         settings.notify();
       }
     });
+    settings.setLoggedInPlayerToFirstOne(username);
   }
 
   @override

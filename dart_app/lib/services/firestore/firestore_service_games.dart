@@ -39,6 +39,7 @@ class FirestoreServiceGames {
       playerGameStatistics: [],
       teamGameStatistics: [],
       currentThreeDarts: [],
+      setLegWithPlayerOrTeamWhoFinishedIt: [],
     );
 
     // delete open game
@@ -106,7 +107,8 @@ class FirestoreServiceGames {
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
-    if (!statisticsFirestoreX01.noGamesPlayed) {
+    if (!statisticsFirestoreX01.noGamesPlayed &&
+        !statisticsFirestoreX01.avgBestWorstStatsLoaded) {
       context
           .read<FirestoreServicePlayerStats>()
           .getX01Statistics(statisticsFirestoreX01, username);
@@ -191,6 +193,8 @@ class FirestoreServiceGames {
       currentPlayerToThrow: game_p.getCurrentPlayerToThrow,
       currentTeamToThrow: game_p.getCurrentTeamToThrow,
       currentThreeDarts: game_p.getCurrentThreeDarts,
+      setLegWithPlayerOrTeamWhoFinishedIt:
+          game_p.getLegSetWithPlayerOrTeamWhoFinishedIt,
     );
     final openGamesFirestore = context.read<OpenGamesFirestore>();
     final CollectionReference collectionReference =
@@ -260,7 +264,7 @@ class FirestoreServiceGames {
 
     await collectionReference.get().then((openGames) => {
           openGames.docs.forEach((openGame) {
-            final game = _createGameFromMap(
+            final Game_P game = _createGameFromMap(
                 openGame.data() as Map<String, dynamic>, openGame);
             openGamesFirestore.openGames.add(game);
             openGamesFirestore.notify();

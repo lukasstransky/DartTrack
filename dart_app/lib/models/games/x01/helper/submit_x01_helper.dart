@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/game_settings/x01/helper/sudden_death_starter.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
@@ -212,7 +213,6 @@ class SubmitX01Helper {
       for (PlayerOrTeamGameStatsX01 stats in gameX01
           .getPlayerStatsFromCurrentTeamToThrow(gameX01, gameSettingsX01)) {
         stats.setLegsWon = currentStats.getLegsWon;
-        stats.setLegsWonTotal = currentStats.getLegsWonTotal;
         stats.setSetsWon = currentStats.getSetsWon;
       }
     }
@@ -431,7 +431,8 @@ class SubmitX01Helper {
         currentStats, gameSettingsX01, gameX01, shouldSubmitTeamStats);
 
     bool isGameFinished = false;
-    if (_isGameWon(currentStats, gameX01, gameSettingsX01, context)) {
+    if (_isGameWon(currentStats, gameX01, gameSettingsX01, context,
+        shouldSubmitTeamStats)) {
       currentStats.setGameWon = true;
       isGameFinished = true;
 
@@ -442,7 +443,12 @@ class SubmitX01Helper {
         }
       }
     } else if (_isGameDraw(gameX01, gameSettingsX01, shouldSubmitTeamStats)) {
-      currentStats.setGameDraw = true;
+      // set game draw for all players
+      for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+          gameX01, gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team)) {
+        stats.setGameDraw = true;
+      }
+
       isGameFinished = true;
 
       // set game draw also for other players in team -> for correct stats
@@ -473,8 +479,22 @@ class SubmitX01Helper {
       }
     }
 
-    // set player or team who will begin next leg
-    if (shouldSubmitTeamStats) {
+    final bool isTeamMode =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team;
+    if (isTeamMode &&
+        shouldSubmitTeamStats &&
+        !gameSettingsX01.getSuddenDeath) {
+      return new Tuple2(true, isGameFinished);
+    }
+
+    // for sudden death
+    if ((gameSettingsX01.getSuddenDeath &&
+            !gameX01.getReachedSuddenDeath &&
+            shouldSubmitTeamStats &&
+            isTeamMode) ||
+        (!isTeamMode &&
+            gameSettingsX01.getSuddenDeath &&
+            gameX01.getReachedSuddenDeath)) {
       return new Tuple2(true, isGameFinished);
     }
 
@@ -514,11 +534,23 @@ class SubmitX01Helper {
       return;
     }
 
-    // update won sets
-    if (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
-            gameSettingsX01.getLegs == currentStats.getLegsWon ||
-        gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
-            (gameSettingsX01.getLegs + 1) / 2 == currentStats.getLegsWon) {
+    if (gameSettingsX01.getWinByTwoLegsDifference &&
+        _isLastSet(gameX01, gameSettingsX01)) {
+      return;
+    }
+
+    _updateSets(currentStats, gameSettingsX01, gameX01, shouldSubmitTeamStats);
+  }
+
+  static _updateSets(
+      PlayerOrTeamGameStatsX01 currentStats,
+      GameSettingsX01_P gameSettingsX01,
+      GameX01_P gameX01,
+      bool shouldSubmitTeamStats) {
+    if ((gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo &&
+            currentStats.getLegsWon >= gameSettingsX01.getLegs) ||
+        (gameSettingsX01.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+            currentStats.getLegsWon >= ((gameSettingsX01.getLegs + 1) / 2))) {
       // save leg count of each player -> in case a user wants to revert a set
       if (shouldSubmitTeamStats) {
         for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
@@ -751,7 +783,10 @@ class SubmitX01Helper {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.of(context).pop();
+              _showDialogForSuddenDeathBeginner(context);
+            },
             child: Text(
               'Continue',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -766,9 +801,181 @@ class SubmitX01Helper {
     );
   }
 
-  static bool _isGameWon(PlayerOrTeamGameStatsX01 stats, GameX01_P gameX01,
-      GameSettingsX01_P gameSettingsX01, BuildContext context) {
+  static _showDialogForSuddenDeathBeginner(BuildContext context) {
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
+    final bool isSingleMode =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+
+    final List<Player> players = gameSettingsX01.getPlayers;
+    Player? selectedPlayer = gameSettingsX01.getPlayers[0];
+
+    final List<Team> teams = gameSettingsX01.getTeams;
+    Team? selectedTeam = gameSettingsX01.getTeams[0];
+
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        contentPadding: dialogContentPadding,
+        title: Text(
+          'Who will begin?',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: StatefulBuilder(
+          builder: ((context, setState) {
+            if (isSingleMode) {
+              return Container(
+                width: double.maxFinite,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: players.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final player = players[index];
+
+                    return Theme(
+                      data: ThemeData(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                      ),
+                      child: RadioListTile(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        title: Container(
+                          transform: Matrix4.translationValues(
+                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                          child: player is Bot
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Bot - lvl. ${player.getLevel}',
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Container(
+                                      transform: Matrix4.translationValues(
+                                          0.0, -0.5.w, 0.0),
+                                      child: Text(
+                                        ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                        style: TextStyle(
+                                          fontSize: 8.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : Text(
+                                  player.getName,
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                        ),
+                        value: player,
+                        groupValue: selectedPlayer,
+                        onChanged: (Player? value) {
+                          setState(() => selectedPlayer = value);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              );
+            }
+
+            return Container(
+              width: double.maxFinite,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: teams.length,
+                itemBuilder: (BuildContext context, int index) {
+                  final team = teams[index];
+
+                  return Theme(
+                    data: ThemeData(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                    ),
+                    child: RadioListTile(
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      title: Container(
+                        transform: Matrix4.translationValues(
+                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                        child: Text(
+                          team.getName,
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      value: team,
+                      groupValue: selectedTeam,
+                      onChanged: (Team? value) {
+                        setState(() => selectedTeam = value);
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
+          }),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              _setSuddenDeathStartingPlayer(selectedPlayer, selectedTeam,
+                  isSingleMode, gameX01, gameSettingsX01);
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Continue',
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            style: ButtonStyle(
+              backgroundColor:
+                  Utils.getPrimaryMaterialStateColorDarken(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static void _setSuddenDeathStartingPlayer(
+      Player? playerToStart,
+      Team? teamToStart,
+      bool isSingleMode,
+      GameX01_P gameX01,
+      GameSettingsX01_P gameSettingsX01) {
+    if (isSingleMode && playerToStart != null) {
+      gameX01.setSuddenDeathStarter = new SuddenDeathStarter(
+          player: playerToStart, prevPlayer: gameX01.getCurrentPlayerToThrow);
+      gameX01.setCurrentPlayerToThrow = playerToStart;
+      gameX01.setPlayerOrTeamLegStartIndex =
+          gameSettingsX01.getPlayers.indexOf(playerToStart);
+    } else if (!isSingleMode && teamToStart != null) {
+      gameX01.setSuddenDeathStarter = new SuddenDeathStarter(
+          team: teamToStart, prevTeam: gameX01.getCurrentTeamToThrow);
+      gameX01.setCurrentTeamToThrow = teamToStart;
+      gameX01.setCurrentPlayerToThrow = teamToStart.getCurrentPlayerToThrow;
+      gameX01.setPlayerOrTeamLegStartIndex =
+          gameSettingsX01.getTeams.indexOf(teamToStart);
+    }
+    gameX01.notify();
+  }
+
+  static bool _isGameWon(
+      PlayerOrTeamGameStatsX01 stats,
+      GameX01_P gameX01,
+      GameSettingsX01_P gameSettingsX01,
+      BuildContext context,
+      bool shouldSubmitTeamStats) {
     if (gameX01.getReachedSuddenDeath) {
+      if (gameSettingsX01.getSetsEnabled) {
+        _updateSets(stats, gameSettingsX01, gameX01, shouldSubmitTeamStats);
+      }
       return true;
     }
 
@@ -779,6 +986,22 @@ class SubmitX01Helper {
           _gameWonBestOfWithSetsWithDrawMode(stats.getSetsWon, gameSettingsX01);
     } else if (gameSettingsX01.getSetsEnabled) {
       // set mode
+      if (gameSettingsX01.getWinByTwoLegsDifference &&
+          _isLastSet(gameX01, gameSettingsX01)) {
+        // suddean death reached
+        if (gameSettingsX01.getSuddenDeath &&
+            reachedSuddenDeath(gameX01, gameSettingsX01)) {
+          _showDialogForSuddenDeath(context);
+          gameX01.setReachedSuddenDeath = true;
+        }
+
+        if (gameX01.isLegDifferenceAtLeastTwo(
+            stats, gameX01, gameSettingsX01)) {
+          _updateSets(stats, gameSettingsX01, gameX01, shouldSubmitTeamStats);
+          return true;
+        }
+      }
+
       return Utils.gameWonFirstToWithSets(stats.getSetsWon, gameSettingsX01) ||
           Utils.gameWonBestOfWithSets(stats.getSetsWon, gameSettingsX01);
     } else if (!gameSettingsX01.getSetsEnabled) {
@@ -792,7 +1015,7 @@ class SubmitX01Helper {
 
         // suddean death reached
         if (gameSettingsX01.getSuddenDeath &&
-            _reachedSuddenDeath(gameX01, gameSettingsX01)) {
+            reachedSuddenDeath(gameX01, gameSettingsX01)) {
           _showDialogForSuddenDeath(context);
           gameX01.setReachedSuddenDeath = true;
         }
@@ -807,7 +1030,7 @@ class SubmitX01Helper {
     return false;
   }
 
-  static bool _reachedSuddenDeath(
+  static bool reachedSuddenDeath(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
     bool result = true;
 
@@ -846,5 +1069,25 @@ class SubmitX01Helper {
             currentStats.getAllThrownDarts == 0 &&
             Player.samePlayer(gameSettingsX01_P.getTeams.first.getPlayers.first,
                 currentStats.getTeam.getPlayers.first));
+  }
+
+  static bool _isLastSet(
+      GameX01_P gameX01_P, GameSettingsX01_P gameSettingsX01_P) {
+    bool isLastSet = true;
+    final int lastSetFirstTo = gameSettingsX01_P.getSets - 1;
+    final double lastSetBestOf = ((gameSettingsX01_P.getSets + 1) / 2) - 1;
+
+    for (PlayerOrTeamGameStatsX01 stats in Utils.getPlayersOrTeamStatsList(
+        gameX01_P,
+        gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team)) {
+      if ((gameSettingsX01_P.getBestOfOrFirstTo ==
+                  BestOfOrFirstToEnum.FirstTo &&
+              lastSetFirstTo != stats.getSetsWon) ||
+          (gameSettingsX01_P.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
+              lastSetBestOf != stats.getSetsWon)) {
+        isLastSet = false;
+      }
+    }
+    return isLastSet;
   }
 }

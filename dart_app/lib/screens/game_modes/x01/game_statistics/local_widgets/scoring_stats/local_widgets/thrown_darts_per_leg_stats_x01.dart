@@ -6,8 +6,8 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class FirstNineAvgStatsX01 extends StatelessWidget {
-  const FirstNineAvgStatsX01({Key? key, required this.gameX01})
+class ThrownDartsPerLegStatsX01 extends StatelessWidget {
+  const ThrownDartsPerLegStatsX01({Key? key, required this.gameX01})
       : super(key: key);
 
   final GameX01_P gameX01;
@@ -26,7 +26,7 @@ class FirstNineAvgStatsX01 extends StatelessWidget {
             child: FittedBox(
               fit: BoxFit.scaleDown,
               child: Text(
-                'First nine avg.',
+                'Darts in leg',
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Utils.getTextColorDarken(context),
@@ -41,7 +41,9 @@ class FirstNineAvgStatsX01 extends StatelessWidget {
             Container(
               width: WIDTH_DATA_STATISTICS.w,
               child: Text(
-                stats.getFirstNinveAvg(),
+                stats.getAllScores.isEmpty && stats.getAllScoresPerDart.isEmpty
+                    ? '-'
+                    : stats.getCurrentThrownDartsInLeg.toString(),
                 style: TextStyle(
                   fontSize: FONTSIZE_STATISTICS.sp,
                   color: Colors.white,

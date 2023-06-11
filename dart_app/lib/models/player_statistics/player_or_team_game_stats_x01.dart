@@ -21,7 +21,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
 
   int _currentThrownDartsInLeg = 0;
   int _allThrownDarts = 0; //for calculating averages
-  SplayTreeMap<String, int> _thrownDartsPerLeg = new SplayTreeMap();
+  LinkedHashMap<String, int> _thrownDartsPerLeg = new LinkedHashMap();
   int _dartsForWonLegCount =
       0; //for statistics screen -> average darts for leg needed (count only won legs)
 
@@ -30,18 +30,18 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
   int _legsWon = 0;
   int _legsWonTotal = 0; //for statistics screen (only for set mode)
   int _setsWon = 0;
-  SplayTreeMap<String, List<int>> _allScoresPerLeg = new SplayTreeMap();
+  LinkedHashMap<String, List<int>> _allScoresPerLeg = new LinkedHashMap();
   //"Leg 1" : 120, 140, 100 -> to calc best, worst leg & avg. darts per leg
   List<int> _legsCount =
       []; //only relevant for set mode -> if player finished set, save current legs count of each player in this list -> in order to revert a set
 
-  SplayTreeMap<String, int> _checkouts = new SplayTreeMap();
+  LinkedHashMap<String, int> _checkouts = new LinkedHashMap();
   int _checkoutCount =
       0; //counts the checkout possibilities -> for calculating checkout quote
   List<Tuple3<String, int, int>> _checkoutCountAtThrownDarts =
       []; //to revert checkout count -> saves the current leg, the thrown darts at this moment+  amount of checkout counts
-  SplayTreeMap<String, int> _amountOfFinishDarts =
-      new SplayTreeMap(); //saves for each leg the amount of finish darts (for reverting)
+  LinkedHashMap<String, int> _amountOfFinishDarts =
+      new LinkedHashMap(); //saves for each leg the amount of finish darts (for reverting)
   List<int> _amountOfDartsForWonLegs = [];
 
   Map<int, int> _roundedScoresEven = {
@@ -103,17 +103,17 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
     required int firstNineAvgCount,
     required int currentThrownDartsInLeg,
     required int allThrownDarts,
-    required SplayTreeMap<String, int> thrownDartsPerLeg,
+    required LinkedHashMap<String, int> thrownDartsPerLeg,
     required int dartsForWonLegCount,
     required bool gameWon,
     required int legsWon,
     required int legsWonTotal,
     required int setsWon,
-    required SplayTreeMap<String, List<dynamic>> allScoresPerLeg,
+    required LinkedHashMap<String, List<dynamic>> allScoresPerLeg,
     required List<int> legsCount,
     required int checkoutCount,
     required List<Tuple3<String, int, int>> checkoutCountAtThrownDarts,
-    required SplayTreeMap<String, int> checkouts,
+    required LinkedHashMap<String, int> checkouts,
     required List<int> amountOfDartsForWonLegs,
     required Map<String, int> roundedScoresEven,
     required Map<String, int> roundedScoresOdd,
@@ -129,7 +129,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
     required Map<String, String> playersWithCheckoutInLeg,
     required int threeDartModeRoundsCount,
     required int totalRoundsCount,
-    required SplayTreeMap<String, int> amountOfFinishDarts,
+    required LinkedHashMap<String, int> amountOfFinishDarts,
     required Map<String, String> setLegWithPlayerOrTeamWhoFinishedIt,
     required List<InputMethod> inputMethodForRounds,
   }) : super(gameId: gameId, dateTime: dateTime, mode: mode) {
@@ -147,7 +147,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
     this._legsWon = legsWon;
     this._legsWonTotal = legsWonTotal;
     this._setsWon = setsWon;
-    this._allScoresPerLeg = SplayTreeMap.from(
+    this._allScoresPerLeg = LinkedHashMap.from(
         allScoresPerLeg.map((key, value) => MapEntry(key, value.cast<int>())));
     this._legsCount = legsCount;
     this._checkoutCount = checkoutCount;
@@ -250,7 +250,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
       this._allThrownDarts = allThrownDarts;
 
   get getThrownDartsPerLeg => this._thrownDartsPerLeg;
-  set setThrownDartsPerLeg(SplayTreeMap<String, int> thrownDartsPerLeg) =>
+  set setThrownDartsPerLeg(LinkedHashMap<String, int> thrownDartsPerLeg) =>
       this._thrownDartsPerLeg = thrownDartsPerLeg;
 
   int get getDartsForWonLegCount => this._dartsForWonLegCount;
@@ -262,7 +262,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
       this._checkoutCount = checkoutCount;
 
   get getCheckouts => this._checkouts;
-  set setCheckouts(SplayTreeMap<String, int> checkouts) =>
+  set setCheckouts(LinkedHashMap<String, int> checkouts) =>
       this._checkouts = checkouts;
 
   List<Tuple3<String, int, int>> get getCheckoutCountAtThrownDarts =>
@@ -280,7 +280,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
       this._roundedScoresOdd = roundedScoresOdd;
 
   get getAllScoresPerLeg => this._allScoresPerLeg;
-  set setAllScoresPerLeg(SplayTreeMap<String, List<int>> allScoresPerLeg) =>
+  set setAllScoresPerLeg(LinkedHashMap<String, List<int>> allScoresPerLeg) =>
       this._allScoresPerLeg = allScoresPerLeg;
 
   List<int> get getAllScores => this._allScores;
@@ -317,9 +317,9 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
   List<int> get getLegsCount => this._legsCount;
   set setLegsCount(List<int> legsCount) => this._legsCount = legsCount;
 
-  SplayTreeMap<String, int> get getAmountOfFinishDarts =>
+  LinkedHashMap<String, int> get getAmountOfFinishDarts =>
       this._amountOfFinishDarts;
-  set setAmountOfFinishDarts(SplayTreeMap<String, int> value) =>
+  set setAmountOfFinishDarts(LinkedHashMap<String, int> value) =>
       this._amountOfFinishDarts = value;
 
   List<int> get getAmountOfDartsForWonLegs => this._amountOfDartsForWonLegs;
@@ -410,8 +410,14 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
       return '-';
     }
 
-    return ((getFirstNineAvgPoints / getFirstNineAvgCount) * 3)
-        .toStringAsFixed(2);
+    final String result =
+        ((getFirstNineAvgPoints / getFirstNineAvgCount) * 3).toStringAsFixed(2);
+    final String decimalPlaces = result.substring(result.length - 2);
+
+    if (decimalPlaces == '00') {
+      return result.substring(0, result.length - 3);
+    }
+    return result;
   }
 
   String getCheckoutQuoteInPercent() {

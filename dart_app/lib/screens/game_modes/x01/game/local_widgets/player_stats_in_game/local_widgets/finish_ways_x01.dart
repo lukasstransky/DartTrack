@@ -22,7 +22,7 @@ class FinishWaysX01 extends StatelessWidget {
   }
 
   String _getFinishWay(int currentPoints) {
-    if (currentPoints != 0) {
+    if (currentPoints != 0 && currentPoints != 1) {
       return FINISH_WAYS[currentPoints]!.first;
     }
 

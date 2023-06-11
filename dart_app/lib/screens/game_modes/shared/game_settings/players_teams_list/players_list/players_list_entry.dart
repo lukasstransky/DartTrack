@@ -5,9 +5,11 @@ import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/players_teams_list/players_teams_list_dialogs_x01.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayersListEntry extends StatelessWidget {
@@ -22,6 +24,9 @@ class PlayersListEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
     return Container(
       padding: EdgeInsets.only(left: 4.w),
       height: 4.h,
@@ -39,7 +44,7 @@ class PlayersListEntry extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            'Bot - level ${(player as Bot).getLevel}',
+                            'Bot - lvl. ${(player as Bot).getLevel}',
                             style: TextStyle(
                               fontSize: 12.sp,
                               color: Colors.white,
@@ -68,6 +73,9 @@ class PlayersListEntry extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.sp,
                         color: Utils.getTextColorForGameSettingsPage(),
+                        fontWeight: player.getName == currentUsername
+                            ? FontWeight.bold
+                            : null,
                       ),
                     ),
                   ),

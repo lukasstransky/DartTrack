@@ -310,9 +310,9 @@ class PlayerOrTeamGameStats {
     return result;
   }
 
-  SplayTreeMap<String, String> convertFieldHitsMapForUploading(
-      SplayTreeMap<int, String> toConvert) {
-    SplayTreeMap<String, String> result = new SplayTreeMap();
+  LinkedHashMap<String, String> convertFieldHitsMapForUploading(
+      LinkedHashMap<int, String> toConvert) {
+    LinkedHashMap<String, String> result = new LinkedHashMap();
 
     toConvert.forEach((key, value) {
       result[key.toString()] = value;
@@ -345,7 +345,7 @@ class PlayerOrTeamGameStats {
       }).toList() as List<Tuple3<String, int, int>>;
     }
 
-    SplayTreeMap<String, List<int>> allScoresPerLeg = SplayTreeMap.of({});
+    LinkedHashMap<String, List<int>> allScoresPerLeg = LinkedHashMap.of({});
     if (map['allScoresPerLeg'] != null) {
       map['allScoresPerLeg'].forEach((string) {
         String key = string.split(';')[0];
@@ -372,8 +372,8 @@ class PlayerOrTeamGameStats {
           : map['currentThrownDartsInLeg'],
       allThrownDarts: map['allThrownDarts'] == null ? 0 : map['allThrownDarts'],
       thrownDartsPerLeg: map['thrownDartsPerLeg'] == null
-          ? new SplayTreeMap()
-          : SplayTreeMap.fromIterable(
+          ? new LinkedHashMap()
+          : LinkedHashMap.fromIterable(
               map['thrownDartsPerLeg'],
               key: (string) => string.split(';')[0],
               value: (string) => int.parse(string.split(';')[1]),
@@ -389,8 +389,8 @@ class PlayerOrTeamGameStats {
       checkoutCount: map['checkoutDarts'] == null ? 0 : map['checkoutDarts'],
       checkoutCountAtThrownDarts: checkoutCountAtThrownDarts,
       checkouts: map['checkouts'] == null
-          ? new SplayTreeMap()
-          : SplayTreeMap.fromIterable(
+          ? new LinkedHashMap()
+          : LinkedHashMap.fromIterable(
               map['checkouts'],
               key: (string) => string.split(';')[0],
               value: (string) => int.parse(string.split(';')[1]),
@@ -416,7 +416,7 @@ class PlayerOrTeamGameStats {
           : map['allScoresPerDart'].cast<int>(),
       playersWithCheckoutInLeg: map['playersWithCheckoutInLeg'] == null
           ? {}
-          : SplayTreeMap.fromIterable(
+          : LinkedHashMap.fromIterable(
               map['playersWithCheckoutInLeg'],
               key: (string) => string.split(';')[0],
               value: (string) => string.split(';')[1],
@@ -440,8 +440,8 @@ class PlayerOrTeamGameStats {
       totalRoundsCount:
           map['totalRoundsCount'] == null ? 0 : map['totalRoundsCount'],
       amountOfFinishDarts: map['amountOfFinishDarts'] == null
-          ? new SplayTreeMap()
-          : SplayTreeMap.fromIterable(
+          ? new LinkedHashMap()
+          : LinkedHashMap.fromIterable(
               map['amountOfFinishDarts'],
               key: (string) => string.split(';')[0],
               value: (string) => int.parse(string.split(';')[1]),
@@ -449,7 +449,7 @@ class PlayerOrTeamGameStats {
       setLegWithPlayerOrTeamWhoFinishedIt:
           map['setLegWithPlayerOrTeamWhoFinishedIt'] == null
               ? {}
-              : SplayTreeMap.fromIterable(
+              : LinkedHashMap.fromIterable(
                   map['setLegWithPlayerOrTeamWhoFinishedIt'],
                   key: (string) => string.split(';')[0],
                   value: (string) => string.split(';')[1],
@@ -514,7 +514,7 @@ class PlayerOrTeamGameStats {
   }
 
   factory PlayerOrTeamGameStats.fromMapSingleDoubleTraining(map) {
-    SplayTreeMap<int, String> fieldHits = new SplayTreeMap();
+    LinkedHashMap<int, String> fieldHits = new LinkedHashMap();
 
     map['fieldHits'].forEach((key, value) {
       fieldHits[int.parse(key)] = value;

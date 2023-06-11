@@ -90,12 +90,12 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
           ),
           actions: [
             TextButton(
-              onPressed: () {
+              onPressed: () { Navigator.of(context).pop();
                 Future.delayed(Duration(milliseconds: 300), () {
                   amountOfRoundsController.text = backupString;
                 });
 
-                Navigator.of(context).pop();
+               
               },
               child: Text(
                 'Cancel',
@@ -104,6 +104,9 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                 ),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),
@@ -117,6 +120,9 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                 ),
               ),
               style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
               ),

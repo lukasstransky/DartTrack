@@ -4,22 +4,14 @@ import 'package:dart_app/models/team.dart';
 
 class RevertHelper {
   static setPreviousPlayerOrTeamLegSetReverted(dynamic game, dynamic settings) {
-    // set start player/team index
-    if (settings.getSingleOrTeam == SingleOrTeamEnum.Single &&
-        game.getPlayerOrTeamLegStartIndex == 0) {
-      game.setPlayerOrTeamLegStartIndex = settings.getPlayers.length - 1;
-    } else if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        game.getPlayerOrTeamLegStartIndex == 0) {
-      game.setPlayerOrTeamLegStartIndex = settings.getTeams.length - 1;
-    } else {
-      game.setPlayerOrTeamLegStartIndex = game.getPlayerOrTeamLegStartIndex - 1;
-    }
+    final bool isSingleMode =
+        settings.getSingleOrTeam == SingleOrTeamEnum.Single;
 
     // set current player/team to throw
     final String playerOrTeamNameToFind =
         game.getLegSetWithPlayerOrTeamWhoFinishedIt.removeLast();
 
-    if (settings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+    if (isSingleMode) {
       for (Player player in settings.getPlayers) {
         if (player.getName == playerOrTeamNameToFind) {
           game.setCurrentPlayerToThrow = player;
@@ -35,6 +27,39 @@ class RevertHelper {
       }
 
       _setPreviousPlayerOfAllTeams(game, true);
+    }
+
+    // set start player/team index
+    if (game.getReachedSuddenDeath) {
+      // for case when sudden death game got reverted from finish screen
+      if (game.getIsGameFinished &&
+          !game.getSuddenDeathStarter.getSuddenDeathReverted) {
+        game.getSuddenDeathStarter.setSuddenDeathReverted = true;
+        if (isSingleMode) {
+          game.setPlayerOrTeamLegStartIndex = settings.getPlayers
+              .indexOf(game.getSuddenDeathStarter.getPlayer());
+        } else {
+          game.setPlayerOrTeamLegStartIndex =
+              settings.getTeams.indexOf(game.getSuddenDeathStarter.getTeam());
+        }
+      } else {
+        if (isSingleMode) {
+          game.setPlayerOrTeamLegStartIndex = settings.getPlayers
+              .indexOf(game.getSuddenDeathStarter.getPrevPlayer());
+        } else {
+          game.setPlayerOrTeamLegStartIndex = settings.getTeams
+              .indexOf(game.getSuddenDeathStarter.getPrevTeam());
+        }
+      }
+    } else {
+      if (isSingleMode && game.getPlayerOrTeamLegStartIndex == 0) {
+        game.setPlayerOrTeamLegStartIndex = settings.getPlayers.length - 1;
+      } else if (!isSingleMode && game.getPlayerOrTeamLegStartIndex == 0) {
+        game.setPlayerOrTeamLegStartIndex = settings.getTeams.length - 1;
+      } else {
+        game.setPlayerOrTeamLegStartIndex =
+            game.getPlayerOrTeamLegStartIndex - 1;
+      }
     }
   }
 

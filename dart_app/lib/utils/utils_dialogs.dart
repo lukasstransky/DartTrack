@@ -87,6 +87,9 @@ class UtilsDialogs {
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
             ),
@@ -99,8 +102,7 @@ class UtilsDialogs {
   static showDialogForBeginner(
       BuildContext context, dynamic gameSettings, GameMode mode) {
     final List<Player> players = gameSettings.getPlayers;
-    Player? selectedPlayer =
-        gameSettings.getPlayers[gameSettings.getPlayers.length - 1];
+    Player? selectedPlayer = gameSettings.getPlayers[0];
 
     final List<Team> teams = gameSettings.getTeams;
     Team? selectedTeam = gameSettings.getTeams[0];
@@ -123,7 +125,6 @@ class UtilsDialogs {
                 width: double.maxFinite,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  reverse: true,
                   itemCount: players.length,
                   itemBuilder: (BuildContext context, int index) {
                     final player = players[index];
@@ -143,7 +144,7 @@ class UtilsDialogs {
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
                                     Text(
-                                      'Bot - level ${player.getLevel}',
+                                      'Bot - lvl. ${player.getLevel}',
                                       style: TextStyle(
                                         fontSize: 12.sp,
                                         color: Colors.white,
@@ -217,15 +218,18 @@ class UtilsDialogs {
         ),
         actions: [
           TextButton(
-            onPressed: () => {
-              gameSettings.notify(),
-              Navigator.of(context).pop(),
+            onPressed: () {
+              Navigator.of(context).pop();
+              gameSettings.notify();
             },
             child: Text(
               'Cancel',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
             ),
@@ -258,6 +262,9 @@ class UtilsDialogs {
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
             ),
@@ -296,6 +303,9 @@ class UtilsDialogs {
                         color: Theme.of(context).colorScheme.secondary),
                   ),
                   style: ButtonStyle(
+                    splashFactory: NoSplash.splashFactory,
+                    shadowColor: MaterialStateProperty.all(Colors.transparent),
+                    overlayColor: MaterialStateProperty.all(Colors.transparent),
                     backgroundColor:
                         Utils.getPrimaryMaterialStateColorDarken(context),
                   ),
@@ -367,8 +377,6 @@ class UtilsDialogs {
       }
     }
 
-    gameSettings.setSingleOrTeam = SingleOrTeamEnum.Single;
-
     return true;
   }
 
@@ -386,7 +394,7 @@ class UtilsDialogs {
     List<Player> players = [...gameSettings_P.getPlayers];
 
     players.removeWhere((p) => p.getName == firstPlayer!.getName);
-    players = new List.from(players.reversed);
+    players = new List.from(players);
     players.insert(0, firstPlayer as Player);
 
     gameSettings_P.setPlayers = players;

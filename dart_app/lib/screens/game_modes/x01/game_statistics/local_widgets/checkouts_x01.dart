@@ -39,7 +39,7 @@ class CheckoutsX01 extends StatelessWidget {
         gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
     final List<String> allSetLegStrings =
         Utils.getPlayersOrTeamStatsListStatsScreen(gameX01, gameSettingsX01)[0]
-            .getAllScoresPerLeg
+            .getThrownDartsPerLeg
             .keys
             .toList();
 
@@ -57,8 +57,9 @@ class CheckoutsX01 extends StatelessWidget {
             ),
           ),
         ),
-        for (String setLegString in allSetLegStrings)
-          if (_isSetLegFinished(setLegString, gameSettingsX01))
+        //for (String setLegString in allSetLegStrings)
+        for (int i = 0; i < allSetLegStrings.length; i++)
+          if (_isSetLegFinished(allSetLegStrings[i], gameSettingsX01))
             Padding(
               padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
               child: Row(
@@ -69,7 +70,7 @@ class CheckoutsX01 extends StatelessWidget {
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        setLegString,
+                        allSetLegStrings[i],
                         style: TextStyle(
                           fontSize: FONTSIZE_STATISTICS.sp,
                           fontWeight: FontWeight.bold,
@@ -84,10 +85,11 @@ class CheckoutsX01 extends StatelessWidget {
                     Container(
                       width: WIDTH_DATA_STATISTICS.w,
                       child: Text(
-                        Utils.getWinnerOfLeg(setLegString, gameX01, context) ==
+                        Utils.getWinnerOfLeg(
+                                    allSetLegStrings[i], gameX01, context, i) ==
                                 _getPlayerOrTeamName(isSingleMode, gameX01,
                                     gameSettingsX01, stats)
-                            ? stats.getCheckouts[setLegString].toString()
+                            ? stats.getCheckouts[allSetLegStrings[i]].toString()
                             : '',
                         style: TextStyle(
                           fontSize: FONTSIZE_STATISTICS.sp,

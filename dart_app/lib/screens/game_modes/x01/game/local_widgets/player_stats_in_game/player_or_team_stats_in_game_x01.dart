@@ -31,26 +31,33 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       children: [
         Container(
           transform: Matrix4.translationValues(0.0, 0.5.h, 0.0),
+          padding: EdgeInsets.only(left: 1.w, right: 1.w),
           child: Column(
             children: [
-              Text(
-                currPlayerOrTeamGameStatsX01!.getTeam.getName,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Utils.getTextColorDarken(context),
-                  fontWeight: FontWeight.bold,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  currPlayerOrTeamGameStatsX01!.getTeam.getName,
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Text(
-                currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow
-                        is Bot
-                    ? 'Lvl. ${currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow.getLevel} Bot'
-                    : currPlayerOrTeamGameStatsX01!
-                        .getTeam.getCurrentPlayerToThrow.getName,
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: Utils.getTextColorDarken(context),
-                  fontWeight: FontWeight.bold,
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow
+                          is Bot
+                      ? 'Lvl. ${currPlayerOrTeamGameStatsX01!.getTeam.getCurrentPlayerToThrow.getLevel} Bot'
+                      : currPlayerOrTeamGameStatsX01!
+                          .getTeam.getCurrentPlayerToThrow.getName,
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: Utils.getTextColorDarken(context),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ],
@@ -96,14 +103,18 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
         ),
         Container(
           transform: Matrix4.translationValues(0.0, -0.5.h, 0.0),
-          child: Text(
-            currPlayerOrTeamGameStatsX01!.getPlayer is Bot
-                ? 'Bot - level ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} '
-                : currPlayerOrTeamGameStatsX01!.getPlayer.getName,
-            style: TextStyle(
-              fontSize: 18.sp,
-              color: Utils.getTextColorDarken(context),
-              fontWeight: FontWeight.bold,
+          padding: EdgeInsets.only(left: 1.w, right: 1.w),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              currPlayerOrTeamGameStatsX01!.getPlayer is Bot
+                  ? 'Bot - lvl. ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} '
+                  : currPlayerOrTeamGameStatsX01!.getPlayer.getName,
+              style: TextStyle(
+                fontSize: 18.sp,
+                color: Utils.getTextColorDarken(context),
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),

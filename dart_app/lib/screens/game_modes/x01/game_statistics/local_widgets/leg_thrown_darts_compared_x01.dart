@@ -16,6 +16,10 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = gameX01.getGameSettings;
+    final double width =
+        gameSettingsX01.playerOrTeamNameWithMoreThanEightChars() ? 30 : 25;
+    final List<String> allLegSetStringsExceptCurrentOne =
+        gameX01.getAllLegSetStringsExceptCurrentOne(gameX01, gameSettingsX01);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,7 +47,7 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
           Row(
             children: [
               Container(
-                width: 20.w,
+                width: width.w,
                 padding: EdgeInsets.only(
                   top: 0.5.h,
                   bottom: 0.5.h,
@@ -53,20 +57,26 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                 alignment: Alignment.center,
                 child:
                     gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
-                        ? Text(
-                            stats.getPlayer is Bot
-                                ? 'Bot'
-                                : stats.getPlayer.getName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Utils.getTextColorDarken(context),
+                        ? FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              stats.getPlayer is Bot
+                                  ? 'Bot'
+                                  : stats.getPlayer.getName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Utils.getTextColorDarken(context),
+                              ),
                             ),
                           )
-                        : Text(
-                            stats.getTeam.getName,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Utils.getTextColorDarken(context),
+                        : FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              stats.getTeam.getName,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Utils.getTextColorDarken(context),
+                              ),
                             ),
                           ),
                 decoration: BoxDecoration(
@@ -78,11 +88,9 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                   ),
                 ),
               ),
-              for (String setLegString
-                  in gameX01.getAllLegSetStringsExceptCurrentOne(
-                      gameX01, gameSettingsX01))
+              for (int i = 0; i < allLegSetStringsExceptCurrentOne.length; i++)
                 Container(
-                  width: 25.w,
+                  width: gameSettingsX01.getSetsEnabled ? 25.w : 20.w,
                   alignment: Alignment.center,
                   padding: EdgeInsets.only(
                     top: 0.5.h,
@@ -90,12 +98,18 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                     left: 1.w,
                     right: 1.w,
                   ),
-                  child: Utils.getWinnerOfLeg(setLegString, gameX01, context) ==
+                  child: Utils.getWinnerOfLeg(
+                              allLegSetStringsExceptCurrentOne[i],
+                              gameX01,
+                              context,
+                              i) ==
                           (Utils.teamStatsDisplayed(gameX01, gameSettingsX01)
                               ? stats.getTeam.getName
                               : stats.getPlayer.getName)
                       ? Text(
-                          stats.getThrownDartsPerLeg[setLegString].toString(),
+                          stats.getThrownDartsPerLeg[
+                                  allLegSetStringsExceptCurrentOne[i]]
+                              .toString(),
                           style: TextStyle(
                             color: Colors.white,
                           ),
@@ -120,7 +134,7 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
             ],
           ),
 
-        Utils.setLegStrings(gameX01, gameSettingsX01, context),
+        Utils.setLegStrings(gameX01, gameSettingsX01, context, width),
       ],
     );
   }

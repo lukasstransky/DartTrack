@@ -59,7 +59,6 @@ class _PlayersListState extends State<PlayersList> {
         child: ListView.builder(
           shrinkWrap: true,
           controller: newScrollControllerPlayers(),
-          reverse: true,
           scrollDirection: Axis.vertical,
           itemCount: widget.players.length,
           itemBuilder: (BuildContext context, int index) {

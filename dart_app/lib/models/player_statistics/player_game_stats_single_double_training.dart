@@ -11,8 +11,8 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
   int _doubleHits = 0;
   int _trippleHits = 0;
   int _missedHits = 0;
-  SplayTreeMap<int, String> _fieldHits =
-      new SplayTreeMap(); // e.g. 20: SST (Single, Single, Tripple hit -> 5 points)
+  LinkedHashMap<int, String> _fieldHits =
+      new LinkedHashMap(); // e.g. 20: SST (Single, Single, Tripple hit -> 5 points)
   List<String> _allHits = []; // e.g. SSTDXXSDTTTXX (for reverting)
   int _highestPoints = 0; // to higlight fields hits
 
@@ -38,7 +38,7 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
     required int doubleHits,
     required int trippleHits,
     required int missedHits,
-    required SplayTreeMap<int, String> fieldHits,
+    required LinkedHashMap<int, String> fieldHits,
     required List<String> allHits,
     required int highestPoints,
   }) : super(gameId: gameId, dateTime: dateTime, mode: mode) {
@@ -72,8 +72,8 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
   int get getMissedHits => this._missedHits;
   set setMissedHits(int value) => this._missedHits = value;
 
-  SplayTreeMap<int, String> get getFieldHits => this._fieldHits;
-  set setFieldHits(SplayTreeMap<int, String> value) => this._fieldHits = value;
+  LinkedHashMap<int, String> get getFieldHits => this._fieldHits;
+  set setFieldHits(LinkedHashMap<int, String> value) => this._fieldHits = value;
 
   List<String> get getAllHits => this._allHits;
   set setAllHits(List<String> value) => this._allHits = value;

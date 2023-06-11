@@ -456,6 +456,15 @@ class GameSettings_P with ChangeNotifier {
     notify();
   }
 
+  void setLoggedInPlayerToFirstOne(String loggedInPlayerName) {
+    final int index =
+        getPlayers.indexWhere((p) => p.getName == loggedInPlayerName);
+    if (index != -1) {
+      final Player player = getPlayers.removeAt(index);
+      getPlayers.insert(0, player);
+    }
+  }
+
   //add a Team to each Player in case someone adds Players in the Single mode & then switches to Teams mode -> automatically assigned Teams
   void assignOrCreateTeamForPlayer(Player player) {
     if (getTeams.isEmpty || getPlayers.length == 2)
@@ -469,7 +478,9 @@ class GameSettings_P with ChangeNotifier {
           break;
         }
       }
-      if (!foundTeamWithLessTwoPlayers) _createTeamAndAddPlayer(player);
+      if (!foundTeamWithLessTwoPlayers) {
+        _createTeamAndAddPlayer(player);
+      }
     }
   }
 
@@ -529,7 +540,8 @@ class GameSettings_P with ChangeNotifier {
     final List<Player> players = game.getCurrentTeamToThrow.getPlayers;
     int indexOfCurrentPlayerInCurrentTeam = -1;
     for (int i = 0; i < players.length; i++) {
-      if (players[i].getName == game.getCurrentPlayerToThrow.getName) {
+      if (players[i].getName ==
+          game.getCurrentTeamToThrow.getCurrentPlayerToThrow.getName) {
         indexOfCurrentPlayerInCurrentTeam = i;
       }
     }
@@ -580,5 +592,23 @@ class GameSettings_P with ChangeNotifier {
         game.setBotSubmittedPoints = false;
       }
     }
+  }
+
+  playerOrTeamNameWithMoreThanEightChars([bool checkForTeams = false]) {
+    final int maxChars = 10;
+    if (checkForTeams) {
+      for (Team team in getTeams) {
+        if (team.getName.length >= maxChars) {
+          return true;
+        }
+      }
+      return false;
+    }
+    for (Player player in getPlayers) {
+      if (player.getName.length >= maxChars) {
+        return true;
+      }
+    }
+    return false;
   }
 }
