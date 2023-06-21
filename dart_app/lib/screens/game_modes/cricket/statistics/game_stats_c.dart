@@ -42,16 +42,22 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
   }
 
   @override
+  void dispose() {
+    _game!.setAreTeamStatsDisplayed = true;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
-              title: 'Statistics',
+              title: 'Cricket - Statistics',
               mode: GameMode.Cricket,
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )
-          : CustomAppBar(title: 'Statistics'),
+          : CustomAppBar(title: 'Cricket - Statistics'),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -97,7 +103,8 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
                         ],
                       ),
                       MainStatsCricket(game: _game!),
-                      PointsPerNumberCricket(game: _game!),
+                      if (_game!.getGameSettings.getMode != CricketMode.NoScore)
+                        PointsPerNumberCricket(game: _game!),
                     ],
                   ),
                 ),
@@ -109,7 +116,16 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
     );
   }
 
-  String _getHeader(GameSettingsCricket_P gameSettingsCricket) {
-    return 'Cricket - ${gameSettingsCricket.getMode.name}';
+  String _getHeader(GameSettingsCricket_P settings) {
+    final String bestOfOrFirstToString =
+        settings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo
+            ? 'First to '
+            : 'Best of ';
+    final String setsString =
+        settings.getSetsEnabled ? '${settings.getSets} sets ' : '';
+    final String legsString =
+        '${settings.getLegs} ${settings.getLegs == 1 ? 'leg' : 'legs'}';
+
+    return '${bestOfOrFirstToString}${setsString}${legsString} - ${settings.getMode.name}';
   }
 }

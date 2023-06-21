@@ -36,7 +36,7 @@ class PlayerOrTeamNames extends StatelessWidget {
             child: Row(
               children: [
                 if (Utils.hasPlayerOrTeamWonTheGame(
-                    stats, game, game.getGameSettings))
+                    stats, game, game.getGameSettings, _isDraw(game)))
                   Padding(
                     padding: EdgeInsets.only(right: 1.w),
                     child: Icon(
@@ -114,4 +114,42 @@ class PlayerOrTeamNames extends StatelessWidget {
       ],
     );
   }
+}
+
+bool _isDraw(Game_P game) {
+  if (game.getPlayerGameStatistics.length == 1) {
+    return false;
+  }
+
+  if (game is GameSingleDoubleTraining_P) {
+    final int totalPointsOfFirstPlayer =
+        game.getPlayerGameStatistics[0].getTotalPoints;
+
+    for (int i = 1; i < game.getPlayerGameStatistics.length; i++) {
+      if (totalPointsOfFirstPlayer !=
+          game.getPlayerGameStatistics[i].getTotalPoints) {
+        return false;
+      }
+    }
+
+    return true;
+  } else if (game is GameScoreTraining_P) {
+    if (game.getGameSettings.getMode == ScoreTrainingModeEnum.MaxPoints) {
+      return false;
+    }
+
+    final int totalPointsOfFirstPlayer =
+        game.getPlayerGameStatistics[0].getCurrentScore;
+
+    for (int i = 1; i < game.getPlayerGameStatistics.length; i++) {
+      if (totalPointsOfFirstPlayer !=
+          game.getPlayerGameStatistics[i].getCurrentScore) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  return false;
 }

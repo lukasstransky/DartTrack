@@ -128,12 +128,12 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
-              title: 'Statistics',
+              title: 'X01 - Statistics',
               mode: GameMode.X01,
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )
-          : CustomAppBar(title: 'Statistics'),
+          : CustomAppBar(title: 'X01 - Statistics'),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(

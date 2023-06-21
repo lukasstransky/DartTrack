@@ -5,7 +5,7 @@ import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class AppBarDialogHelper {
-  static showDialogForInfoAboutScoreTraining(BuildContext context) {
+  static showInfoDialog(BuildContext context, String title, String content) {
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -13,13 +13,13 @@ class AppBarDialogHelper {
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
-          'Score training explained',
+          title,
           style: TextStyle(
             color: Colors.white,
           ),
         ),
         content: Text(
-          'The objective of this training is to improve your scoring. To finish the game, you can either play a certain number of rounds or until a specific amount of total points is reached.',
+          content,
           style: TextStyle(
             color: Colors.white,
           ),
@@ -110,7 +110,7 @@ class _CricketDialogState extends State<CricketDialog> {
                           ),
                           SizedBox(height: 1.h),
                           Text(
-                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye. \nIn standard mode, the player with the highest score wins, but it is also possible to play two additional modes (Cut throat, No score), which are also explained here.',
+                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye. \nIn standard mode, the player with the highest score wins, but it\'s also possible to play two additional modes (Cut throat, No score), which are also explained here.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12.sp,
@@ -133,9 +133,29 @@ class _CricketDialogState extends State<CricketDialog> {
                             ),
                           ),
                           SizedBox(height: 1.h),
-                          Text(
-                            'In order to score points, a number has to be "opened". A player opens a number by hitting it three times with any combination of singles, doubles, or triples. \nOnce open, further hits on the number score points equal to it\'s value, until it\'s closed.',
-                            style: TextStyle(color: Colors.white),
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.sp,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text:
+                                      'In order to score points, a number has to be ',
+                                ),
+                                TextSpan(
+                                  text: 'opened',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                TextSpan(
+                                  text:
+                                      '. A player opens a number by hitting it three times with any combination of singles, doubles, or triples. \nOnce open, further hits on the number score points equal to it\'s value, until it\'s closed.',
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -154,12 +174,27 @@ class _CricketDialogState extends State<CricketDialog> {
                             ),
                           ),
                           SizedBox(height: 1.h),
-                          Text(
-                            'A number is "closed" when all players have hit the number three times, so it is not possible anymore to score any points with that number.',
-                            style: TextStyle(
-                              color: Colors.white,
+                          RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12.sp,
+                              ),
+                              children: <TextSpan>[
+                                TextSpan(
+                                  text: 'A number is ',
+                                ),
+                                TextSpan(
+                                  text: 'closed ',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                TextSpan(
+                                  text:
+                                      'when all players have hit the number three times, so it\'s not possible anymore to score any points with that number.',
+                                ),
+                              ],
                             ),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -181,12 +216,14 @@ class _CricketDialogState extends State<CricketDialog> {
                             'For this mode, the same basic rules apply as for the standard mode, but when points are scored for an open number, instead the points are given to all other players.',
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: 12.sp,
                             ),
                           ),
                           Text(
                             'The player with the lowest number of points at the end wins the game.',
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ],

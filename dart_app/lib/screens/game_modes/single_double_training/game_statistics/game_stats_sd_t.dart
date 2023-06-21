@@ -67,11 +67,24 @@ class _GameStatsSingleDoubleTrainingState
             if (_game!.getGameSettings.getIsTargetNumberEnabled)
               Container(
                 padding: EdgeInsets.only(top: 0.5.h),
-                child: Text(
-                  'Target number: ${_game!.getGameSettings.getTargetNumber} (${_game!.getGameSettings.getAmountOfRounds} rounds)',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    color: Colors.white,
+                child: RichText(
+                  text: TextSpan(
+                    text:
+                        'Target number: ${_game!.getMode == GameMode.DoubleTraining ? 'D' : ''}${_game!.getGameSettings.getTargetNumber} ',
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      color: Colors.white,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text:
+                            '(${_game!.getGameSettings.getAmountOfRounds} rounds)',
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: Colors.white70,
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -122,13 +135,13 @@ class _GameStatsSingleDoubleTrainingState
       //asc, desc or random
       switch (_game!.getGameSettings.getMode) {
         case ModesSingleDoubleTraining.Ascending:
-          result += 'ascending';
+          result += 'Ascending';
           break;
         case ModesSingleDoubleTraining.Descending:
-          result += 'descending';
+          result += 'Descending';
           break;
         case ModesSingleDoubleTraining.Random:
-          result += 'random';
+          result += 'Random';
           break;
       }
     }

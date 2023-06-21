@@ -746,10 +746,12 @@ class Utils {
 
     if (i == 0) {
       return false;
-    } else if ((playersLength == 4 || (!isSingleMode && teamsLength == 4)) &&
+    } else if (((isSingleMode && playersLength == 4) ||
+            (!isSingleMode && teamsLength == 4)) &&
         i == 2) {
       return false;
-    } else if (playersLength == 2 || (!isSingleMode && teamsLength == 2)) {
+    } else if ((isSingleMode && playersLength == 2) ||
+        (!isSingleMode && teamsLength == 2)) {
       return false;
     }
     return true;
@@ -809,12 +811,16 @@ class Utils {
   }
 
   static bool hasPlayerOrTeamWonTheGame(
-      dynamic stats, dynamic game, dynamic settings) {
+      dynamic stats, dynamic game, dynamic settings,
+      [bool isDraw = false]) {
     if (game is GameScoreTraining_P || game is GameSingleDoubleTraining_P) {
-      if (!game.getIsGameFinished) {
+      if (!game.getIsGameFinished || isDraw) {
         return false;
       }
-      return game.getPlayerGameStatistics.indexOf(stats) == 0 ? true : false;
+      final List<PlayerOrTeamGameStats> playerStats =
+          List.from(game.getPlayerGameStatistics);
+      playerStats.sort();
+      return playerStats.indexOf(stats) == 0 ? true : false;
     }
 
     // win check for x01 & cricket

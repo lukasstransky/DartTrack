@@ -29,11 +29,11 @@ class MainStatsScoreTraining extends StatelessWidget {
           SectionHeadingGameStats(textValue: 'Game'),
           ThreeDartsAvgStatsScoreTraining(
               gameScoreTraining_P: gameScoreTraining_P),
+          ScoreStatsScoreTraining(gameScoreTraining_P: gameScoreTraining_P),
           HighestScoreStatsScoreTraining(
               gameScoreTraining_P: gameScoreTraining_P),
           ThrownDartsStatsScoreTraining(
               gameScoreTraining_P: gameScoreTraining_P),
-          ScoreStatsScoreTraining(gameScoreTraining_P: gameScoreTraining_P),
         ],
       ),
     );

@@ -70,7 +70,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '${isRoundMode ? 'Rounds' : 'Points'} left:',
+                'Highest score:',
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
@@ -78,7 +78,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 ),
               ),
               Text(
-                playerStats.getRoundsOrPointsValue(isRoundMode),
+                playerStats.getHighestScore().toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: FONTSIZE.sp,
@@ -96,7 +96,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Highest score:',
+                'Thrown darts:',
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
@@ -104,7 +104,33 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 ),
               ),
               Text(
-                playerStats.getHighestScore().toString(),
+                playerStats.getThrownDarts.toString(),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: FONTSIZE.sp,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.only(
+            top: PADDING_TOP,
+          ),
+          width: WIDTH.w,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '${isRoundMode ? 'Rounds' : 'Points'} left:',
+                style: TextStyle(
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                  fontSize: FONTSIZE.sp,
+                ),
+              ),
+              Text(
+                playerStats.getRoundsOrPointsValue(isRoundMode),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: FONTSIZE.sp,

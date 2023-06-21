@@ -144,6 +144,7 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                       i: widget.i,
                       singleOrTeamEnum:
                           widget.gameX01.getGameSettings.getSingleOrTeam,
+                      isOpenGame: widget.openGame,
                     ),
                   ],
                 ),
@@ -167,12 +168,14 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
     required this.teamStats,
     required this.i,
     required this.singleOrTeamEnum,
+    required this.isOpenGame,
   }) : super(key: key);
 
   final List<PlayerOrTeamGameStatsX01> playerStats;
   final List<PlayerOrTeamGameStatsX01> teamStats;
   final int i;
   final SingleOrTeamEnum singleOrTeamEnum;
+  final bool isOpenGame;
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +188,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
             child: Text(
               teamStats[i].getTeam.getName,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
                 color: Utils.getTextColorDarken(context),
                 fontWeight: FontWeight.bold,
               ),
@@ -204,7 +207,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
                 child: Text(
                   'Bot - lvl. ${playerStats[i].getPlayer.getLevel}',
                   style: TextStyle(
-                    fontSize: 14.sp,
+                    fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
                   ),
@@ -234,7 +237,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
             child: Text(
               playerStats[i].getPlayer.getName,
               style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
                 color: Utils.getTextColorDarken(context),
                 fontWeight: FontWeight.bold,
               ),

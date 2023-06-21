@@ -80,6 +80,7 @@ class UndoLastThrowBtn extends StatelessWidget {
     } else if (gameMode == GameMode.ScoreTraining) {
       final game = context.read<GameScoreTraining_P>();
 
+      game.setIsGameFinished = false;
       game.setShowLoadingSpinner = true;
       game.notify();
 
@@ -103,6 +104,7 @@ class UndoLastThrowBtn extends StatelessWidget {
         gameMode == GameMode.DoubleTraining) {
       final game = context.read<GameSingleDoubleTraining_P>();
 
+      game.setIsGameFinished = false;
       game.setShowLoadingSpinner = true;
       game.notify();
 
@@ -131,8 +133,9 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.Cricket) {
-      final game = context.read<GameCricket_P>();
+      final GameCricket_P game = context.read<GameCricket_P>();
 
+      game.setIsGameFinished = false;
       game.setShowLoadingSpinner = true;
       game.notify();
 

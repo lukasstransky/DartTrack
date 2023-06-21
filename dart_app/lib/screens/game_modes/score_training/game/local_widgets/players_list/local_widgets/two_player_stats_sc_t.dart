@@ -78,7 +78,9 @@ class PlayerEntry extends StatelessWidget {
     final bool isRoundMode =
         context.read<GameSettingsScoreTraining_P>().getMode ==
             ScoreTrainingModeEnum.MaxRounds;
-    const int FONTSIZE = 18;
+    const int FONTSIZE_NAME = 18;
+    const int FONTSIZE_HEADER = 16;
+    const int FONTSIZE_VALUE = 14;
     double PADDING_TOP = 1.h;
 
     return Container(
@@ -87,49 +89,32 @@ class PlayerEntry extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            transform: Matrix4.translationValues(0.0, -2.5.h, 0.0),
-            child: Text(
-              playerStats.getPlayer.getName,
-              style: TextStyle(
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
-                fontSize: FONTSIZE.sp,
+            padding: EdgeInsets.only(bottom: 2.h, left: 1.w, right: 1.w),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                playerStats.getPlayer.getName,
+                style: TextStyle(
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                  fontSize: FONTSIZE_NAME.sp,
+                ),
               ),
             ),
           ),
           Text(
             'Average',
             style: TextStyle(
-              color: Colors.white,
-              fontSize: FONTSIZE.sp,
+              color: Utils.getTextColorDarken(context),
+              fontSize: FONTSIZE_HEADER.sp,
+              fontWeight: FontWeight.bold,
             ),
           ),
           Text(
             playerStats.getAverage(),
             style: TextStyle(
-              color: Utils.getTextColorDarken(context),
-              fontWeight: FontWeight.bold,
-              fontSize: FONTSIZE.sp,
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(
-              top: PADDING_TOP,
-            ),
-            child: Text(
-              '${isRoundMode ? 'Rounds' : 'Points'} left',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: FONTSIZE.sp,
-              ),
-            ),
-          ),
-          Text(
-            playerStats.getRoundsOrPointsValue(isRoundMode),
-            style: TextStyle(
-              color: Utils.getTextColorDarken(context),
-              fontWeight: FontWeight.bold,
-              fontSize: FONTSIZE.sp,
+              color: Colors.white,
+              fontSize: FONTSIZE_VALUE.sp,
             ),
           ),
           Container(
@@ -139,17 +124,57 @@ class PlayerEntry extends StatelessWidget {
             child: Text(
               'Highest score',
               style: TextStyle(
-                color: Colors.white,
-                fontSize: FONTSIZE.sp,
+                color: Utils.getTextColorDarken(context),
+                fontSize: FONTSIZE_HEADER.sp,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ),
           Text(
             playerStats.getHighestScore().toString(),
             style: TextStyle(
-              color: Utils.getTextColorDarken(context),
-              fontWeight: FontWeight.bold,
-              fontSize: FONTSIZE.sp,
+              color: Colors.white,
+              fontSize: FONTSIZE_VALUE.sp,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              top: PADDING_TOP,
+            ),
+            child: Text(
+              'Thrown darts',
+              style: TextStyle(
+                color: Utils.getTextColorDarken(context),
+                fontSize: FONTSIZE_HEADER.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Text(
+            playerStats.getThrownDarts.toString(),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: FONTSIZE_VALUE.sp,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(
+              top: PADDING_TOP,
+            ),
+            child: Text(
+              '${isRoundMode ? 'Rounds' : 'Points'} left',
+              style: TextStyle(
+                color: Utils.getTextColorDarken(context),
+                fontSize: FONTSIZE_HEADER.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Text(
+            playerStats.getRoundsOrPointsValue(isRoundMode),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: FONTSIZE_VALUE.sp,
             ),
           ),
         ],

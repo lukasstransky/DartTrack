@@ -5,7 +5,7 @@ import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/l
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/other.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/single_double_or_tripple.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/six_to_ten.dart';
-import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/sixteen_to_twenty.dart';
+import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/fifteen_to_twenty.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/thrown_darts.dart';
 
 import 'package:flutter/material.dart';
@@ -30,7 +30,7 @@ class PointBtnsThreeDarts extends StatelessWidget {
             OneToFiveBtnsThreeDarts(mode: mode),
             SixToTenBtnsThreeDarts(mode: mode),
             ElevenToFifteenBtnsThreeDarts(mode: mode),
-            SixteenToTwentyBtnsThreeDarts(mode: mode),
+            FifteenToTwentyBtnsThreeDarts(mode: mode),
             SingleDoubleOrTrippleBtns(mode: mode),
           ],
         ),

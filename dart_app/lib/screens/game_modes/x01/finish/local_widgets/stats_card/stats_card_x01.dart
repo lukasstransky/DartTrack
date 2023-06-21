@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/screens/game_modes/shared/overall/list_divider.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/game_details_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/local_widgets/player_entry_finish_x01.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -94,19 +95,5 @@ class _StatsCardX01State extends State<StatsCardX01> {
         ),
       ),
     );
-  }
-}
-
-class ListDivider extends StatelessWidget {
-  const ListDivider({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-        height: 2.h,
-        thickness: 1,
-        endIndent: 10,
-        indent: 10,
-        color: Utils.getTextColorDarken(context));
   }
 }

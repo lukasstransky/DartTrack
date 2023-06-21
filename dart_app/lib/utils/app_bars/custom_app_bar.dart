@@ -6,12 +6,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool showInfoIconScoreTraining;
   final bool showInfoIconCricket;
+  final bool showInfoIconSingleDoubleTraining;
 
   const CustomAppBar({
     this.showBackBtn = true,
     required this.title,
     this.showInfoIconScoreTraining = false,
     this.showInfoIconCricket = false,
+    this.showInfoIconSingleDoubleTraining = false,
   });
 
   @override
@@ -45,15 +47,35 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         ],
       ),
       actions: [
-        if (showInfoIconScoreTraining || showInfoIconCricket)
+        if (showInfoIconScoreTraining ||
+            showInfoIconCricket ||
+            showInfoIconSingleDoubleTraining)
           IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
               if (showInfoIconScoreTraining) {
-                AppBarDialogHelper.showDialogForInfoAboutScoreTraining(context);
+                AppBarDialogHelper.showInfoDialog(
+                  context,
+                  'Score training explained',
+                  'The objective of this training is to improve your scoring. \nTo finish the game, you can either play a certain number of rounds or until a specific amount of total points is reached.',
+                );
               } else if (showInfoIconCricket) {
                 AppBarDialogHelper.showDialogForInfoAboutCricket(context);
+              } else if (showInfoIconSingleDoubleTraining) {
+                if (title == 'Single training settings') {
+                  AppBarDialogHelper.showInfoDialog(
+                    context,
+                    'Single training explained',
+                    'The objective of this training is to improve your hit rate at the single fields. \nYou can either play to hit all fields from 1 to 20 or select one specific number to hit.',
+                  );
+                } else {
+                  AppBarDialogHelper.showInfoDialog(
+                    context,
+                    'Double training explained',
+                    'The objective of this training is to improve your hit rate at the double fields. \nYou can either play to hit all fields from 1 to 20 or select one specific number to hit.',
+                  );
+                }
               }
             },
             icon: Icon(

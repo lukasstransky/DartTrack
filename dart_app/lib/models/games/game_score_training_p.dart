@@ -57,9 +57,6 @@ class GameScoreTraining_P extends Game_P {
         );
       }
 
-      setPlayerGameStatistics = new List.from(getPlayerGameStatistics.reversed);
-      getGameSettings.setPlayers =
-          new List<Player>.from(getGameSettings.getPlayers.reversed);
       setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
 
       if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
@@ -294,11 +291,8 @@ class GameScoreTraining_P extends Game_P {
     setCurrentPointsSelected = 'Points';
     setCurrentPointType = PointType.Single;
 
+    setGameId = '';
     setDateTime = DateTime.now();
-    if (getGameSettings != null) {
-      getGameSettings.reset();
-    }
-    setGameSettings = null;
     setPlayerGameStatistics = [];
     setCurrentPlayerToThrow = null;
     setIsOpenGame = false;

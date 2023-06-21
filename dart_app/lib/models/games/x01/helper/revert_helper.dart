@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 
@@ -30,25 +31,25 @@ class RevertHelper {
     }
 
     // set start player/team index
-    if (game.getReachedSuddenDeath) {
+    if (game is GameX01_P && game.getReachedSuddenDeath) {
       // for case when sudden death game got reverted from finish screen
       if (game.getIsGameFinished &&
-          !game.getSuddenDeathStarter.getSuddenDeathReverted) {
-        game.getSuddenDeathStarter.setSuddenDeathReverted = true;
+          !game.getSuddenDeathStarter!.getSuddenDeathReverted) {
+        game.getSuddenDeathStarter!.setSuddenDeathReverted = true;
         if (isSingleMode) {
           game.setPlayerOrTeamLegStartIndex = settings.getPlayers
-              .indexOf(game.getSuddenDeathStarter.getPlayer());
+              .indexOf(game.getSuddenDeathStarter!.getPlayer());
         } else {
           game.setPlayerOrTeamLegStartIndex =
-              settings.getTeams.indexOf(game.getSuddenDeathStarter.getTeam());
+              settings.getTeams.indexOf(game.getSuddenDeathStarter!.getTeam());
         }
       } else {
         if (isSingleMode) {
           game.setPlayerOrTeamLegStartIndex = settings.getPlayers
-              .indexOf(game.getSuddenDeathStarter.getPrevPlayer());
+              .indexOf(game.getSuddenDeathStarter!.getPrevPlayer());
         } else {
           game.setPlayerOrTeamLegStartIndex = settings.getTeams
-              .indexOf(game.getSuddenDeathStarter.getPrevTeam());
+              .indexOf(game.getSuddenDeathStarter!.getPrevTeam());
         }
       }
     } else {

@@ -39,7 +39,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: Text(
-            'Enter max. rounds',
+            'Enter rounds',
             style: TextStyle(
               color: Colors.white,
             ),
@@ -50,13 +50,14 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
               right: 10.w,
             ),
             child: TextFormField(
+              textAlign: TextAlign.center,
               controller: amountOfRoundsController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return ('Please enter a value!');
                 } else if (int.parse(value) < MIN_ROUNDS_SINGLE_TRAINING ||
                     int.parse(value) > MAX_ROUNDS_SINGLE_TRAINING) {
-                  return 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING} - ${MAX_ROUNDS_SINGLE_TRAINING}';
+                  return 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SINGLE_TRAINING}';
                 }
                 return null;
               },
@@ -71,7 +72,8 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                 color: Colors.white,
               ),
               decoration: InputDecoration(
-                hintText: 'max. ${MAX_ROUNDS_SINGLE_TRAINING}',
+                hintText:
+                    '${MIN_ROUNDS_SINGLE_TRAINING}-${MAX_ROUNDS_SINGLE_TRAINING}',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
@@ -90,12 +92,11 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
           ),
           actions: [
             TextButton(
-              onPressed: () { Navigator.of(context).pop();
+              onPressed: () {
+                Navigator.of(context).pop();
                 Future.delayed(Duration(milliseconds: 300), () {
                   amountOfRoundsController.text = backupString;
                 });
-
-               
               },
               child: Text(
                 'Cancel',

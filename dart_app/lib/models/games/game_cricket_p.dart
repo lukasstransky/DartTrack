@@ -179,11 +179,8 @@ class GameCricket_P extends Game_P {
     setCurrentPlayerOfTeamsBeforeLegFinish = [];
     setLegSetWithPlayerOrTeamWhoFinishedIt = [];
 
+    setGameId = '';
     setDateTime = DateTime.now();
-    if (getGameSettings != null) {
-      getGameSettings.reset();
-    }
-    setGameSettings = null;
     setPlayerGameStatistics = [];
     setTeamGameStatistics = [];
     setCurrentPlayerToThrow = null;
@@ -823,7 +820,8 @@ class GameCricket_P extends Game_P {
                   shouldSubmitTeamStats
               ? getTeamGameStatistics
               : getPlayerGameStatistics) {
-        if (stats != currentStats) {
+        if (stats != currentStats &&
+            stats.getScoresOfNumbers[scoredField]! < 3) {
           stats.setCurrentPoints = stats.getCurrentPoints + scoredPoints;
           stats.setTotalPoints = stats.getTotalPoints + scoredPoints;
         }

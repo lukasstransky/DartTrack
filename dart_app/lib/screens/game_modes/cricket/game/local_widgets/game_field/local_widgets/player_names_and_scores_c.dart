@@ -2,7 +2,6 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
-import 'package:dart_app/screens/game_modes/shared/game/leg_beginner_asset.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -88,18 +87,6 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (!_isNoScoreMode) ...[
-                      Container(
-                        padding: EdgeInsets.only(bottom: 0.5.h),
-                        child: Text(
-                          playerOrTeamGameStatistics[i]
-                              .getCurrentPoints
-                              .toString(),
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.sp,
-                          ),
-                        ),
-                      ),
                       PlayerOrTeamName(
                         isNoScoreMode: _isNoScoreMode,
                         isSingleMode: _isSingleMode,
@@ -111,33 +98,23 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
                           playerOrTeamStats: playerOrTeamGameStatistics[i],
                           isSingleMode: _isSingleMode,
                         ),
+                      Text(
+                        playerOrTeamGameStatistics[i]
+                            .getCurrentPoints
+                            .toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ] else ...[
                       Column(
                         children: [
-                          Center(
-                            child: IntrinsicHeight(
-                              child: Stack(
-                                children: [
-                                  Positioned(
-                                    left: 0,
-                                    child: LegBeginnerDartAsset(
-                                      playerOrTeamStats:
-                                          playerOrTeamGameStatistics[i],
-                                      game: gameCricket,
-                                      gameSettings: gameSettingsCricket,
-                                    ),
-                                  ),
-                                  Align(
-                                    child: PlayerOrTeamName(
-                                      isNoScoreMode: _isNoScoreMode,
-                                      isSingleMode: _isSingleMode,
-                                      playerOrTeamStats:
-                                          playerOrTeamGameStatistics[i],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
+                          PlayerOrTeamName(
+                            isNoScoreMode: _isNoScoreMode,
+                            isSingleMode: _isSingleMode,
+                            playerOrTeamStats: playerOrTeamGameStatistics[i],
                           ),
                           if (!_isSingleMode)
                             CurrentPlayerOfTeam(
@@ -198,7 +175,7 @@ class CurrentPlayerOfTeam extends StatelessWidget {
         child: Text(
           playerOrTeamStats.getTeam.getCurrentPlayerToThrow.getName,
           style: TextStyle(
-            color: Colors.white,
+            color: Utils.getTextColorDarken(context),
             fontSize: 12.sp,
             fontWeight: FontWeight.bold,
           ),
@@ -237,8 +214,8 @@ class PlayerOrTeamName extends StatelessWidget {
               ? playerOrTeamStats.getPlayer.getName
               : playerOrTeamStats.getTeam.getName,
           style: TextStyle(
-            color: Colors.white,
-            fontSize: 12.sp,
+            color: Utils.getTextColorDarken(context),
+            fontSize: 14.sp,
             fontWeight: FontWeight.bold,
           ),
         ),

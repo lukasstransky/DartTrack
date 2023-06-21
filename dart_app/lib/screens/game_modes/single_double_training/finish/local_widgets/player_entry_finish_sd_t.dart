@@ -26,7 +26,8 @@ class PlayerEntryFinishSingleDoubleTraining extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.only(
-        bottom: (i == game.getPlayerGameStatistics.length - 1) ? 1.h : 0,
+        bottom:
+            (i == game.getPlayerGameStatistics.length - 1) || isDraw ? 1.h : 0,
       ),
       child: Row(
         children: [

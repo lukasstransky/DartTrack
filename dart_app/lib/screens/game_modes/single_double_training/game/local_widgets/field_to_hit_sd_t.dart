@@ -21,13 +21,18 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isTargetNumberEnabled = context
+        .read<GameSettingsSingleDoubleTraining_P>()
+        .getIsTargetNumberEnabled;
+    final int height = isTargetNumberEnabled ? 10 : 7;
+
     return Selector<GameSingleDoubleTraining_P, SelectorModel>(
       selector: (_, game) => SelectorModel(
         currentFieldToHit: game.getCurrentFieldToHit,
         amountOfRoundsRemaining: game.getAmountOfRoundsRemaining,
       ),
       builder: (_, selectorModel, __) => Container(
-        height: selectorModel.currentFieldToHit == -1 ? 8.h : 10.h,
+        height: selectorModel.currentFieldToHit == -1 ? 8.h : height.h,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(
@@ -66,9 +71,7 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                 ],
               ),
             ),
-            if (context
-                .read<GameSettingsSingleDoubleTraining_P>()
-                .getIsTargetNumberEnabled)
+            if (isTargetNumberEnabled)
               Container(
                 transform: Matrix4.translationValues(0.0, -0.5.h, 0.0),
                 padding: EdgeInsets.only(top: 0.3.h),

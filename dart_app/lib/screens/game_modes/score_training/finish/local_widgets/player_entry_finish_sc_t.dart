@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/local_widgets/name_and_ranking.dart';
@@ -36,7 +37,11 @@ class PlayerEntryFinishScoreTraining extends StatelessWidget {
             isOpenGame: isOpenGame,
             isDraw: isDraw,
           ),
-          ScoringStats(playerStats: playerStats),
+          ScoringStats(
+            playerStats: playerStats,
+            isRoundMode:
+                game.getGameSettings.getMode == ScoreTrainingModeEnum.MaxRounds,
+          ),
         ],
       ),
     );
@@ -47,9 +52,11 @@ class ScoringStats extends StatelessWidget {
   const ScoringStats({
     Key? key,
     required this.playerStats,
+    required this.isRoundMode,
   }) : super(key: key);
 
   final PlayerGameStatsScoreTraining playerStats;
+  final bool isRoundMode;
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +66,16 @@ class ScoringStats extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (isRoundMode) AverageText(),
             Text(
-              'Average: ${playerStats.getAverage()}',
+              'Total score: ${playerStats.getCurrentScore}',
               style: TextStyle(
                 fontSize: 12.sp,
                 color: Colors.white,
-                fontWeight: FontWeight.bold,
+                fontWeight: isRoundMode ? null : FontWeight.bold,
               ),
             ),
+            if (!isRoundMode) AverageText(),
             Text(
               'Highest score: ${playerStats.getHighestScore()}',
               style: TextStyle(
@@ -74,15 +83,19 @@ class ScoringStats extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            Text(
-              'Total points: ${playerStats.getCurrentScore}',
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Colors.white,
-              ),
-            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Text AverageText() {
+    return Text(
+      'Average: ${playerStats.getAverage()}',
+      style: TextStyle(
+        fontSize: 12.sp,
+        color: Colors.white,
+        fontWeight: isRoundMode ? FontWeight.bold : null,
       ),
     );
   }

@@ -40,6 +40,7 @@ class PlayerOrTeamEntryFinishCricket extends StatelessWidget {
           ScoringStats(
             stats: stats,
             settings: game.getGameSettings,
+            isOpenGame: isOpenGame,
           ),
         ],
       ),
@@ -52,10 +53,12 @@ class ScoringStats extends StatelessWidget {
     Key? key,
     required this.stats,
     required this.settings,
+    required this.isOpenGame,
   }) : super(key: key);
 
   final PlayerOrTeamGameStatsCricket stats;
   final GameSettingsCricket_P settings;
+  final bool isOpenGame;
 
   @override
   Widget build(BuildContext context) {
@@ -75,16 +78,17 @@ class ScoringStats extends StatelessWidget {
                       color: Colors.white,
                     ),
                   ),
-                  Text(
-                    'Legs: ${stats.getLegsWon}',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.white,
+                  if (isOpenGame)
+                    Text(
+                      'Legs: ${stats.getLegsWon}',
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
                 ],
               ),
-            ] else if (settings.getLegs > 1)
+            ] else
               Text(
                 'Legs: ${stats.getLegsWon}',
                 style: TextStyle(

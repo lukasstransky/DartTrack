@@ -49,6 +49,7 @@ class _MulitplePlayerStatsScoreTrainingState
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: fontSize.sp,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -61,6 +62,7 @@ class _MulitplePlayerStatsScoreTrainingState
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: fontSize.sp,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -72,6 +74,7 @@ class _MulitplePlayerStatsScoreTrainingState
                       isRoundMode ? 'Rounds left' : 'Points left',
                       style: TextStyle(
                         color: Colors.white,
+                        fontWeight: FontWeight.bold,
                         fontSize: fontSize.sp,
                       ),
                     ),
@@ -101,13 +104,11 @@ class _MulitplePlayerStatsScoreTrainingState
                       playerStats:
                           playerStats[index] as PlayerGameStatsScoreTraining,
                     ),
-                    index != playerStats.length - 1
-                        ? Divider(
-                            height: 0.1.h,
-                            thickness: 0.1.h,
-                            color: Colors.white,
-                          )
-                        : SizedBox.shrink(),
+                    Divider(
+                      height: 0.1.h,
+                      thickness: 0.1.h,
+                      color: Colors.white,
+                    )
                   ],
                 );
               },

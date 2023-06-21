@@ -44,35 +44,33 @@ class _RoundsOrPointsInputScoreTrainingState
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: Text(
-            isMaxRoundsMode ? 'Enter max. rounds' : 'Enter max. points',
+            isMaxRoundsMode ? 'Enter rounds' : 'Enter points',
             style: TextStyle(
               color: Colors.white,
             ),
           ),
           content: Container(
             margin: EdgeInsets.only(
-              left: 10.w,
-              right: 10.w,
+              left: isMaxRoundsMode ? 10.w : 7.w,
+              right: isMaxRoundsMode ? 10.w : 7.w,
             ),
             child: TextFormField(
+              textAlign: TextAlign.center,
               controller: maxRoundsOrPointsTextController,
               validator: (value) {
                 if (value!.isEmpty) {
                   return ('Please enter a value!');
                 } else if (int.parse(value) <
-                    (isMaxRoundsMode
-                        ? MIN_ROUNDS_SCORE_TRAINING
-                        : MIN_POINTS_SCORE_TRAINING)) {
+                        (isMaxRoundsMode
+                            ? MIN_ROUNDS_SCORE_TRAINING
+                            : MIN_POINTS_SCORE_TRAINING) ||
+                    int.parse(value) >
+                        (isMaxRoundsMode
+                            ? MAX_ROUNDS_SCORE_TRAINING
+                            : MAX_POINTS_SCORE_TRAINING)) {
                   return (isMaxRoundsMode
-                      ? 'Minimum rounds: ${MIN_ROUNDS_SCORE_TRAINING}'
-                      : 'Minimum points: ${MIN_POINTS_SCORE_TRAINING}');
-                } else if (int.parse(value) >
-                    (isMaxRoundsMode
-                        ? MAX_ROUNDS_SCORE_TRAINING
-                        : MAX_POINTS_SCORE_TRAINING)) {
-                  return (isMaxRoundsMode
-                      ? 'Maximum rounds: ${MAX_ROUNDS_SCORE_TRAINING}'
-                      : 'Maximum points: ${MAX_POINTS_SCORE_TRAINING}');
+                      ? 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SCORE_TRAINING}'
+                      : 'Valid values: ${MIN_POINTS_SCORE_TRAINING}-${MAX_POINTS_SCORE_TRAINING}');
                 }
                 return null;
               },
@@ -91,7 +89,7 @@ class _RoundsOrPointsInputScoreTrainingState
               ),
               decoration: InputDecoration(
                 hintText:
-                    'max. ${isMaxRoundsMode ? MAX_ROUNDS_SCORE_TRAINING : MAX_POINTS_SCORE_TRAINING}',
+                    '${isMaxRoundsMode ? '${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SCORE_TRAINING}' : '${MIN_POINTS_SCORE_TRAINING}-${MAX_POINTS_SCORE_TRAINING}'}',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,

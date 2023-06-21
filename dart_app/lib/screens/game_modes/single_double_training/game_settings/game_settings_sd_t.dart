@@ -11,7 +11,6 @@ import 'package:dart_app/screens/game_modes/single_double_training/game_settings
 import 'package:dart_app/screens/game_modes/single_double_training/game_settings/local_widgets/target_number_sd_t.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
-import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -34,12 +33,6 @@ class _GameSettingsSingleDoubleTrainingState
   void initState() {
     _addCurrentUserToPlayers();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    disposeControllersForGamesettingsSingleDoubleTraining();
-    super.dispose();
   }
 
   _addCurrentUserToPlayers() {
@@ -76,6 +69,7 @@ class _GameSettingsSingleDoubleTrainingState
       appBar: CustomAppBar(
         title:
             '${_mode == GameMode.SingleTraining ? 'Single' : 'Double'} training settings',
+        showInfoIconSingleDoubleTraining: true,
       ),
       body: SafeArea(
         child: Center(
@@ -100,7 +94,7 @@ class _GameSettingsSingleDoubleTrainingState
               ModeSingleDoubleTraining(),
               GameInfoSingleDoubleTraining(gameMode: _mode),
               PointDistributionInfoSingleDoubleTraining(gameMode: _mode),
-              TargetNumberSingleDoubleTraining(),
+              TargetNumberSingleDoubleTraining(gameMode: _mode),
               AmountOfRoundsForTargetNumberSingleDoubleTraining(),
               StartGameBtn(mode: _mode),
             ],

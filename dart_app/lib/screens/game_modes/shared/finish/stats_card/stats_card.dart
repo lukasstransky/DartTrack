@@ -10,6 +10,7 @@ import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cric
 import 'package:dart_app/screens/game_modes/cricket/finish/local_widgets/player_entry_finish_c.dart';
 import 'package:dart_app/screens/game_modes/score_training/finish/local_widgets/player_entry_finish_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/local_widgets/game_mode_details.dart';
+import 'package:dart_app/screens/game_modes/shared/overall/list_divider.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/finish/local_widgets/player_entry_finish_sd_t.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -185,6 +186,10 @@ class _StatsCardState extends State<StatsCard> {
         return false;
       }
 
+      if (widget.game.getPlayerGameStatistics.length == 0) {
+        return false;
+      }
+
       final int totalPointsOfFirstPlayer =
           widget.game.getPlayerGameStatistics[0].getCurrentScore;
 
@@ -199,19 +204,5 @@ class _StatsCardState extends State<StatsCard> {
     }
 
     return false;
-  }
-}
-
-class ListDivider extends StatelessWidget {
-  const ListDivider({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-        height: 2.h,
-        thickness: 1,
-        endIndent: 10,
-        indent: 10,
-        color: Utils.getTextColorDarken(context));
   }
 }

@@ -92,7 +92,7 @@ class GameModeDetails extends StatelessWidget {
               bottom: 1.h,
             ),
             child: Text(
-              game.getIsOpenGame
+              game.getIsOpenGame && !game.getIsGameFinished
                   ? 'Remaining rounds: ${(game as GameSingleDoubleTraining_P).getAmountOfRoundsRemaining}'
                   : 'Rounds: ${game.getGameSettings.getAmountOfRounds}',
               style: TextStyle(
@@ -108,7 +108,7 @@ class GameModeDetails extends StatelessWidget {
   String _getMode() {
     String result = '';
 
-    if (isDraw) {
+    if (!isOpenGame && isDraw) {
       result = 'Draw - ';
     }
 

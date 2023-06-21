@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -27,17 +28,21 @@ class NameAndRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<PlayerOrTeamGameStats> statsList =
+        Utils.getPlayersOrTeamStatsList(game,
+            game.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team);
+
     return Expanded(
       child: Container(
         padding: EdgeInsets.only(left: 5.w),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            !isDraw
+            !isDraw && !isOpenGame
                 ? Container(
                     width: 5.w,
                     child: Text(
-                      '${(i + 1)}.',
+                      '${checkForSameAmountOfSetsLegs(i, statsList)}.',
                       style: TextStyle(
                         fontSize: i == 0 && !isOpenGame ? 14.sp : 12.sp,
                         fontWeight: FontWeight.bold,
@@ -51,8 +56,18 @@ class NameAndRanking extends StatelessWidget {
                 padding: EdgeInsets.only(left: 3.w),
                 child: Icon(
                   Entypo.trophy,
-                  size: 12.sp,
+                  size: 14.sp,
                   color: Color(0xffFFD700),
+                ),
+              )
+            else
+              Container(
+                padding: EdgeInsets.only(left: 3.w),
+                child: Icon(
+                  Entypo.trophy,
+                  size: 14.sp,
+                  color:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 15),
                 ),
               ),
             Flexible(
@@ -63,7 +78,7 @@ class NameAndRanking extends StatelessWidget {
                   child: Text(
                     _getPlayerOrTeamName(game.getGameSettings, stats),
                     style: TextStyle(
-                      fontSize: i == 0 && !isOpenGame ? 14.sp : 12.sp,
+                      fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),
@@ -75,6 +90,32 @@ class NameAndRanking extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  checkForSameAmountOfSetsLegs(int indexOfPlayerOrTeam, dynamic statsList) {
+    if (indexOfPlayerOrTeam == 0) {
+      return 1;
+    } else if (indexOfPlayerOrTeam == 1) {
+      return 2;
+    }
+
+    for (int i = 1; i < indexOfPlayerOrTeam; i++) {
+      if (game.getGameSettings.getSetsEnabled) {
+        if ((statsList[i] as PlayerOrTeamGameStatsCricket).getSetsWon ==
+            (statsList[indexOfPlayerOrTeam] as PlayerOrTeamGameStatsCricket)
+                .getSetsWon) {
+          return i + 1;
+        }
+      } else {
+        if ((statsList[i] as PlayerOrTeamGameStatsCricket).getLegsWonTotal ==
+            (statsList[indexOfPlayerOrTeam] as PlayerOrTeamGameStatsCricket)
+                .getLegsWonTotal) {
+          return i + 1;
+        }
+      }
+    }
+
+    return indexOfPlayerOrTeam + 1;
   }
 }
 

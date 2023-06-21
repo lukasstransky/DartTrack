@@ -95,7 +95,7 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
     CricketMode test = CricketMode.CutThroat;
     test.name;
     if (mode == GameMode.ScoreTraining) {
-      return '(${settings.getMaxRoundsOrPoints} ${settings.getMode == ScoreTrainingModeEnum.MaxRounds ? 'rounds' : 'points'})';
+      return '${settings.getMaxRoundsOrPoints} ${settings.getMode == ScoreTrainingModeEnum.MaxRounds ? 'rounds' : 'points'}';
     } else if (mode == GameMode.SingleTraining ||
         mode == GameMode.DoubleTraining) {
       if (settings.getIsTargetNumberEnabled) {

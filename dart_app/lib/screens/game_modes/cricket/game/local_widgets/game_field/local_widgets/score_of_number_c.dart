@@ -73,14 +73,25 @@ class ScoreOfNumber extends StatelessWidget {
       return false;
     } else if ((isSingleMode && gameSettingsCricket.getPlayers.length == 4) ||
         (!isSingleMode && gameSettingsCricket.getTeams.length == 4)) {
-      if (isSingleMode &&
-          gameSettingsCricket.getPlayers.indexOf(playerOrTeamStats.getPlayer) %
-                  2 ==
-              0) {
-        return false;
-      } else if (!isSingleMode &&
-          gameSettingsCricket.getTeams.indexOf(playerOrTeamStats.getTeam) % 2 ==
-              0) {
+      int index = -1;
+      if (isSingleMode) {
+        for (int i = 0; i < gameSettingsCricket.getPlayers.length; i++) {
+          if (gameSettingsCricket.getPlayers[i].getName ==
+              playerOrTeamStats.getPlayer.getName) {
+            index = i;
+            break;
+          }
+        }
+      } else if (!isSingleMode) {
+        for (int i = 0; i < gameSettingsCricket.getTeams.length; i++) {
+          if (gameSettingsCricket.getTeams[i].getName ==
+              playerOrTeamStats.getTeam.getName) {
+            index = i;
+            break;
+          }
+        }
+      }
+      if (index % 2 == 0) {
         return false;
       }
     }

@@ -7,10 +7,21 @@ import 'package:dart_app/screens/game_modes/shared/game_stats/show_teams_or_play
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class GameStatsX01 extends StatelessWidget {
+class GameStatsX01 extends StatefulWidget {
   const GameStatsX01({Key? key, required this.gameX01}) : super(key: key);
 
   final GameX01_P gameX01;
+
+  @override
+  State<GameStatsX01> createState() => _GameStatsX01State();
+}
+
+class _GameStatsX01State extends State<GameStatsX01> {
+  @override
+  void dispose() {
+    widget.gameX01.setAreTeamStatsDisplayed = true;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +32,8 @@ class GameStatsX01 extends StatelessWidget {
           padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
           child: Row(
             children: [
-              ShowTeamsOrPlayersStatsBtn(game: gameX01),
-              PlayerOrTeamNamesX01(gameX01: gameX01),
+              ShowTeamsOrPlayersStatsBtn(game: widget.gameX01),
+              PlayerOrTeamNamesX01(gameX01: widget.gameX01),
             ],
           ),
         ),
@@ -37,7 +48,7 @@ class GameStatsX01 extends StatelessWidget {
             ),
           ),
         ),
-        LegSetsWonX01(gameX01: gameX01),
+        LegSetsWonX01(gameX01: widget.gameX01),
       ],
     );
   }

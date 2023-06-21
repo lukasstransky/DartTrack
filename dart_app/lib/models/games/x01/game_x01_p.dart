@@ -153,11 +153,8 @@ class GameX01_P extends Game_P {
     setLegSetWithPlayerOrTeamWhoFinishedIt = [];
     setBotSubmittedPoints = false;
 
+    setGameId = '';
     setDateTime = DateTime.now();
-    if (getGameSettings != null) {
-      getGameSettings.reset();
-    }
-    setGameSettings = null;
     setPlayerGameStatistics = [];
     setTeamGameStatistics = [];
     setCurrentPlayerToThrow = null;

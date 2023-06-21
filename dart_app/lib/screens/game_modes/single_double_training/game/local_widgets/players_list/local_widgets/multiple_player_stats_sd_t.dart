@@ -85,13 +85,11 @@ class _MulitplePlayerStatsSingleDoubleTrainingState
                           as PlayerGameStatsSingleDoubleTraining,
                       isSingleMode: _isSingleMode,
                     ),
-                    index != playerStats.length - 1
-                        ? Divider(
-                            height: 0.1.h,
-                            thickness: 0.1.h,
-                            color: Colors.white,
-                          )
-                        : SizedBox.shrink(),
+                    Divider(
+                      height: 0.1.h,
+                      thickness: 0.1.h,
+                      color: Colors.white,
+                    ),
                   ],
                 );
               },
@@ -123,6 +121,35 @@ class HeaderText extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontSize: 13.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ValueText extends StatelessWidget {
+  const ValueText({
+    Key? key,
+    required this.textValue,
+  }) : super(key: key);
+
+  final String textValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20.w,
+      alignment: Alignment.center,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          textValue,
+          style: TextStyle(
+            color: Utils.getTextColorDarken(context),
+            fontSize: 13.sp,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -150,39 +177,28 @@ class PlayerEntry extends StatelessWidget {
         children: [
           Expanded(
             child: Padding(
-              padding: EdgeInsets.only(left: 1.2.w),
-              child: HeaderText(
-                textValue: playerStats.getPlayer.getName,
-              ),
+              padding: EdgeInsets.only(left: 1.w),
+              child: ValueText(textValue: playerStats.getPlayer.getName),
             ),
           ),
           Expanded(
-            child: HeaderText(
-              textValue: playerStats.getTotalPoints.toString(),
-            ),
+            child: ValueText(textValue: playerStats.getTotalPoints.toString()),
           ),
           if (isSingleMode)
             Expanded(
-              child: HeaderText(
-                textValue: playerStats.getSingleHits.toString(),
-              ),
+              child: ValueText(textValue: playerStats.getSingleHits.toString()),
             ),
           if (!isSingleMode)
             Expanded(
-              child: HeaderText(
-                textValue: playerStats.getDoubleHits.toString(),
-              ),
+              child: ValueText(textValue: playerStats.getDoubleHits.toString()),
             ),
           if (isSingleMode)
             Expanded(
-              child: HeaderText(
-                textValue: playerStats.getTrippleHits.toString(),
-              ),
+              child:
+                  ValueText(textValue: playerStats.getTrippleHits.toString()),
             ),
           Expanded(
-            child: HeaderText(
-              textValue: playerStats.getMissedHits.toString(),
-            ),
+            child: ValueText(textValue: playerStats.getMissedHits.toString()),
           ),
         ],
       ),

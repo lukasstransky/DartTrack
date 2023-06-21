@@ -104,11 +104,13 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
                               ),
                             ),
                           ),
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              '${playerOrTeamGameStatistics[i].getSetsWon.toString()}',
-                              style: _textStyle,
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '${playerOrTeamGameStatistics[i].getSetsWon.toString()}',
+                                style: _textStyle,
+                              ),
                             ),
                           ),
                         ],
@@ -127,35 +129,42 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
                               ),
                             ),
                           ),
-                          FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              '${playerOrTeamGameStatistics[i].getLegsWon.toString()}',
-                              style: _textStyle,
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '${playerOrTeamGameStatistics[i].getLegsWon.toString()}',
+                                style: _textStyle,
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    Row(
-                      children: [
-                        Container(
-                          width: _width.w,
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              'MPR:',
-                              style: _textStyle,
+                    Padding(
+                      padding: EdgeInsets.only(right: 0.5.w),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: _width.w,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                'MPR:',
+                                style: _textStyle,
+                              ),
                             ),
                           ),
-                        ),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            '${playerOrTeamGameStatistics[i].getMarksPerRound()}',
-                            style: _textStyle,
+                          Flexible(
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '${playerOrTeamGameStatistics[i].getMarksPerRound()}',
+                                style: _textStyle,
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),

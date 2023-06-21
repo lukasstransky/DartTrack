@@ -53,12 +53,16 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
         children: [
           Container(
             transform: Matrix4.translationValues(0.0, -2.h, 0.0),
-            child: Text(
-              playerStats.getPlayer.getName,
-              style: TextStyle(
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
-                fontSize: 20.sp,
+            padding: EdgeInsets.only(left: 1.w, right: 1.w),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                playerStats.getPlayer.getName,
+                style: TextStyle(
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20.sp,
+                ),
               ),
             ),
           ),

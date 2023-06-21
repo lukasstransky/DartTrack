@@ -157,9 +157,6 @@ class GameSingleDoubleTraining_P extends Game_P {
         getPlayerGameStatistics.add(stats);
       }
 
-      setPlayerGameStatistics = new List.from(getPlayerGameStatistics.reversed);
-      getGameSettings.setPlayers =
-          new List<Player>.from(getGameSettings.getPlayers.reversed);
       setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
     }
   }
@@ -173,11 +170,8 @@ class GameSingleDoubleTraining_P extends Game_P {
     setRandomModeFinished = false;
     setCanBePressed = true;
 
+    setGameId = '';
     setDateTime = DateTime.now();
-    if (getGameSettings != null) {
-      getGameSettings.reset();
-    }
-    setGameSettings = null;
     setPlayerGameStatistics = [];
     setCurrentPlayerToThrow = null;
     setIsOpenGame = false;

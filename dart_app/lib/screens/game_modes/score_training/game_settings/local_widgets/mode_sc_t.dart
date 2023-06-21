@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/screens/game_modes/shared/settings_btn.dart';
+import 'package:dart_app/screens/game_modes/shared/overall/settings_btn.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +12,9 @@ class ModeScoreTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameSettingsScoreTraining_P settings =
+        context.read<GameSettingsScoreTraining_P>();
+
     return Selector<GameSettingsScoreTraining_P, SelectorModel>(
       selector: (_, gameSettingsScoreTraining_P) => SelectorModel(
         mode: gameSettingsScoreTraining_P.getMode,
@@ -33,18 +36,20 @@ class ModeScoreTraining extends StatelessWidget {
                 SettingsBtn(
                   condition:
                       selectorModel.mode == ScoreTrainingModeEnum.MaxRounds,
-                  text: 'max. Rounds',
+                  text: 'Rounds',
                   isLeftBtn: true,
-                  onPressed:
-                      context.read<GameSettingsScoreTraining_P>().switchMode,
+                  onPressed: settings.getMode == ScoreTrainingModeEnum.MaxRounds
+                      ? () {}
+                      : settings.switchMode,
                 ),
                 SettingsBtn(
                   condition:
                       selectorModel.mode == ScoreTrainingModeEnum.MaxPoints,
-                  text: 'max. Points',
+                  text: 'Points',
                   isLeftBtn: false,
-                  onPressed:
-                      context.read<GameSettingsScoreTraining_P>().switchMode,
+                  onPressed: settings.getMode == ScoreTrainingModeEnum.MaxPoints
+                      ? () {}
+                      : settings.switchMode,
                 )
               ],
             ),

@@ -9,7 +9,10 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class TargetNumberSingleDoubleTraining extends StatefulWidget {
-  const TargetNumberSingleDoubleTraining({Key? key}) : super(key: key);
+  const TargetNumberSingleDoubleTraining({Key? key, required this.gameMode})
+      : super(key: key);
+
+  final GameMode gameMode;
 
   @override
   State<TargetNumberSingleDoubleTraining> createState() =>
@@ -25,6 +28,9 @@ class _TargetNumberSingleDoubleTrainingState
   }
 
   _showDialogForInfoAboutTargetNumber(BuildContext context) {
+    final String gameModePrefix =
+        widget.gameMode == GameMode.DoubleTraining ? 'D' : '';
+
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -38,7 +44,7 @@ class _TargetNumberSingleDoubleTrainingState
           ),
         ),
         content: Text(
-          'If this option is enabled, only darts on the selected target number are counted. For example, if the target number is 20, only darts on the 20 field will be added to the total score.',
+          'If this option is enabled, only darts on the selected target number are counted. \nFor example, when the target number is ${gameModePrefix}20, only hits on the ${gameModePrefix}20 field will be added to the total score.',
           style: TextStyle(
             color: Colors.white,
           ),
@@ -90,6 +96,7 @@ class _TargetNumberSingleDoubleTrainingState
               right: 10.w,
             ),
             child: TextFormField(
+              textAlign: TextAlign.center,
               controller: targetNumberTextController,
               validator: (value) {
                 if (value!.isEmpty) {
@@ -112,7 +119,7 @@ class _TargetNumberSingleDoubleTrainingState
                 color: Colors.white,
               ),
               decoration: InputDecoration(
-                hintText: 'Enter a value',
+                hintText: '1-20',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
@@ -131,11 +138,11 @@ class _TargetNumberSingleDoubleTrainingState
           ),
           actions: [
             TextButton(
-              onPressed: () {   Navigator.of(context).pop();
+              onPressed: () {
+                Navigator.of(context).pop();
                 Future.delayed(Duration(milliseconds: 300), () {
                   targetNumberTextController.text = backupString;
                 });
-             
               },
               child: Text(
                 'Cancel',
@@ -190,7 +197,8 @@ class _TargetNumberSingleDoubleTrainingState
 
   @override
   Widget build(BuildContext context) {
-    final settings = context.read<GameSettingsSingleDoubleTraining_P>();
+    final GameSettingsSingleDoubleTraining_P settings =
+        context.read<GameSettingsSingleDoubleTraining_P>();
 
     return Container(
       width: 90.w,
@@ -248,7 +256,7 @@ class _TargetNumberSingleDoubleTrainingState
                     ? Row(
                         children: [
                           Text(
-                            '(Selected target number: ',
+                            '(Selected target number: ${widget.gameMode == GameMode.DoubleTraining ? 'D' : ''}',
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 10.sp,

@@ -82,7 +82,7 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
   String getModeStringFinishScreen(
       bool isOpenGame, GameSingleDoubleTraining_P game) {
     if (getIsTargetNumberEnabled) {
-      return 'Target number: ${getTargetNumber}';
+      return 'Target number: ${game.getMode == GameMode.DoubleTraining ? 'D' : ''}${getTargetNumber}';
     }
 
     if (getMode == ModesSingleDoubleTraining.Random) {

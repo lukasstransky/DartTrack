@@ -70,9 +70,7 @@ class _FinishCricketState extends State<FinishCricket> {
         context.read<OpenGamesFirestore>();
 
     if (context.read<GameSettingsCricket_P>().isCurrentUserInPlayers(context)) {
-      g_gameId = await context
-          .read<FirestoreServiceGames>()
-          .postGame(game, context.read<OpenGamesFirestore>());
+      g_gameId = await firestoreServiceGames.postGame(game, openGamesFirestore);
       game.setIsGameFinished = true;
       await context
           .read<FirestoreServicePlayerStats>()
