@@ -35,6 +35,9 @@ class _TargetNumberSingleDoubleTrainingState
       barrierDismissible: false,
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -64,6 +67,12 @@ class _TargetNumberSingleDoubleTrainingState
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -82,6 +91,9 @@ class _TargetNumberSingleDoubleTrainingState
       builder: (context) => Form(
         key: settings.getFormKeyTargetNumber,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: Text(
@@ -156,6 +168,12 @@ class _TargetNumberSingleDoubleTrainingState
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
               ),
             ),
             TextButton(
@@ -172,6 +190,12 @@ class _TargetNumberSingleDoubleTrainingState
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
               ),
             ),
           ],

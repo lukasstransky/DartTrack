@@ -55,6 +55,9 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
     barrierDismissible: false,
     context: context,
     builder: (context) => AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+      ),
       backgroundColor: Theme.of(context).colorScheme.primary,
       contentPadding: dialogContentPadding,
       title: Text(
@@ -487,6 +490,11 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
             overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+              ),
+            ),
           ),
         ),
         TextButton(
@@ -515,6 +523,11 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
             overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+              ),
+            ),
           ),
         ),
       ],

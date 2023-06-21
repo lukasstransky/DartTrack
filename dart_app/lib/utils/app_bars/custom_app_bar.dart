@@ -1,4 +1,6 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/app_bars/app_bar_dialog_helper.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -102,6 +104,9 @@ class _CricketDialogState extends State<CricketDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+      ),
       title: Text('Cricket Game from Darts'),
       content: GestureDetector(
         onHorizontalDragEnd: (details) {
@@ -142,6 +147,17 @@ class _CricketDialogState extends State<CricketDialog> {
             Navigator.pop(context);
           },
           child: Text('Close'),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+              ),
+            ),
+          ),
         ),
       ],
     );

@@ -755,6 +755,9 @@ class SubmitX01Helper {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -792,8 +795,17 @@ class SubmitX01Helper {
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -817,6 +829,9 @@ class SubmitX01Helper {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -934,8 +949,17 @@ class SubmitX01Helper {
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],

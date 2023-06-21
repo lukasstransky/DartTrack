@@ -64,6 +64,9 @@ class AddPlayerTeamBtnDialogs {
         key: _formKeyNewPlayer,
         child: AlertDialog(
           backgroundColor: Theme.of(context).colorScheme.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+          ),
           contentPadding: dialogContentPadding,
           title: Text(
             'Add new player',
@@ -234,6 +237,13 @@ class AddPlayerTeamBtnDialogs {
                             backgroundColor:
                                 Utils.getPrimaryMaterialStateColorDarken(
                                     context),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    DIALOG_BTN_SHAPE_ROUNDING),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -253,6 +263,13 @@ class AddPlayerTeamBtnDialogs {
                               MaterialStateProperty.all(Colors.transparent),
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  DIALOG_BTN_SHAPE_ROUNDING),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -342,6 +359,9 @@ class AddPlayerTeamBtnDialogs {
         return Form(
           key: _formKeyNewTeam,
           child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+            ),
             backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: dialogContentPadding,
             title: Text(
@@ -447,6 +467,13 @@ class AddPlayerTeamBtnDialogs {
                               backgroundColor:
                                   Utils.getPrimaryMaterialStateColorDarken(
                                       context),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      DIALOG_BTN_SHAPE_ROUNDING),
+                                ),
+                              ),
                             ),
                           ),
                         ),
@@ -469,6 +496,13 @@ class AddPlayerTeamBtnDialogs {
                             backgroundColor:
                                 Utils.getPrimaryMaterialStateColorDarken(
                                     context),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    DIALOG_BTN_SHAPE_ROUNDING),
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -528,6 +562,9 @@ class AddPlayerTeamBtnDialogs {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: Text(
@@ -604,6 +641,12 @@ class AddPlayerTeamBtnDialogs {
               ),
               onPressed: () => Navigator.of(context).pop(),
               style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
                 splashFactory: NoSplash.splashFactory,
                 shadowColor: MaterialStateProperty.all(Colors.transparent),
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -626,6 +669,12 @@ class AddPlayerTeamBtnDialogs {
                 }
               },
               style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
                 splashFactory: NoSplash.splashFactory,
                 shadowColor: MaterialStateProperty.all(Colors.transparent),
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
@@ -689,6 +738,9 @@ class AddPlayerTeamBtnDialogs {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: Text(
@@ -785,6 +837,13 @@ class AddPlayerTeamBtnDialogs {
                               MaterialStateProperty.all(Colors.transparent),
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  DIALOG_BTN_SHAPE_ROUNDING),
+                            ),
+                          ),
                         ),
                       ),
                     ),
@@ -804,6 +863,13 @@ class AddPlayerTeamBtnDialogs {
                             MaterialStateProperty.all(Colors.transparent),
                         backgroundColor:
                             Utils.getPrimaryMaterialStateColorDarken(context),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                DIALOG_BTN_SHAPE_ROUNDING),
+                          ),
+                        ),
                       ),
                     ),
                   ],

@@ -41,6 +41,9 @@ class _RoundsOrPointsInputScoreTrainingState
       builder: (context) => Form(
         key: gameSettingsScoreTraining_P.getFormKeyMaxRoundsOrPoints,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: Text(
@@ -126,6 +129,12 @@ class _RoundsOrPointsInputScoreTrainingState
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
               ),
             ),
             TextButton(
@@ -142,6 +151,12 @@ class _RoundsOrPointsInputScoreTrainingState
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
               ),
             ),
           ],

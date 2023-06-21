@@ -39,6 +39,9 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
         builder: (context) => Form(
           key: _formKeyCustomPoints,
           child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+            ),
             backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: dialogContentPadding,
             title: Text(
@@ -101,6 +104,12 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                    ),
+                  ),
                 ),
               ),
               TextButton(
@@ -116,6 +125,12 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                    ),
+                  ),
                 ),
               ),
             ],

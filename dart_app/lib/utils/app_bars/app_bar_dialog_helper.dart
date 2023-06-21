@@ -10,6 +10,9 @@ class AppBarDialogHelper {
       barrierDismissible: false,
       context: context,
       builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -34,8 +37,17 @@ class AppBarDialogHelper {
               ),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -64,6 +76,9 @@ class _CricketDialogState extends State<CricketDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+      ),
       contentPadding: dialogContentPadding,
       backgroundColor: Theme.of(context).colorScheme.primary,
       title: Text(
@@ -281,7 +296,15 @@ class _CricketDialogState extends State<CricketDialog> {
             ),
           ),
           style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+              ),
+            ),
           ),
         ),
       ],

@@ -27,6 +27,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -50,6 +53,12 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -66,6 +75,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -102,6 +114,12 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             style: ButtonStyle(
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -114,6 +132,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: const Text(
@@ -137,6 +158,12 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -149,6 +176,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: const Text(
@@ -172,6 +202,12 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -184,6 +220,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: const Text(
@@ -207,6 +246,12 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],

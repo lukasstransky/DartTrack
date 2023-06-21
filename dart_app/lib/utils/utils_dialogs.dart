@@ -22,6 +22,9 @@ class UtilsDialogs {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -92,6 +95,12 @@ class UtilsDialogs {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -111,6 +120,9 @@ class UtilsDialogs {
       barrierDismissible: false,
       context: context,
       builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: Text(
@@ -232,6 +244,12 @@ class UtilsDialogs {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
           TextButton(
@@ -267,6 +285,12 @@ class UtilsDialogs {
               overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
         ],
@@ -279,6 +303,9 @@ class UtilsDialogs {
       barrierDismissible: false,
       context: context,
       builder: (context1) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
         title: const Text(
@@ -308,6 +335,12 @@ class UtilsDialogs {
                     overlayColor: MaterialStateProperty.all(Colors.transparent),
                     backgroundColor:
                         Utils.getPrimaryMaterialStateColorDarken(context),
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -326,8 +359,20 @@ class UtilsDialogs {
                             color: Theme.of(context).colorScheme.secondary),
                       ),
                       style: ButtonStyle(
+                        splashFactory: NoSplash.splashFactory,
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         backgroundColor:
                             Utils.getPrimaryMaterialStateColorDarken(context),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                DIALOG_BTN_SHAPE_ROUNDING),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -352,8 +397,19 @@ class UtilsDialogs {
                           color: Theme.of(context).colorScheme.secondary),
                     ),
                     style: ButtonStyle(
+                      splashFactory: NoSplash.splashFactory,
+                      shadowColor:
+                          MaterialStateProperty.all(Colors.transparent),
+                      overlayColor:
+                          MaterialStateProperty.all(Colors.transparent),
                       backgroundColor:
                           Utils.getPrimaryMaterialStateColorDarken(context),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                        ),
+                      ),
                     ),
                   ),
                 ],

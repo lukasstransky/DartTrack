@@ -61,6 +61,9 @@ class PlayersTeamsListDialogs {
       builder: (context) => Form(
         key: _formKeyEditPlayer,
         child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: Text(
@@ -184,6 +187,12 @@ class PlayersTeamsListDialogs {
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
               ),
             ),
             TextButton(
@@ -199,6 +208,12 @@ class PlayersTeamsListDialogs {
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
                 backgroundColor:
                     Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
               ),
             ),
           ],
@@ -218,6 +233,9 @@ class PlayersTeamsListDialogs {
         return Form(
           key: _formKeyEditTeam,
           child: AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+            ),
             backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: dialogContentPadding,
             title: Text(
@@ -318,6 +336,12 @@ class PlayersTeamsListDialogs {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                    ),
+                  ),
                 ),
               ),
               TextButton(
@@ -334,6 +358,12 @@ class PlayersTeamsListDialogs {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -353,6 +383,9 @@ class PlayersTeamsListDialogs {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+            ),
             backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: dialogContentPadding,
             title: Text(
@@ -378,8 +411,20 @@ class PlayersTeamsListDialogs {
                             color: Theme.of(context).colorScheme.secondary),
                       ),
                       style: ButtonStyle(
+                        splashFactory: NoSplash.splashFactory,
+                        shadowColor:
+                            MaterialStateProperty.all(Colors.transparent),
+                        overlayColor:
+                            MaterialStateProperty.all(Colors.transparent),
                         backgroundColor:
                             Utils.getPrimaryMaterialStateColorDarken(context),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                                DIALOG_BTN_SHAPE_ROUNDING),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -398,9 +443,21 @@ class PlayersTeamsListDialogs {
                                 color: Theme.of(context).colorScheme.secondary),
                           ),
                           style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
                             backgroundColor:
                                 Utils.getPrimaryMaterialStateColorDarken(
                                     context),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    DIALOG_BTN_SHAPE_ROUNDING),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -417,8 +474,20 @@ class PlayersTeamsListDialogs {
                               color: Theme.of(context).colorScheme.secondary),
                         ),
                         style: ButtonStyle(
+                          splashFactory: NoSplash.splashFactory,
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent),
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  DIALOG_BTN_SHAPE_ROUNDING),
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -444,6 +513,9 @@ class PlayersTeamsListDialogs {
         context: context,
         builder: (context) {
           return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+            ),
             backgroundColor: Theme.of(context).colorScheme.primary,
             contentPadding: dialogContentPadding,
             title: Text(
@@ -497,6 +569,12 @@ class PlayersTeamsListDialogs {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                    ),
+                  ),
                 ),
               ),
               TextButton(
@@ -513,6 +591,12 @@ class PlayersTeamsListDialogs {
                   overlayColor: MaterialStateProperty.all(Colors.transparent),
                   backgroundColor:
                       Utils.getPrimaryMaterialStateColorDarken(context),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -658,6 +742,9 @@ class PlayersTeamsListDialogs {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
+          ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
           title: const Text(
@@ -718,6 +805,13 @@ class PlayersTeamsListDialogs {
                             backgroundColor:
                                 Utils.getPrimaryMaterialStateColorDarken(
                                     context),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    DIALOG_BTN_SHAPE_ROUNDING),
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -739,6 +833,13 @@ class PlayersTeamsListDialogs {
                               MaterialStateProperty.all(Colors.transparent),
                           backgroundColor:
                               Utils.getPrimaryMaterialStateColorDarken(context),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  DIALOG_BTN_SHAPE_ROUNDING),
+                            ),
+                          ),
                         ),
                       ),
                     ],
