@@ -45,6 +45,9 @@ class _StatsCardX01State extends State<StatsCardX01> {
                 arguments: {'game': widget.gameX01});
         },
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
+          ),
           margin: EdgeInsets.zero,
           color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
           child: Column(

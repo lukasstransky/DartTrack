@@ -38,6 +38,9 @@ class InputMethodSettingsX01 extends StatelessWidget {
           right: 0.5.h,
         ),
         child: Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
+          ),
           margin: EdgeInsets.all(0), //card adds 1.h per default
           elevation: 5,
           color: Utils.darken(Theme.of(context).colorScheme.primary, 10),

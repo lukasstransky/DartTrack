@@ -27,6 +27,9 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
       onTap: () => Navigator.pushNamed(context, '/statisticsX01',
           arguments: {'game': widget.game}),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
+        ),
         color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,9 @@ class BestLegStatsCard extends StatelessWidget {
       onTap: () => Navigator.pushNamed(context, '/statisticsX01',
           arguments: {'game': game}),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
+        ),
         color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

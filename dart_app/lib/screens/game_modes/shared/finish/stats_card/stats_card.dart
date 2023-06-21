@@ -76,6 +76,9 @@ class _StatsCardState extends State<StatsCard> {
         },
         child: Container(
           child: Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
+            ),
             margin: EdgeInsets.zero,
             color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
             child: Column(

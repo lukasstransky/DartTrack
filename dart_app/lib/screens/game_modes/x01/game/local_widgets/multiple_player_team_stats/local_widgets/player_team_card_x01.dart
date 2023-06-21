@@ -30,7 +30,7 @@ class PlayerTeamCard extends StatelessWidget {
             color: Utils.darken(Theme.of(context).colorScheme.primary, 15),
             width: 0.5.w,
           ),
-          borderRadius: BorderRadius.circular(12.0),
+          borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
         ),
         elevation: 0,
         color: _isCurrentPlayerTeamOnTheRow(context, gameSettingsX01_P, stats)

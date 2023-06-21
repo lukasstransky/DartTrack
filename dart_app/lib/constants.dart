@@ -448,6 +448,7 @@ const double GENERAL_BORDER_WIDTH = 1;
 const double PADDING_BOTTOM = 2;
 const double DIALOG_SHAPE_ROUNDING = 15;
 const double DIALOG_BTN_SHAPE_ROUNDING = 10;
+const double CARD_SHAPE_ROUNDING = 10;
 
 // game modes overview
 const int GAME_MODES_OVERVIEW_WIDTH = 60;

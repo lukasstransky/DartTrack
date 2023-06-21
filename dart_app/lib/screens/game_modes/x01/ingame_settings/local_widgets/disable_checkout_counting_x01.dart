@@ -16,6 +16,9 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
       padding: EdgeInsets.only(top: 2.h),
       margin: EdgeInsets.only(bottom: 5.h),
       child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
+        ),
         color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         elevation: 5,
         child: Column(
