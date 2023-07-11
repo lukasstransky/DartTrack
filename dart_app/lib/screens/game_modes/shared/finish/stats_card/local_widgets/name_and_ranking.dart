@@ -2,6 +2,8 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -28,10 +30,6 @@ class NameAndRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<PlayerOrTeamGameStats> statsList =
-        Utils.getPlayersOrTeamStatsList(game,
-            game.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team);
-
     return Expanded(
       child: Container(
         padding: EdgeInsets.only(left: 5.w),
@@ -42,7 +40,7 @@ class NameAndRanking extends StatelessWidget {
                 ? Container(
                     width: 5.w,
                     child: Text(
-                      '${checkForSameAmountOfSetsLegs(i, statsList)}.',
+                      '${(game is GameX01_P || game is GameCricket_P) ? checkForSameAmountOfSetsLegs(i, Utils.getPlayersOrTeamStatsList(game, game.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team)) : i + 1}.',
                       style: TextStyle(
                         fontSize: i == 0 && !isOpenGame ? 14.sp : 12.sp,
                         fontWeight: FontWeight.bold,

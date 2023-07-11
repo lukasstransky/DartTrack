@@ -64,6 +64,8 @@ class _FinishX01State extends State<FinishX01> {
     // to load data in stats tab again if new game was added
     statsFirestoreX01.loadGames = true;
     statsFirestoreX01.loadPlayerStats = true;
+    statsFirestoreX01.gamesLoaded = false;
+    statsFirestoreX01.noGamesPlayed = false;
   }
 
   @override

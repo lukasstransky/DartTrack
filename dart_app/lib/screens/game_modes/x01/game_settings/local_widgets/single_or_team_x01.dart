@@ -17,8 +17,8 @@ class SingleOrTeamX01 extends StatelessWidget {
           players: gameSettingsX01.getPlayers,
           teams: gameSettingsX01.getTeams,
         ),
-        builder: (_, selectorModel, __) => SingleOrTeamBtn(
-            gameSettingsProvider: context.read<GameSettingsX01_P>()),
+        builder: (_, selectorModel, __) =>
+            SingleOrTeamBtn(settings: context.read<GameSettingsX01_P>()),
       ),
     );
   }

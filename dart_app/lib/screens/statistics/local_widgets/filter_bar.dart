@@ -1,6 +1,5 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
-import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -28,67 +27,12 @@ class _FilterBarState extends State<FilterBar> {
     _setCurrentDate();
   }
 
-  _setCurrentDate() {
-    DateTime now = new DateTime.now();
-    _customBtnDateRange = DateFormat('dd-MM-yyyy').format(now);
-  }
-
-  _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
-    setState(() {
-      if (args.value is PickerDateRange) {
-        _range = '${DateFormat('dd-MM-yyyy').format(args.value.startDate)};'
-            '${DateFormat('dd-MM-yyyy').format(args.value.endDate ?? args.value.startDate)}';
-
-        _customBtnDateRange =
-            '${DateFormat('dd-MM-yy').format(args.value.startDate)}' +
-                '\n' +
-                '${DateFormat('dd-MM-yy').format(args.value.endDate ?? args.value.startDate)}';
-
-        final List<String> dateParts = _range.split(';');
-        if (dateParts[0] == dateParts[1]) {
-          _customBtnDateRange = dateParts[0];
-        }
-      }
-    });
-  }
-
-  _filterBtnPressed(FilterValue filterValue) async {
-    final StatsFirestoreX01_P statisticsFirestore =
-        context.read<StatsFirestoreX01_P>();
-    final FirestoreServicePlayerStats firestoreServicePlayerStats =
-        context.read<FirestoreServicePlayerStats>();
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
-
-    _setCurrentDate();
-
-    statisticsFirestore.avgBestWorstStatsLoaded = false;
-    statisticsFirestore.notify();
-
-    _showDatePicker = false;
-    _showCustomBtnDateRange = false;
-    statisticsFirestore.filterGamesByDate(
-      filterValue,
-      context,
-      statisticsFirestore,
-      firestoreServicePlayerStats,
-    );
-
-    await firestoreServicePlayerStats.getX01Statistics(
-        statisticsFirestore, username, true);
-
-    statisticsFirestore.avgBestWorstStatsLoaded = true;
-    statisticsFirestore.notify();
-  }
-
   @override
   Widget build(BuildContext context) {
     final StatsFirestoreX01_P statisticsFirestore =
         context.read<StatsFirestoreX01_P>();
     final FirestoreServicePlayerStats firestoreServicePlayerStats =
         context.read<FirestoreServicePlayerStats>();
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     return Selector<StatsFirestoreX01_P, FilterValue>(
       selector: (_, statisticsFirestore) =>
@@ -168,7 +112,7 @@ class _FilterBarState extends State<FilterBar> {
                 ),
               ],
             ),
-            if (_showDatePicker == true)
+            if (_showDatePicker)
               Theme(
                 data: ThemeData(),
                 child: SfDateRangePicker(
@@ -195,54 +139,40 @@ class _FilterBarState extends State<FilterBar> {
                   maxDate: DateTime.now(),
                   onSelectionChanged: _onSelectionChanged,
                   selectionMode: DateRangePickerSelectionMode.range,
-                  initialSelectedRange:
-                      PickerDateRange(DateTime.now(), DateTime.now()),
+                  initialSelectedRange: PickerDateRange(
+                      statisticsFirestore.getCustomStartDate(),
+                      statisticsFirestore.getCustomEndDate(false)),
                   showActionButtons: true,
-                  onSubmit: (p0) async {
-                    statisticsFirestore.avgBestWorstStatsLoaded = false;
-                    statisticsFirestore.notify();
-
+                  onSubmit: (p0) {
                     statisticsFirestore.customDateFilterRange = _range;
-                    statisticsFirestore.filterGamesByDate(
+                    statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
                       FilterValue.Custom,
                       context,
                       statisticsFirestore,
                       firestoreServicePlayerStats,
                     );
+                    statisticsFirestore.calculateX01Stats();
 
                     setState(() {
                       _showCustomBtnDateRange = true;
                       _showDatePicker = false;
                     });
 
-                    await Future.delayed(
-                        Duration(milliseconds: DEFEAULT_DELAY));
-                    await firestoreServicePlayerStats.getX01Statistics(
-                        statisticsFirestore, username);
-
-                    statisticsFirestore.avgBestWorstStatsLoaded = true;
                     statisticsFirestore.notify();
                   },
-                  onCancel: () async {
-                    statisticsFirestore.avgBestWorstStatsLoaded = false;
-                    statisticsFirestore.notify();
-
+                  onCancel: () {
                     _showDatePicker = false;
                     _showCustomBtnDateRange = false;
+                    _range = '';
                     _setCurrentDate();
-                    statisticsFirestore.filterGamesByDate(
+                    statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
                       FilterValue.Overall,
                       context,
                       statisticsFirestore,
                       firestoreServicePlayerStats,
                     );
-
-                    await Future.delayed(
-                        Duration(milliseconds: DEFEAULT_DELAY));
-                    await firestoreServicePlayerStats.getX01Statistics(
-                        statisticsFirestore, username);
-
-                    statisticsFirestore.avgBestWorstStatsLoaded = true;
+                    statisticsFirestore.customDateFilterRange = '';
+                    statisticsFirestore.calculateX01Stats();
                     statisticsFirestore.notify();
                   },
                   showTodayButton: true,
@@ -252,6 +182,52 @@ class _FilterBarState extends State<FilterBar> {
         ),
       ),
     );
+  }
+
+  _setCurrentDate() {
+    DateTime now = new DateTime.now();
+    _customBtnDateRange = DateFormat('dd-MM-yyyy').format(now);
+  }
+
+  _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    setState(() {
+      if (args.value is PickerDateRange) {
+        _range = '${DateFormat('dd-MM-yyyy').format(args.value.startDate)};'
+            '${DateFormat('dd-MM-yyyy').format(args.value.endDate ?? args.value.startDate)}';
+
+        _customBtnDateRange =
+            '${DateFormat('dd-MM-yy').format(args.value.startDate)}' +
+                '\n' +
+                '${DateFormat('dd-MM-yy').format(args.value.endDate ?? args.value.startDate)}';
+
+        final List<String> dateParts = _range.split(';');
+        if (dateParts[0] == dateParts[1]) {
+          _customBtnDateRange = dateParts[0];
+        }
+      }
+    });
+  }
+
+  _filterBtnPressed(FilterValue filterValue) {
+    final StatsFirestoreX01_P statisticsFirestore =
+        context.read<StatsFirestoreX01_P>();
+    final FirestoreServicePlayerStats firestoreServicePlayerStats =
+        context.read<FirestoreServicePlayerStats>();
+
+    _setCurrentDate();
+
+    _showDatePicker = false;
+    _showCustomBtnDateRange = false;
+
+    statisticsFirestore.customDateFilterRange = '';
+    statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
+      filterValue,
+      context,
+      statisticsFirestore,
+      firestoreServicePlayerStats,
+    );
+    statisticsFirestore.calculateX01Stats();
+    statisticsFirestore.notify();
   }
 }
 

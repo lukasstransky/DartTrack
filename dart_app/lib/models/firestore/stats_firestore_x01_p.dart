@@ -1,6 +1,8 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,8 +11,6 @@ import 'package:tuple/tuple.dart';
 class StatsFirestoreX01_P with ChangeNotifier {
   int _countOfGames = 0;
   int _countOfGamesWon = 0;
-
-  bool _avgBestWorstStatsLoaded = false;
 
   double _avg = 0;
   double _bestAvg = -1;
@@ -71,22 +71,28 @@ class StatsFirestoreX01_P with ChangeNotifier {
   List<Game_P> _games = []; // allGames
   List<Game_P> _filteredGames = [];
   List<Game_P> _favouriteGames = [];
+  List<PlayerOrTeamGameStatsX01> _playerOrTeamGameStats = [];
+  List<PlayerOrTeamGameStatsX01> _filteredPlayerOrTeamGameStats = [];
+
   bool _showFavouriteGames = false;
-  bool _loadGames = true; // to indicate if games should be loaded
-  bool _gamesLoaded = true; // for loading spinner if games are already loaded
+
+  bool _loadGames = true;
+  bool _gamesLoaded = false;
   bool _loadPlayerStats = true;
+  bool _playerOrTeamGameStatsLoaded = false;
 
-  get countOfGamesWon => this._countOfGamesWon;
+  get getCountOfGamesWon => this._countOfGamesWon;
 
-  set countOfGamesWon(value) => this._countOfGamesWon = value;
+  set setCountOfGamesWon(value) => this._countOfGamesWon = value;
 
   get countOfGames => this._countOfGames;
 
   set countOfGames(value) => this._countOfGames = value;
 
-  get avgBestWorstStatsLoaded => this._avgBestWorstStatsLoaded;
+  get playerOrTeamGameStatsLoaded => this._playerOrTeamGameStatsLoaded;
 
-  set avgBestWorstStatsLoaded(value) => this._avgBestWorstStatsLoaded = value;
+  set playerOrTeamGameStatsLoaded(value) =>
+      this._playerOrTeamGameStatsLoaded = value;
 
   get avg => this._avg;
 
@@ -211,6 +217,16 @@ class StatsFirestoreX01_P with ChangeNotifier {
 
   set favouriteGames(List<Game_P> value) => this._favouriteGames = value;
 
+  List<PlayerOrTeamGameStatsX01> get getPlayerOrTeamGameStats =>
+      this._playerOrTeamGameStats;
+  set setPlayerOrTeamGameStats(List<PlayerOrTeamGameStatsX01> value) =>
+      this._playerOrTeamGameStats = value;
+
+  List<PlayerOrTeamGameStatsX01> get getFilteredPlayerOrTeamGameStats =>
+      this._filteredPlayerOrTeamGameStats;
+  set setFilteredPlayerOrTeamGameStats(List<PlayerOrTeamGameStatsX01> value) =>
+      this._filteredPlayerOrTeamGameStats = value;
+
   bool get loadGames => this._loadGames;
 
   set loadGames(bool loadGames) => this._loadGames = loadGames;
@@ -248,8 +264,6 @@ class StatsFirestoreX01_P with ChangeNotifier {
     _countOfGames = 0;
     _countOfGamesWon = 0;
 
-    _avgBestWorstStatsLoaded = false;
-
     _avg = 0;
     _bestAvg = -1;
     _worstAvg = -1;
@@ -261,10 +275,13 @@ class StatsFirestoreX01_P with ChangeNotifier {
     _bestCheckoutQuote = -1;
     _worstCheckoutQuote = -1;
 
+    _checkoutScoreAvg = 0;
+    _bestCheckoutScore = -1;
+    _worstCheckoutScore = -1;
+
     _dartsPerLegAvg = 0;
     _bestLeg = -1;
     _worstLeg = -1;
-    _checkoutScoreAvg = 0;
 
     _countOf180 = 0;
     _countOfAllDarts = 0;
@@ -309,10 +326,19 @@ class StatsFirestoreX01_P with ChangeNotifier {
     _filteredGames = [];
   }
 
+  resetFilteredPlayerOrTeamStats() {
+    _filteredPlayerOrTeamGameStats = [];
+  }
+
+  resetPlayerOrTeamStats() {
+    _playerOrTeamGameStats = [];
+  }
+
   resetAll() {
     resetOverallStats();
     resetGames();
     resetFilteredGames();
+    resetFilteredPlayerOrTeamStats();
     resetValues();
   }
 
@@ -330,7 +356,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
     return result;
   }
 
-  sortOverallStats(bool descending) {
+  sortCheckoutsAndBestLegsStats(bool descending) {
     List<int?> onlyCheckouts = [];
     List<int?> onlyBestLegs = [];
 
@@ -392,77 +418,76 @@ class StatsFirestoreX01_P with ChangeNotifier {
         .parse(customDateFilterRange.split(';').first);
   }
 
-  DateTime getCustomEndDate() {
+  DateTime getCustomEndDate(bool addDay) {
     if (customDateFilterRange == '') {
       DateTime now = new DateTime.now();
       return new DateTime(now.year, now.month, now.day);
     }
 
-    return DateFormat('dd-MM-yyyy')
-        .parse(customDateFilterRange.split(';').last);
+    DateTime dateTime =
+        DateFormat('dd-MM-yyyy').parse(customDateFilterRange.split(';').last);
+
+    if (addDay) {
+      dateTime = dateTime.add(Duration(days: 1));
+    }
+
+    return dateTime;
   }
 
-  filterGamesByDate(
+  filterGamesAndPlayerOrTeamStatsByDate(
       FilterValue newFilterValue,
       BuildContext context,
       StatsFirestoreX01_P statsFirestoreX01,
       FirestoreServicePlayerStats firestoreServicePlayerStats) {
-    this.currentFilterValue = newFilterValue;
-    this.resetFilteredGames();
-    this.favouriteGames = [];
+    currentFilterValue = newFilterValue;
+    resetFilteredGames();
+    resetFilteredPlayerOrTeamStats();
+    favouriteGames = [];
 
-    if (this.currentFilterValue == FilterValue.Month) {
-      final DateTime toCompare =
-          new DateTime.now().subtract(new Duration(days: 30));
-
-      for (Game_P game in this.games) {
-        if (game.getDateTime.isAfter(toCompare)) {
-          if (game.getIsFavouriteGame) {
-            this.favouriteGames.add(game);
-          }
-          this.filteredGames.add(game);
-        }
-      }
-    } else if (this.currentFilterValue == FilterValue.Year) {
-      final DateTime toCompare =
-          new DateTime.now().subtract(new Duration(days: 365));
-
-      for (Game_P game in this.games) {
-        if (game.getDateTime.isAfter(toCompare)) {
-          if (game.getIsFavouriteGame) {
-            this.favouriteGames.add(game);
-          }
-          this.filteredGames.add(game);
-        }
-      }
-    } else if (this.currentFilterValue == FilterValue.Custom) {
-      final DateTime customStartDate = this.getCustomStartDate();
-      final DateTime customEndDate = this.getCustomEndDate();
-
-      for (Game_P game in this.games) {
-        if (game.getDateTime.isSameDate(customStartDate, customEndDate) ||
-            (game.getDateTime.isAfter(customStartDate) &&
-                game.getDateTime.isBefore(customEndDate))) {
-          if (game.getIsFavouriteGame) {
-            this.favouriteGames.add(game);
-          }
-          this.filteredGames.add(game);
-        }
-      }
-    } else if (this.currentFilterValue == FilterValue.Overall) {
-      this.filteredGames = this.games;
-
-      for (Game_P game in this.games) {
-        if (game.getIsFavouriteGame) {
-          this.favouriteGames.add(game);
-        }
-      }
+    DateTime comparisonDate = DateTime.now();
+    switch (currentFilterValue) {
+      case FilterValue.Month:
+        comparisonDate = DateTime.now().subtract(Duration(days: 30));
+        break;
+      case FilterValue.Year:
+        comparisonDate = DateTime.now().subtract(Duration(days: 365));
+        break;
+      case FilterValue.Custom:
+        comparisonDate = getCustomStartDate();
+        break;
+      case FilterValue.Overall:
+        comparisonDate = DateTime.fromMillisecondsSinceEpoch(0);
+        break;
     }
 
-    if (this.filteredGames.isEmpty) {
-      this.noGamesPlayed = true;
+    if (this.currentFilterValue == FilterValue.Custom) {
+      final DateTime customEndDate = getCustomEndDate(true);
+      filteredGames = games
+          .where((game) =>
+              game.getDateTime.isSameDate(comparisonDate, customEndDate) ||
+              (game.getDateTime.isAfter(comparisonDate) &&
+                  game.getDateTime.isBefore(customEndDate)))
+          .toList();
+      setFilteredPlayerOrTeamGameStats = getPlayerOrTeamGameStats
+          .where((stats) =>
+              (stats.getDateTime as DateTime)
+                  .isSameDate(comparisonDate, customEndDate) ||
+              (stats.getDateTime.isAfter(comparisonDate) &&
+                  stats.getDateTime.isBefore(customEndDate)))
+          .toList();
+    } else {
+      filteredGames = games
+          .where((game) => game.getDateTime.isAfter(comparisonDate))
+          .toList();
+      setFilteredPlayerOrTeamGameStats = getPlayerOrTeamGameStats
+          .where((stats) => stats.getDateTime.isAfter(comparisonDate))
+          .toList();
     }
 
+    favouriteGames =
+        filteredGames.where((game) => game.getIsFavouriteGame).toList();
+
+    noGamesPlayed = filteredGames.isEmpty;
     notify();
   }
 
@@ -470,6 +495,170 @@ class StatsFirestoreX01_P with ChangeNotifier {
     if (games.isNotEmpty) {
       games.sort();
     }
+  }
+
+  calculateX01Stats() {
+    resetValues();
+
+    int _counter = 0;
+    double _totalAvg = 0;
+    double _totalFirstNineAvg = 0;
+    double _totalCheckoutQuoteAvg = 0;
+    int _checkoutQuoteCounter = 0;
+    double _totalCheckoutScoreAvg = 0;
+    int _checkoutScoreCounter = 0;
+    int _dartsForWonLegCount = 0;
+    int _legsWonTotal = 0;
+
+    countOfGames = getFilteredPlayerOrTeamGameStats.length;
+
+    getFilteredPlayerOrTeamGameStats.forEach((stats) {
+      //count of games won
+      if (stats.getGameWon) {
+        setCountOfGamesWon = getCountOfGamesWon + 1;
+      }
+
+      //checkout quote
+      final String _checkoutQuoteInPercentString =
+          stats.getCheckoutQuoteInPercent();
+      if (_checkoutQuoteInPercentString != '-') {
+        final double _checkoutQuoteInPercent = double.parse(
+            _checkoutQuoteInPercentString.substring(
+                0, _checkoutQuoteInPercentString.length - 1));
+
+        _checkoutQuoteCounter++;
+        _totalCheckoutQuoteAvg += _checkoutQuoteInPercent;
+        if (_checkoutQuoteInPercent > bestCheckoutQuote) {
+          bestCheckoutQuote = _checkoutQuoteInPercent;
+        }
+        if (_checkoutQuoteInPercent < worstCheckoutQuote ||
+            worstCheckoutQuote == -1) {
+          worstCheckoutQuote = _checkoutQuoteInPercent;
+        }
+      }
+
+      //checkout score
+      stats.getCheckouts.values.forEach((int _checkoutScore) {
+        _totalCheckoutScoreAvg += _checkoutScore;
+        _checkoutScoreCounter++;
+        if (_checkoutScore < worstCheckoutScore || worstCheckoutScore == -1) {
+          worstCheckoutScore = _checkoutScore;
+        }
+        if (_checkoutScore > bestCheckoutScore || bestCheckoutScore == -1) {
+          bestCheckoutScore = _checkoutScore;
+        }
+      });
+
+      //legs
+      stats.getThrownDartsPerLeg.values.forEach((int _thrownDarts) {
+        countOfAllDarts += _thrownDarts;
+      });
+
+      final String _bestLegString = stats.getBestLeg();
+      if (_bestLegString != '-') {
+        final int _bestLeg = int.parse(_bestLegString);
+        if (_bestLeg < bestLeg || bestLeg == -1) {
+          bestLeg = _bestLeg;
+        }
+      }
+
+      final String _worstLegString = stats.getWorstLeg();
+      if (_worstLegString != '-') {
+        final int _worstLeg = int.parse(stats.getWorstLeg());
+        if (_worstLeg > worstLeg) {
+          worstLeg = _worstLeg;
+        }
+      }
+
+      _dartsForWonLegCount += stats.getDartsForWonLegCount;
+      _legsWonTotal += stats.getLegsWonTotal;
+
+      //avg
+      final double _avg = double.parse(stats.getAverage());
+      _totalAvg += _avg;
+      if (_avg > bestAvg) {
+        bestAvg = _avg;
+      }
+      if (_avg < worstAvg || worstAvg == -1) {
+        worstAvg = _avg;
+      }
+
+      //first nine avg
+      final double _firstNineAvg = double.parse(stats.getFirstNinveAvg());
+      _totalFirstNineAvg += _firstNineAvg;
+      if (_firstNineAvg > bestFirstNineAvg) {
+        bestFirstNineAvg = _firstNineAvg;
+      }
+      if (_firstNineAvg < worstFirstNineAvg || worstFirstNineAvg == -1) {
+        worstFirstNineAvg = _firstNineAvg;
+      }
+      _counter++;
+
+      //180
+      countOf180 += stats.getRoundedScoresEven[180] as int;
+
+      //rounded scores even
+      final Map<int, int> _roundedScoresEven = stats.getRoundedScoresEven;
+      for (int key in _roundedScoresEven.keys) {
+        roundedScoresEven[key] += _roundedScoresEven[key];
+      }
+
+      //rounded scores odd
+      final Map<int, int> _roundedScoresOdd = stats.getRoundedScoresOdd;
+      for (int key in _roundedScoresOdd.keys) {
+        roundedScoresOdd[key] += _roundedScoresOdd[key];
+      }
+
+      //precise scores
+      final Map<int, int> _preciseScores = stats.getPreciseScores;
+      for (int key in _preciseScores.keys) {
+        if (preciseScores.containsKey(key)) {
+          preciseScores[key] += _preciseScores[key];
+        } else {
+          preciseScores[key] = _preciseScores[key];
+        }
+      }
+
+      //all scores per dart with count
+      final Map<String, int> _allScoresPerDartAsStringCount =
+          stats.getAllScoresPerDartAsStringCount;
+      for (String key in _allScoresPerDartAsStringCount.keys) {
+        if (allScoresPerDartAsStringCount.containsKey(key)) {
+          allScoresPerDartAsStringCount[key] +=
+              _allScoresPerDartAsStringCount[key];
+        } else {
+          allScoresPerDartAsStringCount[key] =
+              _allScoresPerDartAsStringCount[key];
+        }
+      }
+    });
+
+    //calc & set values
+    if (_totalAvg > 0) {
+      avg = _totalAvg / _counter;
+    }
+
+    if (_totalFirstNineAvg > 0) {
+      firstNineAvg = _totalFirstNineAvg / _counter;
+    }
+
+    if (_checkoutQuoteCounter > 0) {
+      checkoutQuoteAvg = _totalCheckoutQuoteAvg / _checkoutQuoteCounter;
+    }
+
+    if (_totalCheckoutScoreAvg > 0) {
+      checkoutScoreAvg = _totalCheckoutScoreAvg / _checkoutScoreCounter;
+    }
+
+    if (_legsWonTotal > 0) {
+      dartsPerLegAvg = _dartsForWonLegCount / _legsWonTotal;
+    }
+
+    preciseScores = Utils.sortMapIntInt(preciseScores);
+    allScoresPerDartAsStringCount =
+        Utils.sortMapStringInt(allScoresPerDartAsStringCount);
+
+    notify();
   }
 }
 

@@ -83,10 +83,10 @@ class _MoreStatsState extends State<MoreStats> {
                     'Show odd rounded scores',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12.sp,
                     ),
                   ),
                   Switch(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     thumbColor: MaterialStateProperty.all(
                         Theme.of(context).colorScheme.secondary),
                     activeColor: Theme.of(context).colorScheme.secondary,
@@ -109,10 +109,10 @@ class _MoreStatsState extends State<MoreStats> {
                     'Show all scores per dart',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 12.sp,
                     ),
                   ),
                   Switch(
+                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     thumbColor: MaterialStateProperty.all(
                         Theme.of(context).colorScheme.secondary),
                     activeColor: Theme.of(context).colorScheme.secondary,

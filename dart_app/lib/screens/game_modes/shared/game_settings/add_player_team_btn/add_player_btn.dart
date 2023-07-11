@@ -16,33 +16,6 @@ class AddPlayerBtn extends StatelessWidget {
 
   final GameMode mode;
 
-  bool _shouldShowOnlyDialogForAddingTeam(dynamic settings) {
-    if (settings.getPlayers.length >= 8) {
-      return true;
-    }
-
-    for (Team team in settings.getTeams) {
-      if (team.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  _addPlayerTeamBtnPressed(dynamic settings, BuildContext context) {
-    if (settings.getSingleOrTeam == SingleOrTeamEnum.Single ||
-        settings.getTeams.length == MAX_TEAMS) {
-      AddPlayerTeamBtnDialogs.showDialogForAddingPlayer(settings, context);
-    } else if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        _shouldShowOnlyDialogForAddingTeam(settings)) {
-      AddPlayerTeamBtnDialogs.showDialogForAddingTeam(settings, context);
-    } else {
-      AddPlayerTeamBtnDialogs.showDialogForAddingPlayerOrTeam(
-          settings, context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -89,5 +62,32 @@ class AddPlayerBtn extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  bool _shouldShowOnlyDialogForAddingTeam(dynamic settings) {
+    if (settings.getPlayers.length >= 8) {
+      return true;
+    }
+
+    for (Team team in settings.getTeams) {
+      if (team.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  _addPlayerTeamBtnPressed(dynamic settings, BuildContext context) {
+    if (settings.getSingleOrTeam == SingleOrTeamEnum.Single ||
+        settings.getTeams.length == MAX_TEAMS) {
+      AddPlayerTeamBtnDialogs.showDialogForAddingPlayer(settings, context);
+    } else if (settings.getSingleOrTeam == SingleOrTeamEnum.Team &&
+        _shouldShowOnlyDialogForAddingTeam(settings)) {
+      AddPlayerTeamBtnDialogs.showDialogForAddingTeam(settings, context);
+    } else {
+      AddPlayerTeamBtnDialogs.showDialogForAddingPlayerOrTeam(
+          settings, context);
+    }
   }
 }

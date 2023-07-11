@@ -1,11 +1,61 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class DrawModeX01 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Selector<GameSettingsX01_P, SelectorModel>(
+      selector: (_, gameSettingsX01) => SelectorModel(
+        drawMode: gameSettingsX01.getDrawMode,
+        winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
+        legs: gameSettingsX01.getLegs,
+        modeOut: gameSettingsX01.getModeOut,
+        setsEnabled: gameSettingsX01.getSetsEnabled,
+      ),
+      builder: (_, selectorModel, __) {
+        if (!selectorModel.winByTwoLegsDifference) {
+          return Container(
+            width: WIDTH_GAMESETTINGS.w,
+            transform: Matrix4.translationValues(
+                0.0, _getProperValueForTransformation(selectorModel).h, 0.0),
+            margin: EdgeInsets.only(
+                top: _noCheckoutCountAndWinByDiffPresent(selectorModel)
+                    ? MARGIN_GAMESETTINGS.h
+                    : 0.h),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      'Draw mode',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
+                      value: selectorModel.drawMode,
+                      onChanged: (value) => _drawModeSwitchPressed(
+                          context.read<GameSettingsX01_P>(), value),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        } else
+          return SizedBox.shrink();
+      },
+    );
+  }
+
   double _getProperValueForTransformation(SelectorModel selectorModel) {
     if (_checkoutCountingPresent(selectorModel) &&
         _winByTwoLegsPresent(selectorModel)) {
@@ -60,57 +110,6 @@ class DrawModeX01 extends StatelessWidget {
     gameSettingsX01.setDrawMode = value;
 
     gameSettingsX01.notify();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Selector<GameSettingsX01_P, SelectorModel>(
-      selector: (_, gameSettingsX01) => SelectorModel(
-        drawMode: gameSettingsX01.getDrawMode,
-        winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
-        legs: gameSettingsX01.getLegs,
-        modeOut: gameSettingsX01.getModeOut,
-        setsEnabled: gameSettingsX01.getSetsEnabled,
-      ),
-      builder: (_, selectorModel, __) {
-        if (!selectorModel.winByTwoLegsDifference) {
-          return Container(
-            width: WIDTH_GAMESETTINGS.w,
-            transform: Matrix4.translationValues(
-                0.0, _getProperValueForTransformation(selectorModel).h, 0.0),
-            margin: EdgeInsets.only(
-                top: _noCheckoutCountAndWinByDiffPresent(selectorModel)
-                    ? MARGIN_GAMESETTINGS.h
-                    : 0.h),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Draw mode',
-                      style: TextStyle(
-                        color: Utils.getTextColorForGameSettingsPage(),
-                      ),
-                    ),
-                    Switch(
-                      thumbColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.secondary),
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveThumbColor:
-                          Theme.of(context).colorScheme.secondary,
-                      value: selectorModel.drawMode,
-                      onChanged: (value) => _drawModeSwitchPressed(
-                          context.read<GameSettingsX01_P>(), value),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        } else
-          return SizedBox.shrink();
-      },
-    );
   }
 }
 

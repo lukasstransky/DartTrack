@@ -16,7 +16,7 @@ class MoreStatsPreciseScores extends StatelessWidget {
     if (showAllScoesPerDartWithCount) {
       return statisticsFirestore.allScoresPerDartAsStringCount.isNotEmpty;
     }
-    return statisticsFirestore.games.isNotEmpty;
+    return statisticsFirestore.filteredGames.isNotEmpty;
   }
 
   @override

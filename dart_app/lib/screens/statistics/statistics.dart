@@ -30,7 +30,6 @@ class _StatisticsState extends State<Statistics> {
     final StatsFirestoreX01_P statsFirestore =
         context.read<StatsFirestoreX01_P>();
 
-    statsFirestore.currentFilterValue = FilterValue.Overall;
     username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
@@ -41,11 +40,11 @@ class _StatisticsState extends State<Statistics> {
       statsFirestore.resetAll();
     } else {
       if (statsFirestore.loadPlayerStats) {
-        _getPlayerGameStatistics(statsFirestore);
+        _getAllPlayerOrTeamGameStatsX01(statsFirestore);
         statsFirestore.loadPlayerStats = false;
       }
       if (statsFirestore.loadGames) {
-        _getGames();
+        _getAllX01Games();
         statsFirestore.loadGames = false;
       }
     }
@@ -53,13 +52,63 @@ class _StatisticsState extends State<Statistics> {
     super.initState();
   }
 
-  _getPlayerGameStatistics(StatsFirestoreX01_P statsFirestore) async {
-    await context
-        .read<FirestoreServicePlayerStats>()
-        .getX01Statistics(statsFirestore, username, true);
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
+        body: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              FilterBar(),
+              Selector<StatsFirestoreX01_P, SelectorModel>(
+                selector: (_, statsFirestoreX01) => SelectorModel(
+                  playerOrTeamGameStatsLoaded:
+                      statsFirestoreX01.playerOrTeamGameStatsLoaded,
+                  gamesLoaded: statsFirestoreX01.gamesLoaded,
+                  noGamesPlayed: statsFirestoreX01.noGamesPlayed,
+                  games: statsFirestoreX01.games,
+                ),
+                builder: (_, selectorModel, __) =>
+                    (selectorModel.playerOrTeamGameStatsLoaded &&
+                                selectorModel.gamesLoaded) ||
+                            selectorModel.noGamesPlayed ||
+                            username == 'Guest'
+                        ? Column(
+                            children: [
+                              OtherStats(),
+                              AvgBestWorstStats(),
+                              if (_showMoreStats) MoreStats(),
+                              showMoreStatsBtn(),
+                              StatsPerGameBtns()
+                            ],
+                          )
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height - 25.h,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  _getGames() async {
+  _getAllPlayerOrTeamGameStatsX01(StatsFirestoreX01_P statsFirestore) async {
+    await context
+        .read<FirestoreServicePlayerStats>()
+        .getAllPlayerOrTeamGameStatsX01(statsFirestore, username);
+    statsFirestore.calculateX01Stats();
+  }
+
+  _getAllX01Games() async {
     await context.read<FirestoreServiceGames>().getGames(
         GameMode.X01, context, context.read<FirestoreServicePlayerStats>());
   }
@@ -108,53 +157,6 @@ class _StatisticsState extends State<Statistics> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Scaffold(
-        appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              FilterBar(),
-              Selector<StatsFirestoreX01_P, SelectorModel>(
-                selector: (_, statsFirestoreX01) => SelectorModel(
-                  avgBestWorstStatsLoaded:
-                      statsFirestoreX01.avgBestWorstStatsLoaded,
-                  gamesLoaded: statsFirestoreX01.gamesLoaded,
-                  games: statsFirestoreX01.games,
-                ),
-                builder: (_, selectorModel, __) =>
-                    (selectorModel.avgBestWorstStatsLoaded &&
-                                selectorModel.gamesLoaded) ||
-                            username == 'Guest'
-                        ? Column(
-                            children: [
-                              OtherStats(),
-                              AvgBestWorstStats(),
-                              if (_showMoreStats) MoreStats(),
-                              showMoreStatsBtn(),
-                              StatsPerGameBtns()
-                            ],
-                          )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height - 25.h,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
   Center showMoreStatsBtn() {
     return Center(
       child: TextButton.icon(
@@ -179,13 +181,15 @@ class _StatisticsState extends State<Statistics> {
 }
 
 class SelectorModel {
-  final bool avgBestWorstStatsLoaded;
+  final bool playerOrTeamGameStatsLoaded;
   final bool gamesLoaded;
+  final bool noGamesPlayed;
   final List<Game_P> games;
 
   SelectorModel({
-    required this.avgBestWorstStatsLoaded,
+    required this.playerOrTeamGameStatsLoaded,
     required this.gamesLoaded,
+    required this.noGamesPlayed,
     required this.games,
   });
 }

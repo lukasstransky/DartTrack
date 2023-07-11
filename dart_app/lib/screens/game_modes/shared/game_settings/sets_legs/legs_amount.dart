@@ -12,6 +12,65 @@ class LegsAmount extends StatelessWidget {
 
   final dynamic gameSettings;
 
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        children: [
+          Container(
+            width: 10.w,
+            alignment: Alignment.center,
+            child: Text(
+              '(Legs)',
+              style: TextStyle(
+                fontSize: 8.sp,
+                color: Utils.getTextColorForGameSettingsPage(),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () => _subtractBtnPressed(),
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+                icon: Icon(Icons.remove,
+                    color: _shouldShowSubtractBtn()
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.secondary),
+              ),
+              Container(
+                width: 10.w,
+                alignment: Alignment.center,
+                child: Text(
+                  gameSettings.getLegs.toString(),
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    color: Utils.getTextColorForGameSettingsPage(),
+                  ),
+                ),
+              ),
+              IconButton(
+                splashColor: Colors.transparent,
+                highlightColor: Colors.transparent,
+                onPressed: () => _addBtnPressed(),
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+                icon: Icon(Icons.add,
+                    color: _shouldShowAddBtn()
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.secondary),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   _shouldShowAddBtn() {
     return gameSettings.getLegs == MAX_LEGS ||
         gameSettings.getLegs == (MAX_LEGS - 1) &&
@@ -85,64 +144,5 @@ class LegsAmount extends StatelessWidget {
     }
 
     gameSettings.notify();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Container(
-            width: 10.w,
-            alignment: Alignment.center,
-            child: Text(
-              '(Legs)',
-              style: TextStyle(
-                fontSize: 8.sp,
-                color: Utils.getTextColorForGameSettingsPage(),
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () => _subtractBtnPressed(),
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
-                icon: Icon(Icons.remove,
-                    color: _shouldShowSubtractBtn()
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.secondary),
-              ),
-              Container(
-                width: 10.w,
-                alignment: Alignment.center,
-                child: Text(
-                  gameSettings.getLegs.toString(),
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    color: Utils.getTextColorForGameSettingsPage(),
-                  ),
-                ),
-              ),
-              IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-                onPressed: () => _addBtnPressed(),
-                padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
-                icon: Icon(Icons.add,
-                    color: _shouldShowAddBtn()
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.secondary),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
   }
 }

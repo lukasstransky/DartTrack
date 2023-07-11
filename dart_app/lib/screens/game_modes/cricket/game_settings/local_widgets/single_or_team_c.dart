@@ -18,8 +18,8 @@ class SingleOrTeamBtnCricket extends StatelessWidget {
           players: gameSettingsCricket.getPlayers,
           teams: gameSettingsCricket.getTeams,
         ),
-        builder: (_, selectorModel, __) => SingleOrTeamBtn(
-            gameSettingsProvider: context.read<GameSettingsCricket_P>()),
+        builder: (_, selectorModel, __) =>
+            SingleOrTeamBtn(settings: context.read<GameSettingsCricket_P>()),
       ),
     );
   }

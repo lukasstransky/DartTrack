@@ -63,8 +63,12 @@ class UndoLastThrowBtn extends StatelessWidget {
       );
 
       if (username != 'Guest') {
-        await firestoreServiceGames.deleteGame(g_gameId, context,
-            game.getTeamGameStatistics.length > 0 ? true : false);
+        await firestoreServiceGames.deleteGame(
+          g_gameId,
+          context,
+          game.getTeamGameStatistics.length > 0 ? true : false,
+          gameMode,
+        );
       }
 
       if (_didBotFinishGame(game, gameSettingsX01)) {
@@ -94,6 +98,7 @@ class UndoLastThrowBtn extends StatelessWidget {
           g_gameId,
           context,
           game.getTeamGameStatistics.length > 0 ? true : false,
+          gameMode,
         );
       }
 
@@ -121,6 +126,7 @@ class UndoLastThrowBtn extends StatelessWidget {
           g_gameId,
           context,
           false,
+          gameMode,
         );
       }
 
@@ -149,6 +155,7 @@ class UndoLastThrowBtn extends StatelessWidget {
           g_gameId,
           context,
           game.getTeamGameStatistics.length > 0 ? true : false,
+          gameMode,
         );
       }
 

@@ -13,12 +13,12 @@ class OtherStats extends StatelessWidget {
       return '-';
     }
     if (statisticsFirestore.countOfGames > 0 &&
-        statisticsFirestore.countOfGamesWon == 0) {
+        statisticsFirestore.getCountOfGamesWon == 0) {
       return '0 (0%)';
     }
 
     String winPercentage =
-        ((100 * (statisticsFirestore.countOfGamesWon as int)) /
+        ((100 * (statisticsFirestore.getCountOfGamesWon as int)) /
                 statisticsFirestore.countOfGames)
             .toStringAsFixed(2);
 
@@ -28,7 +28,7 @@ class OtherStats extends StatelessWidget {
       winPercentage = parts[0];
     }
 
-    return '${statisticsFirestore.countOfGamesWon} (${winPercentage}%)';
+    return '${statisticsFirestore.getCountOfGamesWon} (${winPercentage}%)';
   }
 
   @override

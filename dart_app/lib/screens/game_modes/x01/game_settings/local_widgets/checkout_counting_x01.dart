@@ -6,17 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class CheckoutCountingX01 extends StatelessWidget {
-  bool _winByDiffWidgetIsPresent(SelectorModel selectorModel) {
-    return selectorModel.legs > 1 && !selectorModel.drawMode;
-  }
-
-  bool _noWinByDiffWidgetIsPresent(SelectorModel selectorModel) {
-    if (selectorModel.legs == 1 || selectorModel.drawMode) {
-      return true;
-    }
-    return false;
-  }
-
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
@@ -43,7 +32,7 @@ class CheckoutCountingX01 extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Counting of checkout %',
                       style: TextStyle(color: Colors.white),
                     ),
@@ -68,6 +57,17 @@ class CheckoutCountingX01 extends StatelessWidget {
           return SizedBox.shrink();
       },
     );
+  }
+
+  bool _winByDiffWidgetIsPresent(SelectorModel selectorModel) {
+    return selectorModel.legs > 1 && !selectorModel.drawMode;
+  }
+
+  bool _noWinByDiffWidgetIsPresent(SelectorModel selectorModel) {
+    if (selectorModel.legs == 1 || selectorModel.drawMode) {
+      return true;
+    }
+    return false;
   }
 }
 

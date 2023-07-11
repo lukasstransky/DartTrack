@@ -93,10 +93,10 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
                 players: game.getPlayers,
                 teams: game.getTeams,
               ),
-              shouldRebuild: (previous, next) => true,
+              shouldRebuild: (previous, next) => previous != next,
               builder: (_, selectorModel, __) =>
                   _showAddButton(selectorModel.players, selectorModel.teams)
-                      ? AddPlayerBtn(mode: GameMode.X01)
+                      ? const AddPlayerBtn(mode: GameMode.X01)
                       : SizedBox.shrink(),
             ),
             Column(
@@ -109,7 +109,7 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
                 WinByTwoLegsDifferenceX01(),
                 CheckoutCountingX01(),
                 DrawModeX01(),
-                AdvancedSettingsX01(),
+                const AdvancedSettingsX01(),
               ],
             ),
             StartGameBtnX01()

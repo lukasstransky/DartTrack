@@ -31,11 +31,9 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Text(
+                    const Text(
                       'Win by two legs difference',
-                      style: TextStyle(
-                        color: Utils.getTextColorForGameSettingsPage(),
-                      ),
+                      style: TextStyle(color: Colors.white),
                     ),
                     Switch(
                       thumbColor: MaterialStateProperty.all(
@@ -132,7 +130,7 @@ _showDialogForSuddenDeath(
                     ),
                   ],
                 ),
-                if (gameSettingsX01.getSuddenDeath == true)
+                if (gameSettingsX01.getSuddenDeath)
                   Row(
                     children: [
                       IconButton(

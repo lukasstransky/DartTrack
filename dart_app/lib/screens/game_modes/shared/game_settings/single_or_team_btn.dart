@@ -7,19 +7,19 @@ import 'package:sizer/sizer.dart';
 class SingleOrTeamBtn extends StatelessWidget {
   const SingleOrTeamBtn({
     Key? key,
-    required this.gameSettingsProvider,
+    required this.settings,
   }) : super(key: key);
 
-  final dynamic gameSettingsProvider;
+  final dynamic settings;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: WIDTH_GAMESETTINGS.w,
-      height: gameSettingsProvider is GameSettingsX01_P &&
-              Utils.shouldShrinkWidget(gameSettingsProvider)
-          ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
-          : WIDGET_HEIGHT_GAMESETTINGS.h,
+      height:
+          settings is GameSettingsX01_P && Utils.shouldShrinkWidget(settings)
+              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
+              : WIDGET_HEIGHT_GAMESETTINGS.h,
       margin: EdgeInsets.only(
         top: MARGIN_GAMESETTINGS.h,
         bottom: MARGIN_GAMESETTINGS.h,
@@ -27,10 +27,10 @@ class SingleOrTeamBtn extends StatelessWidget {
       child: Row(
         children: [
           SingleBtn(
-            gameSettingsProvider: gameSettingsProvider,
+            gameSettingsProvider: settings,
           ),
           TeamBtn(
-            gameSettingsProvider: gameSettingsProvider,
+            gameSettingsProvider: settings,
           ),
         ],
       ),

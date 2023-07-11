@@ -11,7 +11,6 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
-import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_stats_list.dart';
@@ -88,7 +87,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
       return 'There are currently no games selected as favourite.';
     }
 
-    final String modeLowerCase = _mode.name.toLowerCase();
+    final String modeLowerCase =
+        _mode.name == 'X01' ? _mode.name : _mode.name.toLowerCase();
     final String messagePart = 'No ${modeLowerCase} games have been played';
     if (mode == GameMode.X01) {
       switch (statsFirestore.currentFilterValue) {
@@ -114,32 +114,19 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   void _deleteGame(Game_P game, dynamic statsFirestore) async {
-    final Game_P toDelete = statsFirestore.games
-        .where(((g) => g.getGameId == game.getGameId))
-        .first;
-
-    statsFirestore.games.remove(toDelete);
-    if (game is GameX01_P) {
-      statsFirestore.filteredGames.remove(toDelete);
-    }
     if (statsFirestore.games.isEmpty) {
       statsFirestore.noGamesPlayed = true;
     }
 
     setState(() {});
 
-    await context.read<FirestoreServiceGames>().deleteGame(game.getGameId,
-        context, game.getTeamGameStatistics.length > 0 ? true : false);
-
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
-    final StatsFirestoreX01_P statsFirestoreX01 =
-        context.read<StatsFirestoreX01_P>();
-
-    await context.read<FirestoreServicePlayerStats>().getX01Statistics(
-          statsFirestoreX01,
-          username,
+    await context.read<FirestoreServiceGames>().deleteGame(
+          game.getGameId,
+          context,
+          game.getTeamGameStatistics.length > 0 ? true : false,
+          _mode,
         );
+    context.read<StatsFirestoreX01_P>().calculateX01Stats();
   }
 
   _getCard(Game_P game) {

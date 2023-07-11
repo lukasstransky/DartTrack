@@ -8,7 +8,6 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
-import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -69,10 +68,29 @@ class FirestoreServiceGames {
     return gameId;
   }
 
-  Future<void> deleteGame(
-      String gameId, BuildContext context, bool teamStatsAvailable) async {
+  Future<void> deleteGame(String gameId, BuildContext context,
+      bool teamStatsAvailable, GameMode mode) async {
     final FirestoreServicePlayerStats firestoreServicePlayerStats =
         context.read<FirestoreServicePlayerStats>();
+    final dynamic firestoreStats =
+        Utils.getFirestoreStatsProviderBasedOnMode(mode, context);
+
+    // remove locally stored game (and player stats for X01 mode)
+    firestoreStats.games.removeWhere((game) => game.getGameId == gameId);
+    if (firestoreStats.games.length == 0) {
+      firestoreStats.noGamesPlayed = true;
+    } else {
+      firestoreStats.noGamesPlayed = false;
+    }
+    if (mode == GameMode.X01) {
+      firestoreStats.filteredGames
+          .removeWhere((game) => game.getGameId == gameId);
+
+      firestoreStats.getPlayerOrTeamGameStats
+          .removeWhere((stats) => stats.getGameId == gameId);
+      firestoreStats.getFilteredPlayerOrTeamGameStats
+          .removeWhere((stats) => stats.getGameId == gameId);
+    }
 
     // delete playerStats or teamStats
     await firestoreServicePlayerStats.deletePlayerOrTeamStats(gameId, false);
@@ -87,13 +105,7 @@ class FirestoreServiceGames {
   }
 
   Future<void> resetStatistics(BuildContext context) async {
-    final StatsFirestoreX01_P statisticsFirestoreX01 =
-        context.read<StatsFirestoreX01_P>();
-
-    for (Game_P game in statisticsFirestoreX01.games) {
-      deleteGame(game.getGameId, context,
-          game.getTeamGameStatistics.length > 0 ? true : false);
-    }
+    //TODO
   }
 
   Future<void> checkIfAtLeastOneX01GameIsPlayed(BuildContext context) async {
@@ -103,15 +115,11 @@ class FirestoreServiceGames {
         .get();
     final StatsFirestoreX01_P statisticsFirestoreX01 =
         context.read<StatsFirestoreX01_P>();
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
     if (!statisticsFirestoreX01.noGamesPlayed &&
-        !statisticsFirestoreX01.avgBestWorstStatsLoaded) {
-      context
-          .read<FirestoreServicePlayerStats>()
-          .getX01Statistics(statisticsFirestoreX01, username);
+        !statisticsFirestoreX01.playerOrTeamGameStatsLoaded) {
+      statisticsFirestoreX01.calculateX01Stats();
     }
     statisticsFirestoreX01.notify();
   }
@@ -120,6 +128,7 @@ class FirestoreServiceGames {
       FirestoreServicePlayerStats firestoreServicePlayerStats) async {
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(mode, context);
+    final bool isX01 = mode == GameMode.X01;
 
     if (!statsFirestore.loadGames) {
       return;
@@ -131,6 +140,9 @@ class FirestoreServiceGames {
     final QuerySnapshot<Object?> games = await query.get();
 
     statsFirestore.resetGames();
+    if (isX01) {
+      statsFirestore.resetFilteredGames();
+    }
 
     if (games.docs.isEmpty) {
       statsFirestore.noGamesPlayed = true;
@@ -165,9 +177,12 @@ class FirestoreServiceGames {
         }
 
         statsFirestore.games.add(game);
+        if (isX01) {
+          statsFirestore.filteredGames.add(game);
+        }
       });
 
-      if (mode == GameMode.X01) {
+      if (isX01) {
         statsFirestore.gamesLoaded = true;
       }
       statsFirestore.notify();

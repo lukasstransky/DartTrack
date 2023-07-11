@@ -5,35 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class AdvancedSettingsX01 extends StatelessWidget {
-  double _getProperValueForTransformation(SelectorModel selectorModel) {
-    int counter = _getCountOfPresentSwitchers(selectorModel);
-    if (counter == 3) {
-      return -3;
-    } else if (counter == 2) {
-      return -2;
-    } else if (counter == 1) {
-      return -0.5;
-    }
-    return 0;
-  }
-
-  int _getCountOfPresentSwitchers(SelectorModel selectorModel) {
-    int counter = 0;
-    if (selectorModel.modeOut == ModeOutIn.Double) {
-      counter++;
-    }
-    if (_winByTwoLegsPresent(selectorModel)) {
-      counter++;
-    }
-    if (!selectorModel.winByTwoLegsDifference) {
-      counter++;
-    }
-    return counter;
-  }
-
-  bool _winByTwoLegsPresent(SelectorModel selectorModel) {
-    return selectorModel.legs > 1 && !selectorModel.drawMode;
-  }
+  const AdvancedSettingsX01({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +46,36 @@ class AdvancedSettingsX01 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double _getProperValueForTransformation(SelectorModel selectorModel) {
+    int counter = _getCountOfPresentSwitchers(selectorModel);
+    if (counter == 3) {
+      return -3;
+    } else if (counter == 2) {
+      return -2;
+    } else if (counter == 1) {
+      return -0.5;
+    }
+    return 0;
+  }
+
+  int _getCountOfPresentSwitchers(SelectorModel selectorModel) {
+    int counter = 0;
+    if (selectorModel.modeOut == ModeOutIn.Double) {
+      counter++;
+    }
+    if (_winByTwoLegsPresent(selectorModel)) {
+      counter++;
+    }
+    if (!selectorModel.winByTwoLegsDifference) {
+      counter++;
+    }
+    return counter;
+  }
+
+  bool _winByTwoLegsPresent(SelectorModel selectorModel) {
+    return selectorModel.legs > 1 && !selectorModel.drawMode;
   }
 }
 

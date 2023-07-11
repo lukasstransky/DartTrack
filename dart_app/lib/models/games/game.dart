@@ -322,7 +322,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
               }
 
               if (mode == GameMode.X01) {
-                return PlayerOrTeamGameStats.fromMapX01(
+                return PlayerOrTeamGameStatsX01.fromMapX01(
                     item, allRemainingScoresPerDart);
               } else if (mode == GameMode.ScoreTraining) {
                 return PlayerOrTeamGameStats.fromMapScoreTraining(
@@ -350,7 +350,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
                   }
 
                   if (mode == GameMode.X01) {
-                    return PlayerOrTeamGameStats.fromMapX01(
+                    return PlayerOrTeamGameStatsX01.fromMapX01(
                         item, allRemainingScoresPerDart);
                   } else if (mode == GameMode.Cricket) {
                     return PlayerOrTeamGameStats.fromMapCricket(item);
