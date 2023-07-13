@@ -128,14 +128,14 @@ class _StatisticsState extends State<Statistics> {
           style: TextStyle(color: Colors.white),
         ),
         content: Text(
-          'In order to track your games you need to create an account.',
+          'In order to track your games, please create an account.',
           style: TextStyle(color: Colors.white),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
-              'Continue',
+              'Ok',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(

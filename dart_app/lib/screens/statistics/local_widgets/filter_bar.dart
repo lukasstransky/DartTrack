@@ -24,7 +24,14 @@ class _FilterBarState extends State<FilterBar> {
   @override
   void initState() {
     super.initState();
-    _setCurrentDate();
+    final String customBtnDateRangeTemp =
+        context.read<StatsFirestoreX01_P>().customBtnDateRange;
+    if (customBtnDateRangeTemp == '') {
+      _setCurrentDate();
+    } else {
+      _customBtnDateRange = customBtnDateRangeTemp;
+      _showCustomBtnDateRange = true;
+    }
   }
 
   @override
@@ -145,6 +152,8 @@ class _FilterBarState extends State<FilterBar> {
                   showActionButtons: true,
                   onSubmit: (p0) {
                     statisticsFirestore.customDateFilterRange = _range;
+                    statisticsFirestore.customBtnDateRange =
+                        _customBtnDateRange;
                     statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
                       FilterValue.Custom,
                       context,

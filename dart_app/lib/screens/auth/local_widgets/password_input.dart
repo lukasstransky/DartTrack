@@ -3,6 +3,7 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -24,8 +25,12 @@ class PasswordInput extends StatelessWidget {
           controller: passwordTextController,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
+          inputFormatters: [
+            LengthLimitingTextInputFormatter(10),
+          ],
           validator: (value) {
-            if (value!.isEmpty) {
+            if (value!.trim().isEmpty) {
+              passwordTextController.clear();
               return ('Password is required!');
             }
             return null;

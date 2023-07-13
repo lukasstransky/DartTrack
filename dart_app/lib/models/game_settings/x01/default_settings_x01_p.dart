@@ -285,12 +285,7 @@ class DefaultSettingsX01_P with ChangeNotifier {
   set drawMode(value) => this._drawMode = value;
 
   resetValues(String? username) async {
-    if (username != null) {
-      players = [new Player(name: username)];
-    } else {
-      players = [];
-    }
-
+    players = [];
     singleOrTeam = DEFAULT_SINGLE_OR_TEAM;
     mode = DEFAULT_MODE;
     points = DEFAULT_POINTS;

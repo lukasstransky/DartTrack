@@ -3,6 +3,7 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,18 +28,18 @@ class EmailInput extends StatelessWidget {
         controller: emailTextController,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(50),
+        ],
         validator: (value) {
           if (value!.isEmpty) {
             return ('Email is required!');
           } else if (!RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}')
               .hasMatch(value)) {
-            emailTextController.clear();
             return ('Please enter a valid email!');
           } else if (isRegisterScreen && auth.getEmailAlreadyExists) {
-            emailTextController.clear();
             return 'Email already exists!';
           } else if (isForgotPasswordScreen && !auth.getEmailAlreadyExists) {
-            emailTextController.clear();
             return 'Email does not exist!';
           }
           return null;

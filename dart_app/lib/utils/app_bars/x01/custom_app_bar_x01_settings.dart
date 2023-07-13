@@ -230,7 +230,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           style: TextStyle(color: Colors.white),
         ),
         content: Text(
-          'Logged in as a guest it\'s not possible to set default settings.',
+          'Logged in as a guest it is not possible to set default settings.',
           style: TextStyle(color: Colors.white),
         ),
         actions: [

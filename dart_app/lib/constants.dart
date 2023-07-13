@@ -62,7 +62,7 @@ enum NewPlayer { Bot, Guest }
 const String SUDDEN_DEATH_INFO =
     "If the score is tied after the regular number of legs, a deciding leg is played, called 'Sudden death'. Whoever wins this leg, is the winner of the match.";
 const String SUDDEN_DEATH_LEG_DIFFERENCE_INFO =
-    "The additional maximum number of legs until the 'Sudden death' leg, is specified here. By default it's 2 legs. (e.g. in case of 'First to 5 legs' the 'Sudden death' leg is played after a score of 7:7).";
+    "The additional maximum number of legs until the 'Sudden death' leg, is specified here. By default it is 2 legs. (e.g. in case of 'First to 5 legs' the 'Sudden death' leg is played after a score of 7:7).";
 
 const int MAX_PLAYERS_IN_TEAM_FOR_AUTO_ASSIGNING = 2;
 const int DEFAULT_BOT_AVG_SLIDER_VALUE = 50;

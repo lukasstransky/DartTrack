@@ -1,4 +1,5 @@
 import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/services/auth_service.dart';
 
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ class ProceedAsGuestLink extends StatelessWidget {
 
   _clickProceedAsGuest(BuildContext context) async {
     final Auth_P auth = context.read<Auth_P>();
+    context.read<OpenGamesFirestore>().setLoadOpenGames = true;
 
     // show loading spinner
     context.loaderOverlay.show();

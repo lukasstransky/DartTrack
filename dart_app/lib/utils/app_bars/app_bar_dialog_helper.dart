@@ -125,7 +125,7 @@ class _CricketDialogState extends State<CricketDialog> {
                           ),
                           SizedBox(height: 1.h),
                           Text(
-                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye. \nIn standard mode, the player with the highest score wins, but it\'s also possible to play two additional modes (Cut throat, No score), which are also explained here.',
+                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye. \nIn standard mode, the player with the highest score wins, but it is also possible to play two additional modes (Cut throat, No score), which are also explained here.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 12.sp,
@@ -167,7 +167,7 @@ class _CricketDialogState extends State<CricketDialog> {
                                 ),
                                 TextSpan(
                                   text:
-                                      '. A player opens a number by hitting it three times with any combination of singles, doubles, or triples. \nOnce open, further hits on the number score points equal to it\'s value, until it\'s closed.',
+                                      '. A player opens a number by hitting it three times with any combination of singles, doubles, or triples. \nOnce open, further hits on the number score points equal to it\'s value, until the number is closed.',
                                 ),
                               ],
                             ),
@@ -205,7 +205,7 @@ class _CricketDialogState extends State<CricketDialog> {
                                 ),
                                 TextSpan(
                                   text:
-                                      'when all players have hit the number three times, so it\'s not possible anymore to score any points with that number.',
+                                      'when all players have hit the number three times, so it is not possible anymore to score any points with that number.',
                                 ),
                               ],
                             ),

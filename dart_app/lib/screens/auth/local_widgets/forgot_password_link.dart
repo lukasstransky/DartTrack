@@ -14,9 +14,10 @@ class ForgotPasswordLink extends StatelessWidget {
       padding: EdgeInsets.only(top: 1.h, bottom: 0.5.h, right: 5.w),
       alignment: Alignment.centerRight,
       child: GestureDetector(
-        onTap: () => {
-          Navigator.of(context).pushNamed('/forgotPassword'),
-          emailTextController.clear(),
+        onTap: () {
+          Navigator.of(context).pushNamed('/forgotPassword');
+          passwordTextController.clear();
+          emailTextController.clear();
         },
         child: Text(
           'Forgot password?',

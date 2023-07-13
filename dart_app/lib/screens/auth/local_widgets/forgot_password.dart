@@ -6,6 +6,7 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -31,28 +32,32 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         body: Form(
           key: _forgotPasswordFormKey,
           child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Forgot password',
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
+            child: Container(
+              padding: EdgeInsets.only(bottom: 10.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Forgot password',
+                    style: TextStyle(
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
                   ),
-                ),
-                Container(
-                  width: 80.w,
-                  padding: EdgeInsets.only(bottom: 1.h, top: 1.h),
-                  child: Text(
-                    'Please provide your email to receive a link for resetting your password.',
-                    style: TextStyle(color: Colors.white70),
+                  Container(
+                    width: 80.w,
+                    padding: EdgeInsets.only(bottom: 1.h, top: 1.h),
+                    child: Text(
+                      'Please provide your email to receive a link for resetting your password.',
+                      style: TextStyle(color: Colors.white70),
+                    ),
                   ),
-                ),
-                EmailInput(isForgotPasswordScreen: true),
-                ResetPasswordBtn(forgotPasswordFormKey: _forgotPasswordFormKey),
-              ],
+                  EmailInput(isForgotPasswordScreen: true),
+                  ResetPasswordBtn(
+                      forgotPasswordFormKey: _forgotPasswordFormKey),
+                ],
+              ),
             ),
           ),
         ),
@@ -89,6 +94,9 @@ class ResetPasswordBtn extends StatelessWidget {
 
     passwordTextController.clear();
     Navigator.of(context).pop();
+    Fluttertoast.showToast(
+        msg: 'Email for resetting password sent!',
+        toastLength: Toast.LENGTH_LONG);
 
     // hide loading spinner
     context.loaderOverlay.hide();

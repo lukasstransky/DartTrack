@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/game_settings/x01/helper/default_settings_helper.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
@@ -32,11 +33,11 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
         context.read<OpenGamesFirestore>();
 
     if (openGamesFirestore.getLoadOpenGames) {
+      openGamesFirestore.setLoadOpenGames = false;
       await context
           .read<FirestoreServiceGames>()
           .getOpenGames(openGamesFirestore);
       await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
-      openGamesFirestore.setLoadOpenGames = false;
       setState(() {});
     }
   }
@@ -54,6 +55,9 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
           .getDefaultSettingsX01(context);
       defaultSettingsX01.loadSettings = false;
       setState(() {});
+    } else if (username == 'Guest') {
+      defaultSettingsX01.resetValues(username);
+      DefaultSettingsHelper.setSettingsFromDefault(context);
     }
   }
 

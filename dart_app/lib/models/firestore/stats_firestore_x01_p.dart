@@ -81,6 +81,8 @@ class StatsFirestoreX01_P with ChangeNotifier {
   bool _loadPlayerStats = true;
   bool _playerOrTeamGameStatsLoaded = false;
 
+  String _customBtnDateRange = '';
+
   get getCountOfGamesWon => this._countOfGamesWon;
 
   set setCountOfGamesWon(value) => this._countOfGamesWon = value;
@@ -240,6 +242,10 @@ class StatsFirestoreX01_P with ChangeNotifier {
   set loadPlayerStats(bool loadPlayerStats) =>
       this._loadPlayerStats = loadPlayerStats;
 
+  String get customBtnDateRange => this._customBtnDateRange;
+
+  set customBtnDateRange(String value) => this._customBtnDateRange = value;
+
   DateTime getDateTimeFromCurrentFilterValue() {
     final DateTime now = new DateTime.now();
     DateTime result = new DateTime.now();
@@ -338,8 +344,16 @@ class StatsFirestoreX01_P with ChangeNotifier {
     resetOverallStats();
     resetGames();
     resetFilteredGames();
+    resetPlayerOrTeamStats();
     resetFilteredPlayerOrTeamStats();
     resetValues();
+  }
+
+  resetLoadingFields() {
+    _loadGames = true;
+    _gamesLoaded = false;
+    _loadPlayerStats = true;
+    _playerOrTeamGameStatsLoaded = false;
   }
 
   notify() {

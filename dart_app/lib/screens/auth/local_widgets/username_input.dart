@@ -23,11 +23,11 @@ class UsernameInput extends StatelessWidget {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         validator: (value) {
-          if (value!.isEmpty) {
+          if (value!.trim().isEmpty) {
+            usernameTextController.clear();
             return ('Username is required!');
           }
           if (!auth.getUsernameValid) {
-            usernameTextController.clear();
             return ('Username already exists!');
           }
           return null;
