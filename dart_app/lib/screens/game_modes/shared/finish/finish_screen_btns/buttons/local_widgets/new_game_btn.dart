@@ -62,7 +62,10 @@ class NewGameBtn extends StatelessWidget {
         width: 40.w,
         height: 6.h,
         child: ElevatedButton(
-          onPressed: () => _newGameBtnClicked(context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _newGameBtnClicked(context);
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(

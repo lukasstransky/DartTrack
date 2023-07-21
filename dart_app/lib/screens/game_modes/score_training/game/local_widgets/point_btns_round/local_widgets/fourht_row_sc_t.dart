@@ -79,6 +79,7 @@ class DeleteBtn extends StatelessWidget {
             color: Utils.getTextColorDarken(context),
           ),
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             if (currentPointsSelected != 'Points') {
               _deleteCurrentPointsSelected(context, gameScoreTraining_P);
             }

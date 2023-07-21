@@ -44,8 +44,10 @@ class DoubleHitBtnDoubleTraining extends StatelessWidget {
             color: Utils.getTextColorDarken(context),
             size: 60.sp,
           ),
-          onPressed: () =>
-              context.read<GameSingleDoubleTraining_P>().submit('D', context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            context.read<GameSingleDoubleTraining_P>().submit('D', context);
+          },
         ),
       ),
     );

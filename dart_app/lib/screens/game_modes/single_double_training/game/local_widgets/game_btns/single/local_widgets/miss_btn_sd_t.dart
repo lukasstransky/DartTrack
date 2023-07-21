@@ -63,7 +63,10 @@ class MissBtnSingleTraining extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: () => game.submit('X', context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            game.submit('X', context);
+          },
         ),
       ),
     );

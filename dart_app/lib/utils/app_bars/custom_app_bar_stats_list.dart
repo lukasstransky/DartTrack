@@ -42,6 +42,7 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               var route = ModalRoute.of(context);
               if (route != null) {
                 Navigator.of(context).pop();
@@ -58,21 +59,19 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
         IconButton(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
-          onPressed: () => {
-            if (statisticsFirestore.showFavouriteGames)
-              {
-                setState(() {
-                  statisticsFirestore.showFavouriteGames = false;
-                  statisticsFirestore.notify();
-                }),
-              }
-            else
-              {
-                setState(() {
-                  statisticsFirestore.showFavouriteGames = true;
-                  statisticsFirestore.notify();
-                }),
-              }
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            if (statisticsFirestore.showFavouriteGames) {
+              setState(() {
+                statisticsFirestore.showFavouriteGames = false;
+                statisticsFirestore.notify();
+              });
+            } else {
+              setState(() {
+                statisticsFirestore.showFavouriteGames = true;
+                statisticsFirestore.notify();
+              });
+            }
           },
           icon: statisticsFirestore.showFavouriteGames
               ? Icon(

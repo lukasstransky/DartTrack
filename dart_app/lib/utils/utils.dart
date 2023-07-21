@@ -16,8 +16,10 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -870,5 +872,11 @@ class Utils {
     }
 
     return false;
+  }
+
+  static handleVibrationFeedback(BuildContext context) {
+    if (context.read<Settings_P>().getVibrationFeedbackEnabled) {
+      HapticFeedback.lightImpact();
+    }
   }
 }

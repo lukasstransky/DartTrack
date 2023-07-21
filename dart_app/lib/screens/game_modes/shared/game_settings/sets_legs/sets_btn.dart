@@ -21,7 +21,10 @@ class SetsBtn extends StatelessWidget {
             ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
             : WIDGET_HEIGHT_GAMESETTINGS.h,
         child: ElevatedButton(
-          onPressed: () => gameSettings.setsBtnClicked(),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            gameSettings.setsBtnClicked();
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(

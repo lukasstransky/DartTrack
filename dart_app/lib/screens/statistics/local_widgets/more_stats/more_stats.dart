@@ -93,6 +93,7 @@ class _MoreStatsState extends State<MoreStats> {
                     inactiveThumbColor: Theme.of(context).colorScheme.secondary,
                     value: _roundedScoresOdd,
                     onChanged: (value) {
+                      Utils.handleVibrationFeedback(context);
                       setState(() {
                         _roundedScoresOdd = !_roundedScoresOdd;
                       });
@@ -119,6 +120,7 @@ class _MoreStatsState extends State<MoreStats> {
                     inactiveThumbColor: Theme.of(context).colorScheme.secondary,
                     value: _showAllScoesPerDartWithCount,
                     onChanged: (value) {
+                      Utils.handleVibrationFeedback(context);
                       setState(() {
                         _showAllScoesPerDartWithCount =
                             !_showAllScoesPerDartWithCount;

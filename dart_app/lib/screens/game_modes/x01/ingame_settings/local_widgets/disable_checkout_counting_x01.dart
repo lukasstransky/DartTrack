@@ -55,9 +55,10 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
       child: Row(
         children: [
           ElevatedButton(
-            onPressed: () => {
-              gameSettingsX01.setCheckoutCountingFinallyDisabled = true,
-              gameSettingsX01.notify(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              gameSettingsX01.setCheckoutCountingFinallyDisabled = true;
+              gameSettingsX01.notify();
             },
             child: FittedBox(
               fit: BoxFit.scaleDown,

@@ -73,7 +73,6 @@ class GameSettings_P with ChangeNotifier {
         result['showLastThrow'] = settings.getShowLastThrow;
         result['showThrownDartsPerLeg'] = settings.getShowThrownDartsPerLeg;
       }
-      result['vibrationFeedback'] = settings.getVibrationFeedbackEnabled;
       result['showInputMethodInGameScreen'] =
           settings.getShowInputMethodInGameScreen;
       result['showMostScoredPoints'] = settings.getShowMostScoredPoints;
@@ -252,9 +251,6 @@ class GameSettings_P with ChangeNotifier {
       showThrownDartsPerLeg: map['showThrownDartsPerLeg'] == null
           ? DEFAULT_SHOW_THROWN_DARTS_PER_LEG
           : map['showThrownDartsPerLeg'],
-      vibrationFeedbackEnabled: map['vibrationFeedback'] == null
-          ? DEFAULT_VIBRATION_FEEDBACK
-          : map['vibrationFeedback'],
     );
   }
 

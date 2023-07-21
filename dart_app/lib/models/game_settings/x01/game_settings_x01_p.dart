@@ -24,7 +24,6 @@ class GameSettingsX01_P extends GameSettings_P {
   bool _showFinishWays = DEFAULT_SHOW_FINISH_WAYS;
   bool _showThrownDartsPerLeg = DEFAULT_SHOW_THROWN_DARTS_PER_LEG;
   bool _showLastThrow = DEFAULT_SHOW_LAST_THROW;
-  bool _vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
   bool _automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
   bool _showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
   List<String> _mostScoredPoints = <String>[];
@@ -53,7 +52,6 @@ class GameSettingsX01_P extends GameSettings_P {
     required bool showFinishWays,
     required bool showLastThrow,
     required bool showThrownDartsPerLeg,
-    required bool vibrationFeedbackEnabled,
     required bool showInputMethodInGameScreen,
     required bool showMostScoredPoints,
     required List<String> mostScoredPoints,
@@ -79,7 +77,6 @@ class GameSettingsX01_P extends GameSettings_P {
     _showFinishWays = showFinishWays;
     _showLastThrow = showLastThrow;
     _showThrownDartsPerLeg = showThrownDartsPerLeg;
-    _vibrationFeedbackEnabled = vibrationFeedbackEnabled;
     _showInputMethodInGameScreen = showInputMethodInGameScreen;
     _showMostScoredPoints = showMostScoredPoints;
     _mostScoredPoints = mostScoredPoints;
@@ -160,10 +157,6 @@ class GameSettingsX01_P extends GameSettings_P {
 
   bool get getShowLastThrow => _showLastThrow;
   set setShowLastThrow(bool showLastThrow) => _showLastThrow = showLastThrow;
-
-  bool get getVibrationFeedbackEnabled => _vibrationFeedbackEnabled;
-  set setVibrationFeedbackEnabled(bool vibrationFeedbackEnabled) =>
-      _vibrationFeedbackEnabled = vibrationFeedbackEnabled;
 
   bool get getAutomaticallySubmitPoints => _automaticallySubmitPoints;
   set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) =>

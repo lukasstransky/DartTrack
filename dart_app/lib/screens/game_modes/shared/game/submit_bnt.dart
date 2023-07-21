@@ -3,8 +3,10 @@ import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -44,21 +46,25 @@ class SubmitBtn extends StatelessWidget {
         ),
       ),
       child: ElevatedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
             ),
-            backgroundColor: _colorResult,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: _colorResult,
           ),
-          child: Icon(
-            Icons.arrow_forward,
-            color: Utils.getTextColorDarken(context),
-          ),
-          onPressed: () => _onPressed(shouldSubmitBtnBeEnabled, context)),
+          backgroundColor: _colorResult,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: _colorResult,
+        ),
+        child: Icon(
+          Icons.arrow_forward,
+          color: Utils.getTextColorDarken(context),
+        ),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _onPressed(shouldSubmitBtnBeEnabled, context);
+        },
+      ),
     );
   }
 

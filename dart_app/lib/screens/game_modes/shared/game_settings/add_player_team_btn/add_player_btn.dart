@@ -30,6 +30,7 @@ class AddPlayerBtn extends StatelessWidget {
           backgroundColor: Utils.getPrimaryColorDarken(context),
           elevation: 0.0,
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             switch (mode) {
               case GameMode.X01:
                 _addPlayerTeamBtnPressed(

@@ -63,7 +63,10 @@ class SingleFieldBtnSingleTraining extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: () => game.submit('S', context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            game.submit('S', context);
+          },
         ),
       ),
     );

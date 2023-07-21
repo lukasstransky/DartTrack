@@ -41,8 +41,6 @@ class DefaultSettingsHelper {
         settingsX01.getShowThrownDartsPerLeg;
     defaultSettingsX01.singleOrTeam = settingsX01.getSingleOrTeam;
     defaultSettingsX01.suddenDeath = settingsX01.getSuddenDeath;
-    defaultSettingsX01.vibrationFeedbackEnabled =
-        settingsX01.getVibrationFeedbackEnabled;
     defaultSettingsX01.winByTwoLegsDifference =
         settingsX01.getWinByTwoLegsDifference;
     defaultSettingsX01.drawMode = settingsX01.getDrawMode;
@@ -96,8 +94,6 @@ class DefaultSettingsHelper {
         defaultSettingsX01.showThrownDartsPerLeg;
     settingsX01.setSingleOrTeam = defaultSettingsX01.singleOrTeam;
     settingsX01.setSuddenDeath = defaultSettingsX01.suddenDeath;
-    settingsX01.setVibrationFeedbackEnabled =
-        defaultSettingsX01.vibrationFeedbackEnabled;
     settingsX01.setWinByTwoLegsDifference =
         defaultSettingsX01.winByTwoLegsDifference;
     settingsX01.setDrawMode = defaultSettingsX01.drawMode;
@@ -143,8 +139,6 @@ class DefaultSettingsHelper {
             settingsX01.getShowThrownDartsPerLeg &&
         defaultSettingsX01.singleOrTeam == settingsX01.getSingleOrTeam &&
         defaultSettingsX01.suddenDeath == settingsX01.getSuddenDeath &&
-        defaultSettingsX01.vibrationFeedbackEnabled ==
-            settingsX01.getVibrationFeedbackEnabled &&
         defaultSettingsX01.winByTwoLegsDifference ==
             settingsX01.getWinByTwoLegsDifference &&
         defaultSettingsX01.drawMode == settingsX01.getDrawMode &&
@@ -189,7 +183,6 @@ class DefaultSettingsHelper {
             DEFAULT_SHOW_THROWN_DARTS_PER_LEG &&
         settingsX01.getSingleOrTeam == DEFAULT_SINGLE_OR_TEAM &&
         settingsX01.getSuddenDeath == DEFAULT_SUDDEN_DEATH &&
-        settingsX01.getVibrationFeedbackEnabled == DEFAULT_VIBRATION_FEEDBACK &&
         settingsX01.getWinByTwoLegsDifference ==
             DEFAULT_WIN_BY_TWO_LEGS_DIFFERENCE &&
         _checkIfDefaultPlayersAreSelected(settingsX01, context) &&

@@ -281,6 +281,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                                 Theme.of(context).colorScheme.secondary,
                             value: _roundedScoresOdd,
                             onChanged: (value) {
+                              Utils.handleVibrationFeedback(context);
                               setState(() {
                                 _roundedScoresOdd = value;
                               });

@@ -53,8 +53,10 @@ class CustomAppBarX01Game extends StatelessWidget
             IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onPressed: () =>
-                  UtilsDialogs.showDialogForSavingGame(context, gameX01),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                UtilsDialogs.showDialogForSavingGame(context, gameX01);
+              },
               icon: Icon(
                 Icons.close_sharp,
                 color: Theme.of(context).colorScheme.secondary,
@@ -67,6 +69,7 @@ class CustomAppBarX01Game extends StatelessWidget
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               if (!showLoadingSpinner) {
                 Navigator.of(context).pushNamed('/statisticsX01', arguments: {
                   'game': context.read<GameX01_P>(),
@@ -82,6 +85,7 @@ class CustomAppBarX01Game extends StatelessWidget
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               if (!showLoadingSpinner) {
                 Navigator.of(context).pushNamed('/inGameSettingsX01');
               }

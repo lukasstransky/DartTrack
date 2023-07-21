@@ -71,6 +71,7 @@ class PointBtnThreeDarts extends StatelessWidget {
           ),
         ),
         onPressed: () {
+          Utils.handleVibrationFeedback(context);
           if (!_isBtnNotClickable) {
             _pointBtnClicked(pointValueWithDoubleOrTripplePrefix, gameCricket,
                 gameScoreTraining, gameSettingsCricket, context);

@@ -29,7 +29,10 @@ class AppBarDialogHelper {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Close',
               style: TextStyle(
@@ -288,7 +291,10 @@ class _CricketDialogState extends State<CricketDialog> {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.pop(context);
+          },
           child: Text(
             'Close',
             style: TextStyle(

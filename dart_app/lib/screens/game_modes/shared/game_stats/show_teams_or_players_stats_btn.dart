@@ -29,6 +29,7 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
         ),
         child: ElevatedButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             late dynamic providerGame;
             if (game is GameX01_P) {
               providerGame = context.read<GameX01_P>();

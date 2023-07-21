@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -44,6 +45,7 @@ class CheckoutCountingX01 extends StatelessWidget {
                           Theme.of(context).colorScheme.secondary,
                       value: selectorModel.enableCheckoutCounting,
                       onChanged: (value) {
+                        Utils.handleVibrationFeedback(context);
                         gameSettingsX01.setEnableCheckoutCounting = value;
                         gameSettingsX01.notify();
                       },

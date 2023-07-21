@@ -96,6 +96,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
           actions: [
             TextButton(
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
                 Future.delayed(Duration(milliseconds: 300), () {
                   amountOfRoundsController.text = backupString;
@@ -122,7 +123,10 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
               ),
             ),
             TextButton(
-              onPressed: () => _submitNewRoundsOrPoints(context, settings),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                _submitNewRoundsOrPoints(context, settings);
+              },
               child: Text(
                 'Submit',
                 style: TextStyle(
@@ -190,7 +194,10 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                     builder: (_, amountOfRounds, __) => Container(
                       width: 20.w,
                       child: ElevatedButton(
-                        onPressed: () => _showDialogForRoundsOrPoints(context),
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          _showDialogForRoundsOrPoints(context);
+                        },
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Text(

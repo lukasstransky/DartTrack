@@ -40,9 +40,11 @@ class _StatsCardX01State extends State<StatsCardX01> {
       padding: EdgeInsets.only(top: widget.isFinishScreen ? 15.h : 0.h),
       child: GestureDetector(
         onTap: () {
-          if (!widget.isFinishScreen)
+          if (!widget.isFinishScreen) {
+            Utils.handleVibrationFeedback(context);
             Navigator.pushNamed(context, '/statisticsX01',
                 arguments: {'game': widget.gameX01});
+          }
         },
         child: Card(
           shape: RoundedRectangleBorder(
@@ -74,6 +76,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
                 Center(
                   child: TextButton.icon(
                     onPressed: () {
+                      Utils.handleVibrationFeedback(context);
                       setState(() {
                         _showAllPlayersOrTeams = !_showAllPlayersOrTeams;
                       });

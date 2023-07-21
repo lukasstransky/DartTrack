@@ -1,8 +1,10 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -48,9 +50,10 @@ class MasterInBtn extends StatelessWidget {
 
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => {
-          gameSettingsX01.setModeIn = ModeOutIn.Master,
-          gameSettingsX01.notify()
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          gameSettingsX01.setModeIn = ModeOutIn.Master;
+          gameSettingsX01.notify();
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,
@@ -112,9 +115,10 @@ class DoubleInBtn extends StatelessWidget {
           ),
         ),
         child: ElevatedButton(
-          onPressed: () => {
-            gameSettingsX01.setModeIn = ModeOutIn.Double,
-            gameSettingsX01.notify()
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            gameSettingsX01.setModeIn = ModeOutIn.Double;
+            gameSettingsX01.notify();
           },
           child: FittedBox(
             fit: BoxFit.scaleDown,
@@ -157,9 +161,10 @@ class SingleInBtn extends StatelessWidget {
 
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => {
-          gameSettingsX01.setModeIn = ModeOutIn.Single,
-          gameSettingsX01.notify()
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          gameSettingsX01.setModeIn = ModeOutIn.Single;
+          gameSettingsX01.notify();
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,

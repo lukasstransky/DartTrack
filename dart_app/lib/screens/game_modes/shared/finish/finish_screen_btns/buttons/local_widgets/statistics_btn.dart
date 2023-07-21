@@ -51,7 +51,10 @@ class StatisticsBtn extends StatelessWidget {
         width: 40.w,
         height: 6.h,
         child: ElevatedButton(
-          onPressed: () => _statisticsBtnClicked(context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _statisticsBtnClicked(context);
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(

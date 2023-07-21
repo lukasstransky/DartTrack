@@ -51,6 +51,7 @@ class StartGameBtnX01 extends StatelessWidget {
                         Theme.of(context).colorScheme.primary, 60)),
               ),
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 if (_activateStartGameBtn(selectorModel)) {
                   if (!gameSettingsX01.isCurrentUserInPlayers(context) &&
                       currentUsername != 'Guest') {

@@ -60,8 +60,15 @@ class PlayerOrTeamGameStats {
 
   get getDateTime => this._dateTime;
 
-  Map<String, dynamic> toMapX01(PlayerOrTeamGameStatsX01 stats, GameX01_P game,
-      GameSettingsX01_P settings, String gameId, bool openGame) {
+  Map<String, dynamic> toMapX01(
+    PlayerOrTeamGameStatsX01 stats,
+    GameX01_P game,
+    GameSettingsX01_P settings,
+    String gameId,
+    bool openGame,
+    String currentUserUid,
+    String currentUsername,
+  ) {
     final String checkoutQuote = stats.getCheckoutQuoteInPercent();
     final Map<String, int> roundedScoresEven =
         Utils.getMapWithStringKey(stats.getRoundedScoresEven);
@@ -77,6 +84,8 @@ class PlayerOrTeamGameStats {
       'dateTimeForFiltering':
           DateTime(_dateTime.year, _dateTime.month, _dateTime.day),
       'currentPoints': stats.getCurrentPoints,
+      if (stats.getPlayer != null && stats.getPlayer.getName == currentUsername)
+        'userId': currentUserUid,
       if (stats.getPlayer != null)
         'player': stats.getPlayer.toMap(stats.getPlayer),
       if (stats.getLegsWon != 0) 'legsWon': stats.getLegsWon,

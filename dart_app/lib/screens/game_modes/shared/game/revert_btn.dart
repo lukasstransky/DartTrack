@@ -7,6 +7,7 @@ import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -60,7 +61,10 @@ class RevertBtn extends StatelessWidget {
               Icons.undo,
               color: Utils.getTextColorDarken(context),
             ),
-            onPressed: () => _revertBtnPressed(context),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              _revertBtnPressed(context);
+            },
           ),
         ));
   }
@@ -73,7 +77,7 @@ class RevertBtn extends StatelessWidget {
     if (game_p is GameX01_P) {
       final GameSettingsX01_P gameSettingsX01 =
           context.read<GameSettingsX01_P>();
-      if (context.read<GameSettingsX01_P>().getVibrationFeedbackEnabled) {
+      if (context.read<Settings_P>().getVibrationFeedbackEnabled) {
         HapticFeedback.lightImpact();
       }
 

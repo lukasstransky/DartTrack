@@ -12,8 +12,11 @@ class StatsCricketBtn extends StatelessWidget {
     return Container(
       width: 40.w,
       child: ElevatedButton(
-        onPressed: () => Navigator.of(context).pushNamed('/statsPerGameList',
-            arguments: {'mode': GameMode.Cricket}),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          Navigator.of(context).pushNamed('/statsPerGameList',
+              arguments: {'mode': GameMode.Cricket});
+        },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(

@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -29,17 +30,19 @@ class EmailInput extends StatelessWidget {
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         inputFormatters: [
-          LengthLimitingTextInputFormatter(50),
+          LengthLimitingTextInputFormatter(MAX_EMAIL_LENGTH),
         ],
         validator: (value) {
           if (value!.isEmpty) {
             return ('Email is required!');
-          } else if (!RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}')
-              .hasMatch(value)) {
+          }
+          if (!RegExp(EMAIL_REGEX).hasMatch(value)) {
             return ('Please enter a valid email!');
-          } else if (isRegisterScreen && auth.getEmailAlreadyExists) {
+          }
+          if (isRegisterScreen && auth.getEmailAlreadyExists) {
             return 'Email already exists!';
-          } else if (isForgotPasswordScreen && !auth.getEmailAlreadyExists) {
+          }
+          if (isForgotPasswordScreen && !auth.getEmailAlreadyExists) {
             return 'Email does not exist!';
           }
           return null;

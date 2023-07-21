@@ -73,6 +73,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onPressed: () {
+                  Utils.handleVibrationFeedback(context);
                   var route = ModalRoute.of(context);
                   if (route != null) {
                     Navigator.of(context).pop();
@@ -89,6 +90,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () async {
+                Utils.handleVibrationFeedback(context);
                 if (!showLoadingSpinner) {
                   _addGameToFavourites();
                 }
@@ -108,6 +110,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 if (!showLoadingSpinner) {
                   _resetGame(context);
                   Navigator.of(context).pushNamed('/home');

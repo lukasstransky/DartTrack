@@ -94,7 +94,10 @@ class RoundBtn extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        onPressed: () => _roundBtnClicked(context, mode),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _roundBtnClicked(context, mode);
+        },
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(

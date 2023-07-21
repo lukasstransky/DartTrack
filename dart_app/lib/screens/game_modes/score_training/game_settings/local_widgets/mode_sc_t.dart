@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/shared/overall/settings_btn.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -38,18 +39,24 @@ class ModeScoreTraining extends StatelessWidget {
                       selectorModel.mode == ScoreTrainingModeEnum.MaxRounds,
                   text: 'Rounds',
                   isLeftBtn: true,
-                  onPressed: settings.getMode == ScoreTrainingModeEnum.MaxRounds
-                      ? () {}
-                      : settings.switchMode,
+                  onPressed: () {
+                    Utils.handleVibrationFeedback(context);
+                    settings.getMode == ScoreTrainingModeEnum.MaxRounds
+                        ? () {}
+                        : settings.switchMode;
+                  },
                 ),
                 SettingsBtn(
                   condition:
                       selectorModel.mode == ScoreTrainingModeEnum.MaxPoints,
                   text: 'Points',
                   isLeftBtn: false,
-                  onPressed: settings.getMode == ScoreTrainingModeEnum.MaxPoints
-                      ? () {}
-                      : settings.switchMode,
+                  onPressed: () {
+                    Utils.handleVibrationFeedback(context);
+                    settings.getMode == ScoreTrainingModeEnum.MaxPoints
+                        ? () {}
+                        : settings.switchMode;
+                  },
                 )
               ],
             ),

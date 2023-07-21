@@ -104,7 +104,8 @@ class _StatisticsState extends State<Statistics> {
   _getAllPlayerOrTeamGameStatsX01(StatsFirestoreX01_P statsFirestore) async {
     await context
         .read<FirestoreServicePlayerStats>()
-        .getAllPlayerOrTeamGameStatsX01(statsFirestore, username);
+        .getAllPlayerOrTeamGameStatsX01(
+            statsFirestore, context.read<AuthService>().getCurrentUserUid);
     statsFirestore.calculateX01Stats();
   }
 
@@ -133,7 +134,10 @@ class _StatisticsState extends State<Statistics> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Ok',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -161,6 +165,7 @@ class _StatisticsState extends State<Statistics> {
     return Center(
       child: TextButton.icon(
         onPressed: () {
+          Utils.handleVibrationFeedback(context);
           setState(() {
             _showMoreStats = !_showMoreStats;
           });

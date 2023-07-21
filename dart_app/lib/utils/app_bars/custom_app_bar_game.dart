@@ -109,6 +109,7 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
   }
 
   _crossIconPressed(BuildContext context) {
+    Utils.handleVibrationFeedback(context);
     late Game_P game;
     if (mode == GameMode.ScoreTraining) {
       game = context.read<GameScoreTraining_P>();
@@ -123,6 +124,7 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
   }
 
   _statsIconPressed(BuildContext context) {
+    Utils.handleVibrationFeedback(context);
     if (mode == GameMode.ScoreTraining) {
       Navigator.of(context).pushNamed('/statisticsScoreTraining',
           arguments: {'game': context.read<GameScoreTraining_P>()});

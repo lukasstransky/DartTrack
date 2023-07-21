@@ -34,6 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 var route = ModalRoute.of(context);
                 if (route != null) {
                   Navigator.of(context).pop();
@@ -56,6 +57,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               if (showInfoIconScoreTraining) {
                 AppBarDialogHelper.showInfoDialog(
                   context,
@@ -144,6 +146,7 @@ class _CricketDialogState extends State<CricketDialog> {
       actions: [
         TextButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             Navigator.pop(context);
           },
           child: Text('Close'),

@@ -93,7 +93,10 @@ class SetsAmount extends StatelessWidget {
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onPressed: () => _subtractBtnPressed(),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  _subtractBtnPressed();
+                },
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
                 icon: Icon(Icons.remove,
@@ -114,7 +117,10 @@ class SetsAmount extends StatelessWidget {
               IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
-                onPressed: () => _addBtnPressed(),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  _addBtnPressed();
+                },
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
                 icon: Icon(Icons.add,

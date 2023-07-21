@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/stats_firestore_c.dart';
+import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
+import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
@@ -8,11 +12,13 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class FirestoreServiceGames {
@@ -104,8 +110,55 @@ class FirestoreServiceGames {
         .delete();
   }
 
-  Future<void> resetStatistics(BuildContext context) async {
-    //TODO
+  Future<void> resetStatistics(BuildContext context,
+      [bool deleteDefaultSettings = false]) async {
+    final Settings_P settings = context.read<Settings_P>();
+
+    context.read<StatsFirestoreX01_P>().resetForResettingStats();
+    context.read<StatsFirestoreCricket_P>().resetForResettingStats();
+    context.read<StatsFirestoreDoubleTraining_P>().resetForResettingStats();
+    context.read<StatsFirestoreSingleTraining_P>().resetForResettingStats();
+    context.read<StatsFirestoreScoreTraining_P>().resetForResettingStats();
+
+    settings.setIsResettingStatsOrDeletingAccount = true;
+    settings.notify();
+
+    try {
+      List<Future<void>> futureList = [
+        _deleteCollection(_firestore.collection(_getFirestoreGamesPath())),
+        _deleteCollection(_firestore.collection(_getFirestoreOpenGamesPath())),
+        _deleteCollection(
+            _firestore.collection(_getFirestorePlayerStatsPath())),
+        _deleteCollection(_firestore.collection(_getFirestoreTeamStatsPath())),
+      ];
+
+      if (deleteDefaultSettings) {
+        futureList.add(_deleteCollection(
+            _firestore.collection(_getFirestoreDefaultSettingsX01Path())));
+      }
+
+      await Future.wait(futureList);
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: 'An unexpected error occurred. Please try again later.',
+          toastLength: Toast.LENGTH_LONG);
+    } finally {
+      settings.setIsResettingStatsOrDeletingAccount = false;
+      settings.notify();
+    }
+  }
+
+  Future<void> _deleteCollection(CollectionReference collection) async {
+    try {
+      final snapshot = await collection.get();
+
+      await Future.wait(
+          snapshot.docs.map((doc) => doc.reference.delete()).toList());
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: 'An unexpected error occurred. Please try again later.',
+          toastLength: Toast.LENGTH_LONG);
+    }
   }
 
   Future<void> checkIfAtLeastOneX01GameIsPlayed(BuildContext context) async {
@@ -327,10 +380,22 @@ class FirestoreServiceGames {
   }
 
   String _getFirestoreGamesPath() {
-    return 'users/' + _firebaseAuth.currentUser!.uid + '/games';
+    return 'users/${_firebaseAuth.currentUser!.uid}/games';
   }
 
   String _getFirestoreOpenGamesPath() {
-    return 'users/' + _firebaseAuth.currentUser!.uid + '/openGames';
+    return 'users/${_firebaseAuth.currentUser!.uid}/openGames';
+  }
+
+  String _getFirestorePlayerStatsPath() {
+    return 'users/${_firebaseAuth.currentUser!.uid}/playerGameStatistics';
+  }
+
+  String _getFirestoreTeamStatsPath() {
+    return 'users/${_firebaseAuth.currentUser!.uid}/teamGameStatistics';
+  }
+
+  String _getFirestoreDefaultSettingsX01Path() {
+    return 'users/${_firebaseAuth.currentUser!.uid}/defaultSettingsX01';
   }
 }

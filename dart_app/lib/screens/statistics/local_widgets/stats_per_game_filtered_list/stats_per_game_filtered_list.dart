@@ -362,10 +362,11 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
           child: SizedBox(
             height: 4.h,
             child: ElevatedButton(
-              onPressed: () => {
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 setState(() {
                   _overallFilter = !_overallFilter;
-                }),
+                });
               },
               child: FittedBox(
                 fit: BoxFit.fitWidth,
@@ -404,10 +405,11 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
           child: SizedBox(
             height: 4.h,
             child: ElevatedButton(
-              onPressed: () => {
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 setState(() {
                   _overallFilter = !_overallFilter;
-                }),
+                });
               },
               child: FittedBox(
                 fit: BoxFit.fitWidth,

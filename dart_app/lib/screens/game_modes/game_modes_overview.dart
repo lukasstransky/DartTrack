@@ -118,8 +118,10 @@ class ScoreTrainingBtn extends StatelessWidget {
               fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
               color: Theme.of(context).colorScheme.secondary),
         ),
-        onPressed: () =>
-            Navigator.of(context).pushNamed('/settingsScoreTraining'),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          Navigator.of(context).pushNamed('/settingsScoreTraining');
+        },
         style: ButtonStyle(
           splashFactory: NoSplash.splashFactory,
           shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -159,10 +161,13 @@ class DoubleTrainingBtn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => Navigator.of(context).pushNamed(
-            '/settingsSingleDoubleTraining',
-            arguments: {'mode': GameMode.DoubleTraining},
-          ),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.of(context).pushNamed(
+              '/settingsSingleDoubleTraining',
+              arguments: {'mode': GameMode.DoubleTraining},
+            );
+          },
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -204,12 +209,15 @@ class SingleTrainingBtn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => Navigator.of(context).pushNamed(
-            '/settingsSingleDoubleTraining',
-            arguments: {
-              'mode': GameMode.SingleTraining,
-            },
-          ),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.of(context).pushNamed(
+              '/settingsSingleDoubleTraining',
+              arguments: {
+                'mode': GameMode.SingleTraining,
+              },
+            );
+          },
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -251,7 +259,10 @@ class CricketBtn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => Navigator.of(context).pushNamed('/settingsCricket'),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.of(context).pushNamed('/settingsCricket');
+          },
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -293,7 +304,10 @@ class X01Btn extends StatelessWidget {
                 fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
                 color: Theme.of(context).colorScheme.secondary),
           ),
-          onPressed: () => Navigator.of(context).pushNamed('/settingsX01'),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.of(context).pushNamed('/settingsX01');
+          },
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -346,7 +360,10 @@ class OpenGames extends StatelessWidget {
                 ),
               ),
             ),
-            onPressed: () => Navigator.of(context).pushNamed('/openGames'),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pushNamed('/openGames');
+            },
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
               shadowColor: MaterialStateProperty.all(Colors.transparent),

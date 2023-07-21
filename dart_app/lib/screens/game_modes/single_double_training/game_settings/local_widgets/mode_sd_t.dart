@@ -72,9 +72,12 @@ class RandomBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => context
-            .read<GameSettingsSingleDoubleTraining_P>()
-            .changeMode(ModesSingleDoubleTraining.Random),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          context
+              .read<GameSettingsSingleDoubleTraining_P>()
+              .changeMode(ModesSingleDoubleTraining.Random);
+        },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
@@ -137,9 +140,12 @@ class DescendingBtn extends StatelessWidget {
           ),
         ),
         child: ElevatedButton(
-          onPressed: () => context
-              .read<GameSettingsSingleDoubleTraining_P>()
-              .changeMode(ModesSingleDoubleTraining.Descending),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            context
+                .read<GameSettingsSingleDoubleTraining_P>()
+                .changeMode(ModesSingleDoubleTraining.Descending);
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
@@ -181,9 +187,12 @@ class AscendingBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => context
-            .read<GameSettingsSingleDoubleTraining_P>()
-            .changeMode(ModesSingleDoubleTraining.Ascending),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          context
+              .read<GameSettingsSingleDoubleTraining_P>()
+              .changeMode(ModesSingleDoubleTraining.Ascending);
+        },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(

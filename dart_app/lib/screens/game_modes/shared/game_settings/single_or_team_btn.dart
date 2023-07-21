@@ -53,6 +53,7 @@ class SingleBtn extends StatelessWidget {
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
+          Utils.handleVibrationFeedback(context);
           if (singleOrTeam != SingleOrTeamEnum.Single) {
             gameSettingsProvider.switchSingleOrTeamMode();
           }
@@ -107,6 +108,7 @@ class TeamBtn extends StatelessWidget {
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
+          Utils.handleVibrationFeedback(context);
           if (singleOrTeam != SingleOrTeamEnum.Team) {
             gameSettingsProvider.switchSingleOrTeamMode();
           }

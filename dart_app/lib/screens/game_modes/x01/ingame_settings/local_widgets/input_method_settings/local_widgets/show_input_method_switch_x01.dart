@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -34,7 +35,10 @@ class ShowInputMethodSwitchX01 extends StatelessWidget {
                 gameSettingsX01.getShowInputMethodInGameScreen,
             builder: (_, showInputMethodInGameScreen, __) => Switch(
               value: showInputMethodInGameScreen,
-              onChanged: (value) => _switchBtnPressed(gameSettingsX01, value),
+              onChanged: (value) {
+                Utils.handleVibrationFeedback(context);
+                _switchBtnPressed(gameSettingsX01, value);
+              },
               thumbColor: MaterialStateProperty.all(
                   Theme.of(context).colorScheme.secondary),
               activeColor: Theme.of(context).colorScheme.secondary,

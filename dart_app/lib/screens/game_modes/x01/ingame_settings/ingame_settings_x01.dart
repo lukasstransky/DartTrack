@@ -1,7 +1,6 @@
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/disable_checkout_counting_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/general_settings/general_settings_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/hide_show_settings/hide_show_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/input_method_settings/input_method_settings_x01.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
@@ -39,7 +38,6 @@ class InGameSettingsX01 extends StatelessWidget {
                   child: Column(
                     children: [
                       HideShowX01(),
-                      GeneralSettingsX01(),
                       InputMethodSettingsX01(),
                       Selector<GameSettingsX01_P, bool>(
                         selector: (_, gameSettingsX01) =>

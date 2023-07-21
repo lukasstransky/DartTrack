@@ -60,6 +60,7 @@ class _StatsCardState extends State<StatsCard> {
       padding: EdgeInsets.only(top: widget.isFinishScreen ? 10.h : 0),
       child: GestureDetector(
         onTap: () {
+          Utils.handleVibrationFeedback(context);
           if (!widget.isFinishScreen) {
             String route = '';
             if (widget.game is GameSingleDoubleTraining_P) {
@@ -103,6 +104,7 @@ class _StatsCardState extends State<StatsCard> {
                   Center(
                     child: TextButton.icon(
                       onPressed: () {
+                        Utils.handleVibrationFeedback(context);
                         setState(() {
                           _showAllPlayersOrTeams = !_showAllPlayersOrTeams;
                         });

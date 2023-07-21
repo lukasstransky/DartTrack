@@ -29,7 +29,10 @@ class StartGameBtn extends StatelessWidget {
       width: 40.w,
       padding: EdgeInsets.only(top: 1.h),
       child: ElevatedButton(
-        onPressed: () => _startGameBtnPressed(context),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _startGameBtnPressed(context);
+        },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(

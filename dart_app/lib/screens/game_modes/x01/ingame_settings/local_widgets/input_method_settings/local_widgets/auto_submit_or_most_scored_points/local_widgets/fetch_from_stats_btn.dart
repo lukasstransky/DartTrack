@@ -24,7 +24,10 @@ class FetchFromStatsBtn extends StatelessWidget {
           child: IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: () => _showInfoDialogForFetchFromStatsBtn(context),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              _showInfoDialogForFetchFromStatsBtn(context);
+            },
             icon: Icon(
               Icons.info_outline,
               color: Theme.of(context).colorScheme.secondary,
@@ -46,6 +49,7 @@ class FetchFromStatsBtn extends StatelessWidget {
               ),
             ),
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               if (!fetchFromStatsBtnClickable) {
                 Fluttertoast.showToast(
                     msg: 'No games played!', toastLength: Toast.LENGTH_LONG);
@@ -119,7 +123,10 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.of(context).pop();
+          },
           child: Text(
             'Continue',
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),

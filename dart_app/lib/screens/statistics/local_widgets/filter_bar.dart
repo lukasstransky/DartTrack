@@ -67,6 +67,7 @@ class _FilterBarState extends State<FilterBar> {
                     height: 4.h,
                     child: ElevatedButton(
                       onPressed: () {
+                        Utils.handleVibrationFeedback(context);
                         setState(
                           () {
                             _showDatePicker = true;
@@ -199,6 +200,7 @@ class _FilterBarState extends State<FilterBar> {
   }
 
   _onSelectionChanged(DateRangePickerSelectionChangedArgs args) {
+    Utils.handleVibrationFeedback(context);
     setState(() {
       if (args.value is PickerDateRange) {
         _range = '${DateFormat('dd-MM-yyyy').format(args.value.startDate)};'
@@ -257,6 +259,7 @@ class OverallFilterBtn extends StatelessWidget {
         height: 4.h,
         child: ElevatedButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             if (currentFilterValue != FilterValue.Overall) {
               filterBtnPressed(FilterValue.Overall);
             }
@@ -331,6 +334,7 @@ class MonthFilterBtn extends StatelessWidget {
         ),
         child: ElevatedButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             if (currentFilterValue != FilterValue.Month) {
               filterBtnPressed(FilterValue.Month);
             }
@@ -396,6 +400,7 @@ class YearFilterBtn extends StatelessWidget {
         ),
         child: ElevatedButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             if (currentFilterValue != FilterValue.Year) {
               filterBtnPressed(FilterValue.Year);
             }

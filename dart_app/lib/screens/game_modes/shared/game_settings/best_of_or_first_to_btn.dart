@@ -48,6 +48,7 @@ class BestOfBtn extends StatelessWidget {
     return Expanded(
       child: ElevatedButton(
         onPressed: () {
+          Utils.handleVibrationFeedback(context);
           if (!isBestOf) {
             gameSettingsProvider.switchBestOfOrFirstTo();
           }
@@ -103,6 +104,7 @@ class FirstToBtn extends StatelessWidget {
       child: SizedBox(
         child: ElevatedButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             if (!isFirstTo) {
               gameSettingsProvider.switchBestOfOrFirstTo();
             }

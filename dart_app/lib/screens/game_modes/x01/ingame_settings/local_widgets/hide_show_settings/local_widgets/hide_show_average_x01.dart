@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -29,6 +30,7 @@ class HideShowAverageX01 extends StatelessWidget {
             builder: (_, showAverage, __) => Switch(
               value: showAverage,
               onChanged: (value) {
+                Utils.handleVibrationFeedback(context);
                 gameSettingsX01.setShowAverage = value;
                 gameSettingsX01.notify();
               },

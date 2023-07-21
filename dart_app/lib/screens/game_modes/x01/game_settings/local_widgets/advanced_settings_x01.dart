@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -25,8 +26,10 @@ class AdvancedSettingsX01 extends StatelessWidget {
           child: Align(
             alignment: Alignment.centerLeft,
             child: TextButton.icon(
-              onPressed: () =>
-                  Navigator.of(context).pushNamed('/inGameSettingsX01'),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                Navigator.of(context).pushNamed('/inGameSettingsX01');
+              },
               icon: Icon(Icons.settings,
                   color: Theme.of(context).colorScheme.secondary),
               label: Text(

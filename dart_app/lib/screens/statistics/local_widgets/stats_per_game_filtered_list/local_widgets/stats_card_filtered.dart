@@ -101,8 +101,11 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
     return Container(
       padding: EdgeInsets.only(bottom: 2.h),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, '/statisticsX01',
-            arguments: {'game': widget.game}),
+        onTap: () {
+          Utils.handleVibrationFeedback(context);
+          Navigator.pushNamed(context, '/statisticsX01',
+              arguments: {'game': widget.game});
+        },
         child: Card(
           margin: EdgeInsets.zero,
           shape: RoundedRectangleBorder(

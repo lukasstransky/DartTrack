@@ -1,7 +1,7 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -20,6 +20,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+    final Settings_P settings_p = context.read<Settings_P>();
 
     return Expanded(
       child: Row(
@@ -74,12 +75,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                 onPressed: () {
                   if (stats.getCurrentPoints != 0 &&
                       gameX01.getAmountOfDartsThrown() != 3) {
-                    if (context
-                            .read<GameSettingsX01_P>()
-                            .getVibrationFeedbackEnabled &&
-                        gameX01.getCurrentPointType != PointType.Single) {
-                      HapticFeedback.lightImpact();
-                    }
+                    Utils.handleVibrationFeedback(context);
                     gameX01.setCurrentPointType = PointType.Single;
                     gameX01.notify();
                   }
@@ -136,12 +132,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                 onPressed: () {
                   if (stats.getCurrentPoints != 0 &&
                       gameX01.getAmountOfDartsThrown() != 3) {
-                    if (context
-                            .read<GameSettingsX01_P>()
-                            .getVibrationFeedbackEnabled &&
-                        gameX01.getCurrentPointType != PointType.Double) {
-                      HapticFeedback.lightImpact();
-                    }
+                    Utils.handleVibrationFeedback(context);
                     gameX01.setCurrentPointType = PointType.Double;
                     gameX01.notify();
                   }
@@ -190,12 +181,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                 onPressed: () {
                   if (stats.getCurrentPoints != 0 &&
                       gameX01.getAmountOfDartsThrown() != 3) {
-                    if (context
-                            .read<GameSettingsX01_P>()
-                            .getVibrationFeedbackEnabled &&
-                        gameX01.getCurrentPointType != PointType.Tripple) {
-                      HapticFeedback.lightImpact();
-                    }
+                    Utils.handleVibrationFeedback(context);
                     gameX01.setCurrentPointType = PointType.Tripple;
                     gameX01.notify();
                   }

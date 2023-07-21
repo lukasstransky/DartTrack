@@ -66,7 +66,10 @@ class ThreeDartsBtn extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        onPressed: () => _threeDartsBtnClicked(context, mode),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _threeDartsBtnClicked(context, mode);
+        },
         style: ButtonStyle(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(

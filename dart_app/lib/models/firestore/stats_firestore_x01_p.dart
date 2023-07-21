@@ -326,6 +326,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
 
   resetGames() {
     _games = [];
+    _favouriteGames = [];
   }
 
   resetFilteredGames() {
@@ -347,6 +348,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
     resetPlayerOrTeamStats();
     resetFilteredPlayerOrTeamStats();
     resetValues();
+    resetLoadingFields();
   }
 
   resetLoadingFields() {
@@ -354,6 +356,15 @@ class StatsFirestoreX01_P with ChangeNotifier {
     _gamesLoaded = false;
     _loadPlayerStats = true;
     _playerOrTeamGameStatsLoaded = false;
+  }
+
+  resetForResettingStats() {
+    resetAll();
+    _loadGames = false;
+    _gamesLoaded = true;
+    _loadPlayerStats = false;
+    _playerOrTeamGameStatsLoaded = true;
+    _noGamesPlayed = true;
   }
 
   notify() {

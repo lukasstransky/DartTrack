@@ -135,7 +135,10 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: () => _pointBtnPressed(context),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _pointBtnPressed(context);
+        },
       ),
     );
   }

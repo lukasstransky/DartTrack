@@ -21,7 +21,10 @@ class SettingsBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => onPressed(),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          onPressed();
+        },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(

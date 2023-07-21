@@ -4,6 +4,7 @@ import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +12,10 @@ class AuthService {
   final FirebaseAuth _firebaseAuth;
   final FirebaseFirestore _firestore;
   late SharedPreferences prefs;
+
+  String get getCurrentUserUid => this._firebaseAuth.currentUser!.uid;
+  String? get getCurrentUserEmail => this._firebaseAuth.currentUser!.email;
+  User? get getCurrentUser => this._firebaseAuth.currentUser!;
 
   Stream<User?> get authStateChanges => _firebaseAuth.authStateChanges();
 
@@ -103,6 +108,10 @@ class AuthService {
   }
 
   String? getUsernameFromSharedPreferences() {
+    if (_firebaseAuth.currentUser == null) {
+      return '';
+    }
+
     if (_firebaseAuth.currentUser!.isAnonymous) {
       return 'Guest';
     }
@@ -117,6 +126,76 @@ class AuthService {
     if (currentUser != null && currentUser.isAnonymous) {
       final String uid = currentUser.uid;
       await _firestore.collection('users').doc(uid).delete();
+    }
+  }
+
+  Future<void> changeUsernameInFirestore(String newUsername) async {
+    await _firestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .update({
+      'username': newUsername,
+      'usernameUpdated': true,
+    });
+  }
+
+  Future<bool> isUsernameUpdated() async {
+    bool usernameUpdated = false;
+    final DocumentSnapshot snapshot = await _firestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .get();
+
+    if (snapshot.exists) {
+      final data = snapshot.data() as Map<String, dynamic>?;
+      if (data != null && data.containsKey('usernameUpdated')) {
+        usernameUpdated = true;
+      }
+    }
+
+    return usernameUpdated;
+  }
+
+  Future<void> updateEmailInFirestore(String newEmail) async {
+    await _firestore
+        .collection('users')
+        .doc(_firebaseAuth.currentUser!.uid)
+        .update({
+      'email': newEmail,
+    });
+  }
+
+  Future<void> updateEmail(String newEmail) async {
+    final User? user = _firebaseAuth.currentUser;
+
+    try {
+      await user?.updateEmail(newEmail);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        Fluttertoast.showToast(
+            msg: 'Please logout/login again to update the email!');
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: 'An unexpected error occurred. Please try again later.',
+          toastLength: Toast.LENGTH_LONG);
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    try {
+      await _firestore.collection('users').doc(getCurrentUserUid).delete();
+      await getCurrentUser!.delete();
+      await _firebaseAuth.signOut();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        Fluttertoast.showToast(
+            msg: 'Please logout/login again!', toastLength: Toast.LENGTH_LONG);
+      }
+    } catch (e) {
+      Fluttertoast.showToast(
+          msg: 'An unexpected error occurred. Please try again later.',
+          toastLength: Toast.LENGTH_LONG);
     }
   }
 }

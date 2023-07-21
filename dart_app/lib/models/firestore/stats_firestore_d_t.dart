@@ -34,6 +34,14 @@ class StatsFirestoreDoubleTraining_P with ChangeNotifier {
     loadGames = false;
   }
 
+  resetForResettingStats() {
+    _games = [];
+    _noGamesPlayed = true;
+    _loadGames = false;
+    _favouriteGames = [];
+    _showFavouriteGames = false;
+  }
+
   notify() {
     notifyListeners();
   }

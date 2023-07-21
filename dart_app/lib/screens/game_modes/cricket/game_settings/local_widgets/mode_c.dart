@@ -85,6 +85,7 @@ class ModeCricketBtn extends StatelessWidget {
             : null,
         child: ElevatedButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             if (value == 'Standard') {
               gameSettingsCricket.setMode = CricketMode.Standard;
             } else if (value == 'Cut throat') {

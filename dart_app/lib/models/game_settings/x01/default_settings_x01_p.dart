@@ -26,7 +26,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
   late bool _showFinishWays;
   late bool _showThrownDartsPerLeg;
   late bool _showLastThrow;
-  late bool _vibrationFeedbackEnabled;
   late bool _automaticallySubmitPoints;
   late bool _showMostScoredPoints;
   late List<String> _mostScoredPoints;
@@ -84,7 +83,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
     showFinishWays = map['showFinishWays'];
     showThrownDartsPerLeg = map['showThrownDartsPerLeg'];
     showLastThrow = map['showLastThrow'];
-    vibrationFeedbackEnabled = map['vibrationFeedbackEnabled'];
     automaticallySubmitPoints = map['automaticallySubmitPoints'];
     showMostScoredPoints = map['showMostScoredPoints'];
     mostScoredPoints = map['mostScoredPoints'] == null
@@ -152,7 +150,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
       'showFinishWays': showFinishWays,
       'showThrownDartsPerLeg': showThrownDartsPerLeg,
       'showLastThrow': showLastThrow,
-      'vibrationFeedbackEnabled': vibrationFeedbackEnabled,
       'automaticallySubmitPoints': automaticallySubmitPoints,
       'showMostScoredPoints': showMostScoredPoints,
       'mostScoredPoints': mostScoredPoints,
@@ -254,10 +251,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
 
   set showLastThrow(value) => this._showLastThrow = value;
 
-  get vibrationFeedbackEnabled => this._vibrationFeedbackEnabled;
-
-  set vibrationFeedbackEnabled(value) => this._vibrationFeedbackEnabled = value;
-
   get automaticallySubmitPoints => this._automaticallySubmitPoints;
 
   set automaticallySubmitPoints(value) =>
@@ -305,7 +298,6 @@ class DefaultSettingsX01_P with ChangeNotifier {
     showFinishWays = DEFAULT_SHOW_FINISH_WAYS;
     showThrownDartsPerLeg = DEFAULT_SHOW_THROWN_DARTS_PER_LEG;
     showLastThrow = DEFAULT_SHOW_LAST_THROW;
-    vibrationFeedbackEnabled = DEFAULT_VIBRATION_FEEDBACK;
     automaticallySubmitPoints = DEFAULT_AUTO_SUBMIT_POINTS;
     showMostScoredPoints = DEFAULT_SHOW_MOST_SCORED_POINTS;
     mostScoredPoints = DEFAULT_MOST_SCORED_POINTS;

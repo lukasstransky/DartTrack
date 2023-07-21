@@ -1,11 +1,14 @@
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/game_modes/game_modes_overview.dart';
 import 'package:dart_app/screens/settings/settings.dart';
 import 'package:dart_app/screens/statistics/statistics.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -27,10 +30,11 @@ class _HomeState extends State<Home> {
     SettingsPage(),
   ];
 
-  onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+  @override
+  void initState() {
+    getAppVersion();
+    isUsernameUpdated();
+    super.initState();
   }
 
   @override
@@ -50,6 +54,28 @@ class _HomeState extends State<Home> {
       }
     }
     super.didChangeDependencies();
+  }
+
+  getAppVersion() async {
+    final PackageInfo _packageInfo = await PackageInfo.fromPlatform();
+    context.read<Settings_P>().setVersion = _packageInfo.version;
+  }
+
+  isUsernameUpdated() async {
+    final Settings_P settings = context.read<Settings_P>();
+    if (settings.getLoadIsUsernameUpdated) {
+      final bool _isUsernameUpdated =
+          await context.read<AuthService>().isUsernameUpdated();
+      settings.setIsUernameUpdated = _isUsernameUpdated;
+      settings.setLoadIsUsernameUpdated = false;
+    }
+  }
+
+  onTabTapped(int index) {
+    Utils.handleVibrationFeedback(context);
+    setState(() {
+      _currentIndex = index;
+    });
   }
 
   @override

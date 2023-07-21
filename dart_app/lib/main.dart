@@ -14,6 +14,7 @@ import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
 import 'package:dart_app/screens/game_modes/cricket/finish/finish_c.dart';
@@ -32,6 +33,7 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.
 import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings_x01.dart';
 import 'package:dart_app/screens/home/home.dart';
+import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/subscription.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_list.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -50,6 +52,8 @@ import 'package:sizer/sizer.dart';
 import 'screens/game_modes/cricket/statistics/game_stats_c.dart';
 import 'screens/game_modes/single_double_training/finish/finish_sd_t.dart';
 import 'screens/game_modes/single_double_training/game/game_sd_t.dart';
+import 'screens/settings/local_widgets/about_and_support/local_widgets/privacy_policy.dart';
+import 'screens/settings/local_widgets/about_and_support/local_widgets/terms_of_use.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -143,6 +147,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => StatsFirestoreCricket_P(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => Settings_P(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -186,6 +193,9 @@ class MyApp extends StatelessWidget {
             GameCricket.routeName: (ctx) => GameCricket(),
             FinishCricket.routeName: (ctx) => FinishCricket(),
             StatisticsCricket.routeName: (ctx) => StatisticsCricket(),
+            TermsOfUse.routeName: (ctx) => TermsOfUse(),
+            PrivacyPolicy.routeName: (ctx) => PrivacyPolicy(),
+            Subscription.routeName: (ctx) => Subscription(),
           },
           home: AuthWrapper(),
         );

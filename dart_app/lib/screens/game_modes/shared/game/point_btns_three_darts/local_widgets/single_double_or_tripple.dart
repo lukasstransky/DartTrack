@@ -72,6 +72,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                 ),
               ),
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 if (gameProvider.getAmountOfDartsThrown() != 3) {
                   gameProvider.setCurrentPointType = PointType.Single;
                   gameProvider.notify();
@@ -124,6 +125,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                 ),
               ),
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 if (gameProvider.getAmountOfDartsThrown() != 3) {
                   gameProvider.setCurrentPointType = PointType.Double;
                   gameProvider.notify();
@@ -168,6 +170,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                 ),
               ),
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 if (gameProvider.getAmountOfDartsThrown() != 3) {
                   gameProvider.setCurrentPointType = PointType.Tripple;
                   gameProvider.notify();

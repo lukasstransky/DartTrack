@@ -28,6 +28,7 @@ class ResetMostScoredPointsBtn extends StatelessWidget {
         ),
         onPressed: () {
           if (!resetBtnClickable) {
+            Utils.handleVibrationFeedback(context);
             Fluttertoast.showToast(
                 msg: 'No values changed!', toastLength: Toast.LENGTH_LONG);
             return;

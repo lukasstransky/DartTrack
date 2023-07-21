@@ -42,7 +42,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Continue',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -94,7 +97,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Cancel',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -102,11 +108,20 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             style: ButtonStyle(
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
           TextButton(
-            onPressed: () => _setOrUndoDefaultSettings(
-                gameSettingsX01, defaultSettingsSelected),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              _setOrUndoDefaultSettings(
+                  gameSettingsX01, defaultSettingsSelected);
+            },
             child: Text(
               defaultSettingsSelected ? 'Undo' : 'Save',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -147,7 +162,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Continue',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -191,7 +209,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Continue',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -235,7 +256,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Continue',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -321,7 +345,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: () => Navigator.of(context).pushNamed('/home'),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pushNamed('/home');
+            },
             icon: Icon(Icons.arrow_back,
                 color: Theme.of(context).colorScheme.secondary),
           )
@@ -334,7 +361,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             builder: (_, gameSettingsX01, __) => IconButton(
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
-              onPressed: () async => _defaultSettingsBtnClicked(),
+              onPressed: () async {
+                Utils.handleVibrationFeedback(context);
+                _defaultSettingsBtnClicked();
+              },
               icon: DefaultSettingsHelper.defaultSettingsSelected(context)
                   ? Icon(MdiIcons.heart,
                       color: Theme.of(context).colorScheme.secondary)

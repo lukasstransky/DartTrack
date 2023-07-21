@@ -13,6 +13,7 @@ class StatsScoreTrainingBtn extends StatelessWidget {
       width: 40.w,
       child: ElevatedButton(
         onPressed: () {
+          Utils.handleVibrationFeedback(context);
           Navigator.of(context).pushNamed('/statsPerGameList',
               arguments: {'mode': GameMode.ScoreTraining});
         },

@@ -127,6 +127,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
               child: Center(
                 child: TextButton.icon(
                   onPressed: () {
+                    Utils.handleVibrationFeedback(context);
                     setState(() {
                       _showFirst10 = !_showFirst10;
                     });

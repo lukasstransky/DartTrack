@@ -52,8 +52,11 @@ class MostScoredPointValue extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-                onPressed: () => _showDialogForMostScoredPointInput(
-                    context, gameSettingsX01, i),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  _showDialogForMostScoredPointInput(
+                      context, gameSettingsX01, i);
+                },
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
                   shadowColor: MaterialStateProperty.all(Colors.transparent),
@@ -147,7 +150,10 @@ class MostScoredPointValue extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                Navigator.of(context).pop();
+              },
               child: Text(
                 'Cancel',
                 style:
@@ -168,8 +174,10 @@ class MostScoredPointValue extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () =>
-                  _submitMostScoredPoint(context, i, gameSettingsX01),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                _submitMostScoredPoint(context, i, gameSettingsX01);
+              },
               child: Text(
                 'Submit',
                 style:

@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -55,7 +56,7 @@ class SubmitPointsBtnX01 extends StatelessWidget {
     final int currentPoints = currentStats.getCurrentPoints;
 
     if ((gameX01.getCurrentPointsSelected != 'Points' || currentPoints == 0) &&
-        gameSettingsX01.getVibrationFeedbackEnabled) {
+        context.read<Settings_P>().getVibrationFeedbackEnabled) {
       HapticFeedback.lightImpact();
     }
 
@@ -176,7 +177,10 @@ class SubmitPointsBtnX01 extends StatelessWidget {
             Icons.arrow_forward,
             color: Utils.getTextColorDarken(context),
           ),
-          onPressed: () => _submitPointsBtnClicked(context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _submitPointsBtnClicked(context);
+          },
         ),
       ),
     );

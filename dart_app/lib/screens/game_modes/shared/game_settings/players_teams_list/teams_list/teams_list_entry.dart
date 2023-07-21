@@ -59,8 +59,11 @@ class TeamsListEntry extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
-          onTap: () => PlayersTeamsListDialogs.showDialogForEditingTeam(
-              context, team, gameSettings),
+          onTap: () {
+            Utils.handleVibrationFeedback(context);
+            PlayersTeamsListDialogs.showDialogForEditingTeam(
+                context, team, gameSettings);
+          },
           child: Text(
             team.getName,
             style: TextStyle(
@@ -135,9 +138,11 @@ class TeamsListEntry extends StatelessWidget {
                             Icons.edit,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
-                          onPressed: () => PlayersTeamsListDialogs
-                              .showDialogForEditingPlayer(
-                                  context, player, gameSettings),
+                          onPressed: () {
+                            Utils.handleVibrationFeedback(context);
+                            PlayersTeamsListDialogs.showDialogForEditingPlayer(
+                                context, player, gameSettings);
+                          },
                         ),
                         if (gameSettings.getTeams.length > 1)
                           IconButton(
@@ -154,6 +159,7 @@ class TeamsListEntry extends StatelessWidget {
                                         30),
                               ),
                               onPressed: () {
+                                Utils.handleVibrationFeedback(context);
                                 if (!areTwoTeamsWithMaxPlayers &&
                                     atLeastOneTeamToSwap) {
                                   PlayersTeamsListDialogs
@@ -169,11 +175,14 @@ class TeamsListEntry extends StatelessWidget {
                             Icons.highlight_remove,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
-                          onPressed: () => _deleteIconClicked(
-                            team,
-                            player,
-                            context,
-                          ),
+                          onPressed: () {
+                            Utils.handleVibrationFeedback(context);
+                            _deleteIconClicked(
+                              team,
+                              player,
+                              context,
+                            );
+                          },
                         ),
                       ],
                     ),

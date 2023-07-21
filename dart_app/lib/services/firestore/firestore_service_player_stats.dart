@@ -10,6 +10,7 @@ import 'package:dart_app/models/player_statistics/player_game_stats_score_traini
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -23,6 +24,9 @@ class FirestoreServicePlayerStats {
   Future<void> postPlayerGameStatistics(
       Game_P game, String gameId, BuildContext context) async {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final String currentUserUid = context.read<AuthService>().getCurrentUserUid;
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     List<String> playerGameStatsIds = [];
     List<String> teamGameStatsIds = [];
@@ -37,17 +41,34 @@ class FirestoreServicePlayerStats {
           dateTime: playerStats.getDateTime);
 
       if (playerStats is PlayerOrTeamGameStatsX01) {
-        data = playerOrTeamStatsToSave.toMapX01(playerStats,
-            GameX01_P.createGame(game), gameSettingsX01, gameId, false);
+        data = playerOrTeamStatsToSave.toMapX01(
+          playerStats,
+          GameX01_P.createGame(game),
+          gameSettingsX01,
+          gameId,
+          false,
+          currentUserUid,
+          currentUsername,
+        );
       } else if (playerStats is PlayerGameStatsScoreTraining) {
         data = playerOrTeamStatsToSave.toMapScoreTraining(
-            playerStats, gameId, false);
+          playerStats,
+          gameId,
+          false,
+        );
       } else if (playerStats is PlayerGameStatsSingleDoubleTraining) {
         data = playerOrTeamStatsToSave.toMapSingleDoubleTraining(
-            playerStats, gameId, false);
+          playerStats,
+          gameId,
+          false,
+        );
       } else if (playerStats is PlayerOrTeamGameStatsCricket) {
         data = playerOrTeamStatsToSave.toMapCricket(
-            playerStats, context.read<GameSettingsCricket_P>(), gameId, false);
+          playerStats,
+          context.read<GameSettingsCricket_P>(),
+          gameId,
+          false,
+        );
       }
 
       // save playerGameStats to firestore
@@ -68,11 +89,22 @@ class FirestoreServicePlayerStats {
             dateTime: teamStats.getDateTime);
 
         if (teamStats is PlayerOrTeamGameStatsX01) {
-          data = playerOrTeamStatsToSave.toMapX01(teamStats,
-              GameX01_P.createGame(game), gameSettingsX01, gameId, false);
+          data = playerOrTeamStatsToSave.toMapX01(
+            teamStats,
+            GameX01_P.createGame(game),
+            gameSettingsX01,
+            gameId,
+            false,
+            currentUserUid,
+            currentUsername,
+          );
         } else if (teamStats is PlayerOrTeamGameStatsCricket) {
           data = playerOrTeamStatsToSave.toMapCricket(
-              teamStats, context.read<GameSettingsCricket_P>(), gameId, false);
+            teamStats,
+            context.read<GameSettingsCricket_P>(),
+            gameId,
+            false,
+          );
         }
 
         await _firestore
@@ -101,7 +133,7 @@ class FirestoreServicePlayerStats {
   }
 
   Future<void> getAllPlayerOrTeamGameStatsX01(
-      StatsFirestoreX01_P firestoreStats, String username) async {
+      StatsFirestoreX01_P firestoreStats, String currentUserId) async {
     if (!firestoreStats.loadPlayerStats) {
       return;
     }
@@ -112,7 +144,7 @@ class FirestoreServicePlayerStats {
     final CollectionReference collectionReference =
         _firestore.collection(_getFirestorePlayerStatsPath());
     final Query query = collectionReference
-        .where('player.name', isEqualTo: username)
+        .where('userId', isEqualTo: currentUserId)
         .where('mode', isEqualTo: GameMode.X01.name);
     final QuerySnapshot<Object?> playerOrTeamGameStatsX01 = await query.get();
 
@@ -174,14 +206,14 @@ class FirestoreServicePlayerStats {
   }
 
   String _getFirestorePlayerStatsPath() {
-    return 'users/' + _firebaseAuth.currentUser!.uid + '/playerGameStatistics';
+    return 'users/${_firebaseAuth.currentUser!.uid}/playerGameStatistics';
   }
 
   String _getFirestoreTeamStatsPath() {
-    return 'users/' + _firebaseAuth.currentUser!.uid + '/teamGameStatistics';
+    return 'users/${_firebaseAuth.currentUser!.uid}/teamGameStatistics';
   }
 
   String _getFirestoreGamesPath() {
-    return 'users/' + _firebaseAuth.currentUser!.uid + '/games';
+    return 'users/${_firebaseAuth.currentUser!.uid}/games';
   }
 }

@@ -112,6 +112,7 @@ class _RoundsOrPointsInputScoreTrainingState
           actions: [
             TextButton(
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
                 Future.delayed(Duration(milliseconds: 300), () {
                   maxRoundsOrPointsTextController.text = backupString;
@@ -138,7 +139,10 @@ class _RoundsOrPointsInputScoreTrainingState
               ),
             ),
             TextButton(
-              onPressed: () => _submitNewRoundsOrPoints(context),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                _submitNewRoundsOrPoints(context);
+              },
               child: Text(
                 'Submit',
                 style: TextStyle(
@@ -211,7 +215,10 @@ class _RoundsOrPointsInputScoreTrainingState
             builder: (_, selectorModel, __) => Container(
               width: 20.w,
               child: ElevatedButton(
-                onPressed: () => _showDialogForRoundsOrPoints(context),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  _showDialogForRoundsOrPoints(context);
+                },
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(

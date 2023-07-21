@@ -1,8 +1,10 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -53,7 +55,10 @@ class SingleOutBtn extends StatelessWidget {
 
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => _singleOutClicked(gameSettingsX01),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _singleOutClicked(gameSettingsX01);
+        },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(
@@ -117,7 +122,10 @@ class DoubleOutBtn extends StatelessWidget {
           ),
         ),
         child: ElevatedButton(
-          onPressed: () => _doubleOutClicked(gameSettingsX01),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _doubleOutClicked(gameSettingsX01);
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
@@ -163,7 +171,10 @@ class MasterOutBtn extends StatelessWidget {
     return Expanded(
       child: SizedBox(
         child: ElevatedButton(
-          onPressed: () => _masterOutClicked(gameSettingsX01),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _masterOutClicked(gameSettingsX01);
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(

@@ -49,6 +49,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    Utils.handleVibrationFeedback(context);
                     if (!isInputMethodRound) {
                       _switchInputMethod(context);
                     }
@@ -88,6 +89,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
+                    Utils.handleVibrationFeedback(context);
                     if (isInputMethodRound) {
                       _switchInputMethod(context);
                     }

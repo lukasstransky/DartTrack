@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class PointBtnRoundX01 extends StatelessWidget {
   }
 
   _pointBtnRoundClicked(BuildContext context) async {
-    if (context.read<GameSettingsX01_P>().getVibrationFeedbackEnabled &&
+    if (context.read<Settings_P>().getVibrationFeedbackEnabled &&
         this.activeBtn as bool) {
       HapticFeedback.lightImpact();
     }
@@ -192,7 +193,10 @@ class PointBtnRoundX01 extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: () => _pointBtnRoundClicked(context),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _pointBtnRoundClicked(context);
+        },
       ),
     );
   }

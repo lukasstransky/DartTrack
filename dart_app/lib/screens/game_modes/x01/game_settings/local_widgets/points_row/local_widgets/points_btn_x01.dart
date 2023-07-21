@@ -47,9 +47,10 @@ class PointsBtnX01 extends StatelessWidget {
                 )
               : null,
           child: ElevatedButton(
-            onPressed: () => {
-              gameSettingsX01.setPoints = points,
-              gameSettingsX01.notify(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              gameSettingsX01.setPoints = points;
+              gameSettingsX01.notify();
             },
             child: FittedBox(
               fit: BoxFit.scaleDown,

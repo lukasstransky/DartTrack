@@ -10,7 +10,6 @@ import 'package:dart_app/screens/game_modes/x01/shared.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
@@ -313,11 +312,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                 ),
                 onPressed: () {
                   if (gameX01.getCurrentPointsSelected != 'Points') {
-                    if (context
-                        .read<GameSettingsX01_P>()
-                        .getVibrationFeedbackEnabled) {
-                      HapticFeedback.lightImpact();
-                    }
+                    Utils.handleVibrationFeedback(context);
                     _deleteCurrentPointsSelected(context, gameX01);
                   }
                 }),
@@ -362,13 +357,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   if (gameX01.getCurrentPointsSelected != 'Points') {
                     return;
                   }
-
-                  if (context
-                      .read<GameSettingsX01_P>()
-                      .getVibrationFeedbackEnabled) {
-                    HapticFeedback.lightImpact();
-                  }
-
+                  Utils.handleVibrationFeedback(context);
                   if (gameX01.getGameSettings.getEnableCheckoutCounting &&
                       gameX01.isCheckoutPossible()) {
                     final int count =

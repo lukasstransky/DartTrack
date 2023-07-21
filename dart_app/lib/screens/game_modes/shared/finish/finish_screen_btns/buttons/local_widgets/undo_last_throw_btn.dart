@@ -10,6 +10,7 @@ import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -173,7 +174,10 @@ class UndoLastThrowBtn extends StatelessWidget {
         width: 40.w,
         height: 6.h,
         child: ElevatedButton(
-          onPressed: () => _undoLastThrowBtnClicked(context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _undoLastThrowBtnClicked(context);
+          },
           child: FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(

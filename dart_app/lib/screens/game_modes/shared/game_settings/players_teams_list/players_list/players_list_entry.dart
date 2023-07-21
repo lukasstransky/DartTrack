@@ -92,9 +92,11 @@ class PlayersListEntry extends StatelessWidget {
                     Icons.edit,
                     color: Theme.of(context).colorScheme.secondary,
                   ),
-                  onPressed: () =>
-                      PlayersTeamsListDialogs.showDialogForEditingPlayer(
-                          context, player, settings),
+                  onPressed: () {
+                    Utils.handleVibrationFeedback(context);
+                    PlayersTeamsListDialogs.showDialogForEditingPlayer(
+                        context, player, settings);
+                  },
                 ),
                 IconButton(
                   splashColor: Colors.transparent,
@@ -105,6 +107,7 @@ class PlayersListEntry extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                   onPressed: () {
+                    Utils.handleVibrationFeedback(context);
                     if (settings is GameSettingsX01_P ||
                         settings is GameSettingsCricket_P) {
                       settings.removePlayer(player, true, true);

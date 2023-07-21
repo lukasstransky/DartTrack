@@ -1,21 +1,17 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/general_settings/local_widgets/vibration_feedback_x01.dart';
+import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
 import 'package:dart_app/utils/utils.dart';
-
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class GeneralSettingsX01 extends StatelessWidget {
-  const GeneralSettingsX01({Key? key}) : super(key: key);
+class AboutAndSupport extends StatelessWidget {
+  const AboutAndSupport({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 11.h,
       padding: EdgeInsets.only(
         top: 2.0.h,
-        left: 0.5.h,
-        right: 0.5.h,
       ),
       child: Card(
         shape: RoundedRectangleBorder(
@@ -27,21 +23,40 @@ class GeneralSettingsX01 extends StatelessWidget {
         child: Column(
           children: [
             Container(
+              height: 5.h,
               padding: EdgeInsets.only(
-                top: 0.5.h,
                 left: 1.5.w,
               ),
               alignment: Alignment.centerLeft,
               child: Text(
-                'General',
+                'About & Support',
                 style: TextStyle(
-                  fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
+                  fontSize: 16.sp,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            VibrationFeedbackX01(),
+            SettingsCardItem(
+              name: 'Subscription',
+              route: '/subscription',
+            ),
+            SettingsCardItem(
+              name: 'Help & Support',
+              helpAndSupport: true,
+            ),
+            SettingsCardItem(
+              name: 'Rate app',
+              rateApp: true,
+            ),
+            SettingsCardItem(
+              name: 'Privacy policy',
+              route: '/privacyPolicy',
+            ),
+            SettingsCardItem(
+              name: 'Terms of use',
+              route: '/termsOfUse',
+            ),
           ],
         ),
       ),

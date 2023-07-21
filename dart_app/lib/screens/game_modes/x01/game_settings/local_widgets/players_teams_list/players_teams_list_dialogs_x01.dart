@@ -111,6 +111,7 @@ class PlayersTeamsListDialogs {
                       interval: 100,
                       showTicks: false,
                       onChanged: (dynamic newValue) {
+                        Utils.handleVibrationFeedback(context);
                         setState(() => _editBotAvg(
                             gameSettings_P as GameSettingsX01_P,
                             playerToEdit,
@@ -168,6 +169,7 @@ class PlayersTeamsListDialogs {
           actions: [
             TextButton(
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
                 if (playerToEdit is Bot) {
                   playerToEdit.setPreDefinedAverage = cancelAverage;
@@ -196,7 +198,10 @@ class PlayersTeamsListDialogs {
               ),
             ),
             TextButton(
-              onPressed: () => _saveEdit(context, gameSettings_P, playerToEdit),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                _saveEdit(context, gameSettings_P, playerToEdit);
+              },
               child: Text(
                 'Submit',
                 style:
@@ -305,6 +310,7 @@ class PlayersTeamsListDialogs {
                             icon: const Icon(Icons.delete),
                             color: Colors.red,
                             onPressed: () {
+                              Utils.handleVibrationFeedback(context);
                               Navigator.of(context).pop();
                               if (teamToEdit.getPlayers.length > 0) {
                                 _showDialogForDeletingTeam(
@@ -322,6 +328,7 @@ class PlayersTeamsListDialogs {
             actions: [
               TextButton(
                 onPressed: () {
+                  Utils.handleVibrationFeedback(context);
                   Navigator.of(context).pop();
                   teamToEdit.setName = cancelName;
                 },
@@ -345,8 +352,10 @@ class PlayersTeamsListDialogs {
                 ),
               ),
               TextButton(
-                onPressed: () =>
-                    _submitEditedTeam(context, gameSettings, teamToEdit),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  _submitEditedTeam(context, gameSettings, teamToEdit);
+                },
                 child: Text(
                   'Submit',
                   style:
@@ -404,7 +413,10 @@ class PlayersTeamsListDialogs {
                     padding: EdgeInsets.only(left: 3.w),
                     alignment: Alignment.centerLeft,
                     child: TextButton(
-                      onPressed: () => Navigator.of(context).pop(),
+                      onPressed: () {
+                        Utils.handleVibrationFeedback(context);
+                        Navigator.of(context).pop();
+                      },
                       child: Text(
                         'Cancel',
                         style: TextStyle(
@@ -434,6 +446,7 @@ class PlayersTeamsListDialogs {
                         padding: EdgeInsets.only(right: 2.w),
                         child: TextButton(
                           onPressed: () {
+                            Utils.handleVibrationFeedback(context);
                             gameSettings.removePlayer(playerToDelete, false);
                             Navigator.of(context).pop();
                           },
@@ -463,6 +476,7 @@ class PlayersTeamsListDialogs {
                       ),
                       TextButton(
                         onPressed: () {
+                          Utils.handleVibrationFeedback(context);
                           gameSettings.getTeams
                               .removeWhere((team) => team == teamToMaybeDelete);
                           gameSettings.removePlayer(playerToDelete, true);
@@ -546,6 +560,7 @@ class PlayersTeamsListDialogs {
                           value: team,
                           groupValue: selectedTeam,
                           onChanged: (Team? value) {
+                            Utils.handleVibrationFeedback(context);
                             setState(() => selectedTeam = value);
                           },
                         ),
@@ -557,7 +572,10 @@ class PlayersTeamsListDialogs {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  Navigator.of(context).pop();
+                },
                 child: Text(
                   'Cancel',
                   style:
@@ -578,8 +596,11 @@ class PlayersTeamsListDialogs {
                 ),
               ),
               TextButton(
-                onPressed: () => _swapTeam(
-                    context, playerToSwap, selectedTeam, gameSettings, true),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  _swapTeam(
+                      context, playerToSwap, selectedTeam, gameSettings, true);
+                },
                 child: Text(
                   'Submit',
                   style:
@@ -773,6 +794,7 @@ class PlayersTeamsListDialogs {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                       onPressed: () {
+                        Utils.handleVibrationFeedback(context);
                         Navigator.of(context).pop();
                         showDialogForEditingTeam(
                           context,
@@ -790,7 +812,10 @@ class PlayersTeamsListDialogs {
                       Padding(
                         padding: EdgeInsets.only(right: 3.w),
                         child: TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () {
+                            Utils.handleVibrationFeedback(context);
+                            Navigator.of(context).pop();
+                          },
                           child: Text(
                             'Cancel',
                             style: TextStyle(
@@ -817,6 +842,7 @@ class PlayersTeamsListDialogs {
                       ),
                       TextButton(
                         onPressed: () {
+                          Utils.handleVibrationFeedback(context);
                           _deleteTeam(teamToEdit, gameSettings);
                           Navigator.of(context).pop();
                         },

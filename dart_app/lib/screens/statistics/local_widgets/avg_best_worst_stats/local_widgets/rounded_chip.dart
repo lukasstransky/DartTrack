@@ -24,12 +24,15 @@ class RoundedChip extends StatelessWidget {
       ),
       child: GestureDetector(
         child: ElevatedButton(
-          onPressed: () => {
-            if (this.type != '' && this.value != '-')
-              {
-                Navigator.of(context).pushNamed('/statsPerGameFilteredList',
-                    arguments: {'type': this.type}),
-              }
+          onPressed: () {
+            if (type != '') {
+              Utils.handleVibrationFeedback(context);
+            }
+
+            if (this.type != '' && this.value != '-') {
+              Navigator.of(context).pushNamed('/statsPerGameFilteredList',
+                  arguments: {'type': this.type});
+            }
           },
           child: FittedBox(
             fit: BoxFit.fitWidth,

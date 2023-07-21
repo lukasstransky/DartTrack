@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 const Color primary = Color(0xff130536);
+const Color DANGER_BACKGROUND_COLOR_BTN_IN_DIALOG =
+    Color(0xFF8B0000); // e.g. for deleting
+
+const String EMAIL_REGEX = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}';
+const int MAX_EMAIL_LENGTH = 50;
+const int MAX_PASSWORD_LENGTH = 20;
 
 enum GameMode { X01, ScoreTraining, SingleTraining, DoubleTraining, Cricket }
 
@@ -466,3 +472,6 @@ const int THROWN_DARTS_WIDGET_HEIGHT = 6;
 
 const int DEFEAULT_DELAY =
     100; // for async rerquests -> to show loading spinner
+
+/* shared preferences constants */
+const String VIBRATION_FEEDBACK_KEY = 'vibrationFeedbackEnabled';

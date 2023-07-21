@@ -99,6 +99,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
+                              Utils.handleVibrationFeedback(context);
                               setState(() => selectedCheckoutCount = 0);
                             },
                             child: FittedBox(
@@ -145,6 +146,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                         child: ElevatedButton(
                           onPressed: () {
+                            Utils.handleVibrationFeedback(context);
                             setState(() => selectedCheckoutCount = 1);
                           },
                           child: FittedBox(
@@ -192,6 +194,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
+                              Utils.handleVibrationFeedback(context);
                               setState(() {
                                 selectedCheckoutCount = 2;
                                 if (!isDoubleField) {
@@ -247,6 +250,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
+                              Utils.handleVibrationFeedback(context);
                               setState(() => selectedCheckoutCount = 3);
                               if (selectedFinishCount < 3) {
                                 selectedFinishCount = 3;
@@ -312,6 +316,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                           child: ElevatedButton(
                             onPressed: () {
+                              Utils.handleVibrationFeedback(context);
                               if (selectedCheckoutCount <= 1)
                                 setState(() => selectedFinishCount = 1);
                             },
@@ -364,6 +369,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                         child: ElevatedButton(
                           onPressed: () {
+                            Utils.handleVibrationFeedback(context);
                             if (selectedCheckoutCount < 2 ||
                                 selectedCheckoutCount == 2 && isDoubleField) {
                               setState(() => selectedFinishCount = 2);
@@ -418,6 +424,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
                         child: ElevatedButton(
                           onPressed: () {
+                            Utils.handleVibrationFeedback(context);
                             setState(() => selectedFinishCount = 3);
                           },
                           child: FittedBox(
@@ -467,6 +474,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
       actions: [
         TextButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             Navigator.of(context).pop();
             if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
               final int amount = gameX01.getAmountOfDartsThrown();
@@ -499,6 +507,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
         ),
         TextButton(
           onPressed: () {
+            Utils.handleVibrationFeedback(context);
             if (!gameSettingsX01.getAutomaticallySubmitPoints &&
                 gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
               g_checkoutCount = selectedCheckoutCount;

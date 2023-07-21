@@ -59,7 +59,10 @@ class TrippleFieldBtnSingleTraining extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: () => game.submit('T', context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            game.submit('T', context);
+          },
         ),
       ),
     );

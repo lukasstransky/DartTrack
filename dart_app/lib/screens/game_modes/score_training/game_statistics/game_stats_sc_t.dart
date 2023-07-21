@@ -134,6 +134,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                               Theme.of(context).colorScheme.secondary,
                           value: _roundedScoresOdd,
                           onChanged: (value) {
+                            Utils.handleVibrationFeedback(context);
                             setState(() {
                               _roundedScoresOdd = value;
                             });

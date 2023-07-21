@@ -51,18 +51,31 @@ class UtilsDialogs {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Cancel',
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
               backgroundColor:
                   Utils.getPrimaryMaterialStateColorDarken(context),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius:
+                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                ),
+              ),
             ),
           ),
           TextButton(
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               Navigator.of(context).pop();
               if (mode == GameMode.X01 || mode == GameMode.Cricket) {
                 showDialogForBeginner(context, gameSettings, mode);
@@ -183,6 +196,7 @@ class UtilsDialogs {
                         value: player,
                         groupValue: selectedPlayer,
                         onChanged: (Player? value) {
+                          Utils.handleVibrationFeedback(context);
                           setState(() => selectedPlayer = value);
                         },
                       ),
@@ -219,6 +233,7 @@ class UtilsDialogs {
                       value: team,
                       groupValue: selectedTeam,
                       onChanged: (Team? value) {
+                        Utils.handleVibrationFeedback(context);
                         setState(() => selectedTeam = value);
                       },
                     ),
@@ -231,6 +246,7 @@ class UtilsDialogs {
         actions: [
           TextButton(
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               Navigator.of(context).pop();
               gameSettings.notify();
             },
@@ -254,6 +270,7 @@ class UtilsDialogs {
           ),
           TextButton(
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
                 _setBeginnerPlayer(selectedPlayer, gameSettings);
               } else {
@@ -323,7 +340,10 @@ class UtilsDialogs {
               Container(
                 alignment: Alignment.centerLeft,
                 child: TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    Utils.handleVibrationFeedback(context);
+                    Navigator.of(context).pop();
+                  },
                   child: Text(
                     'Continue',
                     style: TextStyle(
@@ -350,6 +370,7 @@ class UtilsDialogs {
                     padding: EdgeInsets.only(right: 2.5.w),
                     child: TextButton(
                       onPressed: () {
+                        Utils.handleVibrationFeedback(context);
                         Navigator.of(context).pop();
                         _resetValuesAndNavigateToHome(context, game_p);
                       },
@@ -378,6 +399,7 @@ class UtilsDialogs {
                   ),
                   TextButton(
                     onPressed: () async {
+                      Utils.handleVibrationFeedback(context);
                       Navigator.of(context, rootNavigator: true).pop();
 
                       game_p.setShowLoadingSpinner = true;

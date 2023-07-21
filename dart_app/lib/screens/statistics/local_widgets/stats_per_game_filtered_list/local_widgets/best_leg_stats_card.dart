@@ -21,8 +21,11 @@ class BestLegStatsCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(bottom: 2.h),
       child: GestureDetector(
-        onTap: () => Navigator.pushNamed(context, '/statisticsX01',
-            arguments: {'game': game}),
+        onTap: () {
+          Utils.handleVibrationFeedback(context);
+          Navigator.pushNamed(context, '/statisticsX01',
+              arguments: {'game': game});
+        },
         child: Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),

@@ -92,7 +92,10 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  Navigator.of(context).pop();
+                },
                 child: Text(
                   'Cancel',
                   style:
@@ -113,7 +116,10 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 ),
               ),
               TextButton(
-                onPressed: () => _submitPoints(context),
+                onPressed: () {
+                  Utils.handleVibrationFeedback(context);
+                  _submitPoints(context);
+                },
                 child: Text(
                   'Submit',
                   style:
@@ -204,7 +210,10 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 ),
               ),
             ),
-            onPressed: () => _customPointsBtnPressed(gameSettingsX01),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              _customPointsBtnPressed(gameSettingsX01);
+            },
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
               shadowColor: MaterialStateProperty.all(Colors.transparent),

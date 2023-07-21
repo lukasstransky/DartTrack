@@ -43,6 +43,7 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                           Theme.of(context).colorScheme.secondary,
                       value: selectorModel.winByTwoLegsDifference,
                       onChanged: (value) {
+                        Utils.handleVibrationFeedback(context);
                         if (value) {
                           _showDialogForSuddenDeath(context, gameSettingsX01);
                         } else {
@@ -104,7 +105,10 @@ _showDialogForSuddenDeath(
                         Icons.info_outline,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
-                      onPressed: () => _showInfoDialogForSuddenDeath(context),
+                      onPressed: () {
+                        Utils.handleVibrationFeedback(context);
+                        _showInfoDialogForSuddenDeath(context);
+                      },
                     ),
                     Flexible(
                       child: FittedBox(
@@ -123,6 +127,7 @@ _showDialogForSuddenDeath(
                           Theme.of(context).colorScheme.secondary,
                       value: gameSettingsX01.getSuddenDeath,
                       onChanged: (value) {
+                        Utils.handleVibrationFeedback(context);
                         setState(() {
                           gameSettingsX01.setSuddenDeath = value;
                         });
@@ -138,8 +143,10 @@ _showDialogForSuddenDeath(
                           Icons.info_outline,
                           color: Theme.of(context).colorScheme.secondary,
                         ),
-                        onPressed: () =>
-                            _showInfoDialogForMaxExtraLegs(context),
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          _showInfoDialogForMaxExtraLegs(context);
+                        },
                       ),
                       Flexible(
                         child: FittedBox(
@@ -156,6 +163,7 @@ _showDialogForSuddenDeath(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {
+                            Utils.handleVibrationFeedback(context);
                             setState(() {
                               if (gameSettingsX01.getMaxExtraLegs == 1) return;
                               gameSettingsX01.setMaxExtraLegs =
@@ -187,6 +195,7 @@ _showDialogForSuddenDeath(
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
+                          Utils.handleVibrationFeedback(context);
                           if (gameSettingsX01.getMaxExtraLegs >= MAX_EXTRA_LEGS)
                             return;
                           setState(() {
@@ -212,6 +221,7 @@ _showDialogForSuddenDeath(
         actions: [
           TextButton(
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               Navigator.of(context).pop();
               _resetWinByTwoLegsDifference(gameSettingsX01);
             },
@@ -235,6 +245,7 @@ _showDialogForSuddenDeath(
           ),
           TextButton(
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               _submitWinByTwoLegsDifference(gameSettingsX01);
               Navigator.of(context).pop();
             },
@@ -296,7 +307,10 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.of(context).pop();
+          },
           child: Text(
             'Continue',
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -338,7 +352,10 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            Navigator.of(context).pop();
+          },
           child: Text(
             'Continue',
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),

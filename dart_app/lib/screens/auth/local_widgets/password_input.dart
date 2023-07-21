@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -26,7 +27,7 @@ class PasswordInput extends StatelessWidget {
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           inputFormatters: [
-            LengthLimitingTextInputFormatter(10),
+            LengthLimitingTextInputFormatter(MAX_PASSWORD_LENGTH),
           ],
           validator: (value) {
             if (value!.trim().isEmpty) {

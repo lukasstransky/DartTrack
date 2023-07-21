@@ -11,9 +11,12 @@ import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/u
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
+
+import '../../../settings_p.dart';
 
 class SubmitX01Helper {
   /************************************************************/
@@ -787,6 +790,9 @@ class SubmitX01Helper {
         actions: [
           TextButton(
             onPressed: () {
+              if (context.read<Settings_P>().getVibrationFeedbackEnabled) {
+                HapticFeedback.lightImpact();
+              }
               Navigator.of(context).pop();
               _showDialogForSuddenDeathBeginner(context);
             },
@@ -891,6 +897,7 @@ class SubmitX01Helper {
                         value: player,
                         groupValue: selectedPlayer,
                         onChanged: (Player? value) {
+                          Utils.handleVibrationFeedback(context);
                           setState(() => selectedPlayer = value);
                         },
                       ),
@@ -928,6 +935,7 @@ class SubmitX01Helper {
                       value: team,
                       groupValue: selectedTeam,
                       onChanged: (Team? value) {
+                        Utils.handleVibrationFeedback(context);
                         setState(() => selectedTeam = value);
                       },
                     ),
@@ -940,6 +948,7 @@ class SubmitX01Helper {
         actions: [
           TextButton(
             onPressed: () {
+              Utils.handleVibrationFeedback(context);
               _setSuddenDeathStartingPlayer(selectedPlayer, selectedTeam,
                   isSingleMode, gameX01, gameSettingsX01);
               Navigator.of(context).pop();

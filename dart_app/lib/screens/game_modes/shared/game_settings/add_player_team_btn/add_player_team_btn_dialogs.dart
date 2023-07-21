@@ -122,13 +122,14 @@ class AddPlayerTeamBtnDialogs {
                           activeColor: Theme.of(context).colorScheme.secondary,
                           value: NewPlayer.Bot,
                           groupValue: newPlayer,
-                          onChanged: (value) => {
+                          onChanged: (value) {
+                            Utils.handleVibrationFeedback(context);
                             setState(
                               () {
                                 newPlayerController.text = '';
                                 newPlayer = value;
                               },
-                            ),
+                            );
                           },
                         ),
                       ),
@@ -144,6 +145,7 @@ class AddPlayerTeamBtnDialogs {
                         interval: 100,
                         showTicks: false,
                         onChanged: (dynamic newValue) {
+                          Utils.handleVibrationFeedback(context);
                           setState(() {
                             _selectedBotAvgValue = newValue.round();
                           });
@@ -166,13 +168,14 @@ class AddPlayerTeamBtnDialogs {
                           activeColor: Theme.of(context).colorScheme.secondary,
                           value: NewPlayer.Guest,
                           groupValue: newPlayer,
-                          onChanged: (value) => {
+                          onChanged: (value) {
+                            Utils.handleVibrationFeedback(context);
                             setState(
                               () {
                                 _resetBotAvgValue();
                                 newPlayer = value;
                               },
-                            ),
+                            );
                           },
                         ),
                       ),
@@ -202,6 +205,7 @@ class AddPlayerTeamBtnDialogs {
                               color: Theme.of(context).colorScheme.secondary,
                             ),
                             onPressed: () {
+                              Utils.handleVibrationFeedback(context);
                               Navigator.of(context).pop();
 
                               showDialogForAddingPlayerOrTeam(
@@ -224,6 +228,7 @@ class AddPlayerTeamBtnDialogs {
                                 color: Theme.of(context).colorScheme.secondary),
                           ),
                           onPressed: () {
+                            Utils.handleVibrationFeedback(context);
                             Navigator.of(context).pop();
                             _resetBotAvgValue();
                             newPlayerController.clear();
@@ -253,8 +258,10 @@ class AddPlayerTeamBtnDialogs {
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary),
                         ),
-                        onPressed: () => _submitNewPlayer(
-                            gameSettings_P, context, newPlayer),
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          _submitNewPlayer(gameSettings_P, context, newPlayer);
+                        },
                         style: ButtonStyle(
                           splashFactory: NoSplash.splashFactory,
                           shadowColor:
@@ -434,6 +441,7 @@ class AddPlayerTeamBtnDialogs {
                             color: Theme.of(context).colorScheme.secondary,
                           ),
                           onPressed: () {
+                            Utils.handleVibrationFeedback(context);
                             Navigator.of(context).pop();
                             showDialogForAddingPlayerOrTeam(
                                 gameSettings, context);
@@ -449,6 +457,7 @@ class AddPlayerTeamBtnDialogs {
                           padding: EdgeInsets.only(right: 3.w),
                           child: TextButton(
                             onPressed: () {
+                              Utils.handleVibrationFeedback(context);
                               Navigator.of(context).pop();
                               newTeamController.clear();
                             },
@@ -478,9 +487,10 @@ class AddPlayerTeamBtnDialogs {
                           ),
                         ),
                         TextButton(
-                          onPressed: () => {
-                            _submitNewTeam(gameSettings, context),
-                            newTeamController.clear(),
+                          onPressed: () {
+                            Utils.handleVibrationFeedback(context);
+                            _submitNewTeam(gameSettings, context);
+                            newTeamController.clear();
                           },
                           child: Text(
                             'Submit',
@@ -600,6 +610,7 @@ class AddPlayerTeamBtnDialogs {
                           value: 'team',
                           groupValue: teamOrPlayer,
                           onChanged: (String? value) {
+                            Utils.handleVibrationFeedback(context);
                             setState(() => teamOrPlayer = value);
                           },
                         ),
@@ -624,6 +635,7 @@ class AddPlayerTeamBtnDialogs {
                         value: 'player',
                         groupValue: teamOrPlayer,
                         onChanged: (String? value) {
+                          Utils.handleVibrationFeedback(context);
                           setState(() => teamOrPlayer = value);
                         },
                       ),
@@ -639,7 +651,10 @@ class AddPlayerTeamBtnDialogs {
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                Navigator.of(context).pop();
+              },
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -661,6 +676,7 @@ class AddPlayerTeamBtnDialogs {
                     TextStyle(color: Theme.of(context).colorScheme.secondary),
               ),
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
                 if (teamOrPlayer == 'team') {
                   showDialogForAddingTeam(gameSettings, context);
@@ -768,23 +784,24 @@ class AddPlayerTeamBtnDialogs {
                               highlightColor: Colors.transparent,
                             ),
                             child: RadioListTile(
-                              activeColor:
-                                  Theme.of(context).colorScheme.secondary,
-                              title: Container(
-                                transform: Matrix4.translationValues(
-                                    DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w,
-                                    0.0,
-                                    0.0),
-                                child: Text(
-                                  team.getName,
-                                  style: TextStyle(color: Colors.white),
+                                activeColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                title: Container(
+                                  transform: Matrix4.translationValues(
+                                      DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w,
+                                      0.0,
+                                      0.0),
+                                  child: Text(
+                                    team.getName,
+                                    style: TextStyle(color: Colors.white),
+                                  ),
                                 ),
-                              ),
-                              value: team,
-                              groupValue: selectedTeam,
-                              onChanged: (Team? value) =>
-                                  setState(() => selectedTeam = value),
-                            ),
+                                value: team,
+                                groupValue: selectedTeam,
+                                onChanged: (Team? value) {
+                                  Utils.handleVibrationFeedback(context);
+                                  setState(() => selectedTeam = value);
+                                }),
                           );
                         } else
                           return SizedBox.shrink();
@@ -810,6 +827,7 @@ class AddPlayerTeamBtnDialogs {
                         color: Theme.of(context).colorScheme.secondary,
                       ),
                       onPressed: () {
+                        Utils.handleVibrationFeedback(context);
                         Navigator.of(context).pop();
                         showDialogForAddingPlayer(gameSettings, context);
                       },
@@ -823,7 +841,10 @@ class AddPlayerTeamBtnDialogs {
                     Padding(
                       padding: EdgeInsets.only(right: 3.w),
                       child: TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          Navigator.of(context).pop();
+                        },
                         child: Text(
                           'Cancel',
                           style: TextStyle(
@@ -848,8 +869,11 @@ class AddPlayerTeamBtnDialogs {
                       ),
                     ),
                     TextButton(
-                      onPressed: () => _submitNewTeamForPlayer(
-                          playerToAdd, selectedTeam, gameSettings, context),
+                      onPressed: () {
+                        Utils.handleVibrationFeedback(context);
+                        _submitNewTeamForPlayer(
+                            playerToAdd, selectedTeam, gameSettings, context);
+                      },
                       child: Text(
                         'Submit',
                         style: TextStyle(

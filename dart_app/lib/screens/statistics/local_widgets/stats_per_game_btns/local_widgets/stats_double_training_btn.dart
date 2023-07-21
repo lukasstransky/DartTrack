@@ -12,8 +12,11 @@ class StatsDoubleTrainingBtn extends StatelessWidget {
     return Container(
       width: 40.w,
       child: ElevatedButton(
-        onPressed: () => Navigator.of(context).pushNamed('/statsPerGameList',
-            arguments: {'mode': GameMode.DoubleTraining}),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          Navigator.of(context).pushNamed('/statsPerGameList',
+              arguments: {'mode': GameMode.DoubleTraining});
+        },
         child: FittedBox(
           fit: BoxFit.scaleDown,
           child: Text(

@@ -63,7 +63,10 @@ class DoubleFieldBtnSingleTraining extends StatelessWidget {
               ),
             ),
           ),
-          onPressed: () => game.submit('D', context),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            game.submit('D', context);
+          },
         ),
       ),
     );

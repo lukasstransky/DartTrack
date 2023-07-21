@@ -54,7 +54,10 @@ class _TargetNumberSingleDoubleTrainingState
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pop();
+            },
             child: Text(
               'Continue',
               style: TextStyle(
@@ -151,6 +154,7 @@ class _TargetNumberSingleDoubleTrainingState
           actions: [
             TextButton(
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
                 Future.delayed(Duration(milliseconds: 300), () {
                   targetNumberTextController.text = backupString;
@@ -177,7 +181,10 @@ class _TargetNumberSingleDoubleTrainingState
               ),
             ),
             TextButton(
-              onPressed: () => _submitTargetNumber(context),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                _submitTargetNumber(context);
+              },
               child: Text(
                 'Submit',
                 style: TextStyle(
@@ -236,7 +243,10 @@ class _TargetNumberSingleDoubleTrainingState
                 child: IconButton(
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
-                  onPressed: () => _showDialogForInfoAboutTargetNumber(context),
+                  onPressed: () {
+                    Utils.handleVibrationFeedback(context);
+                    _showDialogForInfoAboutTargetNumber(context);
+                  },
                   icon: Icon(
                     Icons.info_outline,
                     color: Theme.of(context).colorScheme.secondary,
@@ -258,6 +268,7 @@ class _TargetNumberSingleDoubleTrainingState
                   inactiveThumbColor: Theme.of(context).colorScheme.secondary,
                   value: isTargetNumberEnabled,
                   onChanged: (value) {
+                    Utils.handleVibrationFeedback(context);
                     if (value) {
                       _showDialogForEnteringTargetNumber(context);
                     } else {
