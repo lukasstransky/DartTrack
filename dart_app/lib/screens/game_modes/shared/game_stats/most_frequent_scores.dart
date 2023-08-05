@@ -140,6 +140,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                     'Show ${_showFirst10 ? 'less' : 'more'}',
                     style: TextStyle(
                       color: Colors.white,
+                      fontSize: DEFAULT_FONT_SIZE.sp,
                     ),
                   ),
                 ),

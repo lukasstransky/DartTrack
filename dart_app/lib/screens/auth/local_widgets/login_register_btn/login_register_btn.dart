@@ -124,17 +124,29 @@ class LoginRegisterBtn extends StatelessWidget {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
-        title: const Text(
+        title: Text(
           'An error occurred',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
-        content: Text(message, style: TextStyle(color: Colors.white)),
+        content: Text(
+          message,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               'Ok',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,

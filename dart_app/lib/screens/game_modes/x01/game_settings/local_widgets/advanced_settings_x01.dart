@@ -30,12 +30,17 @@ class AdvancedSettingsX01 extends StatelessWidget {
                 Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pushNamed('/inGameSettingsX01');
               },
-              icon: Icon(Icons.settings,
-                  color: Theme.of(context).colorScheme.secondary),
+              icon: Icon(
+                Icons.settings,
+                color: Theme.of(context).colorScheme.secondary,
+                size: ICON_BUTTON_SIZE.h,
+              ),
               label: Text(
                 'Advanced setttings',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 10.sp,
+                ),
               ),
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

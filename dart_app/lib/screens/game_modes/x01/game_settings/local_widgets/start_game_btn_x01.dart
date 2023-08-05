@@ -33,8 +33,10 @@ class StartGameBtnX01 extends StatelessWidget {
             builder: (_, selectorModel, __) => TextButton(
               child: Text(
                 'Start',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 12.sp,
+                ),
               ),
               style: ButtonStyle(
                 splashFactory: NoSplash.splashFactory,

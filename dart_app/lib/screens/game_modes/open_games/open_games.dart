@@ -252,6 +252,7 @@ class _OpenGamesState extends State<OpenGames> {
                               'Swipe left for actions (play & delete)',
                               style: TextStyle(
                                 color: Colors.white,
+                                fontSize: DEFAULT_FONT_SIZE.sp,
                               ),
                             ),
                           ),

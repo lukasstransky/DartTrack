@@ -30,10 +30,11 @@ class DrawModeX01 extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Draw mode',
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: 10.sp,
                       ),
                     ),
                     Switch(

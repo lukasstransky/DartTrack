@@ -66,6 +66,7 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
+                                fontSize: 10.sp,
                               ),
                             ),
                           )
@@ -76,6 +77,7 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
+                                fontSize: 10.sp,
                               ),
                             ),
                           ),
@@ -112,12 +114,16 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                               .toString(),
                           style: TextStyle(
                             color: Colors.white,
+                            fontSize: 10.sp,
                           ),
                         )
-                      : Text('-',
+                      : Text(
+                          '-',
                           style: TextStyle(
                             color: Colors.white,
-                          )),
+                            fontSize: 10.sp,
+                          ),
+                        ),
                   decoration: BoxDecoration(
                     border: Border(
                       left: BorderSide(

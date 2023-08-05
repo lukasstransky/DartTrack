@@ -60,7 +60,7 @@ class FinishWaysX01 extends StatelessWidget {
     if (_checkoutPossible(
         this.currPlayerOrTeamGameStatsX01!.getCurrentPoints)) {
       return SizedBox(
-        height: 2.h,
+        height: 3.h,
         child: Text(
           _getFinishWay(currPlayerOrTeamGameStatsX01!.getCurrentPoints),
           style: TextStyle(

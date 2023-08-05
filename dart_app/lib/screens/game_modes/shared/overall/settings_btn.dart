@@ -31,6 +31,7 @@ class SettingsBtn extends StatelessWidget {
             text,
             style: TextStyle(
               color: Utils.getTextColorForGameSettingsBtn(condition, context),
+              fontSize: DEFAULT_FONT_SIZE.sp,
             ),
           ),
         ),

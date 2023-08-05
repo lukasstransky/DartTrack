@@ -29,12 +29,18 @@ class UtilsDialogs {
         contentPadding: dialogContentPadding,
         title: Text(
           'Game will not be stored!',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: RichText(
           text: TextSpan(
             text: 'No player with the current logged in username ',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
             children: <TextSpan>[
               TextSpan(
                 text: '$username',
@@ -57,7 +63,10 @@ class UtilsDialogs {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -100,7 +109,10 @@ class UtilsDialogs {
             },
             child: Text(
               'Continue anyways',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -140,7 +152,10 @@ class UtilsDialogs {
         contentPadding: dialogContentPadding,
         title: Text(
           'Who will begin?',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: StatefulBuilder(
           builder: ((context, setState) {
@@ -171,7 +186,7 @@ class UtilsDialogs {
                                     Text(
                                       'Bot - lvl. ${player.getLevel}',
                                       style: TextStyle(
-                                        fontSize: 12.sp,
+                                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                         color: Colors.white,
                                       ),
                                     ),
@@ -190,7 +205,10 @@ class UtilsDialogs {
                                 )
                               : Text(
                                   player.getName,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  ),
                                 ),
                         ),
                         value: player,
@@ -227,6 +245,7 @@ class UtilsDialogs {
                           team.getName,
                           style: TextStyle(
                             color: Colors.white,
+                            fontSize: DEFAULT_FONT_SIZE.sp,
                           ),
                         ),
                       ),
@@ -252,7 +271,10 @@ class UtilsDialogs {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -294,7 +316,10 @@ class UtilsDialogs {
             },
             child: Text(
               'Start',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -325,13 +350,19 @@ class UtilsDialogs {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
-        title: const Text(
+        title: Text(
           'End game',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
-        content: const Text(
+        content: Text(
           'Do you want to save the game for finishing it later?',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
         actions: [
           Row(
@@ -347,7 +378,9 @@ class UtilsDialogs {
                   child: Text(
                     'Continue',
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary),
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: DIALOG_BTN_FONTSIZE.sp,
+                    ),
                   ),
                   style: ButtonStyle(
                     splashFactory: NoSplash.splashFactory,
@@ -377,7 +410,9 @@ class UtilsDialogs {
                       child: Text(
                         'No',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: DIALOG_BTN_FONTSIZE.sp,
+                        ),
                       ),
                       style: ButtonStyle(
                         splashFactory: NoSplash.splashFactory,
@@ -416,7 +451,9 @@ class UtilsDialogs {
                     child: Text(
                       'Yes',
                       style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary),
+                        color: Theme.of(context).colorScheme.secondary,
+                        fontSize: DIALOG_BTN_FONTSIZE.sp,
+                      ),
                     ),
                     style: ButtonStyle(
                       splashFactory: NoSplash.splashFactory,

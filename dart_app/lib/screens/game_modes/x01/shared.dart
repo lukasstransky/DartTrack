@@ -65,7 +65,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                 !gameSettingsX01.getCheckoutCountingFinallyDisabled
             ? 'Checkout counting'
             : 'Finish counting',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        ),
       ),
       content: StatefulBuilder(
         builder: (context, setState) {
@@ -78,7 +81,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Darts on double:',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                    ),
                   ),
                 ),
               Row(
@@ -110,6 +116,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   color: selectedCheckoutCount == 0
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                 ),
                               ),
                             ),
@@ -157,6 +164,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 color: selectedCheckoutCount == 1
                                     ? Theme.of(context).colorScheme.secondary
                                     : Colors.white,
+                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                               ),
                             ),
                           ),
@@ -213,6 +221,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   color: selectedCheckoutCount == 2
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                 ),
                               ),
                             ),
@@ -264,6 +273,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   color: selectedCheckoutCount == 3
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                 ),
                               ),
                             ),
@@ -302,7 +312,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Darts for finish:',
-                    style: TextStyle(color: Colors.white),
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                    ),
                   ),
                 ),
                 Row(
@@ -328,6 +341,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   color: selectedFinishCount == 1
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                 ),
                               ),
                             ),
@@ -383,6 +397,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 color: selectedFinishCount == 2
                                     ? Theme.of(context).colorScheme.secondary
                                     : Colors.white,
+                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                               ),
                             ),
                           ),
@@ -435,6 +450,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 color: selectedFinishCount == 3
                                     ? Theme.of(context).colorScheme.secondary
                                     : Colors.white,
+                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                               ),
                             ),
                           ),
@@ -491,7 +507,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
           },
           child: Text(
             'Cancel',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
+            ),
           ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
@@ -525,7 +544,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
           },
           child: Text(
             'Submit',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
+            ),
           ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,

@@ -68,13 +68,16 @@ class SettingsAccountData extends StatelessWidget {
         contentPadding: dialogContentPadding,
         title: Text(
           'Reset statistics',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: RichText(
           text: TextSpan(
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12.sp,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
             ),
             children: <TextSpan>[
               TextSpan(text: 'Are you sure you want to reset '),
@@ -96,7 +99,10 @@ class SettingsAccountData extends StatelessWidget {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -120,7 +126,10 @@ class SettingsAccountData extends StatelessWidget {
             },
             child: Text(
               'Reset statistics',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -153,13 +162,16 @@ class SettingsAccountData extends StatelessWidget {
         contentPadding: dialogContentPadding,
         title: Text(
           'Delete account',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: RichText(
           text: TextSpan(
             style: TextStyle(
               color: Colors.white,
-              fontSize: 12.sp,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
             ),
             children: <TextSpan>[
               TextSpan(text: 'Are you sure you want to '),
@@ -181,7 +193,10 @@ class SettingsAccountData extends StatelessWidget {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -205,7 +220,10 @@ class SettingsAccountData extends StatelessWidget {
             },
             child: Text(
               'Delete account',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,

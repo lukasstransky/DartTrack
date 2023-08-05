@@ -131,6 +131,7 @@ class TeamsListEntry extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
+                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           padding: EdgeInsets.zero,
@@ -146,6 +147,7 @@ class TeamsListEntry extends StatelessWidget {
                         ),
                         if (gameSettings.getTeams.length > 1)
                           IconButton(
+                              iconSize: ICON_BUTTON_SIZE.h,
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               padding: EdgeInsets.zero,
@@ -168,6 +170,7 @@ class TeamsListEntry extends StatelessWidget {
                                 }
                               }),
                         IconButton(
+                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           padding: EdgeInsets.zero,

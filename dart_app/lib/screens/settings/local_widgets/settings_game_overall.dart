@@ -65,9 +65,17 @@ _showDialogForChangingTheme(BuildContext context) {
       contentPadding: dialogContentPadding,
       title: Text(
         'Change theme',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        ),
       ),
-      content: Text("Change theme"),
+      content: Text(
+        "Change theme",
+        style: TextStyle(
+          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        ),
+      ),
       actions: [
         TextButton(
           onPressed: () {
@@ -76,7 +84,10 @@ _showDialogForChangingTheme(BuildContext context) {
           },
           child: Text(
             'Cancel',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
+            ),
           ),
           style: ButtonStyle(
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
@@ -93,7 +104,10 @@ _showDialogForChangingTheme(BuildContext context) {
           },
           child: Text(
             'Update',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
+            ),
           ),
           style: ButtonStyle(
             backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),

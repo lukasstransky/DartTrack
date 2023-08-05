@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SetsBtn extends StatelessWidget {
@@ -16,8 +17,7 @@ class SetsBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
-        height: gameSettings is GameSettingsX01_P &&
-                Utils.shouldShrinkWidget(gameSettings)
+        height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
             ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
             : WIDGET_HEIGHT_GAMESETTINGS.h,
         child: ElevatedButton(
@@ -29,10 +29,11 @@ class SetsBtn extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               'Sets',
-              style: TextStyle(
-                color: Utils.getTextColorForGameSettingsBtn(
-                    gameSettings.getSetsEnabled, context),
-              ),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Utils.getTextColorForGameSettingsBtn(
+                        gameSettings.getSetsEnabled, context),
+                    fontSize: DEFAULT_FONT_SIZE.sp,
+                  ),
             ),
           ),
           style: ButtonStyle(

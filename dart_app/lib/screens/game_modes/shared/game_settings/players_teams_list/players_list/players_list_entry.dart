@@ -88,6 +88,7 @@ class PlayersListEntry extends StatelessWidget {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   padding: EdgeInsets.zero,
+                  iconSize: ICON_BUTTON_SIZE.h,
                   icon: Icon(
                     Icons.edit,
                     color: Theme.of(context).colorScheme.secondary,
@@ -102,6 +103,7 @@ class PlayersListEntry extends StatelessWidget {
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   padding: EdgeInsets.zero,
+                  iconSize: ICON_BUTTON_SIZE.h,
                   icon: Icon(
                     Icons.highlight_remove,
                     color: Theme.of(context).colorScheme.secondary,

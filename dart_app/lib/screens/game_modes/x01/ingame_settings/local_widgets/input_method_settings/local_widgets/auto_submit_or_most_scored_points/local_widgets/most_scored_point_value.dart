@@ -50,6 +50,7 @@ class MostScoredPointValue extends StatelessWidget {
                   gameSettingsX01.getMostScoredPoints[i],
                   style: TextStyle(
                     color: Colors.white,
+                    fontSize: 10.sp,
                   ),
                 ),
                 onPressed: () {
@@ -97,9 +98,12 @@ class MostScoredPointValue extends StatelessWidget {
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
-          title: const Text(
+          title: Text(
             'Enter a value',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            ),
           ),
           content: Container(
             margin: EdgeInsets.only(
@@ -129,7 +133,10 @@ class MostScoredPointValue extends StatelessWidget {
               ],
               textAlignVertical: TextAlignVertical.center,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              ),
               decoration: InputDecoration(
                 hintText: 'Value',
                 fillColor:
@@ -156,8 +163,10 @@ class MostScoredPointValue extends StatelessWidget {
               },
               child: Text(
                 'Cancel',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                ),
               ),
               style: ButtonStyle(
                 splashFactory: NoSplash.splashFactory,
@@ -180,8 +189,10 @@ class MostScoredPointValue extends StatelessWidget {
               },
               child: Text(
                 'Submit',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                ),
               ),
               style: ButtonStyle(
                 splashFactory: NoSplash.splashFactory,

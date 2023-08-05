@@ -765,24 +765,25 @@ class SubmitX01Helper {
         contentPadding: dialogContentPadding,
         title: Text(
           'Sudden death',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: RichText(
           text: TextSpan(
             text: 'The ',
-            style: TextStyle(fontSize: 12.sp),
+            style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
             children: <TextSpan>[
               TextSpan(
                 text: 'Sudden death',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 12.sp,
                 ),
               ),
               TextSpan(
                 text:
                     ' leg is reached. The player who wins this leg also wins the game.',
-                style: TextStyle(fontSize: 12.sp),
               )
             ],
           ),
@@ -798,7 +799,10 @@ class SubmitX01Helper {
             },
             child: Text(
               'Continue',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -842,7 +846,10 @@ class SubmitX01Helper {
         contentPadding: dialogContentPadding,
         title: Text(
           'Who will begin?',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: StatefulBuilder(
           builder: ((context, setState) {
@@ -872,7 +879,7 @@ class SubmitX01Helper {
                                     Text(
                                       'Bot - lvl. ${player.getLevel}',
                                       style: TextStyle(
-                                        fontSize: 12.sp,
+                                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                         color: Colors.white,
                                       ),
                                     ),
@@ -891,7 +898,10 @@ class SubmitX01Helper {
                                 )
                               : Text(
                                   player.getName,
-                                  style: TextStyle(color: Colors.white),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  ),
                                 ),
                         ),
                         value: player,
@@ -929,6 +939,7 @@ class SubmitX01Helper {
                           team.getName,
                           style: TextStyle(
                             color: Colors.white,
+                            fontSize: DEFAULT_FONT_SIZE.sp,
                           ),
                         ),
                       ),
@@ -955,7 +966,10 @@ class SubmitX01Helper {
             },
             child: Text(
               'Continue',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,

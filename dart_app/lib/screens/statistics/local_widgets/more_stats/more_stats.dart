@@ -83,6 +83,7 @@ class _MoreStatsState extends State<MoreStats> {
                     'Show odd rounded scores',
                     style: TextStyle(
                       color: Colors.white,
+                      fontSize: 11.sp,
                     ),
                   ),
                   Switch(
@@ -110,6 +111,7 @@ class _MoreStatsState extends State<MoreStats> {
                     'Show all scores per dart',
                     style: TextStyle(
                       color: Colors.white,
+                      fontSize: 11.sp,
                     ),
                   ),
                   Switch(

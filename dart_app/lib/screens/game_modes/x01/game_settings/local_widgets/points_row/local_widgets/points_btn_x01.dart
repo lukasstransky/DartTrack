@@ -56,12 +56,13 @@ class PointsBtnX01 extends StatelessWidget {
               fit: BoxFit.scaleDown,
               child: Text(
                 points.toString(),
-                style: TextStyle(
-                  color: Utils.getTextColorForGameSettingsBtn(
-                      selectorModel.points == points &&
-                          selectorModel.customPoints == -1,
-                      context),
-                ),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Utils.getTextColorForGameSettingsBtn(
+                          selectorModel.points == points &&
+                              selectorModel.customPoints == -1,
+                          context),
+                      fontSize: DEFAULT_FONT_SIZE.sp,
+                    ),
               ),
             ),
             style: ButtonStyle(

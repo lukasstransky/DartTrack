@@ -294,7 +294,10 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               'To view the details about a game, click on it\'s card.',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: DEFAULT_FONT_SIZE.sp,
+                              ),
                             ),
                           ),
                         ),
@@ -374,7 +377,10 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                   'Overall',
                   style: TextStyle(
                     color: Utils.getTextColorForGameSettingsBtn(
-                        _overallFilter, context),
+                      _overallFilter,
+                      context,
+                    ),
+                    fontSize: DEFAULT_FONT_SIZE.sp,
                   ),
                 ),
               ),
@@ -418,6 +424,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                   style: TextStyle(
                     color: Utils.getTextColorForGameSettingsBtn(
                         !_overallFilter, context),
+                    fontSize: DEFAULT_FONT_SIZE.sp,
                   ),
                 ),
               ),

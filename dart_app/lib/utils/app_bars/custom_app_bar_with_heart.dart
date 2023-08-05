@@ -11,6 +11,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 //ignore: must_be_immutable
 class CustomAppBarWithHeart extends StatefulWidget
@@ -66,10 +67,14 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         elevation: 0,
         centerTitle: true,
         automaticallyImplyLeading: false,
-        title: Text(widget.title),
+        title: Text(
+          widget.title,
+          style: TextStyle(fontSize: 15.sp),
+        ),
         leading: widget.isFinishScreen
             ? SizedBox.shrink()
             : IconButton(
+                iconSize: ICON_BUTTON_SIZE.h,
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onPressed: () {
@@ -87,6 +92,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         actions: [
           if (widget.showHeart && username != 'Guest')
             IconButton(
+              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () async {
@@ -107,6 +113,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
             ),
           if (widget.isFinishScreen)
             IconButton(
+              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {

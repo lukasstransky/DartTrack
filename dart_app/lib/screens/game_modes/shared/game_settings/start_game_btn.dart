@@ -39,6 +39,7 @@ class StartGameBtn extends StatelessWidget {
             'Start',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
+              fontSize: DEFAULT_FONT_SIZE.sp,
             ),
           ),
         ),

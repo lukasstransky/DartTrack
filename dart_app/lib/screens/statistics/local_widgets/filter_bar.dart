@@ -129,7 +129,7 @@ class _FilterBarState extends State<FilterBar> {
                   todayHighlightColor: Colors.white,
                   monthCellStyle: DateRangePickerMonthCellStyle(
                     todayTextStyle: TextStyle(
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       color: Colors.white,
                     ),
                   ),

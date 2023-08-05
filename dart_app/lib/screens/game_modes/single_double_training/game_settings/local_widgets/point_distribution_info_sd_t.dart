@@ -49,6 +49,7 @@ class Item extends StatelessWidget {
               field,
               style: TextStyle(
                 color: Colors.white,
+                fontSize: DEFAULT_FONT_SIZE.sp,
               ),
             ),
           ),
@@ -58,6 +59,7 @@ class Item extends StatelessWidget {
               '=',
               style: TextStyle(
                 color: Colors.white,
+                fontSize: DEFAULT_FONT_SIZE.sp,
               ),
             ),
           ),
@@ -67,6 +69,7 @@ class Item extends StatelessWidget {
               points,
               style: TextStyle(
                 color: Colors.white,
+                fontSize: DEFAULT_FONT_SIZE.sp,
               ),
             ),
           ),

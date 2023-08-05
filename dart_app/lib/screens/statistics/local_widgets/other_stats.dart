@@ -58,12 +58,14 @@ class OtherStats extends StatelessWidget {
                             : '-',
                         style: TextStyle(
                           color: Colors.white,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                         ),
                       ),
                       Text(
                         '180',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                           color: color,
                         ),
                       ),
@@ -79,12 +81,14 @@ class OtherStats extends StatelessWidget {
                             : '-',
                         style: TextStyle(
                           color: Colors.white,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                         ),
                       ),
                       Text(
                         'Darts',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                           color: color,
                         ),
                       ),
@@ -100,12 +104,14 @@ class OtherStats extends StatelessWidget {
                             : '-',
                         style: TextStyle(
                           color: Colors.white,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                         ),
                       ),
                       Text(
                         'Games',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                           color: color,
                         ),
                       ),
@@ -119,12 +125,14 @@ class OtherStats extends StatelessWidget {
                         _getGamesWonString(statisticsFirestore),
                         style: TextStyle(
                           color: Colors.white,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                         ),
                       ),
                       Text(
                         'Games won',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                           color: color,
                         ),
                       ),

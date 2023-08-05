@@ -116,7 +116,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
         contentPadding: dialogContentPadding,
         title: Text(
           'Change username',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Form(
           key: _usernameFormKey,
@@ -138,7 +141,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                   },
                   keyboardType: TextInputType.text,
                   inputFormatters: [LengthLimitingTextInputFormatter(20)],
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                  ),
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.person,
@@ -165,7 +171,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                   child: RichText(
                     text: TextSpan(
                       text: '(Can only be changed ',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: DEFAULT_FONT_SIZE.sp,
+                      ),
                       children: <TextSpan>[
                         TextSpan(
                             text: 'once',
@@ -194,7 +203,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -214,7 +226,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             },
             child: Text(
               'Update',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -296,7 +311,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
         contentPadding: dialogContentPadding,
         title: Text(
           'Change email',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Form(
           key: _emailFormKey,
@@ -328,13 +346,17 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                         }
                         return null;
                       },
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                      ),
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.lock,
                           color: Utils.getPrimaryColorDarken(context),
                         ),
                         suffixIcon: IconButton(
+                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           icon: Icon(passwordVisible
@@ -424,7 +446,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -444,7 +469,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             },
             child: Text(
               'Update',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -500,7 +528,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
         contentPadding: dialogContentPadding,
         title: Text(
           'Change password',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Form(
           key: _passwordFormKey,
@@ -571,7 +602,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -591,7 +625,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             },
             child: Text(
               'Update',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -692,13 +729,17 @@ class PasswordInputField extends StatelessWidget {
             LengthLimitingTextInputFormatter(MAX_PASSWORD_LENGTH),
           ],
           validator: validator,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
           decoration: InputDecoration(
             prefixIcon: Icon(
               Icons.lock,
               color: Utils.getPrimaryColorDarken(context),
             ),
             suffixIcon: IconButton(
+              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               icon: Icon(

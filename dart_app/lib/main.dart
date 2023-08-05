@@ -46,6 +46,7 @@ import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'firebase_options.dart';
 import 'package:sizer/sizer.dart';
 
@@ -153,6 +154,39 @@ class MyApp extends StatelessWidget {
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
+          builder: (context, child) {
+            final screenWidth = MediaQuery.of(context).size.width;
+            TextTheme textTheme;
+
+            if (screenWidth <= 600) {
+              textTheme = ThemeData().textTheme.copyWith(
+                    bodyMedium: TextStyle(fontSize: 10.sp),
+                  );
+            } else if (screenWidth <= 1100) {
+              textTheme = ThemeData().textTheme.copyWith(
+                    bodyMedium: TextStyle(fontSize: 9.sp),
+                  );
+            } else {
+              textTheme = ThemeData().textTheme.copyWith();
+            }
+
+            return Theme(
+              data: Theme.of(context).copyWith(
+                textTheme: textTheme,
+              ),
+              child: ResponsiveBreakpoints.builder(
+                child: child!,
+                breakpoints: [
+                  const Breakpoint(start: 0, end: 600, name: MOBILE),
+                  const Breakpoint(start: 601, end: 1100, name: TABLET),
+                  const Breakpoint(
+                      start: 1101, end: double.infinity, name: DESKTOP),
+                  const Breakpoint(
+                      start: 1921, end: double.infinity, name: '4K'),
+                ],
+              ),
+            );
+          },
           debugShowCheckedModeBanner: false,
           navigatorKey: navigatorKey,
           title: 'Dart',

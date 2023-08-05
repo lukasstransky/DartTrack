@@ -23,8 +23,9 @@ class AutoSubmitOrShowMostScoredPointsSwitch extends StatelessWidget {
                 child: Text(
                   'Most scored points',
                   style: TextStyle(
-                      fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
-                      color: Colors.white),
+                    fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               Spacer(),
@@ -57,8 +58,9 @@ class AutoSubmitOrShowMostScoredPointsSwitch extends StatelessWidget {
               child: Text(
                 'Automatically submit points',
                 style: TextStyle(
-                    fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
-                    color: Colors.white),
+                  fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
+                  color: Colors.white,
+                ),
               ),
             ),
             Spacer(),

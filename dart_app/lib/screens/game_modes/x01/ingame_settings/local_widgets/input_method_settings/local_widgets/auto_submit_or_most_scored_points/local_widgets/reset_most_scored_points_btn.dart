@@ -24,6 +24,7 @@ class ResetMostScoredPointsBtn extends StatelessWidget {
           'Reset',
           style: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
+            fontSize: 12.sp,
           ),
         ),
         onPressed: () {

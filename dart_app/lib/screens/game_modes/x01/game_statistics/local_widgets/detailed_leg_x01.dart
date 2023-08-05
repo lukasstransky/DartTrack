@@ -207,6 +207,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                           .toString(),
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: 11.sp,
                       ),
                     ),
                   ),
@@ -224,6 +225,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                           playerOrTeamGameStatsX01),
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: 11.sp,
                       ),
                     ),
                   ),
@@ -266,6 +268,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                   style: TextStyle(
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
+                    fontSize: 11.sp,
                   ),
                 ),
               ),
@@ -277,6 +280,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                   style: TextStyle(
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
+                    fontSize: 11.sp,
                   ),
                 ),
               ),
@@ -292,6 +296,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                       playerOrTeamGameStatsX01, widget.setLegString),
                   style: TextStyle(
                     color: Colors.white,
+                    fontSize: 11.sp,
                   ),
                 ),
               ),
@@ -302,6 +307,7 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
                   _getThrownDartsForLeg(playerOrTeamGameStatsX01),
                   style: TextStyle(
                     color: Colors.white,
+                    fontSize: 11.sp,
                   ),
                 ),
               ),

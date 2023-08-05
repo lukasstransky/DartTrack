@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/game_modes/game_modes_overview.dart';
 import 'package:dart_app/screens/settings/settings.dart';
@@ -89,18 +90,28 @@ class _HomeState extends State<Home> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(IcoFontIcons.dart),
+            icon: Icon(
+              IcoFontIcons.dart,
+              size: ICON_BUTTON_SIZE.h,
+            ),
             label: 'Play',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesomeIcons.chartBar),
+            icon: Icon(
+              FontAwesomeIcons.chartBar,
+              size: ICON_BUTTON_SIZE.h,
+            ),
             label: 'Statistics',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
+            icon: Icon(
+              Icons.settings,
+              size: ICON_BUTTON_SIZE.h,
+            ),
             label: 'Settings',
           ),
         ],
+        unselectedFontSize: 10.sp,
         selectedFontSize: 15.sp,
         selectedIconTheme: IconThemeData(
             color: Theme.of(context).colorScheme.secondary, size: 35),

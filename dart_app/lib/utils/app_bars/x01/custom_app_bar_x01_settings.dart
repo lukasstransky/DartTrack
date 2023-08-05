@@ -34,11 +34,17 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         contentPadding: dialogContentPadding,
         title: Text(
           'Information',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Text(
           'These settings are the general default settings!',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
         actions: [
           TextButton(
@@ -48,7 +54,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             },
             child: Text(
               'Continue',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -87,13 +96,19 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           defaultSettingsSelected
               ? 'Undo default settings'
               : 'Save settings as default',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Text(
           defaultSettingsSelected
               ? 'Do you want to reset to the general default settings?'
               : 'Do you want to set these settings as default?',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
         actions: [
           TextButton(
@@ -103,7 +118,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -124,7 +142,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             },
             child: Text(
               defaultSettingsSelected ? 'Undo' : 'Save',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               backgroundColor:
@@ -152,13 +173,19 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
-        title: const Text(
+        title: Text(
           'Information',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
-        content: const Text(
+        content: Text(
           'Team mode is not supported for default settings.',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
         actions: [
           TextButton(
@@ -168,7 +195,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             },
             child: Text(
               'Continue',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -199,13 +229,19 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
-        title: const Text(
+        title: Text(
           'Information',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Text(
           'Not able to save default settings because current logged in user (${username}) is not present within the players.',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
         actions: [
           TextButton(
@@ -215,7 +251,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             },
             child: Text(
               'Continue',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -246,13 +285,19 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
-        title: const Text(
+        title: Text(
           'Information',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Text(
           'Logged in as a guest it is not possible to set default settings.',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
         actions: [
           TextButton(
@@ -262,7 +307,10 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             },
             child: Text(
               'Continue',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -349,6 +397,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               Utils.handleVibrationFeedback(context);
               Navigator.of(context).pushNamed('/home');
             },
+            iconSize: ICON_BUTTON_SIZE.h,
             icon: Icon(Icons.arrow_back,
                 color: Theme.of(context).colorScheme.secondary),
           )
@@ -365,6 +414,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                 Utils.handleVibrationFeedback(context);
                 _defaultSettingsBtnClicked();
               },
+              iconSize: ICON_BUTTON_SIZE.h,
               icon: DefaultSettingsHelper.defaultSettingsSelected(context)
                   ? Icon(MdiIcons.heart,
                       color: Theme.of(context).colorScheme.secondary)

@@ -45,6 +45,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
             'Enter rounds',
             style: TextStyle(
               color: Colors.white,
+              fontSize: DIALOG_TITLE_FONTSIZE.sp,
             ),
           ),
           content: Container(
@@ -73,6 +74,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
               ],
               style: TextStyle(
                 color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
               ),
               decoration: InputDecoration(
                 hintText:
@@ -106,6 +108,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
                 ),
               ),
               style: ButtonStyle(
@@ -131,6 +134,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
                 ),
               ),
               style: ButtonStyle(
@@ -185,6 +189,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                         'Game will end after ',
                         style: TextStyle(
                           color: Colors.white,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                         ),
                       ),
                     ),
@@ -204,6 +209,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                             amountOfRounds.toString(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
+                              fontSize: DEFAULT_FONT_SIZE.sp,
                             ),
                           ),
                         ),
@@ -238,6 +244,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                         'rounds are played.',
                         style: TextStyle(
                           color: Colors.white,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
                         ),
                       ),
                     ),

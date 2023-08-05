@@ -1,11 +1,9 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
-import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -20,7 +18,6 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
-    final Settings_P settings_p = context.read<Settings_P>();
 
     return Expanded(
       child: Row(

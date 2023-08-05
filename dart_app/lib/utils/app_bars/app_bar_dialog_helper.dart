@@ -19,12 +19,14 @@ class AppBarDialogHelper {
           title,
           style: TextStyle(
             color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
         content: Text(
           content,
           style: TextStyle(
             color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
           ),
         ),
         actions: [
@@ -37,6 +39,7 @@ class AppBarDialogHelper {
               'Close',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
               ),
             ),
             style: ButtonStyle(
@@ -88,6 +91,7 @@ class _CricketDialogState extends State<CricketDialog> {
         'Cricket explained',
         style: TextStyle(
           color: Colors.white,
+          fontSize: DIALOG_TITLE_FONTSIZE.sp,
         ),
       ),
       content: GestureDetector(
@@ -265,6 +269,7 @@ class _CricketDialogState extends State<CricketDialog> {
                             'For this mode, if a number is open, no points are given for any additional hits on that number. Therefore, the goal is closing the numbers as fast as possible, and the first player who manages to do that also wins the game.',
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: DEFAULT_FONT_SIZE.sp,
                             ),
                           ),
                         ],
@@ -299,6 +304,7 @@ class _CricketDialogState extends State<CricketDialog> {
             'Close',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
             ),
           ),
           style: ButtonStyle(

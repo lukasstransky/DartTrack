@@ -28,6 +28,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
 
   Column team(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
           transform: Matrix4.translationValues(0.0, 0.5.h, 0.0),

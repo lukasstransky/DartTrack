@@ -40,6 +40,7 @@ class LegsAmount extends StatelessWidget {
                 },
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
+                iconSize: ICON_BUTTON_SIZE.h,
                 icon: Icon(Icons.remove,
                     color: _shouldShowSubtractBtn()
                         ? Theme.of(context).colorScheme.primary
@@ -65,6 +66,7 @@ class LegsAmount extends StatelessWidget {
                 },
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
+                iconSize: ICON_BUTTON_SIZE.h,
                 icon: Icon(Icons.add,
                     color: _shouldShowAddBtn()
                         ? Theme.of(context).colorScheme.primary

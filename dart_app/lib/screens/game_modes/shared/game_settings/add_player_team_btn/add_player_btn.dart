@@ -59,6 +59,7 @@ class AddPlayerBtn extends StatelessWidget {
           child: Icon(
             Icons.add,
             color: Theme.of(context).colorScheme.secondary,
+            size: ICON_BUTTON_SIZE.h,
           ),
         ),
       ),

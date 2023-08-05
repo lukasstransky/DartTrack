@@ -120,10 +120,11 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                     padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
                     child: Row(
                       children: [
-                        const Text(
+                        Text(
                           'Show odd rounded scores',
                           style: TextStyle(
                             color: Colors.white,
+                            fontSize: DEFAULT_FONT_SIZE.sp,
                           ),
                         ),
                         Switch(

@@ -46,7 +46,10 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
             contentPadding: dialogContentPadding,
             title: Text(
               'Enter points',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              ),
             ),
             content: Container(
               margin: EdgeInsets.only(
@@ -98,8 +101,10 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 },
                 child: Text(
                   'Cancel',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  ),
                 ),
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
@@ -122,8 +127,10 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 },
                 child: Text(
                   'Submit',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  ),
                 ),
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
@@ -204,10 +211,11 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 selectorModel.customPoints == -1
                     ? 'Custom'
                     : selectorModel.customPoints.toString(),
-                style: TextStyle(
-                  color: Utils.getTextColorForGameSettingsBtn(
-                      selectorModel.customPoints != -1, context),
-                ),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: Utils.getTextColorForGameSettingsBtn(
+                          selectorModel.customPoints != -1, context),
+                      fontSize: DEFAULT_FONT_SIZE.sp,
+                    ),
               ),
             ),
             onPressed: () {

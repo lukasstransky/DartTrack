@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/app_bars/app_bar_dialog_helper.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showBackBtn;
@@ -24,13 +25,17 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0,
       title: Text(
         title,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 14.sp,
+        ),
       ),
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (showBackBtn)
             IconButton(
+              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
@@ -54,6 +59,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             showInfoIconCricket ||
             showInfoIconSingleDoubleTraining)
           IconButton(
+            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -109,7 +115,12 @@ class _CricketDialogState extends State<CricketDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
-      title: Text('Cricket Game from Darts'),
+      title: Text(
+        'Cricket game from darts',
+        style: TextStyle(
+          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        ),
+      ),
       content: GestureDetector(
         onHorizontalDragEnd: (details) {
           if (details.velocity.pixelsPerSecond.dx > 0) {
@@ -131,13 +142,22 @@ class _CricketDialogState extends State<CricketDialog> {
             controller: _pageController,
             children: [
               Container(
-                child: Text('Page 1'),
+                child: Text(
+                  'Page 1',
+                  style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                ),
               ),
               Container(
-                child: Text('Page 2'),
+                child: Text(
+                  'Page 2',
+                  style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                ),
               ),
               Container(
-                child: Text('Page 3'),
+                child: Text(
+                  'Page 3',
+                  style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                ),
               ),
             ],
           ),
@@ -149,7 +169,10 @@ class _CricketDialogState extends State<CricketDialog> {
             Utils.handleVibrationFeedback(context);
             Navigator.pop(context);
           },
-          child: Text('Close'),
+          child: Text(
+            'Close',
+            style: TextStyle(fontSize: DIALOG_BTN_FONTSIZE.sp),
+          ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
             shadowColor: MaterialStateProperty.all(Colors.transparent),

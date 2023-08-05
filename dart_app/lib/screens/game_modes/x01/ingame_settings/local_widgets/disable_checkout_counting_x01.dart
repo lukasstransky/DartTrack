@@ -66,6 +66,7 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
                 'Disable',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DEFAULT_FONT_SIZE.sp,
                 ),
               ),
             ),

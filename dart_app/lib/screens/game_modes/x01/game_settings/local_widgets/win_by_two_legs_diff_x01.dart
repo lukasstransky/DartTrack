@@ -31,9 +31,12 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Win by two legs difference',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: DEFAULT_FONT_SIZE.sp,
+                      ),
                     ),
                     Switch(
                       thumbColor: MaterialStateProperty.all(
@@ -89,9 +92,12 @@ _showDialogForSuddenDeath(
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
-        title: const Text(
+        title: Text(
           'Sudden death',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: StatefulBuilder(
           builder: (context, setState) {
@@ -101,6 +107,7 @@ _showDialogForSuddenDeath(
                 Row(
                   children: [
                     IconButton(
+                      iconSize: ICON_BUTTON_SIZE.h,
                       icon: Icon(
                         Icons.info_outline,
                         color: Theme.of(context).colorScheme.secondary,
@@ -113,9 +120,12 @@ _showDialogForSuddenDeath(
                     Flexible(
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: const Text(
+                        child: Text(
                           'Enable sudden death',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                          ),
                         ),
                       ),
                     ),
@@ -139,6 +149,7 @@ _showDialogForSuddenDeath(
                   Row(
                     children: [
                       IconButton(
+                        iconSize: ICON_BUTTON_SIZE.h,
                         icon: Icon(
                           Icons.info_outline,
                           color: Theme.of(context).colorScheme.secondary,
@@ -151,15 +162,19 @@ _showDialogForSuddenDeath(
                       Flexible(
                         child: FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: const Text(
+                          child: Text(
                             'After max. legs',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                            ),
                           ),
                         ),
                       ),
                       Container(
                         padding: EdgeInsets.only(left: 3.w),
                         child: IconButton(
+                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {
@@ -192,6 +207,7 @@ _showDialogForSuddenDeath(
                         ),
                       ),
                       IconButton(
+                        iconSize: ICON_BUTTON_SIZE.h,
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
@@ -227,7 +243,10 @@ _showDialogForSuddenDeath(
             },
             child: Text(
               'Cancel',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -251,7 +270,10 @@ _showDialogForSuddenDeath(
             },
             child: Text(
               'Submit',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -299,11 +321,17 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
       contentPadding: dialogContentPadding,
       title: Text(
         'Information',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        ),
       ),
       content: Text(
         SUDDEN_DEATH_INFO,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        ),
       ),
       actions: [
         TextButton(
@@ -313,7 +341,10 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
           },
           child: Text(
             'Continue',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
+            ),
           ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,
@@ -344,11 +375,17 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
       contentPadding: dialogContentPadding,
       title: Text(
         'Information',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        ),
       ),
       content: Text(
         SUDDEN_DEATH_LEG_DIFFERENCE_INFO,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        ),
       ),
       actions: [
         TextButton(
@@ -358,7 +395,10 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
           },
           child: Text(
             'Continue',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
+            ),
           ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,

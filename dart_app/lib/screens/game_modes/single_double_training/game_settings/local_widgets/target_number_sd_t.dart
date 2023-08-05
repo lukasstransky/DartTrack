@@ -44,12 +44,14 @@ class _TargetNumberSingleDoubleTrainingState
           'Target number explained',
           style: TextStyle(
             color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
         content: Text(
           'If this option is enabled, only darts on the selected target number are counted. \nFor example, when the target number is ${gameModePrefix}20, only hits on the ${gameModePrefix}20 field will be added to the total score.',
           style: TextStyle(
             color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
           ),
         ),
         actions: [
@@ -62,6 +64,7 @@ class _TargetNumberSingleDoubleTrainingState
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
               ),
             ),
             style: ButtonStyle(
@@ -103,6 +106,7 @@ class _TargetNumberSingleDoubleTrainingState
             'Enter target number',
             style: TextStyle(
               color: Colors.white,
+              fontSize: DIALOG_TITLE_FONTSIZE.sp,
             ),
           ),
           content: Container(
@@ -132,6 +136,7 @@ class _TargetNumberSingleDoubleTrainingState
               ],
               style: TextStyle(
                 color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
               ),
               decoration: InputDecoration(
                 hintText: '1-20',
@@ -164,6 +169,7 @@ class _TargetNumberSingleDoubleTrainingState
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
                 ),
               ),
               style: ButtonStyle(
@@ -189,6 +195,7 @@ class _TargetNumberSingleDoubleTrainingState
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
                 ),
               ),
               style: ButtonStyle(
@@ -241,6 +248,7 @@ class _TargetNumberSingleDoubleTrainingState
                 width: 8.w,
                 transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
                 child: IconButton(
+                  iconSize: ICON_BUTTON_SIZE.h,
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onPressed: () {
@@ -257,6 +265,7 @@ class _TargetNumberSingleDoubleTrainingState
                 'Enable target number',
                 style: TextStyle(
                   color: Utils.getTextColorForGameSettingsPage(),
+                  fontSize: DEFAULT_FONT_SIZE.sp,
                 ),
               ),
               Selector<GameSettingsSingleDoubleTraining_P, bool>(

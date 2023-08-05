@@ -189,7 +189,10 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       'To view the details about a game, click on it\'s card.',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: DEFAULT_FONT_SIZE.sp,
+                      ),
                     ),
                   ),
                 ),
@@ -204,6 +207,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                       '(Swipe left to delete a game)',
                       style: TextStyle(
                         color: Colors.white,
+                        fontSize: DEFAULT_FONT_SIZE.sp,
                       ),
                     ),
                   ),
@@ -250,6 +254,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
+            fontSize: 10.sp,
           ),
         ),
       );

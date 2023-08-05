@@ -174,6 +174,7 @@ class SubmitPointsBtnX01 extends StatelessWidget {
             overlayColor: _colorResult,
           ),
           child: Icon(
+            size: ICON_BUTTON_SIZE.h,
             Icons.arrow_forward,
             color: Utils.getTextColorDarken(context),
           ),

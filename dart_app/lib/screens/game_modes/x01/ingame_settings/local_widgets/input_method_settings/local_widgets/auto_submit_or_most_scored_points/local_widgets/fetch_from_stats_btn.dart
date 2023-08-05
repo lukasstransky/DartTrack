@@ -22,6 +22,7 @@ class FetchFromStatsBtn extends StatelessWidget {
         Container(
           transform: Matrix4.translationValues(0.0, 1.0.h, 0.0),
           child: IconButton(
+            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -46,6 +47,7 @@ class FetchFromStatsBtn extends StatelessWidget {
               'Fetch from stats',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
+                fontSize: 12.sp,
               ),
             ),
             onPressed: () {
@@ -115,11 +117,17 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
       contentPadding: dialogContentPadding,
       title: Text(
         'Information',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        ),
       ),
       content: Text(
         'By clicking this button, the top six most frequently scored points from all your games will be loaded into the \'most scored points\' fields.',
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        ),
       ),
       actions: [
         TextButton(
@@ -129,7 +137,10 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
           },
           child: Text(
             'Continue',
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: DIALOG_BTN_FONTSIZE.sp,
+            ),
           ),
           style: ButtonStyle(
             splashFactory: NoSplash.splashFactory,

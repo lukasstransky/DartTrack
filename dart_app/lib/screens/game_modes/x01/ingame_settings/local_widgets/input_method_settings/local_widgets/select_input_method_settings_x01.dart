@@ -45,6 +45,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
             right: 5.w,
           ),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Expanded(
                 child: ElevatedButton(
@@ -61,6 +62,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                       style: TextStyle(
                         color: Utils.getTextColorForGameSettingsBtn(
                             isInputMethodRound, context),
+                        fontSize: 12.sp,
                       ),
                     ),
                   ),
@@ -101,6 +103,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                       style: TextStyle(
                         color: Utils.getTextColorForGameSettingsBtn(
                             !isInputMethodRound, context),
+                        fontSize: 12.sp,
                       ),
                     ),
                   ),

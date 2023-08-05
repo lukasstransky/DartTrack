@@ -1,10 +1,8 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
-import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -26,6 +24,7 @@ class ModeOutX01 extends StatelessWidget {
               : WIDGET_HEIGHT_GAMESETTINGS.h,
           margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               SingleOutBtn(modeOut: selectorModel.modeOut),
               DoubleOutBtn(modeOut: selectorModel.modeOut),
@@ -63,10 +62,13 @@ class SingleOutBtn extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             'Single out',
-            style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(
-                  modeOut == ModeOutIn.Single, context),
-            ),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Utils.getTextColorForGameSettingsBtn(
+                    modeOut == ModeOutIn.Single,
+                    context,
+                  ),
+                  fontSize: DEFAULT_FONT_SIZE.sp,
+                ),
           ),
         ),
         style: ButtonStyle(
@@ -130,10 +132,13 @@ class DoubleOutBtn extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               'Double out',
-              style: TextStyle(
-                color: Utils.getTextColorForGameSettingsBtn(
-                    modeOut == ModeOutIn.Double, context),
-              ),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Utils.getTextColorForGameSettingsBtn(
+                      modeOut == ModeOutIn.Double,
+                      context,
+                    ),
+                    fontSize: DEFAULT_FONT_SIZE.sp,
+                  ),
             ),
           ),
           style: ButtonStyle(
@@ -179,10 +184,13 @@ class MasterOutBtn extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               'Master out',
-              style: TextStyle(
-                color: Utils.getTextColorForGameSettingsBtn(
-                    modeOut == ModeOutIn.Master, context),
-              ),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Utils.getTextColorForGameSettingsBtn(
+                      modeOut == ModeOutIn.Master,
+                      context,
+                    ),
+                    fontSize: DEFAULT_FONT_SIZE.sp,
+                  ),
             ),
           ),
           style: ButtonStyle(

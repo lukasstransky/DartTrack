@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -50,7 +51,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     padding: EdgeInsets.only(bottom: 1.h, top: 1.h),
                     child: Text(
                       'Please provide your email to receive a link for resetting your password.',
-                      style: TextStyle(color: Colors.white70),
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: DEFAULT_FONT_SIZE.sp,
+                      ),
                     ),
                   ),
                   EmailInput(isForgotPasswordScreen: true),
@@ -111,7 +115,10 @@ class ResetPasswordBtn extends StatelessWidget {
       child: TextButton(
         child: Text(
           'Reset password',
-          style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.secondary,
+            fontSize: DEFAULT_FONT_SIZE.sp,
+          ),
         ),
         style: ButtonStyle(
           splashFactory: NoSplash.splashFactory,

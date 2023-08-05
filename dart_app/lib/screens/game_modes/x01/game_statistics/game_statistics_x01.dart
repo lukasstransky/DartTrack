@@ -170,7 +170,10 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                         label: Text(
                           getModeString(
                               _game!.getGameSettings.getModeIn, false),
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: DEFAULT_FONT_SIZE.sp,
+                          ),
                         ),
                         color: Utils.getPrimaryColorDarken(context),
                       ),
@@ -180,7 +183,10 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                           label: Text(
                             getModeString(
                                 _game!.getGameSettings.getModeOut, true),
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: DEFAULT_FONT_SIZE.sp,
+                            ),
                           ),
                           color: Utils.getPrimaryColorDarken(context),
                         ),
@@ -191,7 +197,10 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                           child: CustomChip(
                             label: Text(
                               'Sudden death',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: DEFAULT_FONT_SIZE.sp,
+                              ),
                             ),
                             color: Utils.getPrimaryColorDarken(context),
                           ),
@@ -202,7 +211,10 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                           child: CustomChip(
                             label: Text(
                               'Draw enabled',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: DEFAULT_FONT_SIZE.sp,
+                              ),
                             ),
                             color: Utils.getPrimaryColorDarken(context),
                           ),
@@ -222,7 +234,10 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                           child: CustomChip(
                             label: Text(
                               'Win by two legs difference',
-                              style: TextStyle(color: Colors.white),
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: DEFAULT_FONT_SIZE.sp,
+                              ),
                             ),
                             color: Utils.getPrimaryColorDarken(context),
                           ),
@@ -266,10 +281,11 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       padding: EdgeInsets.only(left: 5.w),
                       child: Row(
                         children: [
-                          const Text(
+                          Text(
                             'Show odd rounded scores',
                             style: TextStyle(
                               color: Colors.white,
+                              fontSize: DEFAULT_FONT_SIZE.sp,
                             ),
                           ),
                           Switch(

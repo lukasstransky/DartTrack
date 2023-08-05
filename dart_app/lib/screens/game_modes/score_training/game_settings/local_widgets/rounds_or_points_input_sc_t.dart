@@ -50,6 +50,7 @@ class _RoundsOrPointsInputScoreTrainingState
             isMaxRoundsMode ? 'Enter rounds' : 'Enter points',
             style: TextStyle(
               color: Colors.white,
+              fontSize: DIALOG_TITLE_FONTSIZE.sp,
             ),
           ),
           content: Container(
@@ -89,6 +90,7 @@ class _RoundsOrPointsInputScoreTrainingState
               ],
               style: TextStyle(
                 color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
               ),
               decoration: InputDecoration(
                 hintText:
@@ -122,6 +124,7 @@ class _RoundsOrPointsInputScoreTrainingState
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
                 ),
               ),
               style: ButtonStyle(
@@ -147,6 +150,7 @@ class _RoundsOrPointsInputScoreTrainingState
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
                 ),
               ),
               style: ButtonStyle(
@@ -203,6 +207,7 @@ class _RoundsOrPointsInputScoreTrainingState
                 'Game will end after ',
                 style: TextStyle(
                   color: Colors.white,
+                  fontSize: DEFAULT_FONT_SIZE.sp,
                 ),
               ),
             ),
@@ -225,6 +230,7 @@ class _RoundsOrPointsInputScoreTrainingState
                     selectorModel.maxRoundsOrPoints.toString(),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
+                      fontSize: DEFAULT_FONT_SIZE.sp,
                     ),
                   ),
                 ),
@@ -262,6 +268,7 @@ class _RoundsOrPointsInputScoreTrainingState
                       : ' points are reached.',
                   style: TextStyle(
                     color: Colors.white,
+                    fontSize: DEFAULT_FONT_SIZE.sp,
                   ),
                 ),
               ),

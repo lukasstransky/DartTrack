@@ -124,13 +124,19 @@ class _StatisticsState extends State<Statistics> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         contentPadding: dialogContentPadding,
-        title: const Text(
+        title: Text(
           'Information',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          ),
         ),
         content: Text(
           'In order to track your games, please create an account.',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
         actions: [
           TextButton(
@@ -140,7 +146,10 @@ class _StatisticsState extends State<Statistics> {
             },
             child: Text(
               'Ok',
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: DIALOG_BTN_FONTSIZE.sp,
+              ),
             ),
             style: ButtonStyle(
               splashFactory: NoSplash.splashFactory,
@@ -171,6 +180,7 @@ class _StatisticsState extends State<Statistics> {
           });
         },
         icon: Icon(
+          size: ICON_BUTTON_SIZE.h,
           _showMoreStats ? Icons.expand_less : Icons.expand_more,
           color: Theme.of(context).colorScheme.secondary,
         ),
@@ -178,6 +188,7 @@ class _StatisticsState extends State<Statistics> {
           _showMoreStats ? 'Less stats' : 'More stats',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 11.sp,
           ),
         ),
       ),

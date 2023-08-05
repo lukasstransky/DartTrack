@@ -68,7 +68,10 @@ class PlayersTeamsListDialogs {
           contentPadding: dialogContentPadding,
           title: Text(
             'Edit',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            ),
           ),
           content: StatefulBuilder(
             builder: (context, setState) {
@@ -86,7 +89,7 @@ class PlayersTeamsListDialogs {
                             child: Text(
                               'Bot - lvl. ${playerToEdit.getLevel}',
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                 color: Colors.white,
                               ),
                             ),
@@ -94,7 +97,7 @@ class PlayersTeamsListDialogs {
                           Text(
                             ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                             style: TextStyle(
-                              fontSize: 9.sp,
+                              fontSize: 8.sp,
                               color: Colors.white,
                             ),
                           ),
@@ -142,7 +145,10 @@ class PlayersTeamsListDialogs {
                     LengthLimitingTextInputFormatter(
                         MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
                   ],
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                  ),
                   decoration: InputDecoration(
                     prefixIcon: Icon(
                       Icons.person,
@@ -180,8 +186,10 @@ class PlayersTeamsListDialogs {
               },
               child: Text(
                 'Cancel',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                ),
               ),
               style: ButtonStyle(
                 splashFactory: NoSplash.splashFactory,
@@ -204,8 +212,10 @@ class PlayersTeamsListDialogs {
               },
               child: Text(
                 'Submit',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                ),
               ),
               style: ButtonStyle(
                 splashFactory: NoSplash.splashFactory,
@@ -245,7 +255,10 @@ class PlayersTeamsListDialogs {
             contentPadding: dialogContentPadding,
             title: Text(
               'Edit team',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              ),
             ),
             content: StatefulBuilder(
               builder: (context, setState) {
@@ -273,7 +286,10 @@ class PlayersTeamsListDialogs {
                         LengthLimitingTextInputFormatter(
                             MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
                       ],
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                      ),
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           Icons.group,
@@ -298,16 +314,21 @@ class PlayersTeamsListDialogs {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'Delete this team?',
                           style: TextStyle(
                             color: Colors.red,
+                            fontSize: DEFAULT_FONT_SIZE.sp,
                           ),
                         ),
                         IconButton(
+                            iconSize: ICON_BUTTON_SIZE.h,
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
-                            icon: const Icon(Icons.delete),
+                            icon: Icon(
+                              Icons.delete,
+                              size: ICON_BUTTON_SIZE.h,
+                            ),
                             color: Colors.red,
                             onPressed: () {
                               Utils.handleVibrationFeedback(context);
@@ -334,8 +355,10 @@ class PlayersTeamsListDialogs {
                 },
                 child: Text(
                   'Cancel',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  ),
                 ),
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
@@ -358,8 +381,10 @@ class PlayersTeamsListDialogs {
                 },
                 child: Text(
                   'Submit',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  ),
                 ),
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
@@ -399,11 +424,17 @@ class PlayersTeamsListDialogs {
             contentPadding: dialogContentPadding,
             title: Text(
               'Delete team',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              ),
             ),
             content: Text(
               'Do you also want to delete the team?',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              ),
             ),
             actions: [
               Row(
@@ -420,7 +451,9 @@ class PlayersTeamsListDialogs {
                       child: Text(
                         'Cancel',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary),
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize: DIALOG_BTN_FONTSIZE.sp,
+                        ),
                       ),
                       style: ButtonStyle(
                         splashFactory: NoSplash.splashFactory,
@@ -453,7 +486,9 @@ class PlayersTeamsListDialogs {
                           child: Text(
                             'No',
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary),
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: DIALOG_BTN_FONTSIZE.sp,
+                            ),
                           ),
                           style: ButtonStyle(
                             splashFactory: NoSplash.splashFactory,
@@ -485,7 +520,9 @@ class PlayersTeamsListDialogs {
                         child: Text(
                           'Yes',
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: DIALOG_BTN_FONTSIZE.sp,
+                          ),
                         ),
                         style: ButtonStyle(
                           splashFactory: NoSplash.splashFactory,
@@ -534,7 +571,10 @@ class PlayersTeamsListDialogs {
             contentPadding: dialogContentPadding,
             title: Text(
               'Swap team',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              ),
             ),
             content: StatefulBuilder(
               builder: (context, setState) {
@@ -555,7 +595,10 @@ class PlayersTeamsListDialogs {
                           activeColor: Theme.of(context).colorScheme.secondary,
                           title: Text(
                             team.getName,
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                            ),
                           ),
                           value: team,
                           groupValue: selectedTeam,
@@ -578,8 +621,10 @@ class PlayersTeamsListDialogs {
                 },
                 child: Text(
                   'Cancel',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  ),
                 ),
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
@@ -603,8 +648,10 @@ class PlayersTeamsListDialogs {
                 },
                 child: Text(
                   'Submit',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  ),
                 ),
                 style: ButtonStyle(
                   splashFactory: NoSplash.splashFactory,
@@ -768,15 +815,21 @@ class PlayersTeamsListDialogs {
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           contentPadding: dialogContentPadding,
-          title: const Text(
+          title: Text(
             'Info',
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            ),
           ),
           content: Container(
             width: 0.6.w,
             child: Text(
               'All the players in this team will also be deleted.',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              ),
             ),
           ),
           actions: [
@@ -786,6 +839,7 @@ class PlayersTeamsListDialogs {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
+                      iconSize: ICON_BUTTON_SIZE.h,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       padding: EdgeInsets.zero,
@@ -819,7 +873,9 @@ class PlayersTeamsListDialogs {
                           child: Text(
                             'Cancel',
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary),
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: DIALOG_BTN_FONTSIZE.sp,
+                            ),
                           ),
                           style: ButtonStyle(
                             splashFactory: NoSplash.splashFactory,
@@ -849,7 +905,9 @@ class PlayersTeamsListDialogs {
                         child: Text(
                           'Submit',
                           style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary),
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: DIALOG_BTN_FONTSIZE.sp,
+                          ),
                         ),
                         style: ButtonStyle(
                           splashFactory: NoSplash.splashFactory,

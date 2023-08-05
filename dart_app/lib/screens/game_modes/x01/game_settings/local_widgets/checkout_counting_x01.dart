@@ -33,9 +33,12 @@ class CheckoutCountingX01 extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text(
+                    Text(
                       'Counting of checkout %',
-                      style: TextStyle(color: Colors.white),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.sp,
+                      ),
                     ),
                     Switch(
                       thumbColor: MaterialStateProperty.all(

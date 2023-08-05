@@ -59,6 +59,7 @@ class RevertBtn extends StatelessWidget {
             ),
             child: Icon(
               Icons.undo,
+              size: ICON_BUTTON_SIZE.h,
               color: Utils.getTextColorDarken(context),
             ),
             onPressed: () {

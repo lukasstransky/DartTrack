@@ -95,8 +95,6 @@ const int CUSTOM_POINTS_MIN_NUMBER = 100;
 const int DEFAULT_LEGS_DRAW_MODE = 6;
 
 const int WIDTH_GAMESETTINGS = 80;
-const double WIDGET_HEIGHT_GAMESETTINGS = 4;
-const double WIDGET_HEIGHT_GAMESETTINGS_TEAMS = 3.5;
 const double MARGIN_GAMESETTINGS = 1.0;
 const double BUTTON_BORDER_RADIUS = 10.0;
 
@@ -475,3 +473,33 @@ const int DEFEAULT_DELAY =
 
 /* shared preferences constants */
 const String VIBRATION_FEEDBACK_KEY = 'vibrationFeedbackEnabled';
+/*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*
+*/
+// game settings x01
+const double WIDGET_HEIGHT_GAMESETTINGS = 4;
+const double WIDGET_HEIGHT_GAMESETTINGS_TEAMS = 3.5;
+
+const double WIDGET_HEIGHT_GAMESETTINGS_TABLET = 4;
+
+// overall
+const double DEFAULT_FONT_SIZE = 11;
+const double ICON_BUTTON_SIZE = 3;
+const double DIALOG_TITLE_FONTSIZE = 16;
+const double DIALOG_CONTENT_FONTSIZE = 12;
+const double DIALOG_BTN_FONTSIZE = 12;

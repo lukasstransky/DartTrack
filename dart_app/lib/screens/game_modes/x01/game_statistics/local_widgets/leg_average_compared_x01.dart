@@ -58,6 +58,7 @@ class LegAvgComparedX01 extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Utils.getTextColorDarken(context),
+                            fontSize: 10.sp,
                           ),
                         ),
                       )
@@ -70,6 +71,7 @@ class LegAvgComparedX01 extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Utils.getTextColorDarken(context),
+                            fontSize: 10.sp,
                           ),
                         ),
                       ),
@@ -98,6 +100,7 @@ class LegAvgComparedX01 extends StatelessWidget {
                     Utils.getAverageForLeg(stats, setLegString),
                     style: TextStyle(
                       color: Colors.white,
+                      fontSize: DEFAULT_FONT_SIZE.sp,
                     ),
                   ),
                   decoration: BoxDecoration(

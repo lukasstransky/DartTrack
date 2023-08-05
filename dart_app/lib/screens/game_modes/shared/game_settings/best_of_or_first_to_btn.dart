@@ -17,12 +17,12 @@ class BestOfOrFirstToBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: WIDTH_GAMESETTINGS.w,
-      height: gameSettingsProvider is GameSettingsX01_P &&
-              Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
+      height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
           ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
           : WIDGET_HEIGHT_GAMESETTINGS.h,
       margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           BestOfBtn(gameSettingsProvider: gameSettingsProvider),
           FirstToBtn(gameSettingsProvider: gameSettingsProvider),
@@ -57,9 +57,11 @@ class BestOfBtn extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             'Best of',
-            style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(isBestOf, context),
-            ),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color:
+                      Utils.getTextColorForGameSettingsBtn(isBestOf, context),
+                  fontSize: DEFAULT_FONT_SIZE.sp,
+                ),
           ),
         ),
         style: ButtonStyle(
@@ -113,9 +115,11 @@ class FirstToBtn extends StatelessWidget {
             fit: BoxFit.scaleDown,
             child: Text(
               'First to',
-              style: TextStyle(
-                color: Utils.getTextColorForGameSettingsBtn(isFirstTo, context),
-              ),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    color: Utils.getTextColorForGameSettingsBtn(
+                        isFirstTo, context),
+                    fontSize: DEFAULT_FONT_SIZE.sp,
+                  ),
             ),
           ),
           style: ButtonStyle(

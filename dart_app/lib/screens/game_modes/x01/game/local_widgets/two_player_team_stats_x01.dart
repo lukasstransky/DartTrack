@@ -7,6 +7,7 @@ import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_stats_
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
@@ -32,8 +33,18 @@ class TwoPlayerTeamStatsX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late double height;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      height = 35.h;
+    } else if (ResponsiveBreakpoints.of(context).isTablet) {
+      height = 45.h;
+    } else if (ResponsiveBreakpoints.of(context).isDesktop) {
+    } else {
+      height = 45.h;
+    }
+
     return Container(
-      height: 35.h,
+      height: height,
       child: Selector<GameX01_P, List<PlayerOrTeamGameStats>>(
         selector: (_, gameX01) => isSingleMode
             ? gameX01.getPlayerGameStatistics

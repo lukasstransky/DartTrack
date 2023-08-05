@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -51,6 +52,7 @@ class CustomAppBarX01Game extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
+              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
@@ -66,6 +68,7 @@ class CustomAppBarX01Game extends StatelessWidget
         ),
         actions: [
           IconButton(
+            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -82,6 +85,7 @@ class CustomAppBarX01Game extends StatelessWidget
             ),
           ),
           IconButton(
+            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {

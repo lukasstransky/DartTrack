@@ -85,6 +85,7 @@ class RandomBtn extends StatelessWidget {
             style: TextStyle(
               color: Utils.getTextColorForGameSettingsBtn(
                   isRandomBtn && !isTargetNumberEnabled, context),
+              fontSize: DEFAULT_FONT_SIZE.sp,
             ),
           ),
         ),
@@ -153,6 +154,7 @@ class DescendingBtn extends StatelessWidget {
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
                     isDescendingMode && !isTargetNumberEnabled, context),
+                fontSize: DEFAULT_FONT_SIZE.sp,
               ),
             ),
           ),
@@ -200,6 +202,7 @@ class AscendingBtn extends StatelessWidget {
             style: TextStyle(
               color: Utils.getTextColorForGameSettingsBtn(
                   isAscendingMode && !isTargetNumberEnabled, context),
+              fontSize: DEFAULT_FONT_SIZE.sp,
             ),
           ),
         ),

@@ -25,13 +25,10 @@ class SingleOrTeamBtn extends StatelessWidget {
         bottom: MARGIN_GAMESETTINGS.h,
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SingleBtn(
-            gameSettingsProvider: settings,
-          ),
-          TeamBtn(
-            gameSettingsProvider: settings,
-          ),
+          SingleBtn(gameSettingsProvider: settings),
+          TeamBtn(gameSettingsProvider: settings),
         ],
       ),
     );
@@ -62,10 +59,11 @@ class SingleBtn extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             'Single ${singleOrTeam == SingleOrTeamEnum.Single ? '(${gameSettingsProvider.getPlayers.length})' : ''}',
-            style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(
-                  singleOrTeam == SingleOrTeamEnum.Single, context),
-            ),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Utils.getTextColorForGameSettingsBtn(
+                      singleOrTeam == SingleOrTeamEnum.Single, context),
+                  fontSize: DEFAULT_FONT_SIZE.sp,
+                ),
           ),
         ),
         style: ButtonStyle(
@@ -117,10 +115,11 @@ class TeamBtn extends StatelessWidget {
           fit: BoxFit.scaleDown,
           child: Text(
             'Team ${singleOrTeam == SingleOrTeamEnum.Team ? '(${gameSettingsProvider.getTeams.length})' : ''}',
-            style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(
-                  singleOrTeam == SingleOrTeamEnum.Team, context),
-            ),
+            style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Utils.getTextColorForGameSettingsBtn(
+                      singleOrTeam == SingleOrTeamEnum.Team, context),
+                  fontSize: DEFAULT_FONT_SIZE.sp,
+                ),
           ),
         ),
         style: ButtonStyle(

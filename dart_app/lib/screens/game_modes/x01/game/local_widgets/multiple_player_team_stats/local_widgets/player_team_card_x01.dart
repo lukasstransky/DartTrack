@@ -67,7 +67,10 @@ class PlayerTeamCard extends StatelessWidget {
     return CustomChip(
         label: Text(
           label,
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DEFAULT_FONT_SIZE.sp,
+          ),
         ),
         color: Utils.getPrimaryColorDarken(context));
   }

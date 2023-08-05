@@ -16,6 +16,7 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
       case ModesSingleDoubleTraining.Ascending:
         return RichText(
           text: TextSpan(
+            style: TextStyle(fontSize: DEFAULT_FONT_SIZE.sp),
             text: 'Starting from',
             children: <TextSpan>[
               TextSpan(
@@ -39,6 +40,9 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
       case ModesSingleDoubleTraining.Descending:
         return RichText(
           text: TextSpan(
+            style: TextStyle(
+              fontSize: DEFAULT_FONT_SIZE.sp,
+            ),
             text: 'Starting from',
             children: <TextSpan>[
               TextSpan(
@@ -61,6 +65,9 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
       case ModesSingleDoubleTraining.Random:
         return RichText(
           text: TextSpan(
+            style: TextStyle(
+              fontSize: DEFAULT_FONT_SIZE.sp,
+            ),
             children: <TextSpan>[
               TextSpan(
                 text: 'Random',
@@ -96,6 +103,7 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
             'For each round you have 3 darts to throw.',
             style: TextStyle(
               color: Colors.white,
+              fontSize: DEFAULT_FONT_SIZE.sp,
             ),
           ),
         ],
