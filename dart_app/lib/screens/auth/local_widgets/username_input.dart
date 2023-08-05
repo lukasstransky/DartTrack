@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -35,6 +36,7 @@ class UsernameInput extends StatelessWidget {
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           prefixIcon: Icon(
+            size: ICON_BUTTON_SIZE.h,
             Icons.person,
             color: Utils.getPrimaryColorDarken(context),
           ),

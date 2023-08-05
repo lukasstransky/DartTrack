@@ -39,15 +39,17 @@ class PasswordInput extends StatelessWidget {
           style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
             prefixIcon: Icon(
+              size: ICON_BUTTON_SIZE.h,
               Icons.lock,
               color: Utils.getPrimaryColorDarken(context),
             ),
             suffixIcon: IconButton(
-              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               icon: Icon(
-                  passwordVisible ? Icons.visibility : Icons.visibility_off),
+                size: ICON_BUTTON_SIZE.h,
+                passwordVisible ? Icons.visibility : Icons.visibility_off,
+              ),
               color: Utils.getPrimaryColorDarken(context),
               onPressed: () {
                 auth.setPasswordVisible = !passwordVisible;

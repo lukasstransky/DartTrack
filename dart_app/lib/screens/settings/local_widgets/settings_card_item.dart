@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -65,6 +66,7 @@ class SettingsCardItem extends StatelessWidget {
                   ),
                 ),
                 Icon(
+                  size: ICON_BUTTON_SIZE.h,
                   Icons.arrow_forward_sharp,
                   color: Theme.of(context).colorScheme.secondary,
                 ),

@@ -147,6 +147,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                   ),
                   decoration: InputDecoration(
                     prefixIcon: Icon(
+                      size: ICON_BUTTON_SIZE.h,
                       Icons.person,
                       color: Utils.getPrimaryColorDarken(context),
                     ),
@@ -352,6 +353,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                       ),
                       decoration: InputDecoration(
                         prefixIcon: Icon(
+                          size: ICON_BUTTON_SIZE.h,
                           Icons.lock,
                           color: Utils.getPrimaryColorDarken(context),
                         ),
@@ -411,6 +413,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                     style: TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       prefixIcon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
                         Icons.mail,
                         color: Utils.getPrimaryColorDarken(context),
                       ),
@@ -735,14 +738,15 @@ class PasswordInputField extends StatelessWidget {
           ),
           decoration: InputDecoration(
             prefixIcon: Icon(
+              size: ICON_BUTTON_SIZE.h,
               Icons.lock,
               color: Utils.getPrimaryColorDarken(context),
             ),
             suffixIcon: IconButton(
-              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               icon: Icon(
+                  size: ICON_BUTTON_SIZE.h,
                   passwordVisible ? Icons.visibility : Icons.visibility_off),
               color: Utils.getPrimaryColorDarken(context),
               onPressed: () {

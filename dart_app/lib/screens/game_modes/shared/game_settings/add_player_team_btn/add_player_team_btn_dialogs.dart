@@ -209,11 +209,11 @@ class AddPlayerTeamBtnDialogs {
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: IconButton(
-                            iconSize: ICON_BUTTON_SIZE.h,
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             padding: EdgeInsets.zero,
                             icon: Icon(
+                              size: ICON_BUTTON_SIZE.h,
                               Icons.arrow_back,
                               color: Theme.of(context).colorScheme.secondary,
                             ),
@@ -428,6 +428,7 @@ class AddPlayerTeamBtnDialogs {
                         fillColor: Utils.darken(
                             Theme.of(context).colorScheme.primary, 10),
                         prefixIcon: Icon(
+                          size: ICON_BUTTON_SIZE.h,
                           Icons.group,
                           color: Utils.getPrimaryColorDarken(context),
                         ),
@@ -456,11 +457,11 @@ class AddPlayerTeamBtnDialogs {
                       child: Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           padding: EdgeInsets.zero,
                           icon: Icon(
+                            size: ICON_BUTTON_SIZE.h,
                             Icons.arrow_back,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
@@ -865,11 +866,11 @@ class AddPlayerTeamBtnDialogs {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      iconSize: ICON_BUTTON_SIZE.h,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       padding: EdgeInsets.zero,
                       icon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
                         Icons.arrow_back,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -999,6 +1000,7 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
       style: TextStyle(color: Colors.white),
       decoration: InputDecoration(
         prefixIcon: Icon(
+          size: ICON_BUTTON_SIZE.h,
           Icons.person,
           color: Utils.getPrimaryColorDarken(context),
         ),

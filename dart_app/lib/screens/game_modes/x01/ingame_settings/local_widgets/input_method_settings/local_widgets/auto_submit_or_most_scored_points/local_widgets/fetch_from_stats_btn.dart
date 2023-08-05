@@ -22,7 +22,6 @@ class FetchFromStatsBtn extends StatelessWidget {
         Container(
           transform: Matrix4.translationValues(0.0, 1.0.h, 0.0),
           child: IconButton(
-            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -30,6 +29,7 @@ class FetchFromStatsBtn extends StatelessWidget {
               _showInfoDialogForFetchFromStatsBtn(context);
             },
             icon: Icon(
+              size: ICON_BUTTON_SIZE.h,
               Icons.info_outline,
               color: Theme.of(context).colorScheme.secondary,
             ),

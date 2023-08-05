@@ -82,6 +82,7 @@ class _StatsCardX01State extends State<StatsCardX01> {
                       });
                     },
                     icon: Icon(
+                      size: ICON_BUTTON_SIZE.h,
                       _showAllPlayersOrTeams
                           ? Icons.expand_less
                           : Icons.expand_more,

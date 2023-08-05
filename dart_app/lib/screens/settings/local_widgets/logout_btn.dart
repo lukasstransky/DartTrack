@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,7 @@ class LogoutBtn extends StatelessWidget {
           Navigator.of(context).pushNamed('/loginRegister');
         },
         icon: Icon(
+          size: ICON_BUTTON_SIZE.h,
           Icons.logout,
           color: Theme.of(context).colorScheme.secondary,
         ),

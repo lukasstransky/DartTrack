@@ -103,6 +103,7 @@ class ScoreOfNumber extends StatelessWidget {
     if (amountOfScores != null && amountOfScores != 0) {
       if (amountOfScores == 1) {
         return Icon(
+          size: ICON_BUTTON_SIZE.h,
           LineAwesomeIcons.slash,
           color: Colors.white,
         );

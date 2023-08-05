@@ -131,11 +131,11 @@ class TeamsListEntry extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           padding: EdgeInsets.zero,
                           icon: Icon(
+                            size: ICON_BUTTON_SIZE.h,
                             Icons.edit,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
@@ -147,11 +147,11 @@ class TeamsListEntry extends StatelessWidget {
                         ),
                         if (gameSettings.getTeams.length > 1)
                           IconButton(
-                              iconSize: ICON_BUTTON_SIZE.h,
                               splashColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               padding: EdgeInsets.zero,
                               icon: Icon(
+                                size: ICON_BUTTON_SIZE.h,
                                 Icons.swap_vert,
                                 color: !areTwoTeamsWithMaxPlayers &&
                                         atLeastOneTeamToSwap
@@ -170,11 +170,11 @@ class TeamsListEntry extends StatelessWidget {
                                 }
                               }),
                         IconButton(
-                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           padding: EdgeInsets.zero,
                           icon: Icon(
+                            size: ICON_BUTTON_SIZE.h,
                             Icons.highlight_remove,
                             color: Theme.of(context).colorScheme.secondary,
                           ),

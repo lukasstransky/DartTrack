@@ -151,6 +151,7 @@ class PlayersTeamsListDialogs {
                   ),
                   decoration: InputDecoration(
                     prefixIcon: Icon(
+                      size: ICON_BUTTON_SIZE.h,
                       Icons.person,
                       color: Utils.getPrimaryColorDarken(context),
                     ),
@@ -292,6 +293,7 @@ class PlayersTeamsListDialogs {
                       ),
                       decoration: InputDecoration(
                         prefixIcon: Icon(
+                          size: ICON_BUTTON_SIZE.h,
                           Icons.group,
                           color: Utils.getPrimaryColorDarken(context),
                         ),
@@ -322,7 +324,6 @@ class PlayersTeamsListDialogs {
                           ),
                         ),
                         IconButton(
-                            iconSize: ICON_BUTTON_SIZE.h,
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             icon: Icon(
@@ -839,11 +840,11 @@ class PlayersTeamsListDialogs {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: IconButton(
-                      iconSize: ICON_BUTTON_SIZE.h,
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       padding: EdgeInsets.zero,
                       icon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
                         Icons.arrow_back,
                         color: Theme.of(context).colorScheme.secondary,
                       ),

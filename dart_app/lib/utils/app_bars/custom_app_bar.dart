@@ -35,7 +35,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         children: [
           if (showBackBtn)
             IconButton(
-              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
@@ -46,6 +45,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 }
               },
               icon: Icon(
+                size: ICON_BUTTON_SIZE.h,
                 Icons.arrow_back,
                 color: Theme.of(context).colorScheme.secondary,
               ),
@@ -59,7 +59,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             showInfoIconCricket ||
             showInfoIconSingleDoubleTraining)
           IconButton(
-            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -89,6 +88,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               }
             },
             icon: Icon(
+              size: ICON_BUTTON_SIZE.h,
               Icons.info_outline,
               color: Theme.of(context).colorScheme.secondary,
             ),

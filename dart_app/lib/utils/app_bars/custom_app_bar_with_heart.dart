@@ -74,7 +74,6 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         leading: widget.isFinishScreen
             ? SizedBox.shrink()
             : IconButton(
-                iconSize: ICON_BUTTON_SIZE.h,
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onPressed: () {
@@ -85,6 +84,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
                   }
                 },
                 icon: Icon(
+                  size: ICON_BUTTON_SIZE.h,
                   Icons.arrow_back,
                   color: Theme.of(context).colorScheme.secondary,
                 ),
@@ -113,7 +113,6 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
             ),
           if (widget.isFinishScreen)
             IconButton(
-              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
@@ -124,6 +123,7 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
                 }
               },
               icon: Icon(
+                size: ICON_BUTTON_SIZE.h,
                 Icons.home,
                 color: Theme.of(context).colorScheme.secondary,
               ),

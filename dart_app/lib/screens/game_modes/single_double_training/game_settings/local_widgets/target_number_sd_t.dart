@@ -248,7 +248,6 @@ class _TargetNumberSingleDoubleTrainingState
                 width: 8.w,
                 transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
                 child: IconButton(
-                  iconSize: ICON_BUTTON_SIZE.h,
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onPressed: () {
@@ -256,6 +255,7 @@ class _TargetNumberSingleDoubleTrainingState
                     _showDialogForInfoAboutTargetNumber(context);
                   },
                   icon: Icon(
+                    size: ICON_BUTTON_SIZE.h,
                     Icons.info_outline,
                     color: Theme.of(context).colorScheme.secondary,
                   ),

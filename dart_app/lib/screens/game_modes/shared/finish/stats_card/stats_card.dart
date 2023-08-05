@@ -110,6 +110,7 @@ class _StatsCardState extends State<StatsCard> {
                         });
                       },
                       icon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
                         _showAllPlayersOrTeams
                             ? Icons.expand_less
                             : Icons.expand_more,

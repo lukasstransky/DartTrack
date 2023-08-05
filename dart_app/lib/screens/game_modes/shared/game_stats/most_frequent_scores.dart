@@ -133,6 +133,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                     });
                   },
                   icon: Icon(
+                    size: ICON_BUTTON_SIZE.h,
                     _showFirst10 ? Icons.expand_less : Icons.expand_more,
                     color: Theme.of(context).colorScheme.secondary,
                   ),

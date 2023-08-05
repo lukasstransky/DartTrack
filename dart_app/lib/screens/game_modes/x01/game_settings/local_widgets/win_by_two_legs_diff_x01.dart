@@ -107,8 +107,8 @@ _showDialogForSuddenDeath(
                 Row(
                   children: [
                     IconButton(
-                      iconSize: ICON_BUTTON_SIZE.h,
                       icon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
                         Icons.info_outline,
                         color: Theme.of(context).colorScheme.secondary,
                       ),
@@ -149,8 +149,8 @@ _showDialogForSuddenDeath(
                   Row(
                     children: [
                       IconButton(
-                        iconSize: ICON_BUTTON_SIZE.h,
                         icon: Icon(
+                          size: ICON_BUTTON_SIZE.h,
                           Icons.info_outline,
                           color: Theme.of(context).colorScheme.secondary,
                         ),
@@ -174,7 +174,6 @@ _showDialogForSuddenDeath(
                       Container(
                         padding: EdgeInsets.only(left: 3.w),
                         child: IconButton(
-                          iconSize: ICON_BUTTON_SIZE.h,
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {
@@ -188,10 +187,13 @@ _showDialogForSuddenDeath(
                           },
                           padding: EdgeInsets.zero,
                           constraints: BoxConstraints(),
-                          icon: Icon(Icons.remove,
-                              color: gameSettingsX01.getMaxExtraLegs > 1
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context).colorScheme.primary),
+                          icon: Icon(
+                            Icons.remove,
+                            size: ICON_BUTTON_SIZE.h,
+                            color: gameSettingsX01.getMaxExtraLegs > 1
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
                       Container(
@@ -207,7 +209,6 @@ _showDialogForSuddenDeath(
                         ),
                       ),
                       IconButton(
-                        iconSize: ICON_BUTTON_SIZE.h,
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         onPressed: () {
@@ -222,11 +223,14 @@ _showDialogForSuddenDeath(
                         },
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
-                        icon: Icon(Icons.add,
-                            color: gameSettingsX01.getMaxExtraLegs !=
-                                    MAX_EXTRA_LEGS
-                                ? Theme.of(context).colorScheme.secondary
-                                : Theme.of(context).colorScheme.primary),
+                        icon: Icon(
+                          Icons.add,
+                          size: ICON_BUTTON_SIZE.h,
+                          color:
+                              gameSettingsX01.getMaxExtraLegs != MAX_EXTRA_LEGS
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Theme.of(context).colorScheme.primary,
+                        ),
                       ),
                     ],
                   ),

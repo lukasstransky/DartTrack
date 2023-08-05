@@ -50,6 +50,7 @@ class EmailInput extends StatelessWidget {
         style: TextStyle(color: Colors.white),
         decoration: InputDecoration(
           prefixIcon: Icon(
+            size: ICON_BUTTON_SIZE.h,
             Icons.mail,
             color: Utils.getPrimaryColorDarken(context),
           ),

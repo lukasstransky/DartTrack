@@ -99,11 +99,13 @@ class SetsAmount extends StatelessWidget {
                 },
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
-                iconSize: ICON_BUTTON_SIZE.h,
-                icon: Icon(Icons.remove,
-                    color: _shouldShowSubtractBtn()
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.secondary),
+                icon: Icon(
+                  size: ICON_BUTTON_SIZE.h,
+                  Icons.remove,
+                  color: _shouldShowSubtractBtn()
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.secondary,
+                ),
               ),
               Container(
                 width: 10.w,
@@ -124,11 +126,13 @@ class SetsAmount extends StatelessWidget {
                 },
                 padding: EdgeInsets.zero,
                 constraints: BoxConstraints(),
-                iconSize: ICON_BUTTON_SIZE.h,
-                icon: Icon(Icons.add,
-                    color: _shouldShowAddBtn()
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.secondary),
+                icon: Icon(
+                  size: ICON_BUTTON_SIZE.h,
+                  Icons.add,
+                  color: _shouldShowAddBtn()
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.secondary,
+                ),
               ),
             ],
           ),

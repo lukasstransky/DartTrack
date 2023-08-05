@@ -39,7 +39,6 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -50,6 +49,7 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
               }
             },
             icon: Icon(
+              size: ICON_BUTTON_SIZE.h,
               Icons.arrow_back,
               color: Theme.of(context).colorScheme.secondary,
             ),

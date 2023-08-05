@@ -397,9 +397,11 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               Utils.handleVibrationFeedback(context);
               Navigator.of(context).pushNamed('/home');
             },
-            iconSize: ICON_BUTTON_SIZE.h,
-            icon: Icon(Icons.arrow_back,
-                color: Theme.of(context).colorScheme.secondary),
+            icon: Icon(
+              size: ICON_BUTTON_SIZE.h,
+              Icons.arrow_back,
+              color: Theme.of(context).colorScheme.secondary,
+            ),
           )
         ],
       ),

@@ -52,7 +52,6 @@ class CustomAppBarX01Game extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              iconSize: ICON_BUTTON_SIZE.h,
               splashColor: Colors.transparent,
               highlightColor: Colors.transparent,
               onPressed: () {
@@ -60,6 +59,7 @@ class CustomAppBarX01Game extends StatelessWidget
                 UtilsDialogs.showDialogForSavingGame(context, gameX01);
               },
               icon: Icon(
+                size: ICON_BUTTON_SIZE.h,
                 Icons.close_sharp,
                 color: Theme.of(context).colorScheme.secondary,
               ),
@@ -68,7 +68,6 @@ class CustomAppBarX01Game extends StatelessWidget
         ),
         actions: [
           IconButton(
-            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -80,12 +79,12 @@ class CustomAppBarX01Game extends StatelessWidget
               }
             },
             icon: Icon(
+              size: ICON_BUTTON_SIZE.h,
               Icons.bar_chart_rounded,
               color: Theme.of(context).colorScheme.secondary,
             ),
           ),
           IconButton(
-            iconSize: ICON_BUTTON_SIZE.h,
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
             onPressed: () {
@@ -95,6 +94,7 @@ class CustomAppBarX01Game extends StatelessWidget
               }
             },
             icon: Icon(
+              size: ICON_BUTTON_SIZE.h,
               Icons.settings,
               color: Theme.of(context).colorScheme.secondary,
             ),
