@@ -29,6 +29,7 @@ class ModeCricket extends StatelessWidget {
       child: Selector<GameSettingsCricket_P, CricketMode>(
         selector: (_, gameSettingsCricket) => gameSettingsCricket.getMode,
         builder: (_, mode, __) => Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ModeCricketBtn(
               value: 'Standard',

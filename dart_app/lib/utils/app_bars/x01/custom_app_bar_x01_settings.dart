@@ -39,11 +39,14 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          'These settings are the general default settings!',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            'These settings are the general default settings!',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [
@@ -101,13 +104,16 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          defaultSettingsSelected
-              ? 'Do you want to reset to the general default settings?'
-              : 'Do you want to set these settings as default?',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            defaultSettingsSelected
+                ? 'Do you want to reset to the general default settings?'
+                : 'Do you want to set these settings as default?',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [
@@ -180,11 +186,14 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          'Team mode is not supported for default settings.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            'Team mode is not supported for default settings.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [
@@ -236,11 +245,14 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          'Not able to save default settings because current logged in user (${username}) is not present within the players.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            'Not able to save default settings because current logged in user (${username}) is not present within the players.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [
@@ -292,11 +304,14 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          'Logged in as a guest it is not possible to set default settings.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            'Logged in as a guest it is not possible to set default settings.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [

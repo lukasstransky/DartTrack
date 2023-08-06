@@ -73,105 +73,108 @@ class PlayersTeamsListDialogs {
               fontSize: DIALOG_TITLE_FONTSIZE.sp,
             ),
           ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              if (playerToEdit is Bot) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      width: 30.w,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(left: 1.w),
-                            child: Text(
-                              'Bot - lvl. ${playerToEdit.getLevel}',
+          content: Container(
+            width: DIALOG_WIDTH.w,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                if (playerToEdit is Bot) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        width: 30.w,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 1.w),
+                              child: Text(
+                                'Bot - lvl. ${playerToEdit.getLevel}',
+                                style: TextStyle(
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                               style: TextStyle(
-                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                fontSize: 8.sp,
                                 color: Colors.white,
                               ),
                             ),
-                          ),
-                          Text(
-                            ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                            style: TextStyle(
-                              fontSize: 8.sp,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SfSlider(
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveColor: Utils.getPrimaryColorDarken(context),
-                      min: 22,
-                      max: 118,
-                      value: playerToEdit.getPreDefinedAverage,
-                      stepSize: 4,
-                      interval: 100,
-                      showTicks: false,
-                      onChanged: (dynamic newValue) {
-                        Utils.handleVibrationFeedback(context);
-                        setState(() => _editBotAvg(
-                            gameSettings_P as GameSettingsX01_P,
-                            playerToEdit,
-                            newValue));
-                      },
-                    ),
-                  ],
-                );
-              } else {
-                return TextFormField(
-                  autofocus: true,
-                  controller:
-                      newTextControllerForEditingPlayerInGameSettingsX01()
-                        ..text = playerToEdit.getName,
-                  textInputAction: TextInputAction.done,
-                  validator: (value) {
-                    if (value!.trim().isEmpty) {
-                      return ('Please enter a name!');
-                    }
-                    if (gameSettings_P.checkIfPlayerNameExists(value)) {
-                      return 'Name already exists!';
-                    }
+                      SfSlider(
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        inactiveColor: Utils.getPrimaryColorDarken(context),
+                        min: 22,
+                        max: 118,
+                        value: playerToEdit.getPreDefinedAverage,
+                        stepSize: 4,
+                        interval: 100,
+                        showTicks: false,
+                        onChanged: (dynamic newValue) {
+                          Utils.handleVibrationFeedback(context);
+                          setState(() => _editBotAvg(
+                              gameSettings_P as GameSettingsX01_P,
+                              playerToEdit,
+                              newValue));
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  return TextFormField(
+                    autofocus: true,
+                    controller:
+                        newTextControllerForEditingPlayerInGameSettingsX01()
+                          ..text = playerToEdit.getName,
+                    textInputAction: TextInputAction.done,
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return ('Please enter a name!');
+                      }
+                      if (gameSettings_P.checkIfPlayerNameExists(value)) {
+                        return 'Name already exists!';
+                      }
 
-                    return null;
-                  },
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [
-                    LengthLimitingTextInputFormatter(
-                        MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                  ],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      size: ICON_BUTTON_SIZE.h,
-                      Icons.person,
-                      color: Utils.getPrimaryColorDarken(context),
+                      return null;
+                    },
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [
+                      LengthLimitingTextInputFormatter(
+                          MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+                    ],
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                     ),
-                    hintText: 'Name',
-                    filled: true,
-                    fillColor:
-                        Utils.darken(Theme.of(context).colorScheme.primary, 10),
-                    hintStyle:
-                        TextStyle(color: Utils.getPrimaryColorDarken(context)),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
+                        Icons.person,
+                        color: Utils.getPrimaryColorDarken(context),
+                      ),
+                      hintText: 'Name',
+                      filled: true,
+                      fillColor: Utils.darken(
+                          Theme.of(context).colorScheme.primary, 10),
+                      hintStyle: TextStyle(
+                          color: Utils.getPrimaryColorDarken(context)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }
-            },
+                  );
+                }
+              },
+            ),
           ),
           actions: [
             TextButton(
@@ -261,91 +264,95 @@ class PlayersTeamsListDialogs {
                 fontSize: DIALOG_TITLE_FONTSIZE.sp,
               ),
             ),
-            content: StatefulBuilder(
-              builder: (context, setState) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      controller:
-                          newTextControllerForEditingTeamInGameSettingsX01()
-                            ..text = teamToEdit.getName,
-                      textInputAction: TextInputAction.done,
-                      validator: (value) {
-                        if (value!.trim().isEmpty) {
-                          return ('Please enter a name!');
-                        }
-                        if (gameSettings.checkIfTeamNameExists(value)) {
-                          return 'Team name already exists!';
-                        }
+            content: Container(
+              width: DIALOG_WIDTH.w,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        controller:
+                            newTextControllerForEditingTeamInGameSettingsX01()
+                              ..text = teamToEdit.getName,
+                        textInputAction: TextInputAction.done,
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return ('Please enter a name!');
+                          }
+                          if (gameSettings.checkIfTeamNameExists(value)) {
+                            return 'Team name already exists!';
+                          }
 
-                        return null;
-                      },
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(
-                            MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                      ],
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                      ),
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(
-                          size: ICON_BUTTON_SIZE.h,
-                          Icons.group,
-                          color: Utils.getPrimaryColorDarken(context),
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(
+                              MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+                        ],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                         ),
-                        filled: true,
-                        fillColor: Utils.darken(
-                            Theme.of(context).colorScheme.primary, 10),
-                        hintStyle: TextStyle(
-                          color: Utils.getPrimaryColorDarken(context),
-                        ),
-                        hintText: 'Team',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            size: ICON_BUTTON_SIZE.h,
+                            Icons.group,
+                            color: Utils.getPrimaryColorDarken(context),
                           ),
-                        ),
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Delete this team?',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontSize: DEFAULT_FONT_SIZE.sp,
+                          filled: true,
+                          fillColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          hintStyle: TextStyle(
+                            fontSize: 12.sp,
+                            color: Utils.getPrimaryColorDarken(context),
                           ),
-                        ),
-                        IconButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            icon: Icon(
-                              Icons.delete,
-                              size: ICON_BUTTON_SIZE.h,
+                          hintText: 'Team',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
                             ),
-                            color: Colors.red,
-                            onPressed: () {
-                              Utils.handleVibrationFeedback(context);
-                              Navigator.of(context).pop();
-                              if (teamToEdit.getPlayers.length > 0) {
-                                _showDialogForDeletingTeam(
-                                    context, gameSettings, teamToEdit);
-                              } else {
-                                _deleteTeam(teamToEdit, gameSettings);
-                              }
-                            }),
-                      ],
-                    ),
-                  ],
-                );
-              },
+                          ),
+                        ),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Delete this team?',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: DEFAULT_FONT_SIZE.sp,
+                            ),
+                          ),
+                          IconButton(
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              icon: Icon(
+                                Icons.delete,
+                                size: ICON_BUTTON_SIZE.h,
+                              ),
+                              color: Colors.red,
+                              onPressed: () {
+                                Utils.handleVibrationFeedback(context);
+                                Navigator.of(context).pop();
+                                if (teamToEdit.getPlayers.length > 0) {
+                                  _showDialogForDeletingTeam(
+                                      context, gameSettings, teamToEdit);
+                                } else {
+                                  _deleteTeam(teamToEdit, gameSettings);
+                                }
+                              }),
+                        ],
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
             actions: [
               TextButton(
@@ -430,11 +437,14 @@ class PlayersTeamsListDialogs {
                 fontSize: DIALOG_TITLE_FONTSIZE.sp,
               ),
             ),
-            content: Text(
-              'Do you also want to delete the team?',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            content: Container(
+              width: DIALOG_WIDTH.w,
+              child: Text(
+                'Do you also want to delete the team?',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                ),
               ),
             ),
             actions: [
@@ -577,42 +587,46 @@ class PlayersTeamsListDialogs {
                 fontSize: DIALOG_TITLE_FONTSIZE.sp,
               ),
             ),
-            content: StatefulBuilder(
-              builder: (context, setState) {
-                return Container(
-                  width: 0.6.w,
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: possibleTeamsToSwap.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final Team team = possibleTeamsToSwap[index];
+            content: Container(
+              width: DIALOG_WIDTH.w,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Container(
+                    width: 0.6.w,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: possibleTeamsToSwap.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        final Team team = possibleTeamsToSwap[index];
 
-                      return Theme(
-                        data: ThemeData(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                        ),
-                        child: RadioListTile(
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          title: Text(
-                            team.getName,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                            ),
+                        return Theme(
+                          data: ThemeData(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
                           ),
-                          value: team,
-                          groupValue: selectedTeam,
-                          onChanged: (Team? value) {
-                            Utils.handleVibrationFeedback(context);
-                            setState(() => selectedTeam = value);
-                          },
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
+                          child: RadioListTile(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            title: Text(
+                              team.getName,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                              ),
+                            ),
+                            value: team,
+                            groupValue: selectedTeam,
+                            onChanged: (Team? value) {
+                              Utils.handleVibrationFeedback(context);
+                              setState(() => selectedTeam = value);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  );
+                },
+              ),
             ),
             actions: [
               TextButton(
@@ -824,7 +838,7 @@ class PlayersTeamsListDialogs {
             ),
           ),
           content: Container(
-            width: 0.6.w,
+            width: DIALOG_WIDTH.w,
             child: Text(
               'All the players in this team will also be deleted.',
               style: TextStyle(

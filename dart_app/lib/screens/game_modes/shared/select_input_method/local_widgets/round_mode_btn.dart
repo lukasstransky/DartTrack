@@ -19,8 +19,10 @@ class RoundBtn extends StatelessWidget {
     if (mode == GameMode.X01) {
       if (_getAmountOfThrownDarts(context) != 0) {
         Fluttertoast.showToast(
-            msg: 'In order to switch, please finish the round!',
-            toastLength: Toast.LENGTH_LONG);
+          msg: 'In order to switch, please finish the round!',
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        );
       } else {
         final gameSettingsX01_P = context.read<GameSettingsX01_P>();
 
@@ -31,8 +33,10 @@ class RoundBtn extends StatelessWidget {
     } else if (mode == GameMode.ScoreTraining) {
       if (_getAmountOfThrownDarts(context) != 0) {
         Fluttertoast.showToast(
-            msg: 'In order to switch, please finish the round!',
-            toastLength: Toast.LENGTH_LONG);
+          msg: 'In order to switch, please finish the round!',
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        );
       } else {
         final gameSettingsScoreTraining_P =
             context.read<GameSettingsScoreTraining_P>();

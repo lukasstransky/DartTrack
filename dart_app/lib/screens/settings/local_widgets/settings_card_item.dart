@@ -109,7 +109,11 @@ class SettingsCardItem extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      Fluttertoast.showToast(msg: 'Could not launch $url');
+      Fluttertoast.showToast(
+        msg: 'Could not launch $url',
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        toastLength: Toast.LENGTH_LONG,
+      );
     }
   }
 

@@ -73,22 +73,25 @@ class SettingsAccountData extends StatelessWidget {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: RichText(
-          text: TextSpan(
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-            ),
-            children: <TextSpan>[
-              TextSpan(text: 'Are you sure you want to reset '),
-              TextSpan(
-                text: 'all statistics',
-                style: TextStyle(fontWeight: FontWeight.bold),
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
               ),
-              TextSpan(
-                  text:
-                      '? \nThis action will permanently delete all of your game data and cannot be undone.'),
-            ],
+              children: <TextSpan>[
+                TextSpan(text: 'Are you sure you want to reset '),
+                TextSpan(
+                  text: 'all statistics',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                    text:
+                        '? \nThis action will permanently delete all of your game data and cannot be undone.'),
+              ],
+            ),
           ),
         ),
         actions: [
@@ -167,22 +170,25 @@ class SettingsAccountData extends StatelessWidget {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: RichText(
-          text: TextSpan(
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-            ),
-            children: <TextSpan>[
-              TextSpan(text: 'Are you sure you want to '),
-              TextSpan(
-                text: 'delete your account',
-                style: TextStyle(fontWeight: FontWeight.bold),
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
               ),
-              TextSpan(
-                  text:
-                      '? \nThis action is irreversible and will permanently delete your account and associated data.'),
-            ],
+              children: <TextSpan>[
+                TextSpan(text: 'Are you sure you want to '),
+                TextSpan(
+                  text: 'delete your account',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                    text:
+                        '? \nThis action is irreversible and will permanently delete your account and associated data.'),
+              ],
+            ),
           ),
         ),
         actions: [

@@ -3,11 +3,22 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class DrawModeX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    late double scaleFactorSwitch;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    } else {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    }
+
     return Selector<GameSettingsX01_P, SelectorModel>(
       selector: (_, gameSettingsX01) => SelectorModel(
         drawMode: gameSettingsX01.getDrawMode,
@@ -37,18 +48,21 @@ class DrawModeX01 extends StatelessWidget {
                         fontSize: 10.sp,
                       ),
                     ),
-                    Switch(
-                      thumbColor: MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.secondary),
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveThumbColor:
-                          Theme.of(context).colorScheme.secondary,
-                      value: selectorModel.drawMode,
-                      onChanged: (value) {
-                        Utils.handleVibrationFeedback(context);
-                        _drawModeSwitchPressed(
-                            context.read<GameSettingsX01_P>(), value);
-                      },
+                    Transform.scale(
+                      scale: scaleFactorSwitch,
+                      child: Switch(
+                        thumbColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.secondary),
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        inactiveThumbColor:
+                            Theme.of(context).colorScheme.secondary,
+                        value: selectorModel.drawMode,
+                        onChanged: (value) {
+                          Utils.handleVibrationFeedback(context);
+                          _drawModeSwitchPressed(
+                              context.read<GameSettingsX01_P>(), value);
+                        },
+                      ),
                     ),
                   ],
                 ),

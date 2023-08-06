@@ -33,7 +33,10 @@ class UsernameInput extends StatelessWidget {
           }
           return null;
         },
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 12.sp,
+        ),
         decoration: InputDecoration(
           prefixIcon: Icon(
             size: ICON_BUTTON_SIZE.h,
@@ -44,6 +47,7 @@ class UsernameInput extends StatelessWidget {
           filled: true,
           fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
           hintStyle: TextStyle(
+            fontSize: 12.sp,
             color: Utils.getPrimaryColorDarken(context),
           ),
           border: OutlineInputBorder(

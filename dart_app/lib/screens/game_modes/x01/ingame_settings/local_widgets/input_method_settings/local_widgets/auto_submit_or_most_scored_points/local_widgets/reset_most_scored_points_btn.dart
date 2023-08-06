@@ -31,7 +31,10 @@ class ResetMostScoredPointsBtn extends StatelessWidget {
           if (!resetBtnClickable) {
             Utils.handleVibrationFeedback(context);
             Fluttertoast.showToast(
-                msg: 'No values changed!', toastLength: Toast.LENGTH_LONG);
+              msg: 'No values changed!',
+              toastLength: Toast.LENGTH_LONG,
+              fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+            );
             return;
           }
           gameSettingsX01.setMostScoredPoints =

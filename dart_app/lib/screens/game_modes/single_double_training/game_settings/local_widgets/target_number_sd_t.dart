@@ -6,6 +6,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class TargetNumberSingleDoubleTraining extends StatefulWidget {
@@ -110,6 +111,7 @@ class _TargetNumberSingleDoubleTrainingState
             ),
           ),
           content: Container(
+            width: DIALOG_WIDTH.w,
             margin: EdgeInsets.only(
               left: 10.w,
               right: 10.w,
@@ -144,6 +146,7 @@ class _TargetNumberSingleDoubleTrainingState
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
                 hintStyle: TextStyle(
+                  fontSize: 12.sp,
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(
@@ -238,6 +241,16 @@ class _TargetNumberSingleDoubleTrainingState
     final GameSettingsSingleDoubleTraining_P settings =
         context.read<GameSettingsSingleDoubleTraining_P>();
 
+    late double scaleFactorSwitch;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    } else {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    }
+
     return Container(
       width: 90.w,
       child: Column(
@@ -270,21 +283,24 @@ class _TargetNumberSingleDoubleTrainingState
               ),
               Selector<GameSettingsSingleDoubleTraining_P, bool>(
                 selector: (_, settings) => settings.getIsTargetNumberEnabled,
-                builder: (_, isTargetNumberEnabled, __) => Switch(
-                  thumbColor: MaterialStateProperty.all(
-                      Theme.of(context).colorScheme.secondary),
-                  activeColor: Theme.of(context).colorScheme.secondary,
-                  inactiveThumbColor: Theme.of(context).colorScheme.secondary,
-                  value: isTargetNumberEnabled,
-                  onChanged: (value) {
-                    Utils.handleVibrationFeedback(context);
-                    if (value) {
-                      _showDialogForEnteringTargetNumber(context);
-                    } else {
-                      settings.resetTargetNumberToDefault();
-                      settings.notify();
-                    }
-                  },
+                builder: (_, isTargetNumberEnabled, __) => Transform.scale(
+                  scale: scaleFactorSwitch,
+                  child: Switch(
+                    thumbColor: MaterialStateProperty.all(
+                        Theme.of(context).colorScheme.secondary),
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
+                    value: isTargetNumberEnabled,
+                    onChanged: (value) {
+                      Utils.handleVibrationFeedback(context);
+                      if (value) {
+                        _showDialogForEnteringTargetNumber(context);
+                      } else {
+                        settings.resetTargetNumberToDefault();
+                        settings.notify();
+                      }
+                    },
+                  ),
                 ),
               ),
             ],

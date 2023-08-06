@@ -131,11 +131,14 @@ class _StatisticsState extends State<Statistics> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          'In order to track your games, please create an account.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            'In order to track your games, please create an account.',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [

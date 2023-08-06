@@ -1,4 +1,6 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
@@ -33,14 +35,29 @@ class TwoPlayerTeamStatsX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameSettingsX01_P gameSettingsX01_P =
+        context.read<GameSettingsX01_P>();
+
     late double height;
     if (ResponsiveBreakpoints.of(context).isMobile) {
-      height = 35.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet) {
-      height = 45.h;
-    } else if (ResponsiveBreakpoints.of(context).isDesktop) {
+      if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        height = 37.h;
+      } else {
+        height = 35.h;
+      }
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        height = 47.h;
+      } else {
+        height = 45.h;
+      }
     } else {
-      height = 45.h;
+      if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        height = 47.h;
+      } else {
+        height = 45.h;
+      }
     }
 
     return Container(

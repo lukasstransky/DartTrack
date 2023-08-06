@@ -99,8 +99,10 @@ class ResetPasswordBtn extends StatelessWidget {
     passwordTextController.clear();
     Navigator.of(context).pop();
     Fluttertoast.showToast(
-        msg: 'Email for resetting password sent!',
-        toastLength: Toast.LENGTH_LONG);
+      msg: 'Email for resetting password sent!',
+      toastLength: Toast.LENGTH_LONG,
+      fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+    );
 
     // hide loading spinner
     context.loaderOverlay.hide();

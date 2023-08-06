@@ -20,7 +20,13 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
 
   final PlayerOrTeamGameStatsX01? currPlayerOrTeamGameStatsX01;
 
-  bool _shouldDisplayRightBorder(GameX01_P gameX01) {
+  bool _shouldDisplayRightBorder(
+      GameX01_P gameX01, GameSettingsX01_P gameSettingsX01_P) {
+    if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      return gameX01.getTeamGameStatistics
+              .indexOf(currPlayerOrTeamGameStatsX01) !=
+          gameX01.getTeamGameStatistics.length - 1;
+    }
     return gameX01.getPlayerGameStatistics
             .indexOf(currPlayerOrTeamGameStatsX01) !=
         gameX01.getPlayerGameStatistics.length - 1;
@@ -64,20 +70,24 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
             ],
           ),
         ),
-        Text(
-          currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
-          style: TextStyle(
-            fontSize: 50.sp,
-            color: Colors.white,
+        Center(
+          child: Text(
+            currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
+            style: TextStyle(
+              fontSize: 50.sp,
+              color: Colors.white,
+            ),
           ),
         ),
-        Container(
-          transform: Matrix4.translationValues(0.0, -1.5.h, 0.0),
-          child: Selector<GameSettingsX01_P, bool>(
-            selector: (_, gameSettings) => gameSettings.getShowFinishWays,
-            builder: (_, __, ___) => FinishWaysX01(
-                currPlayerOrTeamGameStatsX01:
-                    this.currPlayerOrTeamGameStatsX01),
+        Center(
+          child: Container(
+            transform: Matrix4.translationValues(0.0, -1.5.h, 0.0),
+            child: Selector<GameSettingsX01_P, bool>(
+              selector: (_, gameSettings) => gameSettings.getShowFinishWays,
+              builder: (_, __, ___) => FinishWaysX01(
+                  currPlayerOrTeamGameStatsX01:
+                      this.currPlayerOrTeamGameStatsX01),
+            ),
           ),
         ),
       ],
@@ -89,32 +99,39 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       children: [
         Selector<GameSettingsX01_P, bool>(
           selector: (_, gameSettings) => gameSettings.getShowFinishWays,
-          builder: (_, __, ___) => FinishWaysX01(
-              currPlayerOrTeamGameStatsX01: this.currPlayerOrTeamGameStatsX01),
+          builder: (_, __, ___) => Center(
+            child: FinishWaysX01(
+                currPlayerOrTeamGameStatsX01:
+                    this.currPlayerOrTeamGameStatsX01),
+          ),
         ),
-        Container(
-          padding: EdgeInsets.only(top: 0.5.h),
-          child: Text(
-            currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
-            style: TextStyle(
-              fontSize: 50.sp,
-              color: Colors.white,
+        Center(
+          child: Container(
+            padding: EdgeInsets.only(top: 0.5.h),
+            child: Text(
+              currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
+              style: TextStyle(
+                fontSize: 50.sp,
+                color: Colors.white,
+              ),
             ),
           ),
         ),
-        Container(
-          transform: Matrix4.translationValues(0.0, -0.5.h, 0.0),
-          padding: EdgeInsets.only(left: 1.w, right: 1.w),
-          child: FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              currPlayerOrTeamGameStatsX01!.getPlayer is Bot
-                  ? 'Bot - lvl. ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} '
-                  : currPlayerOrTeamGameStatsX01!.getPlayer.getName,
-              style: TextStyle(
-                fontSize: 18.sp,
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
+        Center(
+          child: Container(
+            transform: Matrix4.translationValues(0.0, -0.5.h, 0.0),
+            padding: EdgeInsets.only(left: 1.w, right: 1.w),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                currPlayerOrTeamGameStatsX01!.getPlayer is Bot
+                    ? 'Bot - lvl. ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} '
+                    : currPlayerOrTeamGameStatsX01!.getPlayer.getName,
+                style: TextStyle(
+                  fontSize: 18.sp,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -137,7 +154,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
             color: Utils.getPrimaryColorDarken(context),
             width: GENERAL_BORDER_WIDTH.w,
           ),
-          right: _shouldDisplayRightBorder(gameX01)
+          right: _shouldDisplayRightBorder(gameX01, gameSettingsX01)
               ? BorderSide(
                   color: Utils.getPrimaryColorDarken(context),
                   width: GENERAL_BORDER_WIDTH.w,

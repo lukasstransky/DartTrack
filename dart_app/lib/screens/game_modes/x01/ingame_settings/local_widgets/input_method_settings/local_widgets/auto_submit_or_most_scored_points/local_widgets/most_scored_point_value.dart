@@ -106,6 +106,7 @@ class MostScoredPointValue extends StatelessWidget {
             ),
           ),
           content: Container(
+            width: DIALOG_WIDTH.w,
             margin: EdgeInsets.only(
               left: 7.w,
               right: 7.w,
@@ -143,6 +144,7 @@ class MostScoredPointValue extends StatelessWidget {
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
                 hintStyle: TextStyle(
+                  fontSize: 12.sp,
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(

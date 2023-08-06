@@ -17,7 +17,8 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
     final bool isRoundMode =
         context.read<GameSettingsScoreTraining_P>().getMode ==
             ScoreTrainingModeEnum.MaxRounds;
-    double WIDTH = 15.w;
+
+    double WIDTH = 60.w;
     const int FONTSIZE = 18;
     double PADDING_TOP = 2.h;
 
@@ -39,7 +40,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
           padding: EdgeInsets.only(
             top: PADDING_TOP,
           ),
-          width: WIDTH.w,
+          width: WIDTH,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -65,7 +66,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
           padding: EdgeInsets.only(
             top: PADDING_TOP,
           ),
-          width: WIDTH.w,
+          width: WIDTH,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -91,7 +92,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
           padding: EdgeInsets.only(
             top: PADDING_TOP,
           ),
-          width: WIDTH.w,
+          width: WIDTH,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -117,7 +118,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
           padding: EdgeInsets.only(
             top: PADDING_TOP,
           ),
-          width: WIDTH.w,
+          width: WIDTH,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

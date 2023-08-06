@@ -599,7 +599,8 @@ class StatsFirestoreX01_P with ChangeNotifier {
       _legsWonTotal += stats.getLegsWonTotal;
 
       //avg
-      final double _avg = double.parse(stats.getAverage());
+      final String _avgString = stats.getAverage();
+      final double _avg = _avgString == '-' ? 0 : double.parse(_avgString);
       _totalAvg += _avg;
       if (_avg > bestAvg) {
         bestAvg = _avg;
@@ -609,7 +610,9 @@ class StatsFirestoreX01_P with ChangeNotifier {
       }
 
       //first nine avg
-      final double _firstNineAvg = double.parse(stats.getFirstNinveAvg());
+      final String _firstNineAvgString = stats.getFirstNinveAvg();
+      final double _firstNineAvg =
+          _firstNineAvgString == '-' ? 0 : double.parse(_firstNineAvgString);
       _totalFirstNineAvg += _firstNineAvg;
       if (_firstNineAvg > bestFirstNineAvg) {
         bestFirstNineAvg = _firstNineAvg;

@@ -18,6 +18,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -140,8 +141,10 @@ class FirestoreServiceGames {
       await Future.wait(futureList);
     } catch (e) {
       Fluttertoast.showToast(
-          msg: 'An unexpected error occurred. Please try again later.',
-          toastLength: Toast.LENGTH_LONG);
+        msg: 'An unexpected error occurred. Please try again later.',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
     } finally {
       settings.setIsResettingStatsOrDeletingAccount = false;
       settings.notify();
@@ -156,8 +159,10 @@ class FirestoreServiceGames {
           snapshot.docs.map((doc) => doc.reference.delete()).toList());
     } catch (e) {
       Fluttertoast.showToast(
-          msg: 'An unexpected error occurred. Please try again later.',
-          toastLength: Toast.LENGTH_LONG);
+        msg: 'An unexpected error occurred. Please try again later.',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
     }
   }
 

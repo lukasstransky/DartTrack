@@ -121,45 +121,48 @@ class _CricketDialogState extends State<CricketDialog> {
           fontSize: DIALOG_TITLE_FONTSIZE.sp,
         ),
       ),
-      content: GestureDetector(
-        onHorizontalDragEnd: (details) {
-          if (details.velocity.pixelsPerSecond.dx > 0) {
-            _pageController.previousPage(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          } else {
-            _pageController.nextPage(
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          }
-        },
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.5,
-          child: PageView(
-            controller: _pageController,
-            children: [
-              Container(
-                child: Text(
-                  'Page 1',
-                  style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+      content: Container(
+        width: DIALOG_WIDTH.w,
+        child: GestureDetector(
+          onHorizontalDragEnd: (details) {
+            if (details.velocity.pixelsPerSecond.dx > 0) {
+              _pageController.previousPage(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+              );
+            } else {
+              _pageController.nextPage(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.easeOut,
+              );
+            }
+          },
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.5,
+            child: PageView(
+              controller: _pageController,
+              children: [
+                Container(
+                  child: Text(
+                    'Page 1',
+                    style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                  ),
                 ),
-              ),
-              Container(
-                child: Text(
-                  'Page 2',
-                  style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                Container(
+                  child: Text(
+                    'Page 2',
+                    style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                  ),
                 ),
-              ),
-              Container(
-                child: Text(
-                  'Page 3',
-                  style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                Container(
+                  child: Text(
+                    'Page 3',
+                    style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

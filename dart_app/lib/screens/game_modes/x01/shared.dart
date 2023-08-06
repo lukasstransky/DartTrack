@@ -70,259 +70,92 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
           fontSize: DIALOG_TITLE_FONTSIZE.sp,
         ),
       ),
-      content: StatefulBuilder(
-        builder: (context, setState) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (gameSettingsX01.getEnableCheckoutCounting &&
-                  gameSettingsX01.getCheckoutCountingFinallyDisabled == false)
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Darts on double:',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+      content: Container(
+        width: DIALOG_WIDTH.w,
+        child: StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (gameSettingsX01.getEnableCheckoutCounting &&
+                    gameSettingsX01.getCheckoutCountingFinallyDisabled == false)
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Darts on double:',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                      ),
                     ),
                   ),
-                ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (gameSettingsX01.getEnableCheckoutCounting &&
-                      gameSettingsX01.getCheckoutCountingFinallyDisabled ==
-                          false) ...[
-                    if (!gameX01.finishedLegSetOrGame(
-                        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts
-                            ? threeDartsCalculated
-                            : currentPointsSelected))
-                      // button 0 for checkout darts
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Utils.handleVibrationFeedback(context);
-                              setState(() => selectedCheckoutCount = 0);
-                            },
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(
-                                '0',
-                                style: TextStyle(
-                                  color: selectedCheckoutCount == 0
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : Colors.white,
-                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                ),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              splashFactory: NoSplash.splashFactory,
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              overlayColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: Utils.getPrimaryColorDarken(context),
-                                    width: borderWidth,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ),
-                                ),
-                              ),
-                              backgroundColor: selectedCheckoutCount == 0
-                                  ? Utils.getPrimaryMaterialStateColorDarken(
-                                      context)
-                                  : Utils.getColor(
-                                      Theme.of(context).colorScheme.primary),
-                            ),
-                          ),
-                        ),
-                      ),
-                    // button 1 for checkout darts
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            setState(() => selectedCheckoutCount = 1);
-                          },
-                          child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text(
-                              '1',
-                              style: TextStyle(
-                                color: selectedCheckoutCount == 1
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Colors.white,
-                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                              ),
-                            ),
-                          ),
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: Utils.getPrimaryColorDarken(context),
-                                  width: borderWidth,
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                ),
-                              ),
-                            ),
-                            backgroundColor: selectedCheckoutCount == 1
-                                ? Utils.getPrimaryMaterialStateColorDarken(
-                                    context)
-                                : Utils.getColor(
-                                    Theme.of(context).colorScheme.primary),
-                          ),
-                        ),
-                      ),
-                    ),
-                    if (checkoutPossibilities >= 2)
-                      // button 2 for checkout darts
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Utils.handleVibrationFeedback(context);
-                              setState(() {
-                                selectedCheckoutCount = 2;
-                                if (!isDoubleField) {
-                                  selectedFinishCount = 3;
-                                }
-                                if (selectedFinishCount < 2) {
-                                  selectedFinishCount = 2;
-                                }
-                              });
-                            },
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(
-                                '2',
-                                style: TextStyle(
-                                  color: selectedCheckoutCount == 2
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : Colors.white,
-                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                ),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              splashFactory: NoSplash.splashFactory,
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              overlayColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: Utils.getPrimaryColorDarken(context),
-                                    width: borderWidth,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ),
-                                ),
-                              ),
-                              backgroundColor: selectedCheckoutCount == 2
-                                  ? Utils.getPrimaryMaterialStateColorDarken(
-                                      context)
-                                  : Utils.getColor(
-                                      Theme.of(context).colorScheme.primary),
-                            ),
-                          ),
-                        ),
-                      ),
-                    if (checkoutPossibilities == 3)
-                      // button 3 for checkout darts
-                      Expanded(
-                        child: Container(
-                          margin: EdgeInsets.only(
-                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Utils.handleVibrationFeedback(context);
-                              setState(() => selectedCheckoutCount = 3);
-                              if (selectedFinishCount < 3) {
-                                selectedFinishCount = 3;
-                              }
-                            },
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(
-                                '3',
-                                style: TextStyle(
-                                  color: selectedCheckoutCount == 3
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : Colors.white,
-                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                ),
-                              ),
-                            ),
-                            style: ButtonStyle(
-                              splashFactory: NoSplash.splashFactory,
-                              shadowColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              overlayColor:
-                                  MaterialStateProperty.all(Colors.transparent),
-                              shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                  side: BorderSide(
-                                    color: Utils.getPrimaryColorDarken(context),
-                                    width: borderWidth,
-                                  ),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10.0),
-                                  ),
-                                ),
-                              ),
-                              backgroundColor: selectedCheckoutCount == 3
-                                  ? Utils.getPrimaryMaterialStateColorDarken(
-                                      context)
-                                  : Utils.getColor(
-                                      Theme.of(context).colorScheme.primary),
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                ],
-              ),
-              if (gameSettingsX01.getInputMethod == InputMethod.Round &&
-                  gameX01.finishedLegSetOrGame(currentPointsSelected)) ...[
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    'Darts for finish:',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                    ),
-                  ),
-                ),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (_shouldDisplayOneFinishDartBtn(
-                        currentPointsSelected, gameSettingsX01, gameX01))
-                      // button 1 for finish darts
+                    if (gameSettingsX01.getEnableCheckoutCounting &&
+                        gameSettingsX01.getCheckoutCountingFinallyDisabled ==
+                            false) ...[
+                      if (!gameX01.finishedLegSetOrGame(
+                          gameSettingsX01.getInputMethod ==
+                                  InputMethod.ThreeDarts
+                              ? threeDartsCalculated
+                              : currentPointsSelected))
+                        // button 0 for checkout darts
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: 0.5.h,
+                                bottom: 0.5.h,
+                                left: 1.w,
+                                right: 1.w),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Utils.handleVibrationFeedback(context);
+                                setState(() => selectedCheckoutCount = 0);
+                              },
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  '0',
+                                  style: TextStyle(
+                                    color: selectedCheckoutCount == 0
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                        : Colors.white,
+                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  ),
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                splashFactory: NoSplash.splashFactory,
+                                shadowColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color:
+                                          Utils.getPrimaryColorDarken(context),
+                                      width: borderWidth,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                                backgroundColor: selectedCheckoutCount == 0
+                                    ? Utils.getPrimaryMaterialStateColorDarken(
+                                        context)
+                                    : Utils.getColor(
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                            ),
+                          ),
+                        ),
+                      // button 1 for checkout darts
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(
@@ -330,15 +163,14 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           child: ElevatedButton(
                             onPressed: () {
                               Utils.handleVibrationFeedback(context);
-                              if (selectedCheckoutCount <= 1)
-                                setState(() => selectedFinishCount = 1);
+                              setState(() => selectedCheckoutCount = 1);
                             },
                             child: FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(
                                 '1',
                                 style: TextStyle(
-                                  color: selectedFinishCount == 1
+                                  color: selectedCheckoutCount == 1
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
                                   fontSize: DIALOG_CONTENT_FONTSIZE.sp,
@@ -362,10 +194,263 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   ),
                                 ),
                               ),
-                              backgroundColor: selectedCheckoutCount > 1
+                              backgroundColor: selectedCheckoutCount == 1
+                                  ? Utils.getPrimaryMaterialStateColorDarken(
+                                      context)
+                                  : Utils.getColor(
+                                      Theme.of(context).colorScheme.primary),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (checkoutPossibilities >= 2)
+                        // button 2 for checkout darts
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: 0.5.h,
+                                bottom: 0.5.h,
+                                left: 1.w,
+                                right: 1.w),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Utils.handleVibrationFeedback(context);
+                                setState(() {
+                                  selectedCheckoutCount = 2;
+                                  if (!isDoubleField) {
+                                    selectedFinishCount = 3;
+                                  }
+                                  if (selectedFinishCount < 2) {
+                                    selectedFinishCount = 2;
+                                  }
+                                });
+                              },
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  '2',
+                                  style: TextStyle(
+                                    color: selectedCheckoutCount == 2
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                        : Colors.white,
+                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  ),
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                splashFactory: NoSplash.splashFactory,
+                                shadowColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color:
+                                          Utils.getPrimaryColorDarken(context),
+                                      width: borderWidth,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                                backgroundColor: selectedCheckoutCount == 2
+                                    ? Utils.getPrimaryMaterialStateColorDarken(
+                                        context)
+                                    : Utils.getColor(
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (checkoutPossibilities == 3)
+                        // button 3 for checkout darts
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: 0.5.h,
+                                bottom: 0.5.h,
+                                left: 1.w,
+                                right: 1.w),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Utils.handleVibrationFeedback(context);
+                                setState(() => selectedCheckoutCount = 3);
+                                if (selectedFinishCount < 3) {
+                                  selectedFinishCount = 3;
+                                }
+                              },
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  '3',
+                                  style: TextStyle(
+                                    color: selectedCheckoutCount == 3
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                        : Colors.white,
+                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  ),
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                splashFactory: NoSplash.splashFactory,
+                                shadowColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color:
+                                          Utils.getPrimaryColorDarken(context),
+                                      width: borderWidth,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                                backgroundColor: selectedCheckoutCount == 3
+                                    ? Utils.getPrimaryMaterialStateColorDarken(
+                                        context)
+                                    : Utils.getColor(
+                                        Theme.of(context).colorScheme.primary),
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ],
+                ),
+                if (gameSettingsX01.getInputMethod == InputMethod.Round &&
+                    gameX01.finishedLegSetOrGame(currentPointsSelected)) ...[
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Darts for finish:',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      if (_shouldDisplayOneFinishDartBtn(
+                          currentPointsSelected, gameSettingsX01, gameX01))
+                        // button 1 for finish darts
+                        Expanded(
+                          child: Container(
+                            margin: EdgeInsets.only(
+                                top: 0.5.h,
+                                bottom: 0.5.h,
+                                left: 1.w,
+                                right: 1.w),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Utils.handleVibrationFeedback(context);
+                                if (selectedCheckoutCount <= 1)
+                                  setState(() => selectedFinishCount = 1);
+                              },
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  '1',
+                                  style: TextStyle(
+                                    color: selectedFinishCount == 1
+                                        ? Theme.of(context)
+                                            .colorScheme
+                                            .secondary
+                                        : Colors.white,
+                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  ),
+                                ),
+                              ),
+                              style: ButtonStyle(
+                                splashFactory: NoSplash.splashFactory,
+                                shadowColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                overlayColor: MaterialStateProperty.all(
+                                    Colors.transparent),
+                                shape: MaterialStateProperty.all(
+                                  RoundedRectangleBorder(
+                                    side: BorderSide(
+                                      color:
+                                          Utils.getPrimaryColorDarken(context),
+                                      width: borderWidth,
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(10.0),
+                                    ),
+                                  ),
+                                ),
+                                backgroundColor: selectedCheckoutCount > 1
+                                    ? MaterialStateProperty.all(
+                                        Utils.darken(Colors.grey, 25))
+                                    : selectedFinishCount == 1
+                                        ? Utils
+                                            .getPrimaryMaterialStateColorDarken(
+                                                context)
+                                        : Utils.getColor(Theme.of(context)
+                                            .colorScheme
+                                            .primary),
+                              ),
+                            ),
+                          ),
+                        ),
+                      // button 2 for finish darts
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Utils.handleVibrationFeedback(context);
+                              if (selectedCheckoutCount < 2 ||
+                                  selectedCheckoutCount == 2 && isDoubleField) {
+                                setState(() => selectedFinishCount = 2);
+                              }
+                            },
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Text(
+                                '2',
+                                style: TextStyle(
+                                  color: selectedFinishCount == 2
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.white,
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                ),
+                              ),
+                            ),
+                            style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Utils.getPrimaryColorDarken(context),
+                                    width: borderWidth,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: selectedCheckoutCount > 2 ||
+                                      (selectedCheckoutCount == 2 &&
+                                          !isDoubleField)
                                   ? MaterialStateProperty.all(
                                       Utils.darken(Colors.grey, 25))
-                                  : selectedFinishCount == 1
+                                  : selectedFinishCount == 2
                                       ? Utils
                                           .getPrimaryMaterialStateColorDarken(
                                               context)
@@ -376,116 +461,61 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           ),
                         ),
                       ),
-                    // button 2 for finish darts
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            if (selectedCheckoutCount < 2 ||
-                                selectedCheckoutCount == 2 && isDoubleField) {
-                              setState(() => selectedFinishCount = 2);
-                            }
-                          },
-                          child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text(
-                              '2',
-                              style: TextStyle(
-                                color: selectedFinishCount == 2
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Colors.white,
-                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                              ),
-                            ),
-                          ),
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: Utils.getPrimaryColorDarken(context),
-                                  width: borderWidth,
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
+                      // button 3 for finish darts
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(
+                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              Utils.handleVibrationFeedback(context);
+                              setState(() => selectedFinishCount = 3);
+                            },
+                            child: FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Text(
+                                '3',
+                                style: TextStyle(
+                                  color: selectedFinishCount == 3
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.white,
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                 ),
                               ),
                             ),
-                            backgroundColor: selectedCheckoutCount > 2 ||
-                                    (selectedCheckoutCount == 2 &&
-                                        !isDoubleField)
-                                ? MaterialStateProperty.all(
-                                    Utils.darken(Colors.grey, 25))
-                                : selectedFinishCount == 2
-                                    ? Utils.getPrimaryMaterialStateColorDarken(
-                                        context)
-                                    : Utils.getColor(
-                                        Theme.of(context).colorScheme.primary),
+                            style: ButtonStyle(
+                              splashFactory: NoSplash.splashFactory,
+                              shadowColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              overlayColor:
+                                  MaterialStateProperty.all(Colors.transparent),
+                              shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                  side: BorderSide(
+                                    color: Utils.getPrimaryColorDarken(context),
+                                    width: borderWidth,
+                                  ),
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                ),
+                              ),
+                              backgroundColor: selectedFinishCount == 3
+                                  ? Utils.getPrimaryMaterialStateColorDarken(
+                                      context)
+                                  : Utils.getColor(
+                                      Theme.of(context).colorScheme.primary),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    // button 3 for finish darts
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            setState(() => selectedFinishCount = 3);
-                          },
-                          child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text(
-                              '3',
-                              style: TextStyle(
-                                color: selectedFinishCount == 3
-                                    ? Theme.of(context).colorScheme.secondary
-                                    : Colors.white,
-                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                              ),
-                            ),
-                          ),
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                side: BorderSide(
-                                  color: Utils.getPrimaryColorDarken(context),
-                                  width: borderWidth,
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(10.0),
-                                ),
-                              ),
-                            ),
-                            backgroundColor: selectedFinishCount == 3
-                                ? Utils.getPrimaryMaterialStateColorDarken(
-                                    context)
-                                : Utils.getColor(
-                                    Theme.of(context).colorScheme.primary),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                    ],
+                  ),
+                ],
               ],
-            ],
-          );
-        },
+            );
+          },
+        ),
       ),
       actions: [
         TextButton(

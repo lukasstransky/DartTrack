@@ -34,25 +34,28 @@ class UtilsDialogs {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: RichText(
-          text: TextSpan(
-            text: 'No player with the current logged in username ',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: '$username',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: RichText(
+            text: TextSpan(
+              text: 'No player with the current logged in username ',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text: '$username',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              TextSpan(
-                text: ' is present, therefore the game will not be stored.',
-                style: TextStyle(color: Colors.white),
-              ),
-            ],
+                TextSpan(
+                  text: ' is present, therefore the game will not be stored.',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
           ),
         ),
         actions: [
@@ -157,17 +160,81 @@ class UtilsDialogs {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: StatefulBuilder(
-          builder: ((context, setState) {
-            if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single ||
-                _onePlayerPerTeam(gameSettings))
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: StatefulBuilder(
+            builder: ((context, setState) {
+              if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single ||
+                  _onePlayerPerTeam(gameSettings))
+                return Container(
+                  width: double.maxFinite,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: players.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final player = players[index];
+
+                      return Theme(
+                        data: ThemeData(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                        ),
+                        child: RadioListTile(
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          title: Container(
+                            transform: Matrix4.translationValues(
+                                DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                            child: player is Bot
+                                ? Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Bot - lvl. ${player.getLevel}',
+                                        style: TextStyle(
+                                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Container(
+                                        transform: Matrix4.translationValues(
+                                            0.0, -0.5.w, 0.0),
+                                        child: Text(
+                                          ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                          style: TextStyle(
+                                            fontSize: 8.sp,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Text(
+                                    player.getName,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                    ),
+                                  ),
+                          ),
+                          value: player,
+                          groupValue: selectedPlayer,
+                          onChanged: (Player? value) {
+                            Utils.handleVibrationFeedback(context);
+                            setState(() => selectedPlayer = value);
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                );
+
               return Container(
                 width: double.maxFinite,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: players.length,
+                  itemCount: teams.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final player = players[index];
+                    final team = teams[index];
 
                     return Theme(
                       data: ThemeData(
@@ -179,88 +246,27 @@ class UtilsDialogs {
                         title: Container(
                           transform: Matrix4.translationValues(
                               DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: player is Bot
-                              ? Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Bot - lvl. ${player.getLevel}',
-                                      style: TextStyle(
-                                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Container(
-                                      transform: Matrix4.translationValues(
-                                          0.0, -0.5.w, 0.0),
-                                      child: Text(
-                                        ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                                        style: TextStyle(
-                                          fontSize: 8.sp,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  player.getName,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                  ),
-                                ),
+                          child: Text(
+                            team.getName,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: DEFAULT_FONT_SIZE.sp,
+                            ),
+                          ),
                         ),
-                        value: player,
-                        groupValue: selectedPlayer,
-                        onChanged: (Player? value) {
+                        value: team,
+                        groupValue: selectedTeam,
+                        onChanged: (Team? value) {
                           Utils.handleVibrationFeedback(context);
-                          setState(() => selectedPlayer = value);
+                          setState(() => selectedTeam = value);
                         },
                       ),
                     );
                   },
                 ),
               );
-
-            return Container(
-              width: double.maxFinite,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: teams.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final team = teams[index];
-
-                  return Theme(
-                    data: ThemeData(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                    ),
-                    child: RadioListTile(
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      title: Container(
-                        transform: Matrix4.translationValues(
-                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                        child: Text(
-                          team.getName,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: DEFAULT_FONT_SIZE.sp,
-                          ),
-                        ),
-                      ),
-                      value: team,
-                      groupValue: selectedTeam,
-                      onChanged: (Team? value) {
-                        Utils.handleVibrationFeedback(context);
-                        setState(() => selectedTeam = value);
-                      },
-                    ),
-                  );
-                },
-              ),
-            );
-          }),
+            }),
+          ),
         ),
         actions: [
           TextButton(
@@ -357,11 +363,14 @@ class UtilsDialogs {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          'Do you want to save the game for finishing it later?',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            'Do you want to save the game for finishing it later?',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [

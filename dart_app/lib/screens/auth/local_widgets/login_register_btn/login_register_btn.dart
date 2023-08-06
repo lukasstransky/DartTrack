@@ -131,11 +131,14 @@ class LoginRegisterBtn extends StatelessWidget {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Text(
-          message,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Text(
+            message,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            ),
           ),
         ),
         actions: [

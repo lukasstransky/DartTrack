@@ -122,6 +122,7 @@ class StartGameBtn extends StatelessWidget {
         Fluttertoast.showToast(
           msg: 'At least two players are required!',
           toastLength: Toast.LENGTH_LONG,
+          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
         );
       }
     }

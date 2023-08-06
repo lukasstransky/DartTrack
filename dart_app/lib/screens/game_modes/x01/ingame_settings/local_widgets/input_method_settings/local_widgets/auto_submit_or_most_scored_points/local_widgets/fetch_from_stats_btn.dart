@@ -54,7 +54,10 @@ class FetchFromStatsBtn extends StatelessWidget {
               Utils.handleVibrationFeedback(context);
               if (!fetchFromStatsBtnClickable) {
                 Fluttertoast.showToast(
-                    msg: 'No games played!', toastLength: Toast.LENGTH_LONG);
+                  msg: 'No games played!',
+                  toastLength: Toast.LENGTH_LONG,
+                  fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+                );
               }
               _fetchFromStatsBtnPressed(gameSettingsX01, statisticsFirestore);
             },
@@ -122,11 +125,14 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
           fontSize: DIALOG_TITLE_FONTSIZE.sp,
         ),
       ),
-      content: Text(
-        'By clicking this button, the top six most frequently scored points from all your games will be loaded into the \'most scored points\' fields.',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+      content: Container(
+        width: DIALOG_WIDTH.w,
+        child: Text(
+          'By clicking this button, the top six most frequently scored points from all your games will be loaded into the \'most scored points\' fields.',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
       ),
       actions: [

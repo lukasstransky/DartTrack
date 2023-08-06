@@ -13,6 +13,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class GameStatsScoreTraining extends StatefulWidget {
@@ -56,6 +57,16 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
 
   @override
   Widget build(BuildContext context) {
+    late double scaleFactorSwitch;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    } else {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    }
+
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
@@ -127,19 +138,23 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                             fontSize: DEFAULT_FONT_SIZE.sp,
                           ),
                         ),
-                        Switch(
-                          thumbColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondary),
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          inactiveThumbColor:
-                              Theme.of(context).colorScheme.secondary,
-                          value: _roundedScoresOdd,
-                          onChanged: (value) {
-                            Utils.handleVibrationFeedback(context);
-                            setState(() {
-                              _roundedScoresOdd = value;
-                            });
-                          },
+                        Transform.scale(
+                          scale: scaleFactorSwitch,
+                          child: Switch(
+                            thumbColor: MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.secondary),
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            inactiveThumbColor:
+                                Theme.of(context).colorScheme.secondary,
+                            value: _roundedScoresOdd,
+                            onChanged: (value) {
+                              Utils.handleVibrationFeedback(context);
+                              setState(() {
+                                _roundedScoresOdd = value;
+                              });
+                            },
+                          ),
                         ),
                       ],
                     ),

@@ -49,6 +49,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
             ),
           ),
           content: Container(
+            width: DIALOG_WIDTH.w,
             margin: EdgeInsets.only(
               left: 10.w,
               right: 10.w,
@@ -83,6 +84,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
                 hintStyle: TextStyle(
+                  fontSize: 12.sp,
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(

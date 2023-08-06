@@ -98,7 +98,10 @@ class SubmitPointsBtnX01 extends StatelessWidget {
         currentPointsSelected == '1' &&
         stats.getCurrentPoints == gameSettingsX01.getPointsOrCustom()) {
       Fluttertoast.showToast(
-          msg: 'Invalid score for double in!', toastLength: Toast.LENGTH_SHORT);
+        msg: 'Invalid score for double in!',
+        toastLength: Toast.LENGTH_SHORT,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
       gameX01.setCurrentPointsSelected = 'Points';
       gameX01.notify();
     } else {

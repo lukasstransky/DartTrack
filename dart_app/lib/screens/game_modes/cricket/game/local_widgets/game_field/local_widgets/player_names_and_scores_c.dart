@@ -6,6 +6,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerOrTeamNamesAndScores extends StatelessWidget {
@@ -30,7 +31,7 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
         gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single;
 
     return Container(
-      height: _getHeight(_isNoScoreMode, _isSingleMode),
+      height: _getHeight(_isNoScoreMode, _isSingleMode, context),
       child: Row(
         children: [
           if (!evenPlayersOrTeams)
@@ -136,17 +137,45 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
   }
 }
 
-double _getHeight(bool isNoScoreMode, bool isSingleMode) {
+double _getHeight(bool isNoScoreMode, bool isSingleMode, BuildContext context) {
   if (isNoScoreMode && isSingleMode) {
-    return 5.h;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return 5.h;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      return 7.h;
+    } else {
+      return 7.h;
+    }
   } else if (isNoScoreMode && !isSingleMode) {
-    return 7.h;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return 7.h;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      return 9.h;
+    } else {
+      return 9.h;
+    }
   } else if (isSingleMode) {
-    return 8.h;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return 8.h;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      return 10.h;
+    } else {
+      return 10.h;
+    }
   }
 
   // team mode
-  return 10.h;
+  if (ResponsiveBreakpoints.of(context).isMobile) {
+    return 10.h;
+  } else if (ResponsiveBreakpoints.of(context).isTablet ||
+      ResponsiveBreakpoints.of(context).isDesktop) {
+    return 13.h;
+  } else {
+    return 14.h;
+  }
 }
 
 class CurrentPlayerOfTeam extends StatelessWidget {
@@ -205,8 +234,6 @@ class PlayerOrTeamName extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.only(left: 0.5.h, right: 0.5.h),
-      transform:
-          isNoScoreMode ? null : Matrix4.translationValues(0.0, -0.5.h, 0.0),
       child: FittedBox(
         fit: BoxFit.scaleDown,
         child: Text(

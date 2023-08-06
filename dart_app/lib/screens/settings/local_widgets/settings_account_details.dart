@@ -121,77 +121,81 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Form(
-          key: _usernameFormKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                TextFormField(
-                  autofocus: true,
-                  controller: _usernameController,
-                  textInputAction: TextInputAction.done,
-                  validator: (value) {
-                    if (value!.trim().isEmpty) {
-                      return ('Please enter a username!');
-                    }
-                    if (!_usernameValid) {
-                      return 'Username already exists!';
-                    }
-                    return null;
-                  },
-                  keyboardType: TextInputType.text,
-                  inputFormatters: [LengthLimitingTextInputFormatter(20)],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                  ),
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(
-                      size: ICON_BUTTON_SIZE.h,
-                      Icons.person,
-                      color: Utils.getPrimaryColorDarken(context),
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Form(
+            key: _usernameFormKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  TextFormField(
+                    autofocus: true,
+                    controller: _usernameController,
+                    textInputAction: TextInputAction.done,
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return ('Please enter a username!');
+                      }
+                      if (!_usernameValid) {
+                        return 'Username already exists!';
+                      }
+                      return null;
+                    },
+                    keyboardType: TextInputType.text,
+                    inputFormatters: [LengthLimitingTextInputFormatter(20)],
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                     ),
-                    hintText: 'Username',
-                    fillColor:
-                        Utils.darken(Theme.of(context).colorScheme.primary, 10),
-                    filled: true,
-                    hintStyle: TextStyle(
-                      color: Utils.getPrimaryColorDarken(context),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(
-                        width: 0,
-                        style: BorderStyle.none,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
+                        Icons.person,
+                        color: Utils.getPrimaryColorDarken(context),
                       ),
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 1.h),
-                  child: RichText(
-                    text: TextSpan(
-                      text: '(Can only be changed ',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: DEFAULT_FONT_SIZE.sp,
+                      hintText: 'Username',
+                      fillColor: Utils.darken(
+                          Theme.of(context).colorScheme.primary, 10),
+                      filled: true,
+                      hintStyle: TextStyle(
+                        fontSize: 12.sp,
+                        color: Utils.getPrimaryColorDarken(context),
                       ),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: 'once',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            )),
-                        TextSpan(
-                          text: '!)',
-                          style: TextStyle(color: Colors.white),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                )
-              ],
+                  Container(
+                    padding: EdgeInsets.only(top: 1.h),
+                    child: RichText(
+                      text: TextSpan(
+                        text: '(Can only be changed ',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: DEFAULT_FONT_SIZE.sp,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: 'once',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              )),
+                          TextSpan(
+                            text: '!)',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
@@ -295,7 +299,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
     _usernameController.clear();
     Navigator.of(context).pop();
     Fluttertoast.showToast(
-        msg: 'Username updated successfully.', toastLength: Toast.LENGTH_LONG);
+      msg: 'Username updated successfully.',
+      toastLength: Toast.LENGTH_LONG,
+      fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+    );
   }
 
   _showDialogForChangingEmail(BuildContext context) {
@@ -317,36 +324,102 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Form(
-          key: _emailFormKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  width: 80.w,
-                  child: Selector<Auth_P, bool>(
-                    selector: (_, auth) => auth.getPasswordVisible,
-                    builder: (_, passwordVisible, __) => TextFormField(
-                      autofocus: true,
-                      obscureText: !passwordVisible,
-                      controller: _currentPasswordController,
-                      keyboardType: TextInputType.text,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Form(
+            key: _emailFormKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    width: 80.w,
+                    child: Selector<Auth_P, bool>(
+                      selector: (_, auth) => auth.getPasswordVisible,
+                      builder: (_, passwordVisible, __) => TextFormField(
+                        autofocus: true,
+                        obscureText: !passwordVisible,
+                        controller: _currentPasswordController,
+                        keyboardType: TextInputType.text,
+                        textInputAction: TextInputAction.done,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(MAX_PASSWORD_LENGTH),
+                        ],
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            _currentPasswordController.clear();
+                            return ('Password is required!');
+                          }
+                          if (_errorMessage.isNotEmpty) {
+                            final String temp = _errorMessage;
+                            _errorMessage = '';
+                            return temp;
+                          }
+                          return null;
+                        },
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                        ),
+                        decoration: InputDecoration(
+                          prefixIcon: Icon(
+                            size: ICON_BUTTON_SIZE.h,
+                            Icons.lock,
+                            color: Utils.getPrimaryColorDarken(context),
+                          ),
+                          suffixIcon: IconButton(
+                            iconSize: ICON_BUTTON_SIZE.h,
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            icon: Icon(passwordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off),
+                            color: Utils.getPrimaryColorDarken(context),
+                            onPressed: () {
+                              Utils.handleVibrationFeedback(context);
+                              auth.setPasswordVisible = !passwordVisible;
+                              auth.notify();
+                            },
+                          ),
+                          filled: true,
+                          fillColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          hintText: 'Current password',
+                          hintStyle: TextStyle(
+                            fontSize: 12.sp,
+                            color: Utils.getPrimaryColorDarken(context),
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(top: 1.h),
+                    child: TextFormField(
+                      controller: _emailController,
                       textInputAction: TextInputAction.done,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(MAX_PASSWORD_LENGTH),
-                      ],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
-                          _currentPasswordController.clear();
-                          return ('Password is required!');
+                          return ('Please enter a email!');
                         }
-                        if (_errorMessage.isNotEmpty) {
-                          final String temp = _errorMessage;
-                          _errorMessage = '';
-                          return temp;
+                        if (!_emailValid) {
+                          return 'Email already exists!';
+                        }
+                        if (!RegExp(EMAIL_REGEX).hasMatch(value)) {
+                          return ('Please enter a valid email!');
                         }
                         return null;
                       },
+                      keyboardType: TextInputType.text,
+                      inputFormatters: [
+                        LengthLimitingTextInputFormatter(MAX_EMAIL_LENGTH)
+                      ],
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: DIALOG_CONTENT_FONTSIZE.sp,
@@ -354,28 +427,15 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                       decoration: InputDecoration(
                         prefixIcon: Icon(
                           size: ICON_BUTTON_SIZE.h,
-                          Icons.lock,
+                          Icons.mail,
                           color: Utils.getPrimaryColorDarken(context),
                         ),
-                        suffixIcon: IconButton(
-                          iconSize: ICON_BUTTON_SIZE.h,
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          icon: Icon(passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off),
-                          color: Utils.getPrimaryColorDarken(context),
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            auth.setPasswordVisible = !passwordVisible;
-                            auth.notify();
-                          },
-                        ),
-                        filled: true,
+                        hintText: 'New email',
                         fillColor: Utils.darken(
                             Theme.of(context).colorScheme.primary, 10),
-                        hintText: 'Current password',
+                        filled: true,
                         hintStyle: TextStyle(
+                          fontSize: 12.sp,
                           color: Utils.getPrimaryColorDarken(context),
                         ),
                         border: OutlineInputBorder(
@@ -388,53 +448,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                       ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 1.h),
-                  child: TextFormField(
-                    controller: _emailController,
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (value!.trim().isEmpty) {
-                        return ('Please enter a email!');
-                      }
-                      if (!_emailValid) {
-                        return 'Email already exists!';
-                      }
-                      if (!RegExp(EMAIL_REGEX).hasMatch(value)) {
-                        return ('Please enter a valid email!');
-                      }
-                      return null;
-                    },
-                    keyboardType: TextInputType.text,
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(MAX_EMAIL_LENGTH)
-                    ],
-                    style: TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      prefixIcon: Icon(
-                        size: ICON_BUTTON_SIZE.h,
-                        Icons.mail,
-                        color: Utils.getPrimaryColorDarken(context),
-                      ),
-                      hintText: 'New email',
-                      fillColor: Utils.darken(
-                          Theme.of(context).colorScheme.primary, 10),
-                      filled: true,
-                      hintStyle: TextStyle(
-                        color: Utils.getPrimaryColorDarken(context),
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
@@ -515,7 +530,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
       _currentPasswordController.clear();
       Navigator.of(context).pop();
       Fluttertoast.showToast(
-          msg: 'Email updated successfully.', toastLength: Toast.LENGTH_LONG);
+        msg: 'Email updated successfully.',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
     }
   }
 
@@ -536,60 +554,63 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: Form(
-          key: _passwordFormKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                PasswordInputField(
-                  passwordController: _currentPasswordController,
-                  hintText: 'Old password',
-                  validator: (value) {
-                    if (value!.trim().isEmpty) {
-                      _currentPasswordController.clear();
-                      return ('Password is required!');
-                    }
-                    if (_errorMessage.isNotEmpty) {
-                      final String temp = _errorMessage;
-                      _errorMessage = '';
-                      return temp;
-                    }
-                    return null;
-                  },
-                  autofocus: true,
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 1.h),
-                  child: PasswordInputField(
-                    passwordController: _newPasswordController,
-                    hintText: 'New password',
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: Form(
+            key: _passwordFormKey,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  PasswordInputField(
+                    passwordController: _currentPasswordController,
+                    hintText: 'Old password',
                     validator: (value) {
                       if (value!.trim().isEmpty) {
-                        _newPasswordController.clear();
+                        _currentPasswordController.clear();
                         return ('Password is required!');
+                      }
+                      if (_errorMessage.isNotEmpty) {
+                        final String temp = _errorMessage;
+                        _errorMessage = '';
+                        return temp;
                       }
                       return null;
                     },
+                    autofocus: true,
                   ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 1.h),
-                  child: PasswordInputField(
-                    passwordController: _confirmationPasswordController,
-                    hintText: 'Confirm password',
-                    validator: (value) {
-                      if (value!.trim().isEmpty) {
-                        _confirmationPasswordController.clear();
-                        return ('Password is required!');
-                      }
-                      if (value != _newPasswordController.text) {
-                        return 'The passwords do not match!';
-                      }
-                      return null;
-                    },
+                  Container(
+                    padding: EdgeInsets.only(top: 1.h),
+                    child: PasswordInputField(
+                      passwordController: _newPasswordController,
+                      hintText: 'New password',
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          _newPasswordController.clear();
+                          return ('Password is required!');
+                        }
+                        return null;
+                      },
+                    ),
                   ),
-                ),
-              ],
+                  Container(
+                    padding: EdgeInsets.only(top: 1.h),
+                    child: PasswordInputField(
+                      passwordController: _confirmationPasswordController,
+                      hintText: 'Confirm password',
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          _confirmationPasswordController.clear();
+                          return ('Password is required!');
+                        }
+                        if (value != _newPasswordController.text) {
+                          return 'The passwords do not match!';
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -667,8 +688,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
       context.read<Auth_P>().setPasswordVisible = false;
       Navigator.of(context).pop();
       Fluttertoast.showToast(
-          msg: 'Password updated successfully.',
-          toastLength: Toast.LENGTH_LONG);
+        msg: 'Password updated successfully.',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
     }
   }
 
@@ -692,8 +715,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
       formKey.currentState!.validate();
     } catch (e) {
       Fluttertoast.showToast(
-          msg: 'An unexpected error occurred. Please try again later.',
-          toastLength: Toast.LENGTH_LONG);
+        msg: 'An unexpected error occurred. Please try again later.',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
     }
 
     return false;
@@ -759,6 +784,7 @@ class PasswordInputField extends StatelessWidget {
             fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
             hintText: hintText,
             hintStyle: TextStyle(
+              fontSize: 12.sp,
               color: Utils.getPrimaryColorDarken(context),
             ),
             border: OutlineInputBorder(

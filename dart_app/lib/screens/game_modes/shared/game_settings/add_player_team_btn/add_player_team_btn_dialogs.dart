@@ -75,130 +75,135 @@ class AddPlayerTeamBtnDialogs {
               fontSize: DIALOG_TITLE_FONTSIZE.sp,
             ),
           ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (showBotOption(gameSettings_P)) ...[
-                    ListTile(
-                      title: Container(
-                        transform: Matrix4.translationValues(
-                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                        child: Row(
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (newPlayer == NewPlayer.Bot) ...[
-                                  Text(
-                                    'Bot - lvl. ${Utils.getLevelForBot(_selectedBotAvgValue)}',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                    ),
-                                  ),
-                                  Container(
-                                    transform: Matrix4.translationValues(
-                                        -1.w, 0.0, 0.0),
-                                    child: Text(
-                                      ' (${_selectedBotAvgValue - BOT_AVG_SLIDER_VALUE_RANGE}-${_selectedBotAvgValue + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                                      style: TextStyle(
-                                        fontSize: 8.sp,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                ] else ...[
-                                  Text(
-                                    'Bot',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                    ),
-                                  )
-                                ]
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                      leading: Theme(
-                        data: Theme.of(context).copyWith(
-                            unselectedWidgetColor:
-                                Utils.getPrimaryColorDarken(context)),
-                        child: Radio<NewPlayer>(
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          value: NewPlayer.Bot,
-                          groupValue: newPlayer,
-                          onChanged: (value) {
-                            Utils.handleVibrationFeedback(context);
-                            setState(
-                              () {
-                                newPlayerController.text = '';
-                                newPlayer = value;
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    if (newPlayer == NewPlayer.Bot)
-                      SfSlider(
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        inactiveColor: Utils.getPrimaryColorDarken(context),
-                        min: 22,
-                        max: 118,
-                        value: _selectedBotAvgValue,
-                        stepSize: 4,
-                        interval: 100,
-                        showTicks: false,
-                        onChanged: (dynamic newValue) {
-                          Utils.handleVibrationFeedback(context);
-                          setState(() {
-                            _selectedBotAvgValue = newValue.round();
-                          });
-                        },
-                      ),
-                    ListTile(
-                      title: Container(
+          content: Container(
+            width: DIALOG_WIDTH.w,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (showBotOption(gameSettings_P)) ...[
+                      ListTile(
+                        title: Container(
                           transform: Matrix4.translationValues(
                               DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: Text(
-                            'Guest',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: DEFAULT_FONT_SIZE.sp,
-                            ),
-                          )),
-                      leading: Theme(
-                        data: Theme.of(context).copyWith(
-                          unselectedWidgetColor:
-                              Utils.getPrimaryColorDarken(context),
+                          child: Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (newPlayer == NewPlayer.Bot) ...[
+                                    Text(
+                                      'Bot - lvl. ${Utils.getLevelForBot(_selectedBotAvgValue)}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                      ),
+                                    ),
+                                    Container(
+                                      transform: Matrix4.translationValues(
+                                          -1.w, 0.0, 0.0),
+                                      child: Text(
+                                        ' (${_selectedBotAvgValue - BOT_AVG_SLIDER_VALUE_RANGE}-${_selectedBotAvgValue + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                        style: TextStyle(
+                                          fontSize: 8.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ] else ...[
+                                    Text(
+                                      'Bot',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                      ),
+                                    )
+                                  ]
+                                ],
+                              )
+                            ],
+                          ),
                         ),
-                        child: Radio<NewPlayer>(
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          value: NewPlayer.Guest,
-                          groupValue: newPlayer,
-                          onChanged: (value) {
-                            Utils.handleVibrationFeedback(context);
-                            setState(
-                              () {
-                                _resetBotAvgValue();
-                                newPlayer = value;
-                              },
-                            );
-                          },
+                        leading: Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor:
+                                  Utils.getPrimaryColorDarken(context)),
+                          child: Radio<NewPlayer>(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            value: NewPlayer.Bot,
+                            groupValue: newPlayer,
+                            onChanged: (value) {
+                              Utils.handleVibrationFeedback(context);
+                              setState(
+                                () {
+                                  newPlayerController.text = '';
+                                  newPlayer = value;
+                                },
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                    if (newPlayer == NewPlayer.Guest)
+                      if (newPlayer == NewPlayer.Bot)
+                        SfSlider(
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          inactiveColor: Utils.getPrimaryColorDarken(context),
+                          min: 22,
+                          max: 118,
+                          value: _selectedBotAvgValue,
+                          stepSize: 4,
+                          interval: 100,
+                          showTicks: false,
+                          onChanged: (dynamic newValue) {
+                            Utils.handleVibrationFeedback(context);
+                            setState(() {
+                              _selectedBotAvgValue = newValue.round();
+                            });
+                          },
+                        ),
+                      ListTile(
+                        title: Container(
+                            transform: Matrix4.translationValues(
+                                DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                            child: Text(
+                              'Guest',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: DEFAULT_FONT_SIZE.sp,
+                              ),
+                            )),
+                        leading: Theme(
+                          data: Theme.of(context).copyWith(
+                            unselectedWidgetColor:
+                                Utils.getPrimaryColorDarken(context),
+                          ),
+                          child: Radio<NewPlayer>(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            value: NewPlayer.Guest,
+                            groupValue: newPlayer,
+                            onChanged: (value) {
+                              Utils.handleVibrationFeedback(context);
+                              setState(
+                                () {
+                                  _resetBotAvgValue();
+                                  newPlayer = value;
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                      if (newPlayer == NewPlayer.Guest)
+                        GuestTextFormField(gameSettings_P: gameSettings_P),
+                    ] else
                       GuestTextFormField(gameSettings_P: gameSettings_P),
-                  ] else
-                    GuestTextFormField(gameSettings_P: gameSettings_P),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
           actions: [
             Row(
@@ -395,59 +400,63 @@ class AddPlayerTeamBtnDialogs {
                 fontSize: DIALOG_TITLE_FONTSIZE.sp,
               ),
             ),
-            content: StatefulBuilder(
-              builder: (context, setState) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    TextFormField(
-                      autofocus: true,
-                      controller:
-                          newTextControllerForAddingNewTeamInGameSettingsX01(),
-                      textInputAction: TextInputAction.done,
-                      validator: (value) {
-                        if (value!.trim().isEmpty) {
-                          return ('Please enter a team name!');
-                        }
-                        if (gameSettings.checkIfTeamNameExists(value)) {
-                          return 'Teamname already exists!';
-                        }
+            content: Container(
+              width: DIALOG_WIDTH.w,
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      TextFormField(
+                        autofocus: true,
+                        controller:
+                            newTextControllerForAddingNewTeamInGameSettingsX01(),
+                        textInputAction: TextInputAction.done,
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return ('Please enter a team name!');
+                          }
+                          if (gameSettings.checkIfTeamNameExists(value)) {
+                            return 'Teamname already exists!';
+                          }
 
-                        return null;
-                      },
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(
-                            MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                      ],
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                      ),
-                      decoration: InputDecoration(
-                        fillColor: Utils.darken(
-                            Theme.of(context).colorScheme.primary, 10),
-                        prefixIcon: Icon(
-                          size: ICON_BUTTON_SIZE.h,
-                          Icons.group,
-                          color: Utils.getPrimaryColorDarken(context),
+                          return null;
+                        },
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(
+                              MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+                        ],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                         ),
-                        hintText: 'Team',
-                        filled: true,
-                        hintStyle: TextStyle(
-                            color: Utils.getPrimaryColorDarken(context)),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
+                        decoration: InputDecoration(
+                          fillColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          prefixIcon: Icon(
+                            size: ICON_BUTTON_SIZE.h,
+                            Icons.group,
+                            color: Utils.getPrimaryColorDarken(context),
+                          ),
+                          hintText: 'Team',
+                          filled: true,
+                          hintStyle: TextStyle(
+                              fontSize: 12.sp,
+                              color: Utils.getPrimaryColorDarken(context)),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            borderSide: BorderSide(
+                              width: 0,
+                              style: BorderStyle.none,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                );
-              },
+                    ],
+                  );
+                },
+              ),
             ),
             actions: [
               Row(
@@ -612,18 +621,51 @@ class AddPlayerTeamBtnDialogs {
               fontSize: DIALOG_TITLE_FONTSIZE.sp,
             ),
           ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (gameSettings.getTeams.length < MAX_TEAMS)
-                    Theme(
-                      data: Theme.of(context).copyWith(
-                        unselectedWidgetColor:
-                            Utils.getPrimaryColorDarken(context),
+          content: Container(
+            width: DIALOG_WIDTH.w,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (gameSettings.getTeams.length < MAX_TEAMS)
+                      Theme(
+                        data: Theme.of(context).copyWith(
+                          unselectedWidgetColor:
+                              Utils.getPrimaryColorDarken(context),
+                        ),
+                        child: Theme(
+                          data: ThemeData(
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                          ),
+                          child: RadioListTile(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            title: Container(
+                              transform: Matrix4.translationValues(
+                                  DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w,
+                                  0.0,
+                                  0.0),
+                              child: Text(
+                                'Team',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                ),
+                              ),
+                            ),
+                            value: 'team',
+                            groupValue: teamOrPlayer,
+                            onChanged: (String? value) {
+                              Utils.handleVibrationFeedback(context);
+                              setState(() => teamOrPlayer = value);
+                            },
+                          ),
+                        ),
                       ),
-                      child: Theme(
+                    if (gameSettings.getTeams.length > 0)
+                      Theme(
                         data: ThemeData(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
@@ -634,14 +676,14 @@ class AddPlayerTeamBtnDialogs {
                             transform: Matrix4.translationValues(
                                 DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
                             child: Text(
-                              'Team',
+                              'Player',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                               ),
                             ),
                           ),
-                          value: 'team',
+                          value: 'player',
                           groupValue: teamOrPlayer,
                           onChanged: (String? value) {
                             Utils.handleVibrationFeedback(context);
@@ -649,37 +691,10 @@ class AddPlayerTeamBtnDialogs {
                           },
                         ),
                       ),
-                    ),
-                  if (gameSettings.getTeams.length > 0)
-                    Theme(
-                      data: ThemeData(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                      ),
-                      child: RadioListTile(
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        title: Container(
-                          transform: Matrix4.translationValues(
-                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: Text(
-                            'Player',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                            ),
-                          ),
-                        ),
-                        value: 'player',
-                        groupValue: teamOrPlayer,
-                        onChanged: (String? value) {
-                          Utils.handleVibrationFeedback(context);
-                          setState(() => teamOrPlayer = value);
-                        },
-                      ),
-                    ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           ),
           actions: [
             TextButton(
@@ -807,57 +822,60 @@ class AddPlayerTeamBtnDialogs {
               fontSize: DIALOG_TITLE_FONTSIZE.sp,
             ),
           ),
-          content: StatefulBuilder(
-            builder: (context, setState) {
-              return Container(
-                width: 0.6.w,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: teams.length,
-                      reverse: true,
-                      itemBuilder: (BuildContext context, int index) {
-                        final Team team = teams[index];
+          content: Container(
+            width: DIALOG_WIDTH.w,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Container(
+                  width: 0.6.w,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: teams.length,
+                        reverse: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          final Team team = teams[index];
 
-                        if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM) {
-                          return Theme(
-                            data: ThemeData(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                            ),
-                            child: RadioListTile(
-                                activeColor:
-                                    Theme.of(context).colorScheme.secondary,
-                                title: Container(
-                                  transform: Matrix4.translationValues(
-                                      DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w,
-                                      0.0,
-                                      0.0),
-                                  child: Text(
-                                    team.getName,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                          if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM) {
+                            return Theme(
+                              data: ThemeData(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                              ),
+                              child: RadioListTile(
+                                  activeColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                  title: Container(
+                                    transform: Matrix4.translationValues(
+                                        DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w,
+                                        0.0,
+                                        0.0),
+                                    child: Text(
+                                      team.getName,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                      ),
                                     ),
                                   ),
-                                ),
-                                value: team,
-                                groupValue: selectedTeam,
-                                onChanged: (Team? value) {
-                                  Utils.handleVibrationFeedback(context);
-                                  setState(() => selectedTeam = value);
-                                }),
-                          );
-                        } else
-                          return SizedBox.shrink();
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
+                                  value: team,
+                                  groupValue: selectedTeam,
+                                  onChanged: (Team? value) {
+                                    Utils.handleVibrationFeedback(context);
+                                    setState(() => selectedTeam = value);
+                                  }),
+                            );
+                          } else
+                            return SizedBox.shrink();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
           actions: [
             Row(
@@ -997,7 +1015,10 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
       inputFormatters: [
         LengthLimitingTextInputFormatter(MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
       ],
-      style: TextStyle(color: Colors.white),
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: 12.sp,
+      ),
       decoration: InputDecoration(
         prefixIcon: Icon(
           size: ICON_BUTTON_SIZE.h,
@@ -1008,6 +1029,7 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
         fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
         filled: true,
         hintStyle: TextStyle(
+          fontSize: 12.sp,
           color: Utils.getPrimaryColorDarken(context),
         ),
         border: OutlineInputBorder(

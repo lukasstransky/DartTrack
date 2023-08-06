@@ -5,6 +5,7 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -70,10 +71,13 @@ _showDialogForChangingTheme(BuildContext context) {
           fontSize: DIALOG_TITLE_FONTSIZE.sp,
         ),
       ),
-      content: Text(
-        "Change theme",
-        style: TextStyle(
-          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+      content: Container(
+        width: DIALOG_WIDTH.w,
+        child: Text(
+          "Change theme",
+          style: TextStyle(
+            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+          ),
         ),
       ),
       actions: [
@@ -158,6 +162,16 @@ class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
     final Settings_P settings_p = context.read<Settings_P>();
     final AuthService authService = context.read<AuthService>();
 
+    late double scaleFactorSwitch;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    } else {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    }
+
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -193,26 +207,30 @@ class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
                 ),
                 Container(
                   transform: Matrix4.translationValues(3.w, 0.0, 0.0),
-                  child: Switch(
-                    thumbColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.secondary),
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
-                    value: _vibrationFeedbackEnabled,
-                    onChanged: (value) async {
-                      Utils.handleVibrationFeedback(context);
-                      final SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      prefs.setBool(
-                          '${authService.getCurrentUserUid}_$VIBRATION_FEEDBACK_KEY',
-                          value);
-                      setState(
-                        () {
-                          _vibrationFeedbackEnabled = value;
-                          settings_p.setVibrationFeedbackEnabled = value;
-                        },
-                      );
-                    },
+                  child: Transform.scale(
+                    scale: scaleFactorSwitch,
+                    child: Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
+                      value: _vibrationFeedbackEnabled,
+                      onChanged: (value) async {
+                        Utils.handleVibrationFeedback(context);
+                        final SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+                        prefs.setBool(
+                            '${authService.getCurrentUserUid}_$VIBRATION_FEEDBACK_KEY',
+                            value);
+                        setState(
+                          () {
+                            _vibrationFeedbackEnabled = value;
+                            settings_p.setVibrationFeedbackEnabled = value;
+                          },
+                        );
+                      },
+                    ),
                   ),
                 ),
               ],

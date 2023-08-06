@@ -499,7 +499,15 @@ const double WIDGET_HEIGHT_GAMESETTINGS_TABLET = 4;
 
 // overall
 const double DEFAULT_FONT_SIZE = 11;
+const double DEFAULT_FONT_SIZE_TOAST_MESSAGE = 12;
 const double ICON_BUTTON_SIZE = 3;
 const double DIALOG_TITLE_FONTSIZE = 16;
 const double DIALOG_CONTENT_FONTSIZE = 12;
 const double DIALOG_BTN_FONTSIZE = 12;
+const double DIALOG_WIDTH = 50;
+
+// mobile
+const double SWTICH_SCALE_FACTOR_MOBILE = 1;
+
+// tablet
+const double SWTICH_SCALE_FACTOR_TABLET = 1.5;

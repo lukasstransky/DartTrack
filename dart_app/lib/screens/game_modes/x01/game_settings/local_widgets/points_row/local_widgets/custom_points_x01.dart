@@ -52,6 +52,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
               ),
             ),
             content: Container(
+              width: DIALOG_WIDTH.w,
               margin: EdgeInsets.only(
                 left: 8.w,
                 right: 8.w,
@@ -74,13 +75,17 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   FilteringTextInputFormatter.digitsOnly,
                   LengthLimitingTextInputFormatter(MAX_NUMBERS_POINTS),
                 ],
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                ),
                 decoration: InputDecoration(
                   hintText: 'min. ${CUSTOM_POINTS_MIN_NUMBER}',
                   fillColor:
                       Utils.darken(Theme.of(context).colorScheme.primary, 10),
                   filled: true,
                   hintStyle: TextStyle(
+                    fontSize: 12.sp,
                     color: Utils.getPrimaryColorDarken(context),
                   ),
                   border: OutlineInputBorder(

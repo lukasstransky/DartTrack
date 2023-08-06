@@ -58,129 +58,126 @@ class ThrownDartsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // height: 5.h,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  right: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GENERAL_BORDER_WIDTH.w,
-                  ),
-                  top: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GENERAL_BORDER_WIDTH.w,
-                  ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
-              ),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all(
-                      Utils.darken(Theme.of(context).colorScheme.primary, 20)),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
+                top: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
-                child: FittedBox(
-                  child: Text(
-                    currentThreeDarts[0],
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  null;
-                },
               ),
             ),
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GENERAL_BORDER_WIDTH.w,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                    Utils.darken(Theme.of(context).colorScheme.primary, 20)),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              child: FittedBox(
+                child: Text(
+                  currentThreeDarts[0],
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Colors.white,
                   ),
                 ),
               ),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all(
-                      Utils.darken(Theme.of(context).colorScheme.primary, 20)),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                ),
-                child: FittedBox(
-                  child: Text(
-                    currentThreeDarts[1],
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  null;
-                },
-              ),
+              onPressed: () {
+                null;
+              },
             ),
           ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GENERAL_BORDER_WIDTH.w,
-                  ),
-                  left: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GENERAL_BORDER_WIDTH.w,
-                  ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
                 ),
-              ),
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  backgroundColor: MaterialStateProperty.all(
-                      Utils.darken(Theme.of(context).colorScheme.primary, 20)),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                ),
-                child: FittedBox(
-                  child: Text(
-                    currentThreeDarts[2],
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                onPressed: () {
-                  null;
-                },
               ),
             ),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                    Utils.darken(Theme.of(context).colorScheme.primary, 20)),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              child: FittedBox(
+                child: Text(
+                  currentThreeDarts[1],
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              onPressed: () {
+                null;
+              },
+            ),
           ),
-        ],
-      ),
+        ),
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                ),
+                left: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                ),
+              ),
+            ),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                  ),
+                ),
+                backgroundColor: MaterialStateProperty.all(
+                    Utils.darken(Theme.of(context).colorScheme.primary, 20)),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              ),
+              child: FittedBox(
+                child: Text(
+                  currentThreeDarts[2],
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              onPressed: () {
+                null;
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

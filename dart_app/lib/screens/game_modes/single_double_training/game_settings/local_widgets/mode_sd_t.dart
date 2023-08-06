@@ -33,6 +33,7 @@ class ModeSingleDoubleTraining extends StatelessWidget {
                   gameSettingsSingleDoubleTraining.getIsTargetNumberEnabled,
             ),
             builder: (_, selectorModel, __) => Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 AscendingBtn(
                   isAscendingMode:

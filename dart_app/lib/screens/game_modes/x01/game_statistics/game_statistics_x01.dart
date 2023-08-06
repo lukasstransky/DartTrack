@@ -18,6 +18,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class GameStatisticsX01 extends StatefulWidget {
@@ -124,6 +125,16 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
     );
     final EdgeInsets _paddingOnlyLeft =
         EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w);
+
+    late double scaleFactorSwitch;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    } else {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    }
 
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
@@ -288,20 +299,23 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                               fontSize: DEFAULT_FONT_SIZE.sp,
                             ),
                           ),
-                          Switch(
-                            thumbColor: MaterialStateProperty.all(
-                                Theme.of(context).colorScheme.secondary),
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            inactiveThumbColor:
-                                Theme.of(context).colorScheme.secondary,
-                            value: _roundedScoresOdd,
-                            onChanged: (value) {
-                              Utils.handleVibrationFeedback(context);
-                              setState(() {
-                                _roundedScoresOdd = value;
-                              });
-                            },
+                          Transform.scale(
+                            scale: scaleFactorSwitch,
+                            child: Switch(
+                              thumbColor: MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.secondary),
+                              activeColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              inactiveThumbColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              value: _roundedScoresOdd,
+                              onChanged: (value) {
+                                Utils.handleVibrationFeedback(context);
+                                setState(() {
+                                  _roundedScoresOdd = value;
+                                });
+                              },
+                            ),
                           ),
                         ],
                       ),

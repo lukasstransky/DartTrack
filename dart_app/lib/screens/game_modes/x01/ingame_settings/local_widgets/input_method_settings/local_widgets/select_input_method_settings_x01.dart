@@ -19,8 +19,10 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
     } else {
       if (gameX01.getAmountOfDartsThrown() != 0) {
         Fluttertoast.showToast(
-            msg: 'In order to switch, please finish the round!',
-            toastLength: Toast.LENGTH_LONG);
+          msg: 'In order to switch, please finish the round!',
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        );
       } else {
         gameSettingsX01.setInputMethod = InputMethod.Round;
       }

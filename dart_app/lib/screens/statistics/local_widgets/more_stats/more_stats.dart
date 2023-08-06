@@ -5,6 +5,7 @@ import 'package:dart_app/screens/statistics/local_widgets/more_stats/local_widge
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class MoreStats extends StatefulWidget {
@@ -20,6 +21,16 @@ class _MoreStatsState extends State<MoreStats> {
 
   @override
   Widget build(BuildContext context) {
+    late double scaleFactorSwitch;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    } else {
+      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
+    }
+
     return Selector<StatsFirestoreX01_P, FilterValue>(
       selector: (_, statsFirestoreX01) => statsFirestoreX01.currentFilterValue,
       builder: (_, __, ___) => Padding(
@@ -86,19 +97,23 @@ class _MoreStatsState extends State<MoreStats> {
                       fontSize: 11.sp,
                     ),
                   ),
-                  Switch(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    thumbColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.secondary),
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
-                    value: _roundedScoresOdd,
-                    onChanged: (value) {
-                      Utils.handleVibrationFeedback(context);
-                      setState(() {
-                        _roundedScoresOdd = !_roundedScoresOdd;
-                      });
-                    },
+                  Transform.scale(
+                    scale: scaleFactorSwitch,
+                    child: Switch(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
+                      value: _roundedScoresOdd,
+                      onChanged: (value) {
+                        Utils.handleVibrationFeedback(context);
+                        setState(() {
+                          _roundedScoresOdd = !_roundedScoresOdd;
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),
@@ -114,20 +129,24 @@ class _MoreStatsState extends State<MoreStats> {
                       fontSize: 11.sp,
                     ),
                   ),
-                  Switch(
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    thumbColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.secondary),
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
-                    value: _showAllScoesPerDartWithCount,
-                    onChanged: (value) {
-                      Utils.handleVibrationFeedback(context);
-                      setState(() {
-                        _showAllScoesPerDartWithCount =
-                            !_showAllScoesPerDartWithCount;
-                      });
-                    },
+                  Transform.scale(
+                    scale: scaleFactorSwitch,
+                    child: Switch(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      activeColor: Theme.of(context).colorScheme.secondary,
+                      inactiveThumbColor:
+                          Theme.of(context).colorScheme.secondary,
+                      value: _showAllScoesPerDartWithCount,
+                      onChanged: (value) {
+                        Utils.handleVibrationFeedback(context);
+                        setState(() {
+                          _showAllScoesPerDartWithCount =
+                              !_showAllScoesPerDartWithCount;
+                        });
+                      },
+                    ),
                   ),
                 ],
               ),

@@ -5,6 +5,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class FieldToHitSingleDoubleTraining extends StatelessWidget {
@@ -19,12 +20,37 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
     return field;
   }
 
+  double _getHeight(
+      BuildContext context, int currentFieldToHit, bool isTargetNumberEnabled) {
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      if (isTargetNumberEnabled) {
+        return 10.h;
+      } else if (currentFieldToHit == -1) {
+        return 8.h;
+      }
+      return 7.h;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      if (isTargetNumberEnabled) {
+        return 12.h;
+      } else if (currentFieldToHit == -1) {
+        return 10.h;
+      }
+      return 9.h;
+    }
+    if (isTargetNumberEnabled) {
+      return 12.h;
+    } else if (currentFieldToHit == -1) {
+      return 10.h;
+    }
+    return 9.h;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isTargetNumberEnabled = context
         .read<GameSettingsSingleDoubleTraining_P>()
         .getIsTargetNumberEnabled;
-    final int height = isTargetNumberEnabled ? 10 : 7;
 
     return Selector<GameSingleDoubleTraining_P, SelectorModel>(
       selector: (_, game) => SelectorModel(
@@ -32,7 +58,8 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
         amountOfRoundsRemaining: game.getAmountOfRoundsRemaining,
       ),
       builder: (_, selectorModel, __) => Container(
-        height: selectorModel.currentFieldToHit == -1 ? 8.h : height.h,
+        height: _getHeight(
+            context, selectorModel.currentFieldToHit, isTargetNumberEnabled),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(

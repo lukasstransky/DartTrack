@@ -47,7 +47,10 @@ class EmailInput extends StatelessWidget {
           }
           return null;
         },
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 12.sp,
+        ),
         decoration: InputDecoration(
           prefixIcon: Icon(
             size: ICON_BUTTON_SIZE.h,
@@ -56,6 +59,7 @@ class EmailInput extends StatelessWidget {
           ),
           hintText: 'Email',
           hintStyle: TextStyle(
+            fontSize: 12.sp,
             color: Utils.getPrimaryColorDarken(context),
           ),
           filled: true,

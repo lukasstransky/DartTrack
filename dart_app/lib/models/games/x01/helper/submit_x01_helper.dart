@@ -770,22 +770,25 @@ class SubmitX01Helper {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: RichText(
-          text: TextSpan(
-            text: 'The ',
-            style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
-            children: <TextSpan>[
-              TextSpan(
-                text: 'Sudden death',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: RichText(
+            text: TextSpan(
+              text: 'The ',
+              style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+              children: <TextSpan>[
+                TextSpan(
+                  text: 'Sudden death',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              TextSpan(
-                text:
-                    ' leg is reached. The player who wins this leg also wins the game.',
-              )
-            ],
+                TextSpan(
+                  text:
+                      ' leg is reached. The player who wins this leg also wins the game.',
+                )
+              ],
+            ),
           ),
         ),
         actions: [
@@ -851,16 +854,81 @@ class SubmitX01Helper {
             fontSize: DIALOG_TITLE_FONTSIZE.sp,
           ),
         ),
-        content: StatefulBuilder(
-          builder: ((context, setState) {
-            if (isSingleMode) {
+        content: Container(
+          width: DIALOG_WIDTH.w,
+          child: StatefulBuilder(
+            builder: ((context, setState) {
+              if (isSingleMode) {
+                return Container(
+                  width: double.maxFinite,
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: players.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final player = players[index];
+
+                      return Theme(
+                        data: ThemeData(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                        ),
+                        child: RadioListTile(
+                          activeColor: Theme.of(context).colorScheme.secondary,
+                          title: Container(
+                            transform: Matrix4.translationValues(
+                                DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
+                            child: player is Bot
+                                ? Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Bot - lvl. ${player.getLevel}',
+                                        style: TextStyle(
+                                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                      Container(
+                                        transform: Matrix4.translationValues(
+                                            0.0, -0.5.w, 0.0),
+                                        child: Text(
+                                          ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                          style: TextStyle(
+                                            fontSize: 8.sp,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : Text(
+                                    player.getName,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                    ),
+                                  ),
+                          ),
+                          value: player,
+                          groupValue: selectedPlayer,
+                          onChanged: (Player? value) {
+                            Utils.handleVibrationFeedback(context);
+                            setState(() => selectedPlayer = value);
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }
+
               return Container(
                 width: double.maxFinite,
                 child: ListView.builder(
                   shrinkWrap: true,
-                  itemCount: players.length,
+                  itemCount: teams.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final player = players[index];
+                    final team = teams[index];
 
                     return Theme(
                       data: ThemeData(
@@ -872,89 +940,27 @@ class SubmitX01Helper {
                         title: Container(
                           transform: Matrix4.translationValues(
                               DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: player is Bot
-                              ? Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      'Bot - lvl. ${player.getLevel}',
-                                      style: TextStyle(
-                                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Container(
-                                      transform: Matrix4.translationValues(
-                                          0.0, -0.5.w, 0.0),
-                                      child: Text(
-                                        ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                                        style: TextStyle(
-                                          fontSize: 8.sp,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              : Text(
-                                  player.getName,
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                                  ),
-                                ),
+                          child: Text(
+                            team.getName,
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: DEFAULT_FONT_SIZE.sp,
+                            ),
+                          ),
                         ),
-                        value: player,
-                        groupValue: selectedPlayer,
-                        onChanged: (Player? value) {
+                        value: team,
+                        groupValue: selectedTeam,
+                        onChanged: (Team? value) {
                           Utils.handleVibrationFeedback(context);
-                          setState(() => selectedPlayer = value);
+                          setState(() => selectedTeam = value);
                         },
                       ),
                     );
                   },
                 ),
               );
-            }
-
-            return Container(
-              width: double.maxFinite,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: teams.length,
-                itemBuilder: (BuildContext context, int index) {
-                  final team = teams[index];
-
-                  return Theme(
-                    data: ThemeData(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                    ),
-                    child: RadioListTile(
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      title: Container(
-                        transform: Matrix4.translationValues(
-                            DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                        child: Text(
-                          team.getName,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: DEFAULT_FONT_SIZE.sp,
-                          ),
-                        ),
-                      ),
-                      value: team,
-                      groupValue: selectedTeam,
-                      onChanged: (Team? value) {
-                        Utils.handleVibrationFeedback(context);
-                        setState(() => selectedTeam = value);
-                      },
-                    ),
-                  );
-                },
-              ),
-            );
-          }),
+            }),
+          ),
         ),
         actions: [
           TextButton(

@@ -1,9 +1,11 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/user.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -173,12 +175,17 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         Fluttertoast.showToast(
-            msg: 'Please logout/login again to update the email!');
+          msg: 'Please logout/login again to update the email!',
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        );
       }
     } catch (e) {
       Fluttertoast.showToast(
-          msg: 'An unexpected error occurred. Please try again later.',
-          toastLength: Toast.LENGTH_LONG);
+        msg: 'An unexpected error occurred. Please try again later.',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
     }
   }
 
@@ -190,12 +197,17 @@ class AuthService {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         Fluttertoast.showToast(
-            msg: 'Please logout/login again!', toastLength: Toast.LENGTH_LONG);
+          msg: 'Please logout/login again!',
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        );
       }
     } catch (e) {
       Fluttertoast.showToast(
-          msg: 'An unexpected error occurred. Please try again later.',
-          toastLength: Toast.LENGTH_LONG);
+        msg: 'An unexpected error occurred. Please try again later.',
+        toastLength: Toast.LENGTH_LONG,
+        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      );
     }
   }
 }

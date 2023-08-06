@@ -7,6 +7,7 @@ import 'package:dart_app/screens/game_modes/single_double_training/game/local_wi
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayersListSingleDoubleTraining extends StatelessWidget {
@@ -26,13 +27,24 @@ class PlayersListSingleDoubleTraining extends StatelessWidget {
     }
   }
 
+  _getHeight(BuildContext context) {
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return 40.h;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      return 50.h;
+    } else {
+      return 50.h;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Selector<GameSingleDoubleTraining_P, List<PlayerOrTeamGameStats>>(
       selector: (_, game) => game.getPlayerGameStatistics,
       shouldRebuild: (previous, next) => true,
       builder: (_, stats, __) => Container(
-        height: 40.h,
+        height: _getHeight(context),
         child: _getWidget(stats),
       ),
     );

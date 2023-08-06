@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -81,6 +82,16 @@ class _CricketDialogState extends State<CricketDialog> {
 
   @override
   Widget build(BuildContext context) {
+    late double dialogHeight;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      dialogHeight = 28;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      dialogHeight = 35;
+    } else {
+      dialogHeight = 35;
+    }
+
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
@@ -110,7 +121,7 @@ class _CricketDialogState extends State<CricketDialog> {
         },
         child: SizedBox(
           width: 80.w,
-          height: 28.h,
+          height: dialogHeight.h,
           child: Column(
             children: [
               Expanded(

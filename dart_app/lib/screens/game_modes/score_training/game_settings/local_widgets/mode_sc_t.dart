@@ -43,7 +43,7 @@ class ModeScoreTraining extends StatelessWidget {
                     Utils.handleVibrationFeedback(context);
                     settings.getMode == ScoreTrainingModeEnum.MaxRounds
                         ? () {}
-                        : settings.switchMode;
+                        : settings.switchMode();
                   },
                 ),
                 SettingsBtn(
@@ -55,7 +55,7 @@ class ModeScoreTraining extends StatelessWidget {
                     Utils.handleVibrationFeedback(context);
                     settings.getMode == ScoreTrainingModeEnum.MaxPoints
                         ? () {}
-                        : settings.switchMode;
+                        : settings.switchMode();
                   },
                 )
               ],

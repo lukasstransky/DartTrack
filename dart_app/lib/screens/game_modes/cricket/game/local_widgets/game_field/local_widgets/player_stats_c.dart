@@ -4,6 +4,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerOrTeamStatsCricket extends StatelessWidget {
@@ -28,7 +29,7 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
     final int _width = 11;
 
     return Container(
-      height: _getHeight(_gameSettingsCricket),
+      height: _getHeight(_gameSettingsCricket, context),
       child: Row(
         children: [
           if (!evenPlayersOrTeams)
@@ -193,19 +194,40 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
     return 1.w;
   }
 
-  _getHeight(GameSettingsCricket_P gameSettingsCricket) {
+  _getHeight(GameSettingsCricket_P gameSettingsCricket, BuildContext context) {
     if (!gameSettingsCricket.getSetsEnabled &&
         gameSettingsCricket.getLegs == 1) {
       // only MRP is displayed
-      return 4.h;
+      if (ResponsiveBreakpoints.of(context).isMobile) {
+        return 4.h;
+      } else if (ResponsiveBreakpoints.of(context).isTablet ||
+          ResponsiveBreakpoints.of(context).isDesktop) {
+        return 6.h;
+      } else {
+        return 6.h;
+      }
     } else if (!gameSettingsCricket.getSetsEnabled &&
         gameSettingsCricket.getLegs > 1) {
       // MPR + legs is displayed
-      return 6.h;
+      if (ResponsiveBreakpoints.of(context).isMobile) {
+        return 6.h;
+      } else if (ResponsiveBreakpoints.of(context).isTablet ||
+          ResponsiveBreakpoints.of(context).isDesktop) {
+        return 8.h;
+      } else {
+        return 8.h;
+      }
     } else if (gameSettingsCricket.getSetsEnabled &&
         gameSettingsCricket.getLegs > 1) {
       // MPR + legs + sets is displayed
-      return 8.h;
+      if (ResponsiveBreakpoints.of(context).isMobile) {
+        return 8.h;
+      } else if (ResponsiveBreakpoints.of(context).isTablet ||
+          ResponsiveBreakpoints.of(context).isDesktop) {
+        return 10.h;
+      } else {
+        return 10.h;
+      }
     }
   }
 }
