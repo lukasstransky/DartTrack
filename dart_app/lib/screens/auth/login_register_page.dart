@@ -40,7 +40,8 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                   child: Text(
                     authMode == AuthMode.Login ? 'Login' : 'Register',
                     style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.titleLarge!.fontSize,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),

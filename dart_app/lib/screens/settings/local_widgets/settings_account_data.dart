@@ -7,6 +7,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class SettingsAccountData extends StatelessWidget {
@@ -28,15 +29,15 @@ class SettingsAccountData extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 5.h,
               padding: EdgeInsets.only(
                 left: 1.5.w,
+                top: 0.5.h,
               ),
               alignment: Alignment.centerLeft,
               child: Text(
                 'Account data',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -65,21 +66,23 @@ class SettingsAccountData extends StatelessWidget {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Reset statistics',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: RichText(
             text: TextSpan(
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
               children: <TextSpan>[
                 TextSpan(text: 'Are you sure you want to reset '),
@@ -104,7 +107,7 @@ class SettingsAccountData extends StatelessWidget {
               'Cancel',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -131,7 +134,7 @@ class SettingsAccountData extends StatelessWidget {
               'Reset statistics',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -162,21 +165,23 @@ class SettingsAccountData extends StatelessWidget {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Delete account',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: RichText(
             text: TextSpan(
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
               children: <TextSpan>[
                 TextSpan(text: 'Are you sure you want to '),
@@ -201,7 +206,7 @@ class SettingsAccountData extends StatelessWidget {
               'Cancel',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -228,7 +233,7 @@ class SettingsAccountData extends StatelessWidget {
               'Delete account',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -266,7 +271,7 @@ class SettingsAccountData extends StatelessWidget {
 
     Future.microtask(() async {
       context.read<FirestoreServiceGames>().resetStatistics(context, true);
-      await authService.deleteAccount();
+      await authService.deleteAccount(context);
       navigator.pushNamed('/loginRegister');
 
       settings.setIsResettingStatsOrDeletingAccount = false;

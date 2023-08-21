@@ -18,6 +18,19 @@ class BestLegStatsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _fontSizeDateTime = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
+    final double _fontSizeField = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+
     return Container(
       padding: EdgeInsets.only(bottom: 2.h),
       child: GestureDetector(
@@ -49,7 +62,8 @@ class BestLegStatsCard extends StatelessWidget {
                       child: Text(
                         Utils.getBestOfOrFirstToString(game.getGameSettings),
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: Colors.white,
                         ),
                       ),
@@ -60,7 +74,7 @@ class BestLegStatsCard extends StatelessWidget {
                       child: Text(
                         game.getFormattedDateTime(),
                         style: TextStyle(
-                          fontSize: 10.sp,
+                          fontSize: _fontSizeDateTime.sp,
                           color: Colors.white,
                         ),
                       ),
@@ -72,7 +86,8 @@ class BestLegStatsCard extends StatelessWidget {
                 padding: EdgeInsets.only(left: 2.w),
                 child: Text(game.getGameSettings.getGameModeDetails(true),
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Colors.white,
                     )),
               ),
@@ -85,7 +100,7 @@ class BestLegStatsCard extends StatelessWidget {
                   '${isWorstSelected ? 'Worst' : 'Best'} leg: ${bestLeg}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
+                    fontSize: _fontSizeField.sp,
                     color: Utils.getTextColorDarken(context),
                   ),
                 ),

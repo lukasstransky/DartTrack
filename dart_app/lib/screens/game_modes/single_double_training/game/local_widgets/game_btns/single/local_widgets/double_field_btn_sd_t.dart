@@ -16,6 +16,13 @@ class DoubleFieldBtnSingleTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: BTN_FONTSIZE_SD_T_MOBILE,
+      tabletValue: BTN_FONTSIZE_SD_T_TABLET,
+      otherValue: BTN_FONTSIZE_SD_T_TABLET,
+    );
+
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
@@ -56,7 +63,7 @@ class DoubleFieldBtnSingleTraining extends StatelessWidget {
               builder: (_, currentFieldToScore, __) => Text(
                 'D${game.getCurrentFieldToHit}',
                 style: TextStyle(
-                  fontSize: BTN_FONTSIZE_SD_T.sp,
+                  fontSize: fontSize.sp,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),

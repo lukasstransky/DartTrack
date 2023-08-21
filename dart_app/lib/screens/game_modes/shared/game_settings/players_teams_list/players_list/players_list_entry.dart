@@ -46,7 +46,10 @@ class PlayersListEntry extends StatelessWidget {
                           Text(
                             'Bot - lvl. ${(player as Bot).getLevel}',
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                               color: Colors.white,
                             ),
                           ),
@@ -54,7 +57,7 @@ class PlayersListEntry extends StatelessWidget {
                             transform:
                                 Matrix4.translationValues(0.0, -0.5.w, 0.0),
                             child: Text(
-                              ' (${(player as Bot).getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${(player as Bot).getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                              ' (${(player as Bot).getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${(player as Bot).getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                               style: TextStyle(
                                 fontSize: 8.sp,
                                 color: Colors.white,
@@ -71,7 +74,8 @@ class PlayersListEntry extends StatelessWidget {
                     child: Text(
                       player.getName,
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                         color: Utils.getTextColorForGameSettingsPage(),
                         fontWeight: player.getName == currentUsername
                             ? FontWeight.bold

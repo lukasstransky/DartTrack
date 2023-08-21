@@ -51,7 +51,7 @@ class DartsPerLegAvgX01 extends StatelessWidget {
               child: RichText(
                 text: TextSpan(
                   style: new TextStyle(
-                    fontSize: FONTSIZE_STATISTICS.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     fontWeight: FontWeight.bold,
                     color: Utils.getTextColorDarken(context),
                   ),
@@ -78,7 +78,7 @@ class DartsPerLegAvgX01 extends StatelessWidget {
               child: Text(
                 _getDartsPerLeg(stats, gameX01, gameSettingsX01),
                 style: new TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

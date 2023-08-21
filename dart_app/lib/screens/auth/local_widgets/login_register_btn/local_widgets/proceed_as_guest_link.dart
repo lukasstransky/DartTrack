@@ -36,7 +36,7 @@ class ProceedAsGuestLink extends StatelessWidget {
           'Proceed as guest',
           style: TextStyle(
             color: Colors.white38,
-            fontSize: 11.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       ),

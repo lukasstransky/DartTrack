@@ -18,7 +18,7 @@ class SectionHeadingGameStats extends StatelessWidget {
       child: Text(
         textValue,
         style: TextStyle(
-          fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+          fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
           color: Colors.white,
         ),
       ),

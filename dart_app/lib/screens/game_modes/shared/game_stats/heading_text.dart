@@ -21,7 +21,7 @@ class HeadingTextGameStats extends StatelessWidget {
         child: Text(
           textValue,
           style: TextStyle(
-            fontSize: FONTSIZE_STATISTICS.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             color: Utils.getTextColorDarken(context),
             fontWeight: FontWeight.bold,
           ),

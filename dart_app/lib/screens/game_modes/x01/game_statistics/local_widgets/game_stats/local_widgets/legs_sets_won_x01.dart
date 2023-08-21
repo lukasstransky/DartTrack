@@ -44,7 +44,8 @@ class LegSetsWonX01 extends StatelessWidget {
                   child: Text(
                     setsEnabled ? 'Sets won' : 'Legs won',
                     style: TextStyle(
-                      fontSize: FONTSIZE_STATISTICS.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                       fontWeight: FontWeight.bold,
                       color: Utils.getTextColorDarken(context),
                     ),
@@ -60,7 +61,8 @@ class LegSetsWonX01 extends StatelessWidget {
                     _getLegsSetsWon(
                         gameX01, setsEnabled, stats, gameSettingsX01),
                     style: TextStyle(
-                      fontSize: FONTSIZE_STATISTICS.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Colors.white,
                     ),
                   ),
@@ -84,7 +86,10 @@ class LegSetsWonX01 extends StatelessWidget {
                           TextSpan(
                             text: 'Legs won ',
                             style: TextStyle(
-                              fontSize: FONTSIZE_STATISTICS.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                               fontWeight: FontWeight.bold,
                               color: Utils.getTextColorDarken(context),
                             ),
@@ -110,7 +115,8 @@ class LegSetsWonX01 extends StatelessWidget {
                     child: Text(
                       stats.getLegsWon.toString(),
                       style: TextStyle(
-                        fontSize: FONTSIZE_STATISTICS.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                         color: Colors.white,
                       ),
                     ),
@@ -129,7 +135,8 @@ class LegSetsWonX01 extends StatelessWidget {
                     child: Text(
                       'Legs won total',
                       style: TextStyle(
-                        fontSize: FONTSIZE_STATISTICS.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                         fontWeight: FontWeight.bold,
                         color: Utils.getTextColorDarken(context),
                       ),
@@ -144,7 +151,8 @@ class LegSetsWonX01 extends StatelessWidget {
                     child: Text(
                       _getLegsSetsWon(gameX01, false, stats, gameSettingsX01),
                       style: TextStyle(
-                        fontSize: FONTSIZE_STATISTICS.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                         color: Colors.white,
                       ),
                     ),

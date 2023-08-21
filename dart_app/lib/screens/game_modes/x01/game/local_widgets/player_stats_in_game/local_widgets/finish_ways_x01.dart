@@ -65,7 +65,7 @@ class FinishWaysX01 extends StatelessWidget {
           _getFinishWay(currPlayerOrTeamGameStatsX01!.getCurrentPoints),
           style: TextStyle(
             color: Utils.getTextColorDarken(context),
-            fontSize: 13.sp,
+            fontSize: 12.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -80,7 +80,7 @@ class FinishWaysX01 extends StatelessWidget {
           'No finish possible!',
           style: TextStyle(
             color: Utils.getTextColorDarken(context),
-            fontSize: 13.sp,
+            fontSize: 12.sp,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -92,7 +92,7 @@ class FinishWaysX01 extends StatelessWidget {
           '',
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
-            fontSize: 13.sp,
+            fontSize: 12.sp,
           ),
         ),
       );

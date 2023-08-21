@@ -13,8 +13,8 @@ class TwoPlayerStatsScoreTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final game = context.read<GameScoreTraining_P>();
-    const double WIDTH = 50;
+    final GameScoreTraining_P game = context.read<GameScoreTraining_P>();
+    final double WIDTH = 50;
 
     return Row(
       children: [
@@ -78,10 +78,7 @@ class PlayerEntry extends StatelessWidget {
     final bool isRoundMode =
         context.read<GameSettingsScoreTraining_P>().getMode ==
             ScoreTrainingModeEnum.MaxRounds;
-    const int FONTSIZE_NAME = 18;
-    const int FONTSIZE_HEADER = 16;
-    const int FONTSIZE_VALUE = 14;
-    double PADDING_TOP = 1.h;
+    final double PADDING_TOP = 1.h;
 
     return Container(
       color: _getBackgroundColor(context),
@@ -97,7 +94,7 @@ class PlayerEntry extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: FONTSIZE_NAME.sp,
+                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
                 ),
               ),
             ),
@@ -106,7 +103,7 @@ class PlayerEntry extends StatelessWidget {
             'Average',
             style: TextStyle(
               color: Utils.getTextColorDarken(context),
-              fontSize: FONTSIZE_HEADER.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -114,7 +111,7 @@ class PlayerEntry extends StatelessWidget {
             playerStats.getAverage(),
             style: TextStyle(
               color: Colors.white,
-              fontSize: FONTSIZE_VALUE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           Container(
@@ -125,7 +122,7 @@ class PlayerEntry extends StatelessWidget {
               'Highest score',
               style: TextStyle(
                 color: Utils.getTextColorDarken(context),
-                fontSize: FONTSIZE_HEADER.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -134,7 +131,7 @@ class PlayerEntry extends StatelessWidget {
             playerStats.getHighestScore().toString(),
             style: TextStyle(
               color: Colors.white,
-              fontSize: FONTSIZE_VALUE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           Container(
@@ -145,7 +142,7 @@ class PlayerEntry extends StatelessWidget {
               'Thrown darts',
               style: TextStyle(
                 color: Utils.getTextColorDarken(context),
-                fontSize: FONTSIZE_HEADER.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -154,7 +151,7 @@ class PlayerEntry extends StatelessWidget {
             playerStats.getThrownDarts.toString(),
             style: TextStyle(
               color: Colors.white,
-              fontSize: FONTSIZE_VALUE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           Container(
@@ -165,7 +162,7 @@ class PlayerEntry extends StatelessWidget {
               '${isRoundMode ? 'Rounds' : 'Points'} left',
               style: TextStyle(
                 color: Utils.getTextColorDarken(context),
-                fontSize: FONTSIZE_HEADER.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -174,7 +171,7 @@ class PlayerEntry extends StatelessWidget {
             playerStats.getRoundsOrPointsValue(isRoundMode),
             style: TextStyle(
               color: Colors.white,
-              fontSize: FONTSIZE_VALUE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ],

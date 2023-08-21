@@ -27,7 +27,7 @@ class BestLegX01 extends StatelessWidget {
               child: Text(
                 'Best leg',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -46,7 +46,7 @@ class BestLegX01 extends StatelessWidget {
                         .getBestLeg()
                     : stats.getBestLeg(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

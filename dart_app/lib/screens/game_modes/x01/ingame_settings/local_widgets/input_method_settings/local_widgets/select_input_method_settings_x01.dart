@@ -21,7 +21,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
         Fluttertoast.showToast(
           msg: 'In order to switch, please finish the round!',
           toastLength: Toast.LENGTH_LONG,
-          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         );
       } else {
         gameSettingsX01.setInputMethod = InputMethod.Round;
@@ -37,6 +37,12 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
         context.read<GameSettingsX01_P>().getInputMethod == InputMethod.Round
             ? true
             : false;
+    final double fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 11,
+      tabletValue: 9,
+      otherValue: 9,
+    );
 
     return Column(
       children: [
@@ -64,7 +70,8 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                       style: TextStyle(
                         color: Utils.getTextColorForGameSettingsBtn(
                             isInputMethodRound, context),
-                        fontSize: 12.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
@@ -105,7 +112,8 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                       style: TextStyle(
                         color: Utils.getTextColorForGameSettingsBtn(
                             !isInputMethodRound, context),
-                        fontSize: 12.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
@@ -142,7 +150,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: new TextStyle(
-                        fontSize: 11.sp,
+                        fontSize: fontSize.sp,
                         color: Colors.white70,
                       ),
                       children: <TextSpan>[
@@ -162,12 +170,12 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                   child: RichText(
                     text: TextSpan(
                       style: new TextStyle(
-                        fontSize: 11.sp,
+                        fontSize: fontSize.sp,
                         color: Colors.white70,
                       ),
                       children: <TextSpan>[
                         new TextSpan(
-                            text: 'Enter each Dart seperately. As a result '),
+                            text: 'Enter each Dart seperately. As a result, '),
                         new TextSpan(
                             text: 'more',
                             style: new TextStyle(fontWeight: FontWeight.bold)),

@@ -19,7 +19,6 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
             ScoreTrainingModeEnum.MaxRounds;
 
     double WIDTH = 60.w;
-    const int FONTSIZE = 18;
     double PADDING_TOP = 2.h;
 
     return Column(
@@ -32,7 +31,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
             style: TextStyle(
               color: Utils.getTextColorDarken(context),
               fontWeight: FontWeight.bold,
-              fontSize: 20.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
             ),
           ),
         ),
@@ -49,14 +48,14 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
               Text(
                 playerStats.getAverage(),
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
             ],
@@ -75,14 +74,14 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
               Text(
                 playerStats.getHighestScore().toString(),
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
             ],
@@ -101,14 +100,14 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
               Text(
                 playerStats.getThrownDarts.toString(),
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
             ],
@@ -127,14 +126,14 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
               Text(
                 playerStats.getRoundsOrPointsValue(isRoundMode),
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,
                 ),
               ),
             ],

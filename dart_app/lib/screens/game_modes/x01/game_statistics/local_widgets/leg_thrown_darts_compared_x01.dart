@@ -34,7 +34,7 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
           child: Text(
             'Darts per leg',
             style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -66,7 +66,10 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
-                                fontSize: 10.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                               ),
                             ),
                           )
@@ -77,7 +80,10 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
-                                fontSize: 10.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                               ),
                             ),
                           ),
@@ -114,14 +120,20 @@ class LegThrownDartsComparedX01 extends StatelessWidget {
                               .toString(),
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 10.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         )
                       : Text(
                           '-',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 10.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         ),
                   decoration: BoxDecoration(

@@ -41,7 +41,8 @@ class MoreStatsPreciseScores extends StatelessWidget {
                       child: Text(
                         '${i.toString()}.',
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           fontWeight: FontWeight.bold,
                           color:
                               _shouldHighlightRankNumber(statisticsFirestore) &&
@@ -78,7 +79,10 @@ class MoreStatsPreciseScores extends StatelessWidget {
                                             .toString() +
                                         'x)',
                                 style: TextStyle(
-                                  fontSize: 12.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                   color: statisticsFirestore
                                               .allScoresPerDartAsStringCount
                                               .isNotEmpty &&
@@ -105,7 +109,10 @@ class MoreStatsPreciseScores extends StatelessWidget {
                                             .toString() +
                                         'x)',
                                 style: TextStyle(
-                                  fontSize: 12.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                   color: statisticsFirestore.games.isNotEmpty &&
                                           i == 1
                                       ? Theme.of(context).colorScheme.secondary

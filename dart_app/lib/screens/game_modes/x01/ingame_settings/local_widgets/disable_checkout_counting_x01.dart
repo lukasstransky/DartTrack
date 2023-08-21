@@ -25,15 +25,12 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
           children: [
             Container(
               alignment: Alignment.centerLeft,
-              padding: EdgeInsets.only(
-                top: 0.5.h,
-                left: 1.5.w,
-                bottom: 1.5.h,
-              ),
+              height: 5.h,
+              padding: EdgeInsets.only(left: 1.5.w),
               child: Text(
                 'Checkout counting',
                 style: TextStyle(
-                  fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
+                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -66,7 +63,7 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
                 'Disable',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DEFAULT_FONT_SIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
             ),
@@ -96,7 +93,7 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
               child: Text(
                 "(Can't be re-enabled for this game)",
                 style: new TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

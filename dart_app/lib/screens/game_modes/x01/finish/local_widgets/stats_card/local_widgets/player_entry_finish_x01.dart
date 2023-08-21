@@ -77,6 +77,12 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
             widget.gameX01,
             widget.gameX01.getGameSettings.getSingleOrTeam ==
                 SingleOrTeamEnum.Team);
+    final double _trophySize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
 
     return Padding(
       padding: EdgeInsets.only(
@@ -106,7 +112,10 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                             child: Text(
                               '${checkForSameAmountOfSetsLegs(widget.i, statsList)}.',
                               style: TextStyle(
-                                fontSize: 14.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
                               ),
@@ -118,7 +127,7 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                         padding: EdgeInsets.only(left: 2.w),
                         child: Icon(
                           Entypo.trophy,
-                          size: 14.sp,
+                          size: _trophySize.sp,
                           color: Color(0xffFFD700),
                         ),
                       )
@@ -133,7 +142,7 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                             : EdgeInsets.only(left: 2.w),
                         child: Icon(
                           Entypo.trophy,
-                          size: 14.sp,
+                          size: _trophySize.sp,
                           color: Utils.darken(
                               Theme.of(context).colorScheme.primary, 15),
                         ),
@@ -179,6 +188,13 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _fontSizeNameFirst = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+
     if (singleOrTeamEnum == SingleOrTeamEnum.Team)
       return Flexible(
         child: Padding(
@@ -188,7 +204,9 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
             child: Text(
               teamStats[i].getTeam.getName,
               style: TextStyle(
-                fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
+                fontSize: i == 0 || isOpenGame
+                    ? _fontSizeNameFirst.sp
+                    : Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Utils.getTextColorDarken(context),
                 fontWeight: FontWeight.bold,
               ),
@@ -207,7 +225,9 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
                 child: Text(
                   'Bot - lvl. ${playerStats[i].getPlayer.getLevel}',
                   style: TextStyle(
-                    fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
+                    fontSize: i == 0 || isOpenGame
+                        ? _fontSizeNameFirst.sp
+                        : Theme.of(context).textTheme.bodyMedium!.fontSize,
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
                   ),
@@ -216,7 +236,7 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
               FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  '(${playerStats[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerStats[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                  '(${playerStats[i].getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${playerStats[i].getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                   style: TextStyle(
                     fontSize: 8.sp,
                     color: Utils.getTextColorDarken(context),
@@ -237,7 +257,9 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
             child: Text(
               playerStats[i].getPlayer.getName,
               style: TextStyle(
-                fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
+                fontSize: i == 0 || isOpenGame
+                    ? _fontSizeNameFirst.sp
+                    : Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Utils.getTextColorDarken(context),
                 fontWeight: FontWeight.bold,
               ),
@@ -296,7 +318,7 @@ class _PlayerStatsState extends State<PlayerStats> {
                     ? 'Sets: ${_playersOrTeamStatsList[widget.i].getSetsWon}'
                     : 'Legs: ${legsWon}',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),
@@ -304,7 +326,7 @@ class _PlayerStatsState extends State<PlayerStats> {
                 Text(
                   ' Legs: ${legsWon}',
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     color: Colors.white,
                   ),
                 ),
@@ -313,7 +335,7 @@ class _PlayerStatsState extends State<PlayerStats> {
           Text(
             'Average: ${_playersOrTeamStatsList[widget.i].getAverage()}',
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -321,7 +343,7 @@ class _PlayerStatsState extends State<PlayerStats> {
             Text(
               'Checkout: ${_playersOrTeamStatsList[widget.i].getCheckoutQuoteInPercent()}',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),

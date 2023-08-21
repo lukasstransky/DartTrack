@@ -27,7 +27,7 @@ class CheckoutDartsX01 extends StatelessWidget {
               child: Text(
                 'Checkout darts',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -44,7 +44,7 @@ class CheckoutDartsX01 extends StatelessWidget {
                     ? '${stats.getLegsWonTotal.toString()}/${stats.getCheckoutCount.toString()}'
                     : '-',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

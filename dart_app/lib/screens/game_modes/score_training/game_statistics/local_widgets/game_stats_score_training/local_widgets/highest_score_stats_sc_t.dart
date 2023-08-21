@@ -28,7 +28,7 @@ class HighestScoreStatsScoreTraining extends StatelessWidget {
               child: Text(
                 'Highest score',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -42,7 +42,7 @@ class HighestScoreStatsScoreTraining extends StatelessWidget {
               child: Text(
                 stats.getHighestScore().toString(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

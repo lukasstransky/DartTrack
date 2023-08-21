@@ -14,6 +14,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class Statistics extends StatefulWidget {
@@ -123,21 +124,26 @@ class _StatisticsState extends State<Statistics> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
-        title: Text(
-          'Information',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
+        title: Container(
+          width: TEXT_DIALOG_WIDTH.w,
+          child: Text(
+            'Information',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+            ),
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: Text(
             'In order to track your games, please create an account.',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -151,7 +157,7 @@ class _StatisticsState extends State<Statistics> {
               'Ok',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -188,10 +194,10 @@ class _StatisticsState extends State<Statistics> {
           color: Theme.of(context).colorScheme.secondary,
         ),
         label: Text(
-          _showMoreStats ? 'Less stats' : 'More stats',
+          _showMoreStats ? 'Less' : 'More',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 11.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       ),

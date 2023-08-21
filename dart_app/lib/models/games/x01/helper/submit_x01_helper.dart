@@ -13,6 +13,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 import 'package:tuple/tuple.dart';
 
@@ -762,20 +763,24 @@ class SubmitX01Helper {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Sudden death',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: RichText(
             text: TextSpan(
               text: 'The ',
-              style: TextStyle(fontSize: DIALOG_CONTENT_FONTSIZE.sp),
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              ),
               children: <TextSpan>[
                 TextSpan(
                   text: 'Sudden death',
@@ -804,7 +809,7 @@ class SubmitX01Helper {
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -846,16 +851,18 @@ class SubmitX01Helper {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Who will begin?',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: StatefulBuilder(
             builder: ((context, setState) {
               if (isSingleMode) {
@@ -872,49 +879,64 @@ class SubmitX01Helper {
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                         ),
-                        child: RadioListTile(
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          title: Container(
-                            transform: Matrix4.translationValues(
-                                DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                            child: player is Bot
-                                ? Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'Bot - lvl. ${player.getLevel}',
+                        child: ListTile(
+                          title: player is Bot
+                              ? Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Bot - lvl. ${player.getLevel}',
+                                      style: TextStyle(
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .fontSize,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Container(
+                                      transform: Matrix4.translationValues(
+                                          0.0, -0.5.w, 0.0),
+                                      child: Text(
+                                        ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                                         style: TextStyle(
-                                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                          fontSize: 8.sp,
                                           color: Colors.white,
                                         ),
                                       ),
-                                      Container(
-                                        transform: Matrix4.translationValues(
-                                            0.0, -0.5.w, 0.0),
-                                        child: Text(
-                                          ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                                          style: TextStyle(
-                                            fontSize: 8.sp,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  )
-                                : Text(
-                                    player.getName,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
                                     ),
+                                  ],
+                                )
+                              : Text(
+                                  player.getName,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                   ),
+                                ),
+                          leading: Theme(
+                            data: Theme.of(context).copyWith(
+                                unselectedWidgetColor:
+                                    Utils.getPrimaryColorDarken(context)),
+                            child: Radio<Player>(
+                              activeColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              value: player,
+                              groupValue: selectedPlayer,
+                              onChanged: (value) {
+                                Utils.handleVibrationFeedback(context);
+                                setState(
+                                  () {
+                                    Utils.handleVibrationFeedback(context);
+                                    setState(() => selectedPlayer = value);
+                                  },
+                                );
+                              },
+                            ),
                           ),
-                          value: player,
-                          groupValue: selectedPlayer,
-                          onChanged: (Player? value) {
-                            Utils.handleVibrationFeedback(context);
-                            setState(() => selectedPlayer = value);
-                          },
                         ),
                       );
                     },
@@ -928,32 +950,44 @@ class SubmitX01Helper {
                   shrinkWrap: true,
                   itemCount: teams.length,
                   itemBuilder: (BuildContext context, int index) {
-                    final team = teams[index];
+                    final Team team = teams[index];
 
                     return Theme(
                       data: ThemeData(
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                       ),
-                      child: RadioListTile(
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        title: Container(
-                          transform: Matrix4.translationValues(
-                              DEFAULT_LIST_TILE_NEGATIVE_MARGIN.w, 0.0, 0.0),
-                          child: Text(
-                            team.getName,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: DEFAULT_FONT_SIZE.sp,
-                            ),
+                      child: ListTile(
+                        title: Text(
+                          team.getName,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         ),
-                        value: team,
-                        groupValue: selectedTeam,
-                        onChanged: (Team? value) {
-                          Utils.handleVibrationFeedback(context);
-                          setState(() => selectedTeam = value);
-                        },
+                        leading: Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor:
+                                  Utils.getPrimaryColorDarken(context)),
+                          child: Radio<Team>(
+                            activeColor:
+                                Theme.of(context).colorScheme.secondary,
+                            value: team,
+                            groupValue: selectedTeam,
+                            onChanged: (value) {
+                              Utils.handleVibrationFeedback(context);
+                              setState(
+                                () {
+                                  Utils.handleVibrationFeedback(context);
+                                  setState(() => selectedTeam = value);
+                                },
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -974,7 +1008,7 @@ class SubmitX01Helper {
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(

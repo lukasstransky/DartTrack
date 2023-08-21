@@ -39,6 +39,12 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = widget.gameX01.getGameSettings;
+    final double iconSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 12,
+      tabletValue: 10,
+      otherValue: 10,
+    );
 
     return Container(
       width: 100.w,
@@ -74,7 +80,10 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
                           child: Text(
                             item.value,
                             style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                               color: Colors.white,
                             ),
                           ),
@@ -84,7 +93,7 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
                             children: [
                               Icon(
                                 Entypo.trophy,
-                                size: 14.sp,
+                                size: iconSize.sp,
                                 color: Color(0xffFFD700),
                               ),
                               Flexible(
@@ -107,7 +116,10 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
                                               _items.indexOf(item)),
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 14.sp,
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .fontSize,
                                       ),
                                     ),
                                   ),

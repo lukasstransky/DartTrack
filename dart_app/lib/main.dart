@@ -160,14 +160,22 @@ class MyApp extends StatelessWidget {
 
             if (screenWidth <= 600) {
               textTheme = ThemeData().textTheme.copyWith(
-                    bodyMedium: TextStyle(fontSize: 10.sp),
+                    bodyMedium: TextStyle(fontSize: 12.sp), // normal
+                    titleSmall: TextStyle(fontSize: 16.sp), // dialog title
+                    titleLarge: TextStyle(fontSize: 18.sp),
                   );
             } else if (screenWidth <= 1100) {
               textTheme = ThemeData().textTheme.copyWith(
-                    bodyMedium: TextStyle(fontSize: 9.sp),
+                    bodyMedium: TextStyle(fontSize: 10.sp), // normal
+                    titleSmall: TextStyle(fontSize: 14.sp), // dialog title
+                    titleLarge: TextStyle(fontSize: 16.sp),
                   );
             } else {
-              textTheme = ThemeData().textTheme.copyWith();
+              textTheme = ThemeData().textTheme.copyWith(
+                    bodyMedium: TextStyle(fontSize: 10.sp), // normal
+                    titleSmall: TextStyle(fontSize: 15.sp), // dialog title
+                    titleLarge: TextStyle(fontSize: 16.sp),
+                  );
             }
 
             return Theme(

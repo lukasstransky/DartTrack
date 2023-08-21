@@ -5,6 +5,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class FetchFromStatsBtn extends StatelessWidget {
@@ -36,18 +37,20 @@ class FetchFromStatsBtn extends StatelessWidget {
           ),
         ),
         Container(
-          height: 4.h,
-          margin: EdgeInsets.only(
+          padding: EdgeInsets.only(
             top: 2.h,
             right: 5.w,
           ),
-          alignment: Alignment.centerLeft,
           child: ElevatedButton(
-            child: Text(
-              'Fetch from stats',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: 12.sp,
+            child: Container(
+              alignment: Alignment.center,
+              height: 4.h,
+              child: Text(
+                'Fetch from stats',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                ),
               ),
             ),
             onPressed: () {
@@ -56,7 +59,7 @@ class FetchFromStatsBtn extends StatelessWidget {
                 Fluttertoast.showToast(
                   msg: 'No games played!',
                   toastLength: Toast.LENGTH_LONG,
-                  fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 );
               }
               _fetchFromStatsBtnPressed(gameSettingsX01, statisticsFirestore);
@@ -117,21 +120,26 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: dialogContentPadding,
-      title: Text(
-        'Information',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+      contentPadding: ResponsiveBreakpoints.of(context).isMobile
+          ? DIALOG_CONTENT_PADDING_MOBILE
+          : null,
+      title: Container(
+        width: TEXT_DIALOG_WIDTH.w,
+        child: Text(
+          'Information',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+          ),
         ),
       ),
       content: Container(
-        width: DIALOG_WIDTH.w,
+        width: DIALOG_NORMAL_WIDTH.w,
         child: Text(
-          'By clicking this button, the top six most frequently scored points from all your games will be loaded into the \'most scored points\' fields.',
+          'By clicking this button, the top six most frequently scored points from all of your games will be loaded into the \'most scored points\' fields.',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       ),
@@ -145,7 +153,7 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
             'Continue',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(

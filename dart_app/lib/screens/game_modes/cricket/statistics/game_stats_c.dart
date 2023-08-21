@@ -52,24 +52,21 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
-              title: 'Cricket - Statistics',
+              title: 'Statistics',
               mode: GameMode.Cricket,
               isFavouriteGame: _game!.getIsFavouriteGame,
               gameId: _game!.getGameId,
             )
-          : CustomAppBar(title: 'Cricket - Statistics'),
+          : CustomAppBar(title: 'Statistics'),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 1.h),
-              child: Text(
-                _getHeader(context.read<GameSettingsCricket_P>()),
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Colors.white,
-                ),
+            Text(
+              _getHeader(context.read<GameSettingsCricket_P>()),
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                color: Colors.white,
               ),
             ),
             Container(
@@ -81,7 +78,7 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
               child: Text(
                 _game!.getFormattedDateTime(),
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),

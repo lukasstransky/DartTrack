@@ -21,6 +21,7 @@ import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class Utils {
@@ -374,7 +375,7 @@ class Utils {
                   style: TextStyle(
                     color: getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
-                    fontSize: 10.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
               ),
@@ -878,5 +879,31 @@ class Utils {
     if (context.read<Settings_P>().getVibrationFeedbackEnabled) {
       HapticFeedback.lightImpact();
     }
+  }
+
+  static double getResponsiveValue({
+    required BuildContext context,
+    required double mobileValue,
+    required double tabletValue,
+    required double otherValue,
+  }) {
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return mobileValue;
+    } else if (ResponsiveBreakpoints.of(context).isTablet) {
+      return tabletValue;
+    } else {
+      return otherValue;
+    }
+  }
+
+  static double getSwitchScaleFactor(BuildContext context) {
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return SWTICH_SCALE_FACTOR_MOBILE;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      return SWTICH_SCALE_FACTOR_TABLET;
+    }
+
+    return SWTICH_SCALE_FACTOR_TABLET;
   }
 }

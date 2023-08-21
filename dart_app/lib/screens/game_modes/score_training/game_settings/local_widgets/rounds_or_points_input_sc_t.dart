@@ -6,6 +6,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class RoundsOrPointsInputScoreTraining extends StatefulWidget {
@@ -45,16 +46,18 @@ class _RoundsOrPointsInputScoreTrainingState
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: dialogContentPadding,
+          contentPadding: ResponsiveBreakpoints.of(context).isMobile
+              ? DIALOG_CONTENT_PADDING_MOBILE
+              : null,
           title: Text(
             isMaxRoundsMode ? 'Enter rounds' : 'Enter points',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             ),
           ),
           content: Container(
-            width: DIALOG_WIDTH.w,
+            width: DIALOG_SMALL_WIDTH.w,
             margin: EdgeInsets.only(
               left: isMaxRoundsMode ? 10.w : 7.w,
               right: isMaxRoundsMode ? 10.w : 7.w,
@@ -91,16 +94,17 @@ class _RoundsOrPointsInputScoreTrainingState
               ],
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
               decoration: InputDecoration(
+                errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                 hintText:
                     '${isMaxRoundsMode ? '${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SCORE_TRAINING}' : '${MIN_POINTS_SCORE_TRAINING}-${MAX_POINTS_SCORE_TRAINING}'}',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
                 hintStyle: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(
@@ -126,7 +130,7 @@ class _RoundsOrPointsInputScoreTrainingState
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -152,7 +156,7 @@ class _RoundsOrPointsInputScoreTrainingState
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -197,20 +201,16 @@ class _RoundsOrPointsInputScoreTrainingState
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(top: 1.h),
-      width: 90.w,
+      width: WIDTH_GAMESETTINGS.w,
       child: Row(
         children: [
-          Container(
-            width: 35.w,
-            alignment: Alignment.centerLeft,
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'Game will end after ',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: DEFAULT_FONT_SIZE.sp,
-                ),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Game will end after ',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),
@@ -220,6 +220,10 @@ class _RoundsOrPointsInputScoreTrainingState
               mode: gameSettings.getMode,
             ),
             builder: (_, selectorModel, __) => Container(
+              padding: EdgeInsets.only(
+                left: 1.w,
+                right: 2.w,
+              ),
               width: 20.w,
               child: ElevatedButton(
                 onPressed: () {
@@ -232,7 +236,8 @@ class _RoundsOrPointsInputScoreTrainingState
                     selectorModel.maxRoundsOrPoints.toString(),
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.secondary,
-                      fontSize: DEFAULT_FONT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ),
@@ -260,18 +265,15 @@ class _RoundsOrPointsInputScoreTrainingState
           Selector<GameSettingsScoreTraining_P, ScoreTrainingModeEnum>(
             selector: (_, gameSettingsScoreTraining_P) =>
                 gameSettingsScoreTraining_P.getMode,
-            builder: (_, scoreTrainingModeEnum, __) => Container(
-              width: 35.w,
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  scoreTrainingModeEnum == ScoreTrainingModeEnum.MaxRounds
-                      ? ' rounds are played.'
-                      : ' points are reached.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: DEFAULT_FONT_SIZE.sp,
-                  ),
+            builder: (_, scoreTrainingModeEnum, __) => FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                scoreTrainingModeEnum == ScoreTrainingModeEnum.MaxRounds
+                    ? ' rounds.'
+                    : ' points.',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
             ),

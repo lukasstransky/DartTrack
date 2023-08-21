@@ -115,7 +115,8 @@ class OtherX01 extends StatelessWidget {
                     child: Text(
                       'Bust',
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         color: Utils.getTextColorDarken(context),
                         fontWeight: FontWeight.bold,
                       ),

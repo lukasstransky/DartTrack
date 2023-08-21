@@ -1,11 +1,9 @@
-import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/user.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -167,7 +165,7 @@ class AuthService {
     });
   }
 
-  Future<void> updateEmail(String newEmail) async {
+  Future<void> updateEmail(String newEmail, BuildContext context) async {
     final User? user = _firebaseAuth.currentUser;
 
     try {
@@ -177,19 +175,19 @@ class AuthService {
         Fluttertoast.showToast(
           msg: 'Please logout/login again to update the email!',
           toastLength: Toast.LENGTH_LONG,
-          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         );
       }
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'An unexpected error occurred. Please try again later.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     }
   }
 
-  Future<void> deleteAccount() async {
+  Future<void> deleteAccount(BuildContext context) async {
     try {
       await _firestore.collection('users').doc(getCurrentUserUid).delete();
       await getCurrentUser!.delete();
@@ -199,14 +197,14 @@ class AuthService {
         Fluttertoast.showToast(
           msg: 'Please logout/login again!',
           toastLength: Toast.LENGTH_LONG,
-          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         );
       }
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'An unexpected error occurred. Please try again later.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     }
   }

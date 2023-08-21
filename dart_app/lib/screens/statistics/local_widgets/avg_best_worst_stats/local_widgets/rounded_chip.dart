@@ -40,7 +40,7 @@ class RoundedChip extends StatelessWidget {
               value,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: 11.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),

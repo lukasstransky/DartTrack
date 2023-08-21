@@ -30,7 +30,7 @@ class _ScoringStatsX01State extends State<ScoringStatsX01> {
           child: Text(
             'Scoring',
             style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               color: Colors.white,
             ),
           ),

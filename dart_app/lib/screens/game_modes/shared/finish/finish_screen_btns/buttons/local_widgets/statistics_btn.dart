@@ -60,7 +60,7 @@ class StatisticsBtn extends StatelessWidget {
             child: Text(
               'Statistics',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),

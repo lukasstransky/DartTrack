@@ -28,39 +28,6 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
     super.initState();
   }
 
-  _getOpenGames() async {
-    final OpenGamesFirestore openGamesFirestore =
-        context.read<OpenGamesFirestore>();
-
-    if (openGamesFirestore.getLoadOpenGames) {
-      openGamesFirestore.setLoadOpenGames = false;
-      await context
-          .read<FirestoreServiceGames>()
-          .getOpenGames(openGamesFirestore);
-      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
-      setState(() {});
-    }
-  }
-
-  _getDefaultSettingsX01() async {
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
-    final DefaultSettingsX01_P defaultSettingsX01 =
-        context.read<DefaultSettingsX01_P>();
-
-    if (defaultSettingsX01.loadSettings) {
-      defaultSettingsX01.resetValues(username);
-      await context
-          .read<FirestoreServiceDefaultSettings>()
-          .getDefaultSettingsX01(context);
-      defaultSettingsX01.loadSettings = false;
-      setState(() {});
-    } else if (username == 'Guest') {
-      defaultSettingsX01.resetValues(username);
-      DefaultSettingsHelper.setSettingsFromDefault(context);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final DefaultSettingsX01_P defaultSettingsX01 =
@@ -101,6 +68,39 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
       ),
     );
   }
+
+  _getOpenGames() async {
+    final OpenGamesFirestore openGamesFirestore =
+        context.read<OpenGamesFirestore>();
+
+    if (openGamesFirestore.getLoadOpenGames) {
+      openGamesFirestore.setLoadOpenGames = false;
+      await context
+          .read<FirestoreServiceGames>()
+          .getOpenGames(openGamesFirestore);
+      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
+      setState(() {});
+    }
+  }
+
+  _getDefaultSettingsX01() async {
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final DefaultSettingsX01_P defaultSettingsX01 =
+        context.read<DefaultSettingsX01_P>();
+
+    if (defaultSettingsX01.loadSettings) {
+      defaultSettingsX01.resetValues(username);
+      await context
+          .read<FirestoreServiceDefaultSettings>()
+          .getDefaultSettingsX01(context);
+      defaultSettingsX01.loadSettings = false;
+      setState(() {});
+    } else if (username == 'Guest') {
+      defaultSettingsX01.resetValues(username);
+      DefaultSettingsHelper.setSettingsFromDefault(context);
+    }
+  }
 }
 
 class ScoreTrainingBtn extends StatelessWidget {
@@ -115,7 +115,7 @@ class ScoreTrainingBtn extends StatelessWidget {
         child: Text(
           GameMode.ScoreTraining.name,
           style: TextStyle(
-              fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               color: Theme.of(context).colorScheme.secondary),
         ),
         onPressed: () {
@@ -158,7 +158,7 @@ class DoubleTrainingBtn extends StatelessWidget {
           child: Text(
             GameMode.DoubleTraining.name,
             style: TextStyle(
-                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () {
@@ -206,7 +206,7 @@ class SingleTrainingBtn extends StatelessWidget {
           child: Text(
             GameMode.SingleTraining.name,
             style: TextStyle(
-                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () {
@@ -256,7 +256,7 @@ class CricketBtn extends StatelessWidget {
           child: Text(
             GameMode.Cricket.name,
             style: TextStyle(
-                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () {
@@ -301,7 +301,7 @@ class X01Btn extends StatelessWidget {
           child: Text(
             GameMode.X01.name,
             style: TextStyle(
-                fontSize: GAME_MODES_OVERVIEW_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () {
@@ -344,38 +344,42 @@ class OpenGames extends StatelessWidget {
           Text(
             'Open games: ',
             style: TextStyle(
-              fontSize: 14.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Colors.white,
             ),
           ),
-          ElevatedButton(
-            child: Selector<OpenGamesFirestore, List<Game_P>>(
-              selector: (_, openGamesFirestore) => openGamesFirestore.openGames,
-              shouldRebuild: (previous, next) => true,
-              builder: (_, openGames, __) => Text(
-                openGames.length.toString(),
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 14.sp,
+          Container(
+            height: 4.h,
+            child: ElevatedButton(
+              child: Selector<OpenGamesFirestore, List<Game_P>>(
+                selector: (_, openGamesFirestore) =>
+                    openGamesFirestore.openGames,
+                shouldRebuild: (previous, next) => true,
+                builder: (_, openGames, __) => Text(
+                  openGames.length.toString(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  ),
                 ),
               ),
-            ),
-            onPressed: () {
-              Utils.handleVibrationFeedback(context);
-              Navigator.of(context).pushNamed('/openGames');
-            },
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor: MaterialStateProperty.all(
-                Utils.darken(
-                    Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
-              ),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                Navigator.of(context).pushNamed('/openGames');
+              },
+              style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+                shadowColor: MaterialStateProperty.all(Colors.transparent),
+                overlayColor: MaterialStateProperty.all(Colors.transparent),
+                backgroundColor: MaterialStateProperty.all(
+                  Utils.darken(
+                      Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
+                ),
+                shape: MaterialStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10.0),
+                    ),
                   ),
                 ),
               ),

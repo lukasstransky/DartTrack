@@ -33,7 +33,7 @@ class PlayerOrTeamNamesX01 extends StatelessWidget {
           FittedBox(
             fit: BoxFit.scaleDown,
             child: Text(
-              ' (${stats.getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${stats.getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+              ' (${stats.getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${stats.getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
               style: TextStyle(
                 fontSize: 8.sp,
                 fontWeight: FontWeight.bold,
@@ -84,7 +84,10 @@ class PlayerOrTeamNamesX01 extends StatelessWidget {
                             child: Text(
                               stats.getPlayer.getName,
                               style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
                               ),
@@ -116,7 +119,10 @@ class PlayerOrTeamNamesX01 extends StatelessWidget {
                               ? stats.getTeam.getName
                               : stats.getPlayer.getName,
                           style: TextStyle(
-                            fontSize: FONTSIZE_STATISTICS.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                             fontWeight: FontWeight.bold,
                             color: Utils.getTextColorDarken(context),
                           ),

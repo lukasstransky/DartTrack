@@ -15,11 +15,11 @@ class StatsPerGameBtns extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.only(bottom: 1.h),
+          padding: EdgeInsets.only(bottom: 1.h, top: 1.h),
           child: Text(
-            'Stats per game',
+            'Statistics per game',
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               color: Colors.white,
             ),
           ),

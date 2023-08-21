@@ -61,7 +61,8 @@ class PointsBtnX01 extends StatelessWidget {
                           selectorModel.points == points &&
                               selectorModel.customPoints == -1,
                           context),
-                      fontSize: DEFAULT_FONT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
               ),
             ),

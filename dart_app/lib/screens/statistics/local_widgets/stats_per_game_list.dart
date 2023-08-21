@@ -45,7 +45,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBarStatsList(
-        title: '${_mode.name} games',
+        title: '${_mode.name} - Games',
         mode: _mode,
       ),
       body: _getWidgetWithSelector(),
@@ -182,7 +182,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    top: 1.h,
+                    top: 2.h,
                     left: 1.w,
                   ),
                   child: Align(
@@ -191,7 +191,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                       'To view the details about a game, click on it\'s card.',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: DEFAULT_FONT_SIZE.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
@@ -207,7 +208,8 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                       '(Swipe left to delete a game)',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: DEFAULT_FONT_SIZE.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
@@ -254,7 +256,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
           textAlign: TextAlign.center,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 10.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       );

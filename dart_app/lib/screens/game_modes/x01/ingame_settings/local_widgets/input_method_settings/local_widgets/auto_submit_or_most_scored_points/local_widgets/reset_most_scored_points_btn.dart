@@ -17,14 +17,20 @@ class ResetMostScoredPointsBtn extends StatelessWidget {
         gameSettingsX01.getMostScoredPoints, DEFAULT_MOST_SCORED_POINTS);
 
     return Container(
-      height: 4.h,
-      margin: EdgeInsets.only(top: 2.h, left: 5.w),
+      padding: EdgeInsets.only(
+        top: 2.h,
+        left: 5.w,
+      ),
       child: ElevatedButton(
-        child: Text(
-          'Reset',
-          style: TextStyle(
-            color: Theme.of(context).colorScheme.secondary,
-            fontSize: 12.sp,
+        child: Container(
+          height: 4.h,
+          alignment: Alignment.center,
+          child: Text(
+            'Reset',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+            ),
           ),
         ),
         onPressed: () {
@@ -33,7 +39,7 @@ class ResetMostScoredPointsBtn extends StatelessWidget {
             Fluttertoast.showToast(
               msg: 'No values changed!',
               toastLength: Toast.LENGTH_LONG,
-              fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             );
             return;
           }

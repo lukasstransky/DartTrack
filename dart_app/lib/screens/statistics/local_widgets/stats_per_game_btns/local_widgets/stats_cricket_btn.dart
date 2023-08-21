@@ -11,6 +11,8 @@ class StatsCricketBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 40.w,
+      height: 5.h,
+      padding: EdgeInsets.only(bottom: 1.h),
       child: ElevatedButton(
         onPressed: () {
           Utils.handleVibrationFeedback(context);
@@ -22,7 +24,7 @@ class StatsCricketBtn extends StatelessWidget {
           child: Text(
             GameMode.Cricket.name,
             style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Theme.of(context).colorScheme.secondary),
           ),
         ),

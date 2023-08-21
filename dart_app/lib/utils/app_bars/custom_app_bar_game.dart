@@ -11,6 +11,7 @@ import 'package:dart_app/utils/utils_dialogs.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
@@ -25,18 +26,7 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       elevation: 0,
       centerTitle: true,
-      title: Column(
-        children: [
-          Text(
-            _getHeader(settings),
-            style: TextStyle(fontSize: 12.sp),
-          ),
-          Text(
-            _getSubHeader(settings),
-            style: TextStyle(fontSize: 10.sp),
-          )
-        ],
-      ),
+      title: _getTitleColumn(context, settings),
       leading: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -62,6 +52,34 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
             Icons.bar_chart_rounded,
             color: Theme.of(context).colorScheme.secondary,
           ),
+        ),
+      ],
+    );
+  }
+
+  Column _getTitleColumn(BuildContext context, dynamic settings) {
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return Column(
+        children: [
+          Text(
+            _getHeader(settings),
+            style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize),
+          ),
+          Text(
+            _getSubHeader(settings),
+            style: TextStyle(fontSize: 10.sp),
+          )
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        Text(
+          "${_getHeader(settings)} - ${_getSubHeader(settings)}",
+          style: TextStyle(
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
         ),
       ],
     );

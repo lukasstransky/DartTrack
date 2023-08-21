@@ -183,7 +183,7 @@ class UndoLastThrowBtn extends StatelessWidget {
             child: Text(
               'Undo last throw',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),

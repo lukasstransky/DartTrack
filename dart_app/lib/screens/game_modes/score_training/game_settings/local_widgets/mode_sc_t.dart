@@ -21,13 +21,8 @@ class ModeScoreTraining extends StatelessWidget {
         mode: gameSettingsScoreTraining_P.getMode,
         players: gameSettingsScoreTraining_P.getPlayers,
       ),
-      builder: (_, selectorModel, __) => Padding(
-        padding: EdgeInsets.only(
-          top: selectorModel.players.length ==
-                  MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING
-              ? 1.h
-              : 0,
-        ),
+      builder: (_, selectorModel, __) => Container(
+        padding: EdgeInsets.only(top: 1.h),
         child: Center(
           child: Container(
             width: WIDTH_GAMESETTINGS.w,

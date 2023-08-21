@@ -58,14 +58,16 @@ class OtherStats extends StatelessWidget {
                             : '-',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
                       Text(
                         '180',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: color,
                         ),
                       ),
@@ -81,14 +83,16 @@ class OtherStats extends StatelessWidget {
                             : '-',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
                       Text(
                         'Darts',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: color,
                         ),
                       ),
@@ -104,14 +108,16 @@ class OtherStats extends StatelessWidget {
                             : '-',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
                       Text(
                         'Games',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: color,
                         ),
                       ),
@@ -125,14 +131,16 @@ class OtherStats extends StatelessWidget {
                         _getGamesWonString(statisticsFirestore),
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
                       Text(
                         'Games won',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: color,
                         ),
                       ),

@@ -69,7 +69,7 @@ class PlayerTeamCard extends StatelessWidget {
           label,
           style: TextStyle(
             color: Colors.white,
-            fontSize: DEFAULT_FONT_SIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
         color: Utils.getPrimaryColorDarken(context));
@@ -90,6 +90,19 @@ class PlayerTeamCard extends StatelessWidget {
 
   Expanded CurrentPointsNameAndThrownDarts(bool showLegBeginnerDartAsset,
       BuildContext context, GameSettingsX01_P gameSettingsX01_P) {
+    final double _fontSizeName = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+    final double _fontSizePoints = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 25,
+      tabletValue: 20,
+      otherValue: 20,
+    );
+
     return Expanded(
       child: Column(
         children: [
@@ -115,7 +128,7 @@ class PlayerTeamCard extends StatelessWidget {
                         stats.getCurrentPoints.toString(),
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 25.sp,
+                          fontSize: _fontSizePoints.sp,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -152,7 +165,7 @@ class PlayerTeamCard extends StatelessWidget {
                           : stats.getTeam.getName,
                       style: TextStyle(
                         color: Utils.getTextColorDarken(context),
-                        fontSize: 14.sp,
+                        fontSize: _fontSizeName.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -182,7 +195,10 @@ class PlayerTeamCard extends StatelessWidget {
                           'Average: ',
                           style: TextStyle(
                             color: Utils.getTextColorDarken(context),
-                            fontSize: 12.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -190,7 +206,10 @@ class PlayerTeamCard extends StatelessWidget {
                           '${stats.getAverage()}',
                           style: TextStyle(
                             color: Utils.getTextColorDarken(context),
-                            fontSize: 12.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -207,7 +226,7 @@ class PlayerTeamCard extends StatelessWidget {
                   'Last throw: ',
                   style: TextStyle(
                     color: Utils.getTextColorDarken(context),
-                    fontSize: 12.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -215,7 +234,7 @@ class PlayerTeamCard extends StatelessWidget {
                   '${stats.getAllScores.length == 0 ? '-' : stats.getAllScores[stats.getAllScores.length - 1].toString()}',
                   style: TextStyle(
                     color: Utils.getTextColorDarken(context),
-                    fontSize: 12.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -239,13 +258,13 @@ class PlayerTeamCard extends StatelessWidget {
                 bottom: 0.5.h,
                 top: 0.5.h,
               ),
-              child: _chip(context, 'Sets ${stats.getSetsWon}'),
+              child: _chip(context, 'Sets: ${stats.getSetsWon}'),
             ),
           Container(
             padding: EdgeInsets.only(
               bottom: gameSettingsX01_P.getSetsEnabled ? 0.5.h : 0,
             ),
-            child: _chip(context, 'Legs ${stats.getLegsWon}'),
+            child: _chip(context, 'Legs: ${stats.getLegsWon}'),
           ),
         ],
       ),

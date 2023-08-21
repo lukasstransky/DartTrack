@@ -71,7 +71,7 @@ class NewGameBtn extends StatelessWidget {
             child: Text(
               'New game',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),

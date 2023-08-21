@@ -17,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -123,21 +124,23 @@ class LoginRegisterBtn extends StatelessWidget {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'An error occurred',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: Text(
             message,
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -148,7 +151,7 @@ class LoginRegisterBtn extends StatelessWidget {
               'Ok',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -188,7 +191,7 @@ class LoginRegisterBtn extends StatelessWidget {
             child: Text(
               isLogin ? 'Login' : 'Register',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),

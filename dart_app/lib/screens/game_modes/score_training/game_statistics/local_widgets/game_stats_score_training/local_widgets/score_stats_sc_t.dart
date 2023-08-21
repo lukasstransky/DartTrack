@@ -28,7 +28,7 @@ class ScoreStatsScoreTraining extends StatelessWidget {
               child: Text(
                 'Total score',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -42,7 +42,7 @@ class ScoreStatsScoreTraining extends StatelessWidget {
               child: Text(
                 stats.getCurrentScore.toString(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

@@ -103,7 +103,7 @@ class ModeCricketBtn extends StatelessWidget {
               style: TextStyle(
                 color:
                     Utils.getTextColorForGameSettingsBtn(expression, context),
-                fontSize: DEFAULT_FONT_SIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),

@@ -90,7 +90,7 @@ class ThrownDartsWidget extends StatelessWidget {
                 child: Text(
                   currentThreeDarts[0],
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                     color: Colors.white,
                   ),
                 ),
@@ -126,7 +126,7 @@ class ThrownDartsWidget extends StatelessWidget {
                 child: Text(
                   currentThreeDarts[1],
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                     color: Colors.white,
                   ),
                 ),
@@ -166,7 +166,7 @@ class ThrownDartsWidget extends StatelessWidget {
                 child: Text(
                   currentThreeDarts[2],
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                     color: Colors.white,
                   ),
                 ),

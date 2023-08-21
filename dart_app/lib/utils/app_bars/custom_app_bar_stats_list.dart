@@ -31,7 +31,9 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
         children: [
           Text(
             widget.title,
-            style: TextStyle(fontSize: 14.sp),
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+            ),
           ),
         ],
       ),

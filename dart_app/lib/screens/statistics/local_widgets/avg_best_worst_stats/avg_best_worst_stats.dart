@@ -35,7 +35,8 @@ class AvgBestWorstStats extends StatelessWidget {
                       'Avg.',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         color: color,
                       ),
                     ),
@@ -47,7 +48,8 @@ class AvgBestWorstStats extends StatelessWidget {
                       'Best',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         color: color,
                       ),
                     ),
@@ -59,7 +61,8 @@ class AvgBestWorstStats extends StatelessWidget {
                       'Worst',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         color: color,
                       ),
                     ),
@@ -79,7 +82,8 @@ class AvgBestWorstStats extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: color,
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ),
@@ -122,7 +126,8 @@ class AvgBestWorstStats extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: color,
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ),
@@ -167,7 +172,8 @@ class AvgBestWorstStats extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: color,
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ),
@@ -213,7 +219,8 @@ class AvgBestWorstStats extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: color,
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ),
@@ -257,7 +264,8 @@ class AvgBestWorstStats extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: color,
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ),

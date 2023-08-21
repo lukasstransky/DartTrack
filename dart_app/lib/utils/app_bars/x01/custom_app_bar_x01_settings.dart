@@ -9,6 +9,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomAppBarX01Settings extends StatefulWidget
@@ -31,21 +32,23 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Information',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: TEXT_DIALOG_WIDTH.w,
           child: Text(
             'These settings are the general default settings!',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -59,7 +62,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -94,25 +97,27 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           defaultSettingsSelected
               ? 'Undo default settings'
               : 'Save settings as default',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: 80.w,
           child: Text(
             defaultSettingsSelected
                 ? 'Do you want to reset to the general default settings?'
                 : 'Do you want to set these settings as default?',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -126,7 +131,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               'Cancel',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -150,7 +155,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               defaultSettingsSelected ? 'Undo' : 'Save',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -178,21 +183,23 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Information',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: TEXT_DIALOG_WIDTH.w,
           child: Text(
             'Team mode is not supported for default settings.',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -206,7 +213,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -237,21 +244,26 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
-        title: Text(
-          'Information',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
+        title: Container(
+          width: TEXT_DIALOG_WIDTH.w,
+          child: Text(
+            'Information',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+            ),
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: Text(
             'Not able to save default settings because current logged in user (${username}) is not present within the players.',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -265,7 +277,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -296,21 +308,26 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
-        title: Text(
-          'Information',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
+        title: Container(
+          width: TEXT_DIALOG_WIDTH.w,
+          child: Text(
+            'Information',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+            ),
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: Text(
             'Logged in as a guest it is not possible to set default settings.',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -324,7 +341,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -395,9 +412,9 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
       title: Column(
         children: [
           Text(
-            'X01 settings',
+            'Settings',
             style: TextStyle(
-                fontSize: 14.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 color: Utils.getTextColorForGameSettingsPage()),
           ),
         ],

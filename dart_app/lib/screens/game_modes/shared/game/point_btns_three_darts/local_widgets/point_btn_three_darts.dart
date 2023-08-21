@@ -6,7 +6,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class PointBtnThreeDarts extends StatelessWidget {
   const PointBtnThreeDarts({
@@ -64,7 +63,7 @@ class PointBtnThreeDarts extends StatelessWidget {
           child: Text(
             pointValueWithDoubleOrTripplePrefix,
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               color: Utils.getTextColorDarken(context),
               fontWeight: FontWeight.bold,
             ),

@@ -24,26 +24,26 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
       BuildContext context, int currentFieldToHit, bool isTargetNumberEnabled) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       if (isTargetNumberEnabled) {
+        return 8.h;
+      } else if (currentFieldToHit == -1) {
+        return 6.h;
+      }
+      return 6.h;
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      if (isTargetNumberEnabled) {
         return 10.h;
       } else if (currentFieldToHit == -1) {
         return 8.h;
       }
       return 7.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      if (isTargetNumberEnabled) {
-        return 12.h;
-      } else if (currentFieldToHit == -1) {
-        return 10.h;
-      }
-      return 9.h;
     }
     if (isTargetNumberEnabled) {
-      return 12.h;
-    } else if (currentFieldToHit == -1) {
       return 10.h;
+    } else if (currentFieldToHit == -1) {
+      return 8.h;
     }
-    return 9.h;
+    return 7.h;
   }
 
   @override
@@ -51,6 +51,12 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
     final bool isTargetNumberEnabled = context
         .read<GameSettingsSingleDoubleTraining_P>()
         .getIsTargetNumberEnabled;
+    final double fontSizeFieldToHit = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 26,
+      tabletValue: 20,
+      otherValue: 20,
+    );
 
     return Selector<GameSingleDoubleTraining_P, SelectorModel>(
       selector: (_, game) => SelectorModel(
@@ -80,7 +86,8 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                     text: TextSpan(
                       text: 'Field to hit: ',
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleLarge!.fontSize,
                       ),
                       children: <TextSpan>[
                         TextSpan(
@@ -88,7 +95,7 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                               selectorModel.currentFieldToHit.toString(),
                               context),
                           style: TextStyle(
-                            fontSize: 26.sp,
+                            fontSize: fontSizeFieldToHit.sp,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -106,7 +113,7 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
                   '(Remaining rounds: ${selectorModel.amountOfRoundsRemaining})',
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 13.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
               ),

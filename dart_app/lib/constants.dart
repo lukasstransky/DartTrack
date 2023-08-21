@@ -9,7 +9,14 @@ const String EMAIL_REGEX = '^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\\.[a-z]{2,}';
 const int MAX_EMAIL_LENGTH = 50;
 const int MAX_PASSWORD_LENGTH = 20;
 
-enum GameMode { X01, ScoreTraining, SingleTraining, DoubleTraining, Cricket }
+enum GameMode {
+  X01,
+  ScoreTraining,
+  SingleTraining,
+  DoubleTraining,
+  Cricket,
+  None
+}
 
 extension NameGetterGameMode on GameMode {
   String get name {
@@ -107,14 +114,11 @@ const String SIXTH_DEFAULT_MOST_SCORED_POINT = '100';
 
 //In Game Settings
 const int HEIGHT_IN_GAME_SETTINGS_WIDGETS = 4;
-const int FONTSIZE_IN_GAME_SETTINGS = 13;
-const int FONTSIZE_HEADINGS_IN_GAME_SETTINGS = 18;
 
 enum InputMethod { Round, ThreeDarts }
 
 //Statistics
-const int FONTSIZE_HEADING_STATISTICS = 18;
-const int FONTSIZE_STATISTICS = 13;
+const int FONTSIZE_STATISTICS = 12;
 const int WIDTH_HEADINGS_STATISTICS = 40;
 const int WIDTH_DATA_STATISTICS = 30;
 const double PADDING_TOP_STATISTICS = 1;
@@ -122,8 +126,6 @@ const double PADDING_LEFT_STATISTICS = 5;
 
 //Game Page
 const double POINTS_BUTTON_MARGIN = 1.0;
-const double ROUND_BUTTON_TEXT_SIZE = 30;
-const double THREE_DARTS_BUTTON_TEXT_SIZE = 14;
 
 enum PointType { Single, Double, Tripple }
 
@@ -387,7 +389,7 @@ const int DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED = 5;
 
 const int DEFAULT_LIST_TILE_NEGATIVE_MARGIN = -4;
 
-var dialogContentPadding = EdgeInsets.fromLTRB(6.w, 1.h, 6.w, 0);
+var DIALOG_CONTENT_PADDING_MOBILE = EdgeInsets.fromLTRB(6.w, 1.h, 6.w, 0);
 
 // Bot class
 const int AMOUNT_OF_GENERATED_SCORES = 2;
@@ -424,8 +426,6 @@ const int MAX_ROUNDS_SINGLE_TRAINING = 100;
 const int MAX_ROUNDS_SINGLE_TRAINING_NUMBERS = 3;
 const int MIN_ROUNDS_SINGLE_TRAINING = 5;
 
-const int BTN_FONTSIZE_SD_T = 30;
-
 /************************************************************************************/
 /**********************          cricket settings           *************************/
 /************************************************************************************/
@@ -457,7 +457,6 @@ const double CARD_SHAPE_ROUNDING = 10;
 // game modes overview
 const int GAME_MODES_OVERVIEW_WIDTH = 60;
 const int GAME_MODES_OVERVIEW_HEIGHT = 6;
-const int GAME_MODES_OVERVIEW_FONTSIZE = 16;
 const int GAME_MODES_OVERVIEW_PADDING = 2;
 
 // game settings
@@ -494,20 +493,22 @@ const String VIBRATION_FEEDBACK_KEY = 'vibrationFeedbackEnabled';
 // game settings x01
 const double WIDGET_HEIGHT_GAMESETTINGS = 4;
 const double WIDGET_HEIGHT_GAMESETTINGS_TEAMS = 3.5;
-
 const double WIDGET_HEIGHT_GAMESETTINGS_TABLET = 4;
 
 // overall
-const double DEFAULT_FONT_SIZE = 11;
-const double DEFAULT_FONT_SIZE_TOAST_MESSAGE = 12;
 const double ICON_BUTTON_SIZE = 3;
-const double DIALOG_TITLE_FONTSIZE = 16;
-const double DIALOG_CONTENT_FONTSIZE = 12;
-const double DIALOG_BTN_FONTSIZE = 12;
-const double DIALOG_WIDTH = 50;
+const double TEXT_DIALOG_WIDTH = 80;
+const double DIALOG_NORMAL_WIDTH = 60;
+const double DIALOG_SMALL_WIDTH = 40;
+const double DIALOG_ERROR_MSG_FONTSIZE = 9;
+const double ACTION_BTNS_SPACING = 1.5;
 
 // mobile
 const double SWTICH_SCALE_FACTOR_MOBILE = 1;
+const double BTN_FONTSIZE_SD_T_MOBILE = 30;
 
 // tablet
 const double SWTICH_SCALE_FACTOR_TABLET = 1.5;
+const double TEXT_SWITCH_SPACE_TABLET = 3;
+const double ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET = 2;
+const double BTN_FONTSIZE_SD_T_TABLET = 20;

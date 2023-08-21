@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/app.version.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -23,15 +24,15 @@ class AboutAndSupport extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 5.h,
               padding: EdgeInsets.only(
                 left: 1.5.w,
+                top: 0.5.h,
               ),
               alignment: Alignment.centerLeft,
               child: Text(
                 'About & Support',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -57,6 +58,7 @@ class AboutAndSupport extends StatelessWidget {
               name: 'Terms of use',
               route: '/termsOfUse',
             ),
+            AppVersion(),
           ],
         ),
       ),

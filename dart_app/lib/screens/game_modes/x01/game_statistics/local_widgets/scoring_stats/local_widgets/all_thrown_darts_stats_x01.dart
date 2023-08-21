@@ -28,7 +28,7 @@ class AllThrownDartsStatsX01 extends StatelessWidget {
               child: Text(
                 'All darts',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,7 +45,7 @@ class AllThrownDartsStatsX01 extends StatelessWidget {
                     ? '-'
                     : stats.getAllThrownDarts.toString(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

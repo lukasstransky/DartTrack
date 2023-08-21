@@ -13,7 +13,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class GameStatsScoreTraining extends StatefulWidget {
@@ -57,15 +56,13 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
 
   @override
   Widget build(BuildContext context) {
-    late double scaleFactorSwitch;
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    } else {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    }
+    final double scaleFactorSwitch = Utils.getSwitchScaleFactor(context);
+    final double textSwitchSpace = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 0,
+      tabletValue: TEXT_SWITCH_SPACE_TABLET,
+      otherValue: TEXT_SWITCH_SPACE_TABLET,
+    );
 
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
@@ -80,16 +77,13 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 1.h),
-              child: Text(
-                context
-                    .read<GameSettingsScoreTraining_P>()
-                    .getModeStringStatsScreen(),
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Colors.white,
-                ),
+            Text(
+              context
+                  .read<GameSettingsScoreTraining_P>()
+                  .getModeStringStatsScreen(),
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                color: Colors.white,
               ),
             ),
             Container(
@@ -100,7 +94,7 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
               child: Text(
                 _game!.getFormattedDateTime(),
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -135,18 +129,20 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
                           'Show odd rounded scores',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: DEFAULT_FONT_SIZE.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
+                        ),
+                        SizedBox(
+                          width: textSwitchSpace.w,
                         ),
                         Transform.scale(
                           scale: scaleFactorSwitch,
                           child: Switch(
                             thumbColor: MaterialStateProperty.all(
                                 Theme.of(context).colorScheme.secondary),
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
-                            inactiveThumbColor:
-                                Theme.of(context).colorScheme.secondary,
                             value: _roundedScoresOdd,
                             onChanged: (value) {
                               Utils.handleVibrationFeedback(context);

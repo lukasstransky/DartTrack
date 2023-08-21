@@ -27,7 +27,7 @@ class WorstLegX01 extends StatelessWidget {
               child: Text(
                 'Worst leg',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -46,7 +46,7 @@ class WorstLegX01 extends StatelessWidget {
                         .getWorstLeg()
                     : stats.getWorstLeg(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

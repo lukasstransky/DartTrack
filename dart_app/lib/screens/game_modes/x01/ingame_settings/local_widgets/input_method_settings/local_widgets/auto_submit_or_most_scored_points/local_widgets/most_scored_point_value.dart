@@ -5,6 +5,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class MostScoredPointValue extends StatelessWidget {
@@ -19,59 +20,56 @@ class MostScoredPointValue extends StatelessWidget {
 
     return Container(
       width: 25.w,
-      padding: (i == 2 || i == 3)
-          ? EdgeInsets.only(
-              top: 1.h,
-              bottom: 1.h,
-            )
-          : null,
+      padding:
+          ((i == 2 || i == 3) && ResponsiveBreakpoints.of(context).isTablet)
+              ? EdgeInsets.only(
+                  top: 1.h,
+                  bottom: 1.h,
+                )
+              : null,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            height: 4.h,
             width: 6.w,
             child: Center(
               child: Text(
                 '${i + 1}.',
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),
             ),
           ),
-          Expanded(
+          ElevatedButton(
             child: Container(
               alignment: Alignment.center,
               height: 4.h,
-              child: ElevatedButton(
-                child: Text(
-                  gameSettingsX01.getMostScoredPoints[i],
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                  ),
+              width: 10.w,
+              child: Text(
+                gameSettingsX01.getMostScoredPoints[i],
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
-                onPressed: () {
-                  Utils.handleVibrationFeedback(context);
-                  _showDialogForMostScoredPointInput(
-                      context, gameSettingsX01, i);
-                },
-                style: ButtonStyle(
-                  splashFactory: NoSplash.splashFactory,
-                  shadowColor: MaterialStateProperty.all(Colors.transparent),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      side: BorderSide(
-                        color: Utils.getPrimaryColorDarken(context),
-                        width: 0.5.w,
-                      ),
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(10.0),
-                      ),
-                    ),
+              ),
+            ),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              _showDialogForMostScoredPointInput(context, gameSettingsX01, i);
+            },
+            style: ButtonStyle(
+              splashFactory: NoSplash.splashFactory,
+              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              overlayColor: MaterialStateProperty.all(Colors.transparent),
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  side: BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: 0.5.w,
+                  ),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
                   ),
                 ),
               ),
@@ -97,16 +95,18 @@ class MostScoredPointValue extends StatelessWidget {
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: dialogContentPadding,
+          contentPadding: ResponsiveBreakpoints.of(context).isMobile
+              ? DIALOG_CONTENT_PADDING_MOBILE
+              : null,
           title: Text(
             'Enter a value',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             ),
           ),
           content: Container(
-            width: DIALOG_WIDTH.w,
+            width: DIALOG_SMALL_WIDTH.w,
             margin: EdgeInsets.only(
               left: 7.w,
               right: 7.w,
@@ -136,15 +136,16 @@ class MostScoredPointValue extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
               decoration: InputDecoration(
+                errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                 hintText: 'Value',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
                 hintStyle: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(
@@ -167,7 +168,7 @@ class MostScoredPointValue extends StatelessWidget {
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -193,7 +194,7 @@ class MostScoredPointValue extends StatelessWidget {
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(

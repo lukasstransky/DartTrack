@@ -120,7 +120,7 @@ class HeaderText extends StatelessWidget {
           textValue,
           style: TextStyle(
             color: Colors.white,
-            fontSize: 13.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -148,7 +148,7 @@ class ValueText extends StatelessWidget {
           textValue,
           style: TextStyle(
             color: Utils.getTextColorDarken(context),
-            fontSize: 13.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),

@@ -49,9 +49,10 @@ class EmailInput extends StatelessWidget {
         },
         style: TextStyle(
           color: Colors.white,
-          fontSize: 12.sp,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         ),
         decoration: InputDecoration(
+          errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
           prefixIcon: Icon(
             size: ICON_BUTTON_SIZE.h,
             Icons.mail,
@@ -59,7 +60,7 @@ class EmailInput extends StatelessWidget {
           ),
           hintText: 'Email',
           hintStyle: TextStyle(
-            fontSize: 12.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             color: Utils.getPrimaryColorDarken(context),
           ),
           filled: true,

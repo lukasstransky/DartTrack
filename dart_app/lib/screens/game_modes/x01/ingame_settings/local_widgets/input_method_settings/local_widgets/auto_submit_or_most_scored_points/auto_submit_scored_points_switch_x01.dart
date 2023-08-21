@@ -8,6 +8,7 @@ import 'package:dart_app/screens/game_modes/x01/ingame_settings/local_widgets/in
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class AutoSubmitOrScoredPointsSwitchX01 extends StatefulWidget {
@@ -89,6 +90,9 @@ class _AutoSubmitOrScoredPointsSwitchX01State
       StatsFirestoreX01_P statisticsFirestoreX01) {
     if (gameSettingsX01.getInputMethod == InputMethod.Round &&
         gameSettingsX01.getShowMostScoredPoints) {
+      if (ResponsiveBreakpoints.of(context).isMobile) {
+        return 32;
+      }
       return 27;
     }
 

@@ -40,19 +40,21 @@ class _TargetNumberSingleDoubleTrainingState
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Target number explained',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Text(
           'If this option is enabled, only darts on the selected target number are counted. \nFor example, when the target number is ${gameModePrefix}20, only hits on the ${gameModePrefix}20 field will be added to the total score.',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
         actions: [
@@ -65,7 +67,7 @@ class _TargetNumberSingleDoubleTrainingState
               'Continue',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -102,16 +104,18 @@ class _TargetNumberSingleDoubleTrainingState
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: dialogContentPadding,
+          contentPadding: ResponsiveBreakpoints.of(context).isMobile
+              ? DIALOG_CONTENT_PADDING_MOBILE
+              : null,
           title: Text(
             'Enter target number',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             ),
           ),
           content: Container(
-            width: DIALOG_WIDTH.w,
+            width: DIALOG_SMALL_WIDTH.w,
             margin: EdgeInsets.only(
               left: 10.w,
               right: 10.w,
@@ -138,15 +142,16 @@ class _TargetNumberSingleDoubleTrainingState
               ],
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
               decoration: InputDecoration(
+                errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                 hintText: '1-20',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
                 hintStyle: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(
@@ -172,7 +177,7 @@ class _TargetNumberSingleDoubleTrainingState
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -198,7 +203,7 @@ class _TargetNumberSingleDoubleTrainingState
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -240,27 +245,35 @@ class _TargetNumberSingleDoubleTrainingState
   Widget build(BuildContext context) {
     final GameSettingsSingleDoubleTraining_P settings =
         context.read<GameSettingsSingleDoubleTraining_P>();
-
-    late double scaleFactorSwitch;
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    } else {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    }
+    final double scaleFactorSwitch = Utils.getSwitchScaleFactor(context);
+    final double textSwitchSpace = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 0,
+      tabletValue: TEXT_SWITCH_SPACE_TABLET,
+      otherValue: TEXT_SWITCH_SPACE_TABLET,
+    );
+    final double transformValue = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: -2.5,
+      tabletValue: -2.5,
+      otherValue: -2.5,
+    );
+    final double selectedTargetNumberFontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
 
     return Container(
-      width: 90.w,
+      width: WIDTH_GAMESETTINGS.w,
       child: Column(
         children: [
-          Row(
-            children: [
-              Container(
-                width: 8.w,
-                transform: Matrix4.translationValues(-2.5.w, 0.0, 0.0),
-                child: IconButton(
+          Container(
+            transform: Matrix4.translationValues(transformValue.w, 0.0, 0.0),
+            child: Row(
+              children: [
+                IconButton(
                   highlightColor: Colors.transparent,
                   splashColor: Colors.transparent,
                   onPressed: () {
@@ -273,37 +286,38 @@ class _TargetNumberSingleDoubleTrainingState
                     color: Theme.of(context).colorScheme.secondary,
                   ),
                 ),
-              ),
-              Text(
-                'Enable target number',
-                style: TextStyle(
-                  color: Utils.getTextColorForGameSettingsPage(),
-                  fontSize: DEFAULT_FONT_SIZE.sp,
-                ),
-              ),
-              Selector<GameSettingsSingleDoubleTraining_P, bool>(
-                selector: (_, settings) => settings.getIsTargetNumberEnabled,
-                builder: (_, isTargetNumberEnabled, __) => Transform.scale(
-                  scale: scaleFactorSwitch,
-                  child: Switch(
-                    thumbColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.secondary),
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                    inactiveThumbColor: Theme.of(context).colorScheme.secondary,
-                    value: isTargetNumberEnabled,
-                    onChanged: (value) {
-                      Utils.handleVibrationFeedback(context);
-                      if (value) {
-                        _showDialogForEnteringTargetNumber(context);
-                      } else {
-                        settings.resetTargetNumberToDefault();
-                        settings.notify();
-                      }
-                    },
+                Text(
+                  'Enable target number',
+                  style: TextStyle(
+                    color: Utils.getTextColorForGameSettingsPage(),
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(
+                  width: textSwitchSpace.w,
+                ),
+                Selector<GameSettingsSingleDoubleTraining_P, bool>(
+                  selector: (_, settings) => settings.getIsTargetNumberEnabled,
+                  builder: (_, isTargetNumberEnabled, __) => Transform.scale(
+                    scale: scaleFactorSwitch,
+                    child: Switch(
+                      thumbColor: MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                      value: isTargetNumberEnabled,
+                      onChanged: (value) {
+                        Utils.handleVibrationFeedback(context);
+                        if (value) {
+                          _showDialogForEnteringTargetNumber(context);
+                        } else {
+                          settings.resetTargetNumberToDefault();
+                          settings.notify();
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           Selector<GameSettingsSingleDoubleTraining_P, SelectorModel>(
             selector: (_, gameSettingsSingleDoubleTraining) => SelectorModel(
@@ -319,14 +333,14 @@ class _TargetNumberSingleDoubleTrainingState
                             '(Selected target number: ${widget.gameMode == GameMode.DoubleTraining ? 'D' : ''}',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: 10.sp,
+                              fontSize: selectedTargetNumberFontSize.sp,
                             ),
                           ),
                           Text(
                             '${selectorModel.targetNumber.toString()})',
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: 10.sp,
+                              fontSize: selectedTargetNumberFontSize.sp,
                             ),
                           ),
                         ],

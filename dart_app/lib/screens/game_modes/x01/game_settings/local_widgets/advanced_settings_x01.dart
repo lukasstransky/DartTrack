@@ -10,6 +10,13 @@ class AdvancedSettingsX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double paddingTop = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 0,
+      tabletValue: 2,
+      otherValue: 2,
+    );
+
     return Selector<GameSettingsX01_P, SelectorModel>(
       selector: (_, gameSettingsX01) => SelectorModel(
         drawMode: gameSettingsX01.getDrawMode,
@@ -18,35 +25,31 @@ class AdvancedSettingsX01 extends StatelessWidget {
         modeOut: gameSettingsX01.getModeOut,
         setsEnabled: gameSettingsX01.getSetsEnabled,
       ),
-      builder: (_, selectorModel, __) => Container(
-        transform: Matrix4.translationValues(
-            0.0, _getProperValueForTransformation(selectorModel).h, 0.0),
-        child: Padding(
-          padding: EdgeInsets.only(left: 7.w),
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: TextButton.icon(
-              onPressed: () {
-                Utils.handleVibrationFeedback(context);
-                Navigator.of(context).pushNamed('/inGameSettingsX01');
-              },
-              icon: Icon(
-                Icons.settings,
+      builder: (_, selectorModel, __) => Padding(
+        padding: EdgeInsets.only(left: 7.w, top: paddingTop.h),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton.icon(
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pushNamed('/inGameSettingsX01');
+            },
+            icon: Icon(
+              Icons.settings,
+              color: Theme.of(context).colorScheme.secondary,
+              size: ICON_BUTTON_SIZE.h,
+            ),
+            label: Text(
+              'Advanced settings',
+              style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                size: ICON_BUTTON_SIZE.h,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
-              label: Text(
-                'Advanced setttings',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 10.sp,
-                ),
-              ),
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
+            ),
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
                 ),
               ),
             ),
@@ -54,36 +57,6 @@ class AdvancedSettingsX01 extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  double _getProperValueForTransformation(SelectorModel selectorModel) {
-    int counter = _getCountOfPresentSwitchers(selectorModel);
-    if (counter == 3) {
-      return -3;
-    } else if (counter == 2) {
-      return -2;
-    } else if (counter == 1) {
-      return -0.5;
-    }
-    return 0;
-  }
-
-  int _getCountOfPresentSwitchers(SelectorModel selectorModel) {
-    int counter = 0;
-    if (selectorModel.modeOut == ModeOutIn.Double) {
-      counter++;
-    }
-    if (_winByTwoLegsPresent(selectorModel)) {
-      counter++;
-    }
-    if (!selectorModel.winByTwoLegsDifference) {
-      counter++;
-    }
-    return counter;
-  }
-
-  bool _winByTwoLegsPresent(SelectorModel selectorModel) {
-    return selectorModel.legs > 1 && !selectorModel.drawMode;
   }
 }
 

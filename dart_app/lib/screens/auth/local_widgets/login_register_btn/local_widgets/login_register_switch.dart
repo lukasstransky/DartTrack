@@ -22,7 +22,7 @@ class LoginRegisterSwitch extends StatelessWidget {
                 ? 'Don\'t have an account? '
                 : 'Already have an account? ',
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -33,7 +33,7 @@ class LoginRegisterSwitch extends StatelessWidget {
               auth.getAuthMode == AuthMode.Login ? 'Register' : 'Login',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),

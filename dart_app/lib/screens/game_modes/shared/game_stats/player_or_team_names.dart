@@ -57,7 +57,10 @@ class PlayerOrTeamNames extends StatelessWidget {
                             child: Text(
                               stats.getPlayer.getName,
                               style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
                               ),
@@ -85,7 +88,10 @@ class PlayerOrTeamNames extends StatelessWidget {
                               ? stats.getTeam.getName
                               : stats.getPlayer.getName,
                           style: TextStyle(
-                            fontSize: FONTSIZE_STATISTICS.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                             fontWeight: FontWeight.bold,
                             color: Utils.getTextColorDarken(context),
                           ),
@@ -100,7 +106,8 @@ class PlayerOrTeamNames extends StatelessWidget {
                       child: Text(
                         stats.getPlayer.getName,
                         style: TextStyle(
-                          fontSize: FONTSIZE_STATISTICS.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: Utils.getTextColorDarken(context),
                           fontWeight: FontWeight.bold,
                         ),

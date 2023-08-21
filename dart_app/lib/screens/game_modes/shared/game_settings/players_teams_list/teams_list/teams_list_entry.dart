@@ -67,7 +67,7 @@ class TeamsListEntry extends StatelessWidget {
           child: Text(
             team.getName,
             style: TextStyle(
-                fontSize: 13.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 fontWeight: FontWeight.bold,
                 color: Colors.white),
           ),
@@ -100,7 +100,10 @@ class TeamsListEntry extends StatelessWidget {
                                 Text(
                                   'Bot - lvl. ${player.getLevel}',
                                   style: TextStyle(
-                                    fontSize: 10.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -108,9 +111,9 @@ class TeamsListEntry extends StatelessWidget {
                                   transform: Matrix4.translationValues(
                                       0.0, -0.5.w, 0.0),
                                   child: Text(
-                                    ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                    ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                                     style: TextStyle(
-                                      fontSize: 7.sp,
+                                      fontSize: 8.sp,
                                       color: Colors.white,
                                     ),
                                   ),
@@ -120,7 +123,10 @@ class TeamsListEntry extends StatelessWidget {
                           : Text(
                               player.getName,
                               style: TextStyle(
-                                fontSize: 12.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 color: Colors.white,
                               ),
                             ),

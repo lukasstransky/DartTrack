@@ -144,7 +144,7 @@ class MainStatsCricket extends StatelessWidget {
               TextSpan(
                 text: firstText,
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),

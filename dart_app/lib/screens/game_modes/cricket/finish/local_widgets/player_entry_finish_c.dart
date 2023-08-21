@@ -74,7 +74,8 @@ class ScoringStats extends StatelessWidget {
                   Text(
                     'Sets: ${stats.getSetsWon} ',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Colors.white,
                     ),
                   ),
@@ -82,7 +83,8 @@ class ScoringStats extends StatelessWidget {
                     Text(
                       'Legs: ${stats.getLegsWon}',
                       style: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                         color: Colors.white,
                       ),
                     ),
@@ -92,14 +94,14 @@ class ScoringStats extends StatelessWidget {
               Text(
                 'Legs: ${stats.getLegsWon}',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),
             Text(
               'MPR: ${stats.getMarksPerRound()}',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),
@@ -107,7 +109,7 @@ class ScoringStats extends StatelessWidget {
               Text(
                 'Total points: ${stats.getTotalPoints.toString()}',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

@@ -27,7 +27,7 @@ class HighestFinishX01 extends StatelessWidget {
               child: Text(
                 'Best finish',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -44,7 +44,7 @@ class HighestFinishX01 extends StatelessWidget {
                     ? stats.getHighestCheckout().toString()
                     : '-',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

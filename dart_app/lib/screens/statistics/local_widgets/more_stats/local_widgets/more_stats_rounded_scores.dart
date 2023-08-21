@@ -35,7 +35,8 @@ class MoreStatsRoundedScores extends StatelessWidget {
                       child: Text(
                         i != 180 ? i.toString() + '+' : i.toString(),
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           fontWeight: FontWeight.bold,
                           color: Utils.highlightRoundedScore(
                                   statisticsFirestore, i, roundedScoresOdd)
@@ -59,7 +60,8 @@ class MoreStatsRoundedScores extends StatelessWidget {
                             : statisticsFirestore.roundedScoresOdd[i]
                                 .toString(),
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: Utils.highlightRoundedScore(
                                   statisticsFirestore, i, roundedScoresOdd)
                               ? Theme.of(context).colorScheme.secondary

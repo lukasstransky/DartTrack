@@ -92,7 +92,8 @@ class _StatsCardX01State extends State<StatsCardX01> {
                       'Show ${_showAllPlayersOrTeams ? 'less' : 'all'} ${gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ? 'players' : 'teams'}',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: DEFAULT_FONT_SIZE.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),

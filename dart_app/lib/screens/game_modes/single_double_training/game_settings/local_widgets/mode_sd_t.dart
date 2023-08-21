@@ -12,16 +12,7 @@ class ModeSingleDoubleTraining extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
-        top: context
-                    .watch<GameSettingsSingleDoubleTraining_P>()
-                    .getPlayers
-                    .length ==
-                MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING
-            ? 1.5.h
-            : 0,
-        bottom: 0.5.h,
-      ),
+      padding: EdgeInsets.only(top: 1.h),
       child: Center(
         child: Container(
           width: WIDTH_GAMESETTINGS.w,
@@ -72,43 +63,46 @@ class RandomBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          Utils.handleVibrationFeedback(context);
-          context
-              .read<GameSettingsSingleDoubleTraining_P>()
-              .changeMode(ModesSingleDoubleTraining.Random);
-        },
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            'Random',
-            style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(
-                  isRandomBtn && !isTargetNumberEnabled, context),
-              fontSize: DEFAULT_FONT_SIZE.sp,
-            ),
-          ),
-        ),
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              side: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
-              ),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(BUTTON_BORDER_RADIUS),
-                bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
+      child: Container(
+        height: 4.h,
+        child: ElevatedButton(
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            context
+                .read<GameSettingsSingleDoubleTraining_P>()
+                .changeMode(ModesSingleDoubleTraining.Random);
+          },
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Random',
+              style: TextStyle(
+                color: Utils.getTextColorForGameSettingsBtn(
+                    isRandomBtn && !isTargetNumberEnabled, context),
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),
-          backgroundColor: isRandomBtn && !isTargetNumberEnabled
-              ? Utils.getPrimaryMaterialStateColorDarken(context)
-              : Utils.getColor(Theme.of(context).colorScheme.primary),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GAME_SETTINGS_BTN_BORDER_WITH.w,
+                ),
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(BUTTON_BORDER_RADIUS),
+                  bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
+                ),
+              ),
+            ),
+            backgroundColor: isRandomBtn && !isTargetNumberEnabled
+                ? Utils.getPrimaryMaterialStateColorDarken(context)
+                : Utils.getColor(Theme.of(context).colorScheme.primary),
+          ),
         ),
       ),
     );
@@ -129,6 +123,7 @@ class DescendingBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: Container(
+        height: 4.h,
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -155,7 +150,7 @@ class DescendingBtn extends StatelessWidget {
               style: TextStyle(
                 color: Utils.getTextColorForGameSettingsBtn(
                     isDescendingMode && !isTargetNumberEnabled, context),
-                fontSize: DEFAULT_FONT_SIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),
@@ -189,43 +184,46 @@ class AscendingBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: ElevatedButton(
-        onPressed: () {
-          Utils.handleVibrationFeedback(context);
-          context
-              .read<GameSettingsSingleDoubleTraining_P>()
-              .changeMode(ModesSingleDoubleTraining.Ascending);
-        },
-        child: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            'Ascending',
-            style: TextStyle(
-              color: Utils.getTextColorForGameSettingsBtn(
-                  isAscendingMode && !isTargetNumberEnabled, context),
-              fontSize: DEFAULT_FONT_SIZE.sp,
-            ),
-          ),
-        ),
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              side: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: GAME_SETTINGS_BTN_BORDER_WITH.w,
-              ),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
-                bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+      child: Container(
+        height: 4.h,
+        child: ElevatedButton(
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            context
+                .read<GameSettingsSingleDoubleTraining_P>()
+                .changeMode(ModesSingleDoubleTraining.Ascending);
+          },
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Ascending',
+              style: TextStyle(
+                color: Utils.getTextColorForGameSettingsBtn(
+                    isAscendingMode && !isTargetNumberEnabled, context),
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),
-          backgroundColor: isAscendingMode && !isTargetNumberEnabled
-              ? Utils.getPrimaryMaterialStateColorDarken(context)
-              : Utils.getColor(Theme.of(context).colorScheme.primary),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                side: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GAME_SETTINGS_BTN_BORDER_WITH.w,
+                ),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+                  bottomLeft: Radius.circular(BUTTON_BORDER_RADIUS),
+                ),
+              ),
+            ),
+            backgroundColor: isAscendingMode && !isTargetNumberEnabled
+                ? Utils.getPrimaryMaterialStateColorDarken(context)
+                : Utils.getColor(Theme.of(context).colorScheme.primary),
+          ),
         ),
       ),
     );

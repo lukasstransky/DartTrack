@@ -57,7 +57,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                               child: Text(
                                 '${stats.getSingleHits}',
                                 style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                   color: Colors.white,
                                 ),
                               ),
@@ -67,7 +70,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                               child: Text(
                                 '(${stats.getSingleHitsPercentage()}%)',
                                 style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                   color: Colors.white70,
                                 ),
                               ),
@@ -86,7 +92,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                             child: Text(
                               '${stats.getDoubleHits}',
                               style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 color: Colors.white,
                               ),
                             ),
@@ -96,7 +105,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                             child: Text(
                               '(${stats.getDoubleHitsPercentage()}%)',
                               style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 color: Colors.white70,
                               ),
                             ),
@@ -116,7 +128,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                               child: Text(
                                 '${stats.getTrippleHits}',
                                 style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                   color: Colors.white,
                                 ),
                               ),
@@ -126,7 +141,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                               child: Text(
                                 '(${stats.getTrippleHitsPercentage()}%)',
                                 style: TextStyle(
-                                  fontSize: FONTSIZE_STATISTICS.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                   color: Colors.white70,
                                 ),
                               ),
@@ -145,7 +163,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                             child: Text(
                               '${stats.getMissedHits}',
                               style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 color: Colors.white,
                               ),
                             ),
@@ -155,7 +176,10 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                             child: Text(
                               '(${stats.getMissedHitsPercentage()}%)',
                               style: TextStyle(
-                                fontSize: FONTSIZE_STATISTICS.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                                 color: Colors.white70,
                               ),
                             ),

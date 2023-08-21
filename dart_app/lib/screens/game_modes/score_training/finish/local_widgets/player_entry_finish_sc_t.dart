@@ -66,20 +66,20 @@ class ScoringStats extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (isRoundMode) AverageText(),
+            if (isRoundMode) AverageText(context),
             Text(
               'Total score: ${playerStats.getCurrentScore}',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
                 fontWeight: isRoundMode ? null : FontWeight.bold,
               ),
             ),
-            if (!isRoundMode) AverageText(),
+            if (!isRoundMode) AverageText(context),
             Text(
               'Highest score: ${playerStats.getHighestScore()}',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),
@@ -89,11 +89,11 @@ class ScoringStats extends StatelessWidget {
     );
   }
 
-  Text AverageText() {
+  Text AverageText(BuildContext context) {
     return Text(
       'Average: ${playerStats.getAverage()}',
       style: TextStyle(
-        fontSize: 12.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         color: Colors.white,
         fontWeight: isRoundMode ? FontWeight.bold : null,
       ),

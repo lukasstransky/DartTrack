@@ -29,7 +29,7 @@ class FinishingStatsX01 extends StatelessWidget {
           child: Text(
             'Finishing',
             style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               color: Colors.white,
             ),
           ),

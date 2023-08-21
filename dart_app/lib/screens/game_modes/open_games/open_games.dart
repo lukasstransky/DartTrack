@@ -252,7 +252,10 @@ class _OpenGamesState extends State<OpenGames> {
                               'Swipe left for actions (play & delete)',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: DEFAULT_FONT_SIZE.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                               ),
                             ),
                           ),
@@ -313,7 +316,7 @@ class _OpenGamesState extends State<OpenGames> {
                   'Currently there are no open games!',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 12.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
               ),

@@ -5,7 +5,6 @@ import 'package:dart_app/screens/statistics/local_widgets/more_stats/local_widge
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class MoreStats extends StatefulWidget {
@@ -21,15 +20,13 @@ class _MoreStatsState extends State<MoreStats> {
 
   @override
   Widget build(BuildContext context) {
-    late double scaleFactorSwitch;
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    } else {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    }
+    final double scaleFactorSwitch = Utils.getSwitchScaleFactor(context);
+    final double textSwitchSpace = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 0,
+      tabletValue: TEXT_SWITCH_SPACE_TABLET,
+      otherValue: TEXT_SWITCH_SPACE_TABLET,
+    );
 
     return Selector<StatsFirestoreX01_P, FilterValue>(
       selector: (_, statsFirestoreX01) => statsFirestoreX01.currentFilterValue,
@@ -44,7 +41,8 @@ class _MoreStatsState extends State<MoreStats> {
                     child: Text(
                       'Rounded scores',
                       style: TextStyle(
-                          fontSize: 14.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.titleSmall!.fontSize,
                           color: Utils.getTextColorDarken(context),
                           fontWeight: FontWeight.bold),
                     ),
@@ -57,7 +55,8 @@ class _MoreStatsState extends State<MoreStats> {
                           ? 'All scores per dart'
                           : 'Precise scores',
                       style: TextStyle(
-                        fontSize: 14.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         color: Utils.getTextColorDarken(context),
                         fontWeight: FontWeight.bold,
                       ),
@@ -94,8 +93,12 @@ class _MoreStatsState extends State<MoreStats> {
                     'Show odd rounded scores',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 11.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
+                  ),
+                  SizedBox(
+                    width: textSwitchSpace.w,
                   ),
                   Transform.scale(
                     scale: scaleFactorSwitch,
@@ -103,9 +106,6 @@ class _MoreStatsState extends State<MoreStats> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       thumbColor: MaterialStateProperty.all(
                           Theme.of(context).colorScheme.secondary),
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveThumbColor:
-                          Theme.of(context).colorScheme.secondary,
                       value: _roundedScoresOdd,
                       onChanged: (value) {
                         Utils.handleVibrationFeedback(context);
@@ -126,8 +126,12 @@ class _MoreStatsState extends State<MoreStats> {
                     'Show all scores per dart',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 11.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
+                  ),
+                  SizedBox(
+                    width: textSwitchSpace.w,
                   ),
                   Transform.scale(
                     scale: scaleFactorSwitch,
@@ -135,9 +139,6 @@ class _MoreStatsState extends State<MoreStats> {
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       thumbColor: MaterialStateProperty.all(
                           Theme.of(context).colorScheme.secondary),
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveThumbColor:
-                          Theme.of(context).colorScheme.secondary,
                       value: _showAllScoesPerDartWithCount,
                       onChanged: (value) {
                         Utils.handleVibrationFeedback(context);

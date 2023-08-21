@@ -1,4 +1,3 @@
-import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
@@ -24,7 +23,7 @@ class ForgotPasswordLink extends StatelessWidget {
           'Forgot password?',
           style: TextStyle(
             color: Colors.white38,
-            fontSize: DEFAULT_FONT_SIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       ),

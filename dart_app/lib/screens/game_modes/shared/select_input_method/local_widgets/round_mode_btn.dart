@@ -21,7 +21,7 @@ class RoundBtn extends StatelessWidget {
         Fluttertoast.showToast(
           msg: 'In order to switch, please finish the round!',
           toastLength: Toast.LENGTH_LONG,
-          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         );
       } else {
         final gameSettingsX01_P = context.read<GameSettingsX01_P>();
@@ -35,7 +35,7 @@ class RoundBtn extends StatelessWidget {
         Fluttertoast.showToast(
           msg: 'In order to switch, please finish the round!',
           toastLength: Toast.LENGTH_LONG,
-          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         );
       } else {
         final gameSettingsScoreTraining_P =
@@ -59,6 +59,13 @@ class RoundBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+
     bool isRoundSelected = false;
     if (mode == GameMode.X01) {
       isRoundSelected =
@@ -91,7 +98,7 @@ class RoundBtn extends StatelessWidget {
         child: Text(
           'Round',
           style: TextStyle(
-            fontSize: 14.sp,
+            fontSize: _fontSize.sp,
             color: isRoundSelected
                 ? Theme.of(context).colorScheme.secondary
                 : Utils.getTextColorDarken(context),

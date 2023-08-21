@@ -18,7 +18,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
@@ -126,16 +125,20 @@ class FirestoreServiceGames {
 
     try {
       List<Future<void>> futureList = [
-        _deleteCollection(_firestore.collection(_getFirestoreGamesPath())),
-        _deleteCollection(_firestore.collection(_getFirestoreOpenGamesPath())),
         _deleteCollection(
-            _firestore.collection(_getFirestorePlayerStatsPath())),
-        _deleteCollection(_firestore.collection(_getFirestoreTeamStatsPath())),
+            _firestore.collection(_getFirestoreGamesPath()), context),
+        _deleteCollection(
+            _firestore.collection(_getFirestoreOpenGamesPath()), context),
+        _deleteCollection(
+            _firestore.collection(_getFirestorePlayerStatsPath()), context),
+        _deleteCollection(
+            _firestore.collection(_getFirestoreTeamStatsPath()), context),
       ];
 
       if (deleteDefaultSettings) {
         futureList.add(_deleteCollection(
-            _firestore.collection(_getFirestoreDefaultSettingsX01Path())));
+            _firestore.collection(_getFirestoreDefaultSettingsX01Path()),
+            context));
       }
 
       await Future.wait(futureList);
@@ -143,7 +146,7 @@ class FirestoreServiceGames {
       Fluttertoast.showToast(
         msg: 'An unexpected error occurred. Please try again later.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     } finally {
       settings.setIsResettingStatsOrDeletingAccount = false;
@@ -151,7 +154,8 @@ class FirestoreServiceGames {
     }
   }
 
-  Future<void> _deleteCollection(CollectionReference collection) async {
+  Future<void> _deleteCollection(
+      CollectionReference collection, BuildContext context) async {
     try {
       final snapshot = await collection.get();
 
@@ -161,7 +165,7 @@ class FirestoreServiceGames {
       Fluttertoast.showToast(
         msg: 'An unexpected error occurred. Please try again later.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     }
   }

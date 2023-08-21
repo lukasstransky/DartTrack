@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -72,15 +73,15 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
       child: Column(
         children: [
           Container(
-            height: 5.h,
             padding: EdgeInsets.only(
               left: 1.5.w,
+              top: 0.5.h,
             ),
             alignment: Alignment.centerLeft,
             child: Text(
               'Account details',
               style: TextStyle(
-                fontSize: 16.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                 color: Utils.getTextColorDarken(context),
                 fontWeight: FontWeight.bold,
               ),
@@ -113,16 +114,18 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Change username',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: Form(
             key: _usernameFormKey,
             child: SingleChildScrollView(
@@ -145,9 +148,12 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                     inputFormatters: [LengthLimitingTextInputFormatter(20)],
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                     decoration: InputDecoration(
+                      errorStyle:
+                          TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                       prefixIcon: Icon(
                         size: ICON_BUTTON_SIZE.h,
                         Icons.person,
@@ -158,7 +164,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                           Theme.of(context).colorScheme.primary, 10),
                       filled: true,
                       hintStyle: TextStyle(
-                        fontSize: 12.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                         color: Utils.getPrimaryColorDarken(context),
                       ),
                       border: OutlineInputBorder(
@@ -177,7 +184,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                         text: '(Can only be changed ',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                         children: <TextSpan>[
                           TextSpan(
@@ -210,7 +218,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
               'Cancel',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -233,7 +241,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
               'Update',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -301,7 +309,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
     Fluttertoast.showToast(
       msg: 'Username updated successfully.',
       toastLength: Toast.LENGTH_LONG,
-      fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
     );
   }
 
@@ -316,16 +324,18 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Change email',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: Form(
             key: _emailFormKey,
             child: SingleChildScrollView(
@@ -358,9 +368,12 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                         },
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                         decoration: InputDecoration(
+                          errorStyle:
+                              TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                           prefixIcon: Icon(
                             size: ICON_BUTTON_SIZE.h,
                             Icons.lock,
@@ -385,7 +398,10 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                               Theme.of(context).colorScheme.primary, 10),
                           hintText: 'Current password',
                           hintStyle: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                             color: Utils.getPrimaryColorDarken(context),
                           ),
                           border: OutlineInputBorder(
@@ -422,9 +438,12 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                       ],
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                       decoration: InputDecoration(
+                        errorStyle:
+                            TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                         prefixIcon: Icon(
                           size: ICON_BUTTON_SIZE.h,
                           Icons.mail,
@@ -435,7 +454,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                             Theme.of(context).colorScheme.primary, 10),
                         filled: true,
                         hintStyle: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: Utils.getPrimaryColorDarken(context),
                         ),
                         border: OutlineInputBorder(
@@ -466,7 +486,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
               'Cancel',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -489,7 +509,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
               'Update',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -523,7 +543,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
         await _reauthenticateUser(authService, _emailFormKey);
     if (reauthenticationSuccessful) {
       authService.updateEmailInFirestore(newEmail);
-      authService.updateEmail(newEmail);
+      authService.updateEmail(newEmail, context);
 
       context.read<Auth_P>().setPasswordVisible = false;
       _emailController.clear();
@@ -532,7 +552,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
       Fluttertoast.showToast(
         msg: 'Email updated successfully.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     }
   }
@@ -546,16 +566,18 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Change password',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Container(
-          width: DIALOG_WIDTH.w,
+          width: DIALOG_NORMAL_WIDTH.w,
           child: Form(
             key: _passwordFormKey,
             child: SingleChildScrollView(
@@ -628,7 +650,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
               'Cancel',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -651,7 +673,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
               'Update',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -690,7 +712,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
       Fluttertoast.showToast(
         msg: 'Password updated successfully.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     }
   }
@@ -717,7 +739,7 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
       Fluttertoast.showToast(
         msg: 'An unexpected error occurred. Please try again later.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     }
 
@@ -759,9 +781,10 @@ class PasswordInputField extends StatelessWidget {
           validator: validator,
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
           decoration: InputDecoration(
+            errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
             prefixIcon: Icon(
               size: ICON_BUTTON_SIZE.h,
               Icons.lock,
@@ -784,7 +807,7 @@ class PasswordInputField extends StatelessWidget {
             fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
             hintText: hintText,
             hintStyle: TextStyle(
-              fontSize: 12.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Utils.getPrimaryColorDarken(context),
             ),
             border: OutlineInputBorder(

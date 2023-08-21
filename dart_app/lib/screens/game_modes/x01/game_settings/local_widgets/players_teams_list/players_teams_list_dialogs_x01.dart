@@ -10,6 +10,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -65,16 +66,18 @@ class PlayersTeamsListDialogs {
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: dialogContentPadding,
+          contentPadding: ResponsiveBreakpoints.of(context).isMobile
+              ? DIALOG_CONTENT_PADDING_MOBILE
+              : null,
           title: Text(
             'Edit',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             ),
           ),
           content: Container(
-            width: DIALOG_WIDTH.w,
+            width: DIALOG_NORMAL_WIDTH.w,
             child: StatefulBuilder(
               builder: (context, setState) {
                 if (playerToEdit is Bot) {
@@ -91,13 +94,16 @@ class PlayersTeamsListDialogs {
                               child: Text(
                                 'Bot - lvl. ${playerToEdit.getLevel}',
                                 style: TextStyle(
-                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                   color: Colors.white,
                                 ),
                               ),
                             ),
                             Text(
-                              ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE}-${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                              ' (${playerToEdit.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${playerToEdit.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
                               style: TextStyle(
                                 fontSize: 8.sp,
                                 color: Colors.white,
@@ -149,9 +155,12 @@ class PlayersTeamsListDialogs {
                     ],
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                     decoration: InputDecoration(
+                      errorStyle:
+                          TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                       prefixIcon: Icon(
                         size: ICON_BUTTON_SIZE.h,
                         Icons.person,
@@ -192,7 +201,7 @@ class PlayersTeamsListDialogs {
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -218,7 +227,7 @@ class PlayersTeamsListDialogs {
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -256,16 +265,18 @@ class PlayersTeamsListDialogs {
               borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
             ),
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: dialogContentPadding,
+            contentPadding: ResponsiveBreakpoints.of(context).isMobile
+                ? DIALOG_CONTENT_PADDING_MOBILE
+                : null,
             title: Text(
               'Edit team',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               ),
             ),
             content: Container(
-              width: DIALOG_WIDTH.w,
+              width: DIALOG_NORMAL_WIDTH.w,
               child: StatefulBuilder(
                 builder: (context, setState) {
                   return Column(
@@ -294,9 +305,12 @@ class PlayersTeamsListDialogs {
                         ],
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                         decoration: InputDecoration(
+                          errorStyle:
+                              TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                           prefixIcon: Icon(
                             size: ICON_BUTTON_SIZE.h,
                             Icons.group,
@@ -306,7 +320,10 @@ class PlayersTeamsListDialogs {
                           fillColor: Utils.darken(
                               Theme.of(context).colorScheme.primary, 10),
                           hintStyle: TextStyle(
-                            fontSize: 12.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                             color: Utils.getPrimaryColorDarken(context),
                           ),
                           hintText: 'Team',
@@ -326,7 +343,10 @@ class PlayersTeamsListDialogs {
                             'Delete this team?',
                             style: TextStyle(
                               color: Colors.red,
-                              fontSize: DEFAULT_FONT_SIZE.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                             ),
                           ),
                           IconButton(
@@ -365,7 +385,7 @@ class PlayersTeamsListDialogs {
                   'Cancel',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
-                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
                 style: ButtonStyle(
@@ -391,7 +411,7 @@ class PlayersTeamsListDialogs {
                   'Submit',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
-                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
                 style: ButtonStyle(
@@ -429,21 +449,23 @@ class PlayersTeamsListDialogs {
               borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
             ),
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: dialogContentPadding,
+            contentPadding: ResponsiveBreakpoints.of(context).isMobile
+                ? DIALOG_CONTENT_PADDING_MOBILE
+                : null,
             title: Text(
               'Delete team',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               ),
             ),
             content: Container(
-              width: DIALOG_WIDTH.w,
+              width: DIALOG_NORMAL_WIDTH.w,
               child: Text(
                 'Do you also want to delete the team?',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
             ),
@@ -452,7 +474,6 @@ class PlayersTeamsListDialogs {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 3.w),
                     alignment: Alignment.centerLeft,
                     child: TextButton(
                       onPressed: () {
@@ -463,7 +484,8 @@ class PlayersTeamsListDialogs {
                         'Cancel',
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.secondary,
-                          fontSize: DIALOG_BTN_FONTSIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
                       style: ButtonStyle(
@@ -486,39 +508,41 @@ class PlayersTeamsListDialogs {
                   ),
                   Row(
                     children: [
-                      Container(
-                        padding: EdgeInsets.only(right: 2.w),
-                        child: TextButton(
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            gameSettings.removePlayer(playerToDelete, false);
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            'No',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontSize: DIALOG_BTN_FONTSIZE.sp,
-                            ),
+                      TextButton(
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          gameSettings.removePlayer(playerToDelete, false);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'No',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            backgroundColor:
-                                Utils.getPrimaryMaterialStateColorDarken(
-                                    context),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    DIALOG_BTN_SHAPE_ROUNDING),
-                              ),
+                        ),
+                        style: ButtonStyle(
+                          splashFactory: NoSplash.splashFactory,
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          backgroundColor:
+                              Utils.getPrimaryMaterialStateColorDarken(context),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  DIALOG_BTN_SHAPE_ROUNDING),
                             ),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        width: ACTION_BTNS_SPACING.w,
                       ),
                       TextButton(
                         onPressed: () {
@@ -532,7 +556,10 @@ class PlayersTeamsListDialogs {
                           'Yes',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
-                            fontSize: DIALOG_BTN_FONTSIZE.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         ),
                         style: ButtonStyle(
@@ -565,6 +592,7 @@ class PlayersTeamsListDialogs {
       BuildContext context, Player playerToSwap, GameSettings_P gameSettings) {
     final Team? newTeam =
         _checkIfSwappingOnlyToOneTeamPossible(playerToSwap, gameSettings);
+
     if (newTeam == null) {
       List<Team> possibleTeamsToSwap =
           _getPossibleTeamsToSwap(playerToSwap, gameSettings);
@@ -579,16 +607,18 @@ class PlayersTeamsListDialogs {
               borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
             ),
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: dialogContentPadding,
+            contentPadding: ResponsiveBreakpoints.of(context).isMobile
+                ? DIALOG_CONTENT_PADDING_MOBILE
+                : null,
             title: Text(
               'Swap team',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               ),
             ),
             content: Container(
-              width: DIALOG_WIDTH.w,
+              width: DIALOG_NORMAL_WIDTH.w,
               child: StatefulBuilder(
                 builder: (context, setState) {
                   return Container(
@@ -604,22 +634,37 @@ class PlayersTeamsListDialogs {
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                           ),
-                          child: RadioListTile(
-                            activeColor:
-                                Theme.of(context).colorScheme.secondary,
+                          child: ListTile(
                             title: Text(
                               team.getName,
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                               ),
                             ),
-                            value: team,
-                            groupValue: selectedTeam,
-                            onChanged: (Team? value) {
-                              Utils.handleVibrationFeedback(context);
-                              setState(() => selectedTeam = value);
-                            },
+                            leading: Theme(
+                              data: Theme.of(context).copyWith(
+                                  unselectedWidgetColor:
+                                      Utils.getPrimaryColorDarken(context)),
+                              child: Radio<Team>(
+                                activeColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                value: team,
+                                groupValue: selectedTeam,
+                                onChanged: (value) {
+                                  Utils.handleVibrationFeedback(context);
+                                  setState(
+                                    () {
+                                      Utils.handleVibrationFeedback(context);
+                                      setState(() => selectedTeam = value);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         );
                       },
@@ -638,7 +683,7 @@ class PlayersTeamsListDialogs {
                   'Cancel',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
-                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
                 style: ButtonStyle(
@@ -665,7 +710,7 @@ class PlayersTeamsListDialogs {
                   'Submit',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
-                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
                 style: ButtonStyle(
@@ -829,21 +874,23 @@ class PlayersTeamsListDialogs {
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: dialogContentPadding,
+          contentPadding: ResponsiveBreakpoints.of(context).isMobile
+              ? DIALOG_CONTENT_PADDING_MOBILE
+              : null,
           title: Text(
-            'Info',
+            'Information',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             ),
           ),
           content: Container(
-            width: DIALOG_WIDTH.w,
+            width: TEXT_DIALOG_WIDTH.w,
             child: Text(
               'All the players in this team will also be deleted.',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),
@@ -878,38 +925,40 @@ class PlayersTeamsListDialogs {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 3.w),
-                        child: TextButton(
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                              color: Theme.of(context).colorScheme.secondary,
-                              fontSize: DIALOG_BTN_FONTSIZE.sp,
-                            ),
+                      TextButton(
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            backgroundColor:
-                                Utils.getPrimaryMaterialStateColorDarken(
-                                    context),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    DIALOG_BTN_SHAPE_ROUNDING),
-                              ),
+                        ),
+                        style: ButtonStyle(
+                          splashFactory: NoSplash.splashFactory,
+                          shadowColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          overlayColor:
+                              MaterialStateProperty.all(Colors.transparent),
+                          backgroundColor:
+                              Utils.getPrimaryMaterialStateColorDarken(context),
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  DIALOG_BTN_SHAPE_ROUNDING),
                             ),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        width: ACTION_BTNS_SPACING.w,
                       ),
                       TextButton(
                         onPressed: () {
@@ -921,7 +970,10 @@ class PlayersTeamsListDialogs {
                           'Submit',
                           style: TextStyle(
                             color: Theme.of(context).colorScheme.secondary,
-                            fontSize: DIALOG_BTN_FONTSIZE.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         ),
                         style: ButtonStyle(

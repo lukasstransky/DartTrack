@@ -27,7 +27,7 @@ class CheckoutPercentX01 extends StatelessWidget {
               child: Text(
                 'Checkout %',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -42,7 +42,7 @@ class CheckoutPercentX01 extends StatelessWidget {
               child: Text(
                 stats.getCheckoutQuoteInPercent(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

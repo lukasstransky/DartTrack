@@ -6,6 +6,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class AmountOfRoundsForTargetNumberSingleDoubleTraining extends StatefulWidget {
@@ -40,16 +41,18 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: dialogContentPadding,
+          contentPadding: ResponsiveBreakpoints.of(context).isMobile
+              ? DIALOG_CONTENT_PADDING_MOBILE
+              : null,
           title: Text(
             'Enter rounds',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DIALOG_TITLE_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             ),
           ),
           content: Container(
-            width: DIALOG_WIDTH.w,
+            width: DIALOG_SMALL_WIDTH.w,
             margin: EdgeInsets.only(
               left: 10.w,
               right: 10.w,
@@ -75,16 +78,17 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
               ],
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
               decoration: InputDecoration(
+                errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                 hintText:
                     '${MIN_ROUNDS_SINGLE_TRAINING}-${MAX_ROUNDS_SINGLE_TRAINING}',
                 fillColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 filled: true,
                 hintStyle: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getPrimaryColorDarken(context),
                 ),
                 border: OutlineInputBorder(
@@ -110,7 +114,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                 'Cancel',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -136,7 +140,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                 'Submit',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: DIALOG_BTN_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -179,26 +183,27 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
       builder: (_, isTargetNumberEnabled, __) => isTargetNumberEnabled
           ? Container(
               margin: EdgeInsets.only(top: 1.h),
-              width: 90.w,
+              width: WIDTH_GAMESETTINGS.w,
               child: Row(
                 children: [
-                  Container(
-                    width: 35.w,
-                    alignment: Alignment.centerLeft,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'Game will end after ',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
-                        ),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'Game will end after ',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
                   Selector<GameSettingsSingleDoubleTraining_P, int>(
                     selector: (_, settings) => settings.getAmountOfRounds,
                     builder: (_, amountOfRounds, __) => Container(
+                      padding: EdgeInsets.only(
+                        left: 1.w,
+                        right: 2.w,
+                      ),
                       width: 20.w,
                       child: ElevatedButton(
                         onPressed: () {
@@ -211,7 +216,10 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                             amountOfRounds.toString(),
                             style: TextStyle(
                               color: Theme.of(context).colorScheme.secondary,
-                              fontSize: DEFAULT_FONT_SIZE.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                             ),
                           ),
                         ),
@@ -238,16 +246,14 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                       ),
                     ),
                   ),
-                  Container(
-                    width: 35.w,
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'rounds are played.',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
-                        ),
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      'rounds.',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),

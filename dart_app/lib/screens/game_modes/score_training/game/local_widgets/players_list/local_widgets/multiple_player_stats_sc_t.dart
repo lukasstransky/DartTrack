@@ -28,7 +28,6 @@ class _MulitplePlayerStatsScoreTrainingState
 
   @override
   Widget build(BuildContext context) {
-    const int fontSize = 13;
     final bool isRoundMode =
         context.read<GameSettingsScoreTraining_P>().getMode ==
             ScoreTrainingModeEnum.MaxRounds;
@@ -48,7 +47,8 @@ class _MulitplePlayerStatsScoreTrainingState
                       'Name',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: fontSize.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -61,7 +61,8 @@ class _MulitplePlayerStatsScoreTrainingState
                       'Avg.',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: fontSize.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -75,7 +76,8 @@ class _MulitplePlayerStatsScoreTrainingState
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: fontSize.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                       ),
                     ),
                   ),
@@ -130,8 +132,6 @@ class PlayerEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const int fontSize = 13;
-
     return Container(
       color: Utils.getBackgroundColorForPlayer(
           context, context.read<GameScoreTraining_P>(), playerStats),
@@ -149,7 +149,7 @@ class PlayerEntry extends StatelessWidget {
                   style: TextStyle(
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
-                    fontSize: fontSize.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
               ),
@@ -163,7 +163,7 @@ class PlayerEntry extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: fontSize.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
             ),
@@ -178,7 +178,7 @@ class PlayerEntry extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: fontSize.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
             ),

@@ -14,7 +14,7 @@ class PointDistributionInfoSingleDoubleTraining extends StatelessWidget {
     final bool isSingleTraining = gameMode == GameMode.SingleTraining;
 
     return Container(
-      padding: EdgeInsets.only(top: 2.h, bottom: 0.5.h),
+      padding: EdgeInsets.only(top: 1.h),
       child: Center(
         child: Column(
           children: [
@@ -49,7 +49,7 @@ class Item extends StatelessWidget {
               field,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DEFAULT_FONT_SIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),
@@ -59,7 +59,7 @@ class Item extends StatelessWidget {
               '=',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DEFAULT_FONT_SIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),
@@ -69,7 +69,7 @@ class Item extends StatelessWidget {
               points,
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DEFAULT_FONT_SIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
           ),

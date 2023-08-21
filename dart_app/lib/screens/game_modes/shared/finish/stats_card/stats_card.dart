@@ -122,7 +122,8 @@ class _StatsCardState extends State<StatsCard> {
                             : 'Show all players',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: DEFAULT_FONT_SIZE.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
                     ),

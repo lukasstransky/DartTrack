@@ -102,6 +102,13 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 30,
+      tabletValue: 20,
+      otherValue: 20,
+    );
+
     return Container(
       decoration: BoxDecoration(
         border: _getBorder(context),
@@ -129,7 +136,7 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
           child: Text(
             point,
             style: TextStyle(
-              fontSize: ROUND_BUTTON_TEXT_SIZE.sp,
+              fontSize: _fontSize.sp,
               color: Utils.getTextColorDarken(context),
               fontWeight: FontWeight.bold,
             ),

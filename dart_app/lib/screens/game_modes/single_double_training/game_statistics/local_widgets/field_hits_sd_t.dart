@@ -74,7 +74,7 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                 text: 'Field hits',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
                 ),
                 children: <TextSpan>[
                   if (isTargetNumberEnabled)
@@ -82,7 +82,8 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                       text: ' (per round)',
                       style: TextStyle(
                         color: Colors.white70,
-                        fontSize: 12.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                 ],
@@ -125,7 +126,10 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                                   child: Text(
                                     '${stats.getFieldHits[i]!} ',
                                     style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp,
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .fontSize,
                                       color: _shouldHighlight(stats, i)
                                           ? Theme.of(context)
                                               .colorScheme
@@ -143,7 +147,10 @@ class FieldHitsSingleDoubleTraining extends StatelessWidget {
                                   child: Text(
                                     ' ${stats.getFieldHits[i]! != '-' ? '(${_getScoredPointsForField(stats.getFieldHits[i]!)})' : ''}',
                                     style: TextStyle(
-                                      fontSize: FONTSIZE_STATISTICS.sp,
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .fontSize,
                                       color: _shouldHighlight(stats, i)
                                           ? Theme.of(context)
                                               .colorScheme

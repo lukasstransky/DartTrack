@@ -1,4 +1,3 @@
-import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -41,7 +40,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   Text(
                     'Forgot password',
                     style: TextStyle(
-                      fontSize: 20.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.titleLarge!.fontSize,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
                     ),
@@ -53,7 +53,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       'Please provide your email to receive a link for resetting your password.',
                       style: TextStyle(
                         color: Colors.white70,
-                        fontSize: DEFAULT_FONT_SIZE.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
@@ -101,7 +102,7 @@ class ResetPasswordBtn extends StatelessWidget {
     Fluttertoast.showToast(
       msg: 'Email for resetting password sent!',
       toastLength: Toast.LENGTH_LONG,
-      fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
     );
 
     // hide loading spinner
@@ -119,7 +120,7 @@ class ResetPasswordBtn extends StatelessWidget {
           'Reset password',
           style: TextStyle(
             color: Theme.of(context).colorScheme.secondary,
-            fontSize: DEFAULT_FONT_SIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
         style: ButtonStyle(

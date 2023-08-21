@@ -60,6 +60,7 @@ class GameStatsX01 extends StatelessWidget {
         Utils.getCurrentSetLegAsString(gameX01, gameSettingsX01);
     final bool isCurrentPlayerBeginnerOfLeg =
         getPlayerTeamStartIndex(gameX01, gameSettingsX01);
+    final double _fontSize = 12.sp;
 
     if (_isCurrentPlayerBot() &&
         (currentStats!.getAllScoresPerLeg.containsKey(setLegString) ||
@@ -88,7 +89,7 @@ class GameStatsX01 extends StatelessWidget {
                 child: Text(
                   'Average: ${_isCurrentPlayerBot() ? g_average : currentStats!.getAverage()}',
                   style: TextStyle(
-                    fontSize: 13.sp,
+                    fontSize: _fontSize,
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
                   ),
@@ -100,7 +101,7 @@ class GameStatsX01 extends StatelessWidget {
                 child: Text(
                   'Last throw: ${_isCurrentPlayerBot() ? g_last_throw : _getLastThrow(currentStats!.getAllScores)}',
                   style: TextStyle(
-                    fontSize: 13.sp,
+                    fontSize: _fontSize,
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
                   ),
@@ -113,7 +114,7 @@ class GameStatsX01 extends StatelessWidget {
                       child: Text(
                         'Thrown darts: ${_isCurrentPlayerBot() ? g_thrown_darts : currentStats!.getCurrentThrownDartsInLeg.toString()}',
                         style: TextStyle(
-                          fontSize: 13.sp,
+                          fontSize: _fontSize,
                           color: Utils.getTextColorDarken(context),
                           fontWeight: FontWeight.bold,
                         ),
@@ -124,7 +125,7 @@ class GameStatsX01 extends StatelessWidget {
                       child: Text(
                         'Thrown darts: ${_isCurrentPlayerBot() ? g_thrown_darts : '-'}',
                         style: TextStyle(
-                          fontSize: 13.sp,
+                          fontSize: _fontSize,
                           color: Utils.getTextColorDarken(context),
                           fontWeight: FontWeight.bold,
                         ),

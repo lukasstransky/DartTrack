@@ -33,6 +33,19 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
   }
 
   Column team(BuildContext context) {
+    final double fontSizePoints = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 50,
+      tabletValue: 40,
+      otherValue: 40,
+    );
+    final double fontSizeTeamName = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 18,
+      tabletValue: 16,
+      otherValue: 16,
+    );
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -46,7 +59,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
                 child: Text(
                   currPlayerOrTeamGameStatsX01!.getTeam.getName,
                   style: TextStyle(
-                    fontSize: 16.sp,
+                    fontSize: fontSizeTeamName.sp,
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
                   ),
@@ -61,7 +74,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
                       : currPlayerOrTeamGameStatsX01!
                           .getTeam.getCurrentPlayerToThrow.getName,
                   style: TextStyle(
-                    fontSize: 13.sp,
+                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
                   ),
@@ -74,7 +87,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
           child: Text(
             currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
             style: TextStyle(
-              fontSize: 50.sp,
+              fontSize: fontSizePoints.sp,
               color: Colors.white,
             ),
           ),
@@ -95,6 +108,13 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
   }
 
   Column single(BuildContext context) {
+    final double fontSizePoints = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 50,
+      tabletValue: 40,
+      otherValue: 40,
+    );
+
     return Column(
       children: [
         Selector<GameSettingsX01_P, bool>(
@@ -111,7 +131,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
             child: Text(
               currPlayerOrTeamGameStatsX01!.getCurrentPoints.toString(),
               style: TextStyle(
-                fontSize: 50.sp,
+                fontSize: fontSizePoints.sp,
                 color: Colors.white,
               ),
             ),
@@ -128,7 +148,7 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
                     ? 'Bot - lvl. ${currPlayerOrTeamGameStatsX01!.getPlayer.getLevel} '
                     : currPlayerOrTeamGameStatsX01!.getPlayer.getName,
                 style: TextStyle(
-                  fontSize: 18.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),

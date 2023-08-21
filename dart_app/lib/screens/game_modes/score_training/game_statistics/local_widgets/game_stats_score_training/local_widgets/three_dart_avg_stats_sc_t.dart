@@ -28,7 +28,7 @@ class ThreeDartsAvgStatsScoreTraining extends StatelessWidget {
               child: Text(
                 '3-Dart avg.',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -42,7 +42,7 @@ class ThreeDartsAvgStatsScoreTraining extends StatelessWidget {
               child: Text(
                 stats.getAverage(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

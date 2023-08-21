@@ -62,7 +62,7 @@ class SingleBtn extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Utils.getTextColorForGameSettingsBtn(
                       singleOrTeam == SingleOrTeamEnum.Single, context),
-                  fontSize: DEFAULT_FONT_SIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
           ),
         ),
@@ -118,7 +118,7 @@ class TeamBtn extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color: Utils.getTextColorForGameSettingsBtn(
                       singleOrTeam == SingleOrTeamEnum.Team, context),
-                  fontSize: DEFAULT_FONT_SIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
           ),
         ),

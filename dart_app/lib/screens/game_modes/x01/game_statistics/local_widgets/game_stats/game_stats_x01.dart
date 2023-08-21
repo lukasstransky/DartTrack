@@ -43,7 +43,7 @@ class _GameStatsX01State extends State<GameStatsX01> {
           child: Text(
             'Game',
             style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               color: Colors.white,
             ),
           ),

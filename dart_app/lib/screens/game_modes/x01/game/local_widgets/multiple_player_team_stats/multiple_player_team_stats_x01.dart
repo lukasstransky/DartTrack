@@ -7,6 +7,7 @@ import 'package:dart_app/screens/game_modes/x01/game/local_widgets/multiple_play
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class MultiplePlayerTeamStatsX01 extends StatefulWidget {
@@ -34,9 +35,30 @@ class _MultiplePlayerTeamStatsX01State
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    late double height;
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        height = 37.h;
+      } else {
+        height = 35.h;
+      }
+    } else if (ResponsiveBreakpoints.of(context).isTablet ||
+        ResponsiveBreakpoints.of(context).isDesktop) {
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        height = 47.h;
+      } else {
+        height = 45.h;
+      }
+    } else {
+      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        height = 47.h;
+      } else {
+        height = 45.h;
+      }
+    }
 
     return Container(
-      height: 35.h,
+      height: height,
       child: Selector<GameX01_P, List<PlayerOrTeamGameStats>>(
         key: const Key('playerStatsList'),
         selector: (_, gameScoreTraining_P) => widget.isSingleMode

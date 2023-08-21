@@ -28,7 +28,7 @@ class FirstNineAvgStatsX01 extends StatelessWidget {
               child: Text(
                 'First nine avg.',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -43,7 +43,7 @@ class FirstNineAvgStatsX01 extends StatelessWidget {
               child: Text(
                 stats.getFirstNinveAvg(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

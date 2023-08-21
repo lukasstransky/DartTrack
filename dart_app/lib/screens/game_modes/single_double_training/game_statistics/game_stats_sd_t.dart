@@ -41,6 +41,13 @@ class _GameStatsSingleDoubleTrainingState
 
   @override
   Widget build(BuildContext context) {
+    final double fontSizeTargetNumberRounds = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
+
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
           ? CustomAppBarWithHeart(
@@ -54,17 +61,7 @@ class _GameStatsSingleDoubleTrainingState
         scrollDirection: Axis.vertical,
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(top: 1.h),
-              child: Text(
-                _getHeader(),
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-            if (_game!.getGameSettings.getIsTargetNumberEnabled)
+            if (_game!.getGameSettings.getIsTargetNumberEnabled) ...[
               Container(
                 padding: EdgeInsets.only(top: 0.5.h),
                 child: RichText(
@@ -72,7 +69,8 @@ class _GameStatsSingleDoubleTrainingState
                     text:
                         'Target number: ${_game!.getMode == GameMode.DoubleTraining ? 'D' : ''}${_game!.getGameSettings.getTargetNumber} ',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Colors.white,
                     ),
                     children: <TextSpan>[
@@ -80,12 +78,20 @@ class _GameStatsSingleDoubleTrainingState
                         text:
                             '(${_game!.getGameSettings.getAmountOfRounds} rounds)',
                         style: TextStyle(
-                          fontSize: 10.sp,
+                          fontSize: fontSizeTargetNumberRounds.sp,
                           color: Colors.white70,
                         ),
                       )
                     ],
                   ),
+                ),
+              ),
+            ] else
+              Text(
+                _getHeader(),
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  color: Colors.white,
                 ),
               ),
             Container(
@@ -97,7 +103,7 @@ class _GameStatsSingleDoubleTrainingState
               child: Text(
                 _game!.getFormattedDateTime(),
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -124,28 +130,18 @@ class _GameStatsSingleDoubleTrainingState
   }
 
   String _getHeader() {
-    String result = '';
-
-    // single or double training
-    result +=
-        '${_game!.getMode == GameMode.SingleTraining ? 'Single' : 'Double'} training';
-
     if (!_game!.getGameSettings.getIsTargetNumberEnabled) {
-      result += ' - ';
       //asc, desc or random
       switch (_game!.getGameSettings.getMode) {
         case ModesSingleDoubleTraining.Ascending:
-          result += 'Ascending';
-          break;
+          return 'Ascending';
         case ModesSingleDoubleTraining.Descending:
-          result += 'Descending';
-          break;
+          return 'Descending';
         case ModesSingleDoubleTraining.Random:
-          result += 'Random';
-          break;
+          return 'Random';
       }
     }
 
-    return result;
+    return "";
   }
 }

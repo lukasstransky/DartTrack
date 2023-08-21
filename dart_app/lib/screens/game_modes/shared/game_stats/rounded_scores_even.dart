@@ -30,7 +30,7 @@ class RoundedScoresEven extends StatelessWidget {
           child: Text(
             'Rounded scores',
             style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -58,7 +58,10 @@ class RoundedScoresEven extends StatelessWidget {
                                       TextSpan(
                                         text: '180',
                                         style: TextStyle(
-                                          fontSize: FONTSIZE_STATISTICS.sp,
+                                          fontSize: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .fontSize,
                                           fontWeight: FontWeight.bold,
                                           color:
                                               Utils.getTextColorDarken(context),
@@ -67,7 +70,10 @@ class RoundedScoresEven extends StatelessWidget {
                                       TextSpan(
                                         text: '+',
                                         style: TextStyle(
-                                          fontSize: FONTSIZE_STATISTICS.sp,
+                                          fontSize: Theme.of(context)
+                                              .textTheme
+                                              .bodyMedium!
+                                              .fontSize,
                                           fontWeight: FontWeight.bold,
                                           color: Theme.of(context)
                                               .colorScheme
@@ -80,7 +86,10 @@ class RoundedScoresEven extends StatelessWidget {
                               : Text(
                                   '${i}+',
                                   style: TextStyle(
-                                    fontSize: FONTSIZE_STATISTICS.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                     fontWeight: FontWeight.bold,
                                     color: Utils.getTextColorDarken(context),
                                   ),
@@ -101,7 +110,10 @@ class RoundedScoresEven extends StatelessWidget {
                         child: Text(
                           stats.getRoundedScoresEven[i].toString(),
                           style: TextStyle(
-                            fontSize: FONTSIZE_STATISTICS.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                             color: _atLeastOneRoundedScoreValue(stats) &&
                                     Utils.getMostOccurringValue(
                                             stats.getRoundedScoresEven) ==

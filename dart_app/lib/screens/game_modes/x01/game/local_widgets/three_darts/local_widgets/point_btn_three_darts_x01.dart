@@ -12,7 +12,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class PointBtnThreeDartX01 extends StatelessWidget {
   const PointBtnThreeDartX01({Key? key, this.point, this.activeBtn})
@@ -205,7 +204,7 @@ class PointBtnThreeDartX01 extends StatelessWidget {
           child: Text(
             pointBtnText,
             style: TextStyle(
-              fontSize: 16.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               color: Utils.getTextColorDarken(context),
               fontWeight: FontWeight.bold,
             ),

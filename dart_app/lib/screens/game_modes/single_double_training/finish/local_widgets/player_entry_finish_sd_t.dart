@@ -74,7 +74,7 @@ class ScoreStats extends StatelessWidget {
               Text(
                 'Singles: ${playerStats.getSingleHits}',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),
@@ -82,7 +82,7 @@ class ScoreStats extends StatelessWidget {
               Text(
                 'Doubles: ${playerStats.getDoubleHits}',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),
@@ -90,21 +90,21 @@ class ScoreStats extends StatelessWidget {
               Text(
                 'Tripples: ${playerStats.getTrippleHits}',
                 style: TextStyle(
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),
             Text(
               'Missed: ${playerStats.getMissedHits}',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),
             Text(
               'Total points: ${playerStats.getTotalPoints}',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),

@@ -32,9 +32,6 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
     final bool isSingleMode = game.getMode == GameMode.SingleTraining;
     final bool isTwoPlayers =
         game.getPlayerGameStatistics.length == 2 ? true : false;
-
-    final int FONTSIZE = isTwoPlayers ? 12 : 18;
-    final int FONTSIZE_PERCENTAGE = isTwoPlayers ? 8 : 12;
     final int HEADER_WIDTH = isTwoPlayers ? 28 : 45;
     final int VALUE_WIDTH = isTwoPlayers ? 6 : 9;
     const int ROW_WIDTH = 80;
@@ -43,6 +40,9 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
       left: 2.5.w,
       right: 2.5.w,
     );
+    final double FONTSIZE = isTwoPlayers
+        ? Theme.of(context).textTheme.bodyMedium!.fontSize!
+        : Theme.of(context).textTheme.titleSmall!.fontSize!;
 
     return Container(
       color: game.getPlayerGameStatistics.length > 1
@@ -61,7 +61,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
-                  fontSize: 20.sp,
+                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
                 ),
               ),
             ),
@@ -104,7 +104,8 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                     '(${playerStats.getSingleHitsPercentage()}%)',
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: FONTSIZE_PERCENTAGE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ],
@@ -129,7 +130,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                   '(${playerStats.getDoubleHitsPercentage()}%)',
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: FONTSIZE_PERCENTAGE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
               ],
@@ -155,7 +156,8 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                     '(${playerStats.getTrippleHitsPercentage()}%)',
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: FONTSIZE_PERCENTAGE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ],
@@ -180,7 +182,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                   '(${playerStats.getMissedHitsPercentage()}%)',
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: FONTSIZE_PERCENTAGE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
               ],
@@ -201,7 +203,7 @@ class ValueText extends StatelessWidget {
   }) : super(key: key);
 
   final int width;
-  final int fontSize;
+  final double fontSize;
   final String textValue;
 
   @override
@@ -212,7 +214,7 @@ class ValueText extends StatelessWidget {
         textValue,
         style: TextStyle(
           color: Colors.white,
-          fontSize: fontSize.sp,
+          fontSize: fontSize,
         ),
       ),
     );
@@ -228,7 +230,7 @@ class HeaderText extends StatelessWidget {
   }) : super(key: key);
 
   final int width;
-  final int fontSize;
+  final double fontSize;
   final String textValue;
 
   @override
@@ -240,7 +242,7 @@ class HeaderText extends StatelessWidget {
         style: TextStyle(
           color: Utils.getTextColorDarken(context),
           fontWeight: FontWeight.bold,
-          fontSize: fontSize.sp,
+          fontSize: fontSize,
         ),
       ),
     );

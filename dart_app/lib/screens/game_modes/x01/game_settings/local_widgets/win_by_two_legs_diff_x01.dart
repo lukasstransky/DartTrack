@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
@@ -13,81 +14,105 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-
-    late double scaleFactorSwitch;
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    } else {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    }
+    final double scaleFactorSwitch = Utils.getSwitchScaleFactor(context);
+    final double textSwitchSpace = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 0,
+      tabletValue: TEXT_SWITCH_SPACE_TABLET,
+      otherValue: TEXT_SWITCH_SPACE_TABLET,
+    );
+    final double paddingTop = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 1,
+      tabletValue: 2,
+      otherValue: 2,
+    );
 
     return Selector<GameSettingsX01_P, SelectorModel>(
       selector: (_, gameSettingsX01) => SelectorModel(
         drawMode: gameSettingsX01.getDrawMode,
         legs: gameSettingsX01.getLegs,
         maxExtraLegs: gameSettingsX01.getMaxExtraLegs,
-        setsEnabled: gameSettingsX01.getSetsEnabled,
         suddenDeath: gameSettingsX01.getSuddenDeath,
         winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
       ),
       builder: (_, selectorModel, __) {
-        if (selectorModel.legs > 1 && !selectorModel.drawMode) {
-          return Container(
-            margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
-            width: WIDTH_GAMESETTINGS.w,
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      'Win by two legs difference',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: DEFAULT_FONT_SIZE.sp,
-                      ),
-                    ),
-                    Transform.scale(
-                      scale: scaleFactorSwitch,
-                      child: Switch(
-                        thumbColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.secondary),
-                        activeColor: Theme.of(context).colorScheme.secondary,
-                        inactiveThumbColor:
-                            Theme.of(context).colorScheme.secondary,
-                        value: selectorModel.winByTwoLegsDifference,
-                        onChanged: (value) {
-                          Utils.handleVibrationFeedback(context);
-                          if (value) {
-                            _showDialogForSuddenDeath(context, gameSettingsX01);
-                          } else {
-                            _resetWinByTwoLegsDifference(gameSettingsX01);
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                if (selectorModel.suddenDeath)
-                  Container(
-                    transform: Matrix4.translationValues(0.0, -1.h, 0.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '(Sudden death leg after max. ${selectorModel.maxExtraLegs} additional ' +
-                          (selectorModel.maxExtraLegs == 1 ? 'leg)' : 'legs)'),
-                      style: TextStyle(
-                        fontSize: 8.sp,
-                        color: Colors.white70,
-                      ),
+        final bool disableSwitch =
+            selectorModel.legs == 1 || selectorModel.drawMode;
+
+        return Container(
+          padding: EdgeInsets.only(top: paddingTop.h),
+          width: WIDTH_GAMESETTINGS.w,
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text(
+                    'Win by two legs difference',
+                    style: TextStyle(
+                      color: disableSwitch ? Colors.white70 : Colors.white,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
-              ],
-            ),
-          );
-        }
-        return SizedBox.shrink();
+                  SizedBox(
+                    width: textSwitchSpace.w,
+                  ),
+                  Transform.scale(
+                    scale: scaleFactorSwitch,
+                    child: Switch(
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      thumbColor: disableSwitch
+                          ? MaterialStateProperty.all(Colors.grey)
+                          : MaterialStateProperty.all(
+                              Theme.of(context).colorScheme.secondary),
+                      value: selectorModel.winByTwoLegsDifference,
+                      onChanged: (value) {
+                        if (disableSwitch) {
+                          String msg = '';
+                          if (selectorModel.legs == 1) {
+                            msg = 'At least 2 legs are required!';
+                          } else {
+                            msg = 'Not possible with draw mode!';
+                          }
+                          Fluttertoast.showToast(
+                            msg: msg,
+                            toastLength: Toast.LENGTH_LONG,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize!,
+                          );
+                          return;
+                        }
+
+                        Utils.handleVibrationFeedback(context);
+                        if (value) {
+                          _showDialogForSuddenDeath(context, gameSettingsX01);
+                        } else {
+                          _resetWinByTwoLegsDifference(gameSettingsX01);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              if (selectorModel.suddenDeath)
+                Container(
+                  transform: Matrix4.translationValues(0.0, -0.5.h, 0.0),
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    '(Sudden death leg after max. ${selectorModel.maxExtraLegs} additional ' +
+                        (selectorModel.maxExtraLegs == 1 ? 'leg)' : 'legs)'),
+                    style: TextStyle(
+                      fontSize: 8.sp,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        );
       },
     );
   }
@@ -95,15 +120,13 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
 
 _showDialogForSuddenDeath(
     BuildContext context, GameSettingsX01_P gameSettingsX01) {
-  late double scaleFactorSwitch;
-  if (ResponsiveBreakpoints.of(context).isMobile) {
-    scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
-  } else if (ResponsiveBreakpoints.of(context).isTablet ||
-      ResponsiveBreakpoints.of(context).isDesktop) {
-    scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-  } else {
-    scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-  }
+  final double scaleFactorSwitch = Utils.getSwitchScaleFactor(context);
+  final double textSwitchSpace = Utils.getResponsiveValue(
+    context: context,
+    mobileValue: 0,
+    tabletValue: TEXT_SWITCH_SPACE_TABLET,
+    otherValue: TEXT_SWITCH_SPACE_TABLET,
+  );
 
   showDialog(
     barrierDismissible: false,
@@ -115,21 +138,70 @@ _showDialogForSuddenDeath(
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           'Sudden death',
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
-        content: Container(
-          width: DIALOG_WIDTH.w,
-          child: StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+        content: StatefulBuilder(
+          builder: (context, setState) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(
+                        size: ICON_BUTTON_SIZE.h,
+                        Icons.info_outline,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      onPressed: () {
+                        Utils.handleVibrationFeedback(context);
+                        _showInfoDialogForSuddenDeath(context);
+                      },
+                    ),
+                    SizedBox(
+                      width: textSwitchSpace.w,
+                    ),
+                    Flexible(
+                      child: Text(
+                        'Enable sudden death',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: textSwitchSpace.w,
+                    ),
+                    Transform.scale(
+                      scale: scaleFactorSwitch,
+                      child: Switch(
+                        thumbColor: MaterialStateProperty.all(
+                            Theme.of(context).colorScheme.secondary),
+                        activeColor: Theme.of(context).colorScheme.secondary,
+                        inactiveThumbColor:
+                            Theme.of(context).colorScheme.secondary,
+                        value: gameSettingsX01.getSuddenDeath,
+                        onChanged: (value) {
+                          Utils.handleVibrationFeedback(context);
+                          setState(() {
+                            gameSettingsX01.setSuddenDeath = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                if (gameSettingsX01.getSuddenDeath)
                   Row(
                     children: [
                       IconButton(
@@ -140,134 +212,93 @@ _showDialogForSuddenDeath(
                         ),
                         onPressed: () {
                           Utils.handleVibrationFeedback(context);
-                          _showInfoDialogForSuddenDeath(context);
+                          _showInfoDialogForMaxExtraLegs(context);
                         },
                       ),
+                      SizedBox(
+                        width: textSwitchSpace.w,
+                      ),
                       Flexible(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            'Enable sudden death',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                            ),
+                        child: Text(
+                          'After max. legs',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         ),
                       ),
-                      Transform.scale(
-                        scale: scaleFactorSwitch,
-                        child: Switch(
-                          thumbColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondary),
-                          activeColor: Theme.of(context).colorScheme.secondary,
-                          inactiveThumbColor:
-                              Theme.of(context).colorScheme.secondary,
-                          value: gameSettingsX01.getSuddenDeath,
-                          onChanged: (value) {
-                            Utils.handleVibrationFeedback(context);
-                            setState(() {
-                              gameSettingsX01.setSuddenDeath = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (gameSettingsX01.getSuddenDeath)
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            size: ICON_BUTTON_SIZE.h,
-                            Icons.info_outline,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            _showInfoDialogForMaxExtraLegs(context);
-                          },
-                        ),
-                        Flexible(
-                          child: FittedBox(
-                            fit: BoxFit.scaleDown,
-                            child: Text(
-                              'After max. legs',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: DIALOG_CONTENT_FONTSIZE.sp,
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: EdgeInsets.only(left: 3.w),
-                          child: IconButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            onPressed: () {
-                              Utils.handleVibrationFeedback(context);
-                              setState(() {
-                                if (gameSettingsX01.getMaxExtraLegs == 1)
-                                  return;
-                                gameSettingsX01.setMaxExtraLegs =
-                                    gameSettingsX01.getMaxExtraLegs - 1;
-                                ;
-                              });
-                            },
-                            padding: EdgeInsets.zero,
-                            constraints: BoxConstraints(),
-                            icon: Icon(
-                              Icons.remove,
-                              size: ICON_BUTTON_SIZE.h,
-                              color: gameSettingsX01.getMaxExtraLegs > 1
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context).colorScheme.primary,
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 10.w,
-                          child: Center(
-                            child: Text(
-                              gameSettingsX01.getMaxExtraLegs.toString(),
-                              style: TextStyle(
-                                fontSize: 18.sp,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                        IconButton(
+                      Container(
+                        padding: EdgeInsets.only(left: 3.w),
+                        child: IconButton(
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onPressed: () {
                             Utils.handleVibrationFeedback(context);
-                            if (gameSettingsX01.getMaxExtraLegs >=
-                                MAX_EXTRA_LEGS) return;
                             setState(() {
+                              if (gameSettingsX01.getMaxExtraLegs == 1) return;
                               gameSettingsX01.setMaxExtraLegs =
-                                  gameSettingsX01.getMaxExtraLegs + 1;
+                                  gameSettingsX01.getMaxExtraLegs - 1;
                               ;
                             });
                           },
                           padding: EdgeInsets.zero,
                           constraints: BoxConstraints(),
                           icon: Icon(
-                            Icons.add,
+                            Icons.remove,
                             size: ICON_BUTTON_SIZE.h,
-                            color: gameSettingsX01.getMaxExtraLegs !=
-                                    MAX_EXTRA_LEGS
+                            color: gameSettingsX01.getMaxExtraLegs > 1
                                 ? Theme.of(context).colorScheme.secondary
                                 : Theme.of(context).colorScheme.primary,
                           ),
                         ),
-                      ],
-                    ),
-                ],
-              );
-            },
-          ),
+                      ),
+                      Container(
+                        width: 10.w,
+                        child: Center(
+                          child: Text(
+                            gameSettingsX01.getMaxExtraLegs.toString(),
+                            style: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .fontSize,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          if (gameSettingsX01.getMaxExtraLegs >= MAX_EXTRA_LEGS)
+                            return;
+                          setState(() {
+                            gameSettingsX01.setMaxExtraLegs =
+                                gameSettingsX01.getMaxExtraLegs + 1;
+                            ;
+                          });
+                        },
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        icon: Icon(
+                          Icons.add,
+                          size: ICON_BUTTON_SIZE.h,
+                          color:
+                              gameSettingsX01.getMaxExtraLegs != MAX_EXTRA_LEGS
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            );
+          },
         ),
         actions: [
           TextButton(
@@ -280,7 +311,7 @@ _showDialogForSuddenDeath(
               'Cancel',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -307,7 +338,7 @@ _showDialogForSuddenDeath(
               'Submit',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -353,21 +384,23 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: dialogContentPadding,
+      contentPadding: ResponsiveBreakpoints.of(context).isMobile
+          ? DIALOG_CONTENT_PADDING_MOBILE
+          : null,
       title: Text(
         'Information',
         style: TextStyle(
           color: Colors.white,
-          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
         ),
       ),
       content: Container(
-        width: DIALOG_WIDTH.w,
+        width: TEXT_DIALOG_WIDTH.w,
         child: Text(
           SUDDEN_DEATH_INFO,
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       ),
@@ -381,7 +414,7 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
             'Continue',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(
@@ -410,21 +443,23 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: dialogContentPadding,
+      contentPadding: ResponsiveBreakpoints.of(context).isMobile
+          ? DIALOG_CONTENT_PADDING_MOBILE
+          : null,
       title: Text(
         'Information',
         style: TextStyle(
           color: Colors.white,
-          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
         ),
       ),
       content: Container(
-        width: DIALOG_WIDTH.w,
+        width: TEXT_DIALOG_WIDTH.w,
         child: Text(
           SUDDEN_DEATH_LEG_DIFFERENCE_INFO,
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       ),
@@ -438,7 +473,7 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
             'Continue',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(
@@ -459,7 +494,6 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
 }
 
 class SelectorModel {
-  final bool setsEnabled;
   final int legs;
   final bool drawMode;
   final bool winByTwoLegsDifference;
@@ -467,7 +501,6 @@ class SelectorModel {
   final int maxExtraLegs;
 
   SelectorModel({
-    required this.setsEnabled,
     required this.legs,
     required this.drawMode,
     required this.winByTwoLegsDifference,

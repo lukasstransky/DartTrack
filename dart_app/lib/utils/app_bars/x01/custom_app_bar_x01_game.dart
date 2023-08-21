@@ -6,6 +6,7 @@ import 'package:dart_app/utils/utils_dialogs.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomAppBarX01Game extends StatelessWidget
@@ -20,34 +21,7 @@ class CustomAppBarX01Game extends StatelessWidget
       builder: (context, showLoadingSpinner, _) => AppBar(
         elevation: 0,
         centerTitle: true,
-        title: Column(
-          children: [
-            Text(
-              Utils.getBestOfOrFirstToString(gameSettingsX01),
-              style: TextStyle(fontSize: 12.sp),
-            ),
-            Text(
-              gameSettingsX01.getGameModeDetails(false),
-              style: TextStyle(fontSize: 10.sp),
-            ),
-            if (!gameSettingsX01.getSuddenDeath &&
-                gameSettingsX01.getWinByTwoLegsDifference)
-              Text(
-                '(Win by two legs difference)',
-                style: TextStyle(fontSize: 8.sp),
-              ),
-            if (gameSettingsX01.getSuddenDeath)
-              Text(
-                gameSettingsX01.getSuddenDeathInfo(),
-                style: TextStyle(fontSize: 8.sp),
-              ),
-            if (gameSettingsX01.getDrawMode)
-              Text(
-                '(Draw enabled)',
-                style: TextStyle(fontSize: 8.sp),
-              ),
-          ],
-        ),
+        title: _getTitleColumn(gameSettingsX01, context),
         leading: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -101,6 +75,52 @@ class CustomAppBarX01Game extends StatelessWidget
           )
         ],
       ),
+    );
+  }
+
+  Column _getTitleColumn(
+      GameSettingsX01_P gameSettingsX01, BuildContext context) {
+    if (ResponsiveBreakpoints.of(context).isMobile) {
+      return Column(
+        children: [
+          Text(
+            Utils.getBestOfOrFirstToString(gameSettingsX01),
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+            ),
+          ),
+          Text(
+            gameSettingsX01.getGameModeDetails(false),
+            style: TextStyle(fontSize: 10.sp),
+          ),
+          if (!gameSettingsX01.getSuddenDeath &&
+              gameSettingsX01.getWinByTwoLegsDifference)
+            Text(
+              '(Win by two legs difference)',
+              style: TextStyle(fontSize: 8.sp),
+            ),
+          if (gameSettingsX01.getSuddenDeath)
+            Text(
+              gameSettingsX01.getSuddenDeathInfo(),
+              style: TextStyle(fontSize: 8.sp),
+            ),
+          if (gameSettingsX01.getDrawMode)
+            Text(
+              '(Draw enabled)',
+              style: TextStyle(fontSize: 8.sp),
+            ),
+        ],
+      );
+    }
+
+    return Column(
+      children: [
+        Text(
+          "${Utils.getBestOfOrFirstToString(gameSettingsX01)} - ${gameSettingsX01.getGameModeDetails(false)}",
+          style: TextStyle(
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
+        ),
+      ],
     );
   }
 

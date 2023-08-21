@@ -27,7 +27,8 @@ class StartGameBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 40.w,
-      padding: EdgeInsets.only(top: 1.h),
+      height: 6.h,
+      padding: EdgeInsets.only(top: 2.h),
       child: ElevatedButton(
         onPressed: () {
           Utils.handleVibrationFeedback(context);
@@ -39,7 +40,7 @@ class StartGameBtn extends StatelessWidget {
             'Start',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DEFAULT_FONT_SIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),
@@ -122,7 +123,7 @@ class StartGameBtn extends StatelessWidget {
         Fluttertoast.showToast(
           msg: 'At least two players are required!',
           toastLength: Toast.LENGTH_LONG,
-          fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         );
       }
     }

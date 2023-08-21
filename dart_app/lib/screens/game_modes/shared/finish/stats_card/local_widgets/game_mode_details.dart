@@ -4,6 +4,7 @@ import 'package:dart_app/models/game_settings/game_settings_single_double_traini
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -27,6 +28,18 @@ class GameModeDetails extends StatelessWidget {
             .getIsTargetNumberEnabled;
     final bool setsEnabled =
         game is GameCricket_P && game.getGameSettings.getSetsEnabled;
+    final double _fontSizeDateTime = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
+    final double _fontSizeMode = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +55,7 @@ class GameModeDetails extends StatelessWidget {
               Text(
                 _getMode(),
                 style: TextStyle(
-                  fontSize: 14.sp,
+                  fontSize: _fontSizeMode.sp,
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                 ),
@@ -51,7 +64,7 @@ class GameModeDetails extends StatelessWidget {
               Text(
                 game.getFormattedDateTime(),
                 style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: _fontSizeDateTime.sp,
                   color: Colors.white,
                 ),
               ),
@@ -80,7 +93,7 @@ class GameModeDetails extends StatelessWidget {
           child: Text(
             game.getGameSettings.getModeStringFinishScreen(isOpenGame, game),
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -96,7 +109,7 @@ class GameModeDetails extends StatelessWidget {
                   ? 'Remaining rounds: ${(game as GameSingleDoubleTraining_P).getAmountOfRoundsRemaining}'
                   : 'Rounds: ${game.getGameSettings.getAmountOfRounds}',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),

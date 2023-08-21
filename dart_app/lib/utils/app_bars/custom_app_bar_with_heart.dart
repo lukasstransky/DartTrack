@@ -69,10 +69,11 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         automaticallyImplyLeading: false,
         title: Text(
           widget.title,
-          style: TextStyle(fontSize: 15.sp),
+          style: TextStyle(
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize),
         ),
         leading: widget.isFinishScreen
-            ? SizedBox.shrink()
+            ? null
             : IconButton(
                 splashColor: Colors.transparent,
                 highlightColor: Colors.transparent,

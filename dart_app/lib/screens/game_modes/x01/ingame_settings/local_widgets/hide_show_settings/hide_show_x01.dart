@@ -47,15 +47,12 @@ class HideShowX01 extends StatelessWidget {
           children: [
             Container(
               height: 5.h,
-              padding: EdgeInsets.only(
-                top: 0.5.h,
-                left: 1.5.w,
-              ),
+              padding: EdgeInsets.only(left: 1.5.w),
               alignment: Alignment.centerLeft,
               child: Text(
                 'Hide/Show',
                 style: TextStyle(
-                  fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
+                  fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),

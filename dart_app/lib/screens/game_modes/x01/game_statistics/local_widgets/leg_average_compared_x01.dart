@@ -31,7 +31,7 @@ class LegAvgComparedX01 extends StatelessWidget {
           child: Text(
             'Averages per leg',
             style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -58,7 +58,10 @@ class LegAvgComparedX01 extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Utils.getTextColorDarken(context),
-                            fontSize: 10.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         ),
                       )
@@ -71,7 +74,10 @@ class LegAvgComparedX01 extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Utils.getTextColorDarken(context),
-                            fontSize: 10.sp,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
                           ),
                         ),
                       ),
@@ -100,7 +106,8 @@ class LegAvgComparedX01 extends StatelessWidget {
                     Utils.getAverageForLeg(stats, setLegString),
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: DEFAULT_FONT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                   decoration: BoxDecoration(

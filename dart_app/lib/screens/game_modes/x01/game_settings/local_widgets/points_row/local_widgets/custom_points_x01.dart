@@ -6,6 +6,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomPointsX01 extends StatefulWidget {
@@ -43,16 +44,18 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
               borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
             ),
             backgroundColor: Theme.of(context).colorScheme.primary,
-            contentPadding: dialogContentPadding,
+            contentPadding: ResponsiveBreakpoints.of(context).isMobile
+                ? DIALOG_CONTENT_PADDING_MOBILE
+                : null,
             title: Text(
               'Enter points',
               style: TextStyle(
                 color: Colors.white,
-                fontSize: DIALOG_TITLE_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
               ),
             ),
             content: Container(
-              width: DIALOG_WIDTH.w,
+              width: DIALOG_SMALL_WIDTH.w,
               margin: EdgeInsets.only(
                 left: 8.w,
                 right: 8.w,
@@ -77,15 +80,16 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 ],
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
                 decoration: InputDecoration(
+                  errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                   hintText: 'min. ${CUSTOM_POINTS_MIN_NUMBER}',
                   fillColor:
                       Utils.darken(Theme.of(context).colorScheme.primary, 10),
                   filled: true,
                   hintStyle: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     color: Utils.getPrimaryColorDarken(context),
                   ),
                   border: OutlineInputBorder(
@@ -108,7 +112,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   'Cancel',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
-                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
                 style: ButtonStyle(
@@ -134,7 +138,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                   'Submit',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
-                    fontSize: DIALOG_BTN_FONTSIZE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
                 style: ButtonStyle(
@@ -219,7 +223,8 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: Utils.getTextColorForGameSettingsBtn(
                           selectorModel.customPoints != -1, context),
-                      fontSize: DEFAULT_FONT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
               ),
             ),

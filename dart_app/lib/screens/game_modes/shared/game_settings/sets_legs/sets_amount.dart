@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class SetsAmount extends StatelessWidget {
@@ -98,7 +99,9 @@ class SetsAmount extends StatelessWidget {
                   _subtractBtnPressed();
                 },
                 padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
+                constraints: ResponsiveBreakpoints.of(context).isMobile
+                    ? BoxConstraints()
+                    : null,
                 icon: Icon(
                   size: ICON_BUTTON_SIZE.h,
                   Icons.remove,
@@ -108,12 +111,13 @@ class SetsAmount extends StatelessWidget {
                 ),
               ),
               Container(
-                width: 10.w,
+                width: 8.w,
                 alignment: Alignment.center,
                 child: Text(
                   gameSettings.getSets.toString(),
                   style: TextStyle(
-                      fontSize: 18.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
                       color: Utils.getTextColorForGameSettingsPage()),
                 ),
               ),
@@ -125,7 +129,9 @@ class SetsAmount extends StatelessWidget {
                   _addBtnPressed();
                 },
                 padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
+                constraints: ResponsiveBreakpoints.of(context).isMobile
+                    ? BoxConstraints()
+                    : null,
                 icon: Icon(
                   size: ICON_BUTTON_SIZE.h,
                   Icons.add,

@@ -52,7 +52,7 @@ class CheckoutsX01 extends StatelessWidget {
           child: Text(
             'Checkouts',
             style: TextStyle(
-              fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+              fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -72,7 +72,8 @@ class CheckoutsX01 extends StatelessWidget {
                       child: Text(
                         allSetLegStrings[i],
                         style: TextStyle(
-                          fontSize: FONTSIZE_STATISTICS.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           fontWeight: FontWeight.bold,
                           color: Utils.getTextColorDarken(context),
                         ),
@@ -92,7 +93,8 @@ class CheckoutsX01 extends StatelessWidget {
                             ? stats.getCheckouts[allSetLegStrings[i]].toString()
                             : '',
                         style: TextStyle(
-                          fontSize: FONTSIZE_STATISTICS.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: Colors.white,
                         ),
                       ),

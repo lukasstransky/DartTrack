@@ -8,6 +8,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 // HERE ARE METHODS DEFINED THAT ARE NEEDED BY MULTIPLE WIDGETS
@@ -59,7 +60,9 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: dialogContentPadding,
+      contentPadding: ResponsiveBreakpoints.of(context).isMobile
+          ? DIALOG_CONTENT_PADDING_MOBILE
+          : null,
       title: Text(
         gameSettingsX01.getEnableCheckoutCounting &&
                 !gameSettingsX01.getCheckoutCountingFinallyDisabled
@@ -67,11 +70,11 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
             : 'Finish counting',
         style: TextStyle(
           color: Colors.white,
-          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
         ),
       ),
       content: Container(
-        width: DIALOG_WIDTH.w,
+        width: DIALOG_NORMAL_WIDTH.w,
         child: StatefulBuilder(
           builder: (context, setState) {
             return Column(
@@ -85,7 +88,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       'Darts on double:',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
@@ -109,6 +113,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 bottom: 0.5.h,
                                 left: 1.w,
                                 right: 1.w),
+                            height: 4.h,
                             child: ElevatedButton(
                               onPressed: () {
                                 Utils.handleVibrationFeedback(context);
@@ -124,7 +129,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                             .colorScheme
                                             .secondary
                                         : Colors.white,
-                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                   ),
                                 ),
                               ),
@@ -159,7 +167,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(
-                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
+                            top: 0.5.h,
+                            bottom: 0.5.h,
+                            left: 1.w,
+                            right: 1.w,
+                          ),
+                          height: 4.h,
                           child: ElevatedButton(
                             onPressed: () {
                               Utils.handleVibrationFeedback(context);
@@ -173,7 +186,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   color: selectedCheckoutCount == 1
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
-                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                 ),
                               ),
                             ),
@@ -208,10 +224,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.only(
-                                top: 0.5.h,
-                                bottom: 0.5.h,
-                                left: 1.w,
-                                right: 1.w),
+                              top: 0.5.h,
+                              bottom: 0.5.h,
+                              left: 1.w,
+                              right: 1.w,
+                            ),
+                            height: 4.h,
                             child: ElevatedButton(
                               onPressed: () {
                                 Utils.handleVibrationFeedback(context);
@@ -235,7 +253,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                             .colorScheme
                                             .secondary
                                         : Colors.white,
-                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                   ),
                                 ),
                               ),
@@ -271,10 +292,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.only(
-                                top: 0.5.h,
-                                bottom: 0.5.h,
-                                left: 1.w,
-                                right: 1.w),
+                              top: 0.5.h,
+                              bottom: 0.5.h,
+                              left: 1.w,
+                              right: 1.w,
+                            ),
+                            height: 4.h,
                             child: ElevatedButton(
                               onPressed: () {
                                 Utils.handleVibrationFeedback(context);
@@ -293,7 +316,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                             .colorScheme
                                             .secondary
                                         : Colors.white,
-                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                   ),
                                 ),
                               ),
@@ -335,7 +361,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       'Darts for finish:',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
                   ),
@@ -347,10 +374,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.only(
-                                top: 0.5.h,
-                                bottom: 0.5.h,
-                                left: 1.w,
-                                right: 1.w),
+                              top: 0.5.h,
+                              bottom: 0.5.h,
+                              left: 1.w,
+                              right: 1.w,
+                            ),
+                            height: 4.h,
                             child: ElevatedButton(
                               onPressed: () {
                                 Utils.handleVibrationFeedback(context);
@@ -367,7 +396,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                             .colorScheme
                                             .secondary
                                         : Colors.white,
-                                    fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                   ),
                                 ),
                               ),
@@ -407,7 +439,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(
-                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
+                            top: 0.5.h,
+                            bottom: 0.5.h,
+                            left: 1.w,
+                            right: 1.w,
+                          ),
+                          height: 4.h,
                           child: ElevatedButton(
                             onPressed: () {
                               Utils.handleVibrationFeedback(context);
@@ -424,7 +461,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   color: selectedFinishCount == 2
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
-                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                 ),
                               ),
                             ),
@@ -465,7 +505,12 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(
-                              top: 0.5.h, bottom: 0.5.h, left: 1.w, right: 1.w),
+                            top: 0.5.h,
+                            bottom: 0.5.h,
+                            left: 1.w,
+                            right: 1.w,
+                          ),
+                          height: 4.h,
                           child: ElevatedButton(
                             onPressed: () {
                               Utils.handleVibrationFeedback(context);
@@ -479,7 +524,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                   color: selectedFinishCount == 3
                                       ? Theme.of(context).colorScheme.secondary
                                       : Colors.white,
-                                  fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
                                 ),
                               ),
                             ),
@@ -539,7 +587,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
             'Cancel',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(
@@ -576,7 +624,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
             'Submit',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(

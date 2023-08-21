@@ -28,15 +28,15 @@ class SettingsGameOverall extends StatelessWidget {
         child: Column(
           children: [
             Container(
-              height: 5.h,
               padding: EdgeInsets.only(
                 left: 1.5.w,
+                top: 0.5.h,
               ),
               alignment: Alignment.centerLeft,
               child: Text(
                 'Game',
                 style: TextStyle(
-                  fontSize: 16.sp,
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -63,20 +63,22 @@ _showDialogForChangingTheme(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: dialogContentPadding,
+      contentPadding: ResponsiveBreakpoints.of(context).isMobile
+          ? DIALOG_CONTENT_PADDING_MOBILE
+          : null,
       title: Text(
         'Change theme',
         style: TextStyle(
           color: Colors.white,
-          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
         ),
       ),
       content: Container(
-        width: DIALOG_WIDTH.w,
+        width: DIALOG_NORMAL_WIDTH.w,
         child: Text(
           "Change theme",
           style: TextStyle(
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
       ),
@@ -90,7 +92,7 @@ _showDialogForChangingTheme(BuildContext context) {
             'Cancel',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(
@@ -110,7 +112,7 @@ _showDialogForChangingTheme(BuildContext context) {
             'Update',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(
@@ -161,16 +163,13 @@ class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
   Widget build(BuildContext context) {
     final Settings_P settings_p = context.read<Settings_P>();
     final AuthService authService = context.read<AuthService>();
-
-    late double scaleFactorSwitch;
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    } else {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    }
+    final double scaleFactorSwitch = Utils.getSwitchScaleFactor(context);
+    final double paddingRight = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 0.h,
+      tabletValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
+      otherValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
+    );
 
     return Material(
       color: Colors.transparent,
@@ -196,25 +195,24 @@ class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Container(
-                  padding: EdgeInsets.only(left: 2.5.w),
+                  padding: EdgeInsets.only(left: 1.w),
                   child: Text(
                     'Vibration feedback',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Colors.white,
                     ),
                   ),
                 ),
                 Container(
                   transform: Matrix4.translationValues(3.w, 0.0, 0.0),
+                  padding: EdgeInsets.only(right: paddingRight),
                   child: Transform.scale(
                     scale: scaleFactorSwitch,
                     child: Switch(
                       thumbColor: MaterialStateProperty.all(
                           Theme.of(context).colorScheme.secondary),
-                      activeColor: Theme.of(context).colorScheme.secondary,
-                      inactiveThumbColor:
-                          Theme.of(context).colorScheme.secondary,
                       value: _vibrationFeedbackEnabled,
                       onChanged: (value) async {
                         Utils.handleVibrationFeedback(context);

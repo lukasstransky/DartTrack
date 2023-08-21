@@ -105,7 +105,8 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
                             .toString(),
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 16.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.titleSmall!.fontSize,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -205,7 +206,7 @@ class CurrentPlayerOfTeam extends StatelessWidget {
           playerOrTeamStats.getTeam.getCurrentPlayerToThrow.getName,
           style: TextStyle(
             color: Utils.getTextColorDarken(context),
-            fontSize: 12.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -242,7 +243,7 @@ class PlayerOrTeamName extends StatelessWidget {
               : playerOrTeamStats.getTeam.getName,
           style: TextStyle(
             color: Utils.getTextColorDarken(context),
-            fontSize: 14.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             fontWeight: FontWeight.bold,
           ),
         ),

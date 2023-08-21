@@ -7,19 +7,11 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class InputMethodSettingsX01 extends StatelessWidget {
   const InputMethodSettingsX01({Key? key}) : super(key: key);
-
-  int _calcCardHeight(BuildContext context, InputMethod inputMethod,
-      bool showMostScoredPoints) {
-    if (inputMethod == InputMethod.Round && showMostScoredPoints) {
-      return 48;
-    }
-
-    return 28;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +22,7 @@ class InputMethodSettingsX01 extends StatelessWidget {
       ),
       builder: (_, selectorModel, __) => Container(
         height: _calcCardHeight(context, selectorModel.inputMethod,
-                selectorModel.showMostScoredPoints)
-            .h,
+            selectorModel.showMostScoredPoints),
         padding: EdgeInsets.only(
           top: 2.0.h,
           left: 0.5.h,
@@ -48,15 +39,12 @@ class InputMethodSettingsX01 extends StatelessWidget {
             children: [
               Container(
                 height: 5.h,
-                padding: EdgeInsets.only(
-                  top: 0.5.h,
-                  left: 1.5.w,
-                ),
+                padding: EdgeInsets.only(left: 1.5.w),
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Input method',
                   style: TextStyle(
-                    fontSize: FONTSIZE_HEADINGS_IN_GAME_SETTINGS.sp,
+                    fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
                     color: Utils.getTextColorDarken(context),
                     fontWeight: FontWeight.bold,
                   ),
@@ -70,6 +58,18 @@ class InputMethodSettingsX01 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double _calcCardHeight(BuildContext context, InputMethod inputMethod,
+      bool showMostScoredPoints) {
+    if (inputMethod == InputMethod.Round && showMostScoredPoints) {
+      if (ResponsiveBreakpoints.of(context).isMobile) {
+        return 53.h;
+      }
+      return 48.h;
+    }
+
+    return 28.h;
   }
 }
 

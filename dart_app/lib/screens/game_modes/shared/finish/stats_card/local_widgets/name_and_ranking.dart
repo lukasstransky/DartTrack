@@ -30,6 +30,19 @@ class NameAndRanking extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _trophySize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+    final double _fontSizeNameFirst = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+
     return Expanded(
       child: Container(
         padding: EdgeInsets.only(left: 5.w),
@@ -42,7 +55,9 @@ class NameAndRanking extends StatelessWidget {
                     child: Text(
                       '${(game is GameX01_P || game is GameCricket_P) ? checkForSameAmountOfSetsLegs(i, Utils.getPlayersOrTeamStatsList(game, game.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team)) : i + 1}.',
                       style: TextStyle(
-                        fontSize: i == 0 && !isOpenGame ? 14.sp : 12.sp,
+                        fontSize: i == 0 && !isOpenGame
+                            ? _fontSizeNameFirst.sp
+                            : Theme.of(context).textTheme.bodyMedium!.fontSize,
                         fontWeight: FontWeight.bold,
                         color: Utils.getTextColorDarken(context),
                       ),
@@ -54,7 +69,7 @@ class NameAndRanking extends StatelessWidget {
                 padding: EdgeInsets.only(left: 3.w),
                 child: Icon(
                   Entypo.trophy,
-                  size: 14.sp,
+                  size: _trophySize.sp,
                   color: Color(0xffFFD700),
                 ),
               )
@@ -63,7 +78,7 @@ class NameAndRanking extends StatelessWidget {
                 padding: EdgeInsets.only(left: 3.w),
                 child: Icon(
                   Entypo.trophy,
-                  size: 14.sp,
+                  size: _trophySize.sp,
                   color:
                       Utils.darken(Theme.of(context).colorScheme.primary, 15),
                 ),
@@ -76,7 +91,9 @@ class NameAndRanking extends StatelessWidget {
                   child: Text(
                     _getPlayerOrTeamName(game.getGameSettings, stats),
                     style: TextStyle(
-                      fontSize: i == 0 || isOpenGame ? 14.sp : 12.sp,
+                      fontSize: i == 0 || isOpenGame
+                          ? _fontSizeNameFirst.sp
+                          : Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),

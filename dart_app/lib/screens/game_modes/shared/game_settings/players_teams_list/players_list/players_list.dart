@@ -49,6 +49,8 @@ class _PlayersListState extends State<PlayersList> {
       case GameMode.Cricket:
         settings = context.read<GameSettingsCricket_P>();
         break;
+      case GameMode.None:
+        break;
     }
 
     return Container(

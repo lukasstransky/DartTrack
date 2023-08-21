@@ -57,7 +57,8 @@ class FieldsToHit extends StatelessWidget {
                       i.toString(),
                       style: TextStyle(
                         color: isNumberClosed ? Colors.white54 : Colors.white,
-                        fontSize: 18.sp,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
                         fontWeight: FontWeight.bold,
                         decoration: isNumberClosed
                             ? TextDecoration.lineThrough
@@ -81,7 +82,7 @@ class FieldsToHit extends StatelessWidget {
                   'Bull',
                   style: TextStyle(
                     color: _is25Closed ? Colors.white54 : Colors.white,
-                    fontSize: 18.sp,
+                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
                     fontWeight: FontWeight.bold,
                     decoration: _is25Closed
                         ? TextDecoration.lineThrough

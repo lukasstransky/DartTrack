@@ -23,6 +23,19 @@ class CheckoutStatsCard extends StatefulWidget {
 class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
   @override
   Widget build(BuildContext context) {
+    final double _fontSizeDateTime = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
+    final double _fontSizeField = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+
     return Container(
       padding: EdgeInsets.only(bottom: 2.h),
       child: GestureDetector(
@@ -57,7 +70,8 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
                             ? 'Double out'
                             : 'Single out',
                         style: TextStyle(
-                          fontSize: 12.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           color: Colors.white,
                         ),
                       ),
@@ -68,7 +82,7 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
                       child: Text(
                         widget.game.getFormattedDateTime(),
                         style: TextStyle(
-                          fontSize: 10.sp,
+                          fontSize: _fontSizeDateTime.sp,
                           color: Colors.white,
                         ),
                       ),
@@ -85,7 +99,7 @@ class _CheckoutStatsCardState extends State<CheckoutStatsCard> {
                   '${widget.isWorstFinished ? 'Worst' : 'Best'} finish: ${widget.finish.toString()}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
+                    fontSize: _fontSizeField.sp,
                     color: Utils.getTextColorDarken(context),
                   ),
                 ),

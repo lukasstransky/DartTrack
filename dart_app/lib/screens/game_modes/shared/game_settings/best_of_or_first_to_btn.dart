@@ -60,7 +60,7 @@ class BestOfBtn extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   color:
                       Utils.getTextColorForGameSettingsBtn(isBestOf, context),
-                  fontSize: DEFAULT_FONT_SIZE.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
           ),
         ),
@@ -118,7 +118,7 @@ class FirstToBtn extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                     color: Utils.getTextColorForGameSettingsBtn(
                         isFirstTo, context),
-                    fontSize: DEFAULT_FONT_SIZE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
             ),
           ),

@@ -31,6 +31,13 @@ class ThreeDartsBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+
     bool isThreeDartsSelected = false;
     if (mode == GameMode.X01) {
       isThreeDartsSelected = context.read<GameSettingsX01_P>().getInputMethod ==
@@ -59,7 +66,7 @@ class ThreeDartsBtn extends StatelessWidget {
         child: Text(
           '3-Darts',
           style: TextStyle(
-            fontSize: 14.sp,
+            fontSize: _fontSize.sp,
             color: isThreeDartsSelected
                 ? Theme.of(context).colorScheme.secondary
                 : Utils.getTextColorDarken(context),

@@ -19,6 +19,18 @@ class GameDetailsX01 extends StatelessWidget {
         Utils.getPlayersOrTeamStatsList(gameX01,
             gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team);
     final bool isDraw = gameX01.isGameDraw(statsList);
+    final double _fontSizeDateTime = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
+    final double _fontSizeMode = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -37,7 +49,7 @@ class GameDetailsX01 extends StatelessWidget {
                   'X01 ${isDraw ? '- Draw' : ''}${(gameSettingsX01.getSetsEnabled || isDraw) ? '' : '- ' + Utils.getBestOfOrFirstToString(gameSettingsX01)}',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
+                    fontSize: _fontSizeMode.sp,
                     color: Colors.white,
                   ),
                 ),
@@ -48,7 +60,7 @@ class GameDetailsX01 extends StatelessWidget {
                 child: Text(
                   gameX01.getFormattedDateTime(),
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: _fontSizeDateTime.sp,
                     color: Colors.white,
                   ),
                 ),
@@ -73,7 +85,7 @@ class GameDetailsX01 extends StatelessWidget {
           child: Text(
             '${gameSettingsX01.getGameModeDetails(true)}',
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -90,7 +102,7 @@ class GameDetailsX01 extends StatelessWidget {
                 ? 'Single mode'
                 : 'Team mode',
             style: TextStyle(
-              fontSize: 12.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -101,7 +113,7 @@ class GameDetailsX01 extends StatelessWidget {
             child: Text(
               'Draw enabled',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),
@@ -113,7 +125,7 @@ class GameDetailsX01 extends StatelessWidget {
             child: Text(
               'Win by two legs difference',
               style: TextStyle(
-                fontSize: 12.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
               ),
             ),
@@ -129,7 +141,8 @@ class GameDetailsX01 extends StatelessWidget {
                   Text(
                     'Sudden death (after max. ${gameSettingsX01.getMaxExtraLegs} leg${gameSettingsX01.getMaxExtraLegs == 1 ? '' : 's'})',
                     style: TextStyle(
-                      fontSize: 12.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Colors.white,
                     ),
                   ),

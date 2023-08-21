@@ -34,7 +34,7 @@ class _GameSettingsCricketState extends State<GameSettingsCricket> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: 'Cricket settings',
+        title: 'Settings',
         showInfoIconCricket: true,
       ),
       body: SafeArea(

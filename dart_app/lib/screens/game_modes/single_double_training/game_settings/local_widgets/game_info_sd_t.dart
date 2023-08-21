@@ -16,7 +16,8 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
       case ModesSingleDoubleTraining.Ascending:
         return RichText(
           text: TextSpan(
-            style: TextStyle(fontSize: DEFAULT_FONT_SIZE.sp),
+            style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
             text: 'Starting from',
             children: <TextSpan>[
               TextSpan(
@@ -41,7 +42,7 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
         return RichText(
           text: TextSpan(
             style: TextStyle(
-              fontSize: DEFAULT_FONT_SIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
             text: 'Starting from',
             children: <TextSpan>[
@@ -66,7 +67,7 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
         return RichText(
           text: TextSpan(
             style: TextStyle(
-              fontSize: DEFAULT_FONT_SIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
             children: <TextSpan>[
               TextSpan(
@@ -89,7 +90,7 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
     final bool isSingleTraining = gameMode == GameMode.SingleTraining;
 
     return Container(
-      padding: EdgeInsets.only(top: 0.5.h),
+      padding: EdgeInsets.only(top: 1.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -103,7 +104,7 @@ class GameInfoSingleDoubleTraining extends StatelessWidget {
             'For each round you have 3 darts to throw.',
             style: TextStyle(
               color: Colors.white,
-              fontSize: DEFAULT_FONT_SIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ],

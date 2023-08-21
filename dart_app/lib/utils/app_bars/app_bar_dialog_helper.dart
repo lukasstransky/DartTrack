@@ -15,19 +15,21 @@ class AppBarDialogHelper {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: dialogContentPadding,
+        contentPadding: ResponsiveBreakpoints.of(context).isMobile
+            ? DIALOG_CONTENT_PADDING_MOBILE
+            : null,
         title: Text(
           title,
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_TITLE_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
         content: Text(
           content,
           style: TextStyle(
             color: Colors.white,
-            fontSize: DIALOG_CONTENT_FONTSIZE.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
         actions: [
@@ -40,7 +42,7 @@ class AppBarDialogHelper {
               'Close',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.secondary,
-                fontSize: DIALOG_BTN_FONTSIZE.sp,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
             style: ButtonStyle(
@@ -82,27 +84,21 @@ class _CricketDialogState extends State<CricketDialog> {
 
   @override
   Widget build(BuildContext context) {
-    late double dialogHeight;
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      dialogHeight = 28;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      dialogHeight = 35;
-    } else {
-      dialogHeight = 35;
-    }
+    final double dialogHeight = 28;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
-      contentPadding: dialogContentPadding,
+      contentPadding: ResponsiveBreakpoints.of(context).isMobile
+          ? DIALOG_CONTENT_PADDING_MOBILE
+          : null,
       backgroundColor: Theme.of(context).colorScheme.primary,
       title: Text(
         'Cricket explained',
         style: TextStyle(
           color: Colors.white,
-          fontSize: DIALOG_TITLE_FONTSIZE.sp,
+          fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
         ),
       ),
       content: GestureDetector(
@@ -146,7 +142,10 @@ class _CricketDialogState extends State<CricketDialog> {
                             'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye. \nIn standard mode, the player with the highest score wins, but it is also possible to play two additional modes (Cut throat, No score), which are also explained here.',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                             ),
                           ),
                         ],
@@ -170,7 +169,10 @@ class _CricketDialogState extends State<CricketDialog> {
                             text: TextSpan(
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                               ),
                               children: <TextSpan>[
                                 TextSpan(
@@ -211,7 +213,10 @@ class _CricketDialogState extends State<CricketDialog> {
                             text: TextSpan(
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 12.sp,
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
                               ),
                               children: <TextSpan>[
                                 TextSpan(
@@ -249,14 +254,20 @@ class _CricketDialogState extends State<CricketDialog> {
                             'For this mode, the same basic rules apply as for the standard mode, but when points are scored for an open number, instead the points are given to all other players.',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                             ),
                           ),
                           Text(
                             'The player with the lowest number of points at the end wins the game.',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 12.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                             ),
                           ),
                         ],
@@ -280,7 +291,10 @@ class _CricketDialogState extends State<CricketDialog> {
                             'For this mode, if a number is open, no points are given for any additional hits on that number. Therefore, the goal is closing the numbers as fast as possible, and the first player who manages to do that also wins the game.',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: DEFAULT_FONT_SIZE.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                             ),
                           ),
                         ],
@@ -315,7 +329,7 @@ class _CricketDialogState extends State<CricketDialog> {
             'Close',
             style: TextStyle(
               color: Theme.of(context).colorScheme.secondary,
-              fontSize: DIALOG_BTN_FONTSIZE.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           style: ButtonStyle(

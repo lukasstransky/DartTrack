@@ -28,7 +28,7 @@ class ThrownDartsPerLegStatsX01 extends StatelessWidget {
               child: Text(
                 'Darts in leg',
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
                 ),
@@ -45,7 +45,7 @@ class ThrownDartsPerLegStatsX01 extends StatelessWidget {
                     ? '-'
                     : stats.getCurrentThrownDartsInLeg.toString(),
                 style: TextStyle(
-                  fontSize: FONTSIZE_STATISTICS.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
                 ),
               ),

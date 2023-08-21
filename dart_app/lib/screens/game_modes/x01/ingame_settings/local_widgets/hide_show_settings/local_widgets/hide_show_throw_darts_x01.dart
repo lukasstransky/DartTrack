@@ -3,7 +3,6 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class HideShowThrownDartsX01 extends StatelessWidget {
@@ -12,16 +11,13 @@ class HideShowThrownDartsX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameSettingsX01 = context.read<GameSettingsX01_P>();
-
-    late double scaleFactorSwitch;
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_MOBILE;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    } else {
-      scaleFactorSwitch = SWTICH_SCALE_FACTOR_TABLET;
-    }
+    final double scaleFactorSwitch = Utils.getSwitchScaleFactor(context);
+    final double paddingRight = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 0.h,
+      tabletValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
+      otherValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
+    );
 
     return Container(
       height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
@@ -31,7 +27,7 @@ class HideShowThrownDartsX01 extends StatelessWidget {
           Text(
             'Thrown darts per leg',
             style: TextStyle(
-              fontSize: FONTSIZE_IN_GAME_SETTINGS.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Colors.white,
             ),
           ),
@@ -41,17 +37,18 @@ class HideShowThrownDartsX01 extends StatelessWidget {
                 gameSettingsX01.getShowThrownDartsPerLeg,
             builder: (_, showThrownDartsPerLeg, __) => Transform.scale(
               scale: scaleFactorSwitch,
-              child: Switch(
-                value: showThrownDartsPerLeg,
-                onChanged: (value) {
-                  Utils.handleVibrationFeedback(context);
-                  gameSettingsX01.setShowThrownDartsPerLeg = value;
-                  gameSettingsX01.notify();
-                },
-                thumbColor: MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.secondary),
-                activeColor: Theme.of(context).colorScheme.secondary,
-                inactiveThumbColor: Theme.of(context).colorScheme.secondary,
+              child: Container(
+                padding: EdgeInsets.only(right: paddingRight),
+                child: Switch(
+                  value: showThrownDartsPerLeg,
+                  onChanged: (value) {
+                    Utils.handleVibrationFeedback(context);
+                    gameSettingsX01.setShowThrownDartsPerLeg = value;
+                    gameSettingsX01.notify();
+                  },
+                  thumbColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.secondary),
+                ),
               ),
             ),
           ),

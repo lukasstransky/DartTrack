@@ -31,47 +31,44 @@ class SettingsCardItem extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         height: 4.h,
-        child: Container(
-          height: 4.h,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: Utils.getColor(
-                Utils.darken(Theme.of(context).colorScheme.primary, 10),
-              ),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
-              ),
-              elevation: MaterialStateProperty.all(0),
-              overlayColor: Utils.getColor(
-                Utils.darken(Theme.of(context).colorScheme.primary, 20),
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: Utils.getColor(
+              Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
               ),
             ),
-            onPressed: () {
-              Utils.handleVibrationFeedback(context);
-              _onPressed(context);
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(left: 2.5.w),
-                  child: Text(
-                    name,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      color: Colors.white,
-                    ),
+            elevation: MaterialStateProperty.all(0),
+            overlayColor: Utils.getColor(
+              Utils.darken(Theme.of(context).colorScheme.primary, 20),
+            ),
+          ),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _onPressed(context);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.only(left: 1.w),
+                child: Text(
+                  name,
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    color: Colors.white,
                   ),
                 ),
-                Icon(
-                  size: ICON_BUTTON_SIZE.h,
-                  Icons.arrow_forward_sharp,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              ],
-            ),
+              ),
+              Icon(
+                size: ICON_BUTTON_SIZE.h,
+                Icons.arrow_forward_sharp,
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+            ],
           ),
         ),
       ),
@@ -82,15 +79,15 @@ class SettingsCardItem extends StatelessWidget {
     if (route != '') {
       Navigator.of(context).pushNamed(route);
     } else if (rateApp) {
-      _openAppInStore();
+      _openAppInStore(context);
     } else if (helpAndSupport) {
-      _launchEmail();
+      _launchEmail(context);
     } else {
       onItemPressed(context);
     }
   }
 
-  _openAppInStore() {
+  _openAppInStore(BuildContext context) {
     String url = '';
     if (Platform.isAndroid) {
       //TODO adjust
@@ -100,10 +97,10 @@ class SettingsCardItem extends StatelessWidget {
       url = 'https://apps.apple.com/app/apple-store/idyour_app_id';
     }
 
-    _launchURL(url);
+    _launchURL(url, context);
   }
 
-  _launchURL(String url) async {
+  _launchURL(String url, BuildContext context) async {
     final Uri uri = Uri.parse(url);
 
     if (await canLaunchUrl(uri)) {
@@ -111,13 +108,13 @@ class SettingsCardItem extends StatelessWidget {
     } else {
       Fluttertoast.showToast(
         msg: 'Could not launch $url',
-        fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
         toastLength: Toast.LENGTH_LONG,
       );
     }
   }
 
-  _launchEmail() async {
+  _launchEmail(BuildContext context) async {
     //TODO adjust
     final String email = 'your_email@example.com';
     final String subject = 'App Help & Support';
@@ -125,6 +122,6 @@ class SettingsCardItem extends StatelessWidget {
     final String url =
         'mailto:$email?subject=${Uri.encodeFull(subject)}&body=${Uri.encodeFull(body)}';
 
-    _launchURL(url);
+    _launchURL(url, context);
   }
 }

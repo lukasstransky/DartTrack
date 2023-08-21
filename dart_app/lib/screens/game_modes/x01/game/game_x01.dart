@@ -120,7 +120,7 @@ class PlayerToThrowForTeamMode extends StatelessWidget {
             'Player to throw: ',
             style: TextStyle(
               color: Colors.white,
-              fontSize: 15.sp,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
             ),
           ),
           Selector<GameX01_P, Player>(
@@ -137,7 +137,8 @@ class PlayerToThrowForTeamMode extends StatelessWidget {
                     currentPlayerToThrow.getName,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 18.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

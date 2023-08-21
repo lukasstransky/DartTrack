@@ -38,9 +38,10 @@ class PasswordInput extends StatelessWidget {
           },
           style: TextStyle(
             color: Colors.white,
-            fontSize: 12.sp,
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
           decoration: InputDecoration(
+            errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
             prefixIcon: Icon(
               size: ICON_BUTTON_SIZE.h,
               Icons.lock,
@@ -63,7 +64,7 @@ class PasswordInput extends StatelessWidget {
             fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
             hintText: 'Password',
             hintStyle: TextStyle(
-              fontSize: 12.sp,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Utils.getPrimaryColorDarken(context),
             ),
             border: OutlineInputBorder(

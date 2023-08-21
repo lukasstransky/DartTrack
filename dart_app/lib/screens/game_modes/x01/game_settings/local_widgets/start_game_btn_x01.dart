@@ -35,7 +35,7 @@ class StartGameBtnX01 extends StatelessWidget {
                 'Start',
                 style: TextStyle(
                   color: Theme.of(context).colorScheme.secondary,
-                  fontSize: 12.sp,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
               style: ButtonStyle(
@@ -79,7 +79,7 @@ class StartGameBtnX01 extends StatelessWidget {
                   Fluttertoast.showToast(
                     msg: msg,
                     toastLength: Toast.LENGTH_LONG,
-                    fontSize: DEFAULT_FONT_SIZE_TOAST_MESSAGE.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   );
                 }
               },

@@ -67,7 +67,8 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   child: Text(
                     'Single',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),
@@ -121,7 +122,8 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   child: Text(
                     'Double',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),
@@ -167,7 +169,8 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
                   child: Text(
                     'Tripple',
                     style: TextStyle(
-                      fontSize: THREE_DARTS_BUTTON_TEXT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
                       color: Utils.getTextColorDarken(context),
                       fontWeight: FontWeight.bold,
                     ),

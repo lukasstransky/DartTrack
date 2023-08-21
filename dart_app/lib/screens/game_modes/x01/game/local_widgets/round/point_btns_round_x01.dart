@@ -33,6 +33,12 @@ class PointBtnsRoundX01 extends StatelessWidget {
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final double _fontSizeCurrentPoints = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 20,
+      tabletValue: 18,
+      otherValue: 18,
+    );
 
     return Expanded(
       child: Selector<GameSettingsX01_P, SelectorModel>(
@@ -69,7 +75,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                           child: Text(
                             currentPointsSelected,
                             style: TextStyle(
-                              fontSize: 20.sp,
+                              fontSize: _fontSizeCurrentPoints.sp,
                               fontWeight: FontWeight.bold,
                               color: Utils.getTextColorDarken(context),
                             ),
@@ -284,6 +290,13 @@ class PointBtnsRoundX01 extends StatelessWidget {
   }
 
   Expanded fourthRow(GameX01_P gameX01, BuildContext context) {
+    final double _fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 25,
+      tabletValue: 20,
+      otherValue: 20,
+    );
+
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -307,7 +320,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                         : Utils.getDefaultOverlayColor(context)),
                 child: Icon(
                   FeatherIcons.delete,
-                  size: 30.sp,
+                  size: _fontSize.sp,
                   color: Utils.getTextColorDarken(context),
                 ),
                 onPressed: () {
@@ -348,7 +361,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                 child: Text(
                   'Bust',
                   style: TextStyle(
-                    fontSize: 25.sp,
+                    fontSize: _fontSize.sp,
                     fontWeight: FontWeight.bold,
                     color: Utils.getTextColorDarken(context),
                   ),

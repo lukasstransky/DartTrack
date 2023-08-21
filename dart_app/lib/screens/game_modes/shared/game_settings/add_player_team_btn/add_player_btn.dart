@@ -54,6 +54,8 @@ class AddPlayerBtn extends StatelessWidget {
                 _addPlayerTeamBtnPressed(
                     context.read<GameSettingsCricket_P>(), context);
                 break;
+              case GameMode.None:
+                break;
             }
           },
           child: Icon(

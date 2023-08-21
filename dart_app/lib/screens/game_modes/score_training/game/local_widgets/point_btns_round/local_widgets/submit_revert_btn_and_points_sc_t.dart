@@ -37,6 +37,13 @@ class CurrentPointsScoreTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _fontSizeCurrentPoints = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 20,
+      tabletValue: 18,
+      otherValue: 18,
+    );
+
     return Container(
       width: 50.w,
       child: Container(
@@ -55,7 +62,7 @@ class CurrentPointsScoreTraining extends StatelessWidget {
             builder: (_, currentPointsSelected, __) => Text(
               currentPointsSelected,
               style: TextStyle(
-                fontSize: 20.sp,
+                fontSize: _fontSizeCurrentPoints.sp,
                 fontWeight: FontWeight.bold,
                 color: Utils.getTextColorDarken(context),
               ),

@@ -98,6 +98,19 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
 
   @override
   Widget build(BuildContext context) {
+    final double _fontSizeDateTime = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
+    final double _fontSizeField = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+      otherValue: 12,
+    );
+
     return Container(
       padding: EdgeInsets.only(bottom: 2.h),
       child: GestureDetector(
@@ -141,7 +154,10 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                             Utils.getBestOfOrFirstToString(
                                 widget.game!.getGameSettings),
                             style: TextStyle(
-                              fontSize: 12.sp,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                               color: Colors.white,
                             ),
                           ),
@@ -154,7 +170,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                       child: Text(
                         widget.game!.getFormattedDateTime(),
                         style: TextStyle(
-                          fontSize: 10.sp,
+                          fontSize: _fontSizeDateTime.sp,
                           color: Colors.white,
                         ),
                       ),
@@ -167,7 +183,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                 child: Text(
                   widget.game!.getGameSettings.getGameModeDetails(true),
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     color: Colors.white,
                   ),
                 ),
@@ -180,7 +196,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                       ? 'Single mode'
                       : 'Team mode',
                   style: TextStyle(
-                    fontSize: 12.sp,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     color: Colors.white,
                   ),
                 ),
@@ -195,7 +211,7 @@ class _StatsCardFilteredState extends State<StatsCardFiltered> {
                   _getField(),
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
+                    fontSize: _fontSizeField.sp,
                     color: Utils.getTextColorDarken(context),
                   ),
                 ),

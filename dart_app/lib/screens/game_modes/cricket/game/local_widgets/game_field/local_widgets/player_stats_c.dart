@@ -24,7 +24,7 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
     final int _halfLength = playerOrTeamGameStatistics.length ~/ 2;
     final TextStyle _textStyle = TextStyle(
       color: Colors.white,
-      fontSize: 10.sp,
+      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
     );
     final int _width = 11;
 

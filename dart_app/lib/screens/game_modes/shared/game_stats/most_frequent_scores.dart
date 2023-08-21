@@ -105,7 +105,7 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
             child: Text(
               'Most frequent scores ${widget.mostScoresPerDart ? 'per dart' : ''}',
               style: TextStyle(
-                fontSize: FONTSIZE_HEADING_STATISTICS.sp,
+                fontSize: Theme.of(context).textTheme.titleLarge!.fontSize,
                 color: Colors.white,
               ),
             ),
@@ -141,7 +141,8 @@ class _MostFrequentScoresState extends State<MostFrequentScores> {
                     'Show ${_showFirst10 ? 'less' : 'more'}',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: DEFAULT_FONT_SIZE.sp,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
                 ),
@@ -163,6 +164,13 @@ class AmountOfThreeDartModeRounds extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double fontSizeThreeDartRounds = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 10,
+      tabletValue: 8,
+      otherValue: 8,
+    );
+
     return Padding(
       padding: EdgeInsets.only(top: PADDING_TOP_STATISTICS.h),
       child: Row(
@@ -176,7 +184,7 @@ class AmountOfThreeDartModeRounds extends StatelessWidget {
               child: Text(
                 '3-dart-mode rounds:',
                 style: TextStyle(
-                  fontSize: 10.sp,
+                  fontSize: fontSizeThreeDartRounds.sp,
                   fontWeight: FontWeight.bold,
                   color: Utils.getTextColorDarken(context),
                 ),
@@ -194,7 +202,7 @@ class AmountOfThreeDartModeRounds extends StatelessWidget {
                 child: Text(
                   '${stats.getThreeDartModeRoundsCount}/${stats.getTotalRoundsCount}',
                   style: TextStyle(
-                    fontSize: 10.sp,
+                    fontSize: fontSizeThreeDartRounds.sp,
                     color: Colors.white,
                   ),
                 ),
@@ -244,7 +252,8 @@ class MostFrequentScoresList extends StatelessWidget {
                       child: Text(
                         '${i + 1}.',
                         style: TextStyle(
-                          fontSize: FONTSIZE_STATISTICS.sp,
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
                           fontWeight: FontWeight.bold,
                           color: Utils.getTextColorDarken(context),
                         ),
@@ -280,7 +289,10 @@ class MostFrequentScoresList extends StatelessWidget {
                                           .toString(),
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: FONTSIZE_STATISTICS.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                   ),
                                 ),
                               ),
@@ -288,7 +300,11 @@ class MostFrequentScoresList extends StatelessWidget {
                                 '(${(mostScoresPerDart ? Utils.sortMapStringIntByKey(stats.getAllScoresPerDartAsStringCount).values.elementAt(i).toString() : Utils.sortMapIntIntByKey(stats.getPreciseScores).values.elementAt(i).toString())}x)',
                                 style: TextStyle(
                                   color: Colors.white70,
-                                  fontSize: 11.sp,
+                                  fontSize: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .fontSize! -
+                                      2,
                                 ),
                               ),
                             ],
@@ -301,7 +317,10 @@ class MostFrequentScoresList extends StatelessWidget {
                                 child: Text(
                                   '-',
                                   style: TextStyle(
-                                    fontSize: FONTSIZE_STATISTICS.sp,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                     color: Colors.white,
                                   ),
                                 ),

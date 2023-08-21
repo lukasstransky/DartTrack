@@ -52,6 +52,12 @@ class DeleteBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gameScoreTraining_P = context.read<GameScoreTraining_P>();
+    final double _deleteIconSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 25,
+      tabletValue: 20,
+      otherValue: 20,
+    );
 
     return Selector<GameScoreTraining_P, String>(
       selector: (_, gameScoreTraining_P) =>
@@ -75,7 +81,7 @@ class DeleteBtn extends StatelessWidget {
           ),
           child: Icon(
             FeatherIcons.delete,
-            size: 30.sp,
+            size: _deleteIconSize.sp,
             color: Utils.getTextColorDarken(context),
           ),
           onPressed: () {
