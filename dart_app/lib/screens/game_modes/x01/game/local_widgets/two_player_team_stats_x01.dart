@@ -45,14 +45,8 @@ class TwoPlayerTeamStatsX01 extends StatelessWidget {
       } else {
         height = 35.h;
       }
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        height = 47.h;
-      } else {
-        height = 45.h;
-      }
     } else {
+      // tablet
       if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
         height = 47.h;
       } else {

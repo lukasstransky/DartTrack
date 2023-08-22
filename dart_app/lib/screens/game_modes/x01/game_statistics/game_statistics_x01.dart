@@ -60,7 +60,6 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
       context: context,
       mobileValue: 0,
       tabletValue: TEXT_SWITCH_SPACE_TABLET,
-      otherValue: TEXT_SWITCH_SPACE_TABLET,
     );
 
     return Scaffold(

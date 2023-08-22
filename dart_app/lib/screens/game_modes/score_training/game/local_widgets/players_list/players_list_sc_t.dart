@@ -25,12 +25,8 @@ class PlayersListScoreTraining extends StatelessWidget {
   double _getHeight(BuildContext context) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       return 35.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      return 45.h;
-    } else {
-      return 45.h;
     }
+    return 45.h;
   }
 
   @override

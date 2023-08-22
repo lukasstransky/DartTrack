@@ -37,7 +37,6 @@ class PointBtnsRoundX01 extends StatelessWidget {
       context: context,
       mobileValue: 20,
       tabletValue: 18,
-      otherValue: 18,
     );
 
     return Expanded(
@@ -294,7 +293,6 @@ class PointBtnsRoundX01 extends StatelessWidget {
       context: context,
       mobileValue: 25,
       tabletValue: 20,
-      otherValue: 20,
     );
 
     return Expanded(

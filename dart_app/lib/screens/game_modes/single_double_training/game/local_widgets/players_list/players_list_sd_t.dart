@@ -30,10 +30,8 @@ class PlayersListSingleDoubleTraining extends StatelessWidget {
   _getHeight(BuildContext context) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       return 40.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      return 50.h;
     } else {
+      // tablet
       return 50.h;
     }
   }

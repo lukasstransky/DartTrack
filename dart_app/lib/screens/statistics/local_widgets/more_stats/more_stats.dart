@@ -25,7 +25,6 @@ class _MoreStatsState extends State<MoreStats> {
       context: context,
       mobileValue: 0,
       tabletValue: TEXT_SWITCH_SPACE_TABLET,
-      otherValue: TEXT_SWITCH_SPACE_TABLET,
     );
 
     return Selector<StatsFirestoreX01_P, FilterValue>(

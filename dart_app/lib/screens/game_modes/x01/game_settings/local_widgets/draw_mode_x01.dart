@@ -22,13 +22,11 @@ class DrawModeX01 extends StatelessWidget {
           context: context,
           mobileValue: 0,
           tabletValue: TEXT_SWITCH_SPACE_TABLET,
-          otherValue: TEXT_SWITCH_SPACE_TABLET,
         );
         final double paddingTop = Utils.getResponsiveValue(
           context: context,
           mobileValue: 0,
           tabletValue: 1,
-          otherValue: 1,
         );
 
         return Container(

@@ -200,10 +200,8 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
       // only MRP is displayed
       if (ResponsiveBreakpoints.of(context).isMobile) {
         return 4.h;
-      } else if (ResponsiveBreakpoints.of(context).isTablet ||
-          ResponsiveBreakpoints.of(context).isDesktop) {
-        return 6.h;
       } else {
+        // tablet
         return 6.h;
       }
     } else if (!gameSettingsCricket.getSetsEnabled &&
@@ -211,10 +209,8 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
       // MPR + legs is displayed
       if (ResponsiveBreakpoints.of(context).isMobile) {
         return 6.h;
-      } else if (ResponsiveBreakpoints.of(context).isTablet ||
-          ResponsiveBreakpoints.of(context).isDesktop) {
-        return 8.h;
       } else {
+        // tablet
         return 8.h;
       }
     } else if (gameSettingsCricket.getSetsEnabled &&
@@ -222,10 +218,8 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
       // MPR + legs + sets is displayed
       if (ResponsiveBreakpoints.of(context).isMobile) {
         return 8.h;
-      } else if (ResponsiveBreakpoints.of(context).isTablet ||
-          ResponsiveBreakpoints.of(context).isDesktop) {
-        return 10.h;
       } else {
+        // tablet
         return 10.h;
       }
     }

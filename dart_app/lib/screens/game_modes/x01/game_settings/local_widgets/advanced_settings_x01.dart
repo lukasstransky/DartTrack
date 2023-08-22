@@ -14,7 +14,6 @@ class AdvancedSettingsX01 extends StatelessWidget {
       context: context,
       mobileValue: 0,
       tabletValue: 2,
-      otherValue: 2,
     );
 
     return Selector<GameSettingsX01_P, SelectorModel>(

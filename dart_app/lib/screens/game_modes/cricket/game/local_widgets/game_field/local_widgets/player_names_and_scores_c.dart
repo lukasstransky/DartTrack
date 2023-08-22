@@ -142,28 +142,22 @@ double _getHeight(bool isNoScoreMode, bool isSingleMode, BuildContext context) {
   if (isNoScoreMode && isSingleMode) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       return 5.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      return 7.h;
     } else {
+      // tablet
       return 7.h;
     }
   } else if (isNoScoreMode && !isSingleMode) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       return 7.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      return 9.h;
     } else {
+      // tablet
       return 9.h;
     }
   } else if (isSingleMode) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       return 8.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      return 10.h;
     } else {
+      // tablet
       return 10.h;
     }
   }
@@ -171,11 +165,9 @@ double _getHeight(bool isNoScoreMode, bool isSingleMode, BuildContext context) {
   // team mode
   if (ResponsiveBreakpoints.of(context).isMobile) {
     return 10.h;
-  } else if (ResponsiveBreakpoints.of(context).isTablet ||
-      ResponsiveBreakpoints.of(context).isDesktop) {
-    return 13.h;
   } else {
-    return 14.h;
+    // tablet
+    return 13.h;
   }
 }
 

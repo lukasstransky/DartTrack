@@ -56,7 +56,6 @@ class DeleteBtn extends StatelessWidget {
       context: context,
       mobileValue: 25,
       tabletValue: 20,
-      otherValue: 20,
     );
 
     return Selector<GameScoreTraining_P, String>(

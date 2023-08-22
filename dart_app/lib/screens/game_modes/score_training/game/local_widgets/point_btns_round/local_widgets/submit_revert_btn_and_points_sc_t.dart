@@ -41,7 +41,6 @@ class CurrentPointsScoreTraining extends StatelessWidget {
       context: context,
       mobileValue: 20,
       tabletValue: 18,
-      otherValue: 18,
     );
 
     return Container(

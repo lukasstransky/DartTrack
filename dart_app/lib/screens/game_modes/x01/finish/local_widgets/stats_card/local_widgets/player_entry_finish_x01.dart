@@ -81,7 +81,6 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
       context: context,
       mobileValue: 14,
       tabletValue: 12,
-      otherValue: 12,
     );
 
     return Padding(
@@ -192,7 +191,6 @@ class DisplayTeamOrPlayerName extends StatelessWidget {
       context: context,
       mobileValue: 14,
       tabletValue: 12,
-      otherValue: 12,
     );
 
     if (singleOrTeamEnum == SingleOrTeamEnum.Team)

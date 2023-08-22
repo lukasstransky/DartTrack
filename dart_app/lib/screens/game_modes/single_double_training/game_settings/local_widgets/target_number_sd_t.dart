@@ -250,19 +250,16 @@ class _TargetNumberSingleDoubleTrainingState
       context: context,
       mobileValue: 0,
       tabletValue: TEXT_SWITCH_SPACE_TABLET,
-      otherValue: TEXT_SWITCH_SPACE_TABLET,
     );
     final double transformValue = Utils.getResponsiveValue(
       context: context,
       mobileValue: -2.5,
       tabletValue: -2.5,
-      otherValue: -2.5,
     );
     final double selectedTargetNumberFontSize = Utils.getResponsiveValue(
       context: context,
       mobileValue: 10,
       tabletValue: 8,
-      otherValue: 8,
     );
 
     return Container(

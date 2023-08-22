@@ -85,7 +85,6 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
       context: context,
       mobileValue: 12,
       tabletValue: 10,
-      otherValue: 10,
     );
 
     return Column(

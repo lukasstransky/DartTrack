@@ -106,7 +106,6 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
       context: context,
       mobileValue: 30,
       tabletValue: 20,
-      otherValue: 20,
     );
 
     return Container(

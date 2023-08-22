@@ -885,25 +885,20 @@ class Utils {
     required BuildContext context,
     required double mobileValue,
     required double tabletValue,
-    required double otherValue,
   }) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       return mobileValue;
-    } else if (ResponsiveBreakpoints.of(context).isTablet) {
-      return tabletValue;
     } else {
-      return otherValue;
+      return tabletValue;
     }
   }
 
   static double getSwitchScaleFactor(BuildContext context) {
     if (ResponsiveBreakpoints.of(context).isMobile) {
       return SWTICH_SCALE_FACTOR_MOBILE;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      return SWTICH_SCALE_FACTOR_TABLET;
     }
 
+    // tablet
     return SWTICH_SCALE_FACTOR_TABLET;
   }
 }

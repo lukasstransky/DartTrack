@@ -29,8 +29,8 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
         return 6.h;
       }
       return 6.h;
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
+    } else {
+      // tablet
       if (isTargetNumberEnabled) {
         return 10.h;
       } else if (currentFieldToHit == -1) {
@@ -38,12 +38,6 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
       }
       return 7.h;
     }
-    if (isTargetNumberEnabled) {
-      return 10.h;
-    } else if (currentFieldToHit == -1) {
-      return 8.h;
-    }
-    return 7.h;
   }
 
   @override
@@ -55,7 +49,6 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
       context: context,
       mobileValue: 26,
       tabletValue: 20,
-      otherValue: 20,
     );
 
     return Selector<GameSingleDoubleTraining_P, SelectorModel>(

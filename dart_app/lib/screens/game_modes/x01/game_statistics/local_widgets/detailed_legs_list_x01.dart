@@ -43,7 +43,6 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
       context: context,
       mobileValue: 12,
       tabletValue: 10,
-      otherValue: 10,
     );
 
     return Container(

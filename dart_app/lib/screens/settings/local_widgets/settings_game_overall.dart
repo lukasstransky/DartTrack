@@ -168,7 +168,6 @@ class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
       context: context,
       mobileValue: 0.h,
       tabletValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
-      otherValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
     );
 
     return Material(

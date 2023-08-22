@@ -94,13 +94,11 @@ class PlayerTeamCard extends StatelessWidget {
       context: context,
       mobileValue: 14,
       tabletValue: 12,
-      otherValue: 12,
     );
     final double _fontSizePoints = Utils.getResponsiveValue(
       context: context,
       mobileValue: 25,
       tabletValue: 20,
-      otherValue: 20,
     );
 
     return Expanded(

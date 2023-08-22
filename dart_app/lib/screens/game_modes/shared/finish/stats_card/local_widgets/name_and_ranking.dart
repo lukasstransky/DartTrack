@@ -34,13 +34,11 @@ class NameAndRanking extends StatelessWidget {
       context: context,
       mobileValue: 14,
       tabletValue: 12,
-      otherValue: 12,
     );
     final double _fontSizeNameFirst = Utils.getResponsiveValue(
       context: context,
       mobileValue: 14,
       tabletValue: 12,
-      otherValue: 12,
     );
 
     return Expanded(

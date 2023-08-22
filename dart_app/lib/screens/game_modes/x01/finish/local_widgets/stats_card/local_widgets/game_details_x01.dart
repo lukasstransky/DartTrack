@@ -23,13 +23,11 @@ class GameDetailsX01 extends StatelessWidget {
       context: context,
       mobileValue: 10,
       tabletValue: 8,
-      otherValue: 8,
     );
     final double _fontSizeMode = Utils.getResponsiveValue(
       context: context,
       mobileValue: 14,
       tabletValue: 12,
-      otherValue: 12,
     );
 
     return Column(

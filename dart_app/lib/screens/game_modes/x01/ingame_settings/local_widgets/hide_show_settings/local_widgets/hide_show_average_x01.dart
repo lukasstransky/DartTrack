@@ -16,7 +16,6 @@ class HideShowAverageX01 extends StatelessWidget {
       context: context,
       mobileValue: 0.h,
       tabletValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
-      otherValue: ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET.w,
     );
 
     return Container(

@@ -19,13 +19,11 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
       context: context,
       mobileValue: 0,
       tabletValue: TEXT_SWITCH_SPACE_TABLET,
-      otherValue: TEXT_SWITCH_SPACE_TABLET,
     );
     final double paddingTop = Utils.getResponsiveValue(
       context: context,
       mobileValue: 1,
       tabletValue: 2,
-      otherValue: 2,
     );
 
     return Selector<GameSettingsX01_P, SelectorModel>(
@@ -125,7 +123,6 @@ _showDialogForSuddenDeath(
     context: context,
     mobileValue: 0,
     tabletValue: TEXT_SWITCH_SPACE_TABLET,
-    otherValue: TEXT_SWITCH_SPACE_TABLET,
   );
 
   showDialog(

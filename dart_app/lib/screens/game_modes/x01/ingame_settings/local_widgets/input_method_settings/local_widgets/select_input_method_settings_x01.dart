@@ -41,7 +41,6 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
       context: context,
       mobileValue: 11,
       tabletValue: 9,
-      otherValue: 9,
     );
 
     return Column(

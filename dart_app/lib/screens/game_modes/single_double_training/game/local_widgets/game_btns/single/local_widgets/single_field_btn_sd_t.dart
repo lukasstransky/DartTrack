@@ -20,7 +20,6 @@ class SingleFieldBtnSingleTraining extends StatelessWidget {
       context: context,
       mobileValue: BTN_FONTSIZE_SD_T_MOBILE,
       tabletValue: BTN_FONTSIZE_SD_T_TABLET,
-      otherValue: BTN_FONTSIZE_SD_T_TABLET,
     );
 
     return Expanded(

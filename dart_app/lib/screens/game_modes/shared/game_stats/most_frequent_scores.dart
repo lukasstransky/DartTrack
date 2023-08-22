@@ -168,7 +168,6 @@ class AmountOfThreeDartModeRounds extends StatelessWidget {
       context: context,
       mobileValue: 10,
       tabletValue: 8,
-      otherValue: 8,
     );
 
     return Padding(

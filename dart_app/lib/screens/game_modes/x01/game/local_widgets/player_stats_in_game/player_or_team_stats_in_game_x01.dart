@@ -37,13 +37,11 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       context: context,
       mobileValue: 50,
       tabletValue: 40,
-      otherValue: 40,
     );
     final double fontSizeTeamName = Utils.getResponsiveValue(
       context: context,
       mobileValue: 18,
       tabletValue: 16,
-      otherValue: 16,
     );
 
     return Column(
@@ -112,7 +110,6 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
       context: context,
       mobileValue: 50,
       tabletValue: 40,
-      otherValue: 40,
     );
 
     return Column(

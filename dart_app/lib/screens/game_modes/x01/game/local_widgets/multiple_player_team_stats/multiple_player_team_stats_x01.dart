@@ -42,14 +42,8 @@ class _MultiplePlayerTeamStatsX01State
       } else {
         height = 35.h;
       }
-    } else if (ResponsiveBreakpoints.of(context).isTablet ||
-        ResponsiveBreakpoints.of(context).isDesktop) {
-      if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        height = 47.h;
-      } else {
-        height = 45.h;
-      }
     } else {
+      // tablet
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
         height = 47.h;
       } else {

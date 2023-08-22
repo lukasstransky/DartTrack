@@ -164,16 +164,11 @@ class MyApp extends StatelessWidget {
                     titleSmall: TextStyle(fontSize: 16.sp), // dialog title
                     titleLarge: TextStyle(fontSize: 18.sp),
                   );
-            } else if (screenWidth <= 1100) {
+            } else {
+              // tablet
               textTheme = ThemeData().textTheme.copyWith(
                     bodyMedium: TextStyle(fontSize: 10.sp), // normal
                     titleSmall: TextStyle(fontSize: 14.sp), // dialog title
-                    titleLarge: TextStyle(fontSize: 16.sp),
-                  );
-            } else {
-              textTheme = ThemeData().textTheme.copyWith(
-                    bodyMedium: TextStyle(fontSize: 10.sp), // normal
-                    titleSmall: TextStyle(fontSize: 15.sp), // dialog title
                     titleLarge: TextStyle(fontSize: 16.sp),
                   );
             }
@@ -186,11 +181,8 @@ class MyApp extends StatelessWidget {
                 child: child!,
                 breakpoints: [
                   const Breakpoint(start: 0, end: 600, name: MOBILE),
-                  const Breakpoint(start: 601, end: 1100, name: TABLET),
                   const Breakpoint(
-                      start: 1101, end: double.infinity, name: DESKTOP),
-                  const Breakpoint(
-                      start: 1921, end: double.infinity, name: '4K'),
+                      start: 601, end: double.infinity, name: TABLET),
                 ],
               ),
             );
