@@ -296,7 +296,7 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
                       ],
                     ],
                     Container(
-                      height: 3.h,
+                      height: 1.h,
                     )
                   ],
                 ),

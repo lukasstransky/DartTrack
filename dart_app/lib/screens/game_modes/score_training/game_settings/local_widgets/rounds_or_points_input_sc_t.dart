@@ -200,7 +200,7 @@ class _RoundsOrPointsInputScoreTrainingState
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 1.h),
+      margin: EdgeInsets.only(top: 2.h),
       width: WIDTH_GAMESETTINGS.w,
       child: Row(
         children: [
@@ -225,6 +225,7 @@ class _RoundsOrPointsInputScoreTrainingState
                 right: 2.w,
               ),
               width: 20.w,
+              height: WIDGET_HEIGHT_GAMESETTINGS.h,
               child: ElevatedButton(
                 onPressed: () {
                   Utils.handleVibrationFeedback(context);

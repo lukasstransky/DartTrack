@@ -14,7 +14,7 @@ class BestOfOrFirstToCricket extends StatelessWidget {
         selector: (_, gameSettingsCricket) =>
             gameSettingsCricket.getBestOfOrFirstTo,
         builder: (_, bestOfOrFirstTo, __) => BestOfOrFirstToBtn(
-            gameSettingsProvider: context.read<GameSettingsCricket_P>()),
+            gameSettings: context.read<GameSettingsCricket_P>()),
       ),
     );
   }

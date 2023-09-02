@@ -211,7 +211,8 @@ class AddPlayerTeamBtnDialogs {
               children: [
                 _isTeamMode(gameSettings_P) &&
                         gameSettings_P.getTeams.length < 4
-                    ? Expanded(
+                    ? Container(
+                        width: 20.w,
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: IconButton(
@@ -275,47 +276,86 @@ class AddPlayerTeamBtnDialogs {
                       SizedBox(
                         width: ACTION_BTNS_SPACING.w,
                       ),
-                      TextButton(
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.secondary,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
+                      Flexible(
+                        child: TextButton(
+                          child: Text(
+                            _shouldDisplayContinue(gameSettings_P)
+                                ? 'Continue'
+                                : 'Submit',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
+                            ),
                           ),
-                        ),
-                        onPressed: () {
-                          Utils.handleVibrationFeedback(context);
-                          _submitNewPlayer(gameSettings_P, context, newPlayer);
-                        },
-                        style: ButtonStyle(
-                          splashFactory: NoSplash.splashFactory,
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          overlayColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          backgroundColor:
-                              Utils.getPrimaryMaterialStateColorDarken(context),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(
-                                  DIALOG_BTN_SHAPE_ROUNDING),
+                          onPressed: () {
+                            Utils.handleVibrationFeedback(context);
+                            _submitNewPlayer(
+                                gameSettings_P, context, newPlayer);
+                          },
+                          style: ButtonStyle(
+                            splashFactory: NoSplash.splashFactory,
+                            shadowColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            overlayColor:
+                                MaterialStateProperty.all(Colors.transparent),
+                            backgroundColor:
+                                Utils.getPrimaryMaterialStateColorDarken(
+                                    context),
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    DIALOG_BTN_SHAPE_ROUNDING),
+                              ),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                )
+                ),
               ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  static _shouldDisplayContinue(GameSettings_P gameSettings) {
+    if (!(gameSettings is GameSettingsX01_P ||
+        gameSettings is GameSettingsCricket_P)) {
+      return false;
+    }
+
+    if (gameSettings is GameSettingsX01_P) {
+      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+        return false;
+      }
+    } else if (gameSettings is GameSettingsCricket_P) {
+      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+        return false;
+      }
+    }
+
+    if (gameSettings.getTeams.length == 1) {
+      return false;
+    }
+
+    int counter = 0;
+    for (Team team in gameSettings.getTeams) {
+      if (team.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
+        counter++;
+      }
+    }
+    if (counter >= 2) {
+      return true;
+    }
+
+    return false;
   }
 
   static _submitNewPlayer(GameSettings_P gameSettings_P, BuildContext context,

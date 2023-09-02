@@ -31,7 +31,7 @@ class PointBtnsThreeDarts extends StatelessWidget {
             SixToTenBtnsThreeDarts(mode: mode),
             ElevenToFifteenBtnsThreeDarts(mode: mode),
             FifteenToTwentyBtnsThreeDarts(mode: mode),
-            SingleDoubleOrTrippleBtns(mode: mode),
+            Expanded(child: SingleDoubleOrTrippleBtns(mode: mode)),
           ],
         ),
       ),

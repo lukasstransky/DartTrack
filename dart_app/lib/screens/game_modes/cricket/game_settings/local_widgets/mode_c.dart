@@ -22,10 +22,7 @@ class ModeCricket extends StatelessWidget {
     return Container(
       width: WIDTH_GAMESETTINGS.w,
       height: WIDGET_HEIGHT_GAMESETTINGS.h,
-      margin: EdgeInsets.only(
-        top: MARGIN_GAMESETTINGS.h,
-        bottom: MARGIN_GAMESETTINGS.h,
-      ),
+      margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
       child: Selector<GameSettingsCricket_P, CricketMode>(
         selector: (_, gameSettingsCricket) => gameSettingsCricket.getMode,
         builder: (_, mode, __) => Row(

@@ -403,9 +403,12 @@ class GameX01_P extends Game_P {
       return false;
     }
 
-    final int currentPointsAndBtnToCheck = getCurrentPointsSelected != 'Points'
-        ? int.parse(getCurrentPointsSelected + btnValueToCheck)
-        : int.parse(btnValueToCheck);
+    final int? currentPointsAndBtnToCheck = getCurrentPointsSelected != 'Points'
+        ? int.tryParse(getCurrentPointsSelected + btnValueToCheck)
+        : int.tryParse(btnValueToCheck);
+    if (currentPointsAndBtnToCheck == null) {
+      return false;
+    }
 
     // DOUBLE IN
     if (stats.getCurrentPoints == getGameSettings.getPointsOrCustom() &&

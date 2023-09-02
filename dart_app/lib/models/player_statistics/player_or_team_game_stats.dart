@@ -66,8 +66,8 @@ class PlayerOrTeamGameStats {
     GameSettingsX01_P settings,
     String gameId,
     bool openGame,
-    String currentUserUid,
-    String currentUsername,
+    String? currentUserUid,
+    String? currentUsername,
   ) {
     final String checkoutQuote = stats.getCheckoutQuoteInPercent();
     final Map<String, int> roundedScoresEven =

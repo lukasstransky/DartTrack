@@ -493,7 +493,6 @@ const String VIBRATION_FEEDBACK_KEY = 'vibrationFeedbackEnabled';
 // game settings x01
 const double WIDGET_HEIGHT_GAMESETTINGS = 4;
 const double WIDGET_HEIGHT_GAMESETTINGS_TEAMS = 3.5;
-const double WIDGET_HEIGHT_GAMESETTINGS_TABLET = 4;
 
 // overall
 const double ICON_BUTTON_SIZE = 3;
@@ -502,6 +501,9 @@ const double DIALOG_NORMAL_WIDTH = 60;
 const double DIALOG_SMALL_WIDTH = 40;
 const double DIALOG_ERROR_MSG_FONTSIZE = 9;
 const double ACTION_BTNS_SPACING = 1.5;
+
+const double GAMESETTINGS_START_GAME_BTN_WIDTH = 50;
+const double GAMESETTINGS_START_GAME_BTN_HEIGHT = 4;
 
 // mobile
 const double SWTICH_SCALE_FACTOR_MOBILE = 1;

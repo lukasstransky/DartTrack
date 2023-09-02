@@ -22,8 +22,8 @@ class StartGameBtnX01 extends StatelessWidget {
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Container(
-          width: 60.w,
-          height: 5.h,
+          width: GAMESETTINGS_START_GAME_BTN_WIDTH.w,
+          height: GAMESETTINGS_START_GAME_BTN_HEIGHT.h,
           child: Selector<GameSettingsX01_P, SelectorModel>(
             selector: (_, gameSettingsX01) => SelectorModel(
               players: gameSettingsX01.getPlayers,
@@ -42,9 +42,11 @@ class StartGameBtnX01 extends StatelessWidget {
                 splashFactory: NoSplash.splashFactory,
                 shadowColor: MaterialStateProperty.all(Colors.transparent),
                 overlayColor: MaterialStateProperty.all(Colors.transparent),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(BUTTON_BORDER_RADIUS),
+                    ),
                   ),
                 ),
                 backgroundColor: _activateStartGameBtn(selectorModel)

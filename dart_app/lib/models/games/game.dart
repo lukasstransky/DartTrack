@@ -146,7 +146,14 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       result['isOpenGame'] = getIsOpenGame;
       result['playerGameStatistics'] = getPlayerGameStatistics.map((item) {
         return item.toMapX01(
-            item as PlayerOrTeamGameStatsX01, game, settings, '', openGame);
+          item as PlayerOrTeamGameStatsX01,
+          game,
+          settings,
+          '',
+          openGame,
+          null,
+          null,
+        );
       }).toList();
       result['currentPlayerToThrow'] =
           getCurrentPlayerToThrow!.toMap(getCurrentPlayerToThrow as Player);

@@ -16,8 +16,8 @@ class BestOfOrFirstToX01 extends StatelessWidget {
           mode: gameSettingsX01.getBestOfOrFirstTo,
           singleOrTeam: gameSettingsX01.getSingleOrTeam,
         ),
-        builder: (_, selectorModel, __) => BestOfOrFirstToBtn(
-            gameSettingsProvider: context.read<GameSettingsX01_P>()),
+        builder: (_, selectorModel, __) =>
+            BestOfOrFirstToBtn(gameSettings: context.read<GameSettingsX01_P>()),
       ),
     );
   }

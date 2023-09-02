@@ -198,7 +198,10 @@ class _DetailedLegX01State extends State<DetailedLegX01> {
               children: [
                 Expanded(
                   child: Center(
-                    child: Text(''),
+                    child: Text(
+                      '',
+                      style: TextStyle(fontSize: _fontSize.sp),
+                    ),
                   ),
                 ),
               ],

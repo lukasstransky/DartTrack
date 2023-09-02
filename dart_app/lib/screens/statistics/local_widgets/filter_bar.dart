@@ -121,73 +121,64 @@ class _FilterBarState extends State<FilterBar> {
               ],
             ),
             if (_showDatePicker)
-              Theme(
-                data: ThemeData(),
-                child: SfDateRangePicker(
-                  confirmText: 'Select',
-                  cancelText: 'Cancel',
-                  todayHighlightColor: Colors.white,
-                  monthCellStyle: DateRangePickerMonthCellStyle(
-                    todayTextStyle: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      color: Colors.white,
-                    ),
-                  ),
-                  yearCellStyle: DateRangePickerYearCellStyle(
-                    todayCellDecoration: BoxDecoration(
-                        border: Border.all(color: Colors.white, width: 1),
-                        shape: BoxShape.circle),
-                    todayTextStyle: const TextStyle(color: Colors.white),
-                  ),
-                  rangeSelectionColor:
-                      Utils.darken(Theme.of(context).colorScheme.primary, 20),
-                  endRangeSelectionColor: Utils.getPrimaryColorDarken(context),
-                  startRangeSelectionColor:
-                      Utils.getPrimaryColorDarken(context),
-                  maxDate: DateTime.now(),
-                  onSelectionChanged: _onSelectionChanged,
-                  selectionMode: DateRangePickerSelectionMode.range,
-                  initialSelectedRange: PickerDateRange(
-                      statisticsFirestore.getCustomStartDate(),
-                      statisticsFirestore.getCustomEndDate(false)),
-                  showActionButtons: true,
-                  onSubmit: (p0) {
-                    statisticsFirestore.customDateFilterRange = _range;
-                    statisticsFirestore.customBtnDateRange =
-                        _customBtnDateRange;
-                    statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
-                      FilterValue.Custom,
-                      context,
-                      statisticsFirestore,
-                      firestoreServicePlayerStats,
-                    );
-                    statisticsFirestore.calculateX01Stats();
-
-                    setState(() {
-                      _showCustomBtnDateRange = true;
-                      _showDatePicker = false;
-                    });
-
-                    statisticsFirestore.notify();
-                  },
-                  onCancel: () {
-                    _showDatePicker = false;
-                    _showCustomBtnDateRange = false;
-                    _range = '';
-                    _setCurrentDate();
-                    statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
-                      FilterValue.Overall,
-                      context,
-                      statisticsFirestore,
-                      firestoreServicePlayerStats,
-                    );
-                    statisticsFirestore.customDateFilterRange = '';
-                    statisticsFirestore.calculateX01Stats();
-                    statisticsFirestore.notify();
-                  },
-                  showTodayButton: true,
+              SfDateRangePicker(
+                confirmText: 'Select',
+                cancelText: 'Cancel',
+                todayHighlightColor: Colors.white,
+                monthCellStyle: DateRangePickerMonthCellStyle(
+                  todayTextStyle: TextStyle(color: Colors.white),
                 ),
+                yearCellStyle: DateRangePickerYearCellStyle(
+                  todayCellDecoration: BoxDecoration(
+                      border: Border.all(color: Colors.white, width: 1),
+                      shape: BoxShape.circle),
+                  todayTextStyle: TextStyle(color: Colors.white),
+                ),
+                rangeSelectionColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 20),
+                endRangeSelectionColor: Utils.getPrimaryColorDarken(context),
+                startRangeSelectionColor: Utils.getPrimaryColorDarken(context),
+                maxDate: DateTime.now(),
+                onSelectionChanged: _onSelectionChanged,
+                selectionMode: DateRangePickerSelectionMode.range,
+                initialSelectedRange: PickerDateRange(
+                    statisticsFirestore.getCustomStartDate(),
+                    statisticsFirestore.getCustomEndDate(false)),
+                showActionButtons: true,
+                onSubmit: (p0) {
+                  statisticsFirestore.customDateFilterRange = _range;
+                  statisticsFirestore.customBtnDateRange = _customBtnDateRange;
+                  statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
+                    FilterValue.Custom,
+                    context,
+                    statisticsFirestore,
+                    firestoreServicePlayerStats,
+                  );
+                  statisticsFirestore.calculateX01Stats();
+
+                  setState(() {
+                    _showCustomBtnDateRange = true;
+                    _showDatePicker = false;
+                  });
+
+                  statisticsFirestore.notify();
+                },
+                onCancel: () {
+                  _showDatePicker = false;
+                  _showCustomBtnDateRange = false;
+                  _range = '';
+                  _setCurrentDate();
+                  statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
+                    FilterValue.Overall,
+                    context,
+                    statisticsFirestore,
+                    firestoreServicePlayerStats,
+                  );
+                  statisticsFirestore.customDateFilterRange = '';
+                  statisticsFirestore.calculateX01Stats();
+                  statisticsFirestore.notify();
+                },
+                showTodayButton: true,
               ),
           ],
         ),

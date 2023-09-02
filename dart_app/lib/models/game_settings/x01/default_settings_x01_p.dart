@@ -278,7 +278,12 @@ class DefaultSettingsX01_P with ChangeNotifier {
   set drawMode(value) => this._drawMode = value;
 
   resetValues(String? username) async {
-    players = [];
+    if (username == null) {
+      players = [];
+    } else {
+      players.removeWhere((p) => p.getName != username);
+    }
+
     singleOrTeam = DEFAULT_SINGLE_OR_TEAM;
     mode = DEFAULT_MODE;
     points = DEFAULT_POINTS;
