@@ -19,7 +19,7 @@ class ResetMostScoredPointsBtn extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(
         top: 2.h,
-        left: 5.w,
+        left: 3.w,
       ),
       child: ElevatedButton(
         child: Container(

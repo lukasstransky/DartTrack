@@ -5,9 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SixteenToTwentyX01 extends StatelessWidget {
-  const SixteenToTwentyX01({
-    Key? key,
-  }) : super(key: key);
+  const SixteenToTwentyX01({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

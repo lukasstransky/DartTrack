@@ -51,7 +51,11 @@ class OtherBtns extends StatelessWidget {
               .read<GameSettingsScoreTraining_P>()
               .getAutomaticallySubmitPoints)
             Expanded(
-              child: SubmitBtn(mode: mode),
+              child: SubmitBtn(
+                mode: mode,
+                safeAreaPadding:
+                    context.read<GameScoreTraining_P>().getSafeAreaPadding,
+              ),
             ),
         ],
       ),

@@ -71,33 +71,39 @@ class _GameSettingsSingleDoubleTrainingState
         gameMode: _mode,
       ),
       body: SafeArea(
-        child: Center(
-          child: Column(
-            children: [
-              Selector<GameSettingsSingleDoubleTraining_P, List<Player>>(
-                selector: (_, gameSettingsScoreTraining) =>
-                    gameSettingsScoreTraining.getPlayers,
-                shouldRebuild: (previous, next) => true,
-                builder: (_, players, __) => Column(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
                   children: [
-                    PlayersList(
-                      mode: GameMode.SingleTraining,
-                      players: players,
+                    Selector<GameSettingsSingleDoubleTraining_P, List<Player>>(
+                      selector: (_, gameSettingsScoreTraining) =>
+                          gameSettingsScoreTraining.getPlayers,
+                      shouldRebuild: (previous, next) => true,
+                      builder: (_, players, __) => Column(
+                        children: [
+                          PlayersList(
+                            mode: GameMode.SingleTraining,
+                            players: players,
+                          ),
+                          if (players.length <
+                              MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING)
+                            AddPlayerBtn(mode: _mode),
+                        ],
+                      ),
                     ),
-                    if (players.length <
-                        MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING)
-                      AddPlayerBtn(mode: _mode),
+                    ModeSingleDoubleTraining(),
+                    GameInfoSingleDoubleTraining(gameMode: _mode),
+                    PointDistributionInfoSingleDoubleTraining(gameMode: _mode),
+                    TargetNumberSingleDoubleTraining(gameMode: _mode),
+                    AmountOfRoundsForTargetNumberSingleDoubleTraining(),
                   ],
                 ),
               ),
-              ModeSingleDoubleTraining(),
-              GameInfoSingleDoubleTraining(gameMode: _mode),
-              PointDistributionInfoSingleDoubleTraining(gameMode: _mode),
-              TargetNumberSingleDoubleTraining(gameMode: _mode),
-              AmountOfRoundsForTargetNumberSingleDoubleTraining(),
-              StartGameBtn(mode: _mode),
-            ],
-          ),
+            ),
+            StartGameBtn(mode: _mode),
+          ],
         ),
       ),
     );

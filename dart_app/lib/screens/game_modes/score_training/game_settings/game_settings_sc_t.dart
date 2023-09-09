@@ -63,23 +63,32 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
       body: SafeArea(
         child: Column(
           children: [
-            Selector<GameSettingsScoreTraining_P, List<Player>>(
-              selector: (_, gameSettingsScoreTraining) =>
-                  gameSettingsScoreTraining.getPlayers,
-              shouldRebuild: (previous, next) => true,
-              builder: (_, players, __) => Column(
-                children: [
-                  PlayersList(
-                    mode: GameMode.ScoreTraining,
-                    players: players,
-                  ),
-                  if (players.length < MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING)
-                    AddPlayerBtn(mode: GameMode.ScoreTraining),
-                ],
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Selector<GameSettingsScoreTraining_P, List<Player>>(
+                      selector: (_, gameSettingsScoreTraining) =>
+                          gameSettingsScoreTraining.getPlayers,
+                      shouldRebuild: (previous, next) => true,
+                      builder: (_, players, __) => Column(
+                        children: [
+                          PlayersList(
+                            mode: GameMode.ScoreTraining,
+                            players: players,
+                          ),
+                          if (players.length <
+                              MAX_PLAYERS_SINGLE_DOUBLE_SCORE_TRAINING)
+                            AddPlayerBtn(mode: GameMode.ScoreTraining),
+                        ],
+                      ),
+                    ),
+                    ModeScoreTraining(),
+                    RoundsOrPointsInputScoreTraining(),
+                  ],
+                ),
               ),
             ),
-            ModeScoreTraining(),
-            RoundsOrPointsInputScoreTraining(),
             StartGameBtn(mode: GameMode.ScoreTraining),
           ],
         ),

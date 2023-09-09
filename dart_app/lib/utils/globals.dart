@@ -139,7 +139,7 @@ disposeControllersForGamesettingsSingleDoubleTraining() {
   amountOfRoundsController.dispose();
 }
 
-// maybe not best solution
+// !!!maybe not best solution!!!
 // needed for input method three darts + don't auto submit points
 int g_thrownDarts = 0;
 int g_checkoutCount = 0;

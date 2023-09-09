@@ -5,40 +5,10 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class FieldToHitSingleDoubleTraining extends StatelessWidget {
   const FieldToHitSingleDoubleTraining({Key? key}) : super(key: key);
-
-  String _getFieldToHit(String field, BuildContext context) {
-    if (context.read<GameSingleDoubleTraining_P>().getMode ==
-        GameMode.DoubleTraining) {
-      field = 'D${field}';
-    }
-
-    return field;
-  }
-
-  double _getHeight(
-      BuildContext context, int currentFieldToHit, bool isTargetNumberEnabled) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
-      if (isTargetNumberEnabled) {
-        return 8.h;
-      } else if (currentFieldToHit == -1) {
-        return 6.h;
-      }
-      return 6.h;
-    } else {
-      // tablet
-      if (isTargetNumberEnabled) {
-        return 10.h;
-      } else if (currentFieldToHit == -1) {
-        return 8.h;
-      }
-      return 7.h;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +36,22 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             ),
+            left: Utils.isLandscape(context)
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
+            right: context
+                        .read<GameSingleDoubleTraining_P>()
+                        .getSafeAreaPadding
+                        .right >
+                    0
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
           ),
         ),
         child: Column(
@@ -114,6 +100,35 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String _getFieldToHit(String field, BuildContext context) {
+    if (context.read<GameSingleDoubleTraining_P>().getMode ==
+        GameMode.DoubleTraining) {
+      field = 'D${field}';
+    }
+
+    return field;
+  }
+
+  double _getHeight(
+      BuildContext context, int currentFieldToHit, bool isTargetNumberEnabled) {
+    if (Utils.isMobile(context)) {
+      if (isTargetNumberEnabled) {
+        return 8.h;
+      } else if (currentFieldToHit == -1) {
+        return 6.h;
+      }
+      return 6.h;
+    } else {
+      // tablet
+      if (isTargetNumberEnabled) {
+        return 10.h;
+      } else if (currentFieldToHit == -1) {
+        return 8.h;
+      }
+      return 7.h;
+    }
   }
 }
 

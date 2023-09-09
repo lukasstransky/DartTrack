@@ -56,61 +56,60 @@ class _GameStatsSingleDoubleTrainingState
               gameId: _game!.getGameId,
             )
           : CustomAppBar(title: 'Statistics'),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            if (_game!.getGameSettings.getIsTargetNumberEnabled) ...[
-              Container(
-                padding: EdgeInsets.only(top: 0.5.h),
-                child: RichText(
-                  text: TextSpan(
-                    text:
-                        'Target number: ${_game!.getMode == GameMode.DoubleTraining ? 'D' : ''}${_game!.getGameSettings.getTargetNumber} ',
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      color: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              if (_game!.getGameSettings.getIsTargetNumberEnabled) ...[
+                Container(
+                  padding: EdgeInsets.only(top: 0.5.h),
+                  child: RichText(
+                    text: TextSpan(
+                      text:
+                          'Target number: ${_game!.getMode == GameMode.DoubleTraining ? 'D' : ''}${_game!.getGameSettings.getTargetNumber} ',
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize,
+                        color: Colors.white,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text:
+                              '(${_game!.getGameSettings.getAmountOfRounds} rounds)',
+                          style: TextStyle(
+                            fontSize: fontSizeTargetNumberRounds.sp,
+                            color: Colors.white70,
+                          ),
+                        )
+                      ],
                     ),
-                    children: <TextSpan>[
-                      TextSpan(
-                        text:
-                            '(${_game!.getGameSettings.getAmountOfRounds} rounds)',
-                        style: TextStyle(
-                          fontSize: fontSizeTargetNumberRounds.sp,
-                          color: Colors.white70,
-                        ),
-                      )
-                    ],
+                  ),
+                ),
+              ] else
+                Text(
+                  _getHeader(),
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    color: Colors.white,
+                  ),
+                ),
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(
+                  top: 0.5.h,
+                  bottom: 2.h,
+                ),
+                child: Text(
+                  _game!.getFormattedDateTime(),
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: Utils.getTextColorDarken(context),
                   ),
                 ),
               ),
-            ] else
-              Text(
-                _getHeader(),
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  color: Colors.white,
-                ),
-              ),
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(
-                top: 0.5.h,
-                bottom: 2.h,
-              ),
-              child: Text(
-                _game!.getFormattedDateTime(),
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  fontWeight: FontWeight.bold,
-                  color: Utils.getTextColorDarken(context),
-                ),
-              ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: SingleChildScrollView(
+              SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -121,8 +120,8 @@ class _GameStatsSingleDoubleTrainingState
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

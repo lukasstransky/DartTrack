@@ -18,6 +18,7 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+    final EdgeInsets safeAreaPadding = gameX01.getSafeAreaPadding;
 
     return Expanded(
       child: Row(
@@ -31,6 +32,18 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                     color: Utils.getPrimaryColorDarken(context),
                     width: GENERAL_BORDER_WIDTH.w,
                   ),
+                  bottom: safeAreaPadding.bottom > 0
+                      ? BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GENERAL_BORDER_WIDTH.w,
+                        )
+                      : BorderSide.none,
+                  left: Utils.isLandscape(context)
+                      ? BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GENERAL_BORDER_WIDTH.w,
+                        )
+                      : BorderSide.none,
                 ),
               ),
               child: ElevatedButton(
@@ -89,6 +102,12 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
                     color: Utils.getPrimaryColorDarken(context),
                     width: GENERAL_BORDER_WIDTH.w,
                   ),
+                  bottom: safeAreaPadding.bottom > 0
+                      ? BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GENERAL_BORDER_WIDTH.w,
+                        )
+                      : BorderSide.none,
                 ),
               ),
               child: ElevatedButton(
@@ -141,6 +160,22 @@ class SingleDoubleOrTrippleX01 extends StatelessWidget {
           ),
           Expanded(
             child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: safeAreaPadding.bottom > 0
+                      ? BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GENERAL_BORDER_WIDTH.w,
+                        )
+                      : BorderSide.none,
+                  right: safeAreaPadding.right > 0
+                      ? BorderSide(
+                          color: Utils.getPrimaryColorDarken(context),
+                          width: GENERAL_BORDER_WIDTH.w,
+                        )
+                      : BorderSide.none,
+                ),
+              ),
               child: ElevatedButton(
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(

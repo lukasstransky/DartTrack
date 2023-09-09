@@ -13,22 +13,6 @@ class ThreeDartsBtn extends StatelessWidget {
 
   final GameMode mode;
 
-  _threeDartsBtnClicked(BuildContext context, GameMode mode) {
-    if (mode == GameMode.X01) {
-      final gameSettingsX01_P = context.read<GameSettingsX01_P>();
-
-      gameSettingsX01_P.setInputMethod = InputMethod.ThreeDarts;
-      gameSettingsX01_P.notify();
-      context.read<GameX01_P>().setCurrentPointsSelected = 'Points';
-    } else if (mode == GameMode.ScoreTraining) {
-      final gameSettingsScoreTraining_P =
-          context.read<GameSettingsScoreTraining_P>();
-
-      gameSettingsScoreTraining_P.setInputMethod = InputMethod.ThreeDarts;
-      gameSettingsScoreTraining_P.notify();
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final double _fontSize = Utils.getResponsiveValue(
@@ -36,6 +20,8 @@ class ThreeDartsBtn extends StatelessWidget {
       mobileValue: 14,
       tabletValue: 12,
     );
+    final dynamic gameProvider =
+        Utils.getGameProviderBasedOnMode(mode, context);
 
     bool isThreeDartsSelected = false;
     if (mode == GameMode.X01) {
@@ -51,54 +37,77 @@ class ThreeDartsBtn extends StatelessWidget {
               : false;
     }
 
-    return Container(
-      width: 50.w - 0.125.w,
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Utils.getPrimaryColorDarken(context),
-            width: GENERAL_BORDER_WIDTH.w,
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: GENERAL_BORDER_WIDTH.w,
+            ),
+            right: gameProvider.getSafeAreaPadding.right > 0
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
           ),
         ),
-      ),
-      child: ElevatedButton(
-        child: Text(
-          '3-Darts',
-          style: TextStyle(
-            fontSize: _fontSize.sp,
-            color: isThreeDartsSelected
-                ? Theme.of(context).colorScheme.secondary
-                : Utils.getTextColorDarken(context),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onPressed: () {
-          Utils.handleVibrationFeedback(context);
-          _threeDartsBtnClicked(context, mode);
-        },
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.zero,
-              ),
+        child: ElevatedButton(
+          child: Text(
+            '3-Darts',
+            style: TextStyle(
+              fontSize: _fontSize.sp,
+              color: isThreeDartsSelected
+                  ? Theme.of(context).colorScheme.secondary
+                  : Utils.getTextColorDarken(context),
+              fontWeight: FontWeight.bold,
             ),
           ),
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          backgroundColor: isThreeDartsSelected
-              ? MaterialStateProperty.all(
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25))
-              : MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
-          overlayColor: isThreeDartsSelected
-              ? MaterialStateProperty.all(Colors.transparent)
-              : Utils.getColorOrPressed(
-                  Theme.of(context).colorScheme.primary,
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _threeDartsBtnClicked(context, mode);
+          },
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.zero,
                 ),
+              ),
+            ),
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            backgroundColor: isThreeDartsSelected
+                ? MaterialStateProperty.all(
+                    Utils.darken(Theme.of(context).colorScheme.primary, 25))
+                : MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+            overlayColor: isThreeDartsSelected
+                ? MaterialStateProperty.all(Colors.transparent)
+                : Utils.getColorOrPressed(
+                    Theme.of(context).colorScheme.primary,
+                    Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                  ),
+          ),
         ),
       ),
     );
+  }
+
+  _threeDartsBtnClicked(BuildContext context, GameMode mode) {
+    if (mode == GameMode.X01) {
+      final gameSettingsX01_P = context.read<GameSettingsX01_P>();
+
+      gameSettingsX01_P.setInputMethod = InputMethod.ThreeDarts;
+      gameSettingsX01_P.notify();
+      context.read<GameX01_P>().setCurrentPointsSelected = 'Points';
+    } else if (mode == GameMode.ScoreTraining) {
+      final gameSettingsScoreTraining_P =
+          context.read<GameSettingsScoreTraining_P>();
+
+      gameSettingsScoreTraining_P.setInputMethod = InputMethod.ThreeDarts;
+      gameSettingsScoreTraining_P.notify();
+    }
   }
 }

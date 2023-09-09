@@ -1,3 +1,4 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/local_widgets/point_btn_round_sc_t.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -61,34 +62,54 @@ class DeleteBtn extends StatelessWidget {
     return Selector<GameScoreTraining_P, String>(
       selector: (_, gameScoreTraining_P) =>
           gameScoreTraining_P.getCurrentPointsSelected,
-      builder: (_, currentPointsSelected, __) => ElevatedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-            ),
-            backgroundColor: currentPointsSelected == 'Points'
-                ? MaterialStateProperty.all(
-                    Utils.darken(Theme.of(context).colorScheme.primary, 25),
+      builder: (_, currentPointsSelected, __) => Container(
+        decoration: BoxDecoration(
+          border: Border(
+            left: Utils.isLandscape(context)
+                ? BorderSide(
+                    width: GENERAL_BORDER_WIDTH.w,
+                    color: Utils.getPrimaryColorDarken(context),
                   )
-                : MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primary),
-            overlayColor: currentPointsSelected == 'Points'
-                ? MaterialStateProperty.all(Colors.transparent)
-                : Utils.getDefaultOverlayColor(context),
+                : BorderSide.none,
+            bottom:
+                context.read<GameScoreTraining_P>().getSafeAreaPadding.bottom >
+                        0
+                    ? BorderSide(
+                        width: GENERAL_BORDER_WIDTH.w,
+                        color: Utils.getPrimaryColorDarken(context),
+                      )
+                    : BorderSide.none,
           ),
-          child: Icon(
-            FeatherIcons.delete,
-            size: _deleteIconSize.sp,
-            color: Utils.getTextColorDarken(context),
-          ),
-          onPressed: () {
-            Utils.handleVibrationFeedback(context);
-            if (currentPointsSelected != 'Points') {
-              _deleteCurrentPointsSelected(context, gameScoreTraining_P);
-            }
-          }),
+        ),
+        child: ElevatedButton(
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+              ),
+              backgroundColor: currentPointsSelected == 'Points'
+                  ? MaterialStateProperty.all(
+                      Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                    )
+                  : MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.primary),
+              overlayColor: currentPointsSelected == 'Points'
+                  ? MaterialStateProperty.all(Colors.transparent)
+                  : Utils.getDefaultOverlayColor(context),
+            ),
+            child: Icon(
+              FeatherIcons.delete,
+              size: _deleteIconSize.sp,
+              color: Utils.getTextColorDarken(context),
+            ),
+            onPressed: () {
+              Utils.handleVibrationFeedback(context);
+              if (currentPointsSelected != 'Points') {
+                _deleteCurrentPointsSelected(context, gameScoreTraining_P);
+              }
+            }),
+      ),
     );
   }
 }

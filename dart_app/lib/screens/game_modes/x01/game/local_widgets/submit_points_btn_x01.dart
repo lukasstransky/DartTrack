@@ -17,6 +17,65 @@ import 'package:sizer/sizer.dart';
 class SubmitPointsBtnX01 extends StatelessWidget {
   const SubmitPointsBtnX01({Key? key}) : super(key: key);
 
+  @override
+  Widget build(BuildContext context) {
+    final MaterialStateProperty<Color> _colorResult =
+        _shouldSubmitBtnBeEnabled(context)
+            ? MaterialStateProperty.all(Colors.green)
+            : MaterialStateProperty.all(Utils.darken(Colors.green, 25));
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
+    return Selector<GameX01_P, SelectorModel>(
+      selector: (_, gameX01_P) => SelectorModel(
+        currentPointsSelected: gameX01_P.getCurrentPointsSelected,
+        currentThreeDarts: gameX01_P.getCurrentThreeDarts,
+      ),
+      builder: (_, selectorModel, __) => Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: GENERAL_BORDER_WIDTH.w,
+            ),
+            left: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: gameSettingsX01.getInputMethod == InputMethod.Round
+                  ? GENERAL_BORDER_WIDTH.w
+                  : 0,
+            ),
+            right: context.read<GameX01_P>().getSafeAreaPadding.right > 0
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
+          ),
+        ),
+        child: ElevatedButton(
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+              ),
+            ),
+            backgroundColor: _colorResult,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: _colorResult,
+          ),
+          child: Icon(
+            size: ICON_BUTTON_SIZE.h,
+            Icons.arrow_forward,
+            color: Utils.getTextColorDarken(context),
+          ),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _submitPointsBtnClicked(context);
+          },
+        ),
+      ),
+    );
+  }
+
   bool _shouldSubmitBtnBeEnabled(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
@@ -133,61 +192,6 @@ class SubmitPointsBtnX01 extends StatelessWidget {
         }
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final MaterialStateProperty<Color> _colorResult =
-        _shouldSubmitBtnBeEnabled(context)
-            ? MaterialStateProperty.all(Colors.green)
-            : MaterialStateProperty.all(
-                Utils.darken(Colors.green, 25),
-              );
-    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-
-    return Selector<GameX01_P, SelectorModel>(
-      selector: (_, gameX01_P) => SelectorModel(
-        currentPointsSelected: gameX01_P.getCurrentPointsSelected,
-        currentThreeDarts: gameX01_P.getCurrentThreeDarts,
-      ),
-      builder: (_, selectorModel, __) => Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(
-              color: Utils.getPrimaryColorDarken(context),
-              width: GENERAL_BORDER_WIDTH.w,
-            ),
-            left: BorderSide(
-              color: Utils.getPrimaryColorDarken(context),
-              width: gameSettingsX01.getInputMethod == InputMethod.Round
-                  ? GENERAL_BORDER_WIDTH.w
-                  : 0,
-            ),
-          ),
-        ),
-        child: ElevatedButton(
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
-              ),
-            ),
-            backgroundColor: _colorResult,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: _colorResult,
-          ),
-          child: Icon(
-            size: ICON_BUTTON_SIZE.h,
-            Icons.arrow_forward,
-            color: Utils.getTextColorDarken(context),
-          ),
-          onPressed: () {
-            Utils.handleVibrationFeedback(context);
-            _submitPointsBtnClicked(context);
-          },
-        ),
-      ),
-    );
   }
 }
 

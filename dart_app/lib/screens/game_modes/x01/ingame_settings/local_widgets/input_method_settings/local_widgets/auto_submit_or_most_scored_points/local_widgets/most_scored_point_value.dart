@@ -5,7 +5,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class MostScoredPointValue extends StatelessWidget {
@@ -20,13 +19,12 @@ class MostScoredPointValue extends StatelessWidget {
 
     return Container(
       width: 25.w,
-      padding:
-          ((i == 2 || i == 3) && ResponsiveBreakpoints.of(context).isTablet)
-              ? EdgeInsets.only(
-                  top: 1.h,
-                  bottom: 1.h,
-                )
-              : null,
+      padding: ((i == 2 || i == 3) && !Utils.isMobile(context))
+          ? EdgeInsets.only(
+              top: 1.h,
+              bottom: 1.h,
+            )
+          : null,
       child: Row(
         children: [
           Container(
@@ -95,9 +93,8 @@ class MostScoredPointValue extends StatelessWidget {
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: ResponsiveBreakpoints.of(context).isMobile
-              ? DIALOG_CONTENT_PADDING_MOBILE
-              : null,
+          contentPadding:
+              Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
           title: Text(
             'Enter a value',
             style: TextStyle(

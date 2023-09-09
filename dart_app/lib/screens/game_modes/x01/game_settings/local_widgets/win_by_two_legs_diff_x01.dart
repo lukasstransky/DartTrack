@@ -5,7 +5,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 final GlobalKey<FormState> _formKeyLegDifference = GlobalKey<FormState>();
@@ -135,9 +134,8 @@ _showDialogForSuddenDeath(
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: ResponsiveBreakpoints.of(context).isMobile
-            ? DIALOG_CONTENT_PADDING_MOBILE
-            : null,
+        contentPadding:
+            Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
         title: Text(
           'Sudden death',
           style: TextStyle(
@@ -381,9 +379,8 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: ResponsiveBreakpoints.of(context).isMobile
-          ? DIALOG_CONTENT_PADDING_MOBILE
-          : null,
+      contentPadding:
+          Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
       title: Text(
         'Information',
         style: TextStyle(
@@ -440,9 +437,8 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: ResponsiveBreakpoints.of(context).isMobile
-          ? DIALOG_CONTENT_PADDING_MOBILE
-          : null,
+      contentPadding:
+          Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
       title: Text(
         'Information',
         style: TextStyle(

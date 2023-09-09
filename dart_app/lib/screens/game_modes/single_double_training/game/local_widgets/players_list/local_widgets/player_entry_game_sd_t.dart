@@ -32,9 +32,6 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
     final bool isSingleMode = game.getMode == GameMode.SingleTraining;
     final bool isTwoPlayers =
         game.getPlayerGameStatistics.length == 2 ? true : false;
-    final int HEADER_WIDTH = isTwoPlayers ? 28 : 45;
-    final int VALUE_WIDTH = isTwoPlayers ? 6 : 9;
-    const int ROW_WIDTH = 80;
     final _padding = EdgeInsets.only(
       top: 2.h,
       left: 2.5.w,
@@ -68,16 +65,15 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
           ),
           Container(
             padding: _padding,
-            width: ROW_WIDTH.w,
+            width: 60.w,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 HeaderText(
-                  width: HEADER_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: 'Total points',
                 ),
                 ValueText(
-                  width: VALUE_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: playerStats.getTotalPoints.toString(),
                 ),
@@ -86,104 +82,70 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
           ),
           if (isSingleMode)
             Container(
+              width: 60.w,
               padding: _padding,
-              width: ROW_WIDTH.w,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   HeaderText(
-                    width: HEADER_WIDTH,
                     fontSize: FONTSIZE,
                     textValue: 'Single hits',
                   ),
                   ValueText(
-                    width: VALUE_WIDTH,
                     fontSize: FONTSIZE,
                     textValue: playerStats.getSingleHits.toString(),
-                  ),
-                  Text(
-                    '(${playerStats.getSingleHitsPercentage()}%)',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    ),
                   ),
                 ],
               ),
             ),
           Container(
+            width: 60.w,
             padding: _padding,
-            width: ROW_WIDTH.w,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 HeaderText(
-                  width: HEADER_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: 'Double hits',
                 ),
                 ValueText(
-                  width: VALUE_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: playerStats.getDoubleHits.toString(),
-                ),
-                Text(
-                  '(${playerStats.getDoubleHitsPercentage()}%)',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  ),
                 ),
               ],
             ),
           ),
           if (isSingleMode)
             Container(
+              width: 60.w,
               padding: _padding,
-              width: ROW_WIDTH.w,
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   HeaderText(
-                    width: HEADER_WIDTH,
                     fontSize: FONTSIZE,
                     textValue: 'Tripple hits',
                   ),
                   ValueText(
-                    width: VALUE_WIDTH,
                     fontSize: FONTSIZE,
                     textValue: playerStats.getTrippleHits.toString(),
-                  ),
-                  Text(
-                    '(${playerStats.getTrippleHitsPercentage()}%)',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    ),
                   ),
                 ],
               ),
             ),
           Container(
+            width: 60.w,
             padding: _padding,
-            width: ROW_WIDTH.w,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 HeaderText(
-                  width: HEADER_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: 'Missed',
                 ),
                 ValueText(
-                  width: VALUE_WIDTH,
                   fontSize: FONTSIZE,
                   textValue: playerStats.getMissedHits.toString(),
-                ),
-                Text(
-                  '(${playerStats.getMissedHitsPercentage()}%)',
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  ),
                 ),
               ],
             ),
@@ -197,25 +159,20 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
 class ValueText extends StatelessWidget {
   const ValueText({
     Key? key,
-    required this.width,
     required this.fontSize,
     required this.textValue,
   }) : super(key: key);
 
-  final int width;
   final double fontSize;
   final String textValue;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width.w,
-      child: Text(
-        textValue,
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: fontSize,
-        ),
+    return Text(
+      textValue,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: fontSize,
       ),
     );
   }
@@ -224,26 +181,21 @@ class ValueText extends StatelessWidget {
 class HeaderText extends StatelessWidget {
   const HeaderText({
     Key? key,
-    required this.width,
     required this.fontSize,
     required this.textValue,
   }) : super(key: key);
 
-  final int width;
   final double fontSize;
   final String textValue;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width.w,
-      child: Text(
-        textValue,
-        style: TextStyle(
-          color: Utils.getTextColorDarken(context),
-          fontWeight: FontWeight.bold,
-          fontSize: fontSize,
-        ),
+    return Text(
+      textValue,
+      style: TextStyle(
+        color: Utils.getTextColorDarken(context),
+        fontWeight: FontWeight.bold,
+        fontSize: fontSize,
       ),
     );
   }

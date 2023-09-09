@@ -10,12 +10,6 @@ class AdvancedSettingsX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double paddingTop = Utils.getResponsiveValue(
-      context: context,
-      mobileValue: 0,
-      tabletValue: 2,
-    );
-
     return Selector<GameSettingsX01_P, SelectorModel>(
       selector: (_, gameSettingsX01) => SelectorModel(
         drawMode: gameSettingsX01.getDrawMode,
@@ -24,32 +18,36 @@ class AdvancedSettingsX01 extends StatelessWidget {
         modeOut: gameSettingsX01.getModeOut,
         setsEnabled: gameSettingsX01.getSetsEnabled,
       ),
-      builder: (_, selectorModel, __) => Padding(
-        padding: EdgeInsets.only(left: 7.w, top: paddingTop.h),
+      builder: (_, selectorModel, __) => Container(
+        width: WIDTH_GAMESETTINGS.w,
+        padding: EdgeInsets.only(
+            top: 1.h, bottom: Utils.isLandscape(context) ? 1.h : 0),
         child: Align(
           alignment: Alignment.centerLeft,
-          child: TextButton.icon(
-            onPressed: () {
-              Utils.handleVibrationFeedback(context);
-              Navigator.of(context).pushNamed('/inGameSettingsX01');
-            },
-            icon: Icon(
-              Icons.settings,
-              color: Theme.of(context).colorScheme.secondary,
-              size: ICON_BUTTON_SIZE.h,
-            ),
-            label: Text(
-              'Advanced settings',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-              ),
-            ),
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
+          child: Container(
+            child: GestureDetector(
+              onTap: () {
+                Utils.handleVibrationFeedback(context);
+                Navigator.of(context).pushNamed('/inGameSettingsX01');
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.settings,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: ICON_BUTTON_SIZE.h,
+                  ),
+                  SizedBox(width: 2.w),
+                  Text(
+                    'Advanced settings',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

@@ -10,11 +10,57 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class PointBtnRoundX01 extends StatelessWidget {
-  const PointBtnRoundX01({this.point, this.activeBtn, this.mostScoredPointBtn});
+  const PointBtnRoundX01({
+    this.point,
+    this.activeBtn,
+    this.mostScoredPointBtn,
+    required this.safeAreaPadding,
+  });
 
   final String? point;
   final bool? activeBtn;
   final bool? mostScoredPointBtn;
+  final EdgeInsets safeAreaPadding;
+
+  @override
+  Widget build(BuildContext context) {
+    final double _fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 30,
+      tabletValue: 20,
+    );
+
+    return Container(
+      decoration: BoxDecoration(
+        border: _getBorder(context, safeAreaPadding),
+      ),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+          backgroundColor: _getBackgroundColor(context),
+          overlayColor: _getOverlayColor(context),
+        ),
+        child: FittedBox(
+          child: Text(
+            point as String,
+            style: TextStyle(
+              fontSize: _fontSize.sp,
+              color: Utils.getTextColorDarken(context),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _pointBtnRoundClicked(context);
+        },
+      ),
+    );
+  }
 
   _updateCurrentPointsSelected(BuildContext context, String newPoints) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
@@ -62,7 +108,7 @@ class PointBtnRoundX01 extends StatelessWidget {
     return MaterialStateProperty.all(Colors.transparent);
   }
 
-  _getBorder(BuildContext context) {
+  _getBorder(BuildContext context, EdgeInsets safeAreaPadding) {
     final GameSettingsX01_P gameSettingsX01_P =
         context.read<GameSettingsX01_P>();
 
@@ -116,39 +162,53 @@ class PointBtnRoundX01 extends StatelessWidget {
     }
 
     return Border(
-      left: [
-        '0',
-        '2',
-        '5',
-        '8',
-      ].contains(point)
+      left: ([
+                '0',
+                '2',
+                '5',
+                '8',
+              ].contains(point)) ||
+              (Utils.isLandscape(context) &&
+                  [
+                    '1',
+                    '4',
+                    '7',
+                  ].contains(point))
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
-      right: [
-        '0',
-        '2',
-        '5',
-        '8',
-      ].contains(point)
+      right: ([
+                '0',
+                '2',
+                '5',
+                '8',
+              ].contains(point)) ||
+              (Utils.isLandscape(context) &&
+                  safeAreaPadding.right > 0 &&
+                  [
+                    '3',
+                    '6',
+                    '9',
+                  ].contains(point))
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       bottom: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-      ].contains(point)
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+              ].contains(point) ||
+              (safeAreaPadding.bottom > 0 && point == '0')
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
@@ -164,46 +224,6 @@ class PointBtnRoundX01 extends StatelessWidget {
               width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final double _fontSize = Utils.getResponsiveValue(
-      context: context,
-      mobileValue: 30,
-      tabletValue: 20,
-    );
-
-    return Container(
-      decoration: BoxDecoration(
-        border: _getBorder(context),
-      ),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
-          ),
-          backgroundColor: _getBackgroundColor(context),
-          overlayColor: _getOverlayColor(context),
-        ),
-        child: FittedBox(
-          child: Text(
-            point as String,
-            style: TextStyle(
-              fontSize: _fontSize.sp,
-              color: Utils.getTextColorDarken(context),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        onPressed: () {
-          Utils.handleVibrationFeedback(context);
-          _pointBtnRoundClicked(context);
-        },
-      ),
     );
   }
 }

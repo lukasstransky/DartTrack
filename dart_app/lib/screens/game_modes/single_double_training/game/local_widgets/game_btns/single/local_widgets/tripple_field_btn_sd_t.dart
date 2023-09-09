@@ -21,15 +21,25 @@ class TrippleFieldBtnSingleTraining extends StatelessWidget {
       mobileValue: BTN_FONTSIZE_SD_T_MOBILE,
       tabletValue: BTN_FONTSIZE_SD_T_TABLET,
     );
+    final GameSingleDoubleTraining_P gameSingleDoubleTraining =
+        context.read<GameSingleDoubleTraining_P>();
 
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
           border: Border(
-            bottom: BorderSide(
-              color: Utils.getPrimaryColorDarken(context),
-              width: GENERAL_BORDER_WIDTH.w,
-            ),
+            bottom: gameSingleDoubleTraining.getSafeAreaPadding.bottom > 0
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
+            right: gameSingleDoubleTraining.getSafeAreaPadding.right > 0
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
           ),
         ),
         child: ElevatedButton(

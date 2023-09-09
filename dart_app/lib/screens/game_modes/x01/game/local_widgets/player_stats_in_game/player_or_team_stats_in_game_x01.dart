@@ -20,7 +20,84 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
 
   final PlayerOrTeamGameStatsX01? currPlayerOrTeamGameStatsX01;
 
-  bool _shouldDisplayRightBorder(
+  @override
+  Widget build(BuildContext context) {
+    final GameX01_P gameX01 = context.read<GameX01_P>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final bool isSingleMode =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+    final bool isNotLastPlayerOrTeam =
+        _isNotLastPlayerOrTeam(gameX01, gameSettingsX01);
+
+    final double screenWidth = MediaQuery.of(context).size.width;
+    final EdgeInsets safeAreaPadding = gameX01.getSafeAreaPadding;
+    // if it's landscape, extract safe area padding
+    final double width = (Utils.isLandscape(context)
+            ? (screenWidth - safeAreaPadding.left - safeAreaPadding.right) / 2
+            : screenWidth) /
+        2;
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Utils.getPrimaryColorDarken(context),
+            width: GENERAL_BORDER_WIDTH.w,
+          ),
+          right: isNotLastPlayerOrTeam
+              ? BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                )
+              : BorderSide.none,
+          bottom: Utils.isLandscape(context) && safeAreaPadding.bottom > 0
+              ? BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                )
+              : BorderSide.none,
+          left: Utils.isLandscape(context) &&
+                  isNotLastPlayerOrTeam &&
+                  safeAreaPadding.left > 0
+              ? BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                )
+              : BorderSide.none,
+        ),
+      ),
+      width: width,
+      child: Container(
+        color: Utils.getBackgroundColorForCurrentPlayerOrTeam(
+            gameX01, gameSettingsX01, currPlayerOrTeamGameStatsX01!, context),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            LegBeginnerDartAsset(
+              playerOrTeamStats: this.currPlayerOrTeamGameStatsX01,
+              game: gameX01,
+              gameSettings: gameSettingsX01,
+            ),
+            Container(
+              transform: Matrix4.translationValues(
+                  0.0, isSingleMode ? -15 : -25.0, 0.0),
+              child: Column(
+                children: [
+                  if (isSingleMode) single(context) else team(context),
+                  SetsLegsScoreX01(
+                      currPlayerOrTeamGameStatsX01:
+                          this.currPlayerOrTeamGameStatsX01),
+                  GameStatsX01(currentStats: this.currPlayerOrTeamGameStatsX01),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  bool _isNotLastPlayerOrTeam(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01_P) {
     if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
       return gameX01.getTeamGameStatistics
@@ -154,59 +231,6 @@ class PlayerOrTeamStatsInGameX01 extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final GameX01_P gameX01 = context.read<GameX01_P>();
-    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-    final bool isSingleMode =
-        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
-
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Utils.getPrimaryColorDarken(context),
-            width: GENERAL_BORDER_WIDTH.w,
-          ),
-          right: _shouldDisplayRightBorder(gameX01, gameSettingsX01)
-              ? BorderSide(
-                  color: Utils.getPrimaryColorDarken(context),
-                  width: GENERAL_BORDER_WIDTH.w,
-                )
-              : BorderSide.none,
-        ),
-      ),
-      width: 50.w,
-      child: Container(
-        color: Utils.getBackgroundColorForCurrentPlayerOrTeam(
-            gameX01, gameSettingsX01, currPlayerOrTeamGameStatsX01!, context),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            LegBeginnerDartAsset(
-              playerOrTeamStats: this.currPlayerOrTeamGameStatsX01,
-              game: gameX01,
-              gameSettings: gameSettingsX01,
-            ),
-            Container(
-              transform: Matrix4.translationValues(
-                  0.0, isSingleMode ? -15 : -25.0, 0.0),
-              child: Column(
-                children: [
-                  if (isSingleMode) single(context) else team(context),
-                  SetsLegsScoreX01(
-                      currPlayerOrTeamGameStatsX01:
-                          this.currPlayerOrTeamGameStatsX01),
-                  GameStatsX01(currentStats: this.currPlayerOrTeamGameStatsX01),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -66,19 +66,10 @@ class _MoreStatsState extends State<MoreStats> {
             ),
             Row(
               children: [
-                SizedBox(
-                  width: 5.w,
-                ),
                 MoreStatsRoundedScores(roundedScoresOdd: _roundedScoresOdd),
-                SizedBox(
-                  width: 25.w,
-                ),
                 MoreStatsPreciseScores(
                     showAllScoesPerDartWithCount:
                         _showAllScoesPerDartWithCount),
-                SizedBox(
-                  width: 10.w,
-                ),
               ],
             ),
             Container(

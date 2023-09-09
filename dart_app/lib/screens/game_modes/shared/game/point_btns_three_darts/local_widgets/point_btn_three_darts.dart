@@ -36,9 +36,17 @@ class PointBtnThreeDarts extends StatelessWidget {
     final String pointValueWithDoubleOrTripplePrefix =
         _getPointValueWithDoubleOrTripplePrefix(gameCricket, gameScoreTraining);
 
+    final dynamic gameProvider =
+        Utils.getGameProviderBasedOnMode(mode, context);
+
     return Container(
       decoration: BoxDecoration(
-        border: Utils.getBorder(context, pointValue, mode),
+        border: Utils.getBorder(
+          context,
+          pointValue,
+          mode,
+          gameProvider.getSafeAreaPadding,
+        ),
       ),
       child: ElevatedButton(
         style: ButtonStyle(

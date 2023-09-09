@@ -13,40 +13,46 @@ class PointBtnRoundScoreTraining extends StatelessWidget {
   final String point;
 
   _getBorder(BuildContext context) {
+    final EdgeInsets safeAreaPadding =
+        context.read<GameScoreTraining_P>().getSafeAreaPadding;
+
     return Border(
       left: [
-        '0',
-        '2',
-        '5',
-        '8',
-      ].contains(point)
+                '0',
+                '2',
+                '5',
+                '8',
+              ].contains(point) ||
+              (Utils.isLandscape(context) && ['1', '4', '7'].contains(point))
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       right: [
-        '0',
-        '2',
-        '5',
-        '8',
-      ].contains(point)
+                '0',
+                '2',
+                '5',
+                '8',
+              ].contains(point) ||
+              (safeAreaPadding.right > 0 && ['3', '6', '9'].contains(point))
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             )
           : BorderSide.none,
       bottom: [
-        '1',
-        '2',
-        '3',
-        '4',
-        '5',
-        '6',
-        '7',
-        '8',
-        '9',
-      ].contains(point)
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+              ].contains(point) ||
+              ('0' == point && safeAreaPadding.bottom > 0)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,

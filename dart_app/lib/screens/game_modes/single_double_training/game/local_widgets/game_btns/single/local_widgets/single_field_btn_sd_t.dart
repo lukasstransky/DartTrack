@@ -34,6 +34,16 @@ class SingleFieldBtnSingleTraining extends StatelessWidget {
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             ),
+            right: context
+                        .read<GameSingleDoubleTraining_P>()
+                        .getSafeAreaPadding
+                        .right >
+                    0
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
           ),
         ),
         child: ElevatedButton(

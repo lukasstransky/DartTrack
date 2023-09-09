@@ -6,7 +6,6 @@ import 'package:dart_app/screens/game_modes/shared/game/submit_bnt.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class SubmitRevertnBtnsCricket extends StatelessWidget {
   const SubmitRevertnBtnsCricket({Key? key}) : super(key: key);
@@ -20,8 +19,7 @@ class SubmitRevertnBtnsCricket extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              width: 25.w,
+            Expanded(
               child: Selector<GameCricket_P, bool>(
                 selector: (_, gameCricket) => gameCricket.getRevertPossible,
                 builder: (_, revertPossible, __) => RevertBtn(
@@ -53,9 +51,12 @@ class SubmitRevertnBtnsCricket extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              width: 25.w,
-              child: SubmitBtn(mode: GameMode.Cricket),
+            Expanded(
+              child: SubmitBtn(
+                mode: GameMode.Cricket,
+                safeAreaPadding:
+                    context.read<GameCricket_P>().getSafeAreaPadding,
+              ),
             ),
           ],
         ),

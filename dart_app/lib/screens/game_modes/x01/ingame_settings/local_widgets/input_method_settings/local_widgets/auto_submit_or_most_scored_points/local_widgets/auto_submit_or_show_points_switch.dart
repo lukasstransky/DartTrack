@@ -19,41 +19,39 @@ class AutoSubmitOrShowMostScoredPointsSwitch extends StatelessWidget {
     );
 
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
-      return Flexible(
-        child: Padding(
-          padding: EdgeInsets.only(left: 2.5.w),
-          child: Row(
-            children: [
-              FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  'Most scored points',
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    color: Colors.white,
-                  ),
+      return Padding(
+        padding: EdgeInsets.only(left: 2.5.w),
+        child: Row(
+          children: [
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                'Most scored points',
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  color: Colors.white,
                 ),
               ),
-              Spacer(),
-              Transform.scale(
-                scale: scaleFactorSwitch,
-                child: Container(
-                  padding: EdgeInsets.only(right: paddingRight),
-                  child: Switch(
-                    value: gameSettingsX01.getShowMostScoredPoints,
-                    onChanged: (value) {
-                      Utils.handleVibrationFeedback(context);
-                      gameSettingsX01.setShowMostScoredPoints = value;
+            ),
+            Spacer(),
+            Transform.scale(
+              scale: scaleFactorSwitch,
+              child: Container(
+                padding: EdgeInsets.only(right: paddingRight),
+                child: Switch(
+                  value: gameSettingsX01.getShowMostScoredPoints,
+                  onChanged: (value) {
+                    Utils.handleVibrationFeedback(context);
+                    gameSettingsX01.setShowMostScoredPoints = value;
 
-                      gameSettingsX01.notify();
-                    },
-                    thumbColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.secondary),
-                  ),
+                    gameSettingsX01.notify();
+                  },
+                  thumbColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.secondary),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       );
     }

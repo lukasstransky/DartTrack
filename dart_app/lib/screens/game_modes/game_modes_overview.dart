@@ -51,15 +51,17 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
                   OpenGames(),
                   Expanded(
                     child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          X01Btn(),
-                          CricketBtn(),
-                          SingleTrainingBtn(),
-                          DoubleTrainingBtn(),
-                          ScoreTrainingBtn(),
-                        ],
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            X01Btn(),
+                            CricketBtn(),
+                            SingleTrainingBtn(),
+                            DoubleTrainingBtn(),
+                            ScoreTrainingBtn(),
+                          ],
+                        ),
                       ),
                     ),
                   ),

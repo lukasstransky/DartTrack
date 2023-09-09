@@ -235,78 +235,81 @@ class _OpenGamesState extends State<OpenGames> {
         selector: (_, openGamesFirestore) => openGamesFirestore.openGames,
         shouldRebuild: (previous, next) => true,
         builder: (_, openGames, __) => openGames.length != 0
-            ? SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Center(
-                  child: Container(
-                    width: 90.w,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: 1.h,
-                          ),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              'Swipe left for actions (play & delete)',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize,
+            ? SafeArea(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Center(
+                    child: Container(
+                      width: 90.w,
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 1.h,
+                            ),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                'Swipe left for actions (play & delete)',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        for (Game_P game_p in openGames) ...[
-                          Column(
-                            children: [
-                              Slidable(
-                                key: UniqueKey(),
-                                child: _getCard(game_p),
-                                startActionPane: ActionPane(
-                                  dismissible: DismissiblePane(onDismissed: () {
-                                    setState(() {});
-                                  }),
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (context) =>
-                                          _continueGame(game_p),
-                                      backgroundColor: Colors.green,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.arrow_forward,
-                                      label: 'Play',
-                                    ),
-                                    SlidableAction(
-                                      onPressed: (context) {
-                                        if (mounted) {
-                                          context
-                                              .read<FirestoreServiceGames>()
-                                              .deleteOpenGame(
-                                                  game_p.getGameId,
-                                                  context.read<
-                                                      OpenGamesFirestore>());
-                                        }
-                                      },
-                                      backgroundColor: Color(0xFFFE4A49),
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                      label: 'Delete',
-                                    ),
-                                  ],
+                          for (Game_P game_p in openGames) ...[
+                            Column(
+                              children: [
+                                Slidable(
+                                  key: UniqueKey(),
+                                  child: _getCard(game_p),
+                                  startActionPane: ActionPane(
+                                    dismissible:
+                                        DismissiblePane(onDismissed: () {
+                                      setState(() {});
+                                    }),
+                                    motion: const ScrollMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (context) =>
+                                            _continueGame(game_p),
+                                        backgroundColor: Colors.green,
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.arrow_forward,
+                                        label: 'Play',
+                                      ),
+                                      SlidableAction(
+                                        onPressed: (context) {
+                                          if (mounted) {
+                                            context
+                                                .read<FirestoreServiceGames>()
+                                                .deleteOpenGame(
+                                                    game_p.getGameId,
+                                                    context.read<
+                                                        OpenGamesFirestore>());
+                                          }
+                                        },
+                                        backgroundColor: Color(0xFFFE4A49),
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.delete,
+                                        label: 'Delete',
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                height: 2.h,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ],
-                          ),
-                        ]
-                      ],
+                                Container(
+                                  height: 2.h,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ],
+                            ),
+                          ]
+                        ],
+                      ),
                     ),
                   ),
                 ),

@@ -7,9 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class ThrownDartsX01 extends StatelessWidget {
-  const ThrownDartsX01({
-    Key? key,
-  }) : super(key: key);
+  const ThrownDartsX01({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +28,12 @@ class ThrownDartsX01 extends StatelessWidget {
                   color: Utils.getPrimaryColorDarken(context),
                   width: GENERAL_BORDER_WIDTH.w,
                 ),
+                left: Utils.isLandscape(context)
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
               ),
             ),
             child: ElevatedButton(
@@ -106,6 +110,12 @@ class ThrownDartsX01 extends StatelessWidget {
                   color: Utils.getPrimaryColorDarken(context),
                   width: GENERAL_BORDER_WIDTH.w,
                 ),
+                right: gameX01.getSafeAreaPadding.right > 0
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
               ),
             ),
             child: ElevatedButton(

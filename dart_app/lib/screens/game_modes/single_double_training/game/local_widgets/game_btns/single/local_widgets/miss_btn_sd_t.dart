@@ -37,6 +37,12 @@ class MissBtnSingleTraining extends StatelessWidget {
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             ),
+            left: Utils.isLandscape(context)
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
           ),
         ),
         child: ElevatedButton(

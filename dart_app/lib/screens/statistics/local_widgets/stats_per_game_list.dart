@@ -48,7 +48,9 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
         title: '${_mode.name} - Games',
         mode: _mode,
       ),
-      body: _getWidgetWithSelector(),
+      body: SafeArea(
+        child: _getWidgetWithSelector(),
+      ),
     );
   }
 

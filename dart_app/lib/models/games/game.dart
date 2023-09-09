@@ -36,6 +36,7 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
   bool _showLoadingSpinner = false;
   List<String> _setLegWithPlayerOrTeamWhoFinishedIt =
       []; // currently only used for x01
+  EdgeInsets safeAreaPadding = EdgeInsets.zero; // used for landscape mode
 
   Game_P({
     required String name,
@@ -127,6 +128,10 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
       _setLegWithPlayerOrTeamWhoFinishedIt;
   set setLegSetWithPlayerOrTeamWhoFinishedIt(List<String> value) =>
       _setLegWithPlayerOrTeamWhoFinishedIt = value;
+
+  EdgeInsets get getSafeAreaPadding => this.safeAreaPadding;
+  set setSafeAreaPadding(EdgeInsets safeAreaPadding) =>
+      this.safeAreaPadding = safeAreaPadding;
 
   Map<String, dynamic> toMapX01(GameX01_P game, bool openGame) {
     final GameSettingsX01_P settings = getGameSettings as GameSettingsX01_P;

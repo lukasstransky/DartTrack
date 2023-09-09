@@ -5,7 +5,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class FetchFromStatsBtn extends StatelessWidget {
@@ -39,7 +38,7 @@ class FetchFromStatsBtn extends StatelessWidget {
         Container(
           padding: EdgeInsets.only(
             top: 2.h,
-            right: 5.w,
+            right: 3.w,
           ),
           child: ElevatedButton(
             child: Container(
@@ -120,9 +119,8 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: ResponsiveBreakpoints.of(context).isMobile
-          ? DIALOG_CONTENT_PADDING_MOBILE
-          : null,
+      contentPadding:
+          Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
       title: Container(
         width: TEXT_DIALOG_WIDTH.w,
         child: Text(

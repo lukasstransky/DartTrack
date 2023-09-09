@@ -3,10 +3,10 @@ import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/local_widgets/multiple_player_stats_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/local_widgets/one_players_stats_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/local_widgets/two_player_stats_sc_t.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayersListScoreTraining extends StatelessWidget {
@@ -22,8 +22,8 @@ class PlayersListScoreTraining extends StatelessWidget {
     }
   }
 
-  double _getHeight(BuildContext context) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+  double _calcHeight(BuildContext context) {
+    if (Utils.isMobile(context)) {
       return 35.h;
     }
     return 45.h;
@@ -35,7 +35,7 @@ class PlayersListScoreTraining extends StatelessWidget {
       selector: (_, game) => game.getPlayerGameStatistics,
       shouldRebuild: (previous, next) => true,
       builder: (_, stats, __) => Container(
-        height: _getHeight(context),
+        height: Utils.isLandscape(context) ? null : _calcHeight(context),
         child: _getWidget(stats.length),
       ),
     );

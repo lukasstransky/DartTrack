@@ -25,46 +25,41 @@ class StartGameBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          width: GAMESETTINGS_START_GAME_BTN_WIDTH.w,
-          height: GAMESETTINGS_START_GAME_BTN_HEIGHT.h,
-          child: ElevatedButton(
-            onPressed: () {
-              Utils.handleVibrationFeedback(context);
-              _startGameBtnPressed(context);
-            },
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'Start',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                ),
+    return Container(
+      width: GAMESETTINGS_START_GAME_BTN_WIDTH.w,
+      height: GAMESETTINGS_START_GAME_BTN_HEIGHT.h,
+      child: ElevatedButton(
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _startGameBtnPressed(context);
+        },
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            'Start',
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+            ),
+          ),
+        ),
+        style: ButtonStyle(
+          splashFactory: NoSplash.splashFactory,
+          shadowColor: MaterialStateProperty.all(Colors.transparent),
+          overlayColor: MaterialStateProperty.all(Colors.transparent),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(BUTTON_BORDER_RADIUS),
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(BUTTON_BORDER_RADIUS),
-                  ),
-                ),
-              ),
-              backgroundColor: selectorModel == null ||
-                      _activateStartGameBtn(selectorModel)
+          ),
+          backgroundColor:
+              selectorModel == null || _activateStartGameBtn(selectorModel)
                   ? Utils.getPrimaryMaterialStateColorDarken(context)
                   : Utils.getColor(
                       Utils.darken(Theme.of(context).colorScheme.primary, 60),
                     ),
-            ),
-          ),
         ),
       ),
     );

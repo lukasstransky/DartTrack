@@ -6,7 +6,6 @@ import 'package:dart_app/utils/utils_dialogs.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomAppBarX01Game extends StatelessWidget
@@ -80,13 +79,13 @@ class CustomAppBarX01Game extends StatelessWidget
 
   Column _getTitleColumn(
       GameSettingsX01_P gameSettingsX01, BuildContext context) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+    if (Utils.isMobile(context)) {
       return Column(
         children: [
           Text(
             Utils.getBestOfOrFirstToString(gameSettingsX01),
             style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
           Text(

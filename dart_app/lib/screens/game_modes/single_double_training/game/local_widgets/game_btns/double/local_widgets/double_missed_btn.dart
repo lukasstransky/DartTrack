@@ -19,14 +19,26 @@ class DoubleMissedBtnDoubleTraining extends StatelessWidget {
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             ),
-            bottom: BorderSide(
-              color: Utils.getPrimaryColorDarken(context),
-              width: GENERAL_BORDER_WIDTH.w,
-            ),
+            bottom: context
+                        .read<GameSingleDoubleTraining_P>()
+                        .getSafeAreaPadding
+                        .bottom >
+                    0
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
             right: BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             ),
+            left: Utils.isLandscape(context)
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
           ),
         ),
         child: ElevatedButton(

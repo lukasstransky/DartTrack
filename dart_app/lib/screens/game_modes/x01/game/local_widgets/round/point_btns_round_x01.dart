@@ -17,18 +17,6 @@ import 'package:sizer/sizer.dart';
 class PointBtnsRoundX01 extends StatelessWidget {
   PointBtnsRoundX01({Key? key}) : super(key: key);
 
-  // deletes one char of the points
-  _deleteCurrentPointsSelected(BuildContext context, GameX01_P gameX01) {
-    gameX01.setCurrentPointsSelected = gameX01.getCurrentPointsSelected
-        .substring(0, gameX01.getCurrentPointsSelected.length - 1);
-
-    if (gameX01.getCurrentPointsSelected.isEmpty) {
-      gameX01.setCurrentPointsSelected = 'Points';
-    }
-
-    gameX01.notify();
-  }
-
   @override
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
@@ -38,6 +26,12 @@ class PointBtnsRoundX01 extends StatelessWidget {
       mobileValue: 20,
       tabletValue: 18,
     );
+    final double _widthBtns = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 25,
+      tabletValue: Utils.isLandscape(context) ? 20 : 25,
+    );
+    final EdgeInsets safeAreaPadding = gameX01.getSafeAreaPadding;
 
     return Expanded(
       child: Selector<GameSettingsX01_P, SelectorModel>(
@@ -56,11 +50,10 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Container(
-                      width: 25.w,
+                      width: _widthBtns.w,
                       child: RevertBtn(game_p: gameX01),
                     ),
-                    Container(
-                      width: 50.w,
+                    Expanded(
                       child: Container(
                         decoration: BoxDecoration(
                           border: Border(
@@ -83,7 +76,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: 25.w,
+                      width: _widthBtns.w,
                       child: SubmitPointsBtnX01(),
                     ),
                   ],
@@ -95,18 +88,25 @@ class PointBtnsRoundX01 extends StatelessWidget {
                 gameX01,
                 gameSettingsX01,
                 selectorModel.showMostScoredPoints,
+                safeAreaPadding,
               ),
               secondRow(
                 gameX01,
                 gameSettingsX01,
                 selectorModel.showMostScoredPoints,
+                safeAreaPadding,
               ),
               thirdRow(
                 gameX01,
                 gameSettingsX01,
                 selectorModel.showMostScoredPoints,
+                safeAreaPadding,
               ),
-              fourthRow(gameX01, context),
+              fourthRow(
+                gameX01,
+                context,
+                safeAreaPadding,
+              ),
             ],
           ),
         ),
@@ -114,8 +114,24 @@ class PointBtnsRoundX01 extends StatelessWidget {
     );
   }
 
-  Expanded firstRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
-      bool showMostScoredPoints) {
+  // deletes one char of the points
+  _deleteCurrentPointsSelected(BuildContext context, GameX01_P gameX01) {
+    gameX01.setCurrentPointsSelected = gameX01.getCurrentPointsSelected
+        .substring(0, gameX01.getCurrentPointsSelected.length - 1);
+
+    if (gameX01.getCurrentPointsSelected.isEmpty) {
+      gameX01.setCurrentPointsSelected = 'Points';
+    }
+
+    gameX01.notify();
+  }
+
+  Expanded firstRow(
+    GameX01_P gameX01,
+    GameSettingsX01_P gameSettingsX01,
+    bool showMostScoredPoints,
+    EdgeInsets safeAreaPadding,
+  ) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -127,32 +143,60 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   ? PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[0],
                       activeBtn: false,
-                      mostScoredPointBtn: true)
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    )
                   : PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[0],
                       activeBtn: true,
-                      mostScoredPointBtn: true),
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    ),
             ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('1')
                 ? PointBtnRoundX01(
-                    point: '1', activeBtn: false, mostScoredPointBtn: false)
+                    point: '1',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '1', activeBtn: true, mostScoredPointBtn: false),
+                    point: '1',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('2')
                 ? PointBtnRoundX01(
-                    point: '2', activeBtn: false, mostScoredPointBtn: false)
+                    point: '2',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '2', activeBtn: true, mostScoredPointBtn: false),
+                    point: '2',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('3')
                 ? PointBtnRoundX01(
-                    point: '3', activeBtn: false, mostScoredPointBtn: false)
+                    point: '3',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '3', activeBtn: true, mostScoredPointBtn: false),
+                    point: '3',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           if (showMostScoredPoints)
             Expanded(
@@ -161,19 +205,27 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   ? PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[1],
                       activeBtn: false,
-                      mostScoredPointBtn: true)
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    )
                   : PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[1],
                       activeBtn: true,
-                      mostScoredPointBtn: true),
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    ),
             ),
         ],
       ),
     );
   }
 
-  Expanded secondRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
-      bool showMostScoredPoints) {
+  Expanded secondRow(
+    GameX01_P gameX01,
+    GameSettingsX01_P gameSettingsX01,
+    bool showMostScoredPoints,
+    EdgeInsets safeAreaPadding,
+  ) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -185,32 +237,60 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   ? PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[2],
                       activeBtn: false,
-                      mostScoredPointBtn: true)
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    )
                   : PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[2],
                       activeBtn: true,
-                      mostScoredPointBtn: true),
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    ),
             ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('4')
                 ? PointBtnRoundX01(
-                    point: '4', activeBtn: false, mostScoredPointBtn: false)
+                    point: '4',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '4', activeBtn: true, mostScoredPointBtn: false),
+                    point: '4',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('5')
                 ? PointBtnRoundX01(
-                    point: '5', activeBtn: false, mostScoredPointBtn: false)
+                    point: '5',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '5', activeBtn: true, mostScoredPointBtn: false),
+                    point: '5',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('6')
                 ? PointBtnRoundX01(
-                    point: '6', activeBtn: false, mostScoredPointBtn: false)
+                    point: '6',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '6', activeBtn: true, mostScoredPointBtn: false),
+                    point: '6',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           if (showMostScoredPoints)
             Expanded(
@@ -219,19 +299,27 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   ? PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[3],
                       activeBtn: false,
-                      mostScoredPointBtn: true)
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    )
                   : PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[3],
                       activeBtn: true,
-                      mostScoredPointBtn: true),
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    ),
             ),
         ],
       ),
     );
   }
 
-  Expanded thirdRow(GameX01_P gameX01, GameSettingsX01_P gameSettingsX01,
-      bool showMostScoredPoints) {
+  Expanded thirdRow(
+    GameX01_P gameX01,
+    GameSettingsX01_P gameSettingsX01,
+    bool showMostScoredPoints,
+    EdgeInsets safeAreaPadding,
+  ) {
     return Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -243,32 +331,60 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   ? PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[4],
                       activeBtn: false,
-                      mostScoredPointBtn: true)
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    )
                   : PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[4],
                       activeBtn: true,
-                      mostScoredPointBtn: true),
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    ),
             ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('7')
                 ? PointBtnRoundX01(
-                    point: '7', activeBtn: false, mostScoredPointBtn: false)
+                    point: '7',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '7', activeBtn: true, mostScoredPointBtn: false),
+                    point: '7',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('8')
                 ? PointBtnRoundX01(
-                    point: '8', activeBtn: false, mostScoredPointBtn: false)
+                    point: '8',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '8', activeBtn: true, mostScoredPointBtn: false),
+                    point: '8',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           Expanded(
             child: gameX01.shouldPointBtnBeDisabled('9')
                 ? PointBtnRoundX01(
-                    point: '9', activeBtn: false, mostScoredPointBtn: false)
+                    point: '9',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
                 : PointBtnRoundX01(
-                    point: '9', activeBtn: true, mostScoredPointBtn: false),
+                    point: '9',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
           ),
           if (showMostScoredPoints)
             Expanded(
@@ -277,18 +393,26 @@ class PointBtnsRoundX01 extends StatelessWidget {
                   ? PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[5],
                       activeBtn: false,
-                      mostScoredPointBtn: true)
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    )
                   : PointBtnRoundX01(
                       point: gameSettingsX01.getMostScoredPoints[5],
                       activeBtn: true,
-                      mostScoredPointBtn: true),
+                      mostScoredPointBtn: true,
+                      safeAreaPadding: safeAreaPadding,
+                    ),
             ),
         ],
       ),
     );
   }
 
-  Expanded fourthRow(GameX01_P gameX01, BuildContext context) {
+  Expanded fourthRow(
+    GameX01_P gameX01,
+    BuildContext context,
+    EdgeInsets safeAreaPadding,
+  ) {
     final double _fontSize = Utils.getResponsiveValue(
       context: context,
       mobileValue: 25,
@@ -300,8 +424,87 @@ class PointBtnsRoundX01 extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
-            child: ElevatedButton(
-                style: ButtonStyle(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: safeAreaPadding.bottom > 0
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
+                  left: Utils.isLandscape(context)
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
+                ),
+              ),
+              child: ElevatedButton(
+                  style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
+                      backgroundColor:
+                          gameX01.getCurrentPointsSelected == 'Points'
+                              ? MaterialStateProperty.all(Utils.darken(
+                                  Theme.of(context).colorScheme.primary, 25))
+                              : MaterialStateProperty.all(
+                                  Theme.of(context).colorScheme.primary),
+                      overlayColor: gameX01.getCurrentPointsSelected == 'Points'
+                          ? MaterialStateProperty.all(Colors.transparent)
+                          : Utils.getDefaultOverlayColor(context)),
+                  child: Icon(
+                    FeatherIcons.delete,
+                    size: _fontSize.sp,
+                    color: Utils.getTextColorDarken(context),
+                  ),
+                  onPressed: () {
+                    if (gameX01.getCurrentPointsSelected != 'Points') {
+                      Utils.handleVibrationFeedback(context);
+                      _deleteCurrentPointsSelected(context, gameX01);
+                    }
+                  }),
+            ),
+          ),
+          Expanded(
+            child: gameX01.shouldPointBtnBeDisabled('0')
+                ? PointBtnRoundX01(
+                    point: '0',
+                    activeBtn: false,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  )
+                : PointBtnRoundX01(
+                    point: '0',
+                    activeBtn: true,
+                    mostScoredPointBtn: false,
+                    safeAreaPadding: safeAreaPadding,
+                  ),
+          ),
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: safeAreaPadding.bottom > 0
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
+                  right: Utils.isLandscape(context) && safeAreaPadding.right > 0
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
+                ),
+              ),
+              child: ElevatedButton(
+                  style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.zero,
@@ -309,80 +512,46 @@ class PointBtnsRoundX01 extends StatelessWidget {
                     ),
                     backgroundColor:
                         gameX01.getCurrentPointsSelected == 'Points'
-                            ? MaterialStateProperty.all(Utils.darken(
-                                Theme.of(context).colorScheme.primary, 25))
-                            : MaterialStateProperty.all(
-                                Theme.of(context).colorScheme.primary),
+                            ? MaterialStateProperty.all(
+                                Theme.of(context).colorScheme.primary)
+                            : MaterialStateProperty.all(Utils.darken(
+                                Theme.of(context).colorScheme.primary, 25)),
                     overlayColor: gameX01.getCurrentPointsSelected == 'Points'
-                        ? MaterialStateProperty.all(Colors.transparent)
-                        : Utils.getDefaultOverlayColor(context)),
-                child: Icon(
-                  FeatherIcons.delete,
-                  size: _fontSize.sp,
-                  color: Utils.getTextColorDarken(context),
-                ),
-                onPressed: () {
-                  if (gameX01.getCurrentPointsSelected != 'Points') {
-                    Utils.handleVibrationFeedback(context);
-                    _deleteCurrentPointsSelected(context, gameX01);
-                  }
-                }),
-          ),
-          Expanded(
-            child: gameX01.shouldPointBtnBeDisabled('0')
-                ? PointBtnRoundX01(
-                    point: '0', activeBtn: false, mostScoredPointBtn: false)
-                : PointBtnRoundX01(
-                    point: '0', activeBtn: true, mostScoredPointBtn: false),
-          ),
-          Expanded(
-            child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
+                        ? Utils.getColorOrPressed(
+                            Theme.of(context).colorScheme.primary,
+                            Utils.darken(
+                                Theme.of(context).colorScheme.primary, 15),
+                          )
+                        : MaterialStateProperty.all(Colors.transparent),
+                  ),
+                  child: Text(
+                    'Bust',
+                    style: TextStyle(
+                      fontSize: _fontSize.sp,
+                      fontWeight: FontWeight.bold,
+                      color: Utils.getTextColorDarken(context),
                     ),
                   ),
-                  backgroundColor: gameX01.getCurrentPointsSelected == 'Points'
-                      ? MaterialStateProperty.all(
-                          Theme.of(context).colorScheme.primary)
-                      : MaterialStateProperty.all(Utils.darken(
-                          Theme.of(context).colorScheme.primary, 25)),
-                  overlayColor: gameX01.getCurrentPointsSelected == 'Points'
-                      ? Utils.getColorOrPressed(
-                          Theme.of(context).colorScheme.primary,
-                          Utils.darken(
-                              Theme.of(context).colorScheme.primary, 15),
-                        )
-                      : MaterialStateProperty.all(Colors.transparent),
-                ),
-                child: Text(
-                  'Bust',
-                  style: TextStyle(
-                    fontSize: _fontSize.sp,
-                    fontWeight: FontWeight.bold,
-                    color: Utils.getTextColorDarken(context),
-                  ),
-                ),
-                onPressed: () {
-                  if (gameX01.getCurrentPointsSelected != 'Points') {
-                    return;
-                  }
-                  Utils.handleVibrationFeedback(context);
-                  if (gameX01.getGameSettings.getEnableCheckoutCounting &&
-                      gameX01.isCheckoutPossible()) {
-                    final int count =
-                        gameX01.getAmountOfCheckoutPossibilities('0');
+                  onPressed: () {
+                    if (gameX01.getCurrentPointsSelected != 'Points') {
+                      return;
+                    }
+                    Utils.handleVibrationFeedback(context);
+                    if (gameX01.getGameSettings.getEnableCheckoutCounting &&
+                        gameX01.isCheckoutPossible()) {
+                      final int count =
+                          gameX01.getAmountOfCheckoutPossibilities('0');
 
-                    if (count != -1) {
-                      showDialogForCheckout(count, '0', context);
+                      if (count != -1) {
+                        showDialogForCheckout(count, '0', context);
+                      } else {
+                        SubmitX01Helper.bust(context);
+                      }
                     } else {
                       SubmitX01Helper.bust(context);
                     }
-                  } else {
-                    SubmitX01Helper.bust(context);
-                  }
-                }),
+                  }),
+            ),
           ),
         ],
       ),

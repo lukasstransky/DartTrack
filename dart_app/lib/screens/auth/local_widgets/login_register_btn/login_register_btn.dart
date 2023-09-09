@@ -17,7 +17,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -124,9 +123,8 @@ class LoginRegisterBtn extends StatelessWidget {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: ResponsiveBreakpoints.of(context).isMobile
-            ? DIALOG_CONTENT_PADDING_MOBILE
-            : null,
+        contentPadding:
+            Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
         title: Text(
           'An error occurred',
           style: TextStyle(

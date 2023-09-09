@@ -25,11 +25,7 @@ class FieldsToHit extends StatelessWidget {
       width: GENERAL_BORDER_WIDTH.w,
       color: Utils.getPrimaryColorDarken(context),
     );
-    final Border _border = Border(
-      top: _borderSide,
-      left: oddPlayersOrTeams ? BorderSide.none : _borderSide,
-      right: _borderSide,
-    );
+
     final Color _darkenPrimaryColor20 =
         Utils.darken(Theme.of(context).colorScheme.primary, 20);
     final bool _is25Closed =
@@ -37,6 +33,17 @@ class FieldsToHit extends StatelessWidget {
 
     return Container(
       width: 20.w,
+      decoration: BoxDecoration(
+        border: Border(
+          left:
+              shouldDisplayLeftBorder(gameCricket, gameSettingsCricket, context)
+                  ? BorderSide(
+                      width: GENERAL_BORDER_WIDTH.w,
+                      color: Utils.getPrimaryColorDarken(context),
+                    )
+                  : BorderSide.none,
+        ),
+      ),
       child: Column(
         children: [
           for (int i = 20; i >= 15; i--)
@@ -50,19 +57,26 @@ class FieldsToHit extends StatelessWidget {
                     color: isNumberClosed
                         ? Theme.of(context).colorScheme.primary
                         : _darkenPrimaryColor20,
-                    border: _border,
+                    border: Border(
+                      top: _borderSide,
+                      left: oddPlayersOrTeams ? BorderSide.none : _borderSide,
+                      right: _borderSide,
+                    ),
                   ),
                   child: Center(
-                    child: Text(
-                      i.toString(),
-                      style: TextStyle(
-                        color: isNumberClosed ? Colors.white54 : Colors.white,
-                        fontSize:
-                            Theme.of(context).textTheme.titleSmall!.fontSize,
-                        fontWeight: FontWeight.bold,
-                        decoration: isNumberClosed
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        i.toString(),
+                        style: TextStyle(
+                          color: isNumberClosed ? Colors.white54 : Colors.white,
+                          fontSize:
+                              Theme.of(context).textTheme.titleSmall!.fontSize,
+                          fontWeight: FontWeight.bold,
+                          decoration: isNumberClosed
+                              ? TextDecoration.lineThrough
+                              : TextDecoration.none,
+                        ),
                       ),
                     ),
                   ),
@@ -75,18 +89,27 @@ class FieldsToHit extends StatelessWidget {
                 color: _is25Closed
                     ? Theme.of(context).colorScheme.primary
                     : _darkenPrimaryColor20,
-                border: _border,
+                border: Border(
+                  top: _borderSide,
+                  left: oddPlayersOrTeams ? BorderSide.none : _borderSide,
+                  right: _borderSide,
+                  bottom: _borderSide,
+                ),
               ),
               child: Center(
-                child: Text(
-                  'Bull',
-                  style: TextStyle(
-                    color: _is25Closed ? Colors.white54 : Colors.white,
-                    fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-                    fontWeight: FontWeight.bold,
-                    decoration: _is25Closed
-                        ? TextDecoration.lineThrough
-                        : TextDecoration.none,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    'Bull',
+                    style: TextStyle(
+                      color: _is25Closed ? Colors.white54 : Colors.white,
+                      fontSize:
+                          Theme.of(context).textTheme.titleSmall!.fontSize,
+                      fontWeight: FontWeight.bold,
+                      decoration: _is25Closed
+                          ? TextDecoration.lineThrough
+                          : TextDecoration.none,
+                    ),
                   ),
                 ),
               ),
@@ -95,5 +118,16 @@ class FieldsToHit extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  bool shouldDisplayLeftBorder(GameCricket_P gameCricket,
+      GameSettingsCricket_P gameSettingsCricket, BuildContext context) {
+    if (Utils.isLandscape(context) && gameCricket.getSafeAreaPadding.left > 0) {
+      if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single) {
+        return gameSettingsCricket.getPlayers.length == 3;
+      }
+      return gameSettingsCricket.getTeams.length == 3;
+    }
+    return false;
   }
 }

@@ -11,41 +11,63 @@ class TwoPlayerStatsSingleDoubleTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final game = context.read<GameSingleDoubleTraining_P>();
-    const double WIDTH = 50;
+    final GameSingleDoubleTraining_P game =
+        context.read<GameSingleDoubleTraining_P>();
 
     return Row(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH.w,
-              ),
-              right: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH.w,
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                ),
+                right: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                ),
+                left: game.getSafeAreaPadding.left > 0
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
+                bottom: game.getSafeAreaPadding.bottom > 0 &&
+                        Utils.isLandscape(context)
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
               ),
             ),
-          ),
-          width: WIDTH.w,
-          child: PlayerEntryGameSingleDoubleTraining(
-            playerStats: game.getPlayerGameStatistics[0],
+            child: PlayerEntryGameSingleDoubleTraining(
+              playerStats: game.getPlayerGameStatistics[0],
+            ),
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH.w,
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                ),
+                bottom: game.getSafeAreaPadding.bottom > 0 &&
+                        Utils.isLandscape(context)
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
               ),
             ),
-          ),
-          width: WIDTH.w,
-          child: PlayerEntryGameSingleDoubleTraining(
-            playerStats: game.getPlayerGameStatistics[1],
+            child: PlayerEntryGameSingleDoubleTraining(
+              playerStats: game.getPlayerGameStatistics[1],
+            ),
           ),
         ),
       ],

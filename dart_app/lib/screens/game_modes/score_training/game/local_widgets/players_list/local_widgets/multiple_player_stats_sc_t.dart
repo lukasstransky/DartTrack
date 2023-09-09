@@ -36,8 +36,16 @@ class _MulitplePlayerStatsScoreTrainingState
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
+          Container(
             padding: EdgeInsets.only(bottom: 0.5.h),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: SMALL_BORDER_WIDTH.w,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -71,24 +79,22 @@ class _MulitplePlayerStatsScoreTrainingState
                 Expanded(
                   child: Container(
                     alignment: Alignment.center,
-                    child: Text(
-                      isRoundMode ? 'Rounds left' : 'Points left',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize:
-                            Theme.of(context).textTheme.titleSmall!.fontSize,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        isRoundMode ? 'Rounds left' : 'Points left',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize:
+                              Theme.of(context).textTheme.titleSmall!.fontSize,
+                        ),
                       ),
                     ),
                   ),
                 ),
               ],
             ),
-          ),
-          Divider(
-            height: 0.1.h,
-            thickness: 0.1.h,
-            color: Colors.white,
           ),
           Selector<GameScoreTraining_P, List<PlayerOrTeamGameStats>>(
             selector: (_, gameScoreTraining_P) =>
@@ -106,11 +112,6 @@ class _MulitplePlayerStatsScoreTrainingState
                       playerStats:
                           playerStats[index] as PlayerGameStatsScoreTraining,
                     ),
-                    Divider(
-                      height: 0.1.h,
-                      thickness: 0.1.h,
-                      color: Colors.white,
-                    )
                   ],
                 );
               },
@@ -132,10 +133,25 @@ class PlayerEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameScoreTraining_P game = context.read<GameScoreTraining_P>();
+
     return Container(
-      color: Utils.getBackgroundColorForPlayer(
-          context, context.read<GameScoreTraining_P>(), playerStats),
       height: 5.h,
+      decoration: BoxDecoration(
+        color: Utils.getBackgroundColorForPlayer(context, game, playerStats),
+        border: Border(
+          bottom: BorderSide(
+            width: SMALL_BORDER_WIDTH.w,
+            color: Colors.white,
+          ),
+          left: game.getSafeAreaPadding.left > 0
+              ? BorderSide(
+                  width: SMALL_BORDER_WIDTH.w,
+                  color: Colors.white,
+                )
+              : BorderSide.none,
+        ),
+      ),
       child: Row(
         children: [
           Expanded(

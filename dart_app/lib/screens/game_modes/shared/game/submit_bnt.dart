@@ -12,9 +12,11 @@ class SubmitBtn extends StatelessWidget {
   const SubmitBtn({
     Key? key,
     required this.mode,
+    required this.safeAreaPadding,
   }) : super(key: key);
 
   final GameMode mode;
+  final EdgeInsets safeAreaPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +43,12 @@ class SubmitBtn extends StatelessWidget {
                 ? GENERAL_BORDER_WIDTH.w
                 : 0,
           ),
+          right: safeAreaPadding.right > 0
+              ? BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                )
+              : BorderSide.none,
         ),
       ),
       child: ElevatedButton(

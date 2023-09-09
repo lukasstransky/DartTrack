@@ -40,21 +40,30 @@ class _GameSettingsCricketState extends State<GameSettingsCricket> {
       body: SafeArea(
         child: Column(
           children: [
-            SingleOrTeamBtnCricket(),
-            PlayersTeamsListCricket(),
-            Selector<GameSettingsCricket_P, SelectorModelAddPlayerBtn>(
-                selector: (_, gameSettingsCricket) => SelectorModelAddPlayerBtn(
-                      players: gameSettingsCricket.getPlayers,
-                      singleOrTeam: gameSettingsCricket.getSingleOrTeam,
-                      teams: gameSettingsCricket.getTeams,
-                    ),
-                builder: (_, selectorModel, __) =>
-                    _showAddPlayerTeamBtn(selectorModel)
-                        ? AddPlayerBtn(mode: GameMode.Cricket)
-                        : SizedBox.shrink()),
-            ModeCricket(),
-            BestOfOrFirstToCricket(),
-            SetsLegsCricket(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SingleOrTeamBtnCricket(),
+                    PlayersTeamsListCricket(),
+                    Selector<GameSettingsCricket_P, SelectorModelAddPlayerBtn>(
+                        selector: (_, gameSettingsCricket) =>
+                            SelectorModelAddPlayerBtn(
+                              players: gameSettingsCricket.getPlayers,
+                              singleOrTeam: gameSettingsCricket.getSingleOrTeam,
+                              teams: gameSettingsCricket.getTeams,
+                            ),
+                        builder: (_, selectorModel, __) =>
+                            _showAddPlayerTeamBtn(selectorModel)
+                                ? AddPlayerBtn(mode: GameMode.Cricket)
+                                : SizedBox.shrink()),
+                    ModeCricket(),
+                    BestOfOrFirstToCricket(),
+                    SetsLegsCricket(),
+                  ],
+                ),
+              ),
+            ),
             Selector<GameSettingsCricket_P, SelectorModelStartGameBtnCricket>(
               selector: (_, gameSettingsCricket) =>
                   SelectorModelStartGameBtnCricket(

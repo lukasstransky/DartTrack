@@ -5,7 +5,6 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -63,9 +62,8 @@ _showDialogForChangingTheme(BuildContext context) {
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding: ResponsiveBreakpoints.of(context).isMobile
-          ? DIALOG_CONTENT_PADDING_MOBILE
-          : null,
+      contentPadding:
+          Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
       title: Text(
         'Change theme',
         style: TextStyle(

@@ -26,7 +26,6 @@ class RevertBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 25.w,
         decoration: BoxDecoration(
           border: Border(
             top: BorderSide(
@@ -37,6 +36,12 @@ class RevertBtn extends StatelessWidget {
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
             ),
+            left: Utils.isLandscape(context)
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
           ),
         ),
         // selector for gameX01 in place because otherwise revert btn is still highlighted when reverting the last score

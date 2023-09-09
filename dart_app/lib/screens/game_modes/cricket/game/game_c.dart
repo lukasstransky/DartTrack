@@ -7,6 +7,7 @@ import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/l
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/fifteen_to_twenty.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/thrown_darts.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_game.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,48 +37,95 @@ class _GameCricketState extends State<GameCricket> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<GameCricket_P>().setSafeAreaPadding =
+        MediaQuery.of(context).padding;
+
     return WillPopScope(
-      onWillPop: () async => false, // ignore gestures
+      onWillPop: () async => false,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBarGame(mode: GameMode.Cricket),
-        body: Selector<GameCricket_P, bool>(
-          selector: (_, game) => game.getShowLoadingSpinner,
-          builder: (_, showLoadingSpinner, __) => showLoadingSpinner
-              ? Center(
+        body: SafeArea(
+          child: Selector<GameCricket_P, bool>(
+            selector: (_, game) => game.getShowLoadingSpinner,
+            builder: (_, showLoadingSpinner, __) {
+              if (showLoadingSpinner) {
+                return Center(
                   child: CircularProgressIndicator(
                     color: Colors.white,
                   ),
-                )
-              : Column(
-                  children: [
-                    GameFieldCricket(),
-                    ThrownDarts(mode: GameMode.Cricket),
-                    SubmitRevertnBtnsCricket(),
-                    Selector<GameCricket_P, SelectorModel>(
-                      selector: (_, gameCricket) => SelectorModel(
-                        currentThreeDarts: gameCricket.getCurrentThreeDarts,
-                        pointType: gameCricket.getCurrentPointType,
-                      ),
-                      builder: (_, currentPointType, __) =>
-                          FifteenToTwentyBtnsThreeDarts(mode: GameMode.Cricket),
-                    ),
-                    Selector<GameCricket_P, SelectorModel>(
-                      selector: (_, gameCricket) => SelectorModel(
-                        currentThreeDarts: gameCricket.getCurrentThreeDarts,
-                        pointType: gameCricket.getCurrentPointType,
-                      ),
-                      builder: (_, currentPointType, __) => Container(
-                        height: 7.h,
-                        child: SingleDoubleOrTrippleBtns(
-                          mode: GameMode.Cricket,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                );
+              } else {
+                return Utils.isLandscape(context)
+                    ? _buildLandscapeLayout()
+                    : _buildPortraitLayout();
+              }
+            },
+          ),
         ),
       ),
+    );
+  }
+
+  Column _buildPortraitLayout() {
+    return Column(
+      children: [
+        GameFieldCricket(),
+        ThrownDarts(mode: GameMode.Cricket),
+        SubmitRevertnBtnsCricket(),
+        Selector<GameCricket_P, SelectorModel>(
+          selector: (_, gameCricket) => SelectorModel(
+            currentThreeDarts: gameCricket.getCurrentThreeDarts,
+            pointType: gameCricket.getCurrentPointType,
+          ),
+          builder: (_, currentPointType, __) =>
+              FifteenToTwentyBtnsThreeDarts(mode: GameMode.Cricket),
+        ),
+        Selector<GameCricket_P, SelectorModel>(
+          selector: (_, gameCricket) => SelectorModel(
+            currentThreeDarts: gameCricket.getCurrentThreeDarts,
+            pointType: gameCricket.getCurrentPointType,
+          ),
+          builder: (_, currentPointType, __) => Container(
+            height: 7.h,
+            child: SingleDoubleOrTrippleBtns(
+              mode: GameMode.Cricket,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row _buildLandscapeLayout() {
+    return Row(
+      children: [
+        Expanded(child: GameFieldCricket()),
+        Expanded(
+          child: Column(
+            children: [
+              ThrownDarts(mode: GameMode.Cricket),
+              SubmitRevertnBtnsCricket(),
+              Selector<GameCricket_P, SelectorModel>(
+                selector: (_, gameCricket) => SelectorModel(
+                  currentThreeDarts: gameCricket.getCurrentThreeDarts,
+                  pointType: gameCricket.getCurrentPointType,
+                ),
+                builder: (_, currentPointType, __) =>
+                    FifteenToTwentyBtnsThreeDarts(mode: GameMode.Cricket),
+              ),
+              Selector<GameCricket_P, SelectorModel>(
+                selector: (_, gameCricket) => SelectorModel(
+                  currentThreeDarts: gameCricket.getCurrentThreeDarts,
+                  pointType: gameCricket.getCurrentPointType,
+                ),
+                builder: (_, currentPointType, __) =>
+                    SingleDoubleOrTrippleBtns(mode: GameMode.Cricket),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

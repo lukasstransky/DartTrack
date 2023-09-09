@@ -2,7 +2,6 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class LegsAmount extends StatelessWidget {
@@ -40,9 +39,7 @@ class LegsAmount extends StatelessWidget {
                   _subtractBtnPressed();
                 },
                 padding: EdgeInsets.zero,
-                constraints: ResponsiveBreakpoints.of(context).isMobile
-                    ? BoxConstraints()
-                    : null,
+                constraints: Utils.isMobile(context) ? BoxConstraints() : null,
                 icon: Icon(
                   size: ICON_BUTTON_SIZE.h,
                   Icons.remove,
@@ -70,9 +67,7 @@ class LegsAmount extends StatelessWidget {
                   _addBtnPressed();
                 },
                 padding: EdgeInsets.zero,
-                constraints: ResponsiveBreakpoints.of(context).isMobile
-                    ? BoxConstraints()
-                    : null,
+                constraints: Utils.isMobile(context) ? BoxConstraints() : null,
                 icon: Icon(
                   size: ICON_BUTTON_SIZE.h,
                   Icons.add,

@@ -14,7 +14,6 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
     return Container(
       height: 13.h,
       padding: EdgeInsets.only(top: 2.h),
-      margin: EdgeInsets.only(bottom: 5.h),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
@@ -47,7 +46,7 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
     final gameSettingsX01 = context.read<GameSettingsX01_P>();
 
     return Container(
-      height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
+      height: WIDGET_HEIGHT_GAMESETTINGS.h,
       padding: EdgeInsets.only(left: 1.5.w),
       child: Row(
         children: [
@@ -88,12 +87,12 @@ class DisableCheckoutCountingX01 extends StatelessWidget {
           ),
           FittedBox(
             fit: BoxFit.scaleDown,
-            child: Padding(
+            child: Container(
               padding: EdgeInsets.only(left: 2.w),
               child: Text(
                 "(Can't be re-enabled for this game)",
                 style: new TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  fontSize: 10.sp,
                   color: Colors.white,
                 ),
               ),

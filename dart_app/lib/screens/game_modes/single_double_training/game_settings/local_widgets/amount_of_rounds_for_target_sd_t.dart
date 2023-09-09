@@ -6,7 +6,6 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class AmountOfRoundsForTargetNumberSingleDoubleTraining extends StatefulWidget {
@@ -41,9 +40,8 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
             borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
-          contentPadding: ResponsiveBreakpoints.of(context).isMobile
-              ? DIALOG_CONTENT_PADDING_MOBILE
-              : null,
+          contentPadding:
+              Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
           title: Text(
             'Enter rounds',
             style: TextStyle(

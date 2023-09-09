@@ -112,9 +112,6 @@ const String FOURTH_DEFAULT_MOST_SCORED_POINT = '7';
 const String FIFTH_DEFAULT_MOST_SCORED_POINT = '59';
 const String SIXTH_DEFAULT_MOST_SCORED_POINT = '100';
 
-//In Game Settings
-const int HEIGHT_IN_GAME_SETTINGS_WIDGETS = 4;
-
 enum InputMethod { Round, ThreeDarts }
 
 //Statistics
@@ -449,6 +446,7 @@ const bool DEFAULT_SETS_ENABLED_CRICKET = false;
 // general
 const int GENERAL_DARKEN = 35;
 const double GENERAL_BORDER_WIDTH = 1;
+const double SMALL_BORDER_WIDTH = 0.3;
 const double PADDING_BOTTOM = 2;
 const double DIALOG_SHAPE_ROUNDING = 15;
 const double DIALOG_BTN_SHAPE_ROUNDING = 10;
@@ -503,7 +501,7 @@ const double DIALOG_ERROR_MSG_FONTSIZE = 9;
 const double ACTION_BTNS_SPACING = 1.5;
 
 const double GAMESETTINGS_START_GAME_BTN_WIDTH = 50;
-const double GAMESETTINGS_START_GAME_BTN_HEIGHT = 4;
+const double GAMESETTINGS_START_GAME_BTN_HEIGHT = 5;
 
 // mobile
 const double SWTICH_SCALE_FACTOR_MOBILE = 1;

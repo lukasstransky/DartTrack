@@ -19,7 +19,7 @@ class HideShowLastThrowX01 extends StatelessWidget {
     );
 
     return Container(
-      height: HEIGHT_IN_GAME_SETTINGS_WIDGETS.h,
+      height: WIDGET_HEIGHT_GAMESETTINGS.h,
       padding: EdgeInsets.only(left: 2.5.w),
       child: Row(
         children: [

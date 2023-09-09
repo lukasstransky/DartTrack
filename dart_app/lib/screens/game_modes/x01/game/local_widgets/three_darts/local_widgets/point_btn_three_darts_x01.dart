@@ -14,11 +14,69 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class PointBtnThreeDartX01 extends StatelessWidget {
-  const PointBtnThreeDartX01({Key? key, this.point, this.activeBtn})
-      : super(key: key);
+  const PointBtnThreeDartX01({
+    Key? key,
+    this.point,
+    this.activeBtn,
+  }) : super(key: key);
 
   final String? point;
   final bool? activeBtn;
+
+  @override
+  Widget build(BuildContext context) {
+    final GameX01_P gameX01 = context.read<GameX01_P>();
+    final String pointBtnText = Utils.appendTrippleOrDouble(
+        gameX01.getCurrentPointType, point as String);
+
+    return Container(
+      decoration: BoxDecoration(
+        border: Utils.getBorder(
+          context,
+          point as String,
+          GameMode.X01,
+          gameX01.getSafeAreaPadding,
+          context.read<GameSettingsX01_P>().getAutomaticallySubmitPoints,
+        ),
+      ),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero,
+            ),
+          ),
+          backgroundColor: activeBtn as bool &&
+                  gameX01.getAmountOfDartsThrown() != 3
+              ? MaterialStateProperty.all(Theme.of(context).colorScheme.primary)
+              : MaterialStateProperty.all(
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25)),
+          overlayColor: activeBtn as bool &&
+                  gameX01.getCanBePressed &&
+                  gameX01.getAmountOfDartsThrown() != 3
+              ? Utils.getColorOrPressed(
+                  Theme.of(context).colorScheme.primary,
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                )
+              : MaterialStateProperty.all(Colors.transparent),
+        ),
+        child: FittedBox(
+          child: Text(
+            pointBtnText,
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+              color: Utils.getTextColorDarken(context),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        onPressed: () {
+          Utils.handleVibrationFeedback(context);
+          _pointBtnClicked(pointBtnText, context);
+        },
+      ),
+    );
+  }
 
   _pointBtnClicked(String pointBtnText, BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
@@ -162,59 +220,5 @@ class PointBtnThreeDartX01 extends StatelessWidget {
     }
 
     return false;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final GameX01_P gameX01 = context.read<GameX01_P>();
-    final String pointBtnText = Utils.appendTrippleOrDouble(
-        gameX01.getCurrentPointType, point as String);
-
-    return Container(
-      decoration: BoxDecoration(
-        border: Utils.getBorder(
-          context,
-          point as String,
-          GameMode.X01,
-          context.read<GameSettingsX01_P>().getAutomaticallySubmitPoints,
-        ),
-      ),
-      child: ElevatedButton(
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-            ),
-          ),
-          backgroundColor: activeBtn as bool &&
-                  gameX01.getAmountOfDartsThrown() != 3
-              ? MaterialStateProperty.all(Theme.of(context).colorScheme.primary)
-              : MaterialStateProperty.all(
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25)),
-          overlayColor: activeBtn as bool &&
-                  gameX01.getCanBePressed &&
-                  gameX01.getAmountOfDartsThrown() != 3
-              ? Utils.getColorOrPressed(
-                  Theme.of(context).colorScheme.primary,
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
-                )
-              : MaterialStateProperty.all(Colors.transparent),
-        ),
-        child: FittedBox(
-          child: Text(
-            pointBtnText,
-            style: TextStyle(
-              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-              color: Utils.getTextColorDarken(context),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        onPressed: () {
-          Utils.handleVibrationFeedback(context);
-          _pointBtnClicked(pointBtnText, context);
-        },
-      ),
-    );
   }
 }

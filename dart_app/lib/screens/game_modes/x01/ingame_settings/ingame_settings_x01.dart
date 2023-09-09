@@ -30,24 +30,26 @@ class InGameSettingsX01 extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Center(
-                child: Container(
-                  width: 95.w,
-                  child: Column(
-                    children: [
-                      HideShowX01(),
-                      InputMethodSettingsX01(),
-                      Selector<GameSettingsX01_P, bool>(
-                        selector: (_, gameSettingsX01) =>
-                            gameSettingsX01.getCheckoutCountingFinallyDisabled,
-                        builder: (_, __, ___) =>
-                            _showDisableCheckoutCounting(context)
-                                ? DisableCheckoutCountingX01()
-                                : SizedBox.shrink(),
-                      ),
-                    ],
+            child: SafeArea(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Center(
+                  child: Container(
+                    width: 95.w,
+                    child: Column(
+                      children: [
+                        HideShowX01(),
+                        InputMethodSettingsX01(),
+                        Selector<GameSettingsX01_P, bool>(
+                          selector: (_, gameSettingsX01) => gameSettingsX01
+                              .getCheckoutCountingFinallyDisabled,
+                          builder: (_, __, ___) =>
+                              _showDisableCheckoutCounting(context)
+                                  ? DisableCheckoutCountingX01()
+                                  : SizedBox.shrink(),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

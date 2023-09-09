@@ -33,8 +33,8 @@ class HideShowX01 extends StatelessWidget {
       height: showOtherOptions ? 23.5.h : 11.h,
       padding: EdgeInsets.only(
         top: 1.0.h,
-        left: 0.5.h,
-        right: 0.5.h,
+        left: 0.5.w,
+        right: 0.5.w,
       ),
       child: Card(
         shape: RoundedRectangleBorder(

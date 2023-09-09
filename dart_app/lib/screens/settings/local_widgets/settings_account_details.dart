@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -114,9 +113,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: ResponsiveBreakpoints.of(context).isMobile
-            ? DIALOG_CONTENT_PADDING_MOBILE
-            : null,
+        contentPadding:
+            Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
         title: Text(
           'Change username',
           style: TextStyle(
@@ -324,9 +322,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: ResponsiveBreakpoints.of(context).isMobile
-            ? DIALOG_CONTENT_PADDING_MOBILE
-            : null,
+        contentPadding:
+            Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
         title: Text(
           'Change email',
           style: TextStyle(
@@ -566,9 +563,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: ResponsiveBreakpoints.of(context).isMobile
-            ? DIALOG_CONTENT_PADDING_MOBILE
-            : null,
+        contentPadding:
+            Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
         title: Text(
           'Change password',
           style: TextStyle(

@@ -36,6 +36,14 @@ class _MulitplePlayerStatsSingleDoubleTrainingState
         children: [
           Container(
             padding: EdgeInsets.only(bottom: 0.5.h),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: SMALL_BORDER_WIDTH.w,
+                  color: Colors.white,
+                ),
+              ),
+            ),
             child: Row(
               children: [
                 Expanded(
@@ -62,11 +70,6 @@ class _MulitplePlayerStatsSingleDoubleTrainingState
               ],
             ),
           ),
-          Divider(
-            height: 0.1.h,
-            thickness: 0.1.h,
-            color: Colors.white,
-          ),
           Selector<GameSingleDoubleTraining_P, List<PlayerOrTeamGameStats>>(
             selector: (_, gameScoreTraining_P) =>
                 gameScoreTraining_P.getPlayerGameStatistics,
@@ -84,11 +87,6 @@ class _MulitplePlayerStatsSingleDoubleTrainingState
                       playerStats: playerStats[index]
                           as PlayerGameStatsSingleDoubleTraining,
                       isSingleMode: _isSingleMode,
-                    ),
-                    Divider(
-                      height: 0.1.h,
-                      thickness: 0.1.h,
-                      color: Colors.white,
                     ),
                   ],
                 );
@@ -169,10 +167,26 @@ class PlayerEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GameSingleDoubleTraining_P game =
+        context.read<GameSingleDoubleTraining_P>();
+
     return Container(
-      color: Utils.getBackgroundColorForPlayer(
-          context, context.read<GameSingleDoubleTraining_P>(), playerStats),
       height: 5.h,
+      decoration: BoxDecoration(
+        color: Utils.getBackgroundColorForPlayer(context, game, playerStats),
+        border: Border(
+          bottom: BorderSide(
+            width: SMALL_BORDER_WIDTH.w,
+            color: Colors.white,
+          ),
+          left: game.getSafeAreaPadding.left > 0
+              ? BorderSide(
+                  width: SMALL_BORDER_WIDTH.w,
+                  color: Colors.white,
+                )
+              : BorderSide.none,
+        ),
+      ),
       child: Row(
         children: [
           Expanded(

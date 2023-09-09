@@ -15,6 +15,91 @@ class RoundBtn extends StatelessWidget {
 
   final GameMode mode;
 
+  @override
+  Widget build(BuildContext context) {
+    final double _fontSize = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+    );
+
+    bool isRoundSelected = false;
+    if (mode == GameMode.X01) {
+      isRoundSelected =
+          context.read<GameSettingsX01_P>().getInputMethod == InputMethod.Round
+              ? true
+              : false;
+    } else if (mode == GameMode.ScoreTraining) {
+      isRoundSelected =
+          context.read<GameSettingsScoreTraining_P>().getInputMethod ==
+                  InputMethod.Round
+              ? true
+              : false;
+    }
+
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            top: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: GENERAL_BORDER_WIDTH.w,
+            ),
+            right: BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: GENERAL_BORDER_WIDTH.w,
+            ),
+            left: Utils.isLandscape(context)
+                ? BorderSide(
+                    color: Utils.getPrimaryColorDarken(context),
+                    width: GENERAL_BORDER_WIDTH.w,
+                  )
+                : BorderSide.none,
+          ),
+        ),
+        child: ElevatedButton(
+          child: Text(
+            'Round',
+            style: TextStyle(
+              fontSize: _fontSize.sp,
+              color: isRoundSelected
+                  ? Theme.of(context).colorScheme.secondary
+                  : Utils.getTextColorDarken(context),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            _roundBtnClicked(context, mode);
+          },
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.zero,
+                ),
+              ),
+            ),
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            backgroundColor: isRoundSelected
+                ? MaterialStateProperty.all(
+                    Utils.darken(Theme.of(context).colorScheme.primary, 25))
+                : MaterialStateProperty.all(
+                    Theme.of(context).colorScheme.primary),
+            overlayColor:
+                isRoundSelected || _getAmountOfThrownDarts(context) != 0
+                    ? MaterialStateProperty.all(Colors.transparent)
+                    : Utils.getColorOrPressed(
+                        Theme.of(context).colorScheme.primary,
+                        Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                      ),
+          ),
+        ),
+      ),
+    );
+  }
+
   _roundBtnClicked(BuildContext context, GameMode mode) {
     if (mode == GameMode.X01) {
       if (_getAmountOfThrownDarts(context) != 0) {
@@ -55,82 +140,5 @@ class RoundBtn extends StatelessWidget {
       return context.read<GameScoreTraining_P>().getAmountOfDartsThrown();
     }
     return 0;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final double _fontSize = Utils.getResponsiveValue(
-      context: context,
-      mobileValue: 14,
-      tabletValue: 12,
-    );
-
-    bool isRoundSelected = false;
-    if (mode == GameMode.X01) {
-      isRoundSelected =
-          context.read<GameSettingsX01_P>().getInputMethod == InputMethod.Round
-              ? true
-              : false;
-    } else if (mode == GameMode.ScoreTraining) {
-      isRoundSelected =
-          context.read<GameSettingsScoreTraining_P>().getInputMethod ==
-                  InputMethod.Round
-              ? true
-              : false;
-    }
-
-    return Container(
-      width: 50.w - 0.125.w,
-      decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Utils.getPrimaryColorDarken(context),
-            width: GENERAL_BORDER_WIDTH.w,
-          ),
-          right: BorderSide(
-            color: Utils.getPrimaryColorDarken(context),
-            width: GENERAL_BORDER_WIDTH.w,
-          ),
-        ),
-      ),
-      child: ElevatedButton(
-        child: Text(
-          'Round',
-          style: TextStyle(
-            fontSize: _fontSize.sp,
-            color: isRoundSelected
-                ? Theme.of(context).colorScheme.secondary
-                : Utils.getTextColorDarken(context),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        onPressed: () {
-          Utils.handleVibrationFeedback(context);
-          _roundBtnClicked(context, mode);
-        },
-        style: ButtonStyle(
-          shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.zero,
-              ),
-            ),
-          ),
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          backgroundColor: isRoundSelected
-              ? MaterialStateProperty.all(
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25))
-              : MaterialStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
-          overlayColor: isRoundSelected || _getAmountOfThrownDarts(context) != 0
-              ? MaterialStateProperty.all(Colors.transparent)
-              : Utils.getColorOrPressed(
-                  Theme.of(context).colorScheme.primary,
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
-                ),
-        ),
-      ),
-    );
   }
 }

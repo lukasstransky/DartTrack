@@ -11,7 +11,6 @@ import 'package:dart_app/utils/utils_dialogs.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
@@ -58,7 +57,7 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Column _getTitleColumn(BuildContext context, dynamic settings) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+    if (Utils.isMobile(context)) {
       return Column(
         children: [
           Text(

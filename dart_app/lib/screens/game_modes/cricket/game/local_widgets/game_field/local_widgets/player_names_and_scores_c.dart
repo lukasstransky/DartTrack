@@ -6,7 +6,6 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class PlayerOrTeamNamesAndScores extends StatelessWidget {
@@ -140,21 +139,21 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
 
 double _getHeight(bool isNoScoreMode, bool isSingleMode, BuildContext context) {
   if (isNoScoreMode && isSingleMode) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+    if (Utils.isMobile(context)) {
       return 5.h;
     } else {
       // tablet
       return 7.h;
     }
   } else if (isNoScoreMode && !isSingleMode) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+    if (Utils.isMobile(context)) {
       return 7.h;
     } else {
       // tablet
       return 9.h;
     }
   } else if (isSingleMode) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+    if (Utils.isMobile(context)) {
       return 8.h;
     } else {
       // tablet
@@ -163,7 +162,7 @@ double _getHeight(bool isNoScoreMode, bool isSingleMode, BuildContext context) {
   }
 
   // team mode
-  if (ResponsiveBreakpoints.of(context).isMobile) {
+  if (Utils.isMobile(context)) {
     return 10.h;
   } else {
     // tablet

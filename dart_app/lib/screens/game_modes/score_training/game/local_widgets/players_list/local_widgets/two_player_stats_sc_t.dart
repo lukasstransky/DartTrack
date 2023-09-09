@@ -14,40 +14,62 @@ class TwoPlayerStatsScoreTraining extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameScoreTraining_P game = context.read<GameScoreTraining_P>();
-    final double WIDTH = 50;
 
     return Row(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: 1.w,
-              ),
-              right: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH.w,
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: 1.w,
+                ),
+                right: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                ),
+                left: game.getSafeAreaPadding.left > 0 &&
+                        Utils.isLandscape(context)
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
+                bottom: game.getSafeAreaPadding.bottom > 0 &&
+                        Utils.isLandscape(context)
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
               ),
             ),
-          ),
-          width: WIDTH.w,
-          child: PlayerEntry(
-            playerStats: game.getPlayerGameStatistics[0],
+            child: PlayerEntry(
+              playerStats: game.getPlayerGameStatistics[0],
+            ),
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            border: Border(
-              top: BorderSide(
-                color: Utils.getPrimaryColorDarken(context),
-                width: GENERAL_BORDER_WIDTH.w,
+        Expanded(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: Utils.getPrimaryColorDarken(context),
+                  width: GENERAL_BORDER_WIDTH.w,
+                ),
+                bottom: game.getSafeAreaPadding.bottom > 0 &&
+                        Utils.isLandscape(context)
+                    ? BorderSide(
+                        color: Utils.getPrimaryColorDarken(context),
+                        width: GENERAL_BORDER_WIDTH.w,
+                      )
+                    : BorderSide.none,
               ),
             ),
-          ),
-          width: WIDTH.w,
-          child: PlayerEntry(
-            playerStats: game.getPlayerGameStatistics[1],
+            child: PlayerEntry(
+              playerStats: game.getPlayerGameStatistics[1],
+            ),
           ),
         ),
       ],

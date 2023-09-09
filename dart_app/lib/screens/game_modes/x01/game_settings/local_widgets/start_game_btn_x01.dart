@@ -18,75 +18,72 @@ class StartGameBtnX01 extends StatelessWidget {
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
 
-    return Expanded(
-      child: Align(
-        alignment: Alignment.bottomCenter,
-        child: Container(
-          width: GAMESETTINGS_START_GAME_BTN_WIDTH.w,
-          height: GAMESETTINGS_START_GAME_BTN_HEIGHT.h,
-          child: Selector<GameSettingsX01_P, SelectorModel>(
-            selector: (_, gameSettingsX01) => SelectorModel(
-              players: gameSettingsX01.getPlayers,
-              singleOrTeam: gameSettingsX01.getSingleOrTeam,
-              teams: gameSettingsX01.getTeams,
-            ),
-            builder: (_, selectorModel, __) => TextButton(
-              child: Text(
-                'Start',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                ),
+    return Container(
+      width: GAMESETTINGS_START_GAME_BTN_WIDTH.w,
+      height: GAMESETTINGS_START_GAME_BTN_HEIGHT.h,
+      child: Selector<GameSettingsX01_P, SelectorModel>(
+        selector: (_, gameSettingsX01) => SelectorModel(
+          players: gameSettingsX01.getPlayers,
+          singleOrTeam: gameSettingsX01.getSingleOrTeam,
+          teams: gameSettingsX01.getTeams,
+        ),
+        builder: (_, selectorModel, __) => TextButton(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Start',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                shape: MaterialStateProperty.all(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(BUTTON_BORDER_RADIUS),
-                    ),
-                  ),
-                ),
-                backgroundColor: _activateStartGameBtn(selectorModel)
-                    ? Utils.getPrimaryMaterialStateColorDarken(context)
-                    : Utils.getColor(Utils.darken(
-                        Theme.of(context).colorScheme.primary, 60)),
-              ),
-              onPressed: () {
-                Utils.handleVibrationFeedback(context);
-                if (_activateStartGameBtn(selectorModel)) {
-                  if (!gameSettingsX01.isCurrentUserInPlayers(context) &&
-                      currentUsername != 'Guest') {
-                    UtilsDialogs.showDialogNoUserInPlayerWarning(
-                        context, gameSettingsX01, GameMode.X01);
-                  } else {
-                    UtilsDialogs.showDialogForBeginner(
-                        context, gameSettingsX01, GameMode.X01);
-                  }
-                } else {
-                  String msg = '';
-                  if (gameSettingsX01.getSingleOrTeam ==
-                      SingleOrTeamEnum.Team) {
-                    if (_emptyTeamPresent(gameSettingsX01)) {
-                      msg = 'Empty teams are not allowed!';
-                    } else {
-                      msg = 'At least two teams are required!';
-                    }
-                  } else {
-                    msg = 'At least two players are required!';
-                  }
-
-                  Fluttertoast.showToast(
-                    msg: msg,
-                    toastLength: Toast.LENGTH_LONG,
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  );
-                }
-              },
             ),
           ),
+          style: ButtonStyle(
+            splashFactory: NoSplash.splashFactory,
+            shadowColor: MaterialStateProperty.all(Colors.transparent),
+            overlayColor: MaterialStateProperty.all(Colors.transparent),
+            shape: MaterialStateProperty.all(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(BUTTON_BORDER_RADIUS),
+                ),
+              ),
+            ),
+            backgroundColor: _activateStartGameBtn(selectorModel)
+                ? Utils.getPrimaryMaterialStateColorDarken(context)
+                : Utils.getColor(
+                    Utils.darken(Theme.of(context).colorScheme.primary, 60)),
+          ),
+          onPressed: () {
+            Utils.handleVibrationFeedback(context);
+            if (_activateStartGameBtn(selectorModel)) {
+              if (!gameSettingsX01.isCurrentUserInPlayers(context) &&
+                  currentUsername != 'Guest') {
+                UtilsDialogs.showDialogNoUserInPlayerWarning(
+                    context, gameSettingsX01, GameMode.X01);
+              } else {
+                UtilsDialogs.showDialogForBeginner(
+                    context, gameSettingsX01, GameMode.X01);
+              }
+            } else {
+              String msg = '';
+              if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
+                if (_emptyTeamPresent(gameSettingsX01)) {
+                  msg = 'Empty teams are not allowed!';
+                } else {
+                  msg = 'At least two teams are required!';
+                }
+              } else {
+                msg = 'At least two players are required!';
+              }
+
+              Fluttertoast.showToast(
+                msg: msg,
+                toastLength: Toast.LENGTH_LONG,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              );
+            }
+          },
         ),
       ),
     );

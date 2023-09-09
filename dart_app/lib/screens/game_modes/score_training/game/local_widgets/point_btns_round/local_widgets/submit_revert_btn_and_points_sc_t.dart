@@ -12,6 +12,12 @@ class SubmitRevertBtnAndPointsScoreTraining extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final double _widthBtns = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 25,
+      tabletValue: Utils.isLandscape(context) ? 20 : 25,
+    );
+
     return Container(
       height: 6.h,
       child: Row(
@@ -20,12 +26,22 @@ class SubmitRevertBtnAndPointsScoreTraining extends StatelessWidget {
           Selector<GameScoreTraining_P, bool>(
             selector: (_, gameScoreTraining_P) =>
                 gameScoreTraining_P.getRevertPossible,
-            builder: (_, revertPossible, __) => RevertBtn(
-              game_p: context.read<GameScoreTraining_P>(),
+            builder: (_, revertPossible, __) => Container(
+              width: _widthBtns.w,
+              child: RevertBtn(
+                game_p: context.read<GameScoreTraining_P>(),
+              ),
             ),
           ),
           CurrentPointsScoreTraining(),
-          SubmitBtn(mode: GameMode.ScoreTraining),
+          Container(
+            width: _widthBtns.w,
+            child: SubmitBtn(
+              mode: GameMode.ScoreTraining,
+              safeAreaPadding:
+                  context.read<GameScoreTraining_P>().getSafeAreaPadding,
+            ),
+          ),
         ],
       ),
     );
@@ -43,8 +59,7 @@ class CurrentPointsScoreTraining extends StatelessWidget {
       tabletValue: 18,
     );
 
-    return Container(
-      width: 50.w,
+    return Expanded(
       child: Container(
         decoration: BoxDecoration(
           border: Border(

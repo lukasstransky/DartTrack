@@ -1,7 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -15,9 +14,8 @@ class AppBarDialogHelper {
           borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding: ResponsiveBreakpoints.of(context).isMobile
-            ? DIALOG_CONTENT_PADDING_MOBILE
-            : null,
+        contentPadding:
+            Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
         title: Text(
           title,
           style: TextStyle(
@@ -90,9 +88,8 @@ class _CricketDialogState extends State<CricketDialog> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
       ),
-      contentPadding: ResponsiveBreakpoints.of(context).isMobile
-          ? DIALOG_CONTENT_PADDING_MOBILE
-          : null,
+      contentPadding:
+          Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
       backgroundColor: Theme.of(context).colorScheme.primary,
       title: Text(
         'Cricket explained',

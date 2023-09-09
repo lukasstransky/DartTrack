@@ -86,33 +86,41 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
       body: SafeArea(
         child: Column(
           children: [
-            SingleOrTeamX01(),
-            PlayersTeamsListX01(),
-            Selector<GameSettingsX01_P, SelectorModel>(
-              selector: (_, game) => SelectorModel(
-                players: game.getPlayers,
-                teams: game.getTeams,
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    SingleOrTeamX01(),
+                    PlayersTeamsListX01(),
+                    Selector<GameSettingsX01_P, SelectorModel>(
+                      selector: (_, game) => SelectorModel(
+                        players: game.getPlayers,
+                        teams: game.getTeams,
+                      ),
+                      shouldRebuild: (previous, next) => previous != next,
+                      builder: (_, selectorModel, __) => _showAddButton(
+                              selectorModel.players, selectorModel.teams)
+                          ? const AddPlayerBtn(mode: GameMode.X01)
+                          : SizedBox.shrink(),
+                    ),
+                    Column(
+                      children: [
+                        ModeInX01(),
+                        ModeOutX01(),
+                        BestOfOrFirstToX01(),
+                        SetsLegsX01(),
+                        PointsRowX01(),
+                        WinByTwoLegsDifferenceX01(),
+                        CheckoutCountingX01(),
+                        DrawModeX01(),
+                        AdvancedSettingsX01(),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              shouldRebuild: (previous, next) => previous != next,
-              builder: (_, selectorModel, __) =>
-                  _showAddButton(selectorModel.players, selectorModel.teams)
-                      ? const AddPlayerBtn(mode: GameMode.X01)
-                      : SizedBox.shrink(),
             ),
-            Column(
-              children: [
-                ModeInX01(),
-                ModeOutX01(),
-                BestOfOrFirstToX01(),
-                SetsLegsX01(),
-                PointsRowX01(),
-                WinByTwoLegsDifferenceX01(),
-                CheckoutCountingX01(),
-                DrawModeX01(),
-                const AdvancedSettingsX01(),
-              ],
-            ),
-            StartGameBtnX01()
+            StartGameBtnX01(),
           ],
         ),
       ),

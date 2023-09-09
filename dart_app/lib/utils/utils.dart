@@ -10,6 +10,7 @@ import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -21,7 +22,6 @@ import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
 
 class Utils {
@@ -470,31 +470,45 @@ class Utils {
   }
 
   static getBorder(BuildContext context, String value, GameMode mode,
+      EdgeInsets safeAreaPadding,
       [bool autoSubmitPoints = false]) {
+    final bool isLandscape = Utils.isLandscape(context);
     return Border(
-      right: [
-        autoSubmitPoints ? '' : '0',
-        '1',
-        '2',
-        '3',
-        '4',
-        '6',
-        '7',
-        '8',
-        '9',
-        '11',
-        '12',
-        '13',
-        '14',
-        mode == GameMode.Cricket ? '15' : '',
-        '16',
-        '17',
-        '18',
-        '19',
-        '25',
-        mode == GameMode.Cricket ? '' : 'Bull',
-        'Bust',
-      ].contains(value)
+      left: (isLandscape &&
+                  ['1', '6', '11', '16'].contains(value) &&
+                  mode != GameMode.Cricket) ||
+              (mode == GameMode.Cricket && isLandscape && value == '15')
+          ? BorderSide(
+              color: Utils.getPrimaryColorDarken(context),
+              width: GENERAL_BORDER_WIDTH.w,
+            )
+          : BorderSide.none,
+      right: ([
+                autoSubmitPoints ? '' : '0',
+                '1',
+                '2',
+                '3',
+                '4',
+                '6',
+                '7',
+                '8',
+                '9',
+                '11',
+                '12',
+                '13',
+                '14',
+                mode == GameMode.Cricket ? '15' : '',
+                '16',
+                '17',
+                '18',
+                '19',
+                '25',
+                mode == GameMode.Cricket ? '' : 'Bull',
+                'Bust',
+              ].contains(value)) ||
+              (['5', '10', '15', '20'].contains(value) &&
+                  Utils.isLandscape(context) &&
+                  safeAreaPadding.right > 0)
           ? BorderSide(
               color: Utils.getPrimaryColorDarken(context),
               width: GENERAL_BORDER_WIDTH.w,
@@ -616,6 +630,36 @@ class Utils {
     } else if (mode == GameMode.Cricket) {
       return context.read<StatsFirestoreCricket_P>();
     }
+  }
+
+  static dynamic getGameProviderBasedOnMode(
+      GameMode mode, BuildContext context) {
+    if (mode == GameMode.X01) {
+      return context.read<GameX01_P>();
+    } else if (mode == GameMode.SingleTraining ||
+        mode == GameMode.DoubleTraining) {
+      return context.read<GameSingleDoubleTraining_P>();
+    } else if (mode == GameMode.ScoreTraining) {
+      return context.read<GameScoreTraining_P>();
+    } else if (mode == GameMode.Cricket) {
+      return context.read<GameCricket_P>();
+    }
+  }
+
+  static EdgeInsets getSafeAreaBasedOnMode(
+      GameMode mode, BuildContext context) {
+    if (mode == GameMode.X01) {
+      return context.read<GameX01_P>().getSafeAreaPadding;
+    } else if (mode == GameMode.SingleTraining ||
+        mode == GameMode.DoubleTraining) {
+      return context.read<GameSingleDoubleTraining_P>().getSafeAreaPadding;
+    } else if (mode == GameMode.ScoreTraining) {
+      return context.read<GameScoreTraining_P>().getSafeAreaPadding;
+    } else if (mode == GameMode.Cricket) {
+      return context.read<GameCricket_P>().getSafeAreaPadding;
+    }
+
+    return EdgeInsets.zero;
   }
 
   static getBackgroundColorForPlayer(
@@ -881,12 +925,17 @@ class Utils {
     }
   }
 
+  static bool isMobile(BuildContext context) {
+    final double shortestSide = MediaQuery.of(context).size.shortestSide;
+    return shortestSide < 600;
+  }
+
   static double getResponsiveValue({
     required BuildContext context,
     required double mobileValue,
     required double tabletValue,
   }) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+    if (Utils.isMobile(context)) {
       return mobileValue;
     } else {
       return tabletValue;
@@ -894,11 +943,15 @@ class Utils {
   }
 
   static double getSwitchScaleFactor(BuildContext context) {
-    if (ResponsiveBreakpoints.of(context).isMobile) {
+    if (Utils.isMobile(context)) {
       return SWTICH_SCALE_FACTOR_MOBILE;
     }
 
     // tablet
     return SWTICH_SCALE_FACTOR_TABLET;
+  }
+
+  static bool isLandscape(BuildContext context) {
+    return MediaQuery.of(context).orientation == Orientation.landscape;
   }
 }

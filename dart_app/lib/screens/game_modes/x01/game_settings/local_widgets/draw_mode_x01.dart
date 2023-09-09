@@ -32,51 +32,43 @@ class DrawModeX01 extends StatelessWidget {
         return Container(
           width: WIDTH_GAMESETTINGS.w,
           padding: EdgeInsets.only(top: paddingTop.h),
-          child: Column(
+          child: Row(
             children: [
-              Row(
-                children: [
-                  Text(
-                    'Draw mode',
-                    style: TextStyle(
-                      color: disableSwitch ? Colors.white70 : Colors.white,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    ),
-                  ),
-                  SizedBox(
-                    width: textSwitchSpace.w,
-                  ),
-                  Transform.scale(
-                    scale: scaleFactorSwitch,
-                    child: Switch(
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      thumbColor: disableSwitch
-                          ? MaterialStateProperty.all(Colors.grey)
-                          : MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.secondary),
-                      value: selectorModel.drawMode,
-                      onChanged: (value) {
-                        if (disableSwitch) {
-                          Fluttertoast.showToast(
-                            msg:
-                                'Not possible with win by two legs difference!',
-                            toastLength: Toast.LENGTH_LONG,
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize!,
-                          );
-                          return;
-                        }
+              Text(
+                'Draw mode',
+                style: TextStyle(
+                  color: disableSwitch ? Colors.white70 : Colors.white,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                ),
+              ),
+              SizedBox(
+                width: textSwitchSpace.w,
+              ),
+              Transform.scale(
+                scale: scaleFactorSwitch,
+                child: Switch(
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  thumbColor: disableSwitch
+                      ? MaterialStateProperty.all(Colors.grey)
+                      : MaterialStateProperty.all(
+                          Theme.of(context).colorScheme.secondary),
+                  value: selectorModel.drawMode,
+                  onChanged: (value) {
+                    if (disableSwitch) {
+                      Fluttertoast.showToast(
+                        msg: 'Not possible with win by two legs difference!',
+                        toastLength: Toast.LENGTH_LONG,
+                        fontSize:
+                            Theme.of(context).textTheme.bodyMedium!.fontSize!,
+                      );
+                      return;
+                    }
 
-                        Utils.handleVibrationFeedback(context);
-                        _drawModeSwitchPressed(
-                            context.read<GameSettingsX01_P>(), value);
-                      },
-                    ),
-                  ),
-                ],
+                    Utils.handleVibrationFeedback(context);
+                    _drawModeSwitchPressed(
+                        context.read<GameSettingsX01_P>(), value);
+                  },
+                ),
               ),
             ],
           ),

@@ -58,56 +58,58 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
               gameId: _game!.getGameId,
             )
           : CustomAppBar(title: 'Statistics'),
-      body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            Text(
-              _getHeader(context.read<GameSettingsCricket_P>()),
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-                color: Colors.white,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              padding: EdgeInsets.only(
-                top: 0.5.h,
-                bottom: 1.h,
-              ),
-              child: Text(
-                _game!.getFormattedDateTime(),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Column(
+            children: [
+              Text(
+                _getHeader(context.read<GameSettingsCricket_P>()),
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  fontWeight: FontWeight.bold,
-                  color: Utils.getTextColorDarken(context),
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                  color: Colors.white,
                 ),
               ),
-            ),
-            Container(
-              alignment: Alignment.centerLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Selector<GameCricket_P, bool>(
-                  selector: (_, game) => game.getAreTeamStatsDisplayed,
-                  builder: (_, areTeamStatsDisplayed, __) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          ShowTeamsOrPlayersStatsBtn(game: _game!),
-                          PlayerOrTeamNames(game: _game!),
-                        ],
-                      ),
-                      MainStatsCricket(game: _game!),
-                      if (_game!.getGameSettings.getMode != CricketMode.NoScore)
-                        PointsPerNumberCricket(game: _game!),
-                    ],
+              Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.only(
+                  top: 0.5.h,
+                  bottom: 1.h,
+                ),
+                child: Text(
+                  _game!.getFormattedDateTime(),
+                  style: TextStyle(
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    fontWeight: FontWeight.bold,
+                    color: Utils.getTextColorDarken(context),
                   ),
                 ),
               ),
-            ),
-          ],
+              SafeArea(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Selector<GameCricket_P, bool>(
+                    selector: (_, game) => game.getAreTeamStatsDisplayed,
+                    builder: (_, areTeamStatsDisplayed, __) => Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            ShowTeamsOrPlayersStatsBtn(game: _game!),
+                            PlayerOrTeamNames(game: _game!),
+                          ],
+                        ),
+                        MainStatsCricket(game: _game!),
+                        if (_game!.getGameSettings.getMode !=
+                            CricketMode.NoScore)
+                          PointsPerNumberCricket(game: _game!),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

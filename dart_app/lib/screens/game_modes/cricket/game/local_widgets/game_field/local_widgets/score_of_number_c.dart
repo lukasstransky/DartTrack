@@ -47,6 +47,12 @@ class ScoreOfNumber extends StatelessWidget {
                     color: Utils.getPrimaryColorDarken(context),
                   )
                 : BorderSide.none,
+            bottom: numberToCheck == 25
+                ? BorderSide(
+                    width: GENERAL_BORDER_WIDTH.w,
+                    color: Utils.getPrimaryColorDarken(context),
+                  )
+                : BorderSide.none,
           ),
         ),
         child: Center(

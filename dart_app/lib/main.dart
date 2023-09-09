@@ -40,6 +40,7 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -155,10 +156,9 @@ class MyApp extends StatelessWidget {
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
           builder: (context, child) {
-            final screenWidth = MediaQuery.of(context).size.width;
             TextTheme textTheme;
 
-            if (screenWidth <= 600) {
+            if (Utils.isMobile(context)) {
               textTheme = ThemeData().textTheme.copyWith(
                     bodyMedium: TextStyle(fontSize: 12.sp), // normal
                     titleSmall: TextStyle(fontSize: 16.sp), // dialog title
