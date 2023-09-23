@@ -490,7 +490,6 @@ const String VIBRATION_FEEDBACK_KEY = 'vibrationFeedbackEnabled';
 */
 // game settings x01
 const double WIDGET_HEIGHT_GAMESETTINGS = 4;
-const double WIDGET_HEIGHT_GAMESETTINGS_TEAMS = 3.5;
 
 // overall
 const double ICON_BUTTON_SIZE = 3;

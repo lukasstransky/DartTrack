@@ -75,6 +75,7 @@ class GameFieldCricket extends StatelessWidget {
                       NumberScoresForPlayerOrTeam(
                         playerOrTeamStats: _playerOrTeamGameStatistics[i]
                             as PlayerOrTeamGameStatsCricket,
+                        i: i,
                       ),
                     if (_evenPlayersOrTeams) FieldsToHit(),
                     for (int i = _halfLength;
@@ -83,6 +84,7 @@ class GameFieldCricket extends StatelessWidget {
                       NumberScoresForPlayerOrTeam(
                         playerOrTeamStats: _playerOrTeamGameStatistics[i]
                             as PlayerOrTeamGameStatsCricket,
+                        i: i,
                       ),
                   ],
                 ),

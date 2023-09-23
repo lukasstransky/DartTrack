@@ -21,6 +21,9 @@ class StartGameBtnX01 extends StatelessWidget {
     return Container(
       width: GAMESETTINGS_START_GAME_BTN_WIDTH.w,
       height: GAMESETTINGS_START_GAME_BTN_HEIGHT.h,
+      margin: context.read<GameSettingsX01_P>().getSafeAreaPadding.bottom > 0
+          ? null
+          : EdgeInsets.only(bottom: 1.h),
       child: Selector<GameSettingsX01_P, SelectorModel>(
         selector: (_, gameSettingsX01) => SelectorModel(
           players: gameSettingsX01.getPlayers,

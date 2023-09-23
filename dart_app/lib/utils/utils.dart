@@ -8,6 +8,8 @@ import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
@@ -646,6 +648,20 @@ class Utils {
     }
   }
 
+  static dynamic getGameSettingsProviderBasedOnMode(
+      GameMode mode, BuildContext context) {
+    if (mode == GameMode.X01) {
+      return context.read<GameSettingsX01_P>();
+    } else if (mode == GameMode.SingleTraining ||
+        mode == GameMode.DoubleTraining) {
+      return context.read<GameSettingsSingleDoubleTraining_P>();
+    } else if (mode == GameMode.ScoreTraining) {
+      return context.read<GameSettingsScoreTraining_P>();
+    } else if (mode == GameMode.Cricket) {
+      return context.read<GameSettingsCricket_P>();
+    }
+  }
+
   static EdgeInsets getSafeAreaBasedOnMode(
       GameMode mode, BuildContext context) {
     if (mode == GameMode.X01) {
@@ -689,12 +705,6 @@ class Utils {
             (!roundedScoresOdd
                 ? getMostOccurringValue(statisticsFirestore.roundedScoresEven)
                 : getMostOccurringValue(statisticsFirestore.roundedScoresOdd));
-  }
-
-  static bool shouldShrinkWidget(GameSettingsX01_P gameSettingsX01) {
-    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        (gameSettingsX01.getPlayers.length >= 4 ||
-            gameSettingsX01.getTeams.length >= 3);
   }
 
   static String getBestOfOrFirstToString(dynamic gameSettings) {
@@ -782,26 +792,6 @@ class Utils {
   static bool gameWonBestOfWithLegs(int legsWon, dynamic gameSettings) {
     return gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf &&
         ((legsWon * 2) - 1) >= gameSettings.getLegs;
-  }
-
-  static bool showLeftBorderCricket(
-      int i, GameSettingsCricket_P gameSettingsCricket) {
-    final int playersLength = gameSettingsCricket.getPlayers.length;
-    final int teamsLength = gameSettingsCricket.getTeams.length;
-    final bool isSingleMode =
-        gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single;
-
-    if (i == 0) {
-      return false;
-    } else if (((isSingleMode && playersLength == 4) ||
-            (!isSingleMode && teamsLength == 4)) &&
-        i == 2) {
-      return false;
-    } else if ((isSingleMode && playersLength == 2) ||
-        (!isSingleMode && teamsLength == 2)) {
-      return false;
-    }
-    return true;
   }
 
   //returns e.g. 'Leg 1' or 'Set 1 Leg 2'
@@ -953,5 +943,56 @@ class Utils {
 
   static bool isLandscape(BuildContext context) {
     return MediaQuery.of(context).orientation == Orientation.landscape;
+  }
+
+  static bool showLeftBorder(GameSettingsCricket_P gameSettingsCricket, int i) {
+    final int playersAmount = gameSettingsCricket.getPlayers.length;
+    final int teamsAmount = gameSettingsCricket.getTeams.length;
+
+    if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      if (playersAmount == 4 && i != 0) {
+        return true;
+      } else if (playersAmount == 3) {
+        return true;
+      } else if (playersAmount == 2 && i == 1) {
+        return true;
+      }
+
+      return false;
+    }
+
+    // teams
+    if (teamsAmount == 3) {
+      return true;
+    } else if (teamsAmount == 2 && i == 1) {
+      return true;
+    }
+
+    return false;
+  }
+
+  static bool showRightBorder(
+      GameSettingsCricket_P gameSettingsCricket, int i) {
+    final int playersAmount = gameSettingsCricket.getPlayers.length;
+    final int teamsAmount = gameSettingsCricket.getTeams.length;
+
+    if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      if (playersAmount == 2 && i == 0) {
+        return true;
+      } else if (playersAmount == 4 && i == 1) {
+        return true;
+      }
+
+      return false;
+    }
+
+    // teams
+    if (teamsAmount == 2 && i == 0) {
+      return true;
+    } else if (teamsAmount == 4 && i == 1) {
+      return true;
+    }
+
+    return false;
   }
 }

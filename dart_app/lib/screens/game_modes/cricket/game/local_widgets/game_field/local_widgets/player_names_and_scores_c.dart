@@ -29,144 +29,97 @@ class PlayerOrTeamNamesAndScores extends StatelessWidget {
     final bool _isSingleMode =
         gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single;
 
-    return Container(
-      height: _getHeight(_isNoScoreMode, _isSingleMode, context),
-      child: Row(
-        children: [
-          if (!evenPlayersOrTeams)
-            Container(
-              width: 20.w,
+    return Row(
+      children: [
+        if (!evenPlayersOrTeams)
+          Container(
+            width: 20.w,
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(
+                  width: GENERAL_BORDER_WIDTH.w,
+                  color: Utils.getPrimaryColorDarken(context),
+                ),
+              ),
+            ),
+          ),
+        for (int i = 0; i < playerOrTeamGameStatistics.length; i++) ...[
+          if (evenPlayersOrTeams && i == _halfLength) Container(width: 20.w),
+          Expanded(
+            child: Container(
               decoration: BoxDecoration(
+                color: Utils.getBackgroundColorForCurrentPlayerOrTeam(
+                    gameCricket,
+                    gameSettingsCricket,
+                    playerOrTeamGameStatistics[i],
+                    context),
                 border: Border(
-                  right: BorderSide(
+                  top: BorderSide(
                     width: GENERAL_BORDER_WIDTH.w,
                     color: Utils.getPrimaryColorDarken(context),
                   ),
+                  left: Utils.showLeftBorder(gameSettingsCricket, i)
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
+                  right: Utils.showRightBorder(gameSettingsCricket, i)
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
                 ),
               ),
-            ),
-          for (int i = 0; i < playerOrTeamGameStatistics.length; i++) ...[
-            if (evenPlayersOrTeams && i == _halfLength)
-              Container(
-                width: 20.w,
-                decoration: BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      width: GENERAL_BORDER_WIDTH.w,
-                      color: Utils.getPrimaryColorDarken(context),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (!_isNoScoreMode) ...[
+                    PlayerOrTeamName(
+                      isNoScoreMode: _isNoScoreMode,
+                      isSingleMode: _isSingleMode,
+                      playerOrTeamStats: playerOrTeamGameStatistics[i],
                     ),
-                    right: BorderSide(
-                      width: GENERAL_BORDER_WIDTH.w,
-                      color: Utils.getPrimaryColorDarken(context),
-                    ),
-                  ),
-                ),
-              ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Utils.getBackgroundColorForCurrentPlayerOrTeam(
-                      gameCricket,
-                      gameSettingsCricket,
-                      playerOrTeamGameStatistics[i],
-                      context),
-                  border: Border(
-                    top: BorderSide(
-                      width: GENERAL_BORDER_WIDTH.w,
-                      color: Utils.getPrimaryColorDarken(context),
-                    ),
-                    left: Utils.showLeftBorderCricket(i, gameSettingsCricket)
-                        ? BorderSide(
-                            width: GENERAL_BORDER_WIDTH.w,
-                            color: Utils.getPrimaryColorDarken(context),
-                          )
-                        : BorderSide.none,
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (!_isNoScoreMode) ...[
-                      PlayerOrTeamName(
+                    if (!_isSingleMode)
+                      CurrentPlayerOfTeam(
                         isNoScoreMode: _isNoScoreMode,
-                        isSingleMode: _isSingleMode,
                         playerOrTeamStats: playerOrTeamGameStatistics[i],
+                        isSingleMode: _isSingleMode,
                       ),
-                      if (!_isSingleMode)
-                        CurrentPlayerOfTeam(
+                    Text(
+                      playerOrTeamGameStatistics[i].getCurrentPoints.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ] else ...[
+                    Column(
+                      children: [
+                        PlayerOrTeamName(
                           isNoScoreMode: _isNoScoreMode,
-                          playerOrTeamStats: playerOrTeamGameStatistics[i],
                           isSingleMode: _isSingleMode,
+                          playerOrTeamStats: playerOrTeamGameStatistics[i],
                         ),
-                      Text(
-                        playerOrTeamGameStatistics[i]
-                            .getCurrentPoints
-                            .toString(),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize:
-                              Theme.of(context).textTheme.titleSmall!.fontSize,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ] else ...[
-                      Column(
-                        children: [
-                          PlayerOrTeamName(
+                        if (!_isSingleMode)
+                          CurrentPlayerOfTeam(
                             isNoScoreMode: _isNoScoreMode,
-                            isSingleMode: _isSingleMode,
                             playerOrTeamStats: playerOrTeamGameStatistics[i],
+                            isSingleMode: _isSingleMode,
                           ),
-                          if (!_isSingleMode)
-                            CurrentPlayerOfTeam(
-                              isNoScoreMode: _isNoScoreMode,
-                              playerOrTeamStats: playerOrTeamGameStatistics[i],
-                              isSingleMode: _isSingleMode,
-                            ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ],
-                ),
+                ],
               ),
             ),
-          ],
+          ),
         ],
-      ),
+      ],
     );
-  }
-}
-
-double _getHeight(bool isNoScoreMode, bool isSingleMode, BuildContext context) {
-  if (isNoScoreMode && isSingleMode) {
-    if (Utils.isMobile(context)) {
-      return 5.h;
-    } else {
-      // tablet
-      return 7.h;
-    }
-  } else if (isNoScoreMode && !isSingleMode) {
-    if (Utils.isMobile(context)) {
-      return 7.h;
-    } else {
-      // tablet
-      return 9.h;
-    }
-  } else if (isSingleMode) {
-    if (Utils.isMobile(context)) {
-      return 8.h;
-    } else {
-      // tablet
-      return 10.h;
-    }
-  }
-
-  // team mode
-  if (Utils.isMobile(context)) {
-    return 10.h;
-  } else {
-    // tablet
-    return 13.h;
   }
 }
 
@@ -225,6 +178,7 @@ class PlayerOrTeamName extends StatelessWidget {
     }
 
     return Container(
+      constraints: BoxConstraints(minHeight: 3.h),
       padding: EdgeInsets.only(left: 0.5.h, right: 0.5.h),
       child: FittedBox(
         fit: BoxFit.scaleDown,

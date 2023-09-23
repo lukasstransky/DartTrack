@@ -50,9 +50,9 @@ class TwoPlayerOrTeamStatsX01 extends StatelessWidget {
 
     if (Utils.isMobile(context)) {
       if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        return 37.h;
+        return 42.h;
       } else {
-        return 35.h;
+        return 40.h;
       }
     } else {
       // tablet

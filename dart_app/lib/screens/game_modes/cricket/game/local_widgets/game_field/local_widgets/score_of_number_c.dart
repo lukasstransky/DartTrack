@@ -1,7 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
-import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -16,10 +15,12 @@ class ScoreOfNumber extends StatelessWidget {
     Key? key,
     required this.playerOrTeamStats,
     required this.numberToCheck,
+    required this.i,
   }) : super(key: key);
 
   final PlayerOrTeamGameStatsCricket playerOrTeamStats;
   final int numberToCheck;
+  final int i;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,13 @@ class ScoreOfNumber extends StatelessWidget {
               width: GENERAL_BORDER_WIDTH.w,
               color: Utils.getPrimaryColorDarken(context),
             ),
-            left: _showLeftBorder(settings, playerOrTeamStats)
+            left: Utils.showLeftBorder(settings, i)
+                ? BorderSide(
+                    width: GENERAL_BORDER_WIDTH.w,
+                    color: Utils.getPrimaryColorDarken(context),
+                  )
+                : BorderSide.none,
+            right: Utils.showRightBorder(settings, i)
                 ? BorderSide(
                     width: GENERAL_BORDER_WIDTH.w,
                     color: Utils.getPrimaryColorDarken(context),
@@ -60,49 +67,6 @@ class ScoreOfNumber extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  bool _showLeftBorder(GameSettingsCricket_P gameSettingsCricket,
-      PlayerOrTeamGameStatsCricket playerOrTeamStats) {
-    final bool isSingleMode =
-        gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single;
-
-    if ((isSingleMode && gameSettingsCricket.getPlayers.length == 2) ||
-        (!isSingleMode && gameSettingsCricket.getTeams.length == 2)) {
-      return false;
-    } else if (isSingleMode &&
-        Player.samePlayer(gameSettingsCricket.getPlayers.first,
-            playerOrTeamStats.getPlayer)) {
-      return false;
-    } else if (!isSingleMode &&
-        gameSettingsCricket.getTeams.first == playerOrTeamStats.getTeam) {
-      return false;
-    } else if ((isSingleMode && gameSettingsCricket.getPlayers.length == 4) ||
-        (!isSingleMode && gameSettingsCricket.getTeams.length == 4)) {
-      int index = -1;
-      if (isSingleMode) {
-        for (int i = 0; i < gameSettingsCricket.getPlayers.length; i++) {
-          if (gameSettingsCricket.getPlayers[i].getName ==
-              playerOrTeamStats.getPlayer.getName) {
-            index = i;
-            break;
-          }
-        }
-      } else if (!isSingleMode) {
-        for (int i = 0; i < gameSettingsCricket.getTeams.length; i++) {
-          if (gameSettingsCricket.getTeams[i].getName ==
-              playerOrTeamStats.getTeam.getName) {
-            index = i;
-            break;
-          }
-        }
-      }
-      if (index % 2 == 0) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   _getCorrectAsset(int? amountOfScores, bool isNumberClosed) {

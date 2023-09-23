@@ -54,6 +54,9 @@ class _GameSettingsScoreTrainingState extends State<GameSettingsScoreTraining> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<GameSettingsScoreTraining_P>().setSafeAreaPadding =
+        MediaQuery.of(context).padding;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(

@@ -35,10 +35,6 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
             width: 20.w,
             decoration: BoxDecoration(
               border: Border(
-                right: BorderSide(
-                  width: GENERAL_BORDER_WIDTH.w,
-                  color: Utils.getPrimaryColorDarken(context),
-                ),
                 left: Utils.isLandscape(context) &&
                         gameCricket.getSafeAreaPadding.left > 0
                     ? BorderSide(
@@ -50,52 +46,26 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
             ),
             child: Container(
               padding: EdgeInsets.only(top: 0.5.h, bottom: 0.5.h),
-              child: Column(
-                children: [
-                  if (_gameSettingsCricket.getSetsEnabled) ...[
-                    Text(""),
-                    Text(""),
-                  ],
-                  Text(""),
-                ],
-              ),
             ),
           ),
         for (int i = 0; i < playerOrTeamGameStatistics.length; i++) ...[
           if (evenPlayersOrTeams && i == _halfLength)
             Container(
               width: 20.w,
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    width: GENERAL_BORDER_WIDTH.w,
-                    color: Utils.getPrimaryColorDarken(context),
-                  ),
-                  right: BorderSide(
-                    width: GENERAL_BORDER_WIDTH.w,
-                    color: Utils.getPrimaryColorDarken(context),
-                  ),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.only(top: 0.5.h, bottom: 0.5.h),
-                child: Column(
-                  children: [
-                    if (_gameSettingsCricket.getSetsEnabled) ...[
-                      Text(""),
-                      Text(""),
-                    ],
-                    Text(""),
-                  ],
-                ),
-              ),
+              padding: EdgeInsets.only(top: 0.5.h, bottom: 0.5.h),
             ),
           Expanded(
             child: Container(
               padding: EdgeInsets.only(top: 0.5.h, bottom: 0.5.h),
               decoration: BoxDecoration(
                 border: Border(
-                  left: Utils.showLeftBorderCricket(i, _gameSettingsCricket)
+                  left: Utils.showLeftBorder(_gameSettingsCricket, i)
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
+                  right: Utils.showRightBorder(_gameSettingsCricket, i)
                       ? BorderSide(
                           width: GENERAL_BORDER_WIDTH.w,
                           color: Utils.getPrimaryColorDarken(context),

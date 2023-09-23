@@ -1,5 +1,4 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -16,10 +15,7 @@ class BestOfOrFirstToBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: WIDTH_GAMESETTINGS.w,
-      height: gameSettings is GameSettingsX01_P &&
-              Utils.shouldShrinkWidget(gameSettings)
-          ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
-          : WIDGET_HEIGHT_GAMESETTINGS.h,
+      height: WIDGET_HEIGHT_GAMESETTINGS.h,
       margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,

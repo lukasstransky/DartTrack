@@ -27,8 +27,6 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
         amountOfRoundsRemaining: game.getAmountOfRoundsRemaining,
       ),
       builder: (_, selectorModel, __) => Container(
-        height: _getHeight(
-            context, selectorModel.currentFieldToHit, isTargetNumberEnabled),
         alignment: Alignment.center,
         decoration: BoxDecoration(
           border: Border(
@@ -109,26 +107,6 @@ class FieldToHitSingleDoubleTraining extends StatelessWidget {
     }
 
     return field;
-  }
-
-  double _getHeight(
-      BuildContext context, int currentFieldToHit, bool isTargetNumberEnabled) {
-    if (Utils.isMobile(context)) {
-      if (isTargetNumberEnabled) {
-        return 8.h;
-      } else if (currentFieldToHit == -1) {
-        return 6.h;
-      }
-      return 6.h;
-    } else {
-      // tablet
-      if (isTargetNumberEnabled) {
-        return 10.h;
-      } else if (currentFieldToHit == -1) {
-        return 8.h;
-      }
-      return 7.h;
-    }
   }
 }
 

@@ -80,6 +80,9 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<GameSettingsX01_P>().setSafeAreaPadding =
+        MediaQuery.of(context).padding;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBarX01Settings(),

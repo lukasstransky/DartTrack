@@ -64,6 +64,9 @@ class _GameSettingsSingleDoubleTrainingState
 
   @override
   Widget build(BuildContext context) {
+    context.read<GameSettingsSingleDoubleTraining_P>().setSafeAreaPadding =
+        MediaQuery.of(context).padding;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(

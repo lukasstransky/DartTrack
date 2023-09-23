@@ -7,9 +7,11 @@ class NumberScoresForPlayerOrTeam extends StatelessWidget {
   const NumberScoresForPlayerOrTeam({
     Key? key,
     required this.playerOrTeamStats,
+    required this.i,
   }) : super(key: key);
 
   final PlayerOrTeamGameStatsCricket playerOrTeamStats;
+  final int i;
 
   @override
   Widget build(BuildContext context) {
@@ -19,30 +21,37 @@ class NumberScoresForPlayerOrTeam extends StatelessWidget {
           ScoreOfNumber(
             playerOrTeamStats: playerOrTeamStats,
             numberToCheck: 20,
+            i: i,
           ),
           ScoreOfNumber(
             playerOrTeamStats: playerOrTeamStats,
             numberToCheck: 19,
+            i: i,
           ),
           ScoreOfNumber(
             playerOrTeamStats: playerOrTeamStats,
             numberToCheck: 18,
+            i: i,
           ),
           ScoreOfNumber(
             playerOrTeamStats: playerOrTeamStats,
             numberToCheck: 17,
+            i: i,
           ),
           ScoreOfNumber(
             playerOrTeamStats: playerOrTeamStats,
             numberToCheck: 16,
+            i: i,
           ),
           ScoreOfNumber(
             playerOrTeamStats: playerOrTeamStats,
             numberToCheck: 15,
+            i: i,
           ),
           ScoreOfNumber(
             playerOrTeamStats: playerOrTeamStats,
             numberToCheck: 25,
+            i: i,
           ),
         ],
       ),

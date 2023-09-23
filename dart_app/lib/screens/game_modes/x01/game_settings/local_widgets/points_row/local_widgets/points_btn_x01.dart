@@ -26,9 +26,7 @@ class PointsBtnX01 extends StatelessWidget {
           singleOrTeam: gameSettingsX01.getSingleOrTeam,
         ),
         builder: (_, selectorModel, __) => Container(
-          height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
-              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
-              : WIDGET_HEIGHT_GAMESETTINGS.h,
+          height: WIDGET_HEIGHT_GAMESETTINGS.h,
           decoration: points != 301
               ? BoxDecoration(
                   border: Border(

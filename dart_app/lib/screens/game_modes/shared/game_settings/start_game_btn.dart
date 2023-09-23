@@ -25,9 +25,15 @@ class StartGameBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final dynamic gameSettingsProvider =
+        Utils.getGameSettingsProviderBasedOnMode(mode, context);
+
     return Container(
       width: GAMESETTINGS_START_GAME_BTN_WIDTH.w,
       height: GAMESETTINGS_START_GAME_BTN_HEIGHT.h,
+      margin: gameSettingsProvider.getSafeAreaPadding.bottom > 0
+          ? null
+          : EdgeInsets.only(bottom: 1.h),
       child: ElevatedButton(
         onPressed: () {
           Utils.handleVibrationFeedback(context);

@@ -32,6 +32,9 @@ class _GameSettingsCricketState extends State<GameSettingsCricket> {
 
   @override
   Widget build(BuildContext context) {
+    context.read<GameSettingsCricket_P>().setSafeAreaPadding =
+        MediaQuery.of(context).padding;
+
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Settings',

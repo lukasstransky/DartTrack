@@ -82,7 +82,7 @@ class _CricketDialogState extends State<CricketDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final double dialogHeight = 28;
+    final double dialogHeight = 30;
 
     return AlertDialog(
       shape: RoundedRectangleBorder(

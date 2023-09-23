@@ -16,6 +16,7 @@ class GameSettings_P with ChangeNotifier {
   List<Team> _teams = [];
   List<int> _teamNamingIds = <int>[];
   List<Player> _players = [];
+  EdgeInsets safeAreaPadding = EdgeInsets.zero;
 
   List<Team> get getTeams => this._teams;
   set setTeams(List<Team> value) => this._teams = value;
@@ -25,6 +26,10 @@ class GameSettings_P with ChangeNotifier {
 
   List<Player> get getPlayers => this._players;
   set setPlayers(List<Player> value) => this._players = value;
+
+  EdgeInsets get getSafeAreaPadding => this.safeAreaPadding;
+  set setSafeAreaPadding(EdgeInsets safeAreaPadding) =>
+      this.safeAreaPadding = safeAreaPadding;
 
   GameSettings_P() {}
 

@@ -33,17 +33,6 @@ class FieldsToHit extends StatelessWidget {
 
     return Container(
       width: 20.w,
-      decoration: BoxDecoration(
-        border: Border(
-          left:
-              shouldDisplayLeftBorder(gameCricket, gameSettingsCricket, context)
-                  ? BorderSide(
-                      width: GENERAL_BORDER_WIDTH.w,
-                      color: Utils.getPrimaryColorDarken(context),
-                    )
-                  : BorderSide.none,
-        ),
-      ),
       child: Column(
         children: [
           for (int i = 20; i >= 15; i--)
@@ -59,8 +48,6 @@ class FieldsToHit extends StatelessWidget {
                         : _darkenPrimaryColor20,
                     border: Border(
                       top: _borderSide,
-                      left: oddPlayersOrTeams ? BorderSide.none : _borderSide,
-                      right: _borderSide,
                     ),
                   ),
                   child: Center(
@@ -91,8 +78,6 @@ class FieldsToHit extends StatelessWidget {
                     : _darkenPrimaryColor20,
                 border: Border(
                   top: _borderSide,
-                  left: oddPlayersOrTeams ? BorderSide.none : _borderSide,
-                  right: _borderSide,
                   bottom: _borderSide,
                 ),
               ),
@@ -118,16 +103,5 @@ class FieldsToHit extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  bool shouldDisplayLeftBorder(GameCricket_P gameCricket,
-      GameSettingsCricket_P gameSettingsCricket, BuildContext context) {
-    if (Utils.isLandscape(context) && gameCricket.getSafeAreaPadding.left > 0) {
-      if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single) {
-        return gameSettingsCricket.getPlayers.length == 3;
-      }
-      return gameSettingsCricket.getTeams.length == 3;
-    }
-    return false;
   }
 }

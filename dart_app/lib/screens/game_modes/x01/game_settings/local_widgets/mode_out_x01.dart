@@ -19,9 +19,7 @@ class ModeOutX01 extends StatelessWidget {
         ),
         builder: (_, selectorModel, __) => Container(
           width: WIDTH_GAMESETTINGS.w,
-          height: Utils.shouldShrinkWidget(context.read<GameSettingsX01_P>())
-              ? WIDGET_HEIGHT_GAMESETTINGS_TEAMS.h
-              : WIDGET_HEIGHT_GAMESETTINGS.h,
+          height: WIDGET_HEIGHT_GAMESETTINGS.h,
           margin: EdgeInsets.only(top: MARGIN_GAMESETTINGS.h),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
