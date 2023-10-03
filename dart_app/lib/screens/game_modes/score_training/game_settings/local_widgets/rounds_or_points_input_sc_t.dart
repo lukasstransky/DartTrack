@@ -25,7 +25,7 @@ class _RoundsOrPointsInputScoreTrainingState
         DEFAULT_ROUNDS_SCORE_TRAINING.toString());
   }
 
-  _showDialogForRoundsOrPoints(BuildContext context) {
+  _showDialogForRoundsOrPoints(BuildContext context) async {
     final gameSettingsScoreTraining_P =
         context.read<GameSettingsScoreTraining_P>();
     final bool isMaxRoundsMode =
@@ -34,6 +34,8 @@ class _RoundsOrPointsInputScoreTrainingState
             : false;
     final String backupString = maxRoundsOrPointsTextController
         .text; // in case of changing input and canceling
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -175,6 +177,8 @@ class _RoundsOrPointsInputScoreTrainingState
         ),
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   _submitNewRoundsOrPoints(BuildContext context) {

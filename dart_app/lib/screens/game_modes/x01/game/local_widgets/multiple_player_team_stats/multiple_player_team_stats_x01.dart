@@ -33,8 +33,8 @@ class _MultiplePlayerTeamStatsX01State
 
   @override
   Widget build(BuildContext context) {
-    final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
 
     return Expanded(
       child: Container(
@@ -86,6 +86,10 @@ class _MultiplePlayerTeamStatsX01State
 
   void _scrollToTopBottomIfNeccessary(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
+    if (gameX01.getCurrentPlayerToThrow == null ||
+        gameX01.getCurrentTeamToThrow == null) {
+      return;
+    }
     final int index = gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
         ? gameSettingsX01.getPlayers.indexOf(gameX01.getCurrentPlayerToThrow)
         : gameSettingsX01.getTeams.indexOf(gameX01.getCurrentTeamToThrow);

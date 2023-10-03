@@ -6,6 +6,7 @@ import 'package:dart_app/screens/game_modes/shared/game_stats/section_heading_te
 import 'package:dart_app/screens/game_modes/shared/game_stats/value_text.dart';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class MainStatsSingleDoubleTraining extends StatelessWidget {
@@ -17,6 +18,8 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isSingleMode = game.getMode == GameMode.SingleTraining;
+    final GameSingleDoubleTraining_P gameSingleDoubleTraining_P =
+        context.read<GameSingleDoubleTraining_P>();
 
     return Container(
       padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
@@ -188,6 +191,11 @@ class MainStatsSingleDoubleTraining extends StatelessWidget {
                       ),
                     ),
                   ],
+                ),
+              if (gameSingleDoubleTraining_P.getPlayerGameStatistics.length ==
+                  1)
+                SizedBox(
+                  width: WIDTH_DATA_STATISTICS.w,
                 ),
             ],
           ),

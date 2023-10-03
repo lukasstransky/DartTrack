@@ -79,7 +79,8 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
               Text(
                 _getHeader(),
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                  fontSize:
+                      Theme.of(context).textTheme.titleSmall!.fontSize! * 0.9,
                   color: Colors.white,
                 ),
               ),

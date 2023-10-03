@@ -1,8 +1,12 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/games/game_cricket_p.dart';
+import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -97,18 +101,11 @@ class UtilsDialogs {
                 Navigator.of(context).pushNamed(
                   '/gameSingleDoubleTraining',
                   arguments: {
-                    'openGame': false,
                     'mode': mode.name,
                   },
                 );
               } else if (mode == GameMode.ScoreTraining) {
-                Navigator.of(context).pushNamed(
-                  '/gameScoreTraining',
-                  arguments: {
-                    'openGame': false,
-                    'mode': mode,
-                  },
-                );
+                Navigator.of(context).pushNamed('/gameScoreTraining');
               }
             },
             child: Text(
@@ -328,6 +325,7 @@ class UtilsDialogs {
           TextButton(
             onPressed: () {
               Utils.handleVibrationFeedback(context);
+
               if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
                 _setBeginnerPlayer(selectedPlayer, gameSettings);
               } else {
@@ -335,18 +333,15 @@ class UtilsDialogs {
               }
 
               if (mode == GameMode.X01) {
-                Navigator.of(context).pushNamed(
-                  '/gameX01',
-                  arguments: {'openGame': false},
-                );
+                context
+                    .read<GameX01_P>()
+                    .init(context.read<GameSettingsX01_P>());
+                Navigator.of(context).pushNamed('/gameX01');
               } else if (mode == GameMode.Cricket) {
-                Navigator.of(context).pushNamed(
-                  '/gameCricket',
-                  arguments: {
-                    'openGame': false,
-                    'mode': mode,
-                  },
-                );
+                context
+                    .read<GameCricket_P>()
+                    .init(context.read<GameSettingsCricket_P>());
+                Navigator.of(context).pushNamed('/gameCricket');
               }
             },
             child: Text(

@@ -117,20 +117,33 @@ class PointBtnRoundX01 extends StatelessWidget {
         this.mostScoredPointBtn as bool) {
       return Border(
         left: [
-          gameSettingsX01_P.getMostScoredPoints[1],
-          gameSettingsX01_P.getMostScoredPoints[3],
-          gameSettingsX01_P.getMostScoredPoints[5],
-        ].contains(point)
+                  gameSettingsX01_P.getMostScoredPoints[1],
+                  gameSettingsX01_P.getMostScoredPoints[3],
+                  gameSettingsX01_P.getMostScoredPoints[5],
+                ].contains(point) ||
+                ([
+                      gameSettingsX01_P.getMostScoredPoints[0],
+                      gameSettingsX01_P.getMostScoredPoints[2],
+                      gameSettingsX01_P.getMostScoredPoints[4],
+                    ].contains(point) &&
+                    Utils.isLandscape(context))
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
                 width: GENERAL_BORDER_WIDTH.w,
               )
             : BorderSide.none,
-        right: [
-          gameSettingsX01_P.getMostScoredPoints[0],
-          gameSettingsX01_P.getMostScoredPoints[2],
-          gameSettingsX01_P.getMostScoredPoints[4],
-        ].contains(point)
+        right: ([
+                      gameSettingsX01_P.getMostScoredPoints[0],
+                      gameSettingsX01_P.getMostScoredPoints[2],
+                      gameSettingsX01_P.getMostScoredPoints[4],
+                    ].contains(point) &&
+                    !Utils.isLandscape(context)) ||
+                ([
+                      gameSettingsX01_P.getMostScoredPoints[1],
+                      gameSettingsX01_P.getMostScoredPoints[3],
+                      gameSettingsX01_P.getMostScoredPoints[5],
+                    ].contains(point) &&
+                    gameSettingsX01_P.getSafeAreaPadding.right > 0)
             ? BorderSide(
                 color: Utils.getPrimaryColorDarken(context),
                 width: GENERAL_BORDER_WIDTH.w,
@@ -187,6 +200,7 @@ class PointBtnRoundX01 extends StatelessWidget {
               ].contains(point)) ||
               (Utils.isLandscape(context) &&
                   safeAreaPadding.right > 0 &&
+                  !gameSettingsX01_P.getShowMostScoredPoints &&
                   [
                     '3',
                     '6',

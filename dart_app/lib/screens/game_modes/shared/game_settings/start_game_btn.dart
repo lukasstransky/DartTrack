@@ -2,6 +2,8 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/cricket/game_settings/game_settings_c.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -79,18 +81,13 @@ class StartGameBtn extends StatelessWidget {
       final GameSettingsScoreTraining_P gameSettingsScoreTraining =
           context.read<GameSettingsScoreTraining_P>();
 
+      context.read<GameScoreTraining_P>().init(gameSettingsScoreTraining);
       if (!gameSettingsScoreTraining.isCurrentUserInPlayers(context) &&
           currentUsername != 'Guest') {
         UtilsDialogs.showDialogNoUserInPlayerWarning(
             context, gameSettingsScoreTraining, mode);
       } else {
-        Navigator.of(context).pushNamed(
-          '/gameScoreTraining',
-          arguments: {
-            'openGame': false,
-            'mode': mode,
-          },
-        );
+        Navigator.of(context).pushNamed('/gameScoreTraining');
       }
     } else if (mode == GameMode.SingleTraining ||
         mode == GameMode.DoubleTraining) {
@@ -98,6 +95,9 @@ class StartGameBtn extends StatelessWidget {
           gameSettingsSingleDoubleTraining =
           context.read<GameSettingsSingleDoubleTraining_P>();
 
+      context
+          .read<GameSingleDoubleTraining_P>()
+          .init(gameSettingsSingleDoubleTraining, mode);
       if (!gameSettingsSingleDoubleTraining.isCurrentUserInPlayers(context) &&
           currentUsername != 'Guest') {
         UtilsDialogs.showDialogNoUserInPlayerWarning(
@@ -106,7 +106,6 @@ class StartGameBtn extends StatelessWidget {
         Navigator.of(context).pushNamed(
           '/gameSingleDoubleTraining',
           arguments: {
-            'openGame': false,
             'mode': mode.name,
           },
         );

@@ -79,9 +79,11 @@ class MostScoredPointValue extends StatelessWidget {
   }
 
   _showDialogForMostScoredPointInput(
-      BuildContext context, GameSettingsX01_P gameSettingsX01, int i) {
+      BuildContext context, GameSettingsX01_P gameSettingsX01, int i) async {
     newTextControllerForMostScoredPointGameSettingsX01(
         gameSettingsX01.getMostScoredPoints[i].toString());
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -212,6 +214,8 @@ class MostScoredPointValue extends StatelessWidget {
         ),
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   _submitMostScoredPoint(

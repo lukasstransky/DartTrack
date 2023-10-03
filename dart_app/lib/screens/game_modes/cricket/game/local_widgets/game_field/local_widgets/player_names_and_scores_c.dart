@@ -178,7 +178,7 @@ class PlayerOrTeamName extends StatelessWidget {
     }
 
     return Container(
-      constraints: BoxConstraints(minHeight: 3.h),
+      constraints: BoxConstraints(minHeight: 4.h),
       padding: EdgeInsets.only(left: 0.5.h, right: 0.5.h),
       child: FittedBox(
         fit: BoxFit.scaleDown,

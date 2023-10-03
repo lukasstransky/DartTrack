@@ -20,9 +20,7 @@ class MainStatsScoreTraining extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(
-        left: PADDING_LEFT_STATISTICS.w,
-      ),
+      padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

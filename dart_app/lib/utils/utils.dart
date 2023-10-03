@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:io';
 
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_c.dart';
@@ -962,7 +963,9 @@ class Utils {
     }
 
     // teams
-    if (teamsAmount == 3) {
+    if (teamsAmount == 4 && i != 0) {
+      return true;
+    } else if (teamsAmount == 3) {
       return true;
     } else if (teamsAmount == 2 && i == 1) {
       return true;
@@ -994,5 +997,15 @@ class Utils {
     }
 
     return false;
+  }
+
+  static forcePortraitMode(BuildContext context) async {
+    if (Platform.isAndroid &&
+        Utils.isMobile(context) &&
+        Utils.isLandscape(context)) {
+      await SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
+    }
   }
 }

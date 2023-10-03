@@ -133,11 +133,25 @@ _showInfoDialogForFetchFromStatsBtn(BuildContext context) {
       ),
       content: Container(
         width: DIALOG_NORMAL_WIDTH.w,
-        child: Text(
-          'By clicking this button, the top six most frequently scored points from all of your games will be loaded into the \'most scored points\' fields.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+        child: RichText(
+          text: TextSpan(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                text: 'Clicking this button will populate the ',
+              ),
+              TextSpan(
+                text: 'most scored points',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              TextSpan(
+                text:
+                    ' fields with the top six points you\'ve scored most frequently across all your games.',
+              ),
+            ],
           ),
         ),
       ),

@@ -97,78 +97,76 @@ class GameCricket_P extends Game_P {
   }
 
   init(GameSettingsCricket_P gameSettings) {
-    if (gameSettings.getPlayers.length != getPlayerGameStatistics.length) {
-      reset();
+    reset();
 
-      setGameSettings = gameSettings;
+    setGameSettings = gameSettings;
 
-      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
-        setCurrentPlayerToThrow = gameSettings.getPlayers.first;
-      } else {
-        setCurrentTeamToThrow = gameSettings.getTeams.first;
+    if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      setCurrentPlayerToThrow = gameSettings.getPlayers.first;
+    } else {
+      setCurrentTeamToThrow = gameSettings.getTeams.first;
 
-        // reverse players in teams
-        for (Team team in gameSettings.getTeams) {
-          team.setPlayers = team.getPlayers.reversed.toList();
-        }
-        // set players in correct order
-        List<Player> players = [];
-        for (Team team in gameSettings.getTeams) {
-          for (Player player in team.getPlayers) {
-            players.add(player);
-          }
-        }
-        gameSettings.setPlayers = players;
-
-        setCurrentPlayerToThrow = gameSettings.getTeams.first.getPlayers.first;
+      // reverse players in teams
+      for (Team team in gameSettings.getTeams) {
+        team.setPlayers = team.getPlayers.reversed.toList();
       }
+      // set players in correct order
+      List<Player> players = [];
+      for (Team team in gameSettings.getTeams) {
+        for (Player player in team.getPlayers) {
+          players.add(player);
+        }
+      }
+      gameSettings.setPlayers = players;
 
-      for (Player player in gameSettings.getPlayers) {
-        final playerStats = new PlayerOrTeamGameStatsCricket(
+      setCurrentPlayerToThrow = gameSettings.getTeams.first.getPlayers.first;
+    }
+
+    for (Player player in gameSettings.getPlayers) {
+      final playerStats = new PlayerOrTeamGameStatsCricket(
+        mode: GameMode.Cricket.name,
+        player: player,
+        dateTime: getDateTime,
+      );
+      for (int i = 15; i <= 20; i++) {
+        playerStats.getScoresOfNumbers[i] = 0;
+        playerStats.getPointsPerNumbers[i] = 0;
+      }
+      playerStats.getScoresOfNumbers[25] = 0;
+      playerStats.getPointsPerNumbers[25] = 0;
+
+      getPlayerGameStatistics.add(playerStats);
+    }
+
+    if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      for (Team team in gameSettings.getTeams) {
+        final teamStats = new PlayerOrTeamGameStatsCricket.Team(
+          team: team,
           mode: GameMode.Cricket.name,
-          player: player,
           dateTime: getDateTime,
         );
         for (int i = 15; i <= 20; i++) {
-          playerStats.getScoresOfNumbers[i] = 0;
-          playerStats.getPointsPerNumbers[i] = 0;
+          teamStats.getScoresOfNumbers[i] = 0;
+          teamStats.getPointsPerNumbers[i] = 0;
         }
-        playerStats.getScoresOfNumbers[25] = 0;
-        playerStats.getPointsPerNumbers[25] = 0;
+        teamStats.getScoresOfNumbers[25] = 0;
+        teamStats.getPointsPerNumbers[25] = 0;
 
-        getPlayerGameStatistics.add(playerStats);
+        getTeamGameStatistics.add(teamStats);
+
+        team.setCurrentPlayerToThrow = team.getPlayers.first;
       }
 
-      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        for (Team team in gameSettings.getTeams) {
-          final teamStats = new PlayerOrTeamGameStatsCricket.Team(
-            team: team,
-            mode: GameMode.Cricket.name,
-            dateTime: getDateTime,
-          );
-          for (int i = 15; i <= 20; i++) {
-            teamStats.getScoresOfNumbers[i] = 0;
-            teamStats.getPointsPerNumbers[i] = 0;
-          }
-          teamStats.getScoresOfNumbers[25] = 0;
-          teamStats.getPointsPerNumbers[25] = 0;
-
-          getTeamGameStatistics.add(teamStats);
-
-          team.setCurrentPlayerToThrow = team.getPlayers.first;
-        }
-
-        // set team for player stats in order to sort them
-        for (PlayerOrTeamGameStatsCricket playerStats
-            in getPlayerGameStatistics) {
-          final Team team =
-              gameSettings.findTeamForPlayer(playerStats.getPlayer.getName);
-          playerStats.setTeam = team;
-        }
-
-        getPlayerGameStatistics.sort((a, b) =>
-            (a.getTeam as Team).getName.compareTo((b.getTeam as Team).getName));
+      // set team for player stats in order to sort them
+      for (PlayerOrTeamGameStatsCricket playerStats
+          in getPlayerGameStatistics) {
+        final Team team =
+            gameSettings.findTeamForPlayer(playerStats.getPlayer.getName);
+        playerStats.setTeam = team;
       }
+
+      getPlayerGameStatistics.sort((a, b) =>
+          (a.getTeam as Team).getName.compareTo((b.getTeam as Team).getName));
     }
   }
 

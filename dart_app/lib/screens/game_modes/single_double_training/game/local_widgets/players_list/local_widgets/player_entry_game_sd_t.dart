@@ -71,7 +71,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
               children: [
                 HeaderText(
                   fontSize: FONTSIZE,
-                  textValue: 'Total points',
+                  textValue: 'Total points:',
                 ),
                 ValueText(
                   fontSize: FONTSIZE,
@@ -89,7 +89,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                 children: [
                   HeaderText(
                     fontSize: FONTSIZE,
-                    textValue: 'Single hits',
+                    textValue: 'Single hits:',
                   ),
                   ValueText(
                     fontSize: FONTSIZE,
@@ -106,7 +106,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
               children: [
                 HeaderText(
                   fontSize: FONTSIZE,
-                  textValue: 'Double hits',
+                  textValue: 'Double hits:',
                 ),
                 ValueText(
                   fontSize: FONTSIZE,
@@ -124,7 +124,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
                 children: [
                   HeaderText(
                     fontSize: FONTSIZE,
-                    textValue: 'Tripple hits',
+                    textValue: 'Tripple hits:',
                   ),
                   ValueText(
                     fontSize: FONTSIZE,
@@ -141,7 +141,7 @@ class PlayerEntryGameSingleDoubleTraining extends StatelessWidget {
               children: [
                 HeaderText(
                   fontSize: FONTSIZE,
-                  textValue: 'Missed',
+                  textValue: 'Missed:',
                 ),
                 ValueText(
                   fontSize: FONTSIZE,

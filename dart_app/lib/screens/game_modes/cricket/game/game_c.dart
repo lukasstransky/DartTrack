@@ -1,5 +1,4 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/game_field/game_field_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/submit_revert_btns_c.dart';
@@ -23,18 +22,6 @@ class GameCricket extends StatefulWidget {
 }
 
 class _GameCricketState extends State<GameCricket> {
-  @override
-  void didChangeDependencies() {
-    final Map arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
-    // only init game for new game, not for open game
-    if (arguments.isNotEmpty && !arguments['openGame']) {
-      context.read<GameCricket_P>().init(context.read<GameSettingsCricket_P>());
-    }
-    super.didChangeDependencies();
-  }
-
   @override
   Widget build(BuildContext context) {
     context.read<GameCricket_P>().setSafeAreaPadding =

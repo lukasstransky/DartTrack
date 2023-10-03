@@ -66,12 +66,13 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
               Text(
                 _getHeader(context.read<GameSettingsCricket_P>()),
                 style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                  fontSize:
+                      Theme.of(context).textTheme.titleSmall!.fontSize! * 0.9,
                   color: Colors.white,
                 ),
               ),
               Container(
-                alignment: Alignment.center,
+                alignment: Utils.isLandscape(context) ? Alignment.center : null,
                 padding: EdgeInsets.only(
                   top: 0.5.h,
                   bottom: 1.h,

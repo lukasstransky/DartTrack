@@ -87,10 +87,12 @@ class _TargetNumberSingleDoubleTrainingState
     );
   }
 
-  _showDialogForEnteringTargetNumber(BuildContext context) {
+  _showDialogForEnteringTargetNumber(BuildContext context) async {
     final settings = context.read<GameSettingsSingleDoubleTraining_P>();
     final String backupString = targetNumberTextController
         .text; // in case text was changed and cancel pressed
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -221,6 +223,8 @@ class _TargetNumberSingleDoubleTrainingState
         ),
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   _submitTargetNumber(BuildContext context) {

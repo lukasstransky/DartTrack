@@ -55,21 +55,17 @@ class _PlayersListState extends State<PlayersList> {
 
     return Container(
       width: WIDTH_GAMESETTINGS.w,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-            maxHeight: widget.mode == GameMode.X01 ? 16.h : 20.h),
-        child: ListView.builder(
-          shrinkWrap: true,
-          controller: newScrollControllerPlayers(),
-          scrollDirection: Axis.vertical,
-          itemCount: widget.players.length,
-          itemBuilder: (BuildContext context, int index) {
-            return PlayersListEntry(
-              player: widget.players[index],
-              settings: settings,
-            );
-          },
-        ),
+      child: ListView.builder(
+        shrinkWrap: true,
+        controller: newScrollControllerPlayers(),
+        scrollDirection: Axis.vertical,
+        itemCount: widget.players.length,
+        itemBuilder: (BuildContext context, int index) {
+          return PlayersListEntry(
+            player: widget.players[index],
+            settings: settings,
+          );
+        },
       ),
     );
   }

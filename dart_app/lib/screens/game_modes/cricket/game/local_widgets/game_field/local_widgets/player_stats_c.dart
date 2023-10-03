@@ -77,55 +77,76 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (_gameSettingsCricket.getSetsEnabled)
-                    Container(
-                      width: 15.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Sets:',
-                            style: _textStyle,
-                          ),
-                          Text(
-                            '${playerOrTeamGameStatistics[i].getSetsWon.toString()}',
-                            style: _textStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-                  if (_gameSettingsCricket.getSetsEnabled ||
-                      _gameSettingsCricket.getLegs > 1)
-                    Container(
-                      width: 15.w,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Legs:',
-                            style: _textStyle,
-                          ),
-                          Text(
-                            '${playerOrTeamGameStatistics[i].getLegsWon.toString()}',
-                            style: _textStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-                  Container(
-                    width: 15.w,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          'MPR:',
-                          style: _textStyle,
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'Sets:',
+                              style: _textStyle,
+                            ),
+                          ),
                         ),
-                        Text(
-                          '${playerOrTeamGameStatistics[i].getMarksPerRound()}',
-                          style: _textStyle,
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${playerOrTeamGameStatistics[i].getSetsWon.toString()}',
+                              style: _textStyle,
+                            ),
+                          ),
                         ),
                       ],
                     ),
+                  if (_gameSettingsCricket.getSetsEnabled ||
+                      _gameSettingsCricket.getLegs > 1)
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              'Legs:',
+                              style: _textStyle,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${playerOrTeamGameStatistics[i].getLegsWon.toString()}',
+                              style: _textStyle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            'MPR:',
+                            style: _textStyle,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            '${playerOrTeamGameStatistics[i].getMarksPerRound()}',
+                            style: _textStyle,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),

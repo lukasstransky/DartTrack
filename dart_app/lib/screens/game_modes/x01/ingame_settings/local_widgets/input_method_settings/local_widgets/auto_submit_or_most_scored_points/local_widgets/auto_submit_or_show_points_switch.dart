@@ -56,45 +56,43 @@ class AutoSubmitOrShowMostScoredPointsSwitch extends StatelessWidget {
       );
     }
 
-    return Flexible(
-      child: Padding(
-        padding: EdgeInsets.only(left: 2.5.w),
-        child: Row(
-          children: [
-            FittedBox(
-              fit: BoxFit.scaleDown,
-              child: Text(
-                'Automatically submit points',
-                style: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  color: Colors.white,
-                ),
+    return Padding(
+      padding: EdgeInsets.only(left: 2.5.w),
+      child: Row(
+        children: [
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              'Automatically submit points',
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                color: Colors.white,
               ),
             ),
-            Spacer(),
-            Selector<GameSettingsX01_P, bool>(
-              selector: (_, gameSettingsX01) =>
-                  gameSettingsX01.getAutomaticallySubmitPoints,
-              builder: (_, automaticallySubmitPoints, __) => Transform.scale(
-                scale: scaleFactorSwitch,
-                child: Container(
-                  padding: EdgeInsets.only(right: paddingRight),
-                  child: Switch(
-                    value: automaticallySubmitPoints,
-                    onChanged: (value) {
-                      Utils.handleVibrationFeedback(context);
-                      gameSettingsX01.setAutomaticallySubmitPoints = value;
+          ),
+          Spacer(),
+          Selector<GameSettingsX01_P, bool>(
+            selector: (_, gameSettingsX01) =>
+                gameSettingsX01.getAutomaticallySubmitPoints,
+            builder: (_, automaticallySubmitPoints, __) => Transform.scale(
+              scale: scaleFactorSwitch,
+              child: Container(
+                padding: EdgeInsets.only(right: paddingRight),
+                child: Switch(
+                  value: automaticallySubmitPoints,
+                  onChanged: (value) {
+                    Utils.handleVibrationFeedback(context);
+                    gameSettingsX01.setAutomaticallySubmitPoints = value;
 
-                      gameSettingsX01.notify();
-                    },
-                    thumbColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.secondary),
-                  ),
+                    gameSettingsX01.notify();
+                  },
+                  thumbColor: MaterialStateProperty.all(
+                      Theme.of(context).colorScheme.secondary),
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

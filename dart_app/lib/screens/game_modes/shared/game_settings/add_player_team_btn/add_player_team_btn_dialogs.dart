@@ -46,7 +46,7 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static showDialogForAddingPlayer(
-      GameSettings_P gameSettings_P, BuildContext context) {
+      GameSettings_P gameSettings_P, BuildContext context) async {
     NewPlayer? newPlayer;
     if (gameSettings_P is GameSettingsX01_P) {
       newPlayer = gameSettings_P.getSingleOrTeam == SingleOrTeamEnum.Single
@@ -56,6 +56,8 @@ class AddPlayerTeamBtnDialogs {
       newPlayer = NewPlayer.Guest;
     }
     _resetBotAvgValue();
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -211,25 +213,23 @@ class AddPlayerTeamBtnDialogs {
                         gameSettings_P.getTeams.length < 4
                     ? Container(
                         width: 20.w,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: IconButton(
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            padding: EdgeInsets.zero,
-                            icon: Icon(
-                              size: ICON_BUTTON_SIZE.h,
-                              Icons.arrow_back,
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            onPressed: () {
-                              Utils.handleVibrationFeedback(context);
-                              Navigator.of(context).pop();
-
-                              showDialogForAddingPlayerOrTeam(
-                                  gameSettings_P, context);
-                            },
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          padding: EdgeInsets.zero,
+                          icon: Icon(
+                            size: ICON_BUTTON_SIZE.h,
+                            Icons.arrow_back,
+                            color: Theme.of(context).colorScheme.secondary,
                           ),
+                          onPressed: () {
+                            Utils.handleVibrationFeedback(context);
+                            Navigator.of(context).pop();
+
+                            showDialogForAddingPlayerOrTeam(
+                                gameSettings_P, context);
+                          },
                         ),
                       )
                     : SizedBox.shrink(),
@@ -321,6 +321,8 @@ class AddPlayerTeamBtnDialogs {
         ),
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   static _shouldDisplayContinue(GameSettings_P gameSettings) {
@@ -416,7 +418,7 @@ class AddPlayerTeamBtnDialogs {
   }
 
   static showDialogForAddingTeam(
-      GameSettings_P gameSettings, BuildContext context) {
+      GameSettings_P gameSettings, BuildContext context) async {
     bool showBackBtn = false;
     for (Team team in gameSettings.getTeams) {
       if (team.getPlayers.length != MAX_PLAYERS_PER_TEAM &&
@@ -424,6 +426,8 @@ class AddPlayerTeamBtnDialogs {
         showBackBtn = true;
       }
     }
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -513,25 +517,24 @@ class AddPlayerTeamBtnDialogs {
               Row(
                 children: [
                   if (showBackBtn)
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          padding: EdgeInsets.zero,
-                          icon: Icon(
-                            size: ICON_BUTTON_SIZE.h,
-                            Icons.arrow_back,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            Navigator.of(context).pop();
-                            showDialogForAddingPlayerOrTeam(
-                                gameSettings, context);
-                          },
+                    Container(
+                      width: 20.w,
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          size: ICON_BUTTON_SIZE.h,
+                          Icons.arrow_back,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
+                        onPressed: () {
+                          Utils.handleVibrationFeedback(context);
+                          Navigator.of(context).pop();
+                          showDialogForAddingPlayerOrTeam(
+                              gameSettings, context);
+                        },
                       ),
                     ),
                   Expanded(
@@ -619,6 +622,8 @@ class AddPlayerTeamBtnDialogs {
         );
       },
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   static _submitNewTeam(GameSettings_P gameSettings, BuildContext context) {
@@ -965,24 +970,23 @@ class AddPlayerTeamBtnDialogs {
           actions: [
             Row(
               children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      padding: EdgeInsets.zero,
-                      icon: Icon(
-                        size: ICON_BUTTON_SIZE.h,
-                        Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      onPressed: () {
-                        Utils.handleVibrationFeedback(context);
-                        Navigator.of(context).pop();
-                        showDialogForAddingPlayer(gameSettings, context);
-                      },
+                Container(
+                  width: 20.w,
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      size: ICON_BUTTON_SIZE.h,
+                      Icons.arrow_back,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
+                    onPressed: () {
+                      Utils.handleVibrationFeedback(context);
+                      Navigator.of(context).pop();
+                      showDialogForAddingPlayer(gameSettings, context);
+                    },
                   ),
                 ),
                 Expanded(

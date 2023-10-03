@@ -70,7 +70,8 @@ class _GameStatsSingleDoubleTrainingState
                           'Target number: ${_game!.getMode == GameMode.DoubleTraining ? 'D' : ''}${_game!.getGameSettings.getTargetNumber} ',
                       style: TextStyle(
                         fontSize:
-                            Theme.of(context).textTheme.bodyMedium!.fontSize,
+                            Theme.of(context).textTheme.titleSmall!.fontSize! *
+                                0.9,
                         color: Colors.white,
                       ),
                       children: <TextSpan>[
@@ -90,12 +91,13 @@ class _GameStatsSingleDoubleTrainingState
                 Text(
                   _getHeader(),
                   style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    fontSize:
+                        Theme.of(context).textTheme.titleSmall!.fontSize! * 0.9,
                     color: Colors.white,
                   ),
                 ),
               Container(
-                alignment: Alignment.center,
+                alignment: Utils.isLandscape(context) ? Alignment.center : null,
                 padding: EdgeInsets.only(
                   top: 0.5.h,
                   bottom: 2.h,

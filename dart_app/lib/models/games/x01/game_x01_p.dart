@@ -10,6 +10,7 @@ import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
+import 'package:flutter/material.dart';
 
 class GameX01_P extends Game_P {
   GameX01_P() : super(dateTime: DateTime.now(), name: GameMode.X01.name);
@@ -143,15 +144,15 @@ class GameX01_P extends Game_P {
   reset() {
     setCurrentPointsSelected = 'Points';
     setPlayerOrTeamLegStartIndex = 0;
+    setRevertPossible = false;
     setInit = false;
     setReachedSuddenDeath = false;
     setCurrentPointType = PointType.Single;
-    UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(getCurrentThreeDarts);
     setCanBePressed = true;
     setAreTeamStatsDisplayed = true;
     setCurrentPlayerOfTeamsBeforeLegFinish = [];
-    setLegSetWithPlayerOrTeamWhoFinishedIt = [];
     setBotSubmittedPoints = false;
+    suddenDeathStarter = null;
 
     setGameId = '';
     setDateTime = DateTime.now();
@@ -163,8 +164,10 @@ class GameX01_P extends Game_P {
     setIsGameFinished = false;
     setIsFavouriteGame = false;
     setRevertPossible = false;
-    setCurrentThreeDarts = ['Dart 1', 'Dart 2', 'Dart 3'];
+    UtilsPointBtnsThreeDarts.resetCurrentThreeDarts(getCurrentThreeDarts);
     setShowLoadingSpinner = false;
+    setLegSetWithPlayerOrTeamWhoFinishedIt = [];
+    setSafeAreaPadding = EdgeInsets.zero;
 
     g_average = '-';
     g_last_throw = '-';
@@ -172,80 +175,77 @@ class GameX01_P extends Game_P {
   }
 
   init(GameSettingsX01_P gameSettings) {
-    // if game is finished -> undo last throw will call init again
-    if (gameSettings.getPlayers.length != getPlayerGameStatistics.length) {
-      reset();
+    reset();
 
-      setGameSettings = gameSettings;
-      setPlayerGameStatistics = [];
+    setGameSettings = gameSettings;
+    setPlayerGameStatistics = [];
 
-      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
-        setCurrentPlayerToThrow = gameSettings.getPlayers.first;
-      } else {
-        setCurrentTeamToThrow = gameSettings.getTeams.first;
+    if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Single) {
+      setCurrentPlayerToThrow = gameSettings.getPlayers.first;
+    } else {
+      setCurrentTeamToThrow = gameSettings.getTeams.first;
 
-        // reverse players in teams
-        for (Team team in gameSettings.getTeams) {
-          team.setPlayers = team.getPlayers.reversed.toList();
-        }
-        // set players in correct order
-        List<Player> players = [];
-        for (Team team in gameSettings.getTeams) {
-          for (Player player in team.getPlayers) {
-            players.add(player);
-          }
-        }
-        gameSettings.setPlayers = players;
-
-        setCurrentPlayerToThrow = gameSettings.getTeams.first.getPlayers.first;
+      // reverse players in teams
+      for (Team team in gameSettings.getTeams) {
+        team.setPlayers = team.getPlayers.reversed.toList();
       }
+      // set players in correct order
+      List<Player> players = [];
+      for (Team team in gameSettings.getTeams) {
+        for (Player player in team.getPlayers) {
+          players.add(player);
+        }
+      }
+      gameSettings.setPlayers = players;
 
-      setInit = true;
-      final int points = gameSettings.getPointsOrCustom();
+      setCurrentPlayerToThrow = gameSettings.getTeams.first.getPlayers.first;
+    }
 
-      for (Player player in gameSettings.getPlayers) {
-        getPlayerGameStatistics.add(
-          new PlayerOrTeamGameStatsX01(
+    setInit = true;
+    final int points = gameSettings.getPointsOrCustom();
+
+    for (Player player in gameSettings.getPlayers) {
+      getPlayerGameStatistics.add(
+        new PlayerOrTeamGameStatsX01(
+          mode: GameMode.X01.name,
+          player: player,
+          currentPoints: points,
+          dateTime: getDateTime,
+        ),
+      );
+    }
+
+    if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      for (Team team in gameSettings.getTeams) {
+        getTeamGameStatistics.add(
+          new PlayerOrTeamGameStatsX01.Team(
+            team: team,
             mode: GameMode.X01.name,
-            player: player,
             currentPoints: points,
             dateTime: getDateTime,
           ),
         );
+        team.setCurrentPlayerToThrow = team.getPlayers.first;
       }
 
-      if (gameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        for (Team team in gameSettings.getTeams) {
-          getTeamGameStatistics.add(
-            new PlayerOrTeamGameStatsX01.Team(
-              team: team,
-              mode: GameMode.X01.name,
-              currentPoints: points,
-              dateTime: getDateTime,
-            ),
-          );
-          team.setCurrentPlayerToThrow = team.getPlayers.first;
-        }
-
-        for (PlayerOrTeamGameStats teamStats in getTeamGameStatistics) {
-          teamStats.getTeam.setCurrentPlayerToThrow =
-              teamStats.getTeam.getPlayers.first;
-        }
-
-        // set team for player stats in order to sort them
-        for (PlayerOrTeamGameStats playerStats in getPlayerGameStatistics) {
-          final Team team =
-              gameSettings.findTeamForPlayer(playerStats.getPlayer.getName);
-          playerStats.setTeam = team;
-        }
-
-        getPlayerGameStatistics.sort((a, b) =>
-            (a.getTeam as Team).getName.compareTo((b.getTeam as Team).getName));
+      for (PlayerOrTeamGameStats teamStats in getTeamGameStatistics) {
+        teamStats.getTeam.setCurrentPlayerToThrow =
+            teamStats.getTeam.getPlayers.first;
       }
 
-      if (gameSettings.getInputMethod == InputMethod.ThreeDarts) {
-        setCurrentPointType = PointType.Single;
+      // set team for player stats in order to sort them
+      for (PlayerOrTeamGameStats playerStats in getPlayerGameStatistics) {
+        final Team team =
+            gameSettings.findTeamForPlayer(playerStats.getPlayer.getName);
+        playerStats.setTeam = team;
       }
+
+      getPlayerGameStatistics.sort((a, b) =>
+          (a.getTeam as Team).getName.compareTo((b.getTeam as Team).getName));
+    }
+
+    if (gameSettings.getInputMethod == InputMethod.ThreeDarts) {
+      setCurrentPointType = PointType.Single;
     }
   }
 

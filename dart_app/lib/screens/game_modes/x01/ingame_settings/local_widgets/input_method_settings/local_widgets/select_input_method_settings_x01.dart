@@ -174,7 +174,7 @@ class SelectInputMethodSettingsX01 extends StatelessWidget {
                       ),
                       children: <TextSpan>[
                         new TextSpan(
-                            text: 'Enter each Dart seperately. As a result, '),
+                            text: 'Enter each dart seperately. As a result, '),
                         new TextSpan(
                             text: 'more',
                             style: new TextStyle(fontWeight: FontWeight.bold)),

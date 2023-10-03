@@ -7,6 +7,7 @@ import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/l
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/six_to_ten.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/fifteen_to_twenty.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/thrown_darts.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -31,7 +32,9 @@ class PointBtnsThreeDarts extends StatelessWidget {
             SixToTenBtnsThreeDarts(mode: mode),
             ElevenToFifteenBtnsThreeDarts(mode: mode),
             FifteenToTwentyBtnsThreeDarts(mode: mode),
-            Expanded(child: SingleDoubleOrTrippleBtns(mode: mode)),
+            Utils.isLandscape(context)
+                ? SingleDoubleOrTrippleBtns(mode: mode)
+                : Expanded(child: SingleDoubleOrTrippleBtns(mode: mode)),
           ],
         ),
       ),

@@ -25,10 +25,12 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
     newTextControllerAmountOfRoundsGameSettingsSdt();
   }
 
-  _showDialogForRoundsOrPoints(BuildContext context) {
+  _showDialogForRoundsOrPoints(BuildContext context) async {
     final settings = context.read<GameSettingsSingleDoubleTraining_P>();
     final String backupString = amountOfRoundsController
         .text; // in case text was changed and cancel pressed
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -159,6 +161,8 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
         ),
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   _submitNewRoundsOrPoints(

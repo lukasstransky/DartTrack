@@ -22,18 +22,6 @@ class GameX01 extends StatefulWidget {
 
 class GameX01State extends State<GameX01> {
   @override
-  didChangeDependencies() {
-    final Map arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
-    // only init game for new game, not for open game
-    if (arguments.isNotEmpty && !arguments['openGame']) {
-      context.read<GameX01_P>().init(context.read<GameSettingsX01_P>());
-    }
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final bool isTeamMode = context.read<GameSettingsX01_P>().getSingleOrTeam ==
         SingleOrTeamEnum.Team;

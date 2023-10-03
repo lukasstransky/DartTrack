@@ -169,15 +169,9 @@ class PlayerOrTeamGameStatsCricket extends PlayerOrTeamGameStats
 
   String getMarksPerRound() {
     if (getThrownDarts == 0) {
-      return '0';
+      return '0.00';
     }
 
-    final String result = (getTotalMarks / getThrownDarts).toStringAsFixed(2);
-    final String decimalPlaces = result.substring(result.length - 2);
-
-    if (decimalPlaces == '00') {
-      return result.substring(0, result.length - 3);
-    }
-    return result;
+    return (getTotalMarks / getThrownDarts).toStringAsFixed(2);
   }
 }

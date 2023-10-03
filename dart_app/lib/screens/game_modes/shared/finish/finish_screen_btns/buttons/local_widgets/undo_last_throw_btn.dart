@@ -58,10 +58,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = true;
       game.notify();
 
-      Navigator.of(context).pushNamed(
-        '/gameX01',
-        arguments: {'openGame': false},
-      );
+      Navigator.of(context).pushNamed('/gameX01');
 
       if (username != 'Guest') {
         await firestoreServiceGames.deleteGame(
@@ -89,10 +86,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = true;
       game.notify();
 
-      Navigator.of(context).pushNamed(
-        '/gameScoreTraining',
-        arguments: {'openGame': false},
-      );
+      Navigator.of(context).pushNamed('/gameScoreTraining');
 
       if (username != 'Guest') {
         await firestoreServiceGames.deleteGame(
@@ -117,7 +111,6 @@ class UndoLastThrowBtn extends StatelessWidget {
       Navigator.of(context).pushNamed(
         '/gameSingleDoubleTraining',
         arguments: {
-          'openGame': false,
           'mode': game.getName,
         },
       );
@@ -146,10 +139,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = true;
       game.notify();
 
-      Navigator.of(context).pushNamed(
-        '/gameCricket',
-        arguments: {'openGame': false},
-      );
+      Navigator.of(context).pushNamed('/gameCricket');
 
       if (username != 'Guest') {
         await firestoreServiceGames.deleteGame(

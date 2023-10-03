@@ -22,21 +22,6 @@ class GameScoreTraining extends StatefulWidget {
 
 class _GameScoreTrainingState extends State<GameScoreTraining> {
   @override
-  void didChangeDependencies() {
-    final Map arguments = (ModalRoute.of(context)?.settings.arguments ??
-        <String, dynamic>{}) as Map;
-
-    // only init game for new game, not for open game
-    if (arguments.isNotEmpty && !arguments['openGame']) {
-      context
-          .read<GameScoreTraining_P>()
-          .init(context.read<GameSettingsScoreTraining_P>());
-    }
-
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
     context.read<GameScoreTraining_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;

@@ -1,5 +1,4 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game/local_widgets/field_to_hit_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game/local_widgets/game_btns/double/game_btns_double_sd_t.dart';
@@ -35,11 +34,6 @@ class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
       _mode = arguments['mode'] == GameMode.SingleTraining.name
           ? GameMode.SingleTraining
           : GameMode.DoubleTraining;
-      if (!arguments['openGame']) {
-        context
-            .read<GameSingleDoubleTraining_P>()
-            .init(context.read<GameSettingsSingleDoubleTraining_P>(), _mode);
-      }
     }
   }
 

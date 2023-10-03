@@ -90,7 +90,7 @@ class SettingsAccountData extends StatelessWidget {
                 ),
                 TextSpan(
                     text:
-                        '? \nThis action will permanently delete all of your game data and cannot be undone.'),
+                        '? \nDeleting your game data is permanent and cannot be reversed.'),
               ],
             ),
           ),
@@ -188,7 +188,7 @@ class SettingsAccountData extends StatelessWidget {
                 ),
                 TextSpan(
                     text:
-                        '? \nThis action is irreversible and will permanently delete your account and associated data.'),
+                        '? \nDeleting your account and its data is permanent and cannot be reversed.'),
               ],
             ),
           ),

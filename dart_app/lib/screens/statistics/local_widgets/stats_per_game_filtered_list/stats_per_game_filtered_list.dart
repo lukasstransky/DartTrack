@@ -226,13 +226,13 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
 
     switch (this._type) {
       case BEST_AVG:
-        return 'Best averages';
+        return 'Best avgs';
       case WORST_AVG:
-        return 'Worst averages';
+        return 'Worst avgs';
       case BEST_FIRST_NINE_AVG:
-        return 'Best first nine averages';
+        return 'Best first nine avgs';
       case WORST_FIRST_NINE_AVG:
-        return 'Worst first nine averages';
+        return 'Worst first nine avgs';
       case BEST_CHECKOUT_QUOTE:
         return 'Best checkout quotes';
       case WORST_CHECKOUT_QUOTE:

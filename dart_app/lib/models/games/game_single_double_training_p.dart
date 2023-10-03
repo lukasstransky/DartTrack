@@ -109,56 +109,54 @@ class GameSingleDoubleTraining_P extends Game_P {
   }
 
   init(GameSettingsSingleDoubleTraining_P settings, GameMode mode) {
-    if (settings.getPlayers.length != getPlayerGameStatistics.length) {
-      reset();
+    reset();
 
-      setGameSettings = settings;
-      setMode = mode;
+    setGameSettings = settings;
+    setMode = mode;
 
-      if (getGameSettings.getIsTargetNumberEnabled) {
-        setCurrentFieldToHit = getGameSettings.getTargetNumber;
-        setAmountOfRoundsRemaining = getGameSettings.getAmountOfRounds;
-      } else {
-        switch (getGameSettings.getMode) {
-          case ModesSingleDoubleTraining.Ascending:
-            {
-              setCurrentFieldToHit = 1;
-              break;
-            }
-          case ModesSingleDoubleTraining.Descending:
-            {
-              setCurrentFieldToHit = 20;
-              break;
-            }
-          case ModesSingleDoubleTraining.Random:
-            {
-              setCurrentFieldToHit = _getRandomValue(1, 21);
-              break;
-            }
-        }
+    if (getGameSettings.getIsTargetNumberEnabled) {
+      setCurrentFieldToHit = getGameSettings.getTargetNumber;
+      setAmountOfRoundsRemaining = getGameSettings.getAmountOfRounds;
+    } else {
+      switch (getGameSettings.getMode) {
+        case ModesSingleDoubleTraining.Ascending:
+          {
+            setCurrentFieldToHit = 1;
+            break;
+          }
+        case ModesSingleDoubleTraining.Descending:
+          {
+            setCurrentFieldToHit = 20;
+            break;
+          }
+        case ModesSingleDoubleTraining.Random:
+          {
+            setCurrentFieldToHit = _getRandomValue(1, 21);
+            break;
+          }
       }
-
-      for (Player player in getGameSettings.getPlayers) {
-        final PlayerGameStatsSingleDoubleTraining stats =
-            new PlayerGameStatsSingleDoubleTraining(
-          mode: mode == GameMode.SingleTraining
-              ? GameMode.SingleTraining.name
-              : GameMode.DoubleTraining.name,
-          player: player,
-          dateTime: getDateTime,
-        );
-        final int until = getGameSettings.getIsTargetNumberEnabled
-            ? getGameSettings.getAmountOfRounds + 1
-            : 21;
-
-        for (int i = 1; i < until; i++) {
-          stats.getFieldHits[i] = '-';
-        }
-        getPlayerGameStatistics.add(stats);
-      }
-
-      setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
     }
+
+    for (Player player in getGameSettings.getPlayers) {
+      final PlayerGameStatsSingleDoubleTraining stats =
+          new PlayerGameStatsSingleDoubleTraining(
+        mode: mode == GameMode.SingleTraining
+            ? GameMode.SingleTraining.name
+            : GameMode.DoubleTraining.name,
+        player: player,
+        dateTime: getDateTime,
+      );
+      final int until = getGameSettings.getIsTargetNumberEnabled
+          ? getGameSettings.getAmountOfRounds + 1
+          : 21;
+
+      for (int i = 1; i < until; i++) {
+        stats.getFieldHits[i] = '-';
+      }
+      getPlayerGameStatistics.add(stats);
+    }
+
+    setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
   }
 
   reset() {

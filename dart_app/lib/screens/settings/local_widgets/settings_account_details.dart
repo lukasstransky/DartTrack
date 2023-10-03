@@ -104,7 +104,9 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
     );
   }
 
-  _showDialogForChangingUsername(BuildContext context) {
+  _showDialogForChangingUsername(BuildContext context) async {
+    Utils.forcePortraitMode(context);
+
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -256,6 +258,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
         ],
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   _onSaveClickedForUsernameDialog(BuildContext context) async {
@@ -311,58 +315,134 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
     );
   }
 
-  _showDialogForChangingEmail(BuildContext context) {
+  _showDialogForChangingEmail(BuildContext context) async {
     final Auth_P auth = context.read<Auth_P>();
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        contentPadding:
-            Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
-        title: Text(
-          'Change email',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+      builder: (context) => SingleChildScrollView(
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
           ),
-        ),
-        content: Container(
-          width: DIALOG_NORMAL_WIDTH.w,
-          child: Form(
-            key: _emailFormKey,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    width: 80.w,
-                    child: Selector<Auth_P, bool>(
-                      selector: (_, auth) => auth.getPasswordVisible,
-                      builder: (_, passwordVisible, __) => TextFormField(
-                        autofocus: true,
-                        obscureText: !passwordVisible,
-                        controller: _currentPasswordController,
-                        keyboardType: TextInputType.text,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          contentPadding:
+              Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
+          title: Text(
+            'Change email',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+            ),
+          ),
+          content: Container(
+            width: DIALOG_NORMAL_WIDTH.w,
+            child: Form(
+              key: _emailFormKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 80.w,
+                      child: Selector<Auth_P, bool>(
+                        selector: (_, auth) => auth.getPasswordVisible,
+                        builder: (_, passwordVisible, __) => TextFormField(
+                          autofocus: true,
+                          obscureText: !passwordVisible,
+                          controller: _currentPasswordController,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(
+                                MAX_PASSWORD_LENGTH),
+                          ],
+                          validator: (value) {
+                            if (value!.trim().isEmpty) {
+                              _currentPasswordController.clear();
+                              return ('Password is required!');
+                            }
+                            if (_errorMessage.isNotEmpty) {
+                              final String temp = _errorMessage;
+                              _errorMessage = '';
+                              return temp;
+                            }
+                            return null;
+                          },
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
+                          ),
+                          decoration: InputDecoration(
+                            errorStyle: TextStyle(
+                                fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
+                            prefixIcon: Icon(
+                              size: ICON_BUTTON_SIZE.h,
+                              Icons.lock,
+                              color: Utils.getPrimaryColorDarken(context),
+                            ),
+                            suffixIcon: IconButton(
+                              iconSize: ICON_BUTTON_SIZE.h,
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              icon: Icon(passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
+                              color: Utils.getPrimaryColorDarken(context),
+                              onPressed: () {
+                                Utils.handleVibrationFeedback(context);
+                                auth.setPasswordVisible = !passwordVisible;
+                                auth.notify();
+                              },
+                            ),
+                            filled: true,
+                            fillColor: Utils.darken(
+                                Theme.of(context).colorScheme.primary, 10),
+                            hintText: 'Current password',
+                            hintStyle: TextStyle(
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
+                              color: Utils.getPrimaryColorDarken(context),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(20),
+                              borderSide: BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.only(top: 1.h),
+                      child: TextFormField(
+                        controller: _emailController,
                         textInputAction: TextInputAction.done,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(MAX_PASSWORD_LENGTH),
-                        ],
                         validator: (value) {
                           if (value!.trim().isEmpty) {
-                            _currentPasswordController.clear();
-                            return ('Password is required!');
+                            return ('Please enter a email!');
                           }
-                          if (_errorMessage.isNotEmpty) {
-                            final String temp = _errorMessage;
-                            _errorMessage = '';
-                            return temp;
+                          if (!_emailValid) {
+                            return 'Email already exists!';
+                          }
+                          if (!RegExp(EMAIL_REGEX).hasMatch(value)) {
+                            return ('Please enter a valid email!');
                           }
                           return null;
                         },
+                        keyboardType: TextInputType.text,
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(MAX_EMAIL_LENGTH)
+                        ],
                         style: TextStyle(
                           color: Colors.white,
                           fontSize:
@@ -373,27 +453,13 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                               TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
                           prefixIcon: Icon(
                             size: ICON_BUTTON_SIZE.h,
-                            Icons.lock,
+                            Icons.mail,
                             color: Utils.getPrimaryColorDarken(context),
                           ),
-                          suffixIcon: IconButton(
-                            iconSize: ICON_BUTTON_SIZE.h,
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            icon: Icon(passwordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off),
-                            color: Utils.getPrimaryColorDarken(context),
-                            onPressed: () {
-                              Utils.handleVibrationFeedback(context);
-                              auth.setPasswordVisible = !passwordVisible;
-                              auth.notify();
-                            },
-                          ),
-                          filled: true,
+                          hintText: 'New email',
                           fillColor: Utils.darken(
                               Theme.of(context).colorScheme.primary, 10),
-                          hintText: 'Current password',
+                          filled: true,
                           hintStyle: TextStyle(
                             fontSize: Theme.of(context)
                                 .textTheme
@@ -411,118 +477,67 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.only(top: 1.h),
-                    child: TextFormField(
-                      controller: _emailController,
-                      textInputAction: TextInputAction.done,
-                      validator: (value) {
-                        if (value!.trim().isEmpty) {
-                          return ('Please enter a email!');
-                        }
-                        if (!_emailValid) {
-                          return 'Email already exists!';
-                        }
-                        if (!RegExp(EMAIL_REGEX).hasMatch(value)) {
-                          return ('Please enter a valid email!');
-                        }
-                        return null;
-                      },
-                      keyboardType: TextInputType.text,
-                      inputFormatters: [
-                        LengthLimitingTextInputFormatter(MAX_EMAIL_LENGTH)
-                      ],
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize:
-                            Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      ),
-                      decoration: InputDecoration(
-                        errorStyle:
-                            TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
-                        prefixIcon: Icon(
-                          size: ICON_BUTTON_SIZE.h,
-                          Icons.mail,
-                          color: Utils.getPrimaryColorDarken(context),
-                        ),
-                        hintText: 'New email',
-                        fillColor: Utils.darken(
-                            Theme.of(context).colorScheme.primary, 10),
-                        filled: true,
-                        hintStyle: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize,
-                          color: Utils.getPrimaryColorDarken(context),
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          borderSide: BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                _emailController.clear();
+                _currentPasswordController.clear();
+                auth.setPasswordVisible = false;
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Utils.handleVibrationFeedback(context);
+                _onSaveClickedForEmailDialog(context);
+              },
+              child: Text(
+                'Update',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                ),
+              ),
+              style: ButtonStyle(
+                backgroundColor:
+                    Utils.getPrimaryMaterialStateColorDarken(context),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Utils.handleVibrationFeedback(context);
-              _emailController.clear();
-              _currentPasswordController.clear();
-              auth.setPasswordVisible = false;
-              Navigator.of(context).pop();
-            },
-            child: Text(
-              'Cancel',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-              ),
-            ),
-            style: ButtonStyle(
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
-                ),
-              ),
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Utils.handleVibrationFeedback(context);
-              _onSaveClickedForEmailDialog(context);
-            },
-            child: Text(
-              'Update',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-              ),
-            ),
-            style: ButtonStyle(
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(
-                  borderRadius:
-                      BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   _onSaveClickedForEmailDialog(BuildContext context) async {
@@ -554,7 +569,9 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
     }
   }
 
-  _showDialogForChangingPassword(BuildContext context) {
+  _showDialogForChangingPassword(BuildContext context) async {
+    Utils.forcePortraitMode(context);
+
     showDialog(
       barrierDismissible: false,
       context: context,
@@ -686,6 +703,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
         ],
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   _onSaveClickedForPasswordDialog(BuildContext context) async {

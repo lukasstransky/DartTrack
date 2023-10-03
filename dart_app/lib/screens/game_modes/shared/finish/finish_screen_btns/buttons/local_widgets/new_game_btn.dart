@@ -1,5 +1,8 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
@@ -20,37 +23,33 @@ class NewGameBtn extends StatelessWidget {
 
   _newGameBtnClicked(BuildContext context) async {
     if (gameMode == GameMode.X01) {
-      context.read<GameX01_P>().reset();
-      Navigator.of(context).pushNamed(
-        '/gameX01',
-        arguments: {'openGame': false},
-      );
+      context.read<GameX01_P>().init(context.read<GameSettingsX01_P>());
+      Navigator.of(context).pushNamed('/gameX01');
     } else if (gameMode == GameMode.ScoreTraining) {
-      context.read<GameScoreTraining_P>().reset();
-      context.read<GameSettingsScoreTraining_P>().setInputMethod =
-          InputMethod.Round;
-      Navigator.of(context).pushNamed(
-        '/gameScoreTraining',
-        arguments: {'openGame': false},
-      );
+      final GameSettingsScoreTraining_P gameSettingsScoreTraining =
+          context.read<GameSettingsScoreTraining_P>();
+      gameSettingsScoreTraining.setInputMethod = InputMethod.Round;
+      context.read<GameScoreTraining_P>().init(gameSettingsScoreTraining);
+
+      Navigator.of(context).pushNamed('/gameScoreTraining');
     } else if (gameMode == GameMode.SingleTraining ||
         gameMode == GameMode.DoubleTraining) {
-      final game = context.read<GameSingleDoubleTraining_P>();
+      final GameSingleDoubleTraining_P gameSingleDoubleTraining =
+          context.read<GameSingleDoubleTraining_P>();
 
-      game.reset();
+      gameSingleDoubleTraining.init(
+        context.read<GameSettingsSingleDoubleTraining_P>(),
+        gameSingleDoubleTraining.getMode,
+      );
       Navigator.of(context).pushNamed(
         '/gameSingleDoubleTraining',
         arguments: {
-          'openGame': false,
-          'mode': game.getName,
+          'mode': gameSingleDoubleTraining.getName,
         },
       );
     } else if (gameMode == GameMode.Cricket) {
-      context.read<GameCricket_P>().reset();
-      Navigator.of(context).pushNamed(
-        '/gameCricket',
-        arguments: {'openGame': false},
-      );
+      context.read<GameCricket_P>().init(context.read<GameSettingsCricket_P>());
+      Navigator.of(context).pushNamed('/gameCricket');
     }
   }
 

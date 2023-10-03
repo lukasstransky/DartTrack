@@ -41,27 +41,25 @@ class GameScoreTraining_P extends Game_P {
   }
 
   init(GameSettingsScoreTraining_P settings) {
-    if (settings.getPlayers.length != getPlayerGameStatistics.length) {
-      reset();
+    reset();
 
-      setGameSettings = settings;
+    setGameSettings = settings;
 
-      for (Player player in getGameSettings.getPlayers) {
-        getPlayerGameStatistics.add(
-          new PlayerGameStatsScoreTraining(
-            mode: GameMode.ScoreTraining.name,
-            player: player,
-            dateTime: getDateTime,
-            roundOrPointsLeft: getGameSettings.getMaxRoundsOrPoints,
-          ),
-        );
-      }
+    for (Player player in getGameSettings.getPlayers) {
+      getPlayerGameStatistics.add(
+        new PlayerGameStatsScoreTraining(
+          mode: GameMode.ScoreTraining.name,
+          player: player,
+          dateTime: getDateTime,
+          roundOrPointsLeft: getGameSettings.getMaxRoundsOrPoints,
+        ),
+      );
+    }
 
-      setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
+    setCurrentPlayerToThrow = getPlayerGameStatistics.first.getPlayer;
 
-      if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
-        setCurrentPointType = PointType.Single;
-      }
+    if (getGameSettings.getInputMethod == InputMethod.ThreeDarts) {
+      setCurrentPointType = PointType.Single;
     }
   }
 

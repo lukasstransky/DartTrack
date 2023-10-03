@@ -42,7 +42,7 @@ class PlayersTeamsListDialogs {
   }
 
   static showDialogForEditingPlayer(BuildContext context, Player playerToEdit,
-      GameSettings_P gameSettings_P) {
+      GameSettings_P gameSettings_P) async {
     //store values as "backup" if user modifies the avg. or name & then clicks on cancel
     String cancelName = '';
     int cancelLvl = 0;
@@ -54,6 +54,8 @@ class PlayersTeamsListDialogs {
     } else {
       cancelName = playerToEdit.getName;
     }
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -246,11 +248,15 @@ class PlayersTeamsListDialogs {
         ),
       ),
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
-  static showDialogForEditingTeam(
-      BuildContext context, Team teamToEdit, GameSettings_P gameSettings) {
+  static showDialogForEditingTeam(BuildContext context, Team teamToEdit,
+      GameSettings_P gameSettings) async {
     final String cancelName = teamToEdit.getName;
+
+    Utils.forcePortraitMode(context);
 
     showDialog(
       barrierDismissible: false,
@@ -430,6 +436,8 @@ class PlayersTeamsListDialogs {
         );
       },
     );
+
+    await SystemChrome.setPreferredOrientations(DeviceOrientation.values);
   }
 
   static showDialogForDeletingTeamAsLastPlayer(
@@ -891,28 +899,27 @@ class PlayersTeamsListDialogs {
           actions: [
             Row(
               children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: IconButton(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      padding: EdgeInsets.zero,
-                      icon: Icon(
-                        size: ICON_BUTTON_SIZE.h,
-                        Icons.arrow_back,
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      onPressed: () {
-                        Utils.handleVibrationFeedback(context);
-                        Navigator.of(context).pop();
-                        showDialogForEditingTeam(
-                          context,
-                          teamToEdit,
-                          gameSettings,
-                        );
-                      },
+                Container(
+                  width: 20.w,
+                  alignment: Alignment.centerLeft,
+                  child: IconButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      size: ICON_BUTTON_SIZE.h,
+                      Icons.arrow_back,
+                      color: Theme.of(context).colorScheme.secondary,
                     ),
+                    onPressed: () {
+                      Utils.handleVibrationFeedback(context);
+                      Navigator.of(context).pop();
+                      showDialogForEditingTeam(
+                        context,
+                        teamToEdit,
+                        gameSettings,
+                      );
+                    },
                   ),
                 ),
                 Expanded(

@@ -89,7 +89,9 @@ class ThrownDartsWidget extends StatelessWidget {
                   color: Utils.getPrimaryColorDarken(context),
                   width: GENERAL_BORDER_WIDTH.w,
                 ),
-                left: Utils.isLandscape(context)
+                left: mode != GameMode.SingleTraining &&
+                        mode != GameMode.DoubleTraining &&
+                        Utils.isLandscape(context)
                     ? BorderSide(
                         color: Utils.getPrimaryColorDarken(context),
                         width: GENERAL_BORDER_WIDTH.w,
