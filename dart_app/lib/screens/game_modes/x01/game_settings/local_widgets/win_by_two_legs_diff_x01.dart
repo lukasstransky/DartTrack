@@ -32,10 +32,12 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
         maxExtraLegs: gameSettingsX01.getMaxExtraLegs,
         suddenDeath: gameSettingsX01.getSuddenDeath,
         winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
+        setsEnabled: gameSettingsX01.getSetsEnabled,
       ),
       builder: (_, selectorModel, __) {
-        final bool disableSwitch =
-            selectorModel.legs == 1 || selectorModel.drawMode;
+        final bool disableSwitch = selectorModel.legs == 1 ||
+            selectorModel.drawMode ||
+            selectorModel.setsEnabled;
 
         return Container(
           padding: EdgeInsets.only(top: paddingTop.h),
@@ -69,8 +71,10 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                           String msg = '';
                           if (selectorModel.legs == 1) {
                             msg = 'At least 2 legs are required!';
+                          } else if (selectorModel.setsEnabled) {
+                            msg = 'Not possible with set mode enabled!';
                           } else {
-                            msg = 'Not possible with draw mode!';
+                            msg = 'Not possible with draw mode enabled!';
                           }
                           Fluttertoast.showToast(
                             msg: msg,
@@ -102,7 +106,7 @@ class WinByTwoLegsDifferenceX01 extends StatelessWidget {
                     '(Sudden death leg after max. ${selectorModel.maxExtraLegs} additional ' +
                         (selectorModel.maxExtraLegs == 1 ? 'leg)' : 'legs)'),
                     style: TextStyle(
-                      fontSize: 8.sp,
+                      fontSize: 9.sp,
                       color: Colors.white70,
                     ),
                   ),
@@ -492,6 +496,7 @@ class SelectorModel {
   final bool winByTwoLegsDifference;
   final bool suddenDeath;
   final int maxExtraLegs;
+  final bool setsEnabled;
 
   SelectorModel({
     required this.legs,
@@ -499,5 +504,6 @@ class SelectorModel {
     required this.winByTwoLegsDifference,
     required this.suddenDeath,
     required this.maxExtraLegs,
+    required this.setsEnabled,
   });
 }

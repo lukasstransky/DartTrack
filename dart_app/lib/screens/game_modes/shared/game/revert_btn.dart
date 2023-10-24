@@ -91,6 +91,9 @@ class RevertBtn extends StatelessWidget {
       if (game_p.getCurrentPlayerToThrow is Bot) {
         RevertX01Helper.revertPoints(game_p as GameX01_P, gameSettingsX01);
       }
+      if (game_p.getCurrentPlayerToThrow is Bot) {
+        RevertX01Helper.revertPoints(game_p as GameX01_P, gameSettingsX01);
+      }
     } else if (game_p is GameScoreTraining_P) {
       (game_p as GameScoreTraining_P).revert(context);
     } else if (game_p is GameSingleDoubleTraining_P) {

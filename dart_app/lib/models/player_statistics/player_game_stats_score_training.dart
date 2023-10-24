@@ -81,6 +81,33 @@ class PlayerGameStatsScoreTraining extends PlayerOrTeamGameStats
     this.setInputMethodForRounds = inputMethodForRounds;
   }
 
+  PlayerGameStatsScoreTraining clone() {
+    return PlayerGameStatsScoreTraining(
+        player: Player.clone(this.getPlayer),
+        mode: this.getMode,
+        dateTime: this.getDateTime,
+        roundOrPointsLeft: this._roundsOrPointsLeft)
+      .._currentScore = this._currentScore
+      .._allScores = List.from(this._allScores)
+      .._allScoresPerDart = List.from(this._allScoresPerDart)
+      .._allScoresPerDartAsStringCount =
+          Map<String, int>.from(this._allScoresPerDartAsStringCount)
+      .._allScoresPerDartAsString = List.from(this._allScoresPerDartAsString)
+      .._thrownDarts = this._thrownDarts
+      .._roundsOrPointsLeft = this._roundsOrPointsLeft
+      .._roundedScoresEven = Map<int, int>.from(this._roundedScoresEven)
+      .._roundedScoresOdd = Map<int, int>.from(this._roundedScoresOdd)
+      .._preciseScores = Map<int, int>.from(this._preciseScores)
+      .._threeDartModeRoundsCount = this._threeDartModeRoundsCount
+      .._totalRoundsCount = this._totalRoundsCount
+      .._inputMethodForRounds =
+          List<InputMethod>.from(this._inputMethodForRounds)
+      .._allRemainingScoresPerDart = this
+          ._allRemainingScoresPerDart
+          .map((list) => List<String>.from(list))
+          .toList();
+  }
+
   int get getCurrentScore => this._currentScore;
   set setCurrentScore(int value) => this._currentScore = value;
 

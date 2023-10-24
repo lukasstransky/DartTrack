@@ -55,18 +55,18 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
             content: Container(
               width: DIALOG_SMALL_WIDTH.w,
               margin: EdgeInsets.only(
-                left: 8.w,
-                right: 8.w,
+                left: 5.w,
+                right: 5.w,
               ),
               child: TextFormField(
                 textAlign: TextAlign.center,
                 controller: customPointsController,
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return ('Please enter some points!');
+                    return ('Please enter a value!');
                   }
                   if (int.parse(value) < CUSTOM_POINTS_MIN_NUMBER) {
-                    return ('Minimum points are ${CUSTOM_POINTS_MIN_NUMBER}!');
+                    return ('Minimum points: ${CUSTOM_POINTS_MIN_NUMBER}');
                   }
                   return null;
                 },

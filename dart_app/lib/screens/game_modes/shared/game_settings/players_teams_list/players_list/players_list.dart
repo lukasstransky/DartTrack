@@ -6,7 +6,6 @@ import 'package:dart_app/models/game_settings/game_settings_single_double_traini
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/screens/game_modes/shared/game_settings/players_teams_list/players_list/players_list_entry.dart';
-import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -27,7 +26,6 @@ class _PlayersListState extends State<PlayersList> {
   @override
   initState() {
     super.initState();
-    newScrollControllerPlayers();
   }
 
   @override
@@ -57,7 +55,6 @@ class _PlayersListState extends State<PlayersList> {
       width: WIDTH_GAMESETTINGS.w,
       child: ListView.builder(
         shrinkWrap: true,
-        controller: newScrollControllerPlayers(),
         scrollDirection: Axis.vertical,
         itemCount: widget.players.length,
         itemBuilder: (BuildContext context, int index) {

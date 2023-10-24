@@ -10,7 +10,6 @@ import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
-import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
@@ -83,18 +82,31 @@ class FirestoreServiceGames {
 
     // remove locally stored game (and player stats for X01 mode)
     firestoreStats.games.removeWhere((game) => game.getGameId == gameId);
+    firestoreStats.favouriteGames
+        .removeWhere((game) => game.getGameId == gameId);
+    firestoreStats.allPlayerGameStats
+        .removeWhere((stats) => stats.getGameId == gameId);
     if (firestoreStats.games.length == 0) {
       firestoreStats.noGamesPlayed = true;
     } else {
       firestoreStats.noGamesPlayed = false;
     }
+
     if (mode == GameMode.X01) {
       firestoreStats.filteredGames
           .removeWhere((game) => game.getGameId == gameId);
 
-      firestoreStats.getPlayerOrTeamGameStats
+      firestoreStats.getUserPlayerGameStats
           .removeWhere((stats) => stats.getGameId == gameId);
-      firestoreStats.getFilteredPlayerOrTeamGameStats
+      firestoreStats.getUserFilteredPlayerGameStats
+          .removeWhere((stats) => stats.getGameId == gameId);
+
+      firestoreStats.filteredTeamGameStats
+          .removeWhere((stats) => stats.getGameId == gameId);
+    }
+
+    if (mode == GameMode.X01 || mode == GameMode.Cricket) {
+      firestoreStats.allTeamGameStats
           .removeWhere((stats) => stats.getGameId == gameId);
     }
 
@@ -180,14 +192,13 @@ class FirestoreServiceGames {
 
     statisticsFirestoreX01.noGamesPlayed = games.docs.isEmpty ? true : false;
     if (!statisticsFirestoreX01.noGamesPlayed &&
-        !statisticsFirestoreX01.playerOrTeamGameStatsLoaded) {
+        !statisticsFirestoreX01.playerGameStatsLoaded) {
       statisticsFirestoreX01.calculateX01Stats();
     }
     statisticsFirestoreX01.notify();
   }
 
-  Future<void> getGames(GameMode mode, BuildContext context,
-      FirestoreServicePlayerStats firestoreServicePlayerStats) async {
+  Future<void> getGames(GameMode mode, BuildContext context) async {
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(mode, context);
     final bool isX01 = mode == GameMode.X01;
@@ -216,22 +227,13 @@ class FirestoreServiceGames {
         final Game_P game =
             Game_P.fromMap(element.data(), mode, element.id, false);
 
-        PlayerOrTeamGameStats? playerOrTeamGameStatistics;
-        for (String playerGameStatsId in element.get('playerGameStatsIds')) {
-          playerOrTeamGameStatistics = await firestoreServicePlayerStats
-              .getPlayerOrTeamGameStatisticById(playerGameStatsId, mode, false);
-
-          game.getPlayerGameStatistics.add(playerOrTeamGameStatistics);
-        }
+        game.getPlayerGameStatistics.addAll(statsFirestore.allPlayerGameStats
+            .where((stats) => stats.getGameId == game.getGameId));
 
         if ((element.data() as Map<String, dynamic>)
             .containsKey('teamGameStatsIds')) {
-          for (String teamGameStatsId in element.get('teamGameStatsIds')) {
-            playerOrTeamGameStatistics = await firestoreServicePlayerStats
-                .getPlayerOrTeamGameStatisticById(teamGameStatsId, mode, true);
-
-            game.getTeamGameStatistics.add(playerOrTeamGameStatistics);
-          }
+          game.getTeamGameStatistics.addAll(statsFirestore.allTeamGameStats
+              .where((stats) => stats.getGameId == game.getGameId));
         }
 
         if (game.getIsFavouriteGame) {

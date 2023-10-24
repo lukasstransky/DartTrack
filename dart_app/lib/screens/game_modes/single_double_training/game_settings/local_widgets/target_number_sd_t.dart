@@ -116,8 +116,8 @@ class _TargetNumberSingleDoubleTrainingState
           content: Container(
             width: DIALOG_SMALL_WIDTH.w,
             margin: EdgeInsets.only(
-              left: 10.w,
-              right: 10.w,
+              left: 5.w,
+              right: 5.w,
             ),
             child: TextFormField(
               textAlign: TextAlign.center,

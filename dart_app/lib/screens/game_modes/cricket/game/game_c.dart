@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/game_field/game_field_c.dart';
+import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/player_to_throw_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/submit_revert_btns_c.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/single_double_or_tripple.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/fifteen_to_twenty.dart';
@@ -58,6 +59,7 @@ class _GameCricketState extends State<GameCricket> {
     return Column(
       children: [
         GameFieldCricket(),
+        PlayerToThrow(),
         ThrownDarts(mode: GameMode.Cricket),
         SubmitRevertnBtnsCricket(),
         Selector<GameCricket_P, SelectorModel>(
@@ -91,6 +93,7 @@ class _GameCricketState extends State<GameCricket> {
         Expanded(
           child: Column(
             children: [
+              PlayerToThrow(),
               ThrownDarts(mode: GameMode.Cricket),
               SubmitRevertnBtnsCricket(),
               Selector<GameCricket_P, SelectorModel>(

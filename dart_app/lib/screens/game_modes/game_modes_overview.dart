@@ -80,7 +80,6 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
       await context
           .read<FirestoreServiceGames>()
           .getOpenGames(openGamesFirestore);
-      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
       setState(() {});
     }
   }

@@ -2,8 +2,11 @@ import 'dart:math';
 
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
 
 class Bot extends Player {
@@ -238,4 +241,18 @@ class Bot extends Player {
   }
 
   int _getRandomValue(int min, int max) => min + _random.nextInt(max - min);
+
+  static void submitPointsForBot(BuildContext context) {
+    final GameX01_P gameX01 = context.read<GameX01_P>();
+
+    if (!gameX01.getBotSubmittedPoints &&
+        gameX01.getCurrentPlayerToThrow is Bot) {
+      final Bot bot = gameX01.getCurrentPlayerToThrow as Bot;
+      final Tuple3<String, int, int> tuple = bot.getNextScoredValue(gameX01);
+
+      SubmitX01Helper.submitPoints(
+          tuple.item1, context, false, tuple.item2, tuple.item3);
+      gameX01.setBotSubmittedPoints = true;
+    }
+  }
 }

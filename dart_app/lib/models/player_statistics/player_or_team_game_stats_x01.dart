@@ -177,6 +177,60 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
     this._inputMethodForRounds = inputMethodForRounds;
   }
 
+  PlayerOrTeamGameStatsX01 clone() {
+    return PlayerOrTeamGameStatsX01(
+        player: this.getPlayer != null ? Player.clone(this.getPlayer) : null,
+        mode: this.getMode,
+        currentPoints: this._currentPoints,
+        dateTime: this.getDateTime)
+      .._totalPoints = this._totalPoints
+      .._pointsSelectedCount = this._pointsSelectedCount
+      .._firstNineAvgPoints = this._firstNineAvgPoints
+      .._firstNineAvgCount = this._firstNineAvgCount
+      .._currentThrownDartsInLeg = this._currentThrownDartsInLeg
+      .._allThrownDarts = this._allThrownDarts
+      .._thrownDartsPerLeg =
+          LinkedHashMap<String, int>.from(this._thrownDartsPerLeg)
+      .._dartsForWonLegCount = this._dartsForWonLegCount
+      .._gameDraw = this._gameDraw
+      .._gameWon = this._gameWon
+      .._legsWon = this._legsWon
+      .._legsWonTotal = this._legsWonTotal
+      .._setsWon = this._setsWon
+      .._allScoresPerLeg =
+          LinkedHashMap<String, List<int>>.from(this._allScoresPerLeg)
+      .._legsCount = List<int>.from(this._legsCount)
+      .._checkouts = LinkedHashMap<String, int>.from(this._checkouts)
+      .._checkoutCount = this._checkoutCount
+      .._checkoutCountAtThrownDarts =
+          List<Tuple3<String, int, int>>.from(this._checkoutCountAtThrownDarts)
+      .._amountOfFinishDarts =
+          LinkedHashMap<String, int>.from(this._amountOfFinishDarts)
+      .._amountOfDartsForWonLegs = List<int>.from(this._amountOfDartsForWonLegs)
+      .._roundedScoresEven = Map<int, int>.from(this._roundedScoresEven)
+      .._roundedScoresOdd = Map<int, int>.from(this._roundedScoresOdd)
+      .._preciseScores = Map<int, int>.from(this._preciseScores)
+      .._allScores = List<int>.from(this._allScores)
+      .._allScoresCountForRound = this._allScoresCountForRound
+      .._allScoresPerDart = List<int>.from(this._allScoresPerDart)
+      .._allScoresPerDartAsStringCount =
+          Map<String, int>.from(this._allScoresPerDartAsStringCount)
+      .._allScoresPerDartAsString =
+          List<String>.from(this._allScoresPerDartAsString)
+      .._allRemainingPoints = List<int>.from(this._allRemainingPoints)
+      .._allRemainingScoresPerDart = List<List<String>>.from(
+          this._allRemainingScoresPerDart.map((e) => List<String>.from(e)))
+      .._playersWithCheckoutInLeg =
+          Map<String, String>.from(this._playersWithCheckoutInLeg)
+      .._setLegWithPlayerOrTeamWhoFinishedIt =
+          Map<String, String>.from(this._setLegWithPlayerOrTeamWhoFinishedIt)
+      .._inputMethodForRounds =
+          List<InputMethod>.from(this._inputMethodForRounds)
+      .._threeDartModeRoundsCount = this._threeDartModeRoundsCount
+      .._totalRoundsCount = this._totalRoundsCount
+      ..setTeam = this.getTeam?.clone() ?? null;
+  }
+
   factory PlayerOrTeamGameStatsX01.fromMapX01(map,
       [List<List<String>>? allRemainingScoresPerDart]) {
     List<InputMethod> inputMethodForRounds = [];
@@ -328,7 +382,7 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
         );
 
   PlayerOrTeamGameStatsX01(
-      {required Player player,
+      {required Player? player,
       required String mode,
       required int currentPoints,
       required DateTime dateTime})
@@ -492,7 +546,9 @@ class PlayerOrTeamGameStatsX01 extends PlayerOrTeamGameStats
 
     int totalPoints = getTotalPoints;
     // for avg bot bug caused by the delay in the submit
-    if (((getTeam != null && getTeam.getCurrentPlayerToThrow is Bot) ||
+    if (((getTeam != null &&
+                getTeam.getCurrentPlayerToThrow != null &&
+                getTeam.getCurrentPlayerToThrow is Bot) ||
             getPlayer is Bot) &&
         getInputMethodForRounds.length != getAllScores.length) {
       int temp = 0;

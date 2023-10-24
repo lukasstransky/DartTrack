@@ -43,8 +43,9 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
           IconButton(
             splashColor: Colors.transparent,
             highlightColor: Colors.transparent,
-            onPressed: () {
+            onPressed: () async {
               Utils.handleVibrationFeedback(context);
+
               var route = ModalRoute.of(context);
               if (route != null) {
                 Navigator.of(context).pop();

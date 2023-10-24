@@ -45,7 +45,7 @@ class SetsAmount extends StatelessWidget {
             gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.BestOf) ||
         (gameSettings.getSets == MIN_SETS_FIRST_TO &&
             gameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo) ||
-        (gameSettings.getSets == (MIN_SETS + 1) &&
+        (gameSettings.getSets == (MIN_SETS) &&
             gameSettings is GameSettingsX01_P &&
             gameSettings.getDrawMode);
   }

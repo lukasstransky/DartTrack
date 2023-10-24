@@ -66,20 +66,27 @@ class StatsFirestoreX01_P with ChangeNotifier {
   List<Tuple2<int?, String>> _checkoutWithGameId = [];
   List<Tuple2<int?, String>> _thrownDartsWithGameId = [];
 
+  // games
   bool _noGamesPlayed = false;
-
+  bool _showFavouriteGames = false;
+  bool _loadGames = true;
+  bool _gamesLoaded = false;
   List<Game_P> _games = []; // allGames
   List<Game_P> _filteredGames = [];
   List<Game_P> _favouriteGames = [];
-  List<PlayerOrTeamGameStatsX01> _playerOrTeamGameStats = [];
-  List<PlayerOrTeamGameStatsX01> _filteredPlayerOrTeamGameStats = [];
 
-  bool _showFavouriteGames = false;
+  // player stats
+  bool _loadPlayerGameStats = true;
+  bool _playerGameStatsLoaded = false;
+  List<PlayerOrTeamGameStatsX01> _allPlayerGameStats = [];
+  List<PlayerOrTeamGameStatsX01> _userPlayerGameStats = [];
+  List<PlayerOrTeamGameStatsX01> _userFilteredPlayerGameStats = [];
 
-  bool _loadGames = true;
-  bool _gamesLoaded = false;
-  bool _loadPlayerStats = true;
-  bool _playerOrTeamGameStatsLoaded = false;
+  // team stats
+  bool _loadTeamGameStats = true;
+  bool _teamGameStatsLoaded = false;
+  List<PlayerOrTeamGameStatsX01> _allTeamGameStats = [];
+  List<PlayerOrTeamGameStatsX01> _filteredTeamGameStats = [];
 
   String _customBtnDateRange = '';
 
@@ -91,10 +98,21 @@ class StatsFirestoreX01_P with ChangeNotifier {
 
   set countOfGames(value) => this._countOfGames = value;
 
-  get playerOrTeamGameStatsLoaded => this._playerOrTeamGameStatsLoaded;
+  get playerGameStatsLoaded => this._playerGameStatsLoaded;
 
-  set playerOrTeamGameStatsLoaded(value) =>
-      this._playerOrTeamGameStatsLoaded = value;
+  set playerGameStatsLoaded(value) => this._playerGameStatsLoaded = value;
+
+  bool get loadTeamGameStats => this._loadTeamGameStats;
+  set loadTeamGameStats(bool value) => this._loadTeamGameStats = value;
+
+  bool get teamGameStatsLoaded => this._teamGameStatsLoaded;
+  set teamGameStatsLoaded(bool value) => this._teamGameStatsLoaded = value;
+
+  get allTeamGameStats => this._allTeamGameStats;
+  set allTeamGameStats(value) => this._allTeamGameStats = value;
+
+  get filteredTeamGameStats => this._filteredTeamGameStats;
+  set filteredTeamGameStats(value) => this._filteredTeamGameStats = value;
 
   get avg => this._avg;
 
@@ -219,15 +237,21 @@ class StatsFirestoreX01_P with ChangeNotifier {
 
   set favouriteGames(List<Game_P> value) => this._favouriteGames = value;
 
-  List<PlayerOrTeamGameStatsX01> get getPlayerOrTeamGameStats =>
-      this._playerOrTeamGameStats;
-  set setPlayerOrTeamGameStats(List<PlayerOrTeamGameStatsX01> value) =>
-      this._playerOrTeamGameStats = value;
+  List<PlayerOrTeamGameStatsX01> get allPlayerGameStats =>
+      this._allPlayerGameStats;
+  set allPlayerGameStats(List<PlayerOrTeamGameStatsX01> value) =>
+      this._allPlayerGameStats = value;
 
-  List<PlayerOrTeamGameStatsX01> get getFilteredPlayerOrTeamGameStats =>
-      this._filteredPlayerOrTeamGameStats;
-  set setFilteredPlayerOrTeamGameStats(List<PlayerOrTeamGameStatsX01> value) =>
-      this._filteredPlayerOrTeamGameStats = value;
+  List<PlayerOrTeamGameStatsX01> get getUserPlayerGameStats =>
+      this._userPlayerGameStats;
+  set setUserPlayerOrTeamGameStats(List<PlayerOrTeamGameStatsX01> value) =>
+      this._userPlayerGameStats = value;
+
+  List<PlayerOrTeamGameStatsX01> get getUserFilteredPlayerGameStats =>
+      this._userFilteredPlayerGameStats;
+  set setUserFilteredPlayerOrTeamGameStats(
+          List<PlayerOrTeamGameStatsX01> value) =>
+      this._userFilteredPlayerGameStats = value;
 
   bool get loadGames => this._loadGames;
 
@@ -237,10 +261,10 @@ class StatsFirestoreX01_P with ChangeNotifier {
 
   set gamesLoaded(bool value) => this._gamesLoaded = value;
 
-  bool get loadPlayerStats => this._loadPlayerStats;
+  bool get loadPlayerGameStats => this._loadPlayerGameStats;
 
-  set loadPlayerStats(bool loadPlayerStats) =>
-      this._loadPlayerStats = loadPlayerStats;
+  set loadPlayerGameStats(bool loadPlayerGameStats) =>
+      this._loadPlayerGameStats = loadPlayerGameStats;
 
   String get customBtnDateRange => this._customBtnDateRange;
 
@@ -333,20 +357,28 @@ class StatsFirestoreX01_P with ChangeNotifier {
     _filteredGames = [];
   }
 
-  resetFilteredPlayerOrTeamStats() {
-    _filteredPlayerOrTeamGameStats = [];
+  resetPlayerGameStats() {
+    _allPlayerGameStats = [];
+    _userPlayerGameStats = [];
+    _userFilteredPlayerGameStats = [];
   }
 
-  resetPlayerOrTeamStats() {
-    _playerOrTeamGameStats = [];
+  resetTeamGameStats() {
+    _allTeamGameStats = [];
+    _filteredTeamGameStats = [];
+  }
+
+  resetFilteredPlayerOrTeamGameStats() {
+    _userFilteredPlayerGameStats = [];
+    _filteredTeamGameStats = [];
   }
 
   resetAll() {
     resetOverallStats();
     resetGames();
     resetFilteredGames();
-    resetPlayerOrTeamStats();
-    resetFilteredPlayerOrTeamStats();
+    resetPlayerGameStats();
+    resetTeamGameStats();
     resetValues();
     resetLoadingFields();
   }
@@ -354,16 +386,16 @@ class StatsFirestoreX01_P with ChangeNotifier {
   resetLoadingFields() {
     _loadGames = true;
     _gamesLoaded = false;
-    _loadPlayerStats = true;
-    _playerOrTeamGameStatsLoaded = false;
+    _loadPlayerGameStats = true;
+    _playerGameStatsLoaded = false;
   }
 
   resetForResettingStats() {
     resetAll();
     _loadGames = false;
     _gamesLoaded = true;
-    _loadPlayerStats = false;
-    _playerOrTeamGameStatsLoaded = true;
+    _loadPlayerGameStats = false;
+    _playerGameStatsLoaded = true;
     _noGamesPlayed = true;
   }
 
@@ -466,7 +498,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
       FirestoreServicePlayerStats firestoreServicePlayerStats) {
     currentFilterValue = newFilterValue;
     resetFilteredGames();
-    resetFilteredPlayerOrTeamStats();
+    ();
     favouriteGames = [];
 
     DateTime comparisonDate = DateTime.now();
@@ -493,7 +525,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
               (game.getDateTime.isAfter(comparisonDate) &&
                   game.getDateTime.isBefore(customEndDate)))
           .toList();
-      setFilteredPlayerOrTeamGameStats = getPlayerOrTeamGameStats
+      setUserFilteredPlayerOrTeamGameStats = getUserPlayerGameStats
           .where((stats) =>
               (stats.getDateTime as DateTime)
                   .isSameDate(comparisonDate, customEndDate) ||
@@ -504,7 +536,7 @@ class StatsFirestoreX01_P with ChangeNotifier {
       filteredGames = games
           .where((game) => game.getDateTime.isAfter(comparisonDate))
           .toList();
-      setFilteredPlayerOrTeamGameStats = getPlayerOrTeamGameStats
+      setUserFilteredPlayerOrTeamGameStats = getUserPlayerGameStats
           .where((stats) => stats.getDateTime.isAfter(comparisonDate))
           .toList();
     }
@@ -535,9 +567,9 @@ class StatsFirestoreX01_P with ChangeNotifier {
     int _dartsForWonLegCount = 0;
     int _legsWonTotal = 0;
 
-    countOfGames = getFilteredPlayerOrTeamGameStats.length;
+    countOfGames = getUserFilteredPlayerGameStats.length;
 
-    getFilteredPlayerOrTeamGameStats.forEach((stats) {
+    getUserFilteredPlayerGameStats.forEach((stats) {
       //count of games won
       if (stats.getGameWon) {
         setCountOfGamesWon = getCountOfGamesWon + 1;
@@ -685,8 +717,6 @@ class StatsFirestoreX01_P with ChangeNotifier {
     preciseScores = Utils.sortMapIntInt(preciseScores);
     allScoresPerDartAsStringCount =
         Utils.sortMapStringInt(allScoresPerDartAsStringCount);
-
-    notify();
   }
 }
 

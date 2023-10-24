@@ -122,7 +122,7 @@ class PlayerEntry extends StatelessWidget {
             ),
           ),
           Text(
-            'Average',
+            'Total score',
             style: TextStyle(
               color: Utils.getTextColorDarken(context),
               fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
@@ -130,7 +130,7 @@ class PlayerEntry extends StatelessWidget {
             ),
           ),
           Text(
-            playerStats.getAverage(),
+            playerStats.getCurrentScore.toString(),
             style: TextStyle(
               color: Colors.white,
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,

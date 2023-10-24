@@ -76,11 +76,10 @@ class UndoLastThrowBtn extends StatelessWidget {
         RevertX01Helper.revertPoints(game, gameSettingsX01);
       }
 
-      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
       game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.ScoreTraining) {
-      final game = context.read<GameScoreTraining_P>();
+      final GameScoreTraining_P game = context.read<GameScoreTraining_P>();
 
       game.setIsGameFinished = false;
       game.setShowLoadingSpinner = true;
@@ -102,7 +101,8 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.notify();
     } else if (gameMode == GameMode.SingleTraining ||
         gameMode == GameMode.DoubleTraining) {
-      final game = context.read<GameSingleDoubleTraining_P>();
+      final GameSingleDoubleTraining_P game =
+          context.read<GameSingleDoubleTraining_P>();
 
       game.setIsGameFinished = false;
       game.setShowLoadingSpinner = true;
@@ -124,7 +124,7 @@ class UndoLastThrowBtn extends StatelessWidget {
         );
       }
 
-      final isRandomMode =
+      final bool isRandomMode =
           game.getGameSettings.getMode == ModesSingleDoubleTraining.Random;
       if (isRandomMode) {
         game.setRandomModeFinished = false;

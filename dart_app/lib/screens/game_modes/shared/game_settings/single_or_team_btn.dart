@@ -1,6 +1,8 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class SingleOrTeamBtn extends StatelessWidget {
@@ -48,7 +50,11 @@ class SingleBtn extends StatelessWidget {
         onPressed: () {
           Utils.handleVibrationFeedback(context);
           if (singleOrTeam != SingleOrTeamEnum.Single) {
-            gameSettingsProvider.switchSingleOrTeamMode();
+            final String currentUsername = context
+                    .read<AuthService>()
+                    .getUsernameFromSharedPreferences() ??
+                '';
+            gameSettingsProvider.switchSingleOrTeamMode(currentUsername);
           }
         },
         child: FittedBox(

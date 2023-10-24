@@ -40,8 +40,11 @@ class _MoreStatsState extends State<MoreStats> {
                     child: Text(
                       'Rounded scores',
                       style: TextStyle(
-                          fontSize:
-                              Theme.of(context).textTheme.titleSmall!.fontSize,
+                          fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .fontSize! *
+                              0.9,
                           color: Utils.getTextColorDarken(context),
                           fontWeight: FontWeight.bold),
                     ),
@@ -49,15 +52,21 @@ class _MoreStatsState extends State<MoreStats> {
                 ),
                 Expanded(
                   child: Center(
-                    child: Text(
-                      _showAllScoesPerDartWithCount
-                          ? 'All scores per dart'
-                          : 'Precise scores',
-                      style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.titleSmall!.fontSize,
-                        color: Utils.getTextColorDarken(context),
-                        fontWeight: FontWeight.bold,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        _showAllScoesPerDartWithCount
+                            ? 'All scores per dart'
+                            : 'Precise scores',
+                        style: TextStyle(
+                          fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .fontSize! *
+                              0.9,
+                          color: Utils.getTextColorDarken(context),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

@@ -70,7 +70,7 @@ class PlayersTeamsListDialogs {
           contentPadding:
               Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
           title: Text(
-            'Edit',
+            'Edit player',
             style: TextStyle(
               color: Colors.white,
               fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
@@ -86,20 +86,18 @@ class PlayersTeamsListDialogs {
                     children: [
                       Container(
                         width: 30.w,
+                        padding: EdgeInsets.only(left: 5.w),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 1.w),
-                              child: Text(
-                                'Bot - lvl. ${playerToEdit.getLevel}',
-                                style: TextStyle(
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .fontSize,
-                                  color: Colors.white,
-                                ),
+                            Text(
+                              'Bot - lvl. ${playerToEdit.getLevel}',
+                              style: TextStyle(
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
+                                color: Colors.white,
                               ),
                             ),
                             Text(
@@ -135,14 +133,16 @@ class PlayersTeamsListDialogs {
                   return TextFormField(
                     autofocus: true,
                     controller:
-                        newTextControllerForEditingPlayerInGameSettingsX01()
-                          ..text = playerToEdit.getName,
+                        newTextControllerForEditingPlayerInGameSettingsX01(
+                            playerToEdit.getName),
                     textInputAction: TextInputAction.done,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
                         return ('Please enter a name!');
                       }
                       if (gameSettings_P.checkIfPlayerNameExists(value)) {
+                        Utils.setCursorForTextControllerToEnd(
+                            editPlayerController);
                         return 'Name already exists!';
                       }
 
@@ -288,14 +288,16 @@ class PlayersTeamsListDialogs {
                     children: [
                       TextFormField(
                         controller:
-                            newTextControllerForEditingTeamInGameSettingsX01()
-                              ..text = teamToEdit.getName,
+                            newTextControllerForEditingTeamInGameSettingsX01(
+                                teamToEdit.getName),
                         textInputAction: TextInputAction.done,
                         validator: (value) {
                           if (value!.trim().isEmpty) {
                             return ('Please enter a name!');
                           }
                           if (gameSettings.checkIfTeamNameExists(value)) {
+                            Utils.setCursorForTextControllerToEnd(
+                                editTeamController);
                             return 'Team name already exists!';
                           }
 
@@ -598,7 +600,7 @@ class PlayersTeamsListDialogs {
         _checkIfSwappingOnlyToOneTeamPossible(playerToSwap, gameSettings);
 
     if (newTeam == null) {
-      List<Team> possibleTeamsToSwap =
+      final List<Team> possibleTeamsToSwap =
           _getPossibleTeamsToSwap(playerToSwap, gameSettings);
       Team? selectedTeam = possibleTeamsToSwap[0];
 
@@ -829,7 +831,10 @@ class PlayersTeamsListDialogs {
     List<Team> result = [];
 
     for (Team team in gameSettings.getTeams) {
-      if (team != currentTeam) result.add(team);
+      if (team != currentTeam &&
+          team.getPlayers.length < MAX_PLAYERS_PER_TEAM) {
+        result.add(team);
+      }
     }
 
     return result;

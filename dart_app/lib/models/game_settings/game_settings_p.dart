@@ -33,6 +33,10 @@ class GameSettings_P with ChangeNotifier {
 
   GameSettings_P() {}
 
+  GameSettings_P clone() {
+    throw UnimplementedError('clone() not implemented for GameSettings_P');
+  }
+
   Map<String, dynamic> toMapX01(GameSettingsX01_P settings, bool openGame) {
     Map<String, dynamic> result = {
       'players': settings.getPlayers.map((player) {
@@ -56,7 +60,9 @@ class GameSettings_P with ChangeNotifier {
         'suddenDeath': settings.getSuddenDeath,
       if (settings.getWinByTwoLegsDifference && settings.getSuddenDeath)
         'maxExtraLegs': settings.getMaxExtraLegs,
-      'checkoutCounting': settings.getEnableCheckoutCounting,
+      'checkoutCounting': settings.getCheckoutCountingFinallyDisabled
+          ? false
+          : settings.getEnableCheckoutCounting,
       'drawMode': settings.getDrawMode,
     };
 

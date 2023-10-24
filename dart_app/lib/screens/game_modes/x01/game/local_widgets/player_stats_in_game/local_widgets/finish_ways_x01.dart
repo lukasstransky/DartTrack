@@ -75,7 +75,7 @@ class FinishWaysX01 extends StatelessWidget {
     if (BOGEY_NUMBERS
         .contains(currPlayerOrTeamGameStatsX01!.getCurrentPoints)) {
       return SizedBox(
-        height: 2.h,
+        height: 3.h,
         child: Text(
           'No finish possible!',
           style: TextStyle(
@@ -87,7 +87,7 @@ class FinishWaysX01 extends StatelessWidget {
       );
     } else {
       SizedBox(
-        height: 2.h,
+        height: 3.h,
         child: Text(
           '',
           style: TextStyle(

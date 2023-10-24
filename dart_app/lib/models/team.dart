@@ -15,6 +15,13 @@ class Team {
         _players = players,
         _currentPlayerToThrow = currentPlayerToThrow;
 
+  Team clone() {
+    return Team(name: _name)
+      .._players =
+          _players.map<Player>((player) => Player.clone(player)).toList()
+      .._currentPlayerToThrow = Player.clone(this._currentPlayerToThrow);
+  }
+
   factory Team.fromMap(map) {
     return new Team.Firestore(
       name: map['name'],

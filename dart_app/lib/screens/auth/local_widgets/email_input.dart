@@ -37,9 +37,11 @@ class EmailInput extends StatelessWidget {
             return ('Email is required!');
           }
           if (!RegExp(EMAIL_REGEX).hasMatch(value)) {
+            Utils.setCursorForTextControllerToEnd(emailTextController);
             return ('Please enter a valid email!');
           }
           if (isRegisterScreen && auth.getEmailAlreadyExists) {
+            Utils.setCursorForTextControllerToEnd(emailTextController);
             return 'Email already exists!';
           }
           if (isForgotPasswordScreen && !auth.getEmailAlreadyExists) {

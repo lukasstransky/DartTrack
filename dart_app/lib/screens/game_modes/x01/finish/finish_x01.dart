@@ -2,9 +2,12 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
@@ -42,7 +45,6 @@ class _FinishX01State extends State<FinishX01> {
 
     gameX01.setShowLoadingSpinner = true;
     gameX01.notify();
-    await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY));
 
     if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
       g_gameId =
@@ -61,11 +63,32 @@ class _FinishX01State extends State<FinishX01> {
     gameX01.setShowLoadingSpinner = false;
     gameX01.notify();
 
-    // to load data in stats tab again if new game was added
-    statsFirestoreX01.loadGames = true;
-    statsFirestoreX01.loadPlayerStats = true;
-    statsFirestoreX01.gamesLoaded = false;
-    statsFirestoreX01.noGamesPlayed = false;
+    // manually add game, stats to avoid fetching calls
+    final Game_P game = gameX01.clone();
+    game.setGameId = g_gameId;
+    statsFirestoreX01.games.add(game);
+    statsFirestoreX01.filteredGames.add(game);
+
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
+      stats.setGameId = g_gameId;
+      statsFirestoreX01.allPlayerGameStats.add(stats);
+      if (stats.getPlayer.getName == currentUsername) {
+        statsFirestoreX01.getUserPlayerGameStats.add(stats);
+        statsFirestoreX01.getUserFilteredPlayerGameStats.add(stats);
+      }
+    }
+
+    if (gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
+        stats.setGameId = g_gameId;
+        statsFirestoreX01.allTeamGameStats.add(stats);
+        statsFirestoreX01.filteredTeamGameStats.add(stats);
+      }
+    }
+
+    statsFirestoreX01.calculateX01Stats();
   }
 
   @override

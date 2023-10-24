@@ -105,14 +105,16 @@ class GameFieldCricket extends StatelessWidget {
   }
 
   double _calcHeight(GameSettingsCricket_P gameSettingsCricket) {
-    if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Team &&
-        gameSettingsCricket.getSetsEnabled) {
-      return 40.h;
+    if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Team) {
+      if (gameSettingsCricket.getSetsEnabled) {
+        return 35.h;
+      }
+      return 38.h;
     } else if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single &&
         gameSettingsCricket.getSetsEnabled) {
-      return 42.h;
+      return 40.h;
     }
-    return 45.h;
+    return 43.h;
   }
 
   bool shouldDisplayLeftBorder(GameSettingsCricket_P gameSettingsCricket,

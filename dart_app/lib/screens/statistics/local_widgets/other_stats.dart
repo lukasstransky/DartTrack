@@ -127,21 +127,31 @@ class OtherStats extends StatelessWidget {
                 Expanded(
                   child: Column(
                     children: [
-                      Text(
-                        _getGamesWonString(statisticsFirestore),
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          _getGamesWonString(statisticsFirestore),
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
+                          ),
                         ),
                       ),
-                      Text(
-                        'Games won',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize,
-                          color: color,
+                      FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Text(
+                          'Games won',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .fontSize,
+                            color: color,
+                          ),
                         ),
                       ),
                     ],

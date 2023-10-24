@@ -66,7 +66,7 @@ class _MulitplePlayerStatsScoreTrainingState
                   child: Container(
                     alignment: Alignment.center,
                     child: Text(
-                      'Avg.',
+                      'Score',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize:
@@ -175,7 +175,7 @@ class PlayerEntry extends StatelessWidget {
             child: Container(
               alignment: Alignment.center,
               child: Text(
-                playerStats.getAverage(),
+                playerStats.getCurrentScore.toString(),
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,

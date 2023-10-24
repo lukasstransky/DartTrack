@@ -127,7 +127,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
       return parseStat(value, gameId);
     }
 
-    firestoreStats.getFilteredPlayerOrTeamGameStats.sort((a, b) {
+    firestoreStats.getUserFilteredPlayerGameStats.sort((a, b) {
       double valueA, valueB;
 
       switch (_orderField) {
@@ -176,7 +176,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
 
     List<Game_P> _sortedGames = [];
     for (PlayerOrTeamGameStatsX01 stats
-        in firestoreStats.getFilteredPlayerOrTeamGameStats) {
+        in firestoreStats.getUserFilteredPlayerGameStats) {
       if (_gamesToNotDisplay.contains(stats.getGameId)) {
         continue;
       }
@@ -202,7 +202,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
         context.read<StatsFirestoreX01_P>();
 
     firestoreStats.resetOverallStats();
-    firestoreStats.getFilteredPlayerOrTeamGameStats.forEach((stats) {
+    firestoreStats.getUserFilteredPlayerGameStats.forEach((stats) {
       final String currentGameId = stats.getGameId;
 
       stats.getCheckouts.values.forEach((int checkout) {
@@ -226,13 +226,13 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
 
     switch (this._type) {
       case BEST_AVG:
-        return 'Best avgs';
+        return 'Best averages';
       case WORST_AVG:
-        return 'Worst avgs';
+        return 'Worst averages';
       case BEST_FIRST_NINE_AVG:
-        return 'Best first nine avgs';
+        return 'Best first nine avgs.';
       case WORST_FIRST_NINE_AVG:
-        return 'Worst first nine avgs';
+        return 'Worst first nine avgs.';
       case BEST_CHECKOUT_QUOTE:
         return 'Best checkout quotes';
       case WORST_CHECKOUT_QUOTE:
@@ -294,7 +294,7 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                             child: Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                'To view the details about a game, click on it\'s card.',
+                                'To view the details about a game, click on its card.',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: Theme.of(context)

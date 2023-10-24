@@ -30,7 +30,7 @@ class HideShowX01 extends StatelessWidget {
     final bool showOtherOptions = _showOtherOptions(context);
 
     return Container(
-      height: showOtherOptions ? 23.5.h : 11.h,
+      height: showOtherOptions ? 23.5.h : 19.h,
       padding: EdgeInsets.only(
         top: 1.0.h,
         left: 0.5.w,
@@ -58,12 +58,10 @@ class HideShowX01 extends StatelessWidget {
                 ),
               ),
             ),
+            if (showOtherOptions) HideShowFinishWaysX01(),
             HideShowAverageX01(),
-            if (showOtherOptions) ...[
-              HideShowFinishWaysX01(),
-              HideShowLastThrowX01(),
-              HideShowThrownDartsX01(),
-            ]
+            HideShowLastThrowX01(),
+            HideShowThrownDartsX01(),
           ],
         ),
       ),

@@ -136,17 +136,23 @@ class _StatsCardState extends State<StatsCard> {
     );
   }
 
-  _multipleWinners(int i) {
+  _multipleWinnersForSingleDoubleTraining(int i) {
     return (_playerOrTeamStats[i] as PlayerGameStatsSingleDoubleTraining)
             .getTotalPoints ==
         (_playerOrTeamStats[0] as PlayerGameStatsSingleDoubleTraining)
             .getTotalPoints;
   }
 
+  _multipleWinnersForScoreTraining(int i) {
+    return (_playerOrTeamStats[i] as PlayerGameStatsScoreTraining)
+            .getCurrentScore ==
+        (_playerOrTeamStats[0] as PlayerGameStatsScoreTraining).getCurrentScore;
+  }
+
   _getPlayerOrTeamEntry(int i, bool isDraw) {
     if (widget.game is GameSingleDoubleTraining_P) {
       return PlayerEntryFinishSingleDoubleTraining(
-        i: _multipleWinners(i) ? 0 : i,
+        i: _multipleWinnersForSingleDoubleTraining(i) ? 0 : i,
         game: widget.game as GameSingleDoubleTraining_P,
         playerStats:
             _playerOrTeamStats[i] as PlayerGameStatsSingleDoubleTraining,
@@ -155,7 +161,7 @@ class _StatsCardState extends State<StatsCard> {
       );
     } else if (widget.game is GameScoreTraining_P) {
       return PlayerEntryFinishScoreTraining(
-        i: i,
+        i: _multipleWinnersForScoreTraining(i) ? 0 : i,
         game: widget.game as GameScoreTraining_P,
         playerStats: _playerOrTeamStats[i] as PlayerGameStatsScoreTraining,
         isOpenGame: widget.isOpenGame,

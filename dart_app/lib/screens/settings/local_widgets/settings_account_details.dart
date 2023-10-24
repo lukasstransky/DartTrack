@@ -140,6 +140,8 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
                         return ('Please enter a username!');
                       }
                       if (!_usernameValid) {
+                        Utils.setCursorForTextControllerToEnd(
+                            _usernameController);
                         return 'Username already exists!';
                       }
                       return null;

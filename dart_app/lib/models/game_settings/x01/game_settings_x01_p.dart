@@ -33,6 +33,38 @@ class GameSettingsX01_P extends GameSettings_P {
 
   GameSettingsX01_P();
 
+  GameSettingsX01_P clone() {
+    return GameSettingsX01_P()
+      .._singleOrTeam = this._singleOrTeam
+      .._bestOfOrFirstTo = this._bestOfOrFirstTo
+      .._points = this._points
+      .._customPoints = this._customPoints
+      .._legs = this._legs
+      .._sets = this._sets
+      .._setsEnabled = this._setsEnabled
+      .._modeIn = this._modeIn
+      .._modeOut = this._modeOut
+      .._winByTwoLegsDifference = this._winByTwoLegsDifference
+      .._suddenDeath = this._suddenDeath
+      .._maxExtraLegs = this._maxExtraLegs
+      .._enableCheckoutCounting = this._enableCheckoutCounting
+      .._checkoutCountingFinallyDisabled = this._checkoutCountingFinallyDisabled
+      .._showAverage = this._showAverage
+      .._showFinishWays = this._showFinishWays
+      .._showThrownDartsPerLeg = this._showThrownDartsPerLeg
+      .._showLastThrow = this._showLastThrow
+      .._automaticallySubmitPoints = this._automaticallySubmitPoints
+      .._showMostScoredPoints = this._showMostScoredPoints
+      .._mostScoredPoints = List.from(this._mostScoredPoints)
+      .._inputMethod = this._inputMethod
+      .._showInputMethodInGameScreen = this._showInputMethodInGameScreen
+      .._drawMode = this._drawMode
+      ..setTeams = getSingleOrTeam == SingleOrTeamEnum.Single
+          ? []
+          : getTeams.map((team) => team.clone()).toList()
+      ..setPlayers = getPlayers.map((player) => Player.clone(player)).toList();
+  }
+
   GameSettingsX01_P.firestore({
     required bool checkoutCounting,
     required int legs,
@@ -246,14 +278,33 @@ class GameSettingsX01_P extends GameSettings_P {
     return '(Sudden death - after max. ${getMaxExtraLegs.toString()} leg${getMaxExtraLegs > 1 ? 's' : ''})';
   }
 
-  switchSingleOrTeamMode() {
+  switchSingleOrTeamMode([String userName = '']) {
     if (getSingleOrTeam == SingleOrTeamEnum.Single) {
       setSingleOrTeam = SingleOrTeamEnum.Team;
     } else {
+      // remove all players in case a bot player is present when switching back to single mode
+      if (getPlayers.any((player) => player is Bot)) {
+        _removeNonBotAndNonUserPlayers(getPlayers, userName);
+
+        List<Team> teamsToRemove = [];
+        for (Team team in List.from(getTeams)) {
+          _removeNonBotAndNonUserPlayers(team.getPlayers, userName);
+          if (team.getPlayers.isEmpty) {
+            teamsToRemove.add(team);
+          }
+        }
+
+        getTeams.removeWhere((team) => teamsToRemove.contains(team));
+      }
+
       setSingleOrTeam = SingleOrTeamEnum.Single;
     }
 
     notify();
+  }
+
+  _removeNonBotAndNonUserPlayers(List<Player> players, String userName) {
+    players.removeWhere((p) => !(p is Bot || p.getName == userName));
   }
 
   switchBestOfOrFirstTo() {

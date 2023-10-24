@@ -14,35 +14,33 @@ class PlayerOrTeamNamesX01 extends StatelessWidget {
 
   final GameX01_P gameX01;
 
-  Flexible _getBotWithLevel(
+  Column _getBotWithLevel(
       PlayerOrTeamGameStatsX01 stats, BuildContext context) {
-    return Flexible(
-      child: Column(
-        children: [
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              'Bot - lvl. ${stats.getPlayer.getLevel}',
-              style: TextStyle(
-                fontSize: 13.sp,
-                fontWeight: FontWeight.bold,
-                color: Utils.getTextColorDarken(context),
-              ),
+    return Column(
+      children: [
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            'Bot - lvl. ${stats.getPlayer.getLevel}',
+            style: TextStyle(
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize!,
+              fontWeight: FontWeight.bold,
+              color: Utils.getTextColorDarken(context),
             ),
           ),
-          FittedBox(
-            fit: BoxFit.scaleDown,
-            child: Text(
-              ' (${stats.getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${stats.getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-              style: TextStyle(
-                fontSize: 8.sp,
-                fontWeight: FontWeight.bold,
-                color: Utils.getTextColorDarken(context),
-              ),
+        ),
+        FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            ' (${stats.getPlayer.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${stats.getPlayer.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+            style: TextStyle(
+              fontSize: 8.sp,
+              fontWeight: FontWeight.bold,
+              color: Utils.getTextColorDarken(context),
             ),
-          )
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 

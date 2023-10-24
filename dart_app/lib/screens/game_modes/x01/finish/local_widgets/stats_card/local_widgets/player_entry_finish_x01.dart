@@ -51,18 +51,20 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
       return 2;
     }
 
-    for (int i = 1; i < indexOfPlayerOrTeam; i++) {
-      if (widget.gameX01.getGameSettings.getSetsEnabled) {
-        if ((statsList[i] as PlayerOrTeamGameStatsX01).getSetsWon ==
-            (statsList[indexOfPlayerOrTeam] as PlayerOrTeamGameStatsX01)
-                .getSetsWon) {
-          return i + 1;
-        }
-      } else {
-        if ((statsList[i] as PlayerOrTeamGameStatsX01).getLegsWonTotal ==
-            (statsList[indexOfPlayerOrTeam] as PlayerOrTeamGameStatsX01)
-                .getLegsWonTotal) {
-          return i + 1;
+    if (statsList.length != 0) {
+      for (int i = 1; i < indexOfPlayerOrTeam; i++) {
+        if (widget.gameX01.getGameSettings.getSetsEnabled) {
+          if ((statsList[i] as PlayerOrTeamGameStatsX01).getSetsWon ==
+              (statsList[indexOfPlayerOrTeam] as PlayerOrTeamGameStatsX01)
+                  .getSetsWon) {
+            return i + 1;
+          }
+        } else {
+          if ((statsList[i] as PlayerOrTeamGameStatsX01).getLegsWonTotal ==
+              (statsList[indexOfPlayerOrTeam] as PlayerOrTeamGameStatsX01)
+                  .getLegsWonTotal) {
+            return i + 1;
+          }
         }
       }
     }
@@ -309,7 +311,7 @@ class _PlayerStatsState extends State<PlayerStats> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          Column(
             children: [
               Text(
                 gameSettingsX01.getSetsEnabled
@@ -322,7 +324,7 @@ class _PlayerStatsState extends State<PlayerStats> {
               ),
               if (widget.openGame && gameSettingsX01.getSetsEnabled)
                 Text(
-                  ' Legs: ${legsWon}',
+                  'Legs: ${legsWon}',
                   style: TextStyle(
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                     color: Colors.white,
@@ -337,7 +339,8 @@ class _PlayerStatsState extends State<PlayerStats> {
               color: Colors.white,
             ),
           ),
-          if (gameSettingsX01.getEnableCheckoutCounting)
+          if (gameSettingsX01.getEnableCheckoutCounting &&
+              !gameSettingsX01.getCheckoutCountingFinallyDisabled)
             Text(
               'Checkout: ${_playersOrTeamStatsList[widget.i].getCheckoutQuoteInPercent()}',
               style: TextStyle(

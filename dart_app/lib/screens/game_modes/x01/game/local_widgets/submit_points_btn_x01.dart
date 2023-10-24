@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
@@ -99,9 +100,11 @@ class SubmitPointsBtnX01 extends StatelessWidget {
     return false;
   }
 
-  bool _shouldOnPressedBeEnabled(GameSettingsX01_P gameSettingsX01) {
+  bool _shouldOnPressedBeEnabled(
+      GameSettingsX01_P gameSettingsX01, GameX01_P gameX01) {
     if (gameSettingsX01.getInputMethod == InputMethod.ThreeDarts &&
-        !gameSettingsX01.getAutomaticallySubmitPoints) {
+        !gameSettingsX01.getAutomaticallySubmitPoints &&
+        !(gameX01.getCurrentPlayerToThrow is Bot)) {
       return true;
     }
     return false;
@@ -114,6 +117,11 @@ class SubmitPointsBtnX01 extends StatelessWidget {
         Utils.getCurrentPlayerOrTeamStats(gameX01, gameSettingsX01);
     final int currentPoints = currentStats.getCurrentPoints;
 
+    // prevent user from submitting points for bot
+    if (gameX01.botSubmittedPoints && gameX01.getCurrentPlayerToThrow is Bot) {
+      return;
+    }
+
     if ((gameX01.getCurrentPointsSelected != 'Points' || currentPoints == 0) &&
         context.read<Settings_P>().getVibrationFeedbackEnabled) {
       HapticFeedback.lightImpact();
@@ -122,7 +130,7 @@ class SubmitPointsBtnX01 extends StatelessWidget {
     if (gameSettingsX01.getInputMethod == InputMethod.Round) {
       _submitPointsForInputMethodRound(
           gameX01.getCurrentPointsSelected, context);
-    } else if (_shouldOnPressedBeEnabled(gameSettingsX01)) {
+    } else if (_shouldOnPressedBeEnabled(gameSettingsX01, gameX01)) {
       // if input method is three darts and points are not auto submitted (btn needs to be pressed)
       g_thrownDarts = g_thrownDarts == 0 ? 3 : g_thrownDarts;
       SubmitX01Helper.submitPoints(_getLastDartThrown(gameX01), context, false,
@@ -157,7 +165,9 @@ class SubmitPointsBtnX01 extends StatelessWidget {
         currentPointsSelected == '1' &&
         stats.getCurrentPoints == gameSettingsX01.getPointsOrCustom()) {
       Fluttertoast.showToast(
-        msg: 'Invalid score for double in!',
+        msg: gameSettingsX01.getModeIn == ModeOutIn.Double
+            ? 'Invalid score for double in!'
+            : 'Invalid score for master in!',
         toastLength: Toast.LENGTH_SHORT,
         fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );

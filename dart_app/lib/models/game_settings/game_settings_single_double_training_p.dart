@@ -16,6 +16,14 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
 
   GameSettingsSingleDoubleTraining_P() {}
 
+  GameSettingsSingleDoubleTraining_P clone() {
+    return GameSettingsSingleDoubleTraining_P()
+      .._mode = this._mode
+      .._targetNumber = this._targetNumber
+      .._isTargetNumberEnabled = this._isTargetNumberEnabled
+      .._amountOfRounds = this._amountOfRounds;
+  }
+
   GameSettingsSingleDoubleTraining_P.firestore({
     required ModesSingleDoubleTraining mode,
     required int targetNumber,

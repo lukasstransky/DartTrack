@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
@@ -81,6 +82,11 @@ class PointBtnThreeDartX01 extends StatelessWidget {
   _pointBtnClicked(String pointBtnText, BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
+    // prevent user from submitting points for bot
+    if (gameX01.botSubmittedPoints && gameX01.getCurrentPlayerToThrow is Bot) {
+      return;
+    }
 
     if (activeBtn as bool && gameX01.getCanBePressed) {
       if (context.read<Settings_P>().getVibrationFeedbackEnabled) {

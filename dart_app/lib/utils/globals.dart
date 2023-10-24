@@ -39,9 +39,6 @@ TextEditingController newTextControllerForPassword() {
 }
 
 // GAMESETTINGS X01
-ScrollController scrollControllerPlayers = new ScrollController();
-ScrollController scrollControllerTeams = new ScrollController();
-
 TextEditingController newPlayerController = new TextEditingController();
 TextEditingController editPlayerController = new TextEditingController();
 TextEditingController newTeamController = new TextEditingController();
@@ -49,23 +46,18 @@ TextEditingController editTeamController = new TextEditingController();
 TextEditingController customPointsController = new TextEditingController();
 TextEditingController mostScoredPointController = new TextEditingController();
 
-newScrollControllerPlayers() {
-  scrollControllerPlayers = new ScrollController();
-  return scrollControllerPlayers;
-}
-
-ScrollController newScrollControllerTeams() {
-  scrollControllerTeams = new ScrollController();
-  return scrollControllerTeams;
-}
-
 TextEditingController newTextControllerForAddingNewPlayerInGameSettingsX01() {
   newPlayerController = new TextEditingController();
   return newPlayerController;
 }
 
-TextEditingController newTextControllerForEditingPlayerInGameSettingsX01() {
+TextEditingController newTextControllerForEditingPlayerInGameSettingsX01(
+    String playerName) {
   editPlayerController = new TextEditingController();
+  editPlayerController.text = playerName;
+  editPlayerController.selection = TextSelection.fromPosition(
+      TextPosition(offset: editPlayerController.text.length));
+
   return editPlayerController;
 }
 
@@ -74,8 +66,13 @@ TextEditingController newTextControllerForAddingNewTeamInGameSettingsX01() {
   return newTeamController;
 }
 
-TextEditingController newTextControllerForEditingTeamInGameSettingsX01() {
+TextEditingController newTextControllerForEditingTeamInGameSettingsX01(
+    String teamName) {
   editTeamController = new TextEditingController();
+  editTeamController.text = teamName;
+  editTeamController.selection = TextSelection.fromPosition(
+      TextPosition(offset: editTeamController.text.length));
+
   return editTeamController;
 }
 
@@ -92,9 +89,6 @@ TextEditingController newTextControllerForMostScoredPointGameSettingsX01(
 }
 
 disposeControllersForGamesettingsX01() {
-  scrollControllerPlayers.dispose();
-  scrollControllerTeams.dispose();
-
   newPlayerController.dispose();
   editPlayerController.dispose();
   newTeamController.dispose();

@@ -29,6 +29,7 @@ class _StatisticsState extends State<Statistics> {
   initState() {
     final StatsFirestoreX01_P statsFirestore =
         context.read<StatsFirestoreX01_P>();
+    statsFirestore.currentFilterValue = FilterValue.Overall;
 
     username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
@@ -39,14 +40,7 @@ class _StatisticsState extends State<Statistics> {
       });
       statsFirestore.resetAll();
     } else {
-      if (statsFirestore.loadPlayerStats) {
-        _getAllPlayerOrTeamGameStatsX01(statsFirestore);
-        statsFirestore.loadPlayerStats = false;
-      }
-      if (statsFirestore.loadGames) {
-        _getAllX01Games();
-        statsFirestore.loadGames = false;
-      }
+      _loadData(statsFirestore);
     }
 
     super.initState();
@@ -66,13 +60,15 @@ class _StatisticsState extends State<Statistics> {
               Selector<StatsFirestoreX01_P, SelectorModel>(
                 selector: (_, statsFirestoreX01) => SelectorModel(
                   playerOrTeamGameStatsLoaded:
-                      statsFirestoreX01.playerOrTeamGameStatsLoaded,
+                      statsFirestoreX01.playerGameStatsLoaded,
+                  teamGameStatsLoaded: statsFirestoreX01.teamGameStatsLoaded,
                   gamesLoaded: statsFirestoreX01.gamesLoaded,
                   noGamesPlayed: statsFirestoreX01.noGamesPlayed,
                   games: statsFirestoreX01.games,
                 ),
                 builder: (_, selectorModel, __) =>
                     (selectorModel.playerOrTeamGameStatsLoaded &&
+                                selectorModel.teamGameStatsLoaded &&
                                 selectorModel.gamesLoaded) ||
                             selectorModel.noGamesPlayed ||
                             username == 'Guest'
@@ -101,17 +97,32 @@ class _StatisticsState extends State<Statistics> {
     );
   }
 
-  _getAllPlayerOrTeamGameStatsX01(StatsFirestoreX01_P statsFirestore) async {
-    await context
-        .read<FirestoreServicePlayerStats>()
-        .getAllPlayerOrTeamGameStatsX01(
-            statsFirestore, context.read<AuthService>().getCurrentUserUid);
-    statsFirestore.calculateX01Stats();
-  }
+  // only loaded when user goes to statistics tab for the first time
+  _loadData(StatsFirestoreX01_P statsFirestore) async {
+    if (statsFirestore.loadPlayerGameStats) {
+      final String currentUsername =
+          context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
-  _getAllX01Games() async {
-    await context.read<FirestoreServiceGames>().getGames(
-        GameMode.X01, context, context.read<FirestoreServicePlayerStats>());
+      await context
+          .read<FirestoreServicePlayerStats>()
+          .getAllPlayerGameStats(statsFirestore, GameMode.X01, currentUsername);
+      await context
+          .read<FirestoreServicePlayerStats>()
+          .getAllTeamGameStats(statsFirestore, GameMode.X01);
+      await statsFirestore.calculateX01Stats();
+
+      statsFirestore.loadPlayerGameStats = false;
+      statsFirestore.loadTeamGameStats = false;
+    }
+
+    // only loaded when user goes to statistics tab for the first time
+    if (statsFirestore.loadGames) {
+      await context
+          .read<FirestoreServiceGames>()
+          .getGames(GameMode.X01, context);
+
+      statsFirestore.loadGames = false;
+    }
   }
 
   _showDialogWhenLoggedInAsGuest() {
@@ -205,12 +216,14 @@ class _StatisticsState extends State<Statistics> {
 
 class SelectorModel {
   final bool playerOrTeamGameStatsLoaded;
+  final bool teamGameStatsLoaded;
   final bool gamesLoaded;
   final bool noGamesPlayed;
   final List<Game_P> games;
 
   SelectorModel({
     required this.playerOrTeamGameStatsLoaded,
+    required this.teamGameStatsLoaded,
     required this.gamesLoaded,
     required this.noGamesPlayed,
     required this.games,

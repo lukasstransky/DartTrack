@@ -33,6 +33,16 @@ class GameSettingsCricket_P extends GameSettings_P {
 
   GameSettingsCricket_P() {}
 
+  GameSettingsCricket_P clone() {
+    return GameSettingsCricket_P()
+      .._singleOrTeam = this._singleOrTeam
+      .._bestOfOrFirstTo = this._bestOfOrFirstTo
+      .._mode = this._mode
+      .._legs = this._legs
+      .._sets = this._sets
+      .._setsEnabled = this._setsEnabled;
+  }
+
   GameSettingsCricket_P.firestore({
     required SingleOrTeamEnum singleOrTeam,
     required BestOfOrFirstToEnum bestOfOrFirstTo,

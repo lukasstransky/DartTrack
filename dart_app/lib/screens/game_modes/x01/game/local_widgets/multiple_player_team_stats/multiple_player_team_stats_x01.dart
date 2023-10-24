@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/bot.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
@@ -49,6 +50,8 @@ class _MultiplePlayerTeamStatsX01State
           shouldRebuild: (previous, next) => true,
           builder: (_, playerOrTeamStats, __) {
             _scrollToTopBottomIfNeccessary(gameX01, gameSettingsX01);
+            Bot.submitPointsForBot(context);
+
             return ListView.builder(
               controller: scrollController,
               scrollDirection: Axis.vertical,
@@ -86,16 +89,18 @@ class _MultiplePlayerTeamStatsX01State
 
   void _scrollToTopBottomIfNeccessary(
       GameX01_P gameX01, GameSettingsX01_P gameSettingsX01) {
-    if (gameX01.getCurrentPlayerToThrow == null ||
-        gameX01.getCurrentTeamToThrow == null) {
+    final bool isSingleMode =
+        gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single;
+    if ((isSingleMode && gameX01.getCurrentPlayerToThrow == null) ||
+        (!isSingleMode && gameX01.getCurrentTeamToThrow == null)) {
       return;
     }
-    final int index = gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+    final int index = isSingleMode
         ? gameSettingsX01.getPlayers.indexOf(gameX01.getCurrentPlayerToThrow)
         : gameSettingsX01.getTeams.indexOf(gameX01.getCurrentTeamToThrow);
 
     // if sets enabled -> card takes up more space
-    if (gameSettingsX01.getSetsEnabled ? index == 3 : index == 4) {
+    if (gameSettingsX01.getSetsEnabled ? index == 4 : index == 4) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent,

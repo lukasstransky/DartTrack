@@ -49,10 +49,15 @@ class RevertX01Helper {
     }
 
     // set game won or game draw to false if needed
-    if (currentStats.getGameDraw) {
-      currentStats.setGameDraw = false;
-    } else if (currentStats.getGameWon) {
-      currentStats.setGameWon = false;
+    for (PlayerOrTeamGameStatsX01 stats in (shouldRevertTeamStats
+        ? gameX01.getTeamGameStatistics
+        : gameX01.getPlayerGameStatistics)) {
+      if (stats.getGameDraw) {
+        stats.setGameDraw = false;
+      }
+      if (stats.getGameWon) {
+        stats.setGameWon = false;
+      }
     }
 
     // last throw of bot gets reverted -> reset global variables

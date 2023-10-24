@@ -44,7 +44,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Average:',
+                'Total score:',
                 style: TextStyle(
                   color: Utils.getTextColorDarken(context),
                   fontWeight: FontWeight.bold,
@@ -52,7 +52,7 @@ class OnePlayerStatsScoreTraining extends StatelessWidget {
                 ),
               ),
               Text(
-                playerStats.getAverage(),
+                playerStats.getCurrentScore.toString(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: Theme.of(context).textTheme.titleSmall!.fontSize!,

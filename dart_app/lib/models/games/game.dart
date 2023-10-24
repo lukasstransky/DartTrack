@@ -75,6 +75,20 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
         this._setLegWithPlayerOrTeamWhoFinishedIt =
             setLegWithPlayerOrTeamWhoFinishedIt;
 
+  Game_P clone() {
+    return Game_P(name: this._name, dateTime: this._dateTime)
+      .._gameSettings = this._gameSettings?.clone()
+      .._playerGameStatistics =
+          this._playerGameStatistics.map((stats) => stats.clone()).toList()
+      .._teamGameStatistics =
+          this._teamGameStatistics.map((stats) => stats.clone()).toList()
+      .._isFavouriteGame = this._isFavouriteGame
+      .._isGameFinished = this._isGameFinished
+      .._showLoadingSpinner = this._showLoadingSpinner
+      .._setLegWithPlayerOrTeamWhoFinishedIt =
+          List.from(this._setLegWithPlayerOrTeamWhoFinishedIt);
+  }
+
   get getGameId => this._gameId;
   set setGameId(String? gameId) => this._gameId = gameId;
 
@@ -173,7 +187,14 @@ class Game_P with ChangeNotifier implements Comparable<Game_P> {
                 game.getCurrentPlayerOfTeamsBeforeLegFinish);
         result['teamGameStatistics'] = getTeamGameStatistics.map((item) {
           return item.toMapX01(
-              item as PlayerOrTeamGameStatsX01, game, settings, '', openGame);
+            item as PlayerOrTeamGameStatsX01,
+            game,
+            settings,
+            '',
+            openGame,
+            null,
+            null,
+          );
         }).toList();
         result['currentTeamToThrow'] =
             getCurrentTeamToThrow!.toMap(getCurrentTeamToThrow as Team);

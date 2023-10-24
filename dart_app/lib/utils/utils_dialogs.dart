@@ -181,29 +181,30 @@ class UtilsDialogs {
                         child: ListTile(
                           title: player is Bot
                               ? Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    Text(
-                                      'Bot - lvl. ${player.getLevel}',
-                                      style: TextStyle(
-                                        fontSize: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .fontSize,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    Container(
-                                      transform: Matrix4.translationValues(
-                                          0.0, -0.5.w, 0.0),
-                                      child: Text(
-                                        ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
-                                        style: TextStyle(
-                                          fontSize: 8.sp,
-                                          color: Colors.white,
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Bot - lvl. ${player.getLevel}',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .fontSize,
+                                          ),
                                         ),
-                                      ),
-                                    ),
+                                        Text(
+                                          ' (${player.getPreDefinedAverage.round() - BOT_AVG_SLIDER_VALUE_RANGE} - ${player.getPreDefinedAverage.round() + BOT_AVG_SLIDER_VALUE_RANGE} avg.)',
+                                          style: TextStyle(
+                                            fontSize: 8.sp,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+                                    )
                                   ],
                                 )
                               : Text(

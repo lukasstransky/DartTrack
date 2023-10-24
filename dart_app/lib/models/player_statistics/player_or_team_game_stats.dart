@@ -29,7 +29,7 @@ class PlayerOrTeamGameStats {
 
   PlayerOrTeamGameStats.Player(
       {required String gameId,
-      required Player player,
+      required Player? player,
       required String mode,
       required DateTime dateTime})
       : _gameId = gameId,
@@ -47,6 +47,11 @@ class PlayerOrTeamGameStats {
         _mode = mode,
         _dateTime = dateTime;
 
+  PlayerOrTeamGameStats clone() {
+    throw UnimplementedError(
+        'clone() not implemented for PlayerOrTeamGameStats');
+  }
+
   get getPlayer => this._player;
   set setPlayer(value) => this._player = value;
 
@@ -55,6 +60,7 @@ class PlayerOrTeamGameStats {
   set setTeam(value) => this._team = value;
 
   get getGameId => this._gameId;
+  set setGameId(gameId) => this._gameId = gameId;
 
   get getMode => this._mode;
 

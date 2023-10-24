@@ -71,10 +71,13 @@ class StartGameBtnX01 extends StatelessWidget {
             } else {
               String msg = '';
               if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Team) {
-                if (_emptyTeamPresent(gameSettingsX01)) {
+                if (_anyEmptyTeam(gameSettingsX01.getTeams)) {
                   msg = 'Empty teams are not allowed!';
-                } else {
+                } else if (gameSettingsX01.getTeams.length == 1) {
                   msg = 'At least two teams are required!';
+                } else if (_areAllTeamsWithSinglePlayer(
+                    gameSettingsX01.getTeams)) {
+                  msg = 'At least one team must have a minimum of two players!';
                 }
               } else {
                 msg = 'At least two players are required!';
@@ -92,13 +95,13 @@ class StartGameBtnX01 extends StatelessWidget {
     );
   }
 
-  bool _emptyTeamPresent(GameSettingsX01_P gameSettingsX01) {
-    for (Team team in gameSettingsX01.getTeams) {
-      if (team.getPlayers.isEmpty) {
-        return true;
+  bool _areAllTeamsWithSinglePlayer(List<Team> teams) {
+    for (Team team in teams) {
+      if (team.getPlayers.length > 1) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   bool _activateStartGameBtn(SelectorModel selectorModel) {
@@ -108,6 +111,8 @@ class StartGameBtnX01 extends StatelessWidget {
       if (_anyEmptyTeam(selectorModel.teams)) {
         return false;
       } else if (selectorModel.teams.length < 2) {
+        return false;
+      } else if (_areAllTeamsWithSinglePlayer(selectorModel.teams)) {
         return false;
       }
     }

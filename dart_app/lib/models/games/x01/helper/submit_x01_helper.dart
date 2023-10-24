@@ -46,13 +46,9 @@ class SubmitX01Helper {
     final bool isBust = scoredPointsString == 'Bust' ? true : false;
     final int scoredPoints =
         isBust ? 0 : Utils.getValueOfSpecificDart(scoredPointsString);
-
-    late final PlayerOrTeamGameStatsX01 currentStats;
-    if (shouldSubmitTeamStats) {
-      currentStats = gameX01.getCurrentTeamGameStats();
-    } else {
-      currentStats = gameX01.getCurrentPlayerGameStats();
-    }
+    final PlayerOrTeamGameStatsX01 currentStats = shouldSubmitTeamStats
+        ? gameX01.getCurrentTeamGameStats()
+        : gameX01.getCurrentPlayerGameStats();
 
     if (!isBotBeginning(currentStats, gameX01, gameSettingsX01)) {
       gameX01.setRevertPossible = true;
@@ -218,6 +214,12 @@ class SubmitX01Helper {
         stats.setLegsWon = currentStats.getLegsWon;
         stats.setSetsWon = currentStats.getSetsWon;
       }
+    }
+
+    if (scoredPointsString == 'Bust' &&
+        gameSettingsX01.getInputMethod == InputMethod.ThreeDarts) {
+      currentStats.setThreeDartModeRoundsCount =
+          currentStats.getThreeDartModeRoundsCount + 1;
     }
   }
 
@@ -788,7 +790,7 @@ class SubmitX01Helper {
                 ),
                 TextSpan(
                   text:
-                      ' leg is reached. The player who wins this leg also wins the game.',
+                      ' leg is reached. The player who wins this leg, also wins the game.',
                 )
               ],
             ),
@@ -839,7 +841,10 @@ class SubmitX01Helper {
     Player? selectedPlayer = gameSettingsX01.getPlayers[0];
 
     final List<Team> teams = gameSettingsX01.getTeams;
-    Team? selectedTeam = gameSettingsX01.getTeams[0];
+    Team? selectedTeam;
+    if (teams.isNotEmpty) {
+      selectedTeam = gameSettingsX01.getTeams[0];
+    }
 
     showDialog(
       barrierDismissible: false,

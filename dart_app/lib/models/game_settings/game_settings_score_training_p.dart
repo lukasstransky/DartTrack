@@ -18,6 +18,14 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
 
   GameSettingsScoreTraining_P() {}
 
+  GameSettingsScoreTraining_P clone() {
+    return GameSettingsScoreTraining_P()
+      .._mode = this._mode
+      .._maxRoundsOrPoints = this._maxRoundsOrPoints
+      .._inputMethod = this._inputMethod
+      ..automaticallySubmitPoints = this.automaticallySubmitPoints;
+  }
+
   GameSettingsScoreTraining_P.firestoreScoreTraining({
     required ScoreTrainingModeEnum mode,
     required int maxRoundsOrPoints,

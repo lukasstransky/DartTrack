@@ -2,7 +2,9 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -31,29 +33,40 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
   }
 
   _saveDataToFirestore() async {
-    final GameScoreTraining_P game = context.read<GameScoreTraining_P>();
+    final GameScoreTraining_P gameScoreTraining =
+        context.read<GameScoreTraining_P>();
     final FirestoreServiceGames firestoreServiceGames =
         context.read<FirestoreServiceGames>();
     final OpenGamesFirestore openGamesFirestore =
         context.read<OpenGamesFirestore>();
+    final StatsFirestoreScoreTraining_P statsFirestoreScoreTraining =
+        context.read<StatsFirestoreScoreTraining_P>();
 
     if (context
         .read<GameSettingsScoreTraining_P>()
         .isCurrentUserInPlayers(context)) {
-      g_gameId = await firestoreServiceGames.postGame(game, openGamesFirestore);
-      game.setIsGameFinished = true;
+      g_gameId = await firestoreServiceGames.postGame(
+          gameScoreTraining, openGamesFirestore);
+      gameScoreTraining.setIsGameFinished = true;
       await context
           .read<FirestoreServicePlayerStats>()
-          .postPlayerGameStatistics(game, g_gameId, context);
+          .postPlayerGameStatistics(gameScoreTraining, g_gameId, context);
     }
 
-    if (game.getIsOpenGame && mounted) {
+    if (gameScoreTraining.getIsOpenGame && mounted) {
       await firestoreServiceGames.deleteOpenGame(
-          game.getGameId, openGamesFirestore);
+          gameScoreTraining.getGameId, openGamesFirestore);
     }
 
-    // to load data in stats tab again if new game was added
-    context.read<StatsFirestoreScoreTraining_P>().loadGames = true;
+    // manually add game, stats to avoid fetching calls
+    final Game_P game = gameScoreTraining.clone();
+    game.setGameId = g_gameId;
+    statsFirestoreScoreTraining.games.add(game);
+
+    for (PlayerGameStatsScoreTraining stats
+        in gameScoreTraining.getPlayerGameStatistics) {
+      statsFirestoreScoreTraining.allPlayerGameStats.add(stats);
+    }
   }
 
   @override

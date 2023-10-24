@@ -54,6 +54,22 @@ class PlayerGameStatsSingleDoubleTraining extends PlayerOrTeamGameStats
     this.setHighestPoints = highestPoints;
   }
 
+  PlayerGameStatsSingleDoubleTraining clone() {
+    return PlayerGameStatsSingleDoubleTraining(
+        player: Player.clone(this.getPlayer),
+        mode: this.getMode,
+        dateTime: this.getDateTime)
+      .._totalPoints = this._totalPoints
+      .._thrownDarts = this._thrownDarts
+      .._singleHits = this._singleHits
+      .._doubleHits = this._doubleHits
+      .._trippleHits = this._trippleHits
+      .._missedHits = this._missedHits
+      .._fieldHits = LinkedHashMap<int, String>.from(this._fieldHits)
+      .._allHits = List.from(this._allHits)
+      .._highestPoints = this._highestPoints;
+  }
+
   int get getTotalPoints => this._totalPoints;
   set setTotalPoints(int value) => this._totalPoints = value;
 

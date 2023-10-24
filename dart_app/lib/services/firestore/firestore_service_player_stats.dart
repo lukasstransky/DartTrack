@@ -9,7 +9,6 @@ import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_cricket.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
-import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -132,60 +131,80 @@ class FirestoreServicePlayerStats {
         .update(firestoreMap);
   }
 
-  Future<void> getAllPlayerOrTeamGameStatsX01(
-      StatsFirestoreX01_P firestoreStats, String currentUserId) async {
-    if (!firestoreStats.loadPlayerStats) {
+  Future<void> getAllPlayerGameStats(dynamic firestoreStats, GameMode mode,
+      [String currentUsername = '']) async {
+    if (!firestoreStats.loadPlayerGameStats) {
       return;
     }
 
-    firestoreStats.resetFilteredPlayerOrTeamStats();
-    firestoreStats.resetPlayerOrTeamStats();
+    firestoreStats.resetPlayerGameStats();
 
     final CollectionReference collectionReference =
         _firestore.collection(_getFirestorePlayerStatsPath());
-    final Query query = collectionReference
-        .where('userId', isEqualTo: currentUserId)
-        .where('mode', isEqualTo: GameMode.X01.name);
-    final QuerySnapshot<Object?> playerOrTeamGameStatsX01 = await query.get();
+    final Query query = collectionReference.where('mode', isEqualTo: mode.name);
+    final QuerySnapshot<Object?> playerGameStats = await query.get();
 
-    await Future.forEach(playerOrTeamGameStatsX01.docs,
+    await Future.forEach(playerGameStats.docs,
         (QueryDocumentSnapshot element) async {
-      final PlayerOrTeamGameStatsX01 playerOrTeamGameStats =
-          PlayerOrTeamGameStatsX01.fromMapX01(element.data());
-      firestoreStats.getPlayerOrTeamGameStats.add(playerOrTeamGameStats);
-      firestoreStats.getFilteredPlayerOrTeamGameStats
-          .add(playerOrTeamGameStats);
-    });
-
-    firestoreStats.playerOrTeamGameStatsLoaded = true;
-    firestoreStats.notify();
-  }
-
-  Future<PlayerOrTeamGameStats?> getPlayerOrTeamGameStatisticById(
-      String playerOrTeamGameStatsId,
-      GameMode mode,
-      bool loadTeamGameStats) async {
-    final CollectionReference collectionReference = _firestore.collection(
-        loadTeamGameStats
-            ? _getFirestoreTeamStatsPath()
-            : _getFirestorePlayerStatsPath());
-    PlayerOrTeamGameStats? result;
-
-    await collectionReference.doc(playerOrTeamGameStatsId).get().then((value) {
+      late PlayerOrTeamGameStats playerGameStats;
       if (mode == GameMode.X01) {
-        result = PlayerOrTeamGameStatsX01.fromMapX01(value.data());
+        playerGameStats = PlayerOrTeamGameStatsX01.fromMapX01(element.data());
       } else if (mode == GameMode.Cricket) {
-        result = PlayerOrTeamGameStats.fromMapCricket(value.data());
-      } else if (mode == GameMode.SingleTraining ||
-          mode == GameMode.DoubleTraining) {
-        result =
-            PlayerOrTeamGameStats.fromMapSingleDoubleTraining(value.data());
+        playerGameStats = PlayerOrTeamGameStats.fromMapCricket(element.data());
+      } else if (mode == GameMode.SingleTraining) {
+        playerGameStats =
+            PlayerOrTeamGameStats.fromMapSingleDoubleTraining(element.data());
+      } else if (mode == GameMode.DoubleTraining) {
+        playerGameStats =
+            PlayerOrTeamGameStats.fromMapSingleDoubleTraining(element.data());
       } else if (mode == GameMode.ScoreTraining) {
-        result = PlayerOrTeamGameStats.fromMapScoreTraining(value.data());
+        playerGameStats =
+            PlayerOrTeamGameStats.fromMapScoreTraining(element.data());
+      }
+
+      firestoreStats.allPlayerGameStats.add(playerGameStats);
+      if (mode == GameMode.X01) {
+        if (playerGameStats.getPlayer.getName == currentUsername) {
+          firestoreStats.getUserPlayerGameStats.add(playerGameStats);
+          firestoreStats.getUserFilteredPlayerGameStats.add(playerGameStats);
+        }
       }
     });
 
-    return result;
+    firestoreStats.playerGameStatsLoaded = true;
+    firestoreStats.notify();
+  }
+
+  Future<void> getAllTeamGameStats(dynamic firestoreStats, GameMode mode,
+      [String currentUsername = '']) async {
+    if (!firestoreStats.loadTeamGameStats) {
+      return;
+    }
+
+    firestoreStats.resetTeamGameStats();
+
+    final CollectionReference collectionReference =
+        _firestore.collection(_getFirestoreTeamStatsPath());
+    final Query query = collectionReference.where('mode', isEqualTo: mode.name);
+    final QuerySnapshot<Object?> teamGameStats = await query.get();
+
+    await Future.forEach(teamGameStats.docs,
+        (QueryDocumentSnapshot element) async {
+      late PlayerOrTeamGameStats teamGameStats;
+      if (mode == GameMode.X01) {
+        teamGameStats = PlayerOrTeamGameStatsX01.fromMapX01(element.data());
+      } else if (mode == GameMode.Cricket) {
+        teamGameStats = PlayerOrTeamGameStats.fromMapCricket(element.data());
+      }
+
+      firestoreStats.allTeamGameStats.add(teamGameStats);
+      if (mode == GameMode.X01) {
+        firestoreStats.filteredTeamGameStats.add(teamGameStats);
+      }
+    });
+
+    firestoreStats.teamGameStatsLoaded = true;
+    firestoreStats.notify();
   }
 
   Future<void> deletePlayerOrTeamStats(

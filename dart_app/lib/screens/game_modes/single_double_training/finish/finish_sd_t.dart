@@ -3,7 +3,9 @@ import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -46,38 +48,55 @@ class _FinishSingleDoubleTrainingState
   }
 
   _saveDataToFirestore() async {
-    final GameSingleDoubleTraining_P game =
+    final GameSingleDoubleTraining_P gameSingleDoubleTraining =
         context.read<GameSingleDoubleTraining_P>();
     final FirestoreServiceGames firestoreServiceGames =
         context.read<FirestoreServiceGames>();
     final OpenGamesFirestore openGamesFirestore =
         context.read<OpenGamesFirestore>();
+    final StatsFirestoreSingleTraining_P statsFirestoreSingleTraining =
+        context.read<StatsFirestoreSingleTraining_P>();
+    final StatsFirestoreDoubleTraining_P statsFirestoreDoubleTraining =
+        context.read<StatsFirestoreDoubleTraining_P>();
 
     if (context
         .read<GameSettingsSingleDoubleTraining_P>()
         .isCurrentUserInPlayers(context)) {
-      if (game.getMode == GameMode.DoubleTraining) {
-        game.setName = GameMode.DoubleTraining.name;
+      if (gameSingleDoubleTraining.getMode == GameMode.DoubleTraining) {
+        gameSingleDoubleTraining.setName = GameMode.DoubleTraining.name;
       }
-      game.setIsGameFinished = true;
-      g_gameId = await context
-          .read<FirestoreServiceGames>()
-          .postGame(game, context.read<OpenGamesFirestore>());
+      gameSingleDoubleTraining.setIsGameFinished = true;
+      g_gameId = await context.read<FirestoreServiceGames>().postGame(
+          gameSingleDoubleTraining, context.read<OpenGamesFirestore>());
       await context
           .read<FirestoreServicePlayerStats>()
-          .postPlayerGameStatistics(game, g_gameId, context);
+          .postPlayerGameStatistics(
+              gameSingleDoubleTraining, g_gameId, context);
     }
 
-    if (game.getIsOpenGame && mounted) {
+    if (gameSingleDoubleTraining.getIsOpenGame && mounted) {
       await firestoreServiceGames.deleteOpenGame(
-          game.getGameId, openGamesFirestore);
+          gameSingleDoubleTraining.getGameId, openGamesFirestore);
     }
 
-    // to load data in stats tab again if new game was added
-    if (game.getMode == GameMode.SingleTraining) {
-      context.read<StatsFirestoreSingleTraining_P>().loadGames = true;
+    // manually add game, stats to avoid fetching calls
+    final Game_P game = gameSingleDoubleTraining.clone();
+    game.setGameId = g_gameId;
+
+    if (gameSingleDoubleTraining.getMode == GameMode.SingleTraining) {
+      statsFirestoreSingleTraining.games.add(game);
+
+      for (PlayerGameStatsSingleDoubleTraining stats
+          in gameSingleDoubleTraining.getPlayerGameStatistics) {
+        statsFirestoreSingleTraining.allPlayerGameStats.add(stats);
+      }
     } else {
-      context.read<StatsFirestoreDoubleTraining_P>().loadGames = true;
+      statsFirestoreDoubleTraining.games.add(game);
+
+      for (PlayerGameStatsSingleDoubleTraining stats
+          in gameSingleDoubleTraining.getPlayerGameStatistics) {
+        statsFirestoreDoubleTraining.allPlayerGameStats.add(stats);
+      }
     }
   }
 

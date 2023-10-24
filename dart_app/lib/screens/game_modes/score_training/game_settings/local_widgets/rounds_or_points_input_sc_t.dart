@@ -59,8 +59,8 @@ class _RoundsOrPointsInputScoreTrainingState
           content: Container(
             width: DIALOG_SMALL_WIDTH.w,
             margin: EdgeInsets.only(
-              left: isMaxRoundsMode ? 10.w : 7.w,
-              right: isMaxRoundsMode ? 10.w : 7.w,
+              left: 5.w,
+              right: 5.w,
             ),
             child: TextFormField(
               textAlign: TextAlign.center,

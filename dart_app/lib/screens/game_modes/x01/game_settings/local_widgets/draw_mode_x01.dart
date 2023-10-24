@@ -15,9 +15,11 @@ class DrawModeX01 extends StatelessWidget {
       selector: (_, gameSettingsX01) => SelectorModel(
         drawMode: gameSettingsX01.getDrawMode,
         winByTwoLegsDifference: gameSettingsX01.getWinByTwoLegsDifference,
+        bestOfOrFirstToEnum: gameSettingsX01.getBestOfOrFirstTo,
       ),
       builder: (_, selectorModel, __) {
-        final bool disableSwitch = selectorModel.winByTwoLegsDifference;
+        final bool disableSwitch = selectorModel.winByTwoLegsDifference ||
+            selectorModel.bestOfOrFirstToEnum == BestOfOrFirstToEnum.FirstTo;
         final double textSwitchSpace = Utils.getResponsiveValue(
           context: context,
           mobileValue: 0,
@@ -55,8 +57,16 @@ class DrawModeX01 extends StatelessWidget {
                   value: selectorModel.drawMode,
                   onChanged: (value) {
                     if (disableSwitch) {
+                      String msg = "";
+                      if (selectorModel.winByTwoLegsDifference) {
+                        msg =
+                            'Not possible with win by two legs difference enabled!';
+                      } else if (selectorModel.bestOfOrFirstToEnum ==
+                          BestOfOrFirstToEnum.FirstTo) {
+                        msg = 'Best of mode is required!';
+                      }
                       Fluttertoast.showToast(
-                        msg: 'Not possible with win by two legs difference!',
+                        msg: msg,
                         toastLength: Toast.LENGTH_LONG,
                         fontSize:
                             Theme.of(context).textTheme.bodyMedium!.fontSize!,
@@ -86,9 +96,7 @@ class DrawModeX01 extends StatelessWidget {
         gameSettingsX01.setLegs = DEFAULT_LEGS_BEST_OF_NO_SETS;
       }
     } else {
-      gameSettingsX01.setBestOfOrFirstTo = BestOfOrFirstToEnum.BestOf;
       gameSettingsX01.setSets = DEFAULT_SETS_DRAW_MODE;
-
       if (gameSettingsX01.getSetsEnabled) {
         gameSettingsX01.setLegs = DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED;
       } else {
@@ -105,9 +113,11 @@ class DrawModeX01 extends StatelessWidget {
 class SelectorModel {
   final bool winByTwoLegsDifference;
   final bool drawMode;
+  final BestOfOrFirstToEnum bestOfOrFirstToEnum;
 
   SelectorModel({
     required this.winByTwoLegsDifference,
     required this.drawMode,
+    required this.bestOfOrFirstToEnum,
   });
 }

@@ -70,6 +70,14 @@ class ScoreStats extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(
+              'Total points: ${playerStats.getTotalPoints}',
+              style: TextStyle(
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             if (isSingleTraining)
               Text(
                 'Singles: ${playerStats.getSingleHits}',
@@ -99,14 +107,6 @@ class ScoreStats extends StatelessWidget {
               style: TextStyle(
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 color: Colors.white,
-              ),
-            ),
-            Text(
-              'Total points: ${playerStats.getTotalPoints}',
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
               ),
             ),
           ],

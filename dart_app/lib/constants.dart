@@ -382,7 +382,7 @@ const int DEFAULT_LEGS_BEST_OF_SETS_ENABLED = 3;
 const int DEFAULT_LEGS_FIRST_TO_NO_SETS = 3;
 const int DEFAULT_LEGS_BEST_OF_NO_SETS = 7;
 const int DEFAULT_SETS_DRAW_MODE = 6;
-const int DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED = 5;
+const int DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED = 3;
 
 const int DEFAULT_LIST_TILE_NEGATIVE_MARGIN = -4;
 
@@ -464,9 +464,6 @@ const double GAME_SETTINGS_BTN_BORDER_WITH = 0.5;
 /****************************          shared           *****************************/
 /************************************************************************************/
 const int THROWN_DARTS_WIDGET_HEIGHT = 6;
-
-const int DEFEAULT_DELAY =
-    100; // for async rerquests -> to show loading spinner
 
 /* shared preferences constants */
 const String VIBRATION_FEEDBACK_KEY = 'vibrationFeedbackEnabled';

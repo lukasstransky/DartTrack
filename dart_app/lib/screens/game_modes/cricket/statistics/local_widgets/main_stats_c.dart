@@ -39,10 +39,9 @@ class MainStatsCricket extends StatelessWidget {
                     if (!game.getIsGameFinished)
                       _getHeader(context, 'Legs won ', '(active set)'),
                   ],
-                  if (gameSettings.getLegs > 1)
-                    HeadingTextGameStats(
-                        textValue:
-                            'Legs won ${gameSettings.getSetsEnabled ? 'total' : ''}'),
+                  HeadingTextGameStats(
+                      textValue:
+                          'Legs won ${gameSettings.getSetsEnabled ? 'total' : ''}'),
                   _getHeader(context, 'MPR ', '(marks per round)'),
                   HeadingTextGameStats(textValue: 'Thrown darts'),
                 ],
@@ -70,9 +69,8 @@ class MainStatsCricket extends StatelessWidget {
                       ValueTextGameStats(
                           textValue: _getLegsWonTotal(gameSettings, stats)),
                     ] else ...[
-                      if (gameSettings.getLegs > 1)
-                        ValueTextGameStats(
-                            textValue: stats.getLegsWon.toString()),
+                      ValueTextGameStats(
+                          textValue: stats.getLegsWon.toString()),
                     ],
                     ValueTextGameStats(textValue: stats.getMarksPerRound()),
                     ValueTextGameStats(

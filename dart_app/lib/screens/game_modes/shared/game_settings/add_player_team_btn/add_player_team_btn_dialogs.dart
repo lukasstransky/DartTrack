@@ -9,7 +9,6 @@ import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
@@ -72,7 +71,7 @@ class AddPlayerTeamBtnDialogs {
           contentPadding:
               Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
           title: Text(
-            'Add new player',
+            'Add player',
             style: TextStyle(
               color: Colors.white,
               fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
@@ -402,16 +401,6 @@ class AddPlayerTeamBtnDialogs {
         gameSettings_P.getPlayers.add(playerToAdd);
         gameSettings_P.notify();
       }
-
-      //scroll automatically to new player
-      await Future.delayed(const Duration(milliseconds: 100));
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        if (scrollControllerPlayers.hasClients)
-          scrollControllerPlayers.animateTo(
-              scrollControllerPlayers.position.maxScrollExtent,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.fastOutSlowIn);
-      });
     }
 
     newPlayerController.clear();
@@ -466,7 +455,9 @@ class AddPlayerTeamBtnDialogs {
                             return ('Please enter a team name!');
                           }
                           if (gameSettings.checkIfTeamNameExists(value)) {
-                            return 'Teamname already exists!';
+                            Utils.setCursorForTextControllerToEnd(
+                                newTeamController);
+                            return 'Team name already exists!';
                           }
 
                           return null;
@@ -582,7 +573,6 @@ class AddPlayerTeamBtnDialogs {
                           onPressed: () {
                             Utils.handleVibrationFeedback(context);
                             _submitNewTeam(gameSettings, context);
-                            newTeamController.clear();
                           },
                           child: Text(
                             'Submit',
@@ -636,17 +626,6 @@ class AddPlayerTeamBtnDialogs {
 
     gameSettings.getTeams.add(new Team(name: newTeamController.text));
     gameSettings.notify();
-
-    // scroll to bottom
-    if (gameSettings.getTeams.length > 2) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        scrollControllerTeams.animateTo(
-          scrollControllerTeams.position.maxScrollExtent,
-          duration: Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-        );
-      });
-    }
 
     Navigator.of(context).pop();
   }
@@ -1098,6 +1077,7 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
           return ('Please enter a name!');
         }
         if (widget.gameSettings_P.checkIfPlayerNameExists(value)) {
+          Utils.setCursorForTextControllerToEnd(newPlayerController);
           return 'Name already exists!';
         }
         return null;

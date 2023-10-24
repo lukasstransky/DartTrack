@@ -599,7 +599,12 @@ class GameCricket_P extends Game_P {
       }
 
       currentStats.setSetsWon = currentStats.getSetsWon - 1;
-      currentStats.setLegsWon = getGameSettings.getLegs - 1;
+      final int legsForBestOf = ((getGameSettings.getLegs + 1) ~/ 2) - 1;
+
+      currentStats.setLegsWon =
+          getGameSettings.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo
+              ? getGameSettings.getLegs - 1
+              : legsForBestOf;
     } else {
       // revert leg
       currentStats.setLegsWon = currentStats.getLegsWon - 1;
@@ -727,14 +732,20 @@ class GameCricket_P extends Game_P {
     stats.setLegsWon = stats.getLegsWon + 1;
     stats.setLegsWonTotal = stats.getLegsWonTotal + 1;
 
-    if (gameSettingsCricket.getSetsEnabled &&
-        stats.getLegsWon == gameSettingsCricket.getLegs) {
-      stats.setSetsWon = stats.getSetsWon + 1;
+    if (gameSettingsCricket.getSetsEnabled) {
+      final bool isFirstTo =
+          gameSettingsCricket.getBestOfOrFirstTo == BestOfOrFirstToEnum.FirstTo;
+      final num legsForBestOfMode = (gameSettingsCricket.getLegs + 1) / 2;
 
-      // set amount of legs for each player/team -> to revert set
-      for (PlayerOrTeamGameStatsCricket stats in playerOrTeamStatsList) {
-        stats.getAmountOfLegsPerSet.add(stats.getLegsWon);
-        stats.setLegsWon = 0;
+      if ((isFirstTo && stats.getLegsWon == gameSettingsCricket.getLegs) ||
+          (!isFirstTo && stats.getLegsWon == legsForBestOfMode)) {
+        stats.setSetsWon = stats.getSetsWon + 1;
+
+        // set amount of legs for each player/team -> to revert set
+        for (PlayerOrTeamGameStatsCricket stats in playerOrTeamStatsList) {
+          stats.getAmountOfLegsPerSet.add(stats.getLegsWon);
+          stats.setLegsWon = 0;
+        }
       }
     }
   }

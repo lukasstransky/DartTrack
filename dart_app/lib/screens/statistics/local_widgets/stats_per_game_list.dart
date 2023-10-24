@@ -38,7 +38,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   didChangeDependencies() {
     super.didChangeDependencies();
     _getMode();
-    _getGames();
+    _getGamesAndPlayerOrTeamGameStats();
   }
 
   @override
@@ -61,21 +61,36 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     _mode = arguments.entries.first.value;
   }
 
-  _getGames() async {
+  _getGamesAndPlayerOrTeamGameStats() async {
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(_mode, context);
+    statsFirestore.showFavouriteGames = false;
 
     setState(() {
       _showLoadingSpinner = true;
     });
 
+    if (statsFirestore.loadPlayerGameStats) {
+      await context
+          .read<FirestoreServicePlayerStats>()
+          .getAllPlayerGameStats(statsFirestore, _mode);
+
+      statsFirestore.loadPlayerGameStats = false;
+    }
+
+    if ((_mode == GameMode.X01 || _mode == GameMode.Cricket) &&
+        statsFirestore.loadTeamGameStats) {
+      await context
+          .read<FirestoreServicePlayerStats>()
+          .getAllTeamGameStats(statsFirestore, _mode);
+
+      statsFirestore.loadTeamGameStats = false;
+    }
+
     if (statsFirestore.loadGames) {
-      await context.read<FirestoreServiceGames>().getGames(
-          _mode, context, context.read<FirestoreServicePlayerStats>());
+      await context.read<FirestoreServiceGames>().getGames(_mode, context);
 
       statsFirestore.loadGames = false;
-    } else {
-      await Future.delayed(Duration(milliseconds: DEFEAULT_DELAY + 200));
     }
 
     setState(() {
@@ -120,7 +135,9 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
       statsFirestore.noGamesPlayed = true;
     }
 
-    setState(() {});
+    setState(() {
+      _showLoadingSpinner = true;
+    });
 
     await context.read<FirestoreServiceGames>().deleteGame(
           game.getGameId,
@@ -128,7 +145,14 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
           game.getTeamGameStatistics.length > 0 ? true : false,
           _mode,
         );
-    context.read<StatsFirestoreX01_P>().calculateX01Stats();
+
+    if (statsFirestore is StatsFirestoreX01_P) {
+      await statsFirestore.calculateX01Stats();
+      setState(() {
+        _showLoadingSpinner = false;
+      });
+      statsFirestore.notify();
+    }
   }
 
   _getCard(Game_P game) {
@@ -190,7 +214,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      'To view the details about a game, click on it\'s card.',
+                      'To view the details about a game, click on its card.',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize:
@@ -278,35 +302,55 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
     }
 
     if (_mode == GameMode.Cricket) {
-      return Selector<StatsFirestoreCricket_P, bool>(
-        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
-        builder: (_, showFavouriteGames, __) =>
-            _getWidget(statsFirestore, games),
+      return Selector<StatsFirestoreCricket_P, SelectorModel>(
+        selector: (_, statsFirestore) => SelectorModel(
+          showFavouriteGames: statsFirestore.showFavouriteGames,
+          favouriteGames: statsFirestore.favouriteGames,
+        ),
+        builder: (_, selectorModel, __) => _getWidget(statsFirestore, games),
       );
     } else if (_mode == GameMode.X01) {
-      return Selector<StatsFirestoreX01_P, bool>(
-        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
-        builder: (_, showFavouriteGames, __) =>
-            _getWidget(statsFirestore, games),
+      return Selector<StatsFirestoreX01_P, SelectorModel>(
+        selector: (_, statsFirestore) => SelectorModel(
+          showFavouriteGames: statsFirestore.showFavouriteGames,
+          favouriteGames: statsFirestore.favouriteGames,
+        ),
+        builder: (_, selectorModel, __) => _getWidget(statsFirestore, games),
       );
     } else if (_mode == GameMode.ScoreTraining) {
-      return Selector<StatsFirestoreScoreTraining_P, bool>(
-        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
-        builder: (_, showFavouriteGames, __) =>
-            _getWidget(statsFirestore, games),
+      return Selector<StatsFirestoreScoreTraining_P, SelectorModel>(
+        selector: (_, statsFirestore) => SelectorModel(
+          showFavouriteGames: statsFirestore.showFavouriteGames,
+          favouriteGames: statsFirestore.favouriteGames,
+        ),
+        builder: (_, selectorModel, __) => _getWidget(statsFirestore, games),
       );
     } else if (_mode == GameMode.SingleTraining) {
-      return Selector<StatsFirestoreSingleTraining_P, bool>(
-        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
-        builder: (_, showFavouriteGames, __) =>
-            _getWidget(statsFirestore, games),
+      return Selector<StatsFirestoreSingleTraining_P, SelectorModel>(
+        selector: (_, statsFirestore) => SelectorModel(
+          showFavouriteGames: statsFirestore.showFavouriteGames,
+          favouriteGames: statsFirestore.favouriteGames,
+        ),
+        builder: (_, selectorModel, __) => _getWidget(statsFirestore, games),
       );
     } else if (_mode == GameMode.DoubleTraining) {
-      return Selector<StatsFirestoreDoubleTraining_P, bool>(
-        selector: (_, statsFirestore) => statsFirestore.showFavouriteGames,
-        builder: (_, showFavouriteGames, __) =>
-            _getWidget(statsFirestore, games),
+      return Selector<StatsFirestoreDoubleTraining_P, SelectorModel>(
+        selector: (_, statsFirestore) => SelectorModel(
+          showFavouriteGames: statsFirestore.showFavouriteGames,
+          favouriteGames: statsFirestore.favouriteGames,
+        ),
+        builder: (_, selectorModel, __) => _getWidget(statsFirestore, games),
       );
     }
   }
+}
+
+class SelectorModel {
+  final bool showFavouriteGames;
+  final List<Game_P> favouriteGames;
+
+  SelectorModel({
+    required this.showFavouriteGames,
+    required this.favouriteGames,
+  });
 }

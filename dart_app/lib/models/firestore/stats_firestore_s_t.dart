@@ -1,11 +1,18 @@
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
 import 'package:flutter/material.dart';
 
 class StatsFirestoreSingleTraining_P with ChangeNotifier {
+  // games
   List<Game_P> _games = [];
   bool _noGamesPlayed = false;
   bool _loadGames = true;
   bool _gameDeleted = false; // to hide loading spinner
+
+  // player stats
+  List<PlayerGameStatsSingleDoubleTraining> _allPlayerGameStats = [];
+  bool _loadPlayerGameStats = true;
+  bool _playerGameStatsLoaded = false;
 
   List<Game_P> _favouriteGames = [];
   bool _showFavouriteGames = false;
@@ -28,6 +35,17 @@ class StatsFirestoreSingleTraining_P with ChangeNotifier {
   bool get showFavouriteGames => this._showFavouriteGames;
   set showFavouriteGames(bool value) => this._showFavouriteGames = value;
 
+  List<PlayerGameStatsSingleDoubleTraining> get allPlayerGameStats =>
+      this._allPlayerGameStats;
+  set allPlayerGameStats(List<PlayerGameStatsSingleDoubleTraining> value) =>
+      this._allPlayerGameStats = value;
+
+  bool get loadPlayerGameStats => this._loadPlayerGameStats;
+  set loadPlayerGameStats(bool value) => this._loadPlayerGameStats = value;
+
+  bool get playerGameStatsLoaded => this._playerGameStatsLoaded;
+  set playerGameStatsLoaded(bool value) => this._playerGameStatsLoaded = value;
+
   resetGames() {
     games = [];
     favouriteGames = [];
@@ -40,6 +58,10 @@ class StatsFirestoreSingleTraining_P with ChangeNotifier {
     _loadGames = false;
     _favouriteGames = [];
     _showFavouriteGames = false;
+  }
+
+  resetPlayerGameStats() {
+    _allPlayerGameStats = [];
   }
 
   notify() {

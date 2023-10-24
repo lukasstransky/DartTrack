@@ -373,12 +373,16 @@ class Utils {
                 right: 1.w,
               ),
               child: Center(
-                child: Text(
-                  setLegString,
-                  style: TextStyle(
-                    color: getTextColorDarken(context),
-                    fontWeight: FontWeight.bold,
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    setLegString,
+                    style: TextStyle(
+                      color: getTextColorDarken(context),
+                      fontWeight: FontWeight.bold,
+                      fontSize:
+                          Theme.of(context).textTheme.bodyMedium!.fontSize,
+                    ),
                   ),
                 ),
               ),
@@ -1007,5 +1011,10 @@ class Utils {
         DeviceOrientation.portraitUp,
       ]);
     }
+  }
+
+  static setCursorForTextControllerToEnd(TextEditingController controller) {
+    controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length));
   }
 }

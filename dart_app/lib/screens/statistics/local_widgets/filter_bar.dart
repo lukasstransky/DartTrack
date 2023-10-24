@@ -24,14 +24,7 @@ class _FilterBarState extends State<FilterBar> {
   @override
   void initState() {
     super.initState();
-    final String customBtnDateRangeTemp =
-        context.read<StatsFirestoreX01_P>().customBtnDateRange;
-    if (customBtnDateRangeTemp == '') {
-      _setCurrentDate();
-    } else {
-      _customBtnDateRange = customBtnDateRangeTemp;
-      _showCustomBtnDateRange = true;
-    }
+    _setCurrentDate();
   }
 
   @override

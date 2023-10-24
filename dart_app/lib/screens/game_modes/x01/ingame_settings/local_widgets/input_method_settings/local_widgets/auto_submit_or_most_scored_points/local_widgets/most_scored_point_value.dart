@@ -107,8 +107,8 @@ class MostScoredPointValue extends StatelessWidget {
           content: Container(
             width: DIALOG_SMALL_WIDTH.w,
             margin: EdgeInsets.only(
-              left: 7.w,
-              right: 7.w,
+              left: 5.w,
+              right: 5.w,
             ),
             child: TextFormField(
               controller: mostScoredPointController,
