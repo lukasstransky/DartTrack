@@ -20,11 +20,21 @@ class SubmitPointsBtnX01 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MaterialStateProperty<Color> _colorResult =
-        _shouldSubmitBtnBeEnabled(context)
-            ? MaterialStateProperty.all(Colors.green)
-            : MaterialStateProperty.all(Utils.darken(Colors.green, 25));
+    final bool shouldSubmitBtnBeEnabled = _shouldSubmitBtnBeEnabled(context);
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
+    final MaterialStateProperty<Color> _colorResult = shouldSubmitBtnBeEnabled
+        ? MaterialStateProperty.all(Colors.green)
+        : MaterialStateProperty.all(Utils.darken(Colors.green, 25));
+    final MaterialStateProperty<Color> _colorResultOverlay =
+        shouldSubmitBtnBeEnabled
+            ? MaterialStateProperty.all(Utils.darken(Colors.green, 10))
+            : MaterialStateProperty.all(Colors.transparent);
+    final MaterialStateProperty<Color> _colorResultShadow =
+        shouldSubmitBtnBeEnabled
+            ? MaterialStateProperty.all(
+                Utils.darken(Colors.green, 30).withOpacity(0.3))
+            : MaterialStateProperty.all(Colors.transparent);
 
     return Selector<GameX01_P, SelectorModel>(
       selector: (_, gameX01_P) => SelectorModel(
@@ -60,8 +70,8 @@ class SubmitPointsBtnX01 extends StatelessWidget {
               ),
             ),
             backgroundColor: _colorResult,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: _colorResult,
+            shadowColor: _colorResultShadow,
+            overlayColor: _colorResultOverlay,
           ),
           child: Icon(
             size: ICON_BUTTON_SIZE.h,

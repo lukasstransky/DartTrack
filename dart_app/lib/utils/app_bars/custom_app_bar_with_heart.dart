@@ -75,8 +75,11 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         leading: widget.isFinishScreen
             ? null
             : IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
+                splashColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                splashRadius: SPLASH_RADIUS,
+                highlightColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 onPressed: () {
                   Utils.handleVibrationFeedback(context);
                   var route = ModalRoute.of(context);
@@ -93,9 +96,12 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         actions: [
           if (widget.showHeart && username != 'Guest')
             IconButton(
+              splashColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
               iconSize: ICON_BUTTON_SIZE.h,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashRadius: SPLASH_RADIUS,
+              highlightColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
               onPressed: () async {
                 Utils.handleVibrationFeedback(context);
                 if (!showLoadingSpinner) {
@@ -114,8 +120,11 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
             ),
           if (widget.isFinishScreen)
             IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
+              splashRadius: SPLASH_RADIUS,
+              highlightColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
               onPressed: () {
                 Utils.handleVibrationFeedback(context);
                 if (!showLoadingSpinner) {
@@ -135,6 +144,11 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
   }
 
   _changeFavouriteStateOfGame(String gameId, bool state) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     setState(() {
       widget.isFavouriteGame = state;
     });

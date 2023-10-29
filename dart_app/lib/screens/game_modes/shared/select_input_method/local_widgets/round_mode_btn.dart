@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/game_settings_score_training_p.dar
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -72,7 +73,12 @@ class RoundBtn extends StatelessWidget {
             Utils.handleVibrationFeedback(context);
             _roundBtnClicked(context, mode);
           },
-          style: ButtonStyle(
+          style: ButtonStyles.twoColorBtnStyle(
+                  context,
+                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                  Theme.of(context).colorScheme.primary,
+                  isRoundSelected)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -80,20 +86,6 @@ class RoundBtn extends StatelessWidget {
                 ),
               ),
             ),
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: isRoundSelected
-                ? MaterialStateProperty.all(
-                    Utils.darken(Theme.of(context).colorScheme.primary, 25))
-                : MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primary),
-            overlayColor:
-                isRoundSelected || _getAmountOfThrownDarts(context) != 0
-                    ? MaterialStateProperty.all(Colors.transparent)
-                    : Utils.getColorOrPressed(
-                        Theme.of(context).colorScheme.primary,
-                        Utils.darken(Theme.of(context).colorScheme.primary, 25),
-                      ),
           ),
         ),
       ),

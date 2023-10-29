@@ -1,6 +1,7 @@
 import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -11,6 +12,11 @@ class ProceedAsGuestLink extends StatelessWidget {
   const ProceedAsGuestLink({Key? key}) : super(key: key);
 
   _clickProceedAsGuest(BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final Auth_P auth = context.read<Auth_P>();
     context.read<OpenGamesFirestore>().setLoadOpenGames = true;
 

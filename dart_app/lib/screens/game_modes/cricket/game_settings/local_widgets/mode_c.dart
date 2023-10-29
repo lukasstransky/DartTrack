@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -104,10 +105,8 @@ class ModeCricketBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style:
+              ButtonStyles.primaryColorBtnStyle(context, expression).copyWith(
             shape: value != 'Cut throat'
                 ? MaterialStateProperty.all(
                     RoundedRectangleBorder(
@@ -121,9 +120,6 @@ class ModeCricketBtn extends StatelessWidget {
                 : MaterialStateProperty.all(
                     RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                   ),
-            backgroundColor: expression
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),

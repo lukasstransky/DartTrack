@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -64,10 +65,11 @@ class PointsBtnX01 extends StatelessWidget {
                     ),
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
+            style: ButtonStyles.primaryColorBtnStyle(
+                    context,
+                    selectorModel.points == points &&
+                        selectorModel.customPoints == -1)
+                .copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   side: points == 301
@@ -84,10 +86,6 @@ class PointsBtnX01 extends StatelessWidget {
                       : BorderRadius.zero,
                 ),
               ),
-              backgroundColor: selectorModel.points == points &&
-                      selectorModel.customPoints == -1
-                  ? Utils.getPrimaryMaterialStateColorDarken(context)
-                  : Utils.getColor(Theme.of(context).colorScheme.primary),
             ),
           ),
         ),

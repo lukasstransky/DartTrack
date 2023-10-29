@@ -35,6 +35,7 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
   @override
   initState() {
     super.initState();
+    initControllersForGamesettingsX01();
     DefaultSettingsHelper.setSettingsFromDefault(context);
     _addCurrentUserToPlayers();
   }

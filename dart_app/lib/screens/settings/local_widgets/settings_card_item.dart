@@ -46,8 +46,16 @@ class SettingsCardItem extends StatelessWidget {
               Utils.darken(Theme.of(context).colorScheme.primary, 20),
             ),
           ),
-          onPressed: () {
+          onPressed: () async {
             Utils.handleVibrationFeedback(context);
+
+            if (name != 'Privacy policy' && name != 'Terms of use') {
+              final bool isConnected = await Utils.hasInternetConnection();
+              if (!isConnected) {
+                return;
+              }
+            }
+
             _onPressed(context);
           },
           child: Row(

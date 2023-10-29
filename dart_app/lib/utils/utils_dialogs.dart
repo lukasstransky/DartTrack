@@ -11,6 +11,7 @@ import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -76,12 +77,7 @@ class UtilsDialogs {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -115,12 +111,7 @@ class UtilsDialogs {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -309,12 +300,7 @@ class UtilsDialogs {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -352,12 +338,7 @@ class UtilsDialogs {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -418,12 +399,8 @@ class UtilsDialogs {
                           Theme.of(context).textTheme.bodyMedium!.fontSize,
                     ),
                   ),
-                  style: ButtonStyle(
-                    splashFactory: NoSplash.splashFactory,
-                    shadowColor: MaterialStateProperty.all(Colors.transparent),
-                    overlayColor: MaterialStateProperty.all(Colors.transparent),
-                    backgroundColor:
-                        Utils.getPrimaryMaterialStateColorDarken(context),
+                  style:
+                      ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       RoundedRectangleBorder(
                         borderRadius:
@@ -451,14 +428,8 @@ class UtilsDialogs {
                               Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
-                      style: ButtonStyle(
-                        splashFactory: NoSplash.splashFactory,
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        backgroundColor:
-                            Utils.getPrimaryMaterialStateColorDarken(context),
+                      style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                          .copyWith(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -471,6 +442,12 @@ class UtilsDialogs {
                   ),
                   TextButton(
                     onPressed: () async {
+                      final bool isConnected =
+                          await Utils.hasInternetConnection();
+                      if (!isConnected) {
+                        return;
+                      }
+
                       Utils.handleVibrationFeedback(context);
                       Navigator.of(context, rootNavigator: true).pop();
 
@@ -493,14 +470,8 @@ class UtilsDialogs {
                             Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
-                    style: ButtonStyle(
-                      splashFactory: NoSplash.splashFactory,
-                      shadowColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      overlayColor:
-                          MaterialStateProperty.all(Colors.transparent),
-                      backgroundColor:
-                          Utils.getPrimaryMaterialStateColorDarken(context),
+                    style:
+                        ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius:

@@ -132,7 +132,7 @@ class FirestoreServiceGames {
     context.read<StatsFirestoreSingleTraining_P>().resetForResettingStats();
     context.read<StatsFirestoreScoreTraining_P>().resetForResettingStats();
 
-    settings.setIsResettingStatsOrDeletingAccount = true;
+    settings.setShowLoadingSpinner = true;
     settings.notify();
 
     try {
@@ -161,7 +161,7 @@ class FirestoreServiceGames {
         fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
       );
     } finally {
-      settings.setIsResettingStatsOrDeletingAccount = false;
+      settings.setShowLoadingSpinner = false;
       settings.notify();
     }
   }

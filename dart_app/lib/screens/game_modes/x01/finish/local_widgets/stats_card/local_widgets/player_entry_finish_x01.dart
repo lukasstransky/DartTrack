@@ -84,6 +84,11 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
       mobileValue: 14,
       tabletValue: 12,
     );
+    final double _fontSizeNameFirst = Utils.getResponsiveValue(
+      context: context,
+      mobileValue: 14,
+      tabletValue: 12,
+    );
 
     return Padding(
       padding: EdgeInsets.only(
@@ -113,10 +118,12 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                             child: Text(
                               '${checkForSameAmountOfSetsLegs(widget.i, statsList)}.',
                               style: TextStyle(
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize,
+                                fontSize: widget.i == 0 && !widget.openGame
+                                    ? _fontSizeNameFirst.sp
+                                    : Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
                                 fontWeight: FontWeight.bold,
                                 color: Utils.getTextColorDarken(context),
                               ),
@@ -139,7 +146,7 @@ class _PlayerEntryFinishX01State extends State<PlayerEntryFinishX01> {
                     else
                       Container(
                         padding: widget.openGame
-                            ? EdgeInsets.zero
+                            ? EdgeInsets.only(left: 1.w)
                             : EdgeInsets.only(left: 2.w),
                         child: Icon(
                           Entypo.trophy,
@@ -319,6 +326,7 @@ class _PlayerStatsState extends State<PlayerStats> {
                     : 'Legs: ${legsWon}',
                 style: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),

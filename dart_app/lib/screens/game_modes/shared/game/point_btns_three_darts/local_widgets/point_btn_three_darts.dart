@@ -63,7 +63,7 @@ class PointBtnThreeDarts extends StatelessWidget {
               ? MaterialStateProperty.all(Colors.transparent)
               : Utils.getColorOrPressed(
                   Theme.of(context).colorScheme.primary,
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 ),
         ),
         child: FittedBox(

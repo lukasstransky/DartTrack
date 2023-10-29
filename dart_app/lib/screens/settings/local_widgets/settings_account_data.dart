@@ -3,6 +3,7 @@ import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -108,12 +109,7 @@ class SettingsAccountData extends StatelessWidget {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -123,24 +119,25 @@ class SettingsAccountData extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Utils.handleVibrationFeedback(context);
+              final bool isConnected = await Utils.hasInternetConnection();
+              if (!isConnected) {
+                return;
+              }
               context.read<FirestoreServiceGames>().resetStatistics(context);
               Navigator.of(context).pop();
             },
             child: Text(
               'Reset statistics',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Colors.white,
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getColor(DANGER_BACKGROUND_COLOR_BTN_IN_DIALOG),
+            style:
+                ButtonStyles.anyColorBtnStyle(context, DANGER_ACTION_BTN_COLOR)
+                    .copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -206,12 +203,7 @@ class SettingsAccountData extends StatelessWidget {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -221,24 +213,25 @@ class SettingsAccountData extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {
+            onPressed: () async {
               Utils.handleVibrationFeedback(context);
+              final bool isConnected = await Utils.hasInternetConnection();
+              if (!isConnected) {
+                return;
+              }
               _onDeleteAccountClicked(context);
               Navigator.of(context).pop();
             },
             child: Text(
               'Delete account',
               style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Colors.white,
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getColor(DANGER_BACKGROUND_COLOR_BTN_IN_DIALOG),
+            style:
+                ButtonStyles.anyColorBtnStyle(context, DANGER_ACTION_BTN_COLOR)
+                    .copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -261,7 +254,7 @@ class SettingsAccountData extends StatelessWidget {
       return;
     }
 
-    settings.setIsResettingStatsOrDeletingAccount = true;
+    settings.setShowLoadingSpinner = true;
     settings.notify();
 
     final navigator = Navigator.of(context);
@@ -271,7 +264,7 @@ class SettingsAccountData extends StatelessWidget {
       await authService.deleteAccount(context);
       navigator.pushNamed('/loginRegister');
 
-      settings.setIsResettingStatsOrDeletingAccount = false;
+      settings.setShowLoadingSpinner = false;
       settings.notify();
     });
   }

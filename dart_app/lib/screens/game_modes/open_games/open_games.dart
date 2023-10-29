@@ -16,6 +16,7 @@ import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
@@ -270,7 +271,13 @@ class _OpenGamesState extends State<OpenGames> {
                                         label: 'Play',
                                       ),
                                       SlidableAction(
-                                        onPressed: (context) {
+                                        onPressed: (context) async {
+                                          final bool isConnected = await Utils
+                                              .hasInternetConnection();
+                                          if (!isConnected) {
+                                            return;
+                                          }
+
                                           if (mounted) {
                                             context
                                                 .read<FirestoreServiceGames>()

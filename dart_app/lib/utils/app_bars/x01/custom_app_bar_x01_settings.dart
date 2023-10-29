@@ -4,6 +4,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/game_settings/x01/helper/default_settings_helper.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         content: Container(
           width: TEXT_DIALOG_WIDTH.w,
           child: Text(
-            'These settings are the general default settings!',
+            'These settings are the general default settings.',
             style: TextStyle(
               color: Colors.white,
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
@@ -63,12 +64,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -131,9 +127,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -155,9 +149,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -212,12 +204,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -275,12 +262,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -338,12 +320,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -358,7 +335,12 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
   }
 
   _setOrUndoDefaultSettings(
-      GameSettingsX01_P gameSettingsX01, bool defaultSettingsSelected) {
+      GameSettingsX01_P gameSettingsX01, bool defaultSettingsSelected) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final defaultSettingsX01 = context.read<DefaultSettingsX01_P>();
     final FirestoreServiceDefaultSettings firestoreServiceDefaultSettings =
         context.read<FirestoreServiceDefaultSettings>();
@@ -417,8 +399,11 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            splashColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            splashRadius: SPLASH_RADIUS,
+            highlightColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
             onPressed: () {
               Utils.handleVibrationFeedback(context);
               Navigator.of(context).pushNamed('/home');
@@ -428,7 +413,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
               Icons.arrow_back,
               color: Theme.of(context).colorScheme.secondary,
             ),
-          )
+          ),
         ],
       ),
       actions: [
@@ -436,8 +421,11 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
           padding: EdgeInsets.only(right: 2.5.w),
           child: Consumer<GameSettingsX01_P>(
             builder: (_, gameSettingsX01, __) => IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
+              splashRadius: SPLASH_RADIUS,
+              highlightColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
               onPressed: () async {
                 Utils.handleVibrationFeedback(context);
                 _defaultSettingsBtnClicked();

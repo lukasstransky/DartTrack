@@ -7,6 +7,7 @@ import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -75,10 +76,7 @@ class NewGameBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -86,7 +84,6 @@ class NewGameBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
           ),
         ),
       ),

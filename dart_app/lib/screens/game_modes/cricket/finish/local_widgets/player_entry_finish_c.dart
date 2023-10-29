@@ -77,6 +77,7 @@ class ScoringStats extends StatelessWidget {
                       fontSize:
                           Theme.of(context).textTheme.bodyMedium!.fontSize,
                       color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   if (isOpenGame)
@@ -96,6 +97,7 @@ class ScoringStats extends StatelessWidget {
                 style: TextStyle(
                   fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             Text(

@@ -129,33 +129,6 @@ class AuthService {
     }
   }
 
-  Future<void> changeUsernameInFirestore(String newUsername) async {
-    await _firestore
-        .collection('users')
-        .doc(_firebaseAuth.currentUser!.uid)
-        .update({
-      'username': newUsername,
-      'usernameUpdated': true,
-    });
-  }
-
-  Future<bool> isUsernameUpdated() async {
-    bool usernameUpdated = false;
-    final DocumentSnapshot snapshot = await _firestore
-        .collection('users')
-        .doc(_firebaseAuth.currentUser!.uid)
-        .get();
-
-    if (snapshot.exists) {
-      final data = snapshot.data() as Map<String, dynamic>?;
-      if (data != null && data.containsKey('usernameUpdated')) {
-        usernameUpdated = true;
-      }
-    }
-
-    return usernameUpdated;
-  }
-
   Future<void> updateEmailInFirestore(String newEmail) async {
     await _firestore
         .collection('users')

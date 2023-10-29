@@ -10,6 +10,7 @@ import 'package:dart_app/models/game_settings/x01/default_settings_x01_p.dart';
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_widgets/login_register_switch.dart';
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_widgets/proceed_as_guest_link.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -28,6 +29,11 @@ class LoginRegisterBtn extends StatelessWidget {
   final GlobalKey<FormState> loginRegisterPageFormKey;
 
   Future<void> submit(bool isLogin, BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final AuthService authService = context.read<AuthService>();
     final Auth_P auth = context.read<Auth_P>();
     context.read<StatsFirestoreX01_P>().resetLoadingFields();
@@ -152,12 +158,7 @@ class LoginRegisterBtn extends StatelessWidget {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -193,17 +194,12 @@ class LoginRegisterBtn extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondary,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
+                  borderRadius: BorderRadius.circular(18),
                 ),
               ),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
             ),
             onPressed: () => submit(isLogin, context),
           ),

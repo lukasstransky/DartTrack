@@ -48,8 +48,11 @@ class PasswordInput extends StatelessWidget {
               color: Utils.getPrimaryColorDarken(context),
             ),
             suffixIcon: IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashRadius: SPLASH_RADIUS,
+              splashColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
+              highlightColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
               icon: Icon(
                 size: ICON_BUTTON_SIZE.h,
                 passwordVisible ? Icons.visibility : Icons.visibility_off,

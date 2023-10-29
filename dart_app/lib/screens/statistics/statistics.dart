@@ -10,6 +10,7 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -99,6 +100,11 @@ class _StatisticsState extends State<Statistics> {
 
   // only loaded when user goes to statistics tab for the first time
   _loadData(StatsFirestoreX01_P statsFirestore) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     if (statsFirestore.loadPlayerGameStats) {
       final String currentUsername =
           context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
@@ -169,12 +175,7 @@ class _StatisticsState extends State<Statistics> {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -208,6 +209,17 @@ class _StatisticsState extends State<Statistics> {
             color: Colors.white,
             fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
+        ),
+        style: ButtonStyle(
+          splashFactory: InkRipple.splashFactory,
+          shadowColor: Utils.getColor(
+              Utils.darken(Theme.of(context).colorScheme.primary, 30)
+                  .withOpacity(0.3)),
+          overlayColor: MaterialStateProperty.resolveWith<Color>((states) {
+            if (states.contains(MaterialState.pressed))
+              return Utils.darken(Theme.of(context).colorScheme.primary, 10);
+            return Colors.transparent;
+          }),
         ),
       ),
     );

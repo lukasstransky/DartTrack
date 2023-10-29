@@ -137,8 +137,11 @@ class TeamsListEntry extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
+                          splashRadius: SPLASH_RADIUS,
+                          splashColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          highlightColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
                           padding: EdgeInsets.zero,
                           icon: Icon(
                             size: ICON_BUTTON_SIZE.h,
@@ -153,8 +156,11 @@ class TeamsListEntry extends StatelessWidget {
                         ),
                         if (gameSettings.getTeams.length > 1)
                           IconButton(
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
+                              splashRadius: SPLASH_RADIUS,
+                              splashColor: Utils.darken(
+                                  Theme.of(context).colorScheme.primary, 10),
+                              highlightColor: Utils.darken(
+                                  Theme.of(context).colorScheme.primary, 10),
                               padding: EdgeInsets.zero,
                               icon: Icon(
                                 size: ICON_BUTTON_SIZE.h,
@@ -176,8 +182,11 @@ class TeamsListEntry extends StatelessWidget {
                                 }
                               }),
                         IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
+                          splashRadius: SPLASH_RADIUS,
+                          splashColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          highlightColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
                           padding: EdgeInsets.zero,
                           icon: Icon(
                             size: ICON_BUTTON_SIZE.h,

@@ -1,7 +1,10 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -13,14 +16,30 @@ class LogoutBtn extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(top: 2.h),
       child: ElevatedButton.icon(
-        style: ButtonStyle(
-          backgroundColor: Utils.getColor(
-              Utils.darken(Theme.of(context).colorScheme.primary, 10)),
+        style: ButtonStyles.anyColorBtnStyle(context,
+                Utils.darken(Theme.of(context).colorScheme.primary, 10))
+            .copyWith(
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(10.0),
+              ),
+            ),
+          ),
         ),
         onPressed: () async {
           Utils.handleVibrationFeedback(context);
+          final bool isConnected = await Utils.hasInternetConnection();
+          if (!isConnected) {
+            return;
+          }
+          context.loaderOverlay.show();
+          context.read<Settings_P>().notify();
           await context.read<AuthService>().logout(context);
           Navigator.of(context).pushNamed('/loginRegister');
+
+          context.loaderOverlay.hide();
+          context.read<Settings_P>().notify();
         },
         icon: Icon(
           size: ICON_BUTTON_SIZE.h,

@@ -23,8 +23,10 @@ class AddPlayerBtn extends StatelessWidget {
       padding: EdgeInsets.only(bottom: 0.5.h),
       child: Theme(
         data: Theme.of(context).copyWith(
-            highlightColor: Colors.transparent,
-            shadowColor: Colors.transparent),
+          highlightColor: OVERLAY_COLOR_BTN_DARK,
+          shadowColor: Utils.darken(Theme.of(context).colorScheme.primary, 30)
+              .withOpacity(0.3),
+        ),
         child: FloatingActionButton(
           splashColor: Colors.transparent,
           backgroundColor: Utils.getPrimaryColorDarken(context),

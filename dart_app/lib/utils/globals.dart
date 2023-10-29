@@ -88,6 +88,14 @@ TextEditingController newTextControllerForMostScoredPointGameSettingsX01(
   return mostScoredPointController;
 }
 
+initControllersForGamesettingsX01() {
+  newPlayerController = new TextEditingController();
+  editPlayerController = new TextEditingController();
+  newTeamController = new TextEditingController();
+  editTeamController = new TextEditingController();
+  customPointsController = new TextEditingController();
+}
+
 disposeControllersForGamesettingsX01() {
   newPlayerController.dispose();
   editPlayerController.dispose();

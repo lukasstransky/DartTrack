@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -117,12 +118,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                   fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
+              style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
@@ -143,12 +139,7 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                   fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
+              style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
@@ -226,12 +217,8 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                             ),
                           ),
                         ),
-                        style: ButtonStyle(
-                          splashFactory: NoSplash.splashFactory,
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          overlayColor:
-                              MaterialStateProperty.all(Colors.transparent),
+                        style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                            .copyWith(
                           shape: MaterialStateProperty.all(
                             RoundedRectangleBorder(
                               side: BorderSide(
@@ -243,8 +230,6 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
                               ),
                             ),
                           ),
-                          backgroundColor:
-                              Utils.getPrimaryMaterialStateColorDarken(context),
                         ),
                       ),
                     ),

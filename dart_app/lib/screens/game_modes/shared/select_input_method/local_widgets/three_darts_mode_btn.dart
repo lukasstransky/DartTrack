@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -68,7 +69,12 @@ class ThreeDartsBtn extends StatelessWidget {
             Utils.handleVibrationFeedback(context);
             _threeDartsBtnClicked(context, mode);
           },
-          style: ButtonStyle(
+          style: ButtonStyles.twoColorBtnStyle(
+            context,
+            Utils.darken(Theme.of(context).colorScheme.primary, 25),
+            Theme.of(context).colorScheme.primary,
+            isThreeDartsSelected,
+          ).copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -76,19 +82,6 @@ class ThreeDartsBtn extends StatelessWidget {
                 ),
               ),
             ),
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: isThreeDartsSelected
-                ? MaterialStateProperty.all(
-                    Utils.darken(Theme.of(context).colorScheme.primary, 25))
-                : MaterialStateProperty.all(
-                    Theme.of(context).colorScheme.primary),
-            overlayColor: isThreeDartsSelected
-                ? MaterialStateProperty.all(Colors.transparent)
-                : Utils.getColorOrPressed(
-                    Theme.of(context).colorScheme.primary,
-                    Utils.darken(Theme.of(context).colorScheme.primary, 25),
-                  ),
           ),
         ),
       ),

@@ -9,8 +9,10 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:icofont_flutter/icofont_flutter.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 class Home extends StatefulWidget {
@@ -33,8 +35,8 @@ class _HomeState extends State<Home> {
 
   @override
   void initState() {
-    getAppVersion();
-    isUsernameUpdated();
+    _getAppVersion();
+    _initVibrationFeedbackValue();
     super.initState();
   }
 
@@ -57,67 +59,73 @@ class _HomeState extends State<Home> {
     super.didChangeDependencies();
   }
 
-  getAppVersion() async {
+  @override
+  Widget build(BuildContext context) {
+    return LoaderOverlay(
+      child: Selector<Settings_P, bool>(
+        selector: (_, settings) => settings.getShowLoadingSpinner,
+        builder: (_, showLoadingSpinner, __) => Scaffold(
+          body: _pages[_currentIndex],
+          bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            elevation: 0,
+            onTap: _onTabTapped,
+            currentIndex: _currentIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(
+                  IcoFontIcons.dart,
+                  size: ICON_BUTTON_SIZE.h,
+                ),
+                label: 'Play',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  FontAwesomeIcons.chartBar,
+                  size: ICON_BUTTON_SIZE.h,
+                ),
+                label: 'Statistics',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(
+                  Icons.settings,
+                  size: ICON_BUTTON_SIZE.h,
+                ),
+                label: 'Settings',
+              ),
+            ],
+            unselectedFontSize: 10.sp,
+            selectedFontSize: 15.sp,
+            selectedIconTheme: IconThemeData(
+                color: Theme.of(context).colorScheme.secondary, size: 35),
+            selectedItemColor: Theme.of(context).colorScheme.secondary,
+            selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+  }
+
+  _initVibrationFeedbackValue() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final Settings_P settings_p = context.read<Settings_P>();
+    final AuthService authService = context.read<AuthService>();
+
+    final bool vibrationFeedbackEnabled = prefs.getBool(
+            '${authService.getCurrentUserUid}_$VIBRATION_FEEDBACK_KEY') ??
+        false;
+    settings_p.setVibrationFeedbackEnabled = vibrationFeedbackEnabled;
+  }
+
+  _getAppVersion() async {
     final PackageInfo _packageInfo = await PackageInfo.fromPlatform();
     context.read<Settings_P>().setVersion = _packageInfo.version;
   }
 
-  isUsernameUpdated() async {
-    final Settings_P settings = context.read<Settings_P>();
-    if (settings.getLoadIsUsernameUpdated) {
-      final bool _isUsernameUpdated =
-          await context.read<AuthService>().isUsernameUpdated();
-      settings.setIsUernameUpdated = _isUsernameUpdated;
-      settings.setLoadIsUsernameUpdated = false;
-    }
-  }
-
-  onTabTapped(int index) {
+  _onTabTapped(int index) {
     Utils.handleVibrationFeedback(context);
     setState(() {
       _currentIndex = index;
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _pages[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        elevation: 0,
-        onTap: onTabTapped,
-        currentIndex: _currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(
-              IcoFontIcons.dart,
-              size: ICON_BUTTON_SIZE.h,
-            ),
-            label: 'Play',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              FontAwesomeIcons.chartBar,
-              size: ICON_BUTTON_SIZE.h,
-            ),
-            label: 'Statistics',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.settings,
-              size: ICON_BUTTON_SIZE.h,
-            ),
-            label: 'Settings',
-          ),
-        ],
-        unselectedFontSize: 10.sp,
-        selectedFontSize: 15.sp,
-        selectedIconTheme: IconThemeData(
-            color: Theme.of(context).colorScheme.secondary, size: 35),
-        selectedItemColor: Theme.of(context).colorScheme.secondary,
-        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-      ),
-    );
   }
 }

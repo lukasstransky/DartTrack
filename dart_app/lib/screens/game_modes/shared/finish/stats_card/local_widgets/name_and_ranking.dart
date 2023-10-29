@@ -123,7 +123,7 @@ class NameAndRanking extends StatelessWidget {
                 : SizedBox.shrink(),
             if (i == 0 && !isOpenGame && !isDraw)
               Container(
-                padding: EdgeInsets.only(left: 3.w),
+                padding: EdgeInsets.only(left: 2.w),
                 child: Icon(
                   Entypo.trophy,
                   size: _trophySize.sp,
@@ -132,7 +132,8 @@ class NameAndRanking extends StatelessWidget {
               )
             else
               Container(
-                padding: EdgeInsets.only(left: 3.w),
+                padding:
+                    isOpenGame ? EdgeInsets.zero : EdgeInsets.only(left: 2.w),
                 child: Icon(
                   Entypo.trophy,
                   size: _trophySize.sp,

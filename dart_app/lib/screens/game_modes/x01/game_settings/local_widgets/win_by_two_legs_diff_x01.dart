@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -155,6 +156,11 @@ _showDialogForSuddenDeath(
                 Row(
                   children: [
                     IconButton(
+                      splashRadius: SPLASH_RADIUS,
+                      splashColor: Utils.darken(
+                          Theme.of(context).colorScheme.primary, 10),
+                      highlightColor: Utils.darken(
+                          Theme.of(context).colorScheme.primary, 10),
                       icon: Icon(
                         size: ICON_BUTTON_SIZE.h,
                         Icons.info_outline,
@@ -204,6 +210,11 @@ _showDialogForSuddenDeath(
                   Row(
                     children: [
                       IconButton(
+                        splashRadius: SPLASH_RADIUS,
+                        splashColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
+                        highlightColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
                         icon: Icon(
                           size: ICON_BUTTON_SIZE.h,
                           Icons.info_outline,
@@ -232,8 +243,11 @@ _showDialogForSuddenDeath(
                       Container(
                         padding: EdgeInsets.only(left: 3.w),
                         child: IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
+                          splashRadius: SPLASH_RADIUS,
+                          splashColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          highlightColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
                           onPressed: () {
                             Utils.handleVibrationFeedback(context);
                             setState(() {
@@ -270,8 +284,11 @@ _showDialogForSuddenDeath(
                         ),
                       ),
                       IconButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
+                        splashRadius: SPLASH_RADIUS,
+                        splashColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
+                        highlightColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
                         onPressed: () {
                           Utils.handleVibrationFeedback(context);
                           if (gameSettingsX01.getMaxExtraLegs >= MAX_EXTRA_LEGS)
@@ -313,12 +330,7 @@ _showDialogForSuddenDeath(
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -340,12 +352,7 @@ _showDialogForSuddenDeath(
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -393,15 +400,29 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
         ),
       ),
       content: Container(
-        width: TEXT_DIALOG_WIDTH.w,
-        child: Text(
-          SUDDEN_DEATH_INFO,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-          ),
-        ),
-      ),
+          width: TEXT_DIALOG_WIDTH.w,
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              ),
+              children: [
+                TextSpan(
+                    text:
+                        "If the score is tied after the regular number of legs, a deciding leg is played called "),
+                TextSpan(
+                  text: "Sudden death",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                TextSpan(
+                    text:
+                        ".\nWhoever wins this leg, is the winner of the match."),
+              ],
+            ),
+          )),
       actions: [
         TextButton(
           onPressed: () {
@@ -415,11 +436,7 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
@@ -451,15 +468,35 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
         ),
       ),
       content: Container(
-        width: TEXT_DIALOG_WIDTH.w,
-        child: Text(
-          SUDDEN_DEATH_LEG_DIFFERENCE_INFO,
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-          ),
-        ),
-      ),
+          width: TEXT_DIALOG_WIDTH.w,
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              ),
+              children: <TextSpan>[
+                TextSpan(
+                  text:
+                      "The additional maximum number of legs until the Sudden death leg is specified here. By default, it is set to 2 legs.\nFor example, in case of",
+                ),
+                TextSpan(
+                  text: " First to 5 legs",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: " the Sudden death leg is played after a",
+                ),
+                TextSpan(
+                  text: " 7:7",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: " score.",
+                ),
+              ],
+            ),
+          )),
       actions: [
         TextButton(
           onPressed: () {
@@ -473,11 +510,7 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),

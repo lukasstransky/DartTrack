@@ -96,6 +96,19 @@ class _StatsCardX01State extends State<StatsCardX01> {
                             Theme.of(context).textTheme.bodyMedium!.fontSize,
                       ),
                     ),
+                    style: ButtonStyle(
+                      splashFactory: InkRipple.splashFactory,
+                      shadowColor: Utils.getColor(Utils.darken(
+                              Theme.of(context).colorScheme.primary, 30)
+                          .withOpacity(0.3)),
+                      overlayColor:
+                          MaterialStateProperty.resolveWith<Color>((states) {
+                        if (states.contains(MaterialState.pressed))
+                          return Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10);
+                        return Colors.transparent;
+                      }),
+                    ),
                   ),
                 ),
               ]

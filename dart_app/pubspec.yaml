@@ -67,7 +67,8 @@ dependencies:
   flutter_svg: ^2.0.5
   line_awesome_flutter: ^2.0.0
   package_info_plus: ^4.0.2
-  url_launcher: ^6.1.12 
+  url_launcher: ^6.1.12
+  connectivity_plus: ^5.0.1
 
   flutter_test:
     sdk: flutter

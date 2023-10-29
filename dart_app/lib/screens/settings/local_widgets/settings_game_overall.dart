@@ -2,6 +2,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -93,8 +94,7 @@ _showDialogForChangingTheme(BuildContext context) {
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
-          style: ButtonStyle(
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
@@ -113,8 +113,7 @@ _showDialogForChangingTheme(BuildContext context) {
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
-          style: ButtonStyle(
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
@@ -136,27 +135,6 @@ class VibrationFeedbackSwitch extends StatefulWidget {
 }
 
 class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
-  bool _vibrationFeedbackEnabled = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSwitchValue();
-  }
-
-  _loadSwitchValue() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final Settings_P settings_p = context.read<Settings_P>();
-    final AuthService authService = context.read<AuthService>();
-
-    setState(() {
-      _vibrationFeedbackEnabled = prefs.getBool(
-              '${authService.getCurrentUserUid}_$VIBRATION_FEEDBACK_KEY') ??
-          false;
-      settings_p.setVibrationFeedbackEnabled = _vibrationFeedbackEnabled;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final Settings_P settings_p = context.read<Settings_P>();
@@ -210,7 +188,7 @@ class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
                     child: Switch(
                       thumbColor: MaterialStateProperty.all(
                           Theme.of(context).colorScheme.secondary),
-                      value: _vibrationFeedbackEnabled,
+                      value: settings_p.getVibrationFeedbackEnabled,
                       onChanged: (value) async {
                         Utils.handleVibrationFeedback(context);
                         final SharedPreferences prefs =
@@ -220,7 +198,7 @@ class _VibrationFeedbackSwitchState extends State<VibrationFeedbackSwitch> {
                             value);
                         setState(
                           () {
-                            _vibrationFeedbackEnabled = value;
+                            settings_p.setVibrationFeedbackEnabled = value;
                             settings_p.setVibrationFeedbackEnabled = value;
                           },
                         );

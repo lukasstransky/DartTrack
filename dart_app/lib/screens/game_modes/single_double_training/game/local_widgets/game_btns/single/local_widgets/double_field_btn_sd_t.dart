@@ -64,7 +64,7 @@ class DoubleFieldBtnSingleTraining extends StatelessWidget {
                 game.getAmountOfDartsThrown() != 3 && game.getCanBePressed
                     ? Utils.getColorOrPressed(
                         Theme.of(context).colorScheme.primary,
-                        Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                        Utils.darken(Theme.of(context).colorScheme.primary, 10),
                       )
                     : MaterialStateProperty.all(Colors.transparent),
           ),

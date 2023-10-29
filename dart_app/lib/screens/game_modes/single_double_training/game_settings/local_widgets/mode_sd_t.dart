@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -83,10 +84,9 @@ class RandomBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, isRandomBtn && !isTargetNumberEnabled)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 side: BorderSide(
@@ -99,9 +99,6 @@ class RandomBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: isRandomBtn && !isTargetNumberEnabled
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),
@@ -154,13 +151,9 @@ class DescendingBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: isDescendingMode && !isTargetNumberEnabled
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, isDescendingMode && !isTargetNumberEnabled)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
@@ -204,10 +197,9 @@ class AscendingBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, isAscendingMode && !isTargetNumberEnabled)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 side: BorderSide(
@@ -220,9 +212,6 @@ class AscendingBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: isAscendingMode && !isTargetNumberEnabled
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),

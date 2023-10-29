@@ -1,3 +1,4 @@
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -44,19 +45,18 @@ class RoundedChip extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.anyColorBtnStyle(
+                  context,
+                  Utils.darken(Theme.of(context).colorScheme.primary,
+                      darkenBackground ? 25 : 15),
+                  darkenBackground)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
               ),
-            ),
-            backgroundColor: MaterialStateProperty.all(
-              Utils.darken(Theme.of(context).colorScheme.primary,
-                  darkenBackground ? 25 : 15),
             ),
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/app_bars/app_bar_dialog_helper.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -37,8 +38,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
+                  splashColor:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                  splashRadius: SPLASH_RADIUS,
+                  highlightColor:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 10),
                   onPressed: () {
                     Utils.handleVibrationFeedback(context);
                     var route = ModalRoute.of(context);
@@ -60,8 +64,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 showInfoIconCricket ||
                 gameMode != GameMode.None)
             ? IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
+                splashColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                splashRadius: SPLASH_RADIUS,
+                highlightColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 onPressed: () {
                   Utils.handleVibrationFeedback(context);
                   if (showInfoIconScoreTraining) {
@@ -95,6 +102,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
               )
             : IconButton(
+                splashColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                splashRadius: SPLASH_RADIUS,
+                highlightColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 onPressed: null,
                 icon: Icon(
                   size: 0,
@@ -195,11 +207,7 @@ class _CricketDialogState extends State<CricketDialog> {
             style: TextStyle(
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),

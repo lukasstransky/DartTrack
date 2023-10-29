@@ -7,6 +7,7 @@ import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/screens/game_modes/cricket/game_settings/game_settings_c.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:dart_app/utils/utils_dialogs.dart';
 
@@ -51,10 +52,9 @@ class StartGameBtn extends StatelessWidget {
             ),
           ),
         ),
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        style: ButtonStyles.darkPrimaryColorBtnStyleWithDisabled(context,
+                selectorModel == null || _activateStartGameBtn(selectorModel))
+            .copyWith(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
@@ -62,12 +62,6 @@ class StartGameBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor:
-              selectorModel == null || _activateStartGameBtn(selectorModel)
-                  ? Utils.getPrimaryMaterialStateColorDarken(context)
-                  : Utils.getColor(
-                      Utils.darken(Theme.of(context).colorScheme.primary, 60),
-                    ),
         ),
       ),
     );

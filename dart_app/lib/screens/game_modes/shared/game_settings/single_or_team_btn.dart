@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -68,10 +69,9 @@ class SingleBtn extends StatelessWidget {
                 ),
           ),
         ),
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        style: ButtonStyles.primaryColorBtnStyle(
+                context, singleOrTeam == SingleOrTeamEnum.Single)
+            .copyWith(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               side: BorderSide(
@@ -84,9 +84,6 @@ class SingleBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: singleOrTeam == SingleOrTeamEnum.Single
-              ? Utils.getPrimaryMaterialStateColorDarken(context)
-              : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
       ),
     );
@@ -124,10 +121,9 @@ class TeamBtn extends StatelessWidget {
                 ),
           ),
         ),
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        style: ButtonStyles.primaryColorBtnStyle(
+                context, singleOrTeam == SingleOrTeamEnum.Team)
+            .copyWith(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               side: BorderSide(
@@ -140,9 +136,6 @@ class TeamBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: singleOrTeam == SingleOrTeamEnum.Team
-              ? Utils.getPrimaryMaterialStateColorDarken(context)
-              : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
       ),
     );

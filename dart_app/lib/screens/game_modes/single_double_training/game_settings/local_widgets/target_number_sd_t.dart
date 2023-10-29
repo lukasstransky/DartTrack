@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -48,11 +49,27 @@ class _TargetNumberSingleDoubleTrainingState
             fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
           ),
         ),
-        content: Text(
-          'If this option is enabled, only darts on the selected target number are counted. \nFor example, when the target number is ${gameModePrefix}20, only hits on the ${gameModePrefix}20 field will be added to the total score.',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+        content: RichText(
+          text: TextSpan(
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                  text:
+                      'If this option is enabled, only darts on the selected '),
+              TextSpan(
+                  text: 'target number',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(text: ' are counted. \nFor example, when the '),
+              TextSpan(
+                  text: 'target number',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+              TextSpan(
+                  text:
+                      ' is ${gameModePrefix}20, only darts on the ${gameModePrefix}20 field contribute to the total score.'),
+            ],
           ),
         ),
         actions: [
@@ -68,12 +85,7 @@ class _TargetNumberSingleDoubleTrainingState
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -179,12 +191,7 @@ class _TargetNumberSingleDoubleTrainingState
                   fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
+              style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
@@ -205,12 +212,7 @@ class _TargetNumberSingleDoubleTrainingState
                   fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                 ),
               ),
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
+              style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
@@ -272,8 +274,11 @@ class _TargetNumberSingleDoubleTrainingState
             child: Row(
               children: [
                 IconButton(
-                  highlightColor: Colors.transparent,
-                  splashColor: Colors.transparent,
+                  splashRadius: SPLASH_RADIUS,
+                  splashColor:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                  highlightColor:
+                      Utils.darken(Theme.of(context).colorScheme.primary, 10),
                   onPressed: () {
                     Utils.handleVibrationFeedback(context);
                     _showDialogForInfoAboutTargetNumber(context);

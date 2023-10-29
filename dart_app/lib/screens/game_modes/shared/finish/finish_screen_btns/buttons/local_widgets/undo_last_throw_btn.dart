@@ -9,6 +9,7 @@ import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -46,6 +47,11 @@ class UndoLastThrowBtn extends StatelessWidget {
   }
 
   _undoLastThrowBtnClicked(BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final FirestoreServiceGames firestoreServiceGames =
         await context.read<FirestoreServiceGames>();
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
@@ -177,19 +183,14 @@ class UndoLastThrowBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.anyColorBtnStyle(context, DANGER_ACTION_BTN_COLOR)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.0),
                 ),
               ),
-            ),
-            backgroundColor: MaterialStateProperty.all(
-              Color.fromARGB(255, 207, 87, 78),
             ),
           ),
         ),

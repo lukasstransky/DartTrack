@@ -2,6 +2,7 @@ import 'package:dart_app/models/auth.dart';
 import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -80,6 +81,11 @@ class ResetPasswordBtn extends StatelessWidget {
   final GlobalKey<FormState> forgotPasswordFormKey;
 
   resetPassword(String email, BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final Auth_P auth = context.read<Auth_P>();
 
     auth.setEmailAlreadyExists = await context
@@ -123,16 +129,12 @@ class ResetPasswordBtn extends StatelessWidget {
             fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
             ),
           ),
-          backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
         ),
         onPressed: () => resetPassword(emailTextController.text, context),
       ),

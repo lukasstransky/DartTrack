@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -32,10 +33,9 @@ class SetsBtn extends StatelessWidget {
                   ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, gameSettings.getSetsEnabled)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 side: BorderSide(
@@ -47,9 +47,6 @@ class SetsBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: gameSettings.getSetsEnabled
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),

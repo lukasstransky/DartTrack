@@ -7,6 +7,7 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +75,14 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   _getOpenGames() async {
     final OpenGamesFirestore openGamesFirestore =
         context.read<OpenGamesFirestore>();
+    final bool isConnected = await Utils.hasInternetConnection();
+
+    if (!isConnected) {
+      openGamesFirestore.setLoadOpenGames = false;
+      setState(() {});
+
+      return;
+    }
 
     if (openGamesFirestore.getLoadOpenGames) {
       openGamesFirestore.setLoadOpenGames = false;
@@ -85,10 +94,18 @@ class _GameModesOverViewScreenState extends State<GameModesOverView> {
   }
 
   _getDefaultSettingsX01() async {
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final bool isConnected = await Utils.hasInternetConnection();
     final DefaultSettingsX01_P defaultSettingsX01 =
         context.read<DefaultSettingsX01_P>();
+
+    if (!isConnected) {
+      defaultSettingsX01.loadSettings = false;
+      setState(() {});
+      return;
+    }
+
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     if (defaultSettingsX01.loadSettings) {
       defaultSettingsX01.resetValues(username);
@@ -123,13 +140,7 @@ class ScoreTrainingBtn extends StatelessWidget {
           Utils.handleVibrationFeedback(context);
           Navigator.of(context).pushNamed('/settingsScoreTraining');
         },
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
-          backgroundColor: MaterialStateProperty.all(
-            Utils.darken(Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
-          ),
+        style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
@@ -169,14 +180,7 @@ class DoubleTrainingBtn extends StatelessWidget {
               arguments: {'mode': GameMode.DoubleTraining},
             );
           },
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: MaterialStateProperty.all(
-              Utils.darken(
-                  Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
-            ),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -219,14 +223,7 @@ class SingleTrainingBtn extends StatelessWidget {
               },
             );
           },
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: MaterialStateProperty.all(
-              Utils.darken(
-                  Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
-            ),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -264,14 +261,7 @@ class CricketBtn extends StatelessWidget {
             Utils.handleVibrationFeedback(context);
             Navigator.of(context).pushNamed('/settingsCricket');
           },
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: MaterialStateProperty.all(
-              Utils.darken(
-                  Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
-            ),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -309,14 +299,7 @@ class X01Btn extends StatelessWidget {
             Utils.handleVibrationFeedback(context);
             Navigator.of(context).pushNamed('/settingsX01');
           },
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: MaterialStateProperty.all(
-              Utils.darken(
-                  Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
-            ),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -368,14 +351,7 @@ class OpenGames extends StatelessWidget {
                 Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pushNamed('/openGames');
               },
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                backgroundColor: MaterialStateProperty.all(
-                  Utils.darken(
-                      Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
-                ),
+              style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(

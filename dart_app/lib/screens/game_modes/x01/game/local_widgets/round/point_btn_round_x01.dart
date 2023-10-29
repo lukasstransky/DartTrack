@@ -101,7 +101,7 @@ class PointBtnRoundX01 extends StatelessWidget {
     if (this.activeBtn as bool) {
       return Utils.getColorOrPressed(
         Theme.of(context).colorScheme.primary,
-        Utils.darken(Theme.of(context).colorScheme.primary, 25),
+        Utils.darken(Theme.of(context).colorScheme.primary, 10),
       );
     }
 

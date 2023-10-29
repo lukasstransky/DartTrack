@@ -41,8 +41,11 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            splashColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            splashRadius: SPLASH_RADIUS,
+            highlightColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
             onPressed: () async {
               Utils.handleVibrationFeedback(context);
 
@@ -61,9 +64,11 @@ class _CustomAppBarStatsListState extends State<CustomAppBarStatsList> {
       ),
       actions: [
         IconButton(
+          splashColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
           iconSize: ICON_BUTTON_SIZE.h,
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
+          splashRadius: SPLASH_RADIUS,
+          highlightColor:
+              Utils.darken(Theme.of(context).colorScheme.primary, 10),
           onPressed: () {
             Utils.handleVibrationFeedback(context);
             if (statisticsFirestore.showFavouriteGames) {

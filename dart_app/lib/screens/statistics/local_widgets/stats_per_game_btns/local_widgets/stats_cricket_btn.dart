@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -28,21 +29,13 @@ class StatsCricketBtn extends StatelessWidget {
                 color: Theme.of(context).colorScheme.secondary),
           ),
         ),
-        style: ButtonStyle(
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: Utils.getColorOrPressed(
-            Theme.of(context).colorScheme.primary,
-            Utils.darken(Theme.of(context).colorScheme.primary, 15),
-          ),
+        style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(10.0),
               ),
             ),
-          ),
-          backgroundColor: MaterialStateProperty.all(
-            Utils.darken(Theme.of(context).colorScheme.primary, GENERAL_DARKEN),
           ),
         ),
       ),

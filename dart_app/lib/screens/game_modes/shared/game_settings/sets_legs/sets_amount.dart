@@ -91,8 +91,11 @@ class SetsAmount extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
+                splashRadius: SPLASH_RADIUS,
+                splashColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                highlightColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 onPressed: () {
                   Utils.handleVibrationFeedback(context);
                   _subtractBtnPressed();
@@ -119,8 +122,11 @@ class SetsAmount extends StatelessWidget {
                 ),
               ),
               IconButton(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
+                splashRadius: SPLASH_RADIUS,
+                highlightColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                splashColor:
+                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 onPressed: () {
                   Utils.handleVibrationFeedback(context);
                   _addBtnPressed();

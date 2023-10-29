@@ -30,8 +30,11 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            splashColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            splashRadius: SPLASH_RADIUS,
+            highlightColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
             onPressed: () => _crossIconPressed(context),
             icon: Icon(
               size: ICON_BUTTON_SIZE.h,
@@ -43,8 +46,10 @@ class CustomAppBarGame extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         IconButton(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
+          splashColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+          splashRadius: SPLASH_RADIUS,
+          highlightColor:
+              Utils.darken(Theme.of(context).colorScheme.primary, 10),
           onPressed: () => _statsIconPressed(context),
           icon: Icon(
             size: ICON_BUTTON_SIZE.h,

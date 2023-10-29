@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -113,12 +114,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
-                style: ButtonStyle(
-                  splashFactory: NoSplash.splashFactory,
-                  shadowColor: MaterialStateProperty.all(Colors.transparent),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  backgroundColor:
-                      Utils.getPrimaryMaterialStateColorDarken(context),
+                style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
@@ -139,12 +135,7 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
                     fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
                   ),
                 ),
-                style: ButtonStyle(
-                  splashFactory: NoSplash.splashFactory,
-                  shadowColor: MaterialStateProperty.all(Colors.transparent),
-                  overlayColor: MaterialStateProperty.all(Colors.transparent),
-                  backgroundColor:
-                      Utils.getPrimaryMaterialStateColorDarken(context),
+                style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius:
@@ -200,6 +191,18 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
   @override
   Widget build(BuildContext context) {
     final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+    final shape = MaterialStateProperty.all(
+      RoundedRectangleBorder(
+        side: BorderSide(
+          color: Utils.getPrimaryColorDarken(context),
+          width: GAME_SETTINGS_BTN_BORDER_WITH.w,
+        ),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(BUTTON_BORDER_RADIUS),
+          bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
+        ),
+      ),
+    );
 
     return Expanded(
       child: Selector<GameSettingsX01_P, SelectorModel>(
@@ -228,26 +231,12 @@ class _CustomPointsX01State extends State<CustomPointsX01> {
               Utils.handleVibrationFeedback(context);
               _customPointsBtnPressed(gameSettingsX01);
             },
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  side: BorderSide(
-                    color: Utils.getPrimaryColorDarken(context),
-                    width: GAME_SETTINGS_BTN_BORDER_WITH.w,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(BUTTON_BORDER_RADIUS),
-                    bottomRight: Radius.circular(BUTTON_BORDER_RADIUS),
-                  ),
-                ),
-              ),
-              backgroundColor: selectorModel.customPoints != -1
-                  ? Utils.getPrimaryMaterialStateColorDarken(context)
-                  : Utils.getColor(Theme.of(context).colorScheme.primary),
-            ),
+            style: selectorModel.customPoints == -1
+                ? ButtonStyles.primaryColorBtnStyle(
+                        context, selectorModel.customPoints != -1)
+                    .copyWith(shape: shape)
+                : ButtonStyles.darkPrimaryColorBtnStyle(context)
+                    .copyWith(shape: shape),
           ),
         ),
       ),

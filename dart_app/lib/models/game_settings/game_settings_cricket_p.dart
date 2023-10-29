@@ -68,7 +68,7 @@ class GameSettingsCricket_P extends GameSettings_P {
     }
   }
 
-  switchSingleOrTeamMode() {
+  switchSingleOrTeamMode([String userName = '']) {
     if (getSingleOrTeam == SingleOrTeamEnum.Single) {
       setSingleOrTeam = SingleOrTeamEnum.Team;
     } else {

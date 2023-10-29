@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -59,7 +60,13 @@ class _FilterBarState extends State<FilterBar> {
                   child: Container(
                     height: 4.h,
                     child: ElevatedButton(
-                      onPressed: () {
+                      onPressed: () async {
+                        final bool isConnected =
+                            await Utils.hasInternetConnection();
+                        if (!isConnected) {
+                          return;
+                        }
+
                         Utils.handleVibrationFeedback(context);
                         setState(
                           () {
@@ -84,12 +91,9 @@ class _FilterBarState extends State<FilterBar> {
                           ),
                         ),
                       ),
-                      style: ButtonStyle(
-                        splashFactory: NoSplash.splashFactory,
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
+                      style: ButtonStyles.primaryColorBtnStyle(
+                              context, currentFilterValue == FilterValue.Custom)
+                          .copyWith(
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(
                             side: BorderSide(
@@ -102,11 +106,6 @@ class _FilterBarState extends State<FilterBar> {
                             ),
                           ),
                         ),
-                        backgroundColor: currentFilterValue ==
-                                FilterValue.Custom
-                            ? Utils.getPrimaryMaterialStateColorDarken(context)
-                            : Utils.getColor(
-                                Theme.of(context).colorScheme.primary),
                       ),
                     ),
                   ),
@@ -204,7 +203,12 @@ class _FilterBarState extends State<FilterBar> {
     });
   }
 
-  _filterBtnPressed(FilterValue filterValue) {
+  _filterBtnPressed(FilterValue filterValue) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final StatsFirestoreX01_P statisticsFirestore =
         context.read<StatsFirestoreX01_P>();
     final FirestoreServicePlayerStats firestoreServicePlayerStats =
@@ -260,10 +264,9 @@ class OverallFilterBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, currentFilterValue == FilterValue.Overall)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 side: BorderSide(
@@ -276,9 +279,6 @@ class OverallFilterBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: currentFilterValue == FilterValue.Overall
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),
@@ -335,10 +335,9 @@ class MonthFilterBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, currentFilterValue == FilterValue.Month)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -346,9 +345,6 @@ class MonthFilterBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: currentFilterValue == FilterValue.Month
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),
@@ -401,10 +397,9 @@ class YearFilterBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, currentFilterValue == FilterValue.Year)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -412,9 +407,6 @@ class YearFilterBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: currentFilterValue == FilterValue.Year
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),

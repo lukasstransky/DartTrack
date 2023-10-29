@@ -5,6 +5,7 @@ import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -214,8 +215,11 @@ class AddPlayerTeamBtnDialogs {
                         width: 20.w,
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
+                          splashRadius: SPLASH_RADIUS,
+                          splashColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          highlightColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
                           padding: EdgeInsets.zero,
                           icon: Icon(
                             size: ICON_BUTTON_SIZE.h,
@@ -253,14 +257,8 @@ class AddPlayerTeamBtnDialogs {
                           _resetBotAvgValue();
                           newPlayerController.clear();
                         },
-                        style: ButtonStyle(
-                          splashFactory: NoSplash.splashFactory,
-                          shadowColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          overlayColor:
-                              MaterialStateProperty.all(Colors.transparent),
-                          backgroundColor:
-                              Utils.getPrimaryMaterialStateColorDarken(context),
+                        style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                            .copyWith(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(
                             RoundedRectangleBorder(
@@ -292,15 +290,8 @@ class AddPlayerTeamBtnDialogs {
                             _submitNewPlayer(
                                 gameSettings_P, context, newPlayer);
                           },
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            backgroundColor:
-                                Utils.getPrimaryMaterialStateColorDarken(
-                                    context),
+                          style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                              .copyWith(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
@@ -512,8 +503,11 @@ class AddPlayerTeamBtnDialogs {
                       width: 20.w,
                       alignment: Alignment.centerLeft,
                       child: IconButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
+                        splashRadius: SPLASH_RADIUS,
+                        splashColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
+                        highlightColor: Utils.darken(
+                            Theme.of(context).colorScheme.primary, 10),
                         padding: EdgeInsets.zero,
                         icon: Icon(
                           size: ICON_BUTTON_SIZE.h,
@@ -548,15 +542,8 @@ class AddPlayerTeamBtnDialogs {
                                   .fontSize,
                             ),
                           ),
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            backgroundColor:
-                                Utils.getPrimaryMaterialStateColorDarken(
-                                    context),
+                          style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                              .copyWith(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
@@ -584,15 +571,8 @@ class AddPlayerTeamBtnDialogs {
                                   .fontSize,
                             ),
                           ),
-                          style: ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            shadowColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            overlayColor:
-                                MaterialStateProperty.all(Colors.transparent),
-                            backgroundColor:
-                                Utils.getPrimaryMaterialStateColorDarken(
-                                    context),
+                          style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                              .copyWith(
                             shape: MaterialStateProperty.all<
                                 RoundedRectangleBorder>(
                               RoundedRectangleBorder(
@@ -766,18 +746,13 @@ class AddPlayerTeamBtnDialogs {
                 Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
               },
-              style: ButtonStyle(
+              style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
                   ),
                 ),
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
               ),
             ),
             TextButton(
@@ -797,18 +772,13 @@ class AddPlayerTeamBtnDialogs {
                   showDialogForAddingPlayer(gameSettings, context);
                 }
               },
-              style: ButtonStyle(
+              style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius:
                         BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
                   ),
                 ),
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
-                backgroundColor:
-                    Utils.getPrimaryMaterialStateColorDarken(context),
               ),
             ),
           ],
@@ -953,8 +923,11 @@ class AddPlayerTeamBtnDialogs {
                   width: 20.w,
                   alignment: Alignment.centerLeft,
                   child: IconButton(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
+                    splashRadius: SPLASH_RADIUS,
+                    splashColor:
+                        Utils.darken(Theme.of(context).colorScheme.primary, 10),
+                    highlightColor:
+                        Utils.darken(Theme.of(context).colorScheme.primary, 10),
                     padding: EdgeInsets.zero,
                     icon: Icon(
                       size: ICON_BUTTON_SIZE.h,
@@ -985,14 +958,8 @@ class AddPlayerTeamBtnDialogs {
                               Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
-                      style: ButtonStyle(
-                        splashFactory: NoSplash.splashFactory,
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        backgroundColor:
-                            Utils.getPrimaryMaterialStateColorDarken(context),
+                      style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                          .copyWith(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -1019,14 +986,8 @@ class AddPlayerTeamBtnDialogs {
                               Theme.of(context).textTheme.bodyMedium!.fontSize,
                         ),
                       ),
-                      style: ButtonStyle(
-                        splashFactory: NoSplash.splashFactory,
-                        shadowColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        overlayColor:
-                            MaterialStateProperty.all(Colors.transparent),
-                        backgroundColor:
-                            Utils.getPrimaryMaterialStateColorDarken(context),
+                      style: ButtonStyles.darkPrimaryColorBtnStyle(context)
+                          .copyWith(
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(

@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -69,10 +70,9 @@ class SingleOutBtn extends StatelessWidget {
                 ),
           ),
         ),
-        style: ButtonStyle(
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        style: ButtonStyles.primaryColorBtnStyle(
+                context, modeOut == ModeOutIn.Single)
+            .copyWith(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               side: BorderSide(
@@ -85,9 +85,6 @@ class SingleOutBtn extends StatelessWidget {
               ),
             ),
           ),
-          backgroundColor: modeOut == ModeOutIn.Single
-              ? Utils.getPrimaryMaterialStateColorDarken(context)
-              : Utils.getColor(Theme.of(context).colorScheme.primary),
         ),
       ),
     );
@@ -139,13 +136,9 @@ class DoubleOutBtn extends StatelessWidget {
                   ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: modeOut == ModeOutIn.Double
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, modeOut == ModeOutIn.Double)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
@@ -191,10 +184,9 @@ class MasterOutBtn extends StatelessWidget {
                   ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.primaryColorBtnStyle(
+                  context, modeOut == ModeOutIn.Master)
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 side: BorderSide(
@@ -207,9 +199,6 @@ class MasterOutBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: modeOut == ModeOutIn.Master
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(Theme.of(context).colorScheme.primary),
           ),
         ),
       ),

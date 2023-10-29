@@ -28,6 +28,11 @@ class _AutoSubmitOrScoredPointsSwitchX01State
 
   // for "fetch from stats" btn for most scored points
   _checkIfAtLeastOneX01GameIsPlayed() async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     await context
         .read<FirestoreServiceGames>()
         .checkIfAtLeastOneX01GameIsPlayed(context);

@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_c.dart';
 import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
@@ -24,6 +25,7 @@ import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -1016,5 +1018,17 @@ class Utils {
   static setCursorForTextControllerToEnd(TextEditingController controller) {
     controller.selection = TextSelection.fromPosition(
         TextPosition(offset: controller.text.length));
+  }
+
+  static Future<bool> hasInternetConnection() async {
+    final ConnectivityResult connectivityResult =
+        await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      Fluttertoast.showToast(
+          msg: 'Error, no internet connection',
+          toastLength: Toast.LENGTH_SHORT);
+      return false;
+    }
+    return true;
   }
 }

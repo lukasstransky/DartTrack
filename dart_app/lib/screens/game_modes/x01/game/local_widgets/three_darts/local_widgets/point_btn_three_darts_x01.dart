@@ -57,7 +57,7 @@ class PointBtnThreeDartX01 extends StatelessWidget {
                   gameX01.getAmountOfDartsThrown() != 3
               ? Utils.getColorOrPressed(
                   Theme.of(context).colorScheme.primary,
-                  Utils.darken(Theme.of(context).colorScheme.primary, 25),
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 )
               : MaterialStateProperty.all(Colors.transparent),
         ),

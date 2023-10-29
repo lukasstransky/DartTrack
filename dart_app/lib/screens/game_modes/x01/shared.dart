@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/revert_x01_helper.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/games/x01/helper/submit_x01_helper.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -588,11 +589,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
@@ -625,11 +622,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),

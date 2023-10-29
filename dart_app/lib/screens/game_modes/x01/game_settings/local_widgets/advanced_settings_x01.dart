@@ -18,40 +18,38 @@ class AdvancedSettingsX01 extends StatelessWidget {
         modeOut: gameSettingsX01.getModeOut,
         setsEnabled: gameSettingsX01.getSetsEnabled,
       ),
-      builder: (_, selectorModel, __) => Container(
-        width: WIDTH_GAMESETTINGS.w,
-        padding: EdgeInsets.only(
-            top: 1.h, bottom: Utils.isLandscape(context) ? 1.h : 0),
-        child: Align(
+      builder: (_, selectorModel, __) => InkWell(
+        child: Container(
+          width: WIDTH_GAMESETTINGS.w,
           alignment: Alignment.centerLeft,
-          child: Container(
-            child: GestureDetector(
-              onTap: () {
-                Utils.handleVibrationFeedback(context);
-                Navigator.of(context).pushNamed('/inGameSettingsX01');
-              },
-              child: Container(
-                padding: EdgeInsets.only(bottom: 1.h),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.settings,
-                      color: Theme.of(context).colorScheme.secondary,
-                      size: ICON_BUTTON_SIZE.h,
-                    ),
-                    SizedBox(width: 2.w),
-                    Text(
-                      'Advanced settings',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.secondary,
-                        fontSize:
-                            Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      ),
-                    ),
-                  ],
+          padding: EdgeInsets.only(
+              top: 1.h, bottom: Utils.isLandscape(context) ? 1.h : 0),
+          child: InkWell(
+            splashColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            highlightColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            onTap: () {
+              Utils.handleVibrationFeedback(context);
+              Navigator.of(context).pushNamed('/inGameSettingsX01');
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.settings,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: ICON_BUTTON_SIZE.h,
                 ),
-              ),
+                SizedBox(width: 2.w),
+                Text(
+                  'Advanced settings',
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

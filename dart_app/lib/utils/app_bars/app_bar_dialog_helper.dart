@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -43,12 +44,7 @@ class AppBarDialogHelper {
                 fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               ),
             ),
-            style: ButtonStyle(
-              splashFactory: NoSplash.splashFactory,
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
-              overlayColor: MaterialStateProperty.all(Colors.transparent),
-              backgroundColor:
-                  Utils.getPrimaryMaterialStateColorDarken(context),
+            style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius:
@@ -136,7 +132,7 @@ class _CricketDialogState extends State<CricketDialog> {
                           ),
                           SizedBox(height: 1.h),
                           Text(
-                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye. \nIn standard mode, the player with the highest score wins, but it is also possible to play two additional modes (Cut throat, No score), which are also explained here.',
+                            'In Cricket, the objective is opening or closing the numbers 15 till 20 as well as the bullseye.\nIn standard mode, the player with the highest score wins the leg/game.\nThere are also two additional modes (Cut throat, No score) which are explained later.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: Theme.of(context)
@@ -184,7 +180,7 @@ class _CricketDialogState extends State<CricketDialog> {
                                 ),
                                 TextSpan(
                                   text:
-                                      '. A player opens a number by hitting it three times with any combination of singles, doubles, or triples. \nOnce open, further hits on the number score points equal to it\'s value, until the number is closed.',
+                                      '. A player opens a number by hitting it three times with any combination of singles, doubles or triples. \nOnce open, further hits on the number score points equal to its value, until the number is closed.',
                                 ),
                               ],
                             ),
@@ -198,7 +194,7 @@ class _CricketDialogState extends State<CricketDialog> {
                         children: [
                           SizedBox(height: 1.h),
                           Text(
-                            'Close number',
+                            'Closing number',
                             style: TextStyle(
                               color: Utils.getTextColorDarken(context),
                               fontSize: 14.sp,
@@ -225,7 +221,7 @@ class _CricketDialogState extends State<CricketDialog> {
                                 ),
                                 TextSpan(
                                   text:
-                                      'when all players have hit the number three times, so it is not possible anymore to score any points with that number.',
+                                      'when all players have hit the number three times.\nThen it is not possible anymore to score any points with that number.',
                                 ),
                               ],
                             ),
@@ -239,7 +235,7 @@ class _CricketDialogState extends State<CricketDialog> {
                         children: [
                           SizedBox(height: 1.h),
                           Text(
-                            'Cut throat',
+                            'Cut throat mode',
                             style: TextStyle(
                               color: Utils.getTextColorDarken(context),
                               fontSize: 14.sp,
@@ -258,7 +254,7 @@ class _CricketDialogState extends State<CricketDialog> {
                             ),
                           ),
                           Text(
-                            'The player with the lowest number of points at the end wins the game.',
+                            'The player with the lowest number of points at the end wins the leg/game.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: Theme.of(context)
@@ -276,7 +272,7 @@ class _CricketDialogState extends State<CricketDialog> {
                         children: [
                           SizedBox(height: 1.h),
                           Text(
-                            'No score',
+                            'No score mode',
                             style: TextStyle(
                               color: Utils.getTextColorDarken(context),
                               fontSize: 14.sp,
@@ -285,7 +281,7 @@ class _CricketDialogState extends State<CricketDialog> {
                           ),
                           SizedBox(height: 1.h),
                           Text(
-                            'For this mode, if a number is open, no points are given for any additional hits on that number. Therefore, the goal is closing the numbers as fast as possible, and the first player who manages to do that also wins the game.',
+                            'For this mode, if a number is open, no points are given for any additional hits on that number.\nTherefore, the goal is to close all numbers as fast as possible, and the first player who manages to do that also wins the leg/game.',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: Theme.of(context)
@@ -329,11 +325,7 @@ class _CricketDialogState extends State<CricketDialog> {
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),

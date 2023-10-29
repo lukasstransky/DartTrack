@@ -62,6 +62,11 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   _getGamesAndPlayerOrTeamGameStats() async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(_mode, context);
     statsFirestore.showFavouriteGames = false;
@@ -131,6 +136,11 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   }
 
   void _deleteGame(Game_P game, dynamic statsFirestore) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     if (statsFirestore.games.isEmpty) {
       statsFirestore.noGamesPlayed = true;
     }

@@ -1,5 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -47,18 +48,13 @@ class ResetMostScoredPointsBtn extends StatelessWidget {
               List<String>.of(mostScoredPoints);
           gameSettingsX01.notify();
         },
-        style: ButtonStyle(
-          backgroundColor: resetBtnClickable
-              ? Utils.getPrimaryMaterialStateColorDarken(context)
-              : Utils.getColor(
-                  Utils.darken(Theme.of(context).colorScheme.primary, 60)),
-          splashFactory: NoSplash.splashFactory,
-          shadowColor: MaterialStateProperty.all(Colors.transparent),
-          overlayColor: MaterialStateProperty.all(Colors.transparent),
+        style: ButtonStyles.darkPrimaryColorBtnStyleWithDisabled(
+                context, resetBtnClickable)
+            .copyWith(
           shape: MaterialStateProperty.all(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
+                Radius.circular(BUTTON_BORDER_RADIUS),
               ),
             ),
           ),

@@ -54,12 +54,15 @@ class RevertBtn extends StatelessWidget {
                   borderRadius: BorderRadius.zero,
                 ),
               ),
-              shadowColor: MaterialStateProperty.all(Colors.transparent),
+              shadowColor: game_p.getRevertPossible
+                  ? MaterialStateProperty.all(
+                      Utils.darken(Colors.red, 30).withOpacity(0.3))
+                  : MaterialStateProperty.all(Colors.transparent),
               backgroundColor: game_p.getRevertPossible
                   ? MaterialStateProperty.all(Colors.red)
                   : MaterialStateProperty.all(Utils.darken(Colors.red, 25)),
               overlayColor: game_p.getRevertPossible
-                  ? MaterialStateProperty.all(Utils.darken(Colors.red, 25))
+                  ? MaterialStateProperty.all(Utils.darken(Colors.red, 10))
                   : MaterialStateProperty.all(Colors.transparent),
             ),
             child: Icon(

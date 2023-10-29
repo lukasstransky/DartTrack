@@ -12,6 +12,7 @@ import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,15 +37,21 @@ class _FinishX01State extends State<FinishX01> {
 
   _saveDataToFirestore(BuildContext context) async {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+
+    gameX01.setShowLoadingSpinner = true;
+    gameX01.notify();
+
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final FirestoreServiceGames firestoreServiceGames =
         context.read<FirestoreServiceGames>();
     final OpenGamesFirestore openGamesFirestore =
         context.read<OpenGamesFirestore>();
     final StatsFirestoreX01_P statsFirestoreX01 =
         context.read<StatsFirestoreX01_P>();
-
-    gameX01.setShowLoadingSpinner = true;
-    gameX01.notify();
 
     if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
       g_gameId =

@@ -3,6 +3,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:dart_app/utils/utils_dialogs.dart';
 
@@ -41,10 +42,9 @@ class StartGameBtnX01 extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
+          style: ButtonStyles.darkPrimaryColorBtnStyleWithDisabled(
+                  context, _activateStartGameBtn(selectorModel))
+              .copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -52,10 +52,6 @@ class StartGameBtnX01 extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: _activateStartGameBtn(selectorModel)
-                ? Utils.getPrimaryMaterialStateColorDarken(context)
-                : Utils.getColor(
-                    Utils.darken(Theme.of(context).colorScheme.primary, 60)),
           ),
           onPressed: () {
             Utils.handleVibrationFeedback(context);

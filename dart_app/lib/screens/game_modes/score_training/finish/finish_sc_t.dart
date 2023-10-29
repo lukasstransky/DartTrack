@@ -11,6 +11,7 @@ import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -28,13 +29,25 @@ class FinishScoreTraining extends StatefulWidget {
 class _FinishScoreTrainingState extends State<FinishScoreTraining> {
   @override
   void initState() {
-    _saveDataToFirestore();
     super.initState();
+
+    Future.delayed(Duration.zero, () {
+      _saveDataToFirestore(context);
+    });
   }
 
-  _saveDataToFirestore() async {
+  _saveDataToFirestore(BuildContext context) async {
     final GameScoreTraining_P gameScoreTraining =
         context.read<GameScoreTraining_P>();
+
+    gameScoreTraining.setShowLoadingSpinner = true;
+    gameScoreTraining.notify();
+
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final FirestoreServiceGames firestoreServiceGames =
         context.read<FirestoreServiceGames>();
     final OpenGamesFirestore openGamesFirestore =
@@ -58,6 +71,9 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
           gameScoreTraining.getGameId, openGamesFirestore);
     }
 
+    gameScoreTraining.setShowLoadingSpinner = false;
+    gameScoreTraining.notify();
+
     // manually add game, stats to avoid fetching calls
     final Game_P game = gameScoreTraining.clone();
     game.setGameId = g_gameId;
@@ -80,23 +96,32 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
           isFinishScreen: true,
           showHeart: true,
         ),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Center(
-            child: Container(
-              width: 90.w,
-              child: Column(
-                children: [
-                  StatsCard(
-                    isFinishScreen: true,
-                    game: context.read<GameScoreTraining_P>(),
-                    isOpenGame: false,
+        body: Selector<GameScoreTraining_P, bool>(
+          selector: (_, game) => game.getShowLoadingSpinner,
+          builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
                   ),
-                  FinishScreenBtns(gameMode: GameMode.ScoreTraining),
-                ],
-              ),
-            ),
-          ),
+                )
+              : SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Center(
+                    child: Container(
+                      width: 90.w,
+                      child: Column(
+                        children: [
+                          StatsCard(
+                            isFinishScreen: true,
+                            game: context.read<GameScoreTraining_P>(),
+                            isOpenGame: false,
+                          ),
+                          FinishScreenBtns(gameMode: GameMode.ScoreTraining),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
         ),
       ),
     );

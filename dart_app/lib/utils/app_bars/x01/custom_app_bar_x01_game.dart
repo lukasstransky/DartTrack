@@ -25,8 +25,11 @@ class CustomAppBarX01Game extends StatelessWidget
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
+              splashColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
+              splashRadius: SPLASH_RADIUS,
+              highlightColor:
+                  Utils.darken(Theme.of(context).colorScheme.primary, 10),
               onPressed: () {
                 Utils.handleVibrationFeedback(context);
                 UtilsDialogs.showDialogForSavingGame(context, gameX01);
@@ -41,8 +44,11 @@ class CustomAppBarX01Game extends StatelessWidget
         ),
         actions: [
           IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            splashColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            splashRadius: SPLASH_RADIUS,
+            highlightColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
             onPressed: () {
               Utils.handleVibrationFeedback(context);
               if (!showLoadingSpinner) {
@@ -58,8 +64,11 @@ class CustomAppBarX01Game extends StatelessWidget
             ),
           ),
           IconButton(
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
+            splashColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
+            splashRadius: SPLASH_RADIUS,
+            highlightColor:
+                Utils.darken(Theme.of(context).colorScheme.primary, 10),
             onPressed: () {
               Utils.handleVibrationFeedback(context);
               if (!showLoadingSpinner) {

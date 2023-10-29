@@ -4,6 +4,7 @@ import 'package:dart_app/screens/settings/local_widgets/about_and_support/settin
 import 'package:dart_app/screens/settings/local_widgets/settings_account_data.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_account_details.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_game_overall.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_settings_tab.dart';
 
 import 'package:flutter/material.dart';
@@ -15,43 +16,46 @@ class SettingsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         appBar: CustomAppBarSettingsTab(),
         body: Selector<Settings_P, bool>(
-          selector: (_, settings) =>
-              settings.getIsResettingStatsOrDeletingAccount,
-          builder: (_, isResettingStatsOrDeletingAccount, __) =>
-              isResettingStatsOrDeletingAccount
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : Column(
-                      children: [
-                        Expanded(
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Center(
-                              child: Container(
-                                width: 90.w,
-                                child: Column(
-                                  children: [
-                                    SettingsAccountDetails(),
-                                    SettingsAccountData(),
-                                    SettingsGameOverall(),
-                                    AboutAndSupport(),
-                                    LogoutBtn(),
-                                  ],
-                                ),
-                              ),
+          selector: (_, settings) => settings.getShowLoadingSpinner,
+          builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+              ? Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.white,
+                  ),
+                )
+              : Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Center(
+                          child: Container(
+                            width: 90.w,
+                            child: Column(
+                              children: [
+                                if (currentUsername != 'Guest') ...[
+                                  SettingsAccountDetails(),
+                                  SettingsAccountData(),
+                                ],
+                                SettingsGameOverall(),
+                                AboutAndSupport(),
+                                LogoutBtn(),
+                              ],
                             ),
                           ),
                         ),
-                      ],
+                      ),
                     ),
+                  ],
+                ),
         ),
       ),
     );
