@@ -41,7 +41,6 @@ dependencies:
   icofont_flutter: ^1.4.0
   font_awesome_flutter: ^10.6.0
   tuple: ^2.0.2
-  scroll_to_index: ^3.0.1
   sizer: ^2.0.15
   flutter_feather_icons: ^2.0.0+1
   material_design_icons_flutter: ^7.0.7296
@@ -49,7 +48,6 @@ dependencies:
   intl: ^0.18.1
   shared_preferences: ^2.2.2
   vibration: ^1.8.3
-  scrollable_positioned_list: ^0.3.8
   syncfusion_flutter_datepicker: ^23.1.43
   flutter_vector_icons: ^2.0.0
   flutter_slidable: ^3.0.1
