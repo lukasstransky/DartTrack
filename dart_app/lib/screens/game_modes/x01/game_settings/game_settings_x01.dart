@@ -46,39 +46,6 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
     super.dispose();
   }
 
-  _addCurrentUserToPlayers() {
-    final String username =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
-    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
-
-    Future.delayed(Duration.zero, () {
-      if (!gameSettingsX01.getPlayers.any((p) => p.getName == username)) {
-        gameSettingsX01.addPlayer(Player(name: username));
-      }
-    });
-
-    gameSettingsX01.setLoggedInPlayerToFirstOne(username);
-  }
-
-  bool _showAddButton(List<Player> players, List<Team> teams) {
-    final bool isSingleMode =
-        context.read<GameSettingsX01_P>().getSingleOrTeam ==
-            SingleOrTeamEnum.Single;
-    if (players.any((player) => player is Bot) &&
-        players.length >= 2 &&
-        isSingleMode) {
-      return false;
-    } else if (players.length >= MAX_PLAYERS_X01 && isSingleMode) {
-      return false;
-    } else if (!isSingleMode &&
-        players.length >= MAX_PLAYERS_X01 &&
-        teams.length >= MAX_TEAMS) {
-      return false;
-    }
-
-    return true;
-  }
-
   @override
   Widget build(BuildContext context) {
     context.read<GameSettingsX01_P>().setSafeAreaPadding =
@@ -129,6 +96,39 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
         ),
       ),
     );
+  }
+
+  _addCurrentUserToPlayers() {
+    final String username =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
+
+    Future.delayed(Duration.zero, () {
+      if (!gameSettingsX01.getPlayers.any((p) => p.getName == username)) {
+        gameSettingsX01.addPlayer(Player(name: username));
+      }
+    });
+
+    gameSettingsX01.setLoggedInPlayerToFirstOne(username);
+  }
+
+  bool _showAddButton(List<Player> players, List<Team> teams) {
+    final bool isSingleMode =
+        context.read<GameSettingsX01_P>().getSingleOrTeam ==
+            SingleOrTeamEnum.Single;
+    if (players.any((player) => player is Bot) &&
+        players.length >= 2 &&
+        isSingleMode) {
+      return false;
+    } else if (players.length >= MAX_PLAYERS_X01 && isSingleMode) {
+      return false;
+    } else if (!isSingleMode &&
+        players.length >= MAX_PLAYERS_X01 &&
+        teams.length >= MAX_TEAMS) {
+      return false;
+    }
+
+    return true;
   }
 }
 

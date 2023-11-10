@@ -1,7 +1,6 @@
+import 'package:dart_app/constants.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-
-import '../constants.dart';
 
 class ButtonStyles {
   static ButtonStyle darkPrimaryColorBtnStyle(
@@ -23,10 +22,9 @@ class ButtonStyles {
   static ButtonStyle darkPrimaryColorBtnStyleWithDisabled(
       BuildContext context, bool condition) {
     final splash = condition ? InkRipple.splashFactory : NoSplash.splashFactory;
-    final Color shadowColor = condition
-        ? Utils.darken(Theme.of(context).colorScheme.primary, 50)
-            .withOpacity(0.3)
-        : Colors.transparent;
+    final Color shadowColor =
+        Utils.darken(Theme.of(context).colorScheme.primary, 50)
+            .withOpacity(0.3);
     final Color overlayColor =
         condition ? OVERLAY_COLOR_BTN_DARK : Colors.transparent;
     final MaterialStateProperty<Color> backgroundColor = condition
@@ -65,9 +63,7 @@ class ButtonStyles {
 
   static ButtonStyle anyColorBtnStyle(BuildContext context, Color color,
       [bool condition = false]) {
-    final Color shadowColor = condition
-        ? Colors.transparent
-        : Utils.darken(color, 30).withOpacity(0.3);
+    final Color shadowColor = Utils.darken(color, 30).withOpacity(0.3);
     final Color overlayColor =
         condition ? Colors.transparent : Utils.darken(color, 10);
     final MaterialStateProperty<Color> backgroundColor = condition
@@ -86,9 +82,7 @@ class ButtonStyles {
   static ButtonStyle primaryColorBtnStyle(
       BuildContext context, bool condition) {
     final Color primaryColor = Theme.of(context).colorScheme.primary;
-    final Color shadowColor = condition
-        ? Colors.transparent
-        : Utils.darken(primaryColor, 30).withOpacity(0.3);
+    final Color shadowColor = Utils.darken(primaryColor, 30).withOpacity(0.3);
     final Color overlayColor =
         condition ? Colors.transparent : Utils.darken(primaryColor, 10);
     final MaterialStateProperty<Color> backgroundColor = condition

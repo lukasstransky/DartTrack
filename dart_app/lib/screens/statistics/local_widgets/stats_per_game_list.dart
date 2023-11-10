@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_c.dart';
 import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
@@ -13,6 +15,7 @@ import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_stats_list.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -33,6 +36,12 @@ class StatsPerGameList extends StatefulWidget {
 class _StatsPerGameListState extends State<StatsPerGameList> {
   GameMode _mode = GameMode.X01;
   bool _showLoadingSpinner = false;
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/6449392696
+  // android -> ca-app-pub-8582367743573228/3685582263
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
   didChangeDependencies() {
@@ -208,82 +217,96 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
         (!statsFirestore.showFavouriteGames && games.isNotEmpty)) {
       statsFirestore.sortGames();
 
-      widgetToReturn = SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Center(
-          child: Container(
-            width: 90.w,
-            padding: EdgeInsets.only(bottom: 2.h),
-            child: Column(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 2.h,
-                    left: 1.w,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      'To view the details about a game, click on its card.',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize:
-                            Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 1.w,
-                    bottom: 1.h,
-                  ),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      '(Swipe left to delete a game)',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize:
-                            Theme.of(context).textTheme.bodyMedium!.fontSize,
-                      ),
-                    ),
-                  ),
-                ),
-                if ((statsFirestore.showFavouriteGames
-                    ? statsFirestore.favouriteGames.isNotEmpty
-                    : games.isNotEmpty))
-                  for (Game_P game in statsFirestore.showFavouriteGames
-                      ? statsFirestore.favouriteGames
-                      : games) ...[
-                    Container(
-                      padding: EdgeInsets.only(bottom: 2.h),
-                      child: Slidable(
-                        key: UniqueKey(),
-                        child: _getCard(game),
-                        startActionPane: ActionPane(
-                          extentRatio: 0.1,
-                          dismissible: DismissiblePane(onDismissed: () {
-                            _deleteGame(game, statsFirestore);
-                          }),
-                          motion: const ScrollMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (context) {},
-                              backgroundColor: Color(0xFFFE4A49),
-                              foregroundColor: Colors.white,
-                              icon: Icons.delete,
-                              label: 'Delete',
+      widgetToReturn = Column(
+        children: [
+          BannerAdWidget(
+            bannerAdUnitId: _bannerAdUnitId,
+            bannerAdEnum: BannerAdEnum.StatsPerGameList,
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.vertical,
+              child: Center(
+                child: Container(
+                  width: 90.w,
+                  padding: EdgeInsets.only(bottom: 2.h),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: 2.h,
+                          left: 1.w,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            'To view the details about a game, click on its card.',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-              ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                          left: 1.w,
+                          bottom: 1.h,
+                        ),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            '(Swipe left to delete a game)',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .fontSize,
+                            ),
+                          ),
+                        ),
+                      ),
+                      if ((statsFirestore.showFavouriteGames
+                          ? statsFirestore.favouriteGames.isNotEmpty
+                          : games.isNotEmpty))
+                        for (Game_P game in statsFirestore.showFavouriteGames
+                            ? statsFirestore.favouriteGames
+                            : games) ...[
+                          Container(
+                            padding: EdgeInsets.only(bottom: 2.h),
+                            child: Slidable(
+                              key: UniqueKey(),
+                              child: _getCard(game),
+                              startActionPane: ActionPane(
+                                extentRatio: 0.1,
+                                dismissible: DismissiblePane(onDismissed: () {
+                                  _deleteGame(game, statsFirestore);
+                                }),
+                                motion: const ScrollMotion(),
+                                children: [
+                                  SlidableAction(
+                                    onPressed: (context) {},
+                                    backgroundColor: Color(0xFFFE4A49),
+                                    foregroundColor: Colors.white,
+                                    icon: Icons.delete,
+                                    label: 'Delete',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                    ],
+                  ),
+                ),
+              ),
             ),
           ),
-        ),
+        ],
       );
     } else {
       widgetToReturn = Center(

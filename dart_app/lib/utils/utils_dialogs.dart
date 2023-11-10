@@ -11,6 +11,7 @@ import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/ad_management/banner_ads_manager_p.dart';
 import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -417,6 +418,9 @@ class UtilsDialogs {
                     child: TextButton(
                       onPressed: () {
                         Utils.handleVibrationFeedback(context);
+                        context
+                            .read<BannerAdManager_P>()
+                            .disposeCorrectBannerAd(game_p);
                         Navigator.of(context).pop();
                         _resetValuesAndNavigateToHome(context, game_p);
                       },

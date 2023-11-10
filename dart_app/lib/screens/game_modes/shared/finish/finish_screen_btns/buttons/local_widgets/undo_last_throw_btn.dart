@@ -64,7 +64,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = true;
       game.notify();
 
-      Navigator.of(context).pushNamed('/gameX01');
+      Navigator.of(context).pushReplacementNamed('/gameX01');
 
       if (username != 'Guest') {
         await firestoreServiceGames.deleteGame(
@@ -91,7 +91,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = true;
       game.notify();
 
-      Navigator.of(context).pushNamed('/gameScoreTraining');
+      Navigator.of(context).pushReplacementNamed('/gameScoreTraining');
 
       if (username != 'Guest') {
         await firestoreServiceGames.deleteGame(
@@ -102,7 +102,7 @@ class UndoLastThrowBtn extends StatelessWidget {
         );
       }
 
-      game.revert(context);
+      game.revert();
       game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.SingleTraining ||
@@ -114,7 +114,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = true;
       game.notify();
 
-      Navigator.of(context).pushNamed(
+      Navigator.of(context).pushReplacementNamed(
         '/gameSingleDoubleTraining',
         arguments: {
           'mode': game.getName,
@@ -135,7 +135,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       if (isRandomMode) {
         game.setRandomModeFinished = false;
       }
-      game.revert(context, isRandomMode);
+      game.revert(isRandomMode);
       game.setShowLoadingSpinner = false;
       game.notify();
     } else if (gameMode == GameMode.Cricket) {
@@ -145,7 +145,7 @@ class UndoLastThrowBtn extends StatelessWidget {
       game.setShowLoadingSpinner = true;
       game.notify();
 
-      Navigator.of(context).pushNamed('/gameCricket');
+      Navigator.of(context).pushReplacementNamed('/gameCricket');
 
       if (username != 'Guest') {
         await firestoreServiceGames.deleteGame(

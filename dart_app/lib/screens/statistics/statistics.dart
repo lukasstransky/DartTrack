@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
@@ -9,6 +11,7 @@ import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_btns/st
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -24,7 +27,13 @@ class Statistics extends StatefulWidget {
 
 class _StatisticsState extends State<Statistics> {
   bool _showMoreStats = false;
-  String username = '';
+  String _username = '';
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/8518148683
+  // android -> ca-app-pub-8582367743573228/7166179194
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
   initState() {
@@ -32,10 +41,10 @@ class _StatisticsState extends State<Statistics> {
         context.read<StatsFirestoreX01_P>();
     statsFirestore.currentFilterValue = FilterValue.Overall;
 
-    username =
+    _username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
-    if (username == 'Guest') {
+    if (_username == 'Guest') {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showDialogWhenLoggedInAsGuest();
       });
@@ -53,46 +62,57 @@ class _StatisticsState extends State<Statistics> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              FilterBar(),
-              Selector<StatsFirestoreX01_P, SelectorModel>(
-                selector: (_, statsFirestoreX01) => SelectorModel(
-                  playerOrTeamGameStatsLoaded:
-                      statsFirestoreX01.playerGameStatsLoaded,
-                  teamGameStatsLoaded: statsFirestoreX01.teamGameStatsLoaded,
-                  gamesLoaded: statsFirestoreX01.gamesLoaded,
-                  noGamesPlayed: statsFirestoreX01.noGamesPlayed,
-                  games: statsFirestoreX01.games,
-                ),
-                builder: (_, selectorModel, __) =>
-                    (selectorModel.playerOrTeamGameStatsLoaded &&
-                                selectorModel.teamGameStatsLoaded &&
-                                selectorModel.gamesLoaded) ||
-                            selectorModel.noGamesPlayed ||
-                            username == 'Guest'
-                        ? Column(
-                            children: [
-                              OtherStats(),
-                              AvgBestWorstStats(),
-                              if (_showMoreStats) MoreStats(),
-                              showMoreStatsBtn(),
-                              StatsPerGameBtns()
-                            ],
-                          )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height - 25.h,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
+        body: Column(
+          children: [
+            BannerAdWidget(
+              bannerAdUnitId: _bannerAdUnitId,
+              bannerAdEnum: BannerAdEnum.OverallStatsScreen,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    FilterBar(),
+                    Selector<StatsFirestoreX01_P, SelectorModel>(
+                      selector: (_, statsFirestoreX01) => SelectorModel(
+                        playerOrTeamGameStatsLoaded:
+                            statsFirestoreX01.playerGameStatsLoaded,
+                        teamGameStatsLoaded:
+                            statsFirestoreX01.teamGameStatsLoaded,
+                        gamesLoaded: statsFirestoreX01.gamesLoaded,
+                        noGamesPlayed: statsFirestoreX01.noGamesPlayed,
+                        games: statsFirestoreX01.games,
+                      ),
+                      builder: (_, selectorModel, __) => (selectorModel
+                                      .playerOrTeamGameStatsLoaded &&
+                                  selectorModel.teamGameStatsLoaded &&
+                                  selectorModel.gamesLoaded) ||
+                              selectorModel.noGamesPlayed ||
+                              _username == 'Guest'
+                          ? Column(
+                              children: [
+                                OtherStats(),
+                                AvgBestWorstStats(),
+                                if (_showMoreStats) MoreStats(),
+                                showMoreStatsBtn(),
+                                StatsPerGameBtns()
+                              ],
+                            )
+                          : SizedBox(
+                              height: MediaQuery.of(context).size.height - 25.h,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

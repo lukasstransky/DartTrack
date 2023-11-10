@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
@@ -5,6 +7,7 @@ import 'package:dart_app/screens/game_modes/cricket/statistics/local_widgets/mai
 import 'package:dart_app/screens/game_modes/cricket/statistics/local_widgets/points_per_number_c.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/show_teams_or_players_stats_btn.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
@@ -25,6 +28,12 @@ class StatisticsCricket extends StatefulWidget {
 class _StatisticsCricketState extends State<StatisticsCricket> {
   GameCricket_P? _game;
   bool _showSimpleAppBar = false;
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/6208320749
+  // android -> ca-app-pub-8582367743573228/5521925033
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
   didChangeDependencies() {
@@ -42,12 +51,6 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
   }
 
   @override
-  void dispose() {
-    _game!.setAreTeamStatsDisplayed = true;
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _game!.getIsGameFinished && !_showSimpleAppBar
@@ -59,58 +62,74 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
             )
           : CustomAppBar(title: 'Statistics'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Text(
-                _getHeader(context.read<GameSettingsCricket_P>()),
-                style: TextStyle(
-                  fontSize:
-                      Theme.of(context).textTheme.titleSmall!.fontSize! * 0.9,
-                  color: Colors.white,
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 0.5.h),
+              child: BannerAdWidget(
+                bannerAdUnitId: _bannerAdUnitId,
+                bannerAdEnum: BannerAdEnum.CricketStatsScreen,
               ),
-              Container(
-                alignment: Utils.isLandscape(context) ? Alignment.center : null,
-                padding: EdgeInsets.only(
-                  top: 0.5.h,
-                  bottom: 1.h,
-                ),
-                child: Text(
-                  _game!.getFormattedDateTime(),
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: Utils.getTextColorDarken(context),
-                  ),
-                ),
-              ),
-              SafeArea(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Selector<GameCricket_P, bool>(
-                    selector: (_, game) => game.getAreTeamStatsDisplayed,
-                    builder: (_, areTeamStatsDisplayed, __) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            ShowTeamsOrPlayersStatsBtn(game: _game!),
-                            PlayerOrTeamNames(game: _game!),
-                          ],
-                        ),
-                        MainStatsCricket(game: _game!),
-                        if (_game!.getGameSettings.getMode !=
-                            CricketMode.NoScore)
-                          PointsPerNumberCricket(game: _game!),
-                      ],
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    Text(
+                      _getHeader(context.read<GameSettingsCricket_P>()),
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize! *
+                                0.9,
+                        color: Colors.white,
+                      ),
                     ),
-                  ),
+                    Container(
+                      alignment:
+                          Utils.isLandscape(context) ? Alignment.center : null,
+                      padding: EdgeInsets.only(
+                        top: 0.5.h,
+                        bottom: 1.h,
+                      ),
+                      child: Text(
+                        _game!.getFormattedDateTime(),
+                        style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Utils.getTextColorDarken(context),
+                        ),
+                      ),
+                    ),
+                    SafeArea(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Selector<GameCricket_P, bool>(
+                          selector: (_, game) => game.getAreTeamStatsDisplayed,
+                          builder: (_, areTeamStatsDisplayed, __) => Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  ShowTeamsOrPlayersStatsBtn(game: _game!),
+                                  PlayerOrTeamNames(game: _game!),
+                                ],
+                              ),
+                              MainStatsCricket(game: _game!),
+                              if (_game!.getGameSettings.getMode !=
+                                  CricketMode.NoScore)
+                                PointsPerNumberCricket(game: _game!),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

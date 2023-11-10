@@ -47,11 +47,7 @@ class TwoPlayerOrTeamStatsX01 extends StatelessWidget {
         context.read<GameSettingsX01_P>();
 
     if (Utils.isMobile(context)) {
-      if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {
-        return 42.h;
-      } else {
-        return 40.h;
-      }
+      return 38.h;
     } else {
       // tablet
       if (gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team) {

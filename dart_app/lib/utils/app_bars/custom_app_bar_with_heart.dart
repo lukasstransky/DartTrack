@@ -6,6 +6,7 @@ import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/ad_management/interstitial_ad_helper.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
@@ -129,7 +130,9 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
                 Utils.handleVibrationFeedback(context);
                 if (!showLoadingSpinner) {
                   _resetGame(context);
-                  Navigator.of(context).pushNamed('/home');
+                  InterstitialAdHelper.showInterstitialAd(() {
+                    Navigator.of(context).pushReplacementNamed('/home');
+                  });
                 }
               },
               icon: Icon(

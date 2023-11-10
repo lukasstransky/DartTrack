@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_c.dart';
@@ -9,6 +11,7 @@ import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/but
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -26,6 +29,13 @@ class FinishCricket extends StatefulWidget {
 }
 
 class _FinishCricketState extends State<FinishCricket> {
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/2870591408
+  // android -> ca-app-pub-8582367743573228/9129959568
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
   @override
   void initState() {
     super.initState();
@@ -46,32 +56,48 @@ class _FinishCricketState extends State<FinishCricket> {
           isFinishScreen: true,
           showHeart: true,
         ),
-        body: Selector<GameCricket_P, bool>(
-          selector: (_, game) => game.getShowLoadingSpinner,
-          builder: (_, showLoadingSpinner, __) => showLoadingSpinner
-              ? Center(
-                  child: CircularProgressIndicator(
-                    color: Colors.white,
-                  ),
-                )
-              : SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Center(
-                    child: Container(
-                      width: 90.w,
-                      child: Column(
-                        children: [
-                          StatsCard(
-                            isFinishScreen: true,
-                            game: context.read<GameCricket_P>(),
-                            isOpenGame: false,
-                          ),
-                          FinishScreenBtns(gameMode: GameMode.Cricket),
-                        ],
+        body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: BannerAdWidget(
+                bannerAdUnitId: _bannerAdUnitId,
+                bannerAdEnum: BannerAdEnum.CricketFinishScreen,
+                disposeInstant: true,
+              ),
+            ),
+            Selector<GameCricket_P, bool>(
+              selector: (_, game) => game.getShowLoadingSpinner,
+              builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
                       ),
+                    )
+                  : Column(
+                      children: [
+                        SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Center(
+                            child: Container(
+                              width: 90.w,
+                              child: Column(
+                                children: [
+                                  StatsCard(
+                                    isFinishScreen: true,
+                                    game: context.read<GameCricket_P>(),
+                                    isOpenGame: false,
+                                  ),
+                                  FinishScreenBtns(gameMode: GameMode.Cricket),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
+            ),
+          ],
         ),
       ),
     );

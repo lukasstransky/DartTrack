@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -6,12 +8,15 @@ import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_to_thr
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btns_round_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/two_player_team_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/point_btns_three_darts_x01.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
+import 'package:dart_app/utils/ad_management/banner_ads_manager_p.dart';
 
 import 'package:dart_app/utils/app_bars/x01/custom_app_bar_x01_game.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class GameX01 extends StatefulWidget {
   static const routeName = '/gameX01';
@@ -21,6 +26,13 @@ class GameX01 extends StatefulWidget {
 }
 
 class GameX01State extends State<GameX01> {
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/6467055638
+  // android -> ca-app-pub-8582367743573228/8518503902
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
   @override
   Widget build(BuildContext context) {
     final bool isTeamMode = context.read<GameSettingsX01_P>().getSingleOrTeam ==
@@ -28,6 +40,10 @@ class GameX01State extends State<GameX01> {
 
     context.read<GameX01_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;
+
+    if (Utils.isLandscape(context)) {
+      context.read<BannerAdManager_P>().getX01GameScreenBannerAd!.dispose();
+    }
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -79,6 +95,14 @@ class GameX01State extends State<GameX01> {
   Column _buildPortraitLayout(bool isTeamMode) {
     return Column(
       children: [
+        Container(
+          padding: EdgeInsets.only(bottom: 0.5.h),
+          child: BannerAdWidget(
+            bannerAdUnitId: _bannerAdUnitId,
+            bannerAdEnum: BannerAdEnum.X01GameScreen,
+            disposeInstant: true,
+          ),
+        ),
         _getTwoOrMultiplePlayerTeamStatsView(context),
         if (isTeamMode) PlayerToThrowFromTeam(),
         Selector<GameSettingsX01_P, InputMethod>(

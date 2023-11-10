@@ -7,6 +7,7 @@ import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/utils/ad_management/interstitial_ad_helper.dart';
 import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -25,14 +26,17 @@ class NewGameBtn extends StatelessWidget {
   _newGameBtnClicked(BuildContext context) async {
     if (gameMode == GameMode.X01) {
       context.read<GameX01_P>().init(context.read<GameSettingsX01_P>());
-      Navigator.of(context).pushNamed('/gameX01');
+      InterstitialAdHelper.showInterstitialAd(() {
+        Navigator.of(context).pushReplacementNamed('/gameX01');
+      });
     } else if (gameMode == GameMode.ScoreTraining) {
       final GameSettingsScoreTraining_P gameSettingsScoreTraining =
           context.read<GameSettingsScoreTraining_P>();
       gameSettingsScoreTraining.setInputMethod = InputMethod.Round;
       context.read<GameScoreTraining_P>().init(gameSettingsScoreTraining);
-
-      Navigator.of(context).pushNamed('/gameScoreTraining');
+      InterstitialAdHelper.showInterstitialAd(() {
+        Navigator.of(context).pushReplacementNamed('/gameScoreTraining');
+      });
     } else if (gameMode == GameMode.SingleTraining ||
         gameMode == GameMode.DoubleTraining) {
       final GameSingleDoubleTraining_P gameSingleDoubleTraining =
@@ -42,15 +46,19 @@ class NewGameBtn extends StatelessWidget {
         context.read<GameSettingsSingleDoubleTraining_P>(),
         gameSingleDoubleTraining.getMode,
       );
-      Navigator.of(context).pushNamed(
-        '/gameSingleDoubleTraining',
-        arguments: {
-          'mode': gameSingleDoubleTraining.getName,
-        },
-      );
+      InterstitialAdHelper.showInterstitialAd(() {
+        Navigator.of(context).pushReplacementNamed(
+          '/gameSingleDoubleTraining',
+          arguments: {
+            'mode': gameSingleDoubleTraining.getName,
+          },
+        );
+      });
     } else if (gameMode == GameMode.Cricket) {
       context.read<GameCricket_P>().init(context.read<GameSettingsCricket_P>());
-      Navigator.of(context).pushNamed('/gameCricket');
+      InterstitialAdHelper.showInterstitialAd(() {
+        Navigator.of(context).pushReplacementNamed('/gameCricket');
+      });
     }
   }
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
@@ -12,6 +14,8 @@ import 'package:dart_app/screens/game_modes/shared/game_stats/most_frequent_scor
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_even.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_odd.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/scoring_stats/scoring_stats_x01.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
+
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -31,6 +35,12 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
   GameX01_P? _game;
   bool _roundedScoresOdd = false;
   bool _showSimpleAppBar = false;
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/5991578764
+  // android -> ca-app-pub-8582367743573228/8148088377
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
   didChangeDependencies() {
@@ -72,240 +82,266 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
             )
           : CustomAppBar(title: 'Statistics'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Text(
-                _getHeader(),
-                style: TextStyle(
-                  fontSize:
-                      Theme.of(context).textTheme.titleSmall!.fontSize! * 0.9,
-                  color: Colors.white,
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 0.5.h),
+              child: BannerAdWidget(
+                bannerAdUnitId: _bannerAdUnitId,
+                bannerAdEnum: BannerAdEnum.X01StatsScreen,
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 0.5.h),
-                child: Text(
-                  _game!.getFormattedDateTime(),
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: Utils.getTextColorDarken(context),
-                  ),
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 1.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  children: [
+                    Text(
+                      _getHeader(),
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize! *
+                                0.9,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 0.5.h),
+                      child: Text(
+                        _game!.getFormattedDateTime(),
+                        style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Utils.getTextColorDarken(context),
+                        ),
+                      ),
+                    ),
+                    Column(
                       children: [
-                        CustomChip(
-                          label: Text(
-                            getModeString(
-                                _game!.getGameSettings.getModeIn, false),
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize,
-                            ),
+                        Container(
+                          padding: EdgeInsets.only(top: 1.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomChip(
+                                label: Text(
+                                  getModeString(
+                                      _game!.getGameSettings.getModeIn, false),
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
+                                  ),
+                                ),
+                                color: Utils.getPrimaryColorDarken(context),
+                              ),
+                              Container(
+                                padding: EdgeInsets.only(left: 1.5.w),
+                                child: CustomChip(
+                                  label: Text(
+                                    getModeString(
+                                        _game!.getGameSettings.getModeOut,
+                                        true),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .fontSize,
+                                    ),
+                                  ),
+                                  color: Utils.getPrimaryColorDarken(context),
+                                ),
+                              ),
+                              if (_game!.getGameSettings.getSuddenDeath)
+                                Container(
+                                  padding: EdgeInsets.only(left: 1.5.w),
+                                  child: CustomChip(
+                                    label: Text(
+                                      'Sudden death',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .fontSize,
+                                      ),
+                                    ),
+                                    color: Utils.getPrimaryColorDarken(context),
+                                  ),
+                                ),
+                              if (_game!.getGameSettings.getDrawMode)
+                                Container(
+                                  padding: EdgeInsets.only(left: 1.5.w),
+                                  child: CustomChip(
+                                    label: Text(
+                                      'Draw enabled',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .fontSize,
+                                      ),
+                                    ),
+                                    color: Utils.getPrimaryColorDarken(context),
+                                  ),
+                                ),
+                            ],
                           ),
-                          color: Utils.getPrimaryColorDarken(context),
                         ),
                         Container(
-                          padding: EdgeInsets.only(left: 1.5.w),
-                          child: CustomChip(
-                            label: Text(
-                              getModeString(
-                                  _game!.getGameSettings.getModeOut, true),
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize,
-                              ),
-                            ),
-                            color: Utils.getPrimaryColorDarken(context),
+                          transform: Matrix4.translationValues(0.0, -8, 0.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              if (!_game!.getGameSettings.getSuddenDeath &&
+                                  _game!.getGameSettings
+                                      .getWinByTwoLegsDifference)
+                                Padding(
+                                  padding: EdgeInsets.only(left: 1.w, top: 2.h),
+                                  child: CustomChip(
+                                    label: Text(
+                                      'Win by two legs difference',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .fontSize,
+                                      ),
+                                    ),
+                                    color: Utils.getPrimaryColorDarken(context),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
-                        if (_game!.getGameSettings.getSuddenDeath)
-                          Container(
-                            padding: EdgeInsets.only(left: 1.5.w),
-                            child: CustomChip(
-                              label: Text(
-                                'Sudden death',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .fontSize,
-                                ),
-                              ),
-                              color: Utils.getPrimaryColorDarken(context),
-                            ),
-                          ),
-                        if (_game!.getGameSettings.getDrawMode)
-                          Container(
-                            padding: EdgeInsets.only(left: 1.5.w),
-                            child: CustomChip(
-                              label: Text(
-                                'Draw enabled',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .fontSize,
-                                ),
-                              ),
-                              color: Utils.getPrimaryColorDarken(context),
-                            ),
-                          ),
                       ],
                     ),
-                  ),
-                  Container(
-                    transform: Matrix4.translationValues(0.0, -8, 0.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        if (!_game!.getGameSettings.getSuddenDeath &&
-                            _game!.getGameSettings.getWinByTwoLegsDifference)
-                          Padding(
-                            padding: EdgeInsets.only(left: 1.w, top: 2.h),
-                            child: CustomChip(
-                              label: Text(
-                                'Win by two legs difference',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .fontSize,
-                                ),
-                              ),
-                              color: Utils.getPrimaryColorDarken(context),
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Selector<GameX01_P, bool>(
-                  selector: (_, gameX01) => gameX01.getAreTeamStatsDisplayed,
-                  builder: (_, areTeamStatsDisplayed, __) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: _padding,
-                        child: GameStatsX01(gameX01: _game as GameX01_P),
-                      ),
-                      Padding(
-                        padding: _padding,
-                        child: ScoringStatsX01(gameX01: _game as GameX01_P),
-                      ),
-                      Padding(
-                        padding: _padding,
-                        child: FinishingStatsX01(gameX01: _game as GameX01_P),
-                      ),
-                      if (_oneLegWonAtLeast())
-                        Padding(
-                          padding: _padding,
-                          child: CheckoutsX01(gameX01: _game as GameX01_P),
-                        ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.w),
-                        child: !_roundedScoresOdd
-                            ? RoundedScoresEven(game_p: _game as GameX01_P)
-                            : RoundedScoresOdd(game_p: _game as GameX01_P),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 5.w),
-                        child: Row(
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Selector<GameX01_P, bool>(
+                        selector: (_, gameX01) =>
+                            gameX01.getAreTeamStatsDisplayed,
+                        builder: (_, areTeamStatsDisplayed, __) => Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Show odd rounded scores',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: Theme.of(context)
-                                    .textTheme
-                                    .bodyMedium!
-                                    .fontSize,
+                            Padding(
+                              padding: _padding,
+                              child: GameStatsX01(gameX01: _game as GameX01_P),
+                            ),
+                            Padding(
+                              padding: _padding,
+                              child:
+                                  ScoringStatsX01(gameX01: _game as GameX01_P),
+                            ),
+                            Padding(
+                              padding: _padding,
+                              child: FinishingStatsX01(
+                                  gameX01: _game as GameX01_P),
+                            ),
+                            if (_oneLegWonAtLeast())
+                              Padding(
+                                padding: _padding,
+                                child:
+                                    CheckoutsX01(gameX01: _game as GameX01_P),
+                              ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.w),
+                              child: !_roundedScoresOdd
+                                  ? RoundedScoresEven(
+                                      game_p: _game as GameX01_P)
+                                  : RoundedScoresOdd(
+                                      game_p: _game as GameX01_P),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 5.w),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    'Show odd rounded scores',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .fontSize,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: textSwitchSpace.w,
+                                  ),
+                                  Transform.scale(
+                                    scale: scaleFactorSwitch,
+                                    child: Switch(
+                                      thumbColor: MaterialStateProperty.all(
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary),
+                                      value: _roundedScoresOdd,
+                                      onChanged: (value) {
+                                        Utils.handleVibrationFeedback(context);
+                                        setState(() {
+                                          _roundedScoresOdd = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: textSwitchSpace.w,
-                            ),
-                            Transform.scale(
-                              scale: scaleFactorSwitch,
-                              child: Switch(
-                                thumbColor: MaterialStateProperty.all(
-                                    Theme.of(context).colorScheme.secondary),
-                                value: _roundedScoresOdd,
-                                onChanged: (value) {
-                                  Utils.handleVibrationFeedback(context);
-                                  setState(() {
-                                    _roundedScoresOdd = value;
-                                  });
-                                },
+                            Padding(
+                              padding: _paddingOnlyLeft,
+                              child: MostFrequentScores(
+                                mostScoresPerDart: false,
+                                game_p: _game as GameX01_P,
                               ),
                             ),
+                            if (_oneScorePerDartAtLeast())
+                              Padding(
+                                padding: _paddingOnlyLeft,
+                                child: MostFrequentScores(
+                                  mostScoresPerDart: true,
+                                  game_p: _game as GameX01_P,
+                                ),
+                              ),
+                            if (_oneLegWonAtLeast()) ...[
+                              Padding(
+                                padding: _padding,
+                                child: LegAvgComparedX01(
+                                    gameX01: _game as GameX01_P),
+                              ),
+                              if (!Utils.playerStatsDisplayedInTeamMode(
+                                  _game as GameX01_P,
+                                  (_game as GameX01_P).getGameSettings)) ...[
+                                Padding(
+                                  padding: _padding,
+                                  child: LegThrownDartsComparedX01(
+                                      gameX01: _game as GameX01_P),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: 3.h),
+                                  child: DetailedLegsListX01(
+                                      gameX01: _game as GameX01_P),
+                                ),
+                              ],
+                            ],
+                            Container(
+                              height: 1.h,
+                            )
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: _paddingOnlyLeft,
-                        child: MostFrequentScores(
-                          mostScoresPerDart: false,
-                          game_p: _game as GameX01_P,
-                        ),
-                      ),
-                      if (_oneScorePerDartAtLeast())
-                        Padding(
-                          padding: _paddingOnlyLeft,
-                          child: MostFrequentScores(
-                            mostScoresPerDart: true,
-                            game_p: _game as GameX01_P,
-                          ),
-                        ),
-                      if (_oneLegWonAtLeast()) ...[
-                        Padding(
-                          padding: _padding,
-                          child: LegAvgComparedX01(gameX01: _game as GameX01_P),
-                        ),
-                        if (!Utils.playerStatsDisplayedInTeamMode(
-                            _game as GameX01_P,
-                            (_game as GameX01_P).getGameSettings)) ...[
-                          Padding(
-                            padding: _padding,
-                            child: LegThrownDartsComparedX01(
-                                gameX01: _game as GameX01_P),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 3.h),
-                            child: DetailedLegsListX01(
-                                gameX01: _game as GameX01_P),
-                          ),
-                        ],
-                      ],
-                      Container(
-                        height: 1.h,
-                      )
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
@@ -7,6 +9,7 @@ import 'package:dart_app/screens/game_modes/shared/game_stats/most_frequent_scor
 import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_even.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/rounded_scores_odd.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -28,6 +31,12 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
   GameScoreTraining_P? _game;
   bool _roundedScoresOdd = false;
   bool _showSimpleAppBar = false;
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/4678497098
+  // android -> ca-app-pub-8582367743573228/6298700521
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
   didChangeDependencies() {
@@ -73,112 +82,133 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
             )
           : CustomAppBar(title: 'Statistics'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              Text(
-                context
-                    .read<GameSettingsScoreTraining_P>()
-                    .getModeStringStatsScreen(),
-                style: TextStyle(
-                  fontSize:
-                      Theme.of(context).textTheme.titleSmall!.fontSize! * 0.9,
-                  color: Colors.white,
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 0.5.h),
+              child: BannerAdWidget(
+                bannerAdUnitId: _bannerAdUnitId,
+                bannerAdEnum: BannerAdEnum.ScoreTrainingStatsScreen,
               ),
-              Container(
-                alignment: Utils.isLandscape(context) ? Alignment.center : null,
-                padding: EdgeInsets.only(
-                  top: 0.5.h,
-                  bottom: 2.h,
-                ),
-                child: Text(
-                  _game!.getFormattedDateTime(),
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: Utils.getTextColorDarken(context),
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PlayerOrTeamNames(game: _game!),
-                    MainStatsScoreTraining(
-                        gameScoreTraining_P: _game as GameScoreTraining_P),
-                    Container(
-                      padding: EdgeInsets.only(
-                        left: PADDING_LEFT_STATISTICS.w,
-                        top: PADDING_TOP_STATISTICS.h,
+                    Text(
+                      context
+                          .read<GameSettingsScoreTraining_P>()
+                          .getModeStringStatsScreen(),
+                      style: TextStyle(
+                        fontSize:
+                            Theme.of(context).textTheme.titleSmall!.fontSize! *
+                                0.9,
+                        color: Colors.white,
                       ),
-                      child: !_roundedScoresOdd
-                          ? RoundedScoresEven(
-                              game_p: _game as GameScoreTraining_P,
-                            )
-                          : RoundedScoresOdd(
-                              game_p: _game as GameScoreTraining_P,
-                            ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
-                      child: Row(
+                    Container(
+                      alignment:
+                          Utils.isLandscape(context) ? Alignment.center : null,
+                      padding: EdgeInsets.only(
+                        top: 0.5.h,
+                        bottom: 2.h,
+                      ),
+                      child: Text(
+                        _game!.getFormattedDateTime(),
+                        style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Utils.getTextColorDarken(context),
+                        ),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Show odd rounded scores',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize,
+                          PlayerOrTeamNames(game: _game!),
+                          MainStatsScoreTraining(
+                              gameScoreTraining_P:
+                                  _game as GameScoreTraining_P),
+                          Container(
+                            padding: EdgeInsets.only(
+                              left: PADDING_LEFT_STATISTICS.w,
+                              top: PADDING_TOP_STATISTICS.h,
+                            ),
+                            child: !_roundedScoresOdd
+                                ? RoundedScoresEven(
+                                    game_p: _game as GameScoreTraining_P,
+                                  )
+                                : RoundedScoresOdd(
+                                    game_p: _game as GameScoreTraining_P,
+                                  ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: PADDING_LEFT_STATISTICS.w),
+                            child: Row(
+                              children: [
+                                Text(
+                                  'Show odd rounded scores',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .fontSize,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: textSwitchSpace.w,
+                                ),
+                                Transform.scale(
+                                  scale: scaleFactorSwitch,
+                                  child: Switch(
+                                    thumbColor: MaterialStateProperty.all(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .secondary),
+                                    value: _roundedScoresOdd,
+                                    onChanged: (value) {
+                                      Utils.handleVibrationFeedback(context);
+                                      setState(() {
+                                        _roundedScoresOdd = value;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          SizedBox(
-                            width: textSwitchSpace.w,
-                          ),
-                          Transform.scale(
-                            scale: scaleFactorSwitch,
-                            child: Switch(
-                              thumbColor: MaterialStateProperty.all(
-                                  Theme.of(context).colorScheme.secondary),
-                              value: _roundedScoresOdd,
-                              onChanged: (value) {
-                                Utils.handleVibrationFeedback(context);
-                                setState(() {
-                                  _roundedScoresOdd = value;
-                                });
-                              },
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: PADDING_LEFT_STATISTICS.w),
+                            child: MostFrequentScores(
+                              game_p: _game as GameScoreTraining_P,
+                              mostScoresPerDart: false,
                             ),
                           ),
+                          if (_oneScorePerDartAtLeast())
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: PADDING_LEFT_STATISTICS.w,
+                              ),
+                              child: MostFrequentScores(
+                                game_p: _game as GameScoreTraining_P,
+                                mostScoresPerDart: true,
+                              ),
+                            ),
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(left: PADDING_LEFT_STATISTICS.w),
-                      child: MostFrequentScores(
-                        game_p: _game as GameScoreTraining_P,
-                        mostScoresPerDart: false,
-                      ),
-                    ),
-                    if (_oneScorePerDartAtLeast())
-                      Padding(
-                        padding: EdgeInsets.only(
-                          left: PADDING_LEFT_STATISTICS.w,
-                        ),
-                        child: MostFrequentScores(
-                          game_p: _game as GameScoreTraining_P,
-                          mostScoresPerDart: true,
-                        ),
-                      ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

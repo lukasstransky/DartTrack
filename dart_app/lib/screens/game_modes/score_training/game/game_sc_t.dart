@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
@@ -5,11 +7,14 @@ import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/pl
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/point_btns_round_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/point_btns_three_darts.dart';
 import 'package:dart_app/screens/game_modes/shared/select_input_method/select_input_method.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
+import 'package:dart_app/utils/ad_management/banner_ads_manager_p.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_game.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sizer/sizer.dart';
 
 class GameScoreTraining extends StatefulWidget {
   static const routeName = '/gameScoreTraining';
@@ -21,10 +26,24 @@ class GameScoreTraining extends StatefulWidget {
 }
 
 class _GameScoreTrainingState extends State<GameScoreTraining> {
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/6083912251
+  // android -> ca-app-pub-8582367743573228/6822278850
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
   @override
   Widget build(BuildContext context) {
     context.read<GameScoreTraining_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;
+
+    if (Utils.isLandscape(context)) {
+      context
+          .read<BannerAdManager_P>()
+          .getScoreTrainingGameScreenBannerAd!
+          .dispose();
+    }
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -56,6 +75,14 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
   Column _buildPortraitLayout() {
     return Column(
       children: [
+        Container(
+          padding: EdgeInsets.only(bottom: 0.5.h),
+          child: BannerAdWidget(
+            bannerAdUnitId: _bannerAdUnitId,
+            bannerAdEnum: BannerAdEnum.ScoreTrainingGameScreen,
+            disposeInstant: true,
+          ),
+        ),
         PlayersListScoreTraining(),
         Expanded(
           child: Selector<GameSettingsScoreTraining_P, InputMethod>(

@@ -177,7 +177,7 @@ class GameScoreTraining_P extends Game_P {
       }
 
       if (finished) {
-        Navigator.of(context).pushNamed('/finishScoreTraining');
+        Navigator.of(context).pushReplacementNamed('/finishScoreTraining');
       }
     } else {
       bool noPlayerBelowZero = true;
@@ -203,7 +203,7 @@ class GameScoreTraining_P extends Game_P {
       }
 
       if (finished) {
-        Navigator.of(context).pushNamed('/finishScoreTraining');
+        Navigator.of(context).pushReplacementNamed('/finishScoreTraining');
       }
     }
 
@@ -342,7 +342,7 @@ class GameScoreTraining_P extends Game_P {
     }
   }
 
-  revert(BuildContext context) {
+  revert() {
     if (!_isRevertPossible()) {
       return;
     }
@@ -350,7 +350,7 @@ class GameScoreTraining_P extends Game_P {
     _setPreviousPlayer();
 
     final PlayerGameStatsScoreTraining stats = getCurrentPlayerGameStats();
-    final settings = context.read<GameSettingsScoreTraining_P>();
+    final GameSettingsScoreTraining_P settings = getGameSettings;
 
     // input method for rounds
     if (stats.getInputMethodForRounds.isNotEmpty) {

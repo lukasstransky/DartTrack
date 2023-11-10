@@ -170,19 +170,19 @@ class _OpenGamesState extends State<OpenGames> {
     _setNewGameValuesFromOpenGame(game_p, context);
 
     if (game_p.getName == GameMode.X01.name) {
-      Navigator.of(context).pushNamed('/gameX01');
+      Navigator.of(context).pushReplacementNamed('/gameX01');
     } else if (game_p.getName == GameMode.ScoreTraining.name) {
-      Navigator.of(context).pushNamed('/gameScoreTraining');
+      Navigator.of(context).pushReplacementNamed('/gameScoreTraining');
     } else if (game_p.getName == GameMode.SingleTraining.name ||
         game_p.getName == GameMode.DoubleTraining.name) {
-      Navigator.of(context).pushNamed(
+      Navigator.of(context).pushReplacementNamed(
         '/gameSingleDoubleTraining',
         arguments: {
           'mode': game_p.getName,
         },
       );
     } else if (game_p.getName == GameMode.Cricket.name) {
-      Navigator.of(context).pushNamed('/gameCricket');
+      Navigator.of(context).pushReplacementNamed('/gameCricket');
     }
   }
 

@@ -337,7 +337,7 @@ class GameCricket_P extends Game_P {
     final bool isGameFinished =
         _isCricketGameFinished(settings, playerOrTeamStatsList);
     if (isGameFinished) {
-      Navigator.of(context).pushNamed('/finishCricket');
+      Navigator.of(context).pushReplacementNamed('/finishCricket');
     }
 
     // submit stats for team

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/game_field/game_field_c.dart';
@@ -6,6 +8,8 @@ import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/submit_re
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/single_double_or_tripple.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/fifteen_to_twenty.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/thrown_darts.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
+import 'package:dart_app/utils/ad_management/banner_ads_manager_p.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_game.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -23,10 +27,21 @@ class GameCricket extends StatefulWidget {
 }
 
 class _GameCricketState extends State<GameCricket> {
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/8901647282
+  // android -> ca-app-pub-8582367743573228/9640013886
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
   @override
   Widget build(BuildContext context) {
     context.read<GameCricket_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;
+
+    if (Utils.isLandscape(context)) {
+      context.read<BannerAdManager_P>().getCricketGameScreenBannerAd!.dispose();
+    }
 
     return WillPopScope(
       onWillPop: () async => false,
@@ -58,6 +73,14 @@ class _GameCricketState extends State<GameCricket> {
   Column _buildPortraitLayout() {
     return Column(
       children: [
+        Container(
+          padding: EdgeInsets.only(bottom: 0.5.h),
+          child: BannerAdWidget(
+            bannerAdUnitId: _bannerAdUnitId,
+            bannerAdEnum: BannerAdEnum.CricketGameScreen,
+            disposeInstant: true,
+          ),
+        ),
         GameFieldCricket(),
         PlayerToThrow(),
         ThrownDarts(mode: GameMode.Cricket),
@@ -76,7 +99,7 @@ class _GameCricketState extends State<GameCricket> {
             pointType: gameCricket.getCurrentPointType,
           ),
           builder: (_, currentPointType, __) => Container(
-            height: 7.h,
+            height: 5.h,
             child: SingleDoubleOrTrippleBtns(
               mode: GameMode.Cricket,
             ),

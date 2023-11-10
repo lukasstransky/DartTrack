@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
@@ -6,6 +8,7 @@ import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/best_leg_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/checkouts_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/stats_card_filtered.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -32,6 +35,12 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   static const String ORDER_FIELD_WORST_FINISH = 'worstFinish';
   static const String ORDER_FIELD_BEST_LEG = 'bestLeg';
   static const String ORDER_FIELD_WORST_LEG = 'worstLeg';
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/6257821003
+  // android -> ca-app-pub-8582367743573228/6640964380
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
   String? _type;
   String _orderField = '';
@@ -272,91 +281,110 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                 ),
               )
             : SafeArea(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Center(
-                    child: Container(
-                      width: 90.w,
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 1.h),
-                            child: _showOverallPerGameBtn()
-                                ? OverallPerGameBtns(context)
-                                : SizedBox.shrink(),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                              top: 1.h,
-                              left: 1.w,
-                              bottom: 1.h,
+                child: Column(
+                  children: [
+                    BannerAdWidget(
+                      bannerAdUnitId: _bannerAdUnitId,
+                      bannerAdEnum: BannerAdEnum.StatsPerGameListFiltered,
+                    ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Center(
+                          child: Container(
+                            width: 90.w,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(top: 1.h),
+                                  child: _showOverallPerGameBtn()
+                                      ? OverallPerGameBtns(context)
+                                      : SizedBox.shrink(),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 1.h,
+                                    left: 1.w,
+                                    bottom: 1.h,
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      'To view the details about a game, click on its card.',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .fontSize,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                if ((_orderField == 'highestFinish' ||
+                                        _orderField == 'worstFinish') &&
+                                    _overallFilter &&
+                                    statsFirestore
+                                        .checkoutWithGameId.isNotEmpty) ...[
+                                  for (int i = 0;
+                                      i <
+                                          statsFirestore
+                                              .checkoutWithGameId.length;
+                                      i++) ...[
+                                    CheckoutStatsCard(
+                                      finish: statsFirestore.checkoutWithGameId
+                                          .elementAt(i)
+                                          .item1,
+                                      game: GameX01_P.createGame(
+                                        statsFirestore.getGameById(
+                                            statsFirestore.checkoutWithGameId
+                                                .elementAt(i)
+                                                .item2),
+                                      ),
+                                      isWorstFinished:
+                                          _orderField == 'worstFinish',
+                                    ),
+                                  ],
+                                ] else if ((_orderField == 'bestLeg' ||
+                                        _orderField == 'worstLeg') &&
+                                    statsFirestore
+                                        .thrownDartsWithGameId.isNotEmpty &&
+                                    _overallFilter) ...[
+                                  for (int i = 0;
+                                      i <
+                                          statsFirestore
+                                              .thrownDartsWithGameId.length;
+                                      i++) ...[
+                                    BestLegStatsCard(
+                                      bestLeg: statsFirestore
+                                          .thrownDartsWithGameId
+                                          .elementAt(i)
+                                          .item1,
+                                      game: GameX01_P.createGame(
+                                        statsFirestore.getGameById(
+                                            statsFirestore.thrownDartsWithGameId
+                                                .elementAt(i)
+                                                .item2),
+                                      ),
+                                      isWorstSelected:
+                                          _orderField == 'worstLeg',
+                                    ),
+                                  ],
+                                ] else ...[
+                                  for (Game_P game in filteredGames) ...[
+                                    StatsCardFiltered(
+                                      game: GameX01_P.createGame(game),
+                                      orderField: _orderField,
+                                    ),
+                                  ],
+                                ],
+                              ],
                             ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'To view the details about a game, click on its card.',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .fontSize,
-                                ),
-                              ),
-                            ),
                           ),
-                          if ((_orderField == 'highestFinish' ||
-                                  _orderField == 'worstFinish') &&
-                              _overallFilter &&
-                              statsFirestore.checkoutWithGameId.isNotEmpty) ...[
-                            for (int i = 0;
-                                i < statsFirestore.checkoutWithGameId.length;
-                                i++) ...[
-                              CheckoutStatsCard(
-                                finish: statsFirestore.checkoutWithGameId
-                                    .elementAt(i)
-                                    .item1,
-                                game: GameX01_P.createGame(
-                                  statsFirestore.getGameById(statsFirestore
-                                      .checkoutWithGameId
-                                      .elementAt(i)
-                                      .item2),
-                                ),
-                                isWorstFinished: _orderField == 'worstFinish',
-                              ),
-                            ],
-                          ] else if ((_orderField == 'bestLeg' ||
-                                  _orderField == 'worstLeg') &&
-                              statsFirestore.thrownDartsWithGameId.isNotEmpty &&
-                              _overallFilter) ...[
-                            for (int i = 0;
-                                i < statsFirestore.thrownDartsWithGameId.length;
-                                i++) ...[
-                              BestLegStatsCard(
-                                bestLeg: statsFirestore.thrownDartsWithGameId
-                                    .elementAt(i)
-                                    .item1,
-                                game: GameX01_P.createGame(
-                                  statsFirestore.getGameById(statsFirestore
-                                      .thrownDartsWithGameId
-                                      .elementAt(i)
-                                      .item2),
-                                ),
-                                isWorstSelected: _orderField == 'worstLeg',
-                              ),
-                            ],
-                          ] else ...[
-                            for (Game_P game in filteredGames) ...[
-                              StatsCardFiltered(
-                                game: GameX01_P.createGame(game),
-                                orderField: _orderField,
-                              ),
-                            ],
-                          ],
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ),
       ),

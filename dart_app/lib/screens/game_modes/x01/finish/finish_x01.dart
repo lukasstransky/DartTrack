@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
@@ -10,6 +12,7 @@ import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -26,6 +29,13 @@ class FinishX01 extends StatefulWidget {
 }
 
 class _FinishX01State extends State<FinishX01> {
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/7757168145
+  // android -> ca-app-pub-8582367743573228/1443041236
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +43,60 @@ class _FinishX01State extends State<FinishX01> {
     Future.delayed(Duration.zero, () {
       _saveDataToFirestore(context);
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false, // ignore gestures
+      child: Scaffold(
+        appBar: CustomAppBarWithHeart(
+          title: 'Finished game',
+          mode: GameMode.X01,
+          isFinishScreen: true,
+          showHeart: true,
+        ),
+        body: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: BannerAdWidget(
+                bannerAdUnitId: _bannerAdUnitId,
+                bannerAdEnum: BannerAdEnum.X01FinishScreen,
+                disposeInstant: true,
+              ),
+            ),
+            Selector<GameX01_P, bool>(
+              selector: (_, game) => game.getShowLoadingSpinner,
+              builder: (_, showLoadingSpinner, __) => showLoadingSpinner
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Center(
+                        child: Container(
+                          width: 90.w,
+                          child: Column(
+                            children: [
+                              StatsCardX01(
+                                isFinishScreen: true,
+                                gameX01: context.read<GameX01_P>(),
+                                isOpenGame: false,
+                              ),
+                              FinishScreenBtns(gameMode: GameMode.X01),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   _saveDataToFirestore(BuildContext context) async {
@@ -96,51 +160,5 @@ class _FinishX01State extends State<FinishX01> {
     }
 
     statsFirestoreX01.calculateX01Stats();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false, // ignore gestures
-      child: Scaffold(
-        appBar: CustomAppBarWithHeart(
-          title: 'Finished game',
-          mode: GameMode.X01,
-          isFinishScreen: true,
-          showHeart: true,
-        ),
-        body: Stack(
-          children: [
-            Selector<GameX01_P, bool>(
-              selector: (_, game) => game.getShowLoadingSpinner,
-              builder: (_, showLoadingSpinner, __) => showLoadingSpinner
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    )
-                  : SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Center(
-                        child: Container(
-                          width: 90.w,
-                          child: Column(
-                            children: [
-                              StatsCardX01(
-                                isFinishScreen: true,
-                                gameX01: context.read<GameX01_P>(),
-                                isOpenGame: false,
-                              ),
-                              FinishScreenBtns(gameMode: GameMode.X01),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }

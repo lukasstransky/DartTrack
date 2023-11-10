@@ -40,9 +40,12 @@ import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_default_settings.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/ad_management/interstitial_ad_helper.dart';
+import 'package:dart_app/utils/ad_management/banner_ads_manager_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,9 +62,18 @@ import 'screens/settings/local_widgets/about_and_support/local_widgets/terms_of_
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // init Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // init Google Mobile Ads SDK
+  await MobileAds.instance.initialize();
+
+  // load interstitial ad
+  InterstitialAdHelper.loadInterstitialAd();
+
   runApp(MyApp());
 }
 
@@ -151,6 +163,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (_) => Settings_P(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => BannerAdManager_P(),
         ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {

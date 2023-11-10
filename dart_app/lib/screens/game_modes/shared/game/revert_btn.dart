@@ -98,9 +98,9 @@ class RevertBtn extends StatelessWidget {
         RevertX01Helper.revertPoints(game_p as GameX01_P, gameSettingsX01);
       }
     } else if (game_p is GameScoreTraining_P) {
-      (game_p as GameScoreTraining_P).revert(context);
+      (game_p as GameScoreTraining_P).revert();
     } else if (game_p is GameSingleDoubleTraining_P) {
-      (game_p as GameSingleDoubleTraining_P).revert(context, false);
+      (game_p as GameSingleDoubleTraining_P).revert(false);
     } else if (game_p is GameCricket_P) {
       (game_p as GameCricket_P).revert();
     }

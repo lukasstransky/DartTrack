@@ -45,39 +45,42 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
-      ),
-      elevation: 5,
-      margin: EdgeInsets.all(0),
-      color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
-      child: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.only(
-              left: 1.5.w,
-              top: 0.5.h,
-            ),
-            alignment: Alignment.centerLeft,
-            child: Text(
-              'Account details',
-              style: TextStyle(
-                fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-                color: Utils.getTextColorDarken(context),
-                fontWeight: FontWeight.bold,
+    return Container(
+      padding: EdgeInsets.only(top: 1.h),
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(CARD_SHAPE_ROUNDING),
+        ),
+        elevation: 5,
+        margin: EdgeInsets.all(0),
+        color: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(
+                left: 1.5.w,
+                top: 0.5.h,
+              ),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                'Account details',
+                style: TextStyle(
+                  fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
+                  color: Utils.getTextColorDarken(context),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          SettingsCardItem(
-            name: 'Email',
-            onItemPressed: _showDialogForChangingEmail,
-          ),
-          SettingsCardItem(
-            name: 'Password',
-            onItemPressed: _showDialogForChangingPassword,
-          ),
-        ],
+            SettingsCardItem(
+              name: 'Email',
+              onItemPressed: _showDialogForChangingEmail,
+            ),
+            SettingsCardItem(
+              name: 'Password',
+              onItemPressed: _showDialogForChangingPassword,
+            ),
+          ],
+        ),
       ),
     );
   }

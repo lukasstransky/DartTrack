@@ -20,6 +20,24 @@ enum GameMode {
   None
 }
 
+enum BannerAdEnum {
+  OverallStatsScreen,
+  X01StatsScreen,
+  CricketStatsScreen,
+  SingleDoubleTrainingStatsScreen,
+  ScoreTrainingStatsScreen,
+  StatsPerGameList,
+  StatsPerGameListFiltered,
+  X01FinishScreen,
+  CricketFinishScreen,
+  SingleDoubleTrainingFinishScreen,
+  ScoreTrainingFinishScreen,
+  X01GameScreen,
+  CricketGameScreen,
+  SingleDoubleTrainingGameScreen,
+  ScoreTrainingGameScreen,
+}
+
 extension NameGetterGameMode on GameMode {
   String get name {
     switch (this) {

@@ -338,7 +338,7 @@ class GameSingleDoubleTraining_P extends Game_P {
 
           _isGameFinished = isGameFinished();
           if (_isGameFinished) {
-            Navigator.of(context).pushNamed(
+            Navigator.of(context).pushReplacementNamed(
               '/finishSingleDoubleTraining',
               arguments: {
                 'mode': getMode,
@@ -404,7 +404,7 @@ class GameSingleDoubleTraining_P extends Game_P {
     getCurrentThreeDarts[1] = hits[1];
   }
 
-  revert(BuildContext context, bool isRevertedFromFinishScreenWithRandomMode) {
+  revert(bool isRevertedFromFinishScreenWithRandomMode) {
     if (!_isRevertPossible()) {
       return;
     }

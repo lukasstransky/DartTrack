@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/field_hits_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/main_stats_sd_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
+import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -23,6 +26,12 @@ class _GameStatsSingleDoubleTrainingState
     extends State<GameStatsSingleDoubleTraining> {
   GameSingleDoubleTraining_P? _game;
   bool _showSimpleAppBar = false;
+  //TODO replace
+  // ios -> ca-app-pub-8582367743573228/6490272217
+  // android -> ca-app-pub-8582367743573228/1888682225
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
   didChangeDependencies() {
@@ -57,73 +66,93 @@ class _GameStatsSingleDoubleTrainingState
             )
           : CustomAppBar(title: 'Statistics'),
       body: SafeArea(
-        child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              if (_game!.getGameSettings.getIsTargetNumberEnabled) ...[
-                Container(
-                  padding: EdgeInsets.only(top: 0.5.h),
-                  child: RichText(
-                    text: TextSpan(
-                      text:
-                          'Target number: ${_game!.getMode == GameMode.DoubleTraining ? 'D' : ''}${_game!.getGameSettings.getTargetNumber} ',
-                      style: TextStyle(
-                        fontSize:
-                            Theme.of(context).textTheme.titleSmall!.fontSize! *
-                                0.9,
-                        color: Colors.white,
-                      ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text:
-                              '(${_game!.getGameSettings.getAmountOfRounds} rounds)',
-                          style: TextStyle(
-                            fontSize: fontSizeTargetNumberRounds.sp,
-                            color: Colors.white70,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ] else
-                Text(
-                  _getHeader(),
-                  style: TextStyle(
-                    fontSize:
-                        Theme.of(context).textTheme.titleSmall!.fontSize! * 0.9,
-                    color: Colors.white,
-                  ),
-                ),
-              Container(
-                alignment: Utils.isLandscape(context) ? Alignment.center : null,
-                padding: EdgeInsets.only(
-                  top: 0.5.h,
-                  bottom: 2.h,
-                ),
-                child: Text(
-                  _game!.getFormattedDateTime(),
-                  style: TextStyle(
-                    fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    fontWeight: FontWeight.bold,
-                    color: Utils.getTextColorDarken(context),
-                  ),
-                ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(bottom: 0.5.h),
+              child: BannerAdWidget(
+                bannerAdUnitId: _bannerAdUnitId,
+                bannerAdEnum: BannerAdEnum.SingleDoubleTrainingStatsScreen,
               ),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    PlayerOrTeamNames(game: _game!),
-                    MainStatsSingleDoubleTraining(game: _game!),
-                    FieldHitsSingleDoubleTraining(game: _game!),
+                    if (_game!.getGameSettings.getIsTargetNumberEnabled) ...[
+                      Container(
+                        padding: EdgeInsets.only(top: 0.5.h),
+                        child: RichText(
+                          text: TextSpan(
+                            text:
+                                'Target number: ${_game!.getMode == GameMode.DoubleTraining ? 'D' : ''}${_game!.getGameSettings.getTargetNumber} ',
+                            style: TextStyle(
+                              fontSize: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .fontSize! *
+                                  0.9,
+                              color: Colors.white,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text:
+                                    '(${_game!.getGameSettings.getAmountOfRounds} rounds)',
+                                style: TextStyle(
+                                  fontSize: fontSizeTargetNumberRounds.sp,
+                                  color: Colors.white70,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                    ] else
+                      Text(
+                        _getHeader(),
+                        style: TextStyle(
+                          fontSize: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .fontSize! *
+                              0.9,
+                          color: Colors.white,
+                        ),
+                      ),
+                    Container(
+                      alignment:
+                          Utils.isLandscape(context) ? Alignment.center : null,
+                      padding: EdgeInsets.only(
+                        top: 0.5.h,
+                        bottom: 2.h,
+                      ),
+                      child: Text(
+                        _game!.getFormattedDateTime(),
+                        style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.bodyMedium!.fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Utils.getTextColorDarken(context),
+                        ),
+                      ),
+                    ),
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          PlayerOrTeamNames(game: _game!),
+                          MainStatsSingleDoubleTraining(game: _game!),
+                          FieldHitsSingleDoubleTraining(game: _game!),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

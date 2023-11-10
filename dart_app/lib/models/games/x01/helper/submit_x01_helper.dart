@@ -472,7 +472,7 @@ class SubmitX01Helper {
     if ((isGameFinished || currentStats.getGameDraw)) {
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
           shouldSubmitTeamStats) {
-        Navigator.of(context).pushNamed('/finishX01');
+        Navigator.of(context).pushReplacementNamed('/finishX01');
       }
     } else {
       for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
