@@ -15,6 +15,7 @@ import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/settings_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
 import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
 import 'package:dart_app/screens/game_modes/cricket/finish/finish_c.dart';
@@ -33,7 +34,7 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.
 import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings_x01.dart';
 import 'package:dart_app/screens/home/home.dart';
-import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/subscription.dart';
+import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/remove_ads.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_list.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -167,6 +168,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => BannerAdManager_P(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => User_P(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -244,7 +248,7 @@ class MyApp extends StatelessWidget {
             StatisticsCricket.routeName: (ctx) => StatisticsCricket(),
             TermsOfUse.routeName: (ctx) => TermsOfUse(),
             PrivacyPolicy.routeName: (ctx) => PrivacyPolicy(),
-            Subscription.routeName: (ctx) => Subscription(),
+            RemoveAds.routeName: (ctx) => RemoveAds(),
           },
           home: AuthWrapper(),
         );

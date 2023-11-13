@@ -8,6 +8,7 @@ import 'package:dart_app/models/game_settings/game_settings_single_double_traini
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_single_double_training.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -73,14 +74,15 @@ class _FinishSingleDoubleTrainingState
         ),
         body: Stack(
           children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: BannerAdWidget(
-                bannerAdUnitId: _bannerAdUnitId,
-                bannerAdEnum: BannerAdEnum.SingleDoubleTrainingFinishScreen,
-                disposeInstant: true,
+            if (context.read<User_P>().getAdsEnabled)
+              Align(
+                alignment: Alignment.topCenter,
+                child: BannerAdWidget(
+                  bannerAdUnitId: _bannerAdUnitId,
+                  bannerAdEnum: BannerAdEnum.SingleDoubleTrainingFinishScreen,
+                  disposeInstant: true,
+                ),
               ),
-            ),
             Selector<GameSingleDoubleTraining_P, bool>(
               selector: (_, game) => game.getShowLoadingSpinner,
               builder: (_, showLoadingSpinner, __) => showLoadingSpinner

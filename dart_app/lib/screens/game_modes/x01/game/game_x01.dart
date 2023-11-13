@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/multiple_player_team_stats/multiple_player_team_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_to_throw_from_team_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btns_round_x01.dart';
@@ -41,7 +42,7 @@ class GameX01State extends State<GameX01> {
     context.read<GameX01_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;
 
-    if (Utils.isLandscape(context)) {
+    if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
       context.read<BannerAdManager_P>().getX01GameScreenBannerAd!.dispose();
     }
 
@@ -95,14 +96,15 @@ class GameX01State extends State<GameX01> {
   Column _buildPortraitLayout(bool isTeamMode) {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 0.5.h),
-          child: BannerAdWidget(
-            bannerAdUnitId: _bannerAdUnitId,
-            bannerAdEnum: BannerAdEnum.X01GameScreen,
-            disposeInstant: true,
+        if (context.read<User_P>().getAdsEnabled)
+          Container(
+            padding: EdgeInsets.only(bottom: 0.5.h),
+            child: BannerAdWidget(
+              bannerAdUnitId: _bannerAdUnitId,
+              bannerAdEnum: BannerAdEnum.X01GameScreen,
+              disposeInstant: true,
+            ),
           ),
-        ),
         _getTwoOrMultiplePlayerTeamStatsView(context),
         if (isTeamMode) PlayerToThrowFromTeam(),
         Selector<GameSettingsX01_P, InputMethod>(

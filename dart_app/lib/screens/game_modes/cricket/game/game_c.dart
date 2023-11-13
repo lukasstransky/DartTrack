@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/game_field/game_field_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/player_to_throw_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/submit_revert_btns_c.dart';
@@ -39,7 +40,7 @@ class _GameCricketState extends State<GameCricket> {
     context.read<GameCricket_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;
 
-    if (Utils.isLandscape(context)) {
+    if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
       context.read<BannerAdManager_P>().getCricketGameScreenBannerAd!.dispose();
     }
 
@@ -73,14 +74,15 @@ class _GameCricketState extends State<GameCricket> {
   Column _buildPortraitLayout() {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 0.5.h),
-          child: BannerAdWidget(
-            bannerAdUnitId: _bannerAdUnitId,
-            bannerAdEnum: BannerAdEnum.CricketGameScreen,
-            disposeInstant: true,
+        if (context.read<User_P>().getAdsEnabled)
+          Container(
+            padding: EdgeInsets.only(bottom: 0.5.h),
+            child: BannerAdWidget(
+              bannerAdUnitId: _bannerAdUnitId,
+              bannerAdEnum: BannerAdEnum.CricketGameScreen,
+              disposeInstant: true,
+            ),
           ),
-        ),
         GameFieldCricket(),
         PlayerToThrow(),
         ThrownDarts(mode: GameMode.Cricket),

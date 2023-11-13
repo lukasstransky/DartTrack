@@ -1,5 +1,7 @@
 import 'package:dart_app/models/user.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -28,6 +30,11 @@ class AuthService {
   }
 
   Future<void> register(email, password) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
@@ -37,6 +44,11 @@ class AuthService {
   }
 
   Future<void> postUserToFirestore(String email, String username) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final UserModel newUser = UserModel(
         uid: _firebaseAuth.currentUser!.uid, email: email, username: username);
 
@@ -44,6 +56,11 @@ class AuthService {
   }
 
   Future<void> login(email, password) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
@@ -53,6 +70,11 @@ class AuthService {
   }
 
   Future<void> logout(BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final String username = getUsernameFromSharedPreferences() ?? '';
 
     if (username == 'Guest') {
@@ -65,6 +87,11 @@ class AuthService {
   }
 
   Future<bool> usernameValid(String usernameToVerify) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return false;
+    }
+
     final QuerySnapshot querySnapshot = await _firestore
         .collection('users')
         .where('username', isEqualTo: usernameToVerify)
@@ -76,7 +103,65 @@ class AuthService {
     return true;
   }
 
+  Future<void> setAdsEnabledFlagToFalse(BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    final User_P user = context.read<User_P>();
+    if (!isConnected) {
+      user.setAdsEnabled = false;
+      return;
+    }
+
+    try {
+      await _firestore
+          .collection('users')
+          .doc(getCurrentUserUid)
+          .update({'adsEnabled': false});
+      user.setAdsEnabled = false;
+      print(
+          'Ads have been successfully disabled for user with uid: $getCurrentUserUid');
+    } catch (e) {
+      print('Error disabling ads for user: $e');
+    }
+  }
+
+  Future<void> getAdsEnabledFlag(BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    final User_P user = context.read<User_P>();
+    if (!isConnected) {
+      user.setAdsEnabled = false;
+      return;
+    }
+
+    try {
+      final QuerySnapshot querySnapshot = await _firestore
+          .collection('users')
+          .where('uid', isEqualTo: getCurrentUserUid)
+          .get();
+
+      bool adsEnabled = true;
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final DocumentSnapshot userDoc = querySnapshot.docs.first;
+        final data = userDoc.data();
+        if (data is Map<String, dynamic>) {
+          adsEnabled = data['adsEnabled'] as bool? ?? true;
+        }
+      } else {
+        print(
+            'Failed to fetch "adsEnabled" flag, user with uid "${getCurrentUserUid}" was not found');
+      }
+      user.setAdsEnabled = adsEnabled;
+    } catch (e) {
+      print('An error occurred while fetching "adsEnabled" flag: $e');
+    }
+  }
+
   Future<bool> emailAlreadyExists(String emailToVerify) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return false;
+    }
+
     final QuerySnapshot querySnapshot = await _firestore
         .collection('users')
         .where('email', isEqualTo: emailToVerify)
@@ -89,14 +174,29 @@ class AuthService {
   }
 
   Future<void> resetPassword(String email) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
   Future<void> loginAnonymously() async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     await _firebaseAuth.signInAnonymously();
   }
 
   Future<void> storeUsernameInSharedPreferences(String email) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final QuerySnapshot querySnapshot = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: email)
@@ -120,6 +220,11 @@ class AuthService {
   }
 
   Future<void> deleteUserData() async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     await _firebaseAuth.authStateChanges().firstWhere((user) => user != null);
 
     final currentUser = _firebaseAuth.currentUser;
@@ -130,6 +235,11 @@ class AuthService {
   }
 
   Future<void> updateEmailInFirestore(String newEmail) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     await _firestore
         .collection('users')
         .doc(_firebaseAuth.currentUser!.uid)
@@ -139,6 +249,11 @@ class AuthService {
   }
 
   Future<void> updateEmail(String newEmail, BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     final User? user = _firebaseAuth.currentUser;
 
     try {
@@ -161,6 +276,11 @@ class AuthService {
   }
 
   Future<void> deleteAccount(BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
     try {
       await _firestore.collection('users').doc(getCurrentUserUid).delete();
       await getCurrentUser!.delete();

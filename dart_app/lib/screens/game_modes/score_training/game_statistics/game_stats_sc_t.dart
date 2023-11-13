@@ -4,6 +4,7 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/score_training/game_statistics/local_widgets/game_stats_score_training/main_stats_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/most_frequent_scores.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
@@ -84,13 +85,14 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 0.5.h),
-              child: BannerAdWidget(
-                bannerAdUnitId: _bannerAdUnitId,
-                bannerAdEnum: BannerAdEnum.ScoreTrainingStatsScreen,
+            if (context.read<User_P>().getAdsEnabled)
+              Container(
+                padding: EdgeInsets.only(bottom: 0.5.h),
+                child: BannerAdWidget(
+                  bannerAdUnitId: _bannerAdUnitId,
+                  bannerAdEnum: BannerAdEnum.ScoreTrainingStatsScreen,
+                ),
               ),
-            ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game/local_widgets/field_to_hit_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game/local_widgets/game_btns/double/game_btns_double_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game/local_widgets/game_btns/single/game_btns_single_sd_t.dart';
@@ -53,7 +54,7 @@ class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
     context.read<GameSingleDoubleTraining_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;
 
-    if (Utils.isLandscape(context)) {
+    if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
       context
           .read<BannerAdManager_P>()
           .getSingleDoubleTrainingGameScreenBannerAd!
@@ -90,14 +91,15 @@ class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
   Column _buildPortraitLayout() {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 0.5.h),
-          child: BannerAdWidget(
-            bannerAdUnitId: _bannerAdUnitId,
-            bannerAdEnum: BannerAdEnum.SingleDoubleTrainingGameScreen,
-            disposeInstant: true,
+        if (context.read<User_P>().getAdsEnabled)
+          Container(
+            padding: EdgeInsets.only(bottom: 0.5.h),
+            child: BannerAdWidget(
+              bannerAdUnitId: _bannerAdUnitId,
+              bannerAdEnum: BannerAdEnum.SingleDoubleTrainingGameScreen,
+              disposeInstant: true,
+            ),
           ),
-        ),
         PlayersListSingleDoubleTraining(),
         FieldToHitSingleDoubleTraining(),
         RevertBtnAndThrownDarts(),

@@ -11,6 +11,7 @@ import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
@@ -219,10 +220,11 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
       widgetToReturn = Column(
         children: [
-          BannerAdWidget(
-            bannerAdUnitId: _bannerAdUnitId,
-            bannerAdEnum: BannerAdEnum.StatsPerGameList,
-          ),
+          if (context.read<User_P>().getAdsEnabled)
+            BannerAdWidget(
+              bannerAdUnitId: _bannerAdUnitId,
+              bannerAdEnum: BannerAdEnum.StatsPerGameList,
+            ),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/shared/overall/custom_chip.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/checkouts_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game_statistics/local_widgets/detailed_legs_list_x01.dart';
@@ -84,13 +85,14 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 0.5.h),
-              child: BannerAdWidget(
-                bannerAdUnitId: _bannerAdUnitId,
-                bannerAdEnum: BannerAdEnum.X01StatsScreen,
+            if (context.read<User_P>().getAdsEnabled)
+              Container(
+                padding: EdgeInsets.only(bottom: 0.5.h),
+                child: BannerAdWidget(
+                  bannerAdUnitId: _bannerAdUnitId,
+                  bannerAdEnum: BannerAdEnum.X01StatsScreen,
+                ),
               ),
-            ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,

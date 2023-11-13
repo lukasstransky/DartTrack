@@ -5,6 +5,7 @@ import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/best_leg_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/checkouts_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/stats_card_filtered.dart';
@@ -283,10 +284,11 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
             : SafeArea(
                 child: Column(
                   children: [
-                    BannerAdWidget(
-                      bannerAdUnitId: _bannerAdUnitId,
-                      bannerAdEnum: BannerAdEnum.StatsPerGameListFiltered,
-                    ),
+                    if (context.read<User_P>().getAdsEnabled)
+                      BannerAdWidget(
+                        bannerAdUnitId: _bannerAdUnitId,
+                        bannerAdEnum: BannerAdEnum.StatsPerGameListFiltered,
+                      ),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,

@@ -7,6 +7,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/finish_screen_btns/buttons/finish_screen_btns.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -58,14 +59,15 @@ class _FinishX01State extends State<FinishX01> {
         ),
         body: Stack(
           children: [
-            Align(
-              alignment: Alignment.topCenter,
-              child: BannerAdWidget(
-                bannerAdUnitId: _bannerAdUnitId,
-                bannerAdEnum: BannerAdEnum.X01FinishScreen,
-                disposeInstant: true,
+            if (context.read<User_P>().getAdsEnabled)
+              Align(
+                alignment: Alignment.topCenter,
+                child: BannerAdWidget(
+                  bannerAdUnitId: _bannerAdUnitId,
+                  bannerAdEnum: BannerAdEnum.X01FinishScreen,
+                  disposeInstant: true,
+                ),
               ),
-            ),
             Selector<GameX01_P, bool>(
               selector: (_, game) => game.getShowLoadingSpinner,
               builder: (_, showLoadingSpinner, __) => showLoadingSpinner

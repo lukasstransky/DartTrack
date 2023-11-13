@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/games/game.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/avg_best_worst_stats/avg_best_worst_stats.dart';
 import 'package:dart_app/screens/statistics/local_widgets/filter_bar.dart';
 import 'package:dart_app/screens/statistics/local_widgets/more_stats/more_stats.dart';
@@ -64,10 +65,11 @@ class _StatisticsState extends State<Statistics> {
         appBar: CustomAppBar(showBackBtn: false, title: 'Statistics'),
         body: Column(
           children: [
-            BannerAdWidget(
-              bannerAdUnitId: _bannerAdUnitId,
-              bannerAdEnum: BannerAdEnum.OverallStatsScreen,
-            ),
+            if (context.read<User_P>().getAdsEnabled)
+              BannerAdWidget(
+                bannerAdUnitId: _bannerAdUnitId,
+                bannerAdEnum: BannerAdEnum.OverallStatsScreen,
+              ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,

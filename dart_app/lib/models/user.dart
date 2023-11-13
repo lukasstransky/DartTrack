@@ -18,6 +18,7 @@ class UserModel {
       'uid': uid,
       'email': email,
       'username': username,
+      'adsEnabled': true,
     };
   }
 }

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/field_hits_sd_t.dart';
 import 'package:dart_app/screens/game_modes/single_double_training/game_statistics/local_widgets/main_stats_sd_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
@@ -10,6 +11,7 @@ import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_with_heart.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class GameStatsSingleDoubleTraining extends StatefulWidget {
@@ -68,13 +70,14 @@ class _GameStatsSingleDoubleTrainingState
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 0.5.h),
-              child: BannerAdWidget(
-                bannerAdUnitId: _bannerAdUnitId,
-                bannerAdEnum: BannerAdEnum.SingleDoubleTrainingStatsScreen,
+            if (context.read<User_P>().getAdsEnabled)
+              Container(
+                padding: EdgeInsets.only(bottom: 0.5.h),
+                child: BannerAdWidget(
+                  bannerAdUnitId: _bannerAdUnitId,
+                  bannerAdEnum: BannerAdEnum.SingleDoubleTrainingStatsScreen,
+                ),
               ),
-            ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,

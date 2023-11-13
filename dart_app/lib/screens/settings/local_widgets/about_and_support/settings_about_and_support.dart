@@ -1,8 +1,10 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/app.version.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
 class AboutAndSupport extends StatelessWidget {
@@ -38,10 +40,11 @@ class AboutAndSupport extends StatelessWidget {
                 ),
               ),
             ),
-            SettingsCardItem(
-              name: 'Subscription',
-              route: '/subscription',
-            ),
+            if (context.read<User_P>().adsEnabled)
+              SettingsCardItem(
+                name: 'Remove ads 2,99€',
+                route: '/removeAds',
+              ),
             SettingsCardItem(
               name: 'Help & Support',
               helpAndSupport: true,

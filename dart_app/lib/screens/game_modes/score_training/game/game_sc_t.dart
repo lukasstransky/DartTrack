@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_score_training_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/players_list/players_list_sc_t.dart';
 import 'package:dart_app/screens/game_modes/score_training/game/local_widgets/point_btns_round/point_btns_round_sc_t.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/point_btns_three_darts.dart';
@@ -38,7 +39,7 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
     context.read<GameScoreTraining_P>().setSafeAreaPadding =
         MediaQuery.of(context).padding;
 
-    if (Utils.isLandscape(context)) {
+    if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
       context
           .read<BannerAdManager_P>()
           .getScoreTrainingGameScreenBannerAd!
@@ -75,14 +76,15 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
   Column _buildPortraitLayout() {
     return Column(
       children: [
-        Container(
-          padding: EdgeInsets.only(bottom: 0.5.h),
-          child: BannerAdWidget(
-            bannerAdUnitId: _bannerAdUnitId,
-            bannerAdEnum: BannerAdEnum.ScoreTrainingGameScreen,
-            disposeInstant: true,
+        if (context.read<User_P>().getAdsEnabled)
+          Container(
+            padding: EdgeInsets.only(bottom: 0.5.h),
+            child: BannerAdWidget(
+              bannerAdUnitId: _bannerAdUnitId,
+              bannerAdEnum: BannerAdEnum.ScoreTrainingGameScreen,
+              disposeInstant: true,
+            ),
           ),
-        ),
         PlayersListScoreTraining(),
         Expanded(
           child: Selector<GameSettingsScoreTraining_P, InputMethod>(

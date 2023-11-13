@@ -4,6 +4,7 @@ import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/ad_management/interstitial_ad_helper.dart';
@@ -130,9 +131,13 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
                 Utils.handleVibrationFeedback(context);
                 if (!showLoadingSpinner) {
                   _resetGame(context);
-                  InterstitialAdHelper.showInterstitialAd(() {
+                  if (context.read<User_P>().getAdsEnabled) {
+                    InterstitialAdHelper.showInterstitialAd(() {
+                      Navigator.of(context).pushReplacementNamed('/home');
+                    });
+                  } else {
                     Navigator.of(context).pushReplacementNamed('/home');
-                  });
+                  }
                 }
               },
               icon: Icon(

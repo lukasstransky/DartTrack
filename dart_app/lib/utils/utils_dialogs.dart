@@ -9,6 +9,7 @@ import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/team.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/utils/ad_management/banner_ads_manager_p.dart';
@@ -418,9 +419,12 @@ class UtilsDialogs {
                     child: TextButton(
                       onPressed: () {
                         Utils.handleVibrationFeedback(context);
-                        context
-                            .read<BannerAdManager_P>()
-                            .disposeCorrectBannerAd(game_p);
+                        if (context.read<User_P>().getAdsEnabled) {
+                          context
+                              .read<BannerAdManager_P>()
+                              .disposeCorrectBannerAd(game_p);
+                        }
+
                         Navigator.of(context).pop();
                         _resetValuesAndNavigateToHome(context, game_p);
                       },

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_cricket_p.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/cricket/statistics/local_widgets/main_stats_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/statistics/local_widgets/points_per_number_c.dart';
 import 'package:dart_app/screens/game_modes/shared/game_stats/player_or_team_names.dart';
@@ -64,13 +65,14 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
       body: SafeArea(
         child: Column(
           children: [
-            Container(
-              padding: EdgeInsets.only(bottom: 0.5.h),
-              child: BannerAdWidget(
-                bannerAdUnitId: _bannerAdUnitId,
-                bannerAdEnum: BannerAdEnum.CricketStatsScreen,
+            if (context.read<User_P>().getAdsEnabled)
+              Container(
+                padding: EdgeInsets.only(bottom: 0.5.h),
+                child: BannerAdWidget(
+                  bannerAdUnitId: _bannerAdUnitId,
+                  bannerAdEnum: BannerAdEnum.CricketStatsScreen,
+                ),
               ),
-            ),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,
