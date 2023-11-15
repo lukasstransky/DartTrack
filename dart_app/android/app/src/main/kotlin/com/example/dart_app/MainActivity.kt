@@ -1,4 +1,4 @@
-package com.example.dart_app
+package com.darttrack.app
 
 import io.flutter.embedding.android.FlutterActivity
 

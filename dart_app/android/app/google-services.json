@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:576943166736:android:462ba565fc6979196d0195",
         "android_client_info": {
-          "package_name": "com.example.dart_app"
+          "package_name": "com.darttrack.app"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "576943166736-tvniocq83o5l4sei7pn316bgroc13cbn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.dart_app",
+            "package_name": "com.darttrack.app",
             "certificate_hash": "f76c02bee45c2fed16d6b7357a3d8baa5bab7ef2"
           }
         },

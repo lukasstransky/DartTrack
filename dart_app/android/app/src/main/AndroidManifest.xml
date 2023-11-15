@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.dart_app">
+    package="com.darttrack.app">
     <uses-permission android:name="android.permission.VIBRATE" />
    <application
         android:label="dart_app"
