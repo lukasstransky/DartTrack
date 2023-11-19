@@ -1,3 +1,4 @@
+import 'package:dart_app/models/in_app_purchase_p.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/logout_btn.dart';
 import 'package:dart_app/screens/settings/local_widgets/about_and_support/settings_about_and_support.dart';
@@ -11,8 +12,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<InAppPurchase_P>().loadProducts(context);
+  }
 
   @override
   Widget build(BuildContext context) {

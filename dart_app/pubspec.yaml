@@ -35,8 +35,8 @@ dependencies:
   provider: ^6.0.5
   cloud_firestore: ^4.12.2
   firebase_core: ^2.21.0
-  firebase_auth: ^4.12.1
-  fluttertoast: ^8.2.2
+  firebase_auth: ^4.14.0
+  fluttertoast: ^8.2.4
   numberpicker: ^2.1.2
   icofont_flutter: ^1.4.0
   font_awesome_flutter: ^10.6.0
@@ -47,7 +47,6 @@ dependencies:
   get: ^4.6.6
   intl: ^0.18.1
   shared_preferences: ^2.2.2
-  vibration: ^1.8.3
   syncfusion_flutter_datepicker: ^23.1.43
   flutter_vector_icons: ^2.0.0
   flutter_slidable: ^3.0.1

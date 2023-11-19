@@ -14,6 +14,7 @@ import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
+import 'package:dart_app/models/in_app_purchase_p.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
@@ -34,7 +35,6 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/game_settings_x01.
 import 'package:dart_app/screens/game_modes/x01/game_statistics/game_statistics_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/ingame_settings/ingame_settings_x01.dart';
 import 'package:dart_app/screens/home/home.dart';
-import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/remove_ads.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/stats_per_game_filtered_list.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_list.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -47,6 +47,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -74,6 +75,9 @@ void main() async {
 
   // load interstitial ad
   InterstitialAdHelper.loadInterstitialAd();
+
+  // init in app purchase plugin
+  InAppPurchase.instance.isAvailable();
 
   runApp(MyApp());
 }
@@ -171,6 +175,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => User_P(),
         ),
+        ChangeNotifierProvider(
+          create: (_) => InAppPurchase_P(),
+        ),
       ],
       child: Sizer(builder: (context, orientation, deviceType) {
         return MaterialApp(
@@ -248,7 +255,6 @@ class MyApp extends StatelessWidget {
             StatisticsCricket.routeName: (ctx) => StatisticsCricket(),
             TermsOfUse.routeName: (ctx) => TermsOfUse(),
             PrivacyPolicy.routeName: (ctx) => PrivacyPolicy(),
-            RemoveAds.routeName: (ctx) => RemoveAds(),
           },
           home: AuthWrapper(),
         );

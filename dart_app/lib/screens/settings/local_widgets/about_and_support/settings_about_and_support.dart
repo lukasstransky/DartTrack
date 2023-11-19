@@ -1,7 +1,9 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/in_app_purchase_p.dart';
 import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/app.version.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
+import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -41,9 +43,18 @@ class AboutAndSupport extends StatelessWidget {
               ),
             ),
             if (context.read<User_P>().adsEnabled)
-              SettingsCardItem(
-                name: 'Remove ads 2,99€',
-                route: '/removeAds',
+              Consumer<InAppPurchase_P>(
+                builder: (context, inAppPurchaseProvider, child) {
+                  if (inAppPurchaseProvider.purchaseSuccessful) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _onPurchaseSuccess(context);
+                    });
+                  }
+                  return SettingsCardItem(
+                    name: 'Remove ads 2,99€',
+                    buyAdFreeVersion: true,
+                  );
+                },
               ),
             SettingsCardItem(
               name: 'Help & Support',
@@ -66,5 +77,14 @@ class AboutAndSupport extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _onPurchaseSuccess(BuildContext context) {
+    final AuthService authService = context.read<AuthService>();
+    authService.setAdsEnabledFlagToFalse(context);
+
+    final InAppPurchase_P inAppPurchaseProvider =
+        context.read<InAppPurchase_P>();
+    inAppPurchaseProvider.resetPurchaseSuccessfulFlag();
   }
 }

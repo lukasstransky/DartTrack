@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/in_app_purchase_p.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -15,6 +17,7 @@ class SettingsCardItem extends StatelessWidget {
     String this.route = '',
     bool this.rateApp = false,
     bool this.helpAndSupport = false,
+    bool this.buyAdFreeVersion = false,
   }) : super(key: key);
 
   final String name;
@@ -22,6 +25,7 @@ class SettingsCardItem extends StatelessWidget {
   final String route;
   final bool rateApp;
   final bool helpAndSupport;
+  final bool buyAdFreeVersion;
 
   static void _emptyFunction(BuildContext context) {}
 
@@ -90,6 +94,8 @@ class SettingsCardItem extends StatelessWidget {
       _openAppInStore(context);
     } else if (helpAndSupport) {
       _launchEmail(context);
+    } else if (buyAdFreeVersion) {
+      context.read<InAppPurchase_P>().buyAdFreeVersion();
     } else {
       onItemPressed(context);
     }
