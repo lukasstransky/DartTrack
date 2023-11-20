@@ -1,6 +1,5 @@
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 
 class InAppPurchase_P with ChangeNotifier {
@@ -32,14 +31,7 @@ class InAppPurchase_P with ChangeNotifier {
     final ProductDetailsResponse response =
         await InAppPurchase.instance.queryProductDetails(_kIds);
     if (response.notFoundIDs.isNotEmpty) {
-      final String message =
-          'Product ID not found: ${response.notFoundIDs.join(", ")}';
-      print(message);
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_LONG,
-        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-      );
+      print('Product ID not found: ${response.notFoundIDs.join(", ")}');
     } else {
       // successfully fetched the products
       if (response.notFoundIDs.isEmpty) {
