@@ -47,6 +47,7 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -74,7 +75,7 @@ void main() async {
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
 
   // init Google Mobile Ads SDK
-  // await MobileAds.instance.initialize();
+  await MobileAds.instance.initialize();
 
   // load interstitial ad
   InterstitialAdHelper.loadInterstitialAd();
