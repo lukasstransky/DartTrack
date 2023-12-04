@@ -1,9 +1,11 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
-import 'package:dart_app/screens/auth/local_widgets/forgot_password_link.dart';
+import 'package:dart_app/models/auth_p.dart';
+import 'package:dart_app/screens/auth/local_widgets/email_input/email_input_register.dart';
+import 'package:dart_app/screens/auth/local_widgets/email_input/email_input_login.dart';
+import 'package:dart_app/screens/auth/local_widgets/forgot_password/forgot_password_link.dart';
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/login_register_btn.dart';
-import 'package:dart_app/screens/auth/local_widgets/password_input.dart';
+import 'package:dart_app/screens/auth/local_widgets/password_input/password_input_login.dart';
+import 'package:dart_app/screens/auth/local_widgets/password_input/password_input_register.dart';
 import 'package:dart_app/screens/auth/local_widgets/username_input.dart';
 
 import 'package:flutter/material.dart';
@@ -47,12 +49,15 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                     ),
                   ),
                 ),
-                if (authMode == AuthMode.Register) UsernameInput(),
-                EmailInput(
-                    isRegisterScreen:
-                        authMode == AuthMode.Register ? true : false),
-                PasswordInput(),
-                if (authMode == AuthMode.Login) ForgotPasswordLink(),
+                if (authMode == AuthMode.Register) ...[
+                  UsernameInput(),
+                  EmailInputRegister(),
+                  PasswordInputRegister(),
+                ] else if (authMode == AuthMode.Login) ...[
+                  EmailInputLogin(),
+                  PasswordInputLogin(),
+                  ForgotPasswordLink(),
+                ],
                 LoginRegisterBtn(
                     loginRegisterPageFormKey: _loginRegisterPageFormKey),
               ],

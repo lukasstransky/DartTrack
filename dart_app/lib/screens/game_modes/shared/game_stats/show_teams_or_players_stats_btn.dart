@@ -1,6 +1,7 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -63,7 +64,7 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
               ),
             ),
           ),
-          style: ButtonStyle(
+          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
             shape: MaterialStateProperty.all(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(
@@ -71,10 +72,6 @@ class ShowTeamsOrPlayersStatsBtn extends StatelessWidget {
                 ),
               ),
             ),
-            backgroundColor: Utils.getPrimaryMaterialStateColorDarken(context),
-            splashFactory: NoSplash.splashFactory,
-            shadowColor: MaterialStateProperty.all(Colors.transparent),
-            overlayColor: MaterialStateProperty.all(Colors.transparent),
           ),
         ),
       );

@@ -33,81 +33,89 @@ class PointBtnsRoundX01 extends StatelessWidget {
     );
     final EdgeInsets safeAreaPadding = gameX01.getSafeAreaPadding;
 
-    return Expanded(
-      child: Selector<GameSettingsX01_P, SelectorModel>(
-        selector: (_, gameSettingsX01) => SelectorModel(
-          showInputMethodInGameScreen:
-              gameSettingsX01.getShowInputMethodInGameScreen,
-          showMostScoredPoints: gameSettingsX01.getShowMostScoredPoints,
-        ),
-        builder: (_, selectorModel, __) => Selector<GameX01_P, String>(
-          selector: (_, gameX01) => gameX01.getCurrentPointsSelected,
-          builder: (_, currentPointsSelected, __) => Column(
-            children: [
-              Container(
-                height: 6.h,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      width: _widthBtns.w,
-                      child: RevertBtn(game_p: gameX01),
-                    ),
-                    Expanded(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            top: BorderSide(
-                              width: GENERAL_BORDER_WIDTH.w,
-                              color: Utils.getPrimaryColorDarken(context),
+    return Utils.wrapExpandedIfLandscape(
+      context,
+      Container(
+        height: Utils.isLandscape(context)
+            ? null
+            : gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+                ? 43.h
+                : 40.h,
+        child: Selector<GameSettingsX01_P, SelectorModel>(
+          selector: (_, gameSettingsX01) => SelectorModel(
+            showInputMethodInGameScreen:
+                gameSettingsX01.getShowInputMethodInGameScreen,
+            showMostScoredPoints: gameSettingsX01.getShowMostScoredPoints,
+          ),
+          builder: (_, selectorModel, __) => Selector<GameX01_P, String>(
+            selector: (_, gameX01) => gameX01.getCurrentPointsSelected,
+            builder: (_, currentPointsSelected, __) => Column(
+              children: [
+                Container(
+                  height: 6.h,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Container(
+                        width: _widthBtns.w,
+                        child: RevertBtn(game_p: gameX01),
+                      ),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                width: GENERAL_BORDER_WIDTH.w,
+                                color: Utils.getPrimaryColorDarken(context),
+                              ),
                             ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            currentPointsSelected,
-                            style: TextStyle(
-                              fontSize: _fontSizeCurrentPoints.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Utils.getTextColorDarken(context),
+                          child: Center(
+                            child: Text(
+                              currentPointsSelected,
+                              style: TextStyle(
+                                fontSize: _fontSizeCurrentPoints.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Utils.getTextColorDarken(context),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                    Container(
-                      width: _widthBtns.w,
-                      child: SubmitPointsBtnX01(),
-                    ),
-                  ],
+                      Container(
+                        width: _widthBtns.w,
+                        child: SubmitPointsBtnX01(),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              if (selectorModel.showInputMethodInGameScreen)
-                SelectInputMethod(mode: GameMode.X01),
-              firstRow(
-                gameX01,
-                gameSettingsX01,
-                selectorModel.showMostScoredPoints,
-                safeAreaPadding,
-              ),
-              secondRow(
-                gameX01,
-                gameSettingsX01,
-                selectorModel.showMostScoredPoints,
-                safeAreaPadding,
-              ),
-              thirdRow(
-                gameX01,
-                gameSettingsX01,
-                selectorModel.showMostScoredPoints,
-                safeAreaPadding,
-              ),
-              fourthRow(
-                gameX01,
-                context,
-                safeAreaPadding,
-              ),
-            ],
+                if (selectorModel.showInputMethodInGameScreen)
+                  SelectInputMethod(mode: GameMode.X01),
+                firstRow(
+                  gameX01,
+                  gameSettingsX01,
+                  selectorModel.showMostScoredPoints,
+                  safeAreaPadding,
+                ),
+                secondRow(
+                  gameX01,
+                  gameSettingsX01,
+                  selectorModel.showMostScoredPoints,
+                  safeAreaPadding,
+                ),
+                thirdRow(
+                  gameX01,
+                  gameSettingsX01,
+                  selectorModel.showMostScoredPoints,
+                  safeAreaPadding,
+                ),
+                fourthRow(
+                  gameX01,
+                  context,
+                  safeAreaPadding,
+                ),
+              ],
+            ),
           ),
         ),
       ),

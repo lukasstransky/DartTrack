@@ -1,16 +1,13 @@
-import 'dart:io';
-
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
-import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/best_leg_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/checkouts_stats_card.dart';
 import 'package:dart_app/screens/statistics/local_widgets/stats_per_game_filtered_list/local_widgets/stats_card_filtered.dart';
-import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
+import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -36,12 +33,6 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
   static const String ORDER_FIELD_WORST_FINISH = 'worstFinish';
   static const String ORDER_FIELD_BEST_LEG = 'bestLeg';
   static const String ORDER_FIELD_WORST_LEG = 'worstLeg';
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/6257821003
-  // android -> ca-app-pub-8582367743573228/6640964380
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
 
   String? _type;
   String _orderField = '';
@@ -284,11 +275,6 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
             : SafeArea(
                 child: Column(
                   children: [
-                    if (context.read<User_P>().getAdsEnabled)
-                      BannerAdWidget(
-                        bannerAdUnitId: _bannerAdUnitId,
-                        bannerAdEnum: BannerAdEnum.StatsPerGameListFiltered,
-                      ),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
@@ -419,10 +405,8 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                   ),
                 ),
               ),
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              style: ButtonStyles.primaryColorBtnStyle(context, _overallFilter)
+                  .copyWith(
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     side: BorderSide(
@@ -435,9 +419,6 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                     ),
                   ),
                 ),
-                backgroundColor: _overallFilter
-                    ? Utils.getPrimaryMaterialStateColorDarken(context)
-                    : Utils.getColor(Theme.of(context).colorScheme.primary),
               ),
             ),
           ),
@@ -463,10 +444,8 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                   ),
                 ),
               ),
-              style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-                shadowColor: MaterialStateProperty.all(Colors.transparent),
-                overlayColor: MaterialStateProperty.all(Colors.transparent),
+              style: ButtonStyles.primaryColorBtnStyle(context, !_overallFilter)
+                  .copyWith(
                 shape: MaterialStateProperty.all(
                   RoundedRectangleBorder(
                     side: BorderSide(
@@ -479,9 +458,6 @@ class _StatsPerGameFilteredListState extends State<StatsPerGameFilteredList> {
                     ),
                   ),
                 ),
-                backgroundColor: !_overallFilter
-                    ? Utils.getPrimaryMaterialStateColorDarken(context)
-                    : Utils.getColor(Theme.of(context).colorScheme.primary),
               ),
             ),
           ),

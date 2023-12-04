@@ -185,7 +185,7 @@ class SettingsAccountData extends StatelessWidget {
                 ),
                 TextSpan(
                     text:
-                        '? \nDeleting your account and its data is permanent and cannot be reversed.'),
+                        '? \nDeleting your account and its data is permanent and cannot be reversed.\n'),
               ],
             ),
           ),

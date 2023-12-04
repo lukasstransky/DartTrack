@@ -17,7 +17,7 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
     final dynamic gameProvider =
         Utils.getGameProviderBasedOnMode(mode, context);
 
-    return wrapExpandedIfLandscape(
+    return Utils.wrapExpandedIfLandscape(
       context,
       Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -216,9 +216,5 @@ class SingleDoubleOrTrippleBtns extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Widget wrapExpandedIfLandscape(BuildContext context, Widget child) {
-    return Utils.isLandscape(context) ? Expanded(child: child) : child;
   }
 }

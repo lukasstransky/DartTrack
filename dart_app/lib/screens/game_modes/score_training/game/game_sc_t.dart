@@ -40,10 +40,11 @@ class _GameScoreTrainingState extends State<GameScoreTraining> {
         MediaQuery.of(context).padding;
 
     if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
-      context
-          .read<BannerAdManager_P>()
-          .getScoreTrainingGameScreenBannerAd!
-          .dispose();
+      final BannerAdManager_P bannerAdManager =
+          context.read<BannerAdManager_P>();
+      if (bannerAdManager.getScoreTrainingGameScreenBannerAd != null) {
+        bannerAdManager.getScoreTrainingGameScreenBannerAd!.dispose();
+      }
     }
 
     return WillPopScope(

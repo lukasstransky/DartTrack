@@ -9,27 +9,13 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class AmountOfRoundsForTargetNumberSingleDoubleTraining extends StatefulWidget {
+class AmountOfRoundsForTargetNumberSingleDoubleTraining
+    extends StatelessWidget {
   const AmountOfRoundsForTargetNumberSingleDoubleTraining({Key? key})
       : super(key: key);
 
-  @override
-  State<AmountOfRoundsForTargetNumberSingleDoubleTraining> createState() =>
-      _AmountOfRoundsForTargetNumberSingleDoubleTrainingState();
-}
-
-class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
-    extends State<AmountOfRoundsForTargetNumberSingleDoubleTraining> {
-  @override
-  void initState() {
-    super.initState();
-    newTextControllerAmountOfRoundsGameSettingsSdt();
-  }
-
   _showDialogForRoundsOrPoints(BuildContext context) async {
     final settings = context.read<GameSettingsSingleDoubleTraining_P>();
-    final String backupString = amountOfRoundsController
-        .text; // in case text was changed and cancel pressed
 
     Utils.forcePortraitMode(context);
 
@@ -58,58 +44,13 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
               left: 5.w,
               right: 5.w,
             ),
-            child: TextFormField(
-              textAlign: TextAlign.center,
-              controller: amountOfRoundsController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return ('Please enter a value!');
-                } else if (int.parse(value) < MIN_ROUNDS_SINGLE_TRAINING ||
-                    int.parse(value) > MAX_ROUNDS_SINGLE_TRAINING) {
-                  return 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SINGLE_TRAINING}';
-                }
-                return null;
-              },
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(
-                    MAX_ROUNDS_SINGLE_TRAINING_NUMBERS),
-              ],
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-              ),
-              decoration: InputDecoration(
-                errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
-                hintText:
-                    '${MIN_ROUNDS_SINGLE_TRAINING}-${MAX_ROUNDS_SINGLE_TRAINING}',
-                fillColor:
-                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
-                filled: true,
-                hintStyle: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  color: Utils.getPrimaryColorDarken(context),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
-                  ),
-                ),
-              ),
-            ),
+            child: AmountOfRoundsTextFormField(),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
-                Future.delayed(Duration(milliseconds: 300), () {
-                  amountOfRoundsController.text = backupString;
-                });
               },
               child: Text(
                 'Cancel',
@@ -249,6 +190,73 @@ class _AmountOfRoundsForTargetNumberSingleDoubleTrainingState
               ),
             )
           : SizedBox.shrink(),
+    );
+  }
+}
+
+class AmountOfRoundsTextFormField extends StatefulWidget {
+  AmountOfRoundsTextFormField({Key? key}) : super(key: key);
+
+  @override
+  State<AmountOfRoundsTextFormField> createState() =>
+      _AmountOfRoundsTextFormFieldState();
+}
+
+class _AmountOfRoundsTextFormFieldState
+    extends State<AmountOfRoundsTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    amountOfRoundsController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    amountOfRoundsController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: amountOfRoundsController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ('Please enter a value!');
+        } else if (int.parse(value) < MIN_ROUNDS_SINGLE_TRAINING ||
+            int.parse(value) > MAX_ROUNDS_SINGLE_TRAINING) {
+          return 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SINGLE_TRAINING}';
+        }
+        return null;
+      },
+      autofocus: true,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(MAX_ROUNDS_SINGLE_TRAINING_NUMBERS),
+      ],
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+      ),
+      decoration: InputDecoration(
+        errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
+        hintText: '${MIN_ROUNDS_SINGLE_TRAINING}-${MAX_ROUNDS_SINGLE_TRAINING}',
+        fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+        filled: true,
+        hintStyle: TextStyle(
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+          color: Utils.getPrimaryColorDarken(context),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
     );
   }
 }

@@ -26,8 +26,6 @@ enum BannerAdEnum {
   CricketStatsScreen,
   SingleDoubleTrainingStatsScreen,
   ScoreTrainingStatsScreen,
-  StatsPerGameList,
-  StatsPerGameListFiltered,
   X01FinishScreen,
   CricketFinishScreen,
   SingleDoubleTrainingFinishScreen,
@@ -395,7 +393,7 @@ const int DEFAULT_LEGS_FIRST_TO_SETS_ENABLED = 2;
 const int DEFAULT_SETS_BEST_OF_SETS_ENABLED = 5;
 const int DEFAULT_LEGS_BEST_OF_SETS_ENABLED = 3;
 const int DEFAULT_LEGS_FIRST_TO_NO_SETS = 3;
-const int DEFAULT_LEGS_BEST_OF_NO_SETS = 7;
+const int DEFAULT_LEGS_BEST_OF_NO_SETS = 5;
 const int DEFAULT_SETS_DRAW_MODE = 6;
 const int DEFAULT_LEGS_DRAW_MODE_SETS_ENABLED = 3;
 
@@ -523,3 +521,5 @@ const double SWTICH_SCALE_FACTOR_TABLET = 1.5;
 const double TEXT_SWITCH_SPACE_TABLET = 3;
 const double ADVANCED_SETTINGS_SWITCH_PADDING_RIGHT_TABLET = 2;
 const double BTN_FONTSIZE_SD_T_TABLET = 20;
+
+const int DEFAULT_DELY = 200;

@@ -55,10 +55,11 @@ class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
         MediaQuery.of(context).padding;
 
     if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
-      context
-          .read<BannerAdManager_P>()
-          .getSingleDoubleTrainingGameScreenBannerAd!
-          .dispose();
+      final BannerAdManager_P bannerAdManager =
+          context.read<BannerAdManager_P>();
+      if (bannerAdManager.getSingleDoubleTrainingGameScreenBannerAd != null) {
+        bannerAdManager.getSingleDoubleTrainingGameScreenBannerAd!.dispose();
+      }
     }
 
     return WillPopScope(

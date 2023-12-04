@@ -1,4 +1,4 @@
-import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/auth_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_c.dart';
 import 'package:dart_app/models/firestore/stats_firestore_s_t.dart';
 import 'package:dart_app/models/firestore/stats_firestore_sc_t.dart';
@@ -17,8 +17,8 @@ import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/in_app_purchase_p.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/models/user_p.dart';
+import 'package:dart_app/screens/auth/local_widgets/forgot_password/forgot_password.dart';
 import 'package:dart_app/screens/auth/login_register_page.dart';
-import 'package:dart_app/screens/auth/local_widgets/forgot_password.dart';
 import 'package:dart_app/screens/game_modes/cricket/finish/finish_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/game_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game_settings/game_settings_c.dart';

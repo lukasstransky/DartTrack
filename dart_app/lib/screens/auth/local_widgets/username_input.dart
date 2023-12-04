@@ -1,18 +1,40 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/models/auth_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class UsernameInput extends StatelessWidget {
+class UsernameInput extends StatefulWidget {
   const UsernameInput({Key? key}) : super(key: key);
 
   @override
+  State<UsernameInput> createState() => _UsernameInputState();
+}
+
+class _UsernameInputState extends State<UsernameInput> {
+  late TextEditingController usernameTextController;
+
+  @override
+  void initState() {
+    super.initState();
+    usernameTextController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    usernameTextController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final Auth_P auth = context.read<Auth_P>();
+    final Auth_P auth_p = context.read<Auth_P>();
+
+    usernameTextController.addListener(() {
+      auth_p.setUsername = usernameTextController.text;
+    });
 
     return Container(
       width: 80.w,
@@ -21,8 +43,8 @@ class UsernameInput extends StatelessWidget {
         data: ThemeData(
           inputDecorationTheme: InputDecorationTheme(
             errorStyle: TextStyle(
-              color: Colors.red, // or any color you want
-              fontSize: 20.sp, // adjust this size as needed
+              color: Colors.red,
+              fontSize: 20.sp,
             ),
           ),
         ),
@@ -37,7 +59,7 @@ class UsernameInput extends StatelessWidget {
               usernameTextController.clear();
               return ('Username is required!');
             }
-            if (!auth.getUsernameValid) {
+            if (value == 'Guest' || !auth_p.getUsernameValid) {
               return ('Username already exists!');
             }
             return null;

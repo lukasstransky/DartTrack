@@ -110,8 +110,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             margin: EdgeInsets.only(
                                 top: 0.5.h,
                                 bottom: 0.5.h,
-                                left: 1.w,
-                                right: 1.w),
+                                left: 0.5.w,
+                                right: 0.5.w),
                             height: 4.h,
                             child: ElevatedButton(
                               onPressed: () {
@@ -166,11 +166,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                       Expanded(
                         child: Container(
                           margin: EdgeInsets.only(
-                            top: 0.5.h,
-                            bottom: 0.5.h,
-                            left: 1.w,
-                            right: 1.w,
-                          ),
+                              top: 0.5.h,
+                              bottom: 0.5.h,
+                              left: 0.5.w,
+                              right: 0.5.w),
                           height: 4.h,
                           child: ElevatedButton(
                             onPressed: () {
@@ -223,11 +222,10 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                         Expanded(
                           child: Container(
                             margin: EdgeInsets.only(
-                              top: 0.5.h,
-                              bottom: 0.5.h,
-                              left: 1.w,
-                              right: 1.w,
-                            ),
+                                top: 0.5.h,
+                                bottom: 0.5.h,
+                                left: 0.5.w,
+                                right: 0.5.w),
                             height: 4.h,
                             child: ElevatedButton(
                               onPressed: () {
@@ -293,8 +291,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             margin: EdgeInsets.only(
                               top: 0.5.h,
                               bottom: 0.5.h,
-                              left: 1.w,
-                              right: 1.w,
+                              left: 0.5.w,
+                              right: 0.5.w,
                             ),
                             height: 4.h,
                             child: ElevatedButton(
@@ -375,8 +373,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                             margin: EdgeInsets.only(
                               top: 0.5.h,
                               bottom: 0.5.h,
-                              left: 1.w,
-                              right: 1.w,
+                              left: 0.5.w,
+                              right: 0.5.w,
                             ),
                             height: 4.h,
                             child: ElevatedButton(
@@ -440,8 +438,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           margin: EdgeInsets.only(
                             top: 0.5.h,
                             bottom: 0.5.h,
-                            left: 1.w,
-                            right: 1.w,
+                            left: 0.5.w,
+                            right: 0.5.w,
                           ),
                           height: 4.h,
                           child: ElevatedButton(
@@ -506,8 +504,8 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                           margin: EdgeInsets.only(
                             top: 0.5.h,
                             bottom: 0.5.h,
-                            left: 1.w,
-                            right: 1.w,
+                            left: 0.5.w,
+                            right: 0.5.w,
                           ),
                           height: 4.h,
                           child: ElevatedButton(
@@ -520,9 +518,6 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               child: Text(
                                 '3',
                                 style: TextStyle(
-                                  color: selectedFinishCount == 3
-                                      ? Theme.of(context).colorScheme.secondary
-                                      : Colors.white,
                                   fontSize: Theme.of(context)
                                       .textTheme
                                       .bodyMedium!

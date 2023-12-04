@@ -1,9 +1,8 @@
-import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/screens/auth/local_widgets/email_input.dart';
+import 'package:dart_app/models/auth_p.dart';
+import 'package:dart_app/screens/auth/local_widgets/email_input/email_input_forgot_passwrod.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar.dart';
 import 'package:dart_app/utils/button_styles.dart';
-import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -59,7 +58,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                     ),
                   ),
-                  EmailInput(isForgotPasswordScreen: true),
+                  EmailInputForgotPassword(),
                   ResetPasswordBtn(
                       forgotPasswordFormKey: _forgotPasswordFormKey),
                 ],
@@ -79,42 +78,6 @@ class ResetPasswordBtn extends StatelessWidget {
   }) : super(key: key);
 
   final GlobalKey<FormState> forgotPasswordFormKey;
-
-  resetPassword(String email, BuildContext context) async {
-    final bool isConnected = await Utils.hasInternetConnection();
-    if (!isConnected) {
-      return;
-    }
-
-    final Auth_P auth = context.read<Auth_P>();
-
-    auth.setEmailAlreadyExists = await context
-        .read<AuthService>()
-        .emailAlreadyExists(emailTextController.text);
-
-    if (!forgotPasswordFormKey.currentState!.validate()) {
-      return;
-    }
-    forgotPasswordFormKey.currentState!.save();
-
-    // show loading spinner
-    context.loaderOverlay.show();
-    auth.notify();
-
-    await context.read<AuthService>().resetPassword(email.trim());
-
-    passwordTextController.clear();
-    Navigator.of(context).pop();
-    Fluttertoast.showToast(
-      msg: 'Email for resetting password sent!',
-      toastLength: Toast.LENGTH_LONG,
-      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-    );
-
-    // hide loading spinner
-    context.loaderOverlay.hide();
-    auth.notify();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,8 +99,45 @@ class ResetPasswordBtn extends StatelessWidget {
             ),
           ),
         ),
-        onPressed: () => resetPassword(emailTextController.text, context),
+        onPressed: () => resetPassword(context),
       ),
     );
+  }
+
+  resetPassword(BuildContext context) async {
+    final bool isConnected = await Utils.hasInternetConnection();
+    if (!isConnected) {
+      return;
+    }
+
+    final Auth_P auth = context.read<Auth_P>();
+
+    auth.setEmailAlreadyExists = await context
+        .read<AuthService>()
+        .emailAlreadyExists(auth.getForgotPasswordEmail);
+
+    if (!forgotPasswordFormKey.currentState!.validate()) {
+      return;
+    }
+    forgotPasswordFormKey.currentState!.save();
+
+    // show loading spinner
+    context.loaderOverlay.show();
+    auth.notify();
+
+    await context
+        .read<AuthService>()
+        .resetPassword(auth.getForgotPasswordEmail.trim());
+
+    Navigator.of(context).pop();
+    Fluttertoast.showToast(
+      msg: 'Email for resetting password sent!',
+      toastLength: Toast.LENGTH_LONG,
+      fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+    );
+
+    // hide loading spinner
+    context.loaderOverlay.hide();
+    auth.notify();
   }
 }

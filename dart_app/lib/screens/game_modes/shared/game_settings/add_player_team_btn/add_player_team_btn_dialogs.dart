@@ -436,60 +436,7 @@ class AddPlayerTeamBtnDialogs {
                   return Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextFormField(
-                        autofocus: true,
-                        controller:
-                            newTextControllerForAddingNewTeamInGameSettingsX01(),
-                        textInputAction: TextInputAction.done,
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return ('Please enter a team name!');
-                          }
-                          if (gameSettings.checkIfTeamNameExists(value)) {
-                            Utils.setCursorForTextControllerToEnd(
-                                newTeamController);
-                            return 'Team name already exists!';
-                          }
-
-                          return null;
-                        },
-                        keyboardType: TextInputType.text,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                        ],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize,
-                        ),
-                        decoration: InputDecoration(
-                          errorStyle:
-                              TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
-                          fillColor: Utils.darken(
-                              Theme.of(context).colorScheme.primary, 10),
-                          prefixIcon: Icon(
-                            size: ICON_BUTTON_SIZE.h,
-                            Icons.group,
-                            color: Utils.getPrimaryColorDarken(context),
-                          ),
-                          hintText: 'Team',
-                          filled: true,
-                          hintStyle: TextStyle(
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize,
-                              color: Utils.getPrimaryColorDarken(context)),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                        ),
-                      ),
+                      TeamNameTextFormField(gameSettings_P: gameSettings),
                     ],
                   );
                 },
@@ -1024,7 +971,13 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
   @override
   void initState() {
     super.initState();
-    newTextControllerForAddingNewPlayerInGameSettingsX01();
+    newPlayerController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    newPlayerController.dispose();
+    super.dispose();
   }
 
   @override
@@ -1065,6 +1018,79 @@ class _GuestTextFormFieldState extends State<GuestTextFormField> {
           fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
           color: Utils.getPrimaryColorDarken(context),
         ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TeamNameTextFormField extends StatefulWidget {
+  TeamNameTextFormField({Key? key, required this.gameSettings_P})
+      : super(key: key);
+
+  final GameSettings_P gameSettings_P;
+
+  @override
+  State<TeamNameTextFormField> createState() => _TeamNameTextFormFieldState();
+}
+
+class _TeamNameTextFormFieldState extends State<TeamNameTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    newTeamController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    newTeamController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      autofocus: true,
+      controller: newTeamController,
+      textInputAction: TextInputAction.done,
+      validator: (value) {
+        if (value!.trim().isEmpty) {
+          return ('Please enter a team name!');
+        }
+        if (widget.gameSettings_P.checkIfTeamNameExists(value)) {
+          Utils.setCursorForTextControllerToEnd(newTeamController);
+          return 'Team name already exists!';
+        }
+
+        return null;
+      },
+      keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+      ],
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+      ),
+      decoration: InputDecoration(
+        errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
+        fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+        prefixIcon: Icon(
+          size: ICON_BUTTON_SIZE.h,
+          Icons.group,
+          color: Utils.getPrimaryColorDarken(context),
+        ),
+        hintText: 'Team',
+        filled: true,
+        hintStyle: TextStyle(
+            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+            color: Utils.getPrimaryColorDarken(context)),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(20),
           borderSide: BorderSide(

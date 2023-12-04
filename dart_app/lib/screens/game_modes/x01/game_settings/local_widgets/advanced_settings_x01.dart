@@ -22,8 +22,7 @@ class AdvancedSettingsX01 extends StatelessWidget {
         child: Container(
           width: WIDTH_GAMESETTINGS.w,
           alignment: Alignment.centerLeft,
-          padding: EdgeInsets.only(
-              top: 1.h, bottom: Utils.isLandscape(context) ? 1.h : 0),
+          padding: EdgeInsets.only(top: 1.h, bottom: 1.h),
           child: InkWell(
             splashColor:
                 Utils.darken(Theme.of(context).colorScheme.primary, 10),

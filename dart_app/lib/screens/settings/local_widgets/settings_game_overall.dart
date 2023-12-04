@@ -1,8 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/settings_p.dart';
-import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
 import 'package:dart_app/services/auth_service.dart';
-import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,87 +41,11 @@ class SettingsGameOverall extends StatelessWidget {
               ),
             ),
             VibrationFeedbackSwitch(),
-            SettingsCardItem(
-                name: 'Change theme',
-                onItemPressed: _showDialogForChangingTheme),
           ],
         ),
       ),
     );
   }
-}
-
-//todo
-_showDialogForChangingTheme(BuildContext context) {
-  showDialog(
-    barrierDismissible: false,
-    context: context,
-    builder: (context) => AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(DIALOG_SHAPE_ROUNDING),
-      ),
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      contentPadding:
-          Utils.isMobile(context) ? DIALOG_CONTENT_PADDING_MOBILE : null,
-      title: Text(
-        'Change theme',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: Theme.of(context).textTheme.titleSmall!.fontSize,
-        ),
-      ),
-      content: Container(
-        width: DIALOG_NORMAL_WIDTH.w,
-        child: Text(
-          "Change theme",
-          style: TextStyle(
-            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Utils.handleVibrationFeedback(context);
-            Navigator.of(context).pop();
-          },
-          child: Text(
-            'Cancel',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-            ),
-          ),
-          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
-              ),
-            ),
-          ),
-        ),
-        TextButton(
-          onPressed: () {
-            Utils.handleVibrationFeedback(context);
-          },
-          child: Text(
-            'Update',
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-            ),
-          ),
-          style: ButtonStyles.darkPrimaryColorBtnStyle(context).copyWith(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(DIALOG_BTN_SHAPE_ROUNDING),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-  );
 }
 
 class VibrationFeedbackSwitch extends StatefulWidget {

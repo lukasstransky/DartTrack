@@ -33,13 +33,22 @@ class LogoutBtn extends StatelessWidget {
           if (!isConnected) {
             return;
           }
-          context.loaderOverlay.show();
-          context.read<Settings_P>().notify();
+
+          final String username =
+              context.read<AuthService>().getUsernameFromSharedPreferences() ??
+                  '';
+          if (username == 'Guest') {
+            context.loaderOverlay.show();
+            context.read<Settings_P>().notify();
+          }
+
           await context.read<AuthService>().logout(context);
           Navigator.of(context).pushNamed('/loginRegister');
 
-          context.loaderOverlay.hide();
-          context.read<Settings_P>().notify();
+          if (username == 'Guest') {
+            context.loaderOverlay.hide();
+            context.read<Settings_P>().notify();
+          }
         },
         icon: Icon(
           size: ICON_BUTTON_SIZE.h,

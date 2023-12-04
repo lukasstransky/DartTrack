@@ -70,7 +70,9 @@ class PlayerTeamCard extends StatelessWidget {
           label,
           style: TextStyle(
             color: Colors.white,
-            fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+            fontSize: Utils.isLandscape(context)
+                ? 10.sp
+                : Theme.of(context).textTheme.bodyMedium!.fontSize,
           ),
         ),
         color: Utils.getPrimaryColorDarken(context));
@@ -96,102 +98,92 @@ class PlayerTeamCard extends StatelessWidget {
       mobileValue: 14,
       tabletValue: 12,
     );
-    final double _fontSizePoints = Utils.getResponsiveValue(
-      context: context,
-      mobileValue: 25,
-      tabletValue: 20,
-    );
+    final double _fontSizePoints = 20;
 
-    return Row(
-      children: [
-        Container(
-          transform: Matrix4.translationValues(0.0, -2.h, 0.0),
-          padding: EdgeInsets.fromLTRB(1.w, 0, 1.w, 0),
-          child: Image.asset('assets/dart_arrow.png',
-              width: 8.w,
-              color: showLegBeginnerDartAsset
-                  ? Utils.getTextColorDarken(context)
-                  : Colors.transparent),
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                FittedBox(
+    return Container(
+      width: 38.w,
+      child: Row(
+        children: [
+          Container(
+            transform: Matrix4.translationValues(0.0, -2.h, 0.0),
+            padding: EdgeInsets.fromLTRB(1.w, 0, 1.w, 0),
+            child: Image.asset('assets/dart_arrow.png',
+                width: 8.w,
+                color: showLegBeginnerDartAsset
+                    ? Utils.getTextColorDarken(context)
+                    : Colors.transparent),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      stats.getCurrentPoints.toString(),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: _fontSizePoints.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    '(${stats.getCurrentThrownDartsInLeg.toString()})',
+                    style: TextStyle(
+                      color: Utils.getTextColorDarken(context),
+                      fontSize: 8.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
+                ],
+              ),
+              Container(
+                width: 20.w,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(bottom: 0.5.w),
+                child: FittedBox(
                   fit: BoxFit.scaleDown,
                   child: Text(
-                    stats.getCurrentPoints.toString(),
+                    gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Single
+                        ? stats.getPlayer.getName
+                        : stats.getTeam.getName,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: _fontSizePoints.sp,
+                      color: Utils.getTextColorDarken(context),
+                      fontSize: _fontSizeName.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Text(
-                  '(${stats.getCurrentThrownDartsInLeg.toString()})',
-                  style: TextStyle(
-                    color: Utils.getTextColorDarken(context),
-                    fontSize: 8.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              ],
-            ),
-            Container(
-              padding: EdgeInsets.only(bottom: 0.5.w),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Single
-                      ? stats.getPlayer.getName
-                      : stats.getTeam.getName,
-                  style: TextStyle(
-                    color: Utils.getTextColorDarken(context),
-                    fontSize: _fontSizeName.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget AverageAndLastThrow(
       BuildContext context, GameSettingsX01_P gameSettingsX01_P) {
-    return Column(
-      children: [
-        Selector<GameSettingsX01_P, SelectorModel>(
-          selector: (_, gameSettings) => SelectorModel(
-              showAvg: gameSettings.getShowAverage,
-              showLastThrow: gameSettings.getShowLastThrow,
-              showThrownDarts: gameSettings.getShowThrownDartsPerLeg),
-          builder: (_, selectorModel, __) => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              selectorModel.showAvg
-                  ? Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Avg.: ',
-                          style: TextStyle(
-                            color: Utils.getTextColorDarken(context),
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            '${stats.getAverage()}',
+    return Container(
+      width: 38.w,
+      child: Column(
+        children: [
+          Selector<GameSettingsX01_P, SelectorModel>(
+            selector: (_, gameSettings) => SelectorModel(
+                showAvg: gameSettings.getShowAverage,
+                showLastThrow: gameSettings.getShowLastThrow,
+                showThrownDarts: gameSettings.getShowThrownDartsPerLeg),
+            builder: (_, selectorModel, __) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                selectorModel.showAvg
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Avg.: ',
                             style: TextStyle(
                               color: Utils.getTextColorDarken(context),
                               fontSize: Theme.of(context)
@@ -201,28 +193,62 @@ class PlayerTeamCard extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : SizedBox.shrink(),
-              selectorModel.showLastThrow
-                  ? Row(
-                      children: [
-                        Text(
-                          'Last throw: ',
-                          style: TextStyle(
-                            color: Utils.getTextColorDarken(context),
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
-                            fontWeight: FontWeight.bold,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${stats.getAverage()}',
+                              style: TextStyle(
+                                color: Utils.getTextColorDarken(context),
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
+                        ],
+                      )
+                    : SizedBox.shrink(),
+                selectorModel.showLastThrow
+                    ? FittedBox(
+                        fit: BoxFit.scaleDown,
+                        child: Row(
+                          children: [
+                            Text(
+                              'Last throw: ',
+                              style: TextStyle(
+                                color: Utils.getTextColorDarken(context),
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            FittedBox(
+                              fit: BoxFit.scaleDown,
+                              child: Text(
+                                '${stats.getAllScores.length == 0 ? '-' : stats.getAllScores[stats.getAllScores.length - 1].toString()}',
+                                style: TextStyle(
+                                  color: Utils.getTextColorDarken(context),
+                                  fontSize: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .fontSize,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            '${stats.getAllScores.length == 0 ? '-' : stats.getAllScores[stats.getAllScores.length - 1].toString()}',
+                      )
+                    : SizedBox.shrink(),
+                selectorModel.showThrownDarts
+                    ? Row(
+                        children: [
+                          Text(
+                            'Thrown darts: ',
                             style: TextStyle(
                               color: Utils.getTextColorDarken(context),
                               fontSize: Theme.of(context)
@@ -232,69 +258,54 @@ class PlayerTeamCard extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : SizedBox.shrink(),
-              selectorModel.showThrownDarts
-                  ? Row(
-                      children: [
-                        Text(
-                          'Thrown darts: ',
-                          style: TextStyle(
-                            color: Utils.getTextColorDarken(context),
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: Text(
-                            '${stats.getCurrentThrownDartsInLeg.toString()}',
-                            style: TextStyle(
-                              color: Utils.getTextColorDarken(context),
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .fontSize,
-                              fontWeight: FontWeight.bold,
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${stats.getCurrentThrownDartsInLeg.toString()}',
+                              style: TextStyle(
+                                color: Utils.getTextColorDarken(context),
+                                fontSize: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .fontSize,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                    )
-                  : SizedBox.shrink(),
-            ],
+                        ],
+                      )
+                    : SizedBox.shrink(),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Container LegsSetsAmount(
+  Expanded LegsSetsAmount(
       GameSettingsX01_P gameSettingsX01_P, BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(right: 1.w),
-      child: Column(
-        children: [
-          if (gameSettingsX01_P.getSetsEnabled)
+    return Expanded(
+      child: Container(
+        margin: EdgeInsets.only(right: 1.w),
+        child: Column(
+          children: [
+            if (gameSettingsX01_P.getSetsEnabled)
+              Container(
+                padding: EdgeInsets.only(
+                  bottom: 0.5.h,
+                  top: 0.5.h,
+                ),
+                child: _chip(context, 'Sets: ${stats.getSetsWon}'),
+              ),
             Container(
               padding: EdgeInsets.only(
-                bottom: 0.5.h,
-                top: 0.5.h,
+                bottom: gameSettingsX01_P.getSetsEnabled ? 0.5.h : 0,
               ),
-              child: _chip(context, 'Sets: ${stats.getSetsWon}'),
+              child: _chip(context, 'Legs: ${stats.getLegsWon}'),
             ),
-          Container(
-            padding: EdgeInsets.only(
-              bottom: gameSettingsX01_P.getSetsEnabled ? 0.5.h : 0,
-            ),
-            child: _chip(context, 'Legs: ${stats.getLegsWon}'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

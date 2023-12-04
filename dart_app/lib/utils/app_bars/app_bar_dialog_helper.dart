@@ -73,8 +73,14 @@ class CricketDialog extends StatefulWidget {
 }
 
 class _CricketDialogState extends State<CricketDialog> {
-  final PageController _pageController = PageController(initialPage: 0);
+  PageController _pageController = PageController(initialPage: 0);
   final int _amountOfPages = 5;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

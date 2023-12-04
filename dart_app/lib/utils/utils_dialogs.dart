@@ -457,10 +457,8 @@ class UtilsDialogs {
                       }
 
                       Utils.handleVibrationFeedback(context);
-                      Navigator.of(context, rootNavigator: true).pop();
 
-                      game_p.setShowLoadingSpinner = true;
-                      game_p.notify();
+                      Navigator.of(context, rootNavigator: true).pop();
 
                       context.read<OpenGamesFirestore>().setLoadOpenGames =
                           true;
@@ -469,6 +467,11 @@ class UtilsDialogs {
                           .postOpenGame(game_p, context);
 
                       _resetValuesAndNavigateToHome(context, game_p);
+                      if (context.read<User_P>().getAdsEnabled) {
+                        await context
+                            .read<BannerAdManager_P>()
+                            .disposeCorrectBannerAd(game_p);
+                      }
                     },
                     child: Text(
                       'Yes',
@@ -499,7 +502,7 @@ class UtilsDialogs {
 
   static _resetValuesAndNavigateToHome(BuildContext context, dynamic game_p) {
     game_p.reset();
-    Navigator.of(context).pushNamed('/home');
+    Navigator.of(context).pushReplacementNamed('/home');
   }
 
   static bool _onePlayerPerTeam(dynamic gameSettings) {

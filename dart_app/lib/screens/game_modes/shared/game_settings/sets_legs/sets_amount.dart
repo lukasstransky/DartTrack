@@ -96,10 +96,12 @@ class SetsAmount extends StatelessWidget {
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 highlightColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
-                onPressed: () {
-                  Utils.handleVibrationFeedback(context);
-                  _subtractBtnPressed();
-                },
+                onPressed: _shouldShowSubtractBtn()
+                    ? null
+                    : () {
+                        Utils.handleVibrationFeedback(context);
+                        _subtractBtnPressed();
+                      },
                 padding: EdgeInsets.zero,
                 constraints: Utils.isMobile(context) ? BoxConstraints() : null,
                 icon: Icon(
@@ -127,10 +129,12 @@ class SetsAmount extends StatelessWidget {
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
                 splashColor:
                     Utils.darken(Theme.of(context).colorScheme.primary, 10),
-                onPressed: () {
-                  Utils.handleVibrationFeedback(context);
-                  _addBtnPressed();
-                },
+                onPressed: _shouldShowAddBtn()
+                    ? null
+                    : () {
+                        Utils.handleVibrationFeedback(context);
+                        _addBtnPressed();
+                      },
                 padding: EdgeInsets.zero,
                 constraints: Utils.isMobile(context) ? BoxConstraints() : null,
                 icon: Icon(

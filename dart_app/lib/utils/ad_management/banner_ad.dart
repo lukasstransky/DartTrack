@@ -54,7 +54,7 @@ class MyBannerAd {
     final currentTime = DateTime.now();
     if (disposeInstant ||
         _lastAdShownTime == null ||
-        currentTime.difference(_lastAdShownTime!).inSeconds > 60) {
+        currentTime.difference(_lastAdShownTime!).inSeconds > 5) {
       dispose();
     }
   }

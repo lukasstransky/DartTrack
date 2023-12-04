@@ -1,4 +1,4 @@
-import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/auth_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/utils.dart';

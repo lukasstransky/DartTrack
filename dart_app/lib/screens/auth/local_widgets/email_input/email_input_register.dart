@@ -1,6 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/models/auth_p.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -8,25 +7,42 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class EmailInput extends StatelessWidget {
-  final bool isForgotPasswordScreen;
-  final bool isRegisterScreen;
+class EmailInputRegister extends StatefulWidget {
+  const EmailInputRegister({
+    Key? key,
+  }) : super(key: key);
 
-  const EmailInput(
-      {Key? key,
-      this.isForgotPasswordScreen = false,
-      this.isRegisterScreen = false})
-      : super(key: key);
+  @override
+  State<EmailInputRegister> createState() => _EmailInputRegisterState();
+}
+
+class _EmailInputRegisterState extends State<EmailInputRegister> {
+  late TextEditingController emailRegisterTextController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailRegisterTextController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailRegisterTextController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final Auth_P auth = context.read<Auth_P>();
+    final Auth_P auth_p = context.read<Auth_P>();
+
+    emailRegisterTextController.addListener(() {
+      auth_p.setRegisterEmail = emailRegisterTextController.text;
+    });
 
     return Container(
       width: 80.w,
       child: TextFormField(
-        key: Key('emailInput'),
-        controller: emailTextController,
+        controller: emailRegisterTextController,
         keyboardType: TextInputType.emailAddress,
         textInputAction: TextInputAction.next,
         inputFormatters: [
@@ -37,15 +53,12 @@ class EmailInput extends StatelessWidget {
             return ('Email is required!');
           }
           if (!RegExp(EMAIL_REGEX).hasMatch(value)) {
-            Utils.setCursorForTextControllerToEnd(emailTextController);
+            Utils.setCursorForTextControllerToEnd(emailRegisterTextController);
             return ('Please enter a valid email!');
           }
-          if (isRegisterScreen && auth.getEmailAlreadyExists) {
-            Utils.setCursorForTextControllerToEnd(emailTextController);
+          if (auth_p.getEmailAlreadyExists) {
+            Utils.setCursorForTextControllerToEnd(emailRegisterTextController);
             return 'Email already exists!';
-          }
-          if (isForgotPasswordScreen && !auth.getEmailAlreadyExists) {
-            return 'Email does not exist!';
           }
           return null;
         },

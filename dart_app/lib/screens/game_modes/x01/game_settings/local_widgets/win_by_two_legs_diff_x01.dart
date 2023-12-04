@@ -248,15 +248,18 @@ _showDialogForSuddenDeath(
                               Theme.of(context).colorScheme.primary, 10),
                           highlightColor: Utils.darken(
                               Theme.of(context).colorScheme.primary, 10),
-                          onPressed: () {
-                            Utils.handleVibrationFeedback(context);
-                            setState(() {
-                              if (gameSettingsX01.getMaxExtraLegs == 1) return;
-                              gameSettingsX01.setMaxExtraLegs =
-                                  gameSettingsX01.getMaxExtraLegs - 1;
-                              ;
-                            });
-                          },
+                          onPressed: gameSettingsX01.getMaxExtraLegs <= 1
+                              ? null
+                              : () {
+                                  Utils.handleVibrationFeedback(context);
+                                  setState(() {
+                                    if (gameSettingsX01.getMaxExtraLegs == 1)
+                                      return;
+                                    gameSettingsX01.setMaxExtraLegs =
+                                        gameSettingsX01.getMaxExtraLegs - 1;
+                                    ;
+                                  });
+                                },
                           padding: EdgeInsets.zero,
                           constraints: BoxConstraints(),
                           icon: Icon(
@@ -289,16 +292,19 @@ _showDialogForSuddenDeath(
                             Theme.of(context).colorScheme.primary, 10),
                         highlightColor: Utils.darken(
                             Theme.of(context).colorScheme.primary, 10),
-                        onPressed: () {
-                          Utils.handleVibrationFeedback(context);
-                          if (gameSettingsX01.getMaxExtraLegs >= MAX_EXTRA_LEGS)
-                            return;
-                          setState(() {
-                            gameSettingsX01.setMaxExtraLegs =
-                                gameSettingsX01.getMaxExtraLegs + 1;
-                            ;
-                          });
-                        },
+                        onPressed:
+                            gameSettingsX01.getMaxExtraLegs == MAX_EXTRA_LEGS
+                                ? null
+                                : () {
+                                    Utils.handleVibrationFeedback(context);
+                                    if (gameSettingsX01.getMaxExtraLegs >=
+                                        MAX_EXTRA_LEGS) return;
+                                    setState(() {
+                                      gameSettingsX01.setMaxExtraLegs =
+                                          gameSettingsX01.getMaxExtraLegs + 1;
+                                      ;
+                                    });
+                                  },
                         padding: EdgeInsets.zero,
                         constraints: BoxConstraints(),
                         icon: Icon(
@@ -410,7 +416,7 @@ _showInfoDialogForSuddenDeath(BuildContext context) {
               children: [
                 TextSpan(
                     text:
-                        "If the score is tied after the regular number of legs, a deciding leg is played called "),
+                        "If the score is tied after the regular number of legs, a deciding leg is played, called "),
                 TextSpan(
                   text: "Sudden death",
                   style: TextStyle(
@@ -478,10 +484,10 @@ _showInfoDialogForMaxExtraLegs(BuildContext context) {
               children: <TextSpan>[
                 TextSpan(
                   text:
-                      "The additional maximum number of legs until the Sudden death leg is specified here. By default, it is set to 2 legs.\nFor example, in case of",
+                      "The additional maximum number of legs until the Sudden death leg, is specified here. By default, it is set to 2 legs.\nFor example, in case of",
                 ),
                 TextSpan(
-                  text: " First to 5 legs",
+                  text: " First to 5 legs,",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 TextSpan(

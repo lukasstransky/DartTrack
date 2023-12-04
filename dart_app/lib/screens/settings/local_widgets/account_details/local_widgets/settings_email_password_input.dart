@@ -1,29 +1,53 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/auth.dart';
-import 'package:dart_app/utils/globals.dart';
+import 'package:dart_app/models/auth_p.dart';
+import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/utils/utils.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class PasswordInput extends StatelessWidget {
-  const PasswordInput({Key? key}) : super(key: key);
+class EmailPasswordInputField extends StatefulWidget {
+  const EmailPasswordInputField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  State<EmailPasswordInputField> createState() => _PasswordInputFieldState();
+}
+
+class _PasswordInputFieldState extends State<EmailPasswordInputField> {
+  late TextEditingController settingsEmailPasswordController;
+
+  @override
+  void initState() {
+    settingsEmailPasswordController = new TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    settingsEmailPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final Auth_P auth = context.read<Auth_P>();
+    final Settings_P settings = context.read<Settings_P>();
+
+    settingsEmailPasswordController.addListener(() {
+      settings.setEmailPassword = settingsEmailPasswordController.text;
+    });
 
     return Container(
-      key: Key('passwordInput'),
-      padding: EdgeInsets.only(top: 1.h),
       width: 80.w,
       child: Selector<Auth_P, bool>(
         selector: (_, auth) => auth.getPasswordVisible,
         builder: (_, passwordVisible, __) => TextFormField(
+          autofocus: true,
           obscureText: !passwordVisible,
-          controller: passwordTextController,
+          controller: settingsEmailPasswordController,
           keyboardType: TextInputType.text,
           textInputAction: TextInputAction.done,
           inputFormatters: [
@@ -31,8 +55,10 @@ class PasswordInput extends StatelessWidget {
           ],
           validator: (value) {
             if (value!.trim().isEmpty) {
-              passwordTextController.clear();
               return ('Password is required!');
+            }
+            if (settings.getErrorMsg != '') {
+              return (settings.getErrorMsg);
             }
             return null;
           },
@@ -48,24 +74,24 @@ class PasswordInput extends StatelessWidget {
               color: Utils.getPrimaryColorDarken(context),
             ),
             suffixIcon: IconButton(
-              splashRadius: SPLASH_RADIUS,
               splashColor:
                   Utils.darken(Theme.of(context).colorScheme.primary, 10),
+              iconSize: ICON_BUTTON_SIZE.h,
+              splashRadius: SPLASH_RADIUS,
               highlightColor:
                   Utils.darken(Theme.of(context).colorScheme.primary, 10),
               icon: Icon(
-                size: ICON_BUTTON_SIZE.h,
-                passwordVisible ? Icons.visibility : Icons.visibility_off,
-              ),
+                  passwordVisible ? Icons.visibility : Icons.visibility_off),
               color: Utils.getPrimaryColorDarken(context),
               onPressed: () {
+                Utils.handleVibrationFeedback(context);
                 auth.setPasswordVisible = !passwordVisible;
                 auth.notify();
               },
             ),
             filled: true,
             fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
-            hintText: 'Password',
+            hintText: 'Current password',
             hintStyle: TextStyle(
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
               color: Utils.getPrimaryColorDarken(context),

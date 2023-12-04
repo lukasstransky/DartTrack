@@ -4,7 +4,6 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/games/game_cricket_p.dart';
 import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/game_field/game_field_c.dart';
-import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/player_to_throw_c.dart';
 import 'package:dart_app/screens/game_modes/cricket/game/local_widgets/submit_revert_btns_c.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/single_double_or_tripple.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/local_widgets/fifteen_to_twenty.dart';
@@ -41,7 +40,11 @@ class _GameCricketState extends State<GameCricket> {
         MediaQuery.of(context).padding;
 
     if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
-      context.read<BannerAdManager_P>().getCricketGameScreenBannerAd!.dispose();
+      final BannerAdManager_P bannerAdManager =
+          context.read<BannerAdManager_P>();
+      if (bannerAdManager.getCricketGameScreenBannerAd != null) {
+        bannerAdManager.getCricketGameScreenBannerAd!.dispose();
+      }
     }
 
     return WillPopScope(
@@ -84,29 +87,35 @@ class _GameCricketState extends State<GameCricket> {
             ),
           ),
         GameFieldCricket(),
-        PlayerToThrow(),
-        ThrownDarts(mode: GameMode.Cricket),
-        SubmitRevertnBtnsCricket(),
-        Selector<GameCricket_P, SelectorModel>(
-          selector: (_, gameCricket) => SelectorModel(
-            currentThreeDarts: gameCricket.getCurrentThreeDarts,
-            pointType: gameCricket.getCurrentPointType,
+        Container(
+          height: 28.h,
+          child: Column(
+            children: [
+              ThrownDarts(mode: GameMode.Cricket),
+              SubmitRevertnBtnsCricket(),
+              Selector<GameCricket_P, SelectorModel>(
+                selector: (_, gameCricket) => SelectorModel(
+                  currentThreeDarts: gameCricket.getCurrentThreeDarts,
+                  pointType: gameCricket.getCurrentPointType,
+                ),
+                builder: (_, currentPointType, __) =>
+                    FifteenToTwentyBtnsThreeDarts(mode: GameMode.Cricket),
+              ),
+              Selector<GameCricket_P, SelectorModel>(
+                selector: (_, gameCricket) => SelectorModel(
+                  currentThreeDarts: gameCricket.getCurrentThreeDarts,
+                  pointType: gameCricket.getCurrentPointType,
+                ),
+                builder: (_, currentPointType, __) => Container(
+                  height: 5.h,
+                  child: SingleDoubleOrTrippleBtns(
+                    mode: GameMode.Cricket,
+                  ),
+                ),
+              ),
+            ],
           ),
-          builder: (_, currentPointType, __) =>
-              FifteenToTwentyBtnsThreeDarts(mode: GameMode.Cricket),
-        ),
-        Selector<GameCricket_P, SelectorModel>(
-          selector: (_, gameCricket) => SelectorModel(
-            currentThreeDarts: gameCricket.getCurrentThreeDarts,
-            pointType: gameCricket.getCurrentPointType,
-          ),
-          builder: (_, currentPointType, __) => Container(
-            height: 5.h,
-            child: SingleDoubleOrTrippleBtns(
-              mode: GameMode.Cricket,
-            ),
-          ),
-        ),
+        )
       ],
     );
   }
@@ -114,11 +123,10 @@ class _GameCricketState extends State<GameCricket> {
   Row _buildLandscapeLayout() {
     return Row(
       children: [
-        Expanded(child: GameFieldCricket()),
+        GameFieldCricket(),
         Expanded(
           child: Column(
             children: [
-              PlayerToThrow(),
               ThrownDarts(mode: GameMode.Cricket),
               SubmitRevertnBtnsCricket(),
               Selector<GameCricket_P, SelectorModel>(

@@ -82,8 +82,7 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
     setMode = ScoreTrainingModeEnum.MaxRounds;
     setMaxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
     setInputMethod = InputMethod.Round;
-    newTextControllerMaxRoundsOrPointsGameSettingsSct(
-        DEFAULT_ROUNDS_SCORE_TRAINING.toString());
+
     setFormKeyMaxRoundsOrPoints = GlobalKey<FormState>();
     setPlayers = [];
   }

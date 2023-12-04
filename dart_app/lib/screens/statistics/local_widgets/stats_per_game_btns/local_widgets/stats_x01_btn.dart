@@ -5,9 +5,14 @@ import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class StatsX01Btn extends StatelessWidget {
+class StatsX01Btn extends StatefulWidget {
   const StatsX01Btn({Key? key}) : super(key: key);
 
+  @override
+  State<StatsX01Btn> createState() => _StatsX01BtnState();
+}
+
+class _StatsX01BtnState extends State<StatsX01Btn> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,6 +24,7 @@ class StatsX01Btn extends StatelessWidget {
           Utils.handleVibrationFeedback(context);
           Navigator.of(context).pushNamed('/statsPerGameList',
               arguments: {'mode': GameMode.X01});
+          ;
         },
         child: FittedBox(
           fit: BoxFit.scaleDown,

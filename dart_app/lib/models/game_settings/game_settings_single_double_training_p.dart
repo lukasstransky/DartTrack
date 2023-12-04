@@ -2,7 +2,6 @@ import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/player.dart';
-import 'package:dart_app/utils/globals.dart';
 import 'package:flutter/material.dart';
 
 class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
@@ -83,8 +82,6 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
     setTargetNumber = DEFAULT_TARGET_NUMBER;
     setIsTargetNumberEnabled = false;
     setAmountOfRounds = DEFUALT_ROUNDS_FOR_TARGET_NUMBER;
-    targetNumberTextController.text = DEFAULT_TARGET_NUMBER.toString();
-    amountOfRoundsController.text = DEFUALT_ROUNDS_FOR_TARGET_NUMBER.toString();
   }
 
   String getModeStringFinishScreen(

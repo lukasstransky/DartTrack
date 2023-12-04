@@ -81,9 +81,6 @@ class MostScoredPointValue extends StatelessWidget {
 
   _showDialogForMostScoredPointInput(
       BuildContext context, GameSettingsX01_P gameSettingsX01, int i) async {
-    newTextControllerForMostScoredPointGameSettingsX01(
-        gameSettingsX01.getMostScoredPoints[i].toString());
-
     Utils.forcePortraitMode(context);
 
     showDialog(
@@ -111,52 +108,7 @@ class MostScoredPointValue extends StatelessWidget {
               left: 5.w,
               right: 5.w,
             ),
-            child: TextFormField(
-              controller: mostScoredPointController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return ('Please enter a value!');
-                }
-                if (int.parse(value) > 180) {
-                  return ('Maximal value is 180!');
-                }
-                if (gameSettingsX01.getMostScoredPoints.contains(value)) {
-                  return ('Value already defined!');
-                }
-
-                return null;
-              },
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(3),
-              ],
-              textAlignVertical: TextAlignVertical.center,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-              ),
-              decoration: InputDecoration(
-                errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
-                hintText: 'Value',
-                fillColor:
-                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
-                filled: true,
-                hintStyle: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  color: Utils.getPrimaryColorDarken(context),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
-                  ),
-                ),
-              ),
-            ),
+            child: MostScoredPointTextFormField(),
           ),
           actions: [
             TextButton(
@@ -220,5 +172,80 @@ class MostScoredPointValue extends StatelessWidget {
     gameSettingsX01.notify();
     Navigator.of(context).pop();
     mostScoredPointController.clear();
+  }
+}
+
+class MostScoredPointTextFormField extends StatefulWidget {
+  MostScoredPointTextFormField({Key? key}) : super(key: key);
+
+  @override
+  State<MostScoredPointTextFormField> createState() =>
+      _MostScoredPointTextFormFieldState();
+}
+
+class _MostScoredPointTextFormFieldState
+    extends State<MostScoredPointTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    mostScoredPointController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    mostScoredPointController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: mostScoredPointController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ('Please enter a value!');
+        }
+        if (int.parse(value) > 180) {
+          return ('Maximal value is 180!');
+        }
+        if (context
+            .read<GameSettingsX01_P>()
+            .getMostScoredPoints
+            .contains(value)) {
+          return ('Value already defined!');
+        }
+
+        return null;
+      },
+      autofocus: true,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(3),
+      ],
+      textAlignVertical: TextAlignVertical.center,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+      ),
+      decoration: InputDecoration(
+        errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
+        hintText: 'Value',
+        fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+        filled: true,
+        hintStyle: TextStyle(
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+          color: Utils.getPrimaryColorDarken(context),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
+    );
   }
 }

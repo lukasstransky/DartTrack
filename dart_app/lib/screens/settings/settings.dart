@@ -3,7 +3,7 @@ import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/logout_btn.dart';
 import 'package:dart_app/screens/settings/local_widgets/about_and_support/settings_about_and_support.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_account_data.dart';
-import 'package:dart_app/screens/settings/local_widgets/settings_account_details.dart';
+import 'package:dart_app/screens/settings/local_widgets/account_details/settings_account_details.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_game_overall.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_settings_tab.dart';

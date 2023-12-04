@@ -3,7 +3,6 @@ import 'package:dart_app/models/game_settings/game_settings_score_training_p.dar
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
-import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -20,10 +19,18 @@ class MulitplePlayerStatsScoreTraining extends StatefulWidget {
 
 class _MulitplePlayerStatsScoreTrainingState
     extends State<MulitplePlayerStatsScoreTraining> {
+  late ScrollController scrollController;
+
   @override
   void initState() {
+    scrollController = new ScrollController();
     super.initState();
-    newScrollControllerScoreTrainingPlayerEntries();
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
@@ -102,7 +109,7 @@ class _MulitplePlayerStatsScoreTrainingState
             shouldRebuild: (previous, next) => true,
             builder: (_, playerStats, __) => ListView.builder(
               scrollDirection: Axis.vertical,
-              controller: newScrollControllerScoreTrainingPlayerEntries(),
+              controller: scrollController,
               itemCount: playerStats.length,
               shrinkWrap: true,
               itemBuilder: (BuildContext context, int index) {

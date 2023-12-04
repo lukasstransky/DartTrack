@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/firestore/stats_firestore_c.dart';
 import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
@@ -11,12 +9,10 @@ import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/games/game_single_double_training_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
-import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/shared/finish/stats_card/stats_card.dart';
 import 'package:dart_app/screens/game_modes/x01/finish/local_widgets/stats_card/stats_card_x01.dart';
 import 'package:dart_app/services/firestore/firestore_service_games.dart';
 import 'package:dart_app/services/firestore/firestore_service_player_stats.dart';
-import 'package:dart_app/utils/ad_management/banner_ad_widget.dart';
 import 'package:dart_app/utils/app_bars/custom_app_bar_stats_list.dart';
 import 'package:dart_app/utils/utils.dart';
 
@@ -37,12 +33,6 @@ class StatsPerGameList extends StatefulWidget {
 class _StatsPerGameListState extends State<StatsPerGameList> {
   GameMode _mode = GameMode.X01;
   bool _showLoadingSpinner = false;
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/6449392696
-  // android -> ca-app-pub-8582367743573228/3685582263
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
   didChangeDependencies() {
@@ -168,11 +158,12 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
     if (statsFirestore is StatsFirestoreX01_P) {
       await statsFirestore.calculateX01Stats();
-      setState(() {
-        _showLoadingSpinner = false;
-      });
-      statsFirestore.notify();
     }
+
+    setState(() {
+      _showLoadingSpinner = false;
+    });
+    statsFirestore.notify();
   }
 
   _getCard(Game_P game) {
@@ -220,11 +211,6 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
 
       widgetToReturn = Column(
         children: [
-          if (context.read<User_P>().getAdsEnabled)
-            BannerAdWidget(
-              bannerAdUnitId: _bannerAdUnitId,
-              bannerAdEnum: BannerAdEnum.StatsPerGameList,
-            ),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
@@ -329,6 +315,7 @@ class _StatsPerGameListState extends State<StatsPerGameList> {
   _getWidgetWithSelector() {
     final dynamic statsFirestore =
         Utils.getFirestoreStatsProviderBasedOnMode(_mode, context);
+    statsFirestore.favouriteGames.sort();
 
     List<Game_P> games = statsFirestore.games;
     if (_mode == GameMode.X01 &&

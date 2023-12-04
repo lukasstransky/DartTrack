@@ -127,17 +127,7 @@ class _StatsCardState extends State<StatsCard> {
                         ),
                       ),
                       style: ButtonStyle(
-                        splashFactory: InkRipple.splashFactory,
-                        shadowColor: Utils.getColor(Utils.darken(
-                                Theme.of(context).colorScheme.primary, 30)
-                            .withOpacity(0.3)),
-                        overlayColor:
-                            MaterialStateProperty.resolveWith<Color>((states) {
-                          if (states.contains(MaterialState.pressed))
-                            return Utils.darken(
-                                Theme.of(context).colorScheme.primary, 10);
-                          return Colors.transparent;
-                        }),
+                        overlayColor: Utils.getColor(Colors.transparent),
                       ),
                     ),
                   ),

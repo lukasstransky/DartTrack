@@ -28,43 +28,39 @@ class GameFieldCricket extends StatelessWidget {
     final bool _evenPlayersOrTeams =
         _playerOrTeamGameStatistics.length % 2 == 0;
 
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          left: shouldDisplayLeftBorder(
-                  _gameSettingsCricket, _gameCricket, context)
-              ? BorderSide(
-                  width: GENERAL_BORDER_WIDTH.w,
-                  color: Utils.getPrimaryColorDarken(context),
-                )
-              : BorderSide.none,
-          bottom: _gameCricket.getSafeAreaPadding.bottom > 0 &&
-                  Utils.isLandscape(context)
-              ? BorderSide(
-                  width: GENERAL_BORDER_WIDTH.w,
-                  color: Utils.getPrimaryColorDarken(context),
-                )
-              : BorderSide.none,
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            left: shouldDisplayLeftBorder(
+                    _gameSettingsCricket, _gameCricket, context)
+                ? BorderSide(
+                    width: GENERAL_BORDER_WIDTH.w,
+                    color: Utils.getPrimaryColorDarken(context),
+                  )
+                : BorderSide.none,
+            bottom: _gameCricket.getSafeAreaPadding.bottom > 0 &&
+                    Utils.isLandscape(context)
+                ? BorderSide(
+                    width: GENERAL_BORDER_WIDTH.w,
+                    color: Utils.getPrimaryColorDarken(context),
+                  )
+                : BorderSide.none,
+          ),
         ),
-      ),
-      child: Selector<GameCricket_P, SelectorModel>(
-        selector: (_, gameCricket) => SelectorModel(
-          playerStats: gameCricket.getPlayerGameStatistics,
-          teamStats: gameCricket.getTeamGameStatistics,
-        ),
-        shouldRebuild: (previous, next) => true,
-        builder: (_, selectorModel, __) => Column(
-          children: [
-            PlayerOrTeamNamesAndScores(
-              evenPlayersOrTeams: _evenPlayersOrTeams,
-              playerOrTeamGameStatistics: _playerOrTeamGameStatistics,
-            ),
-            wrapExpandedIfLandscape(
-              context,
-              Container(
-                height: Utils.isLandscape(context)
-                    ? null
-                    : _calcHeight(_gameSettingsCricket),
+        child: Selector<GameCricket_P, SelectorModel>(
+          selector: (_, gameCricket) => SelectorModel(
+            playerStats: gameCricket.getPlayerGameStatistics,
+            teamStats: gameCricket.getTeamGameStatistics,
+          ),
+          shouldRebuild: (previous, next) => true,
+          builder: (_, selectorModel, __) => Column(
+            children: [
+              PlayerOrTeamNamesAndScores(
+                evenPlayersOrTeams: _evenPlayersOrTeams,
+                playerOrTeamGameStatistics: _playerOrTeamGameStatistics,
+              ),
+              Expanded(
                 child: Row(
                   children: [
                     if (!_evenPlayersOrTeams)
@@ -89,32 +85,15 @@ class GameFieldCricket extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-            PlayerOrTeamStatsCricket(
-              evenPlayersOrTeams: _evenPlayersOrTeams,
-              playerOrTeamGameStatistics: _playerOrTeamGameStatistics,
-            ),
-          ],
+              PlayerOrTeamStatsCricket(
+                evenPlayersOrTeams: _evenPlayersOrTeams,
+                playerOrTeamGameStatistics: _playerOrTeamGameStatistics,
+              ),
+            ],
+          ),
         ),
       ),
     );
-  }
-
-  Widget wrapExpandedIfLandscape(BuildContext context, Widget child) {
-    return Utils.isLandscape(context) ? Expanded(child: child) : child;
-  }
-
-  double _calcHeight(GameSettingsCricket_P gameSettingsCricket) {
-    if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      if (gameSettingsCricket.getSetsEnabled) {
-        return 29.h;
-      }
-      return 33.h;
-    } else if (gameSettingsCricket.getSingleOrTeam == SingleOrTeamEnum.Single &&
-        gameSettingsCricket.getSetsEnabled) {
-      return 35.h;
-    }
-    return 40.h;
   }
 
   bool shouldDisplayLeftBorder(GameSettingsCricket_P gameSettingsCricket,

@@ -137,9 +137,13 @@ class _FilterBarState extends State<FilterBar> {
                     statisticsFirestore.getCustomStartDate(),
                     statisticsFirestore.getCustomEndDate(false)),
                 showActionButtons: true,
-                onSubmit: (p0) {
+                onSubmit: (p0) async {
                   statisticsFirestore.customDateFilterRange = _range;
                   statisticsFirestore.customBtnDateRange = _customBtnDateRange;
+
+                  statisticsFirestore.setShowLoadingSpinner = true;
+                  statisticsFirestore.notify();
+
                   statisticsFirestore.filterGamesAndPlayerOrTeamStatsByDate(
                     FilterValue.Custom,
                     context,
@@ -153,6 +157,9 @@ class _FilterBarState extends State<FilterBar> {
                     _showDatePicker = false;
                   });
 
+                  await Future.delayed(Duration(milliseconds: DEFAULT_DELY));
+
+                  statisticsFirestore.setShowLoadingSpinner = false;
                   statisticsFirestore.notify();
                 },
                 onCancel: () {
@@ -214,6 +221,9 @@ class _FilterBarState extends State<FilterBar> {
     final FirestoreServicePlayerStats firestoreServicePlayerStats =
         context.read<FirestoreServicePlayerStats>();
 
+    statisticsFirestore.setShowLoadingSpinner = true;
+    statisticsFirestore.notify();
+
     _setCurrentDate();
 
     _showDatePicker = false;
@@ -227,6 +237,10 @@ class _FilterBarState extends State<FilterBar> {
       firestoreServicePlayerStats,
     );
     statisticsFirestore.calculateX01Stats();
+
+    await Future.delayed(Duration(milliseconds: DEFAULT_DELY));
+
+    statisticsFirestore.setShowLoadingSpinner = false;
     statisticsFirestore.notify();
   }
 }

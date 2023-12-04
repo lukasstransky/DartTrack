@@ -249,7 +249,6 @@ class FirestoreServiceGames {
       if (isX01) {
         statsFirestore.gamesLoaded = true;
       }
-      statsFirestore.notify();
     }
   }
 

@@ -14,8 +14,6 @@ class BannerAdManager_P with ChangeNotifier {
   MyBannerAd? cricketGameStatsScreenBannerAd;
   MyBannerAd? singleDoubleTrainingGameStatsScreenBannerAd;
   MyBannerAd? scoreTrainingGameStatsScreenBannerAd;
-  MyBannerAd? statsPerGameList;
-  MyBannerAd? statsPerGameListFiltered;
   // finish screen
   MyBannerAd? x01FinishScreenBannerAd;
   MyBannerAd? cricketFinishScreenBannerAd;
@@ -56,14 +54,6 @@ class BannerAdManager_P with ChangeNotifier {
           MyBannerAd? scoreTrainingGameStatsScreenBannerAd) =>
       this.scoreTrainingGameStatsScreenBannerAd =
           scoreTrainingGameStatsScreenBannerAd;
-
-  MyBannerAd? get getStatsPerGameList => this.statsPerGameList;
-  set setStatsPerGameList(MyBannerAd? statsPerGameList) =>
-      this.statsPerGameList = statsPerGameList;
-
-  MyBannerAd? get getStatsPerGameListFiltered => this.statsPerGameListFiltered;
-  set setStatsPerGameListFiltered(MyBannerAd? statsPerGameListFiltered) =>
-      this.statsPerGameListFiltered = statsPerGameListFiltered;
 
   MyBannerAd? get getX01FinishScreenBannerAd => this.x01FinishScreenBannerAd;
   set setX01FinishScreenBannerAd(MyBannerAd? x01FinishScreenBannerAd) =>
@@ -122,10 +112,6 @@ class BannerAdManager_P with ChangeNotifier {
         return getSingleDoubleTrainingGameStatsScreenBannerAd;
       case BannerAdEnum.ScoreTrainingStatsScreen:
         return getScoreTrainingGameStatsScreenBannerAd;
-      case BannerAdEnum.StatsPerGameList:
-        return getStatsPerGameList;
-      case BannerAdEnum.StatsPerGameListFiltered:
-        return getStatsPerGameListFiltered;
       case BannerAdEnum.X01FinishScreen:
         return getX01FinishScreenBannerAd;
       case BannerAdEnum.CricketFinishScreen:
@@ -145,15 +131,23 @@ class BannerAdManager_P with ChangeNotifier {
     }
   }
 
-  void disposeCorrectBannerAd(Game_P game) {
+  disposeCorrectBannerAd(Game_P game) {
     if (game is GameX01_P) {
-      getX01GameScreenBannerAd!.dispose();
+      if (getX01GameScreenBannerAd != null) {
+        getX01GameScreenBannerAd!.dispose();
+      }
     } else if (game is GameCricket_P) {
-      getCricketGameScreenBannerAd!.dispose();
+      if (getCricketGameScreenBannerAd != null) {
+        getCricketGameScreenBannerAd!.dispose();
+      }
     } else if (game is GameSingleDoubleTraining_P) {
-      getSingleDoubleTrainingGameScreenBannerAd!.dispose();
+      if (getSingleDoubleTrainingGameScreenBannerAd != null) {
+        getSingleDoubleTrainingGameScreenBannerAd!.dispose();
+      }
     } else if (game is GameScoreTraining_P) {
-      getScoreTrainingGameScreenBannerAd!.dispose();
+      if (getScoreTrainingGameScreenBannerAd != null) {
+        getScoreTrainingGameScreenBannerAd!.dispose();
+      }
     }
   }
 }

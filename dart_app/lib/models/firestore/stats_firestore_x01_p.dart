@@ -90,6 +90,8 @@ class StatsFirestoreX01_P with ChangeNotifier {
 
   String _customBtnDateRange = '';
 
+  bool _showLoadingSpinner = true;
+
   get getCountOfGamesWon => this._countOfGamesWon;
 
   set setCountOfGamesWon(value) => this._countOfGamesWon = value;
@@ -269,6 +271,9 @@ class StatsFirestoreX01_P with ChangeNotifier {
   String get customBtnDateRange => this._customBtnDateRange;
 
   set customBtnDateRange(String value) => this._customBtnDateRange = value;
+
+  bool get getShowLoadingSpinner => this._showLoadingSpinner;
+  set setShowLoadingSpinner(bool value) => this._showLoadingSpinner = value;
 
   DateTime getDateTimeFromCurrentFilterValue() {
     final DateTime now = new DateTime.now();

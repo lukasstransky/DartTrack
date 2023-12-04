@@ -1031,4 +1031,8 @@ class Utils {
     }
     return true;
   }
+
+  static Widget wrapExpandedIfLandscape(BuildContext context, Widget child) {
+    return Utils.isLandscape(context) ? Expanded(child: child) : child;
+  }
 }

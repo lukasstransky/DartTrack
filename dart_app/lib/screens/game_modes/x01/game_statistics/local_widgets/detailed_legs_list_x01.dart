@@ -62,7 +62,7 @@ class _DetailedLegsListX01State extends State<DetailedLegsListX01> {
           expandedHeaderPadding: EdgeInsets.all(0),
           expansionCallback: (int index, bool isExpanded) {
             setState(() {
-              _items[index].isExpanded = !isExpanded;
+              _items[index].isExpanded = isExpanded;
             });
           },
           children: _items

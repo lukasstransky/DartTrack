@@ -129,9 +129,8 @@ class SettingsCardItem extends StatelessWidget {
   }
 
   _launchEmail(BuildContext context) async {
-    //TODO adjust
-    final String email = 'your_email@example.com';
-    final String subject = 'App Help & Support';
+    final String email = 'darttrack.help@gmail.com';
+    final String subject = 'Help & Support';
     final String body = 'Hello, I need help with...';
     final String url =
         'mailto:$email?subject=${Uri.encodeFull(subject)}&body=${Uri.encodeFull(body)}';

@@ -77,7 +77,8 @@ class PlayersListEntry extends StatelessWidget {
                         fontSize:
                             Theme.of(context).textTheme.bodyMedium!.fontSize,
                         color: Utils.getTextColorForGameSettingsPage(),
-                        fontWeight: player.getName == currentUsername
+                        fontWeight: player.getName == currentUsername &&
+                                currentUsername != 'Guest'
                             ? FontWeight.bold
                             : null,
                       ),

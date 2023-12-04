@@ -183,12 +183,12 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
         Utils.getFirestoreStatsProviderBasedOnMode(widget.mode, context);
     final String gameId =
         widget.gameId != null ? widget.gameId as String : g_gameId;
+    final Game_P game = _getGameById(gameId, statsFirestore);
 
     if (widget.isFavouriteGame) {
       _changeFavouriteStateOfGame(gameId, false);
 
       if (!widget.isFinishScreen) {
-        final Game_P game = _getGameById(gameId, statsFirestore);
         game.setIsFavouriteGame = false;
 
         // remove game from the favourites
@@ -197,13 +197,11 @@ class _CustomAppBarWithHeartState extends State<CustomAppBarWithHeart> {
     } else {
       _changeFavouriteStateOfGame(gameId, true);
 
-      if (!widget.isFinishScreen) {
-        final Game_P game = _getGameById(gameId, statsFirestore);
-        game.setIsFavouriteGame = true;
+      game.setIsFavouriteGame = true;
 
-        // add game to the favourites
-        statsFirestore.favouriteGames.add(game);
-      }
+      // add game to the favourites
+      statsFirestore.favouriteGames.add(game);
+      statsFirestore.favouriteGames.sort();
     }
 
     statsFirestore.notify();

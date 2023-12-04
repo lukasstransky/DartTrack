@@ -37,24 +37,41 @@ class _StatisticsState extends State<Statistics> {
       : 'ca-app-pub-3940256099942544/2934735716';
 
   @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  }
+
+  @override
   initState() {
     final StatsFirestoreX01_P statsFirestore =
         context.read<StatsFirestoreX01_P>();
     statsFirestore.currentFilterValue = FilterValue.Overall;
+    statsFirestore.setShowLoadingSpinner = true;
 
     _username =
         context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
-    if (_username == 'Guest') {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_username == 'Guest') {
         _showDialogWhenLoggedInAsGuest();
-      });
-      statsFirestore.resetAll();
-    } else {
-      _loadData(statsFirestore);
-    }
+      } else {
+        _loadData(statsFirestore);
+        showSpinner(statsFirestore);
+      }
+    });
 
     super.initState();
+  }
+
+  showSpinner(StatsFirestoreX01_P statsFirestore) async {
+    if (statsFirestore.gamesLoaded || statsFirestore.noGamesPlayed) {
+      statsFirestore.setShowLoadingSpinner = true;
+      statsFirestore.notify();
+      await Future.delayed(Duration(milliseconds: DEFAULT_DELY));
+      statsFirestore.setShowLoadingSpinner = false;
+      statsFirestore.notify();
+    }
   }
 
   @override
@@ -78,21 +95,19 @@ class _StatisticsState extends State<Statistics> {
                     FilterBar(),
                     Selector<StatsFirestoreX01_P, SelectorModel>(
                       selector: (_, statsFirestoreX01) => SelectorModel(
-                        playerOrTeamGameStatsLoaded:
-                            statsFirestoreX01.playerGameStatsLoaded,
-                        teamGameStatsLoaded:
-                            statsFirestoreX01.teamGameStatsLoaded,
-                        gamesLoaded: statsFirestoreX01.gamesLoaded,
-                        noGamesPlayed: statsFirestoreX01.noGamesPlayed,
-                        games: statsFirestoreX01.games,
-                      ),
-                      builder: (_, selectorModel, __) => (selectorModel
-                                      .playerOrTeamGameStatsLoaded &&
-                                  selectorModel.teamGameStatsLoaded &&
-                                  selectorModel.gamesLoaded) ||
-                              selectorModel.noGamesPlayed ||
-                              _username == 'Guest'
-                          ? Column(
+                          games: statsFirestoreX01.games,
+                          showLoadingSpinner:
+                              statsFirestoreX01.getShowLoadingSpinner),
+                      builder: (_, model, __) => model.showLoadingSpinner
+                          ? SizedBox(
+                              height: MediaQuery.of(context).size.height - 25.h,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : Column(
                               children: [
                                 OtherStats(),
                                 AvgBestWorstStats(),
@@ -100,14 +115,6 @@ class _StatisticsState extends State<Statistics> {
                                 showMoreStatsBtn(),
                                 StatsPerGameBtns()
                               ],
-                            )
-                          : SizedBox(
-                              height: MediaQuery.of(context).size.height - 25.h,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                ),
-                              ),
                             ),
                     ),
                   ],
@@ -126,6 +133,13 @@ class _StatisticsState extends State<Statistics> {
     if (!isConnected) {
       return;
     }
+
+    if (!statsFirestore.loadPlayerGameStats && !statsFirestore.loadGames) {
+      return;
+    }
+
+    statsFirestore.setShowLoadingSpinner = true;
+    statsFirestore.notify();
 
     if (statsFirestore.loadPlayerGameStats) {
       final String currentUsername =
@@ -151,6 +165,9 @@ class _StatisticsState extends State<Statistics> {
 
       statsFirestore.loadGames = false;
     }
+
+    statsFirestore.setShowLoadingSpinner = false;
+    statsFirestore.notify();
   }
 
   _showDialogWhenLoggedInAsGuest() {
@@ -249,17 +266,11 @@ class _StatisticsState extends State<Statistics> {
 }
 
 class SelectorModel {
-  final bool playerOrTeamGameStatsLoaded;
-  final bool teamGameStatsLoaded;
-  final bool gamesLoaded;
-  final bool noGamesPlayed;
+  final bool showLoadingSpinner;
   final List<Game_P> games;
 
   SelectorModel({
-    required this.playerOrTeamGameStatsLoaded,
-    required this.teamGameStatsLoaded,
-    required this.gamesLoaded,
-    required this.noGamesPlayed,
+    required this.showLoadingSpinner,
     required this.games,
   });
 }

@@ -9,22 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
-class RoundsOrPointsInputScoreTraining extends StatefulWidget {
+class RoundsOrPointsInputScoreTraining extends StatelessWidget {
   const RoundsOrPointsInputScoreTraining({Key? key}) : super(key: key);
-
-  @override
-  State<RoundsOrPointsInputScoreTraining> createState() =>
-      _RoundsOrPointsInputScoreTrainingState();
-}
-
-class _RoundsOrPointsInputScoreTrainingState
-    extends State<RoundsOrPointsInputScoreTraining> {
-  @override
-  void initState() {
-    super.initState();
-    newTextControllerMaxRoundsOrPointsGameSettingsSct(
-        DEFAULT_ROUNDS_SCORE_TRAINING.toString());
-  }
 
   _showDialogForRoundsOrPoints(BuildContext context) async {
     final gameSettingsScoreTraining_P =
@@ -33,8 +19,6 @@ class _RoundsOrPointsInputScoreTrainingState
         gameSettingsScoreTraining_P.getMode == ScoreTrainingModeEnum.MaxRounds
             ? true
             : false;
-    final String backupString = maxRoundsOrPointsTextController
-        .text; // in case of changing input and canceling
 
     Utils.forcePortraitMode(context);
 
@@ -63,69 +47,13 @@ class _RoundsOrPointsInputScoreTrainingState
               left: 5.w,
               right: 5.w,
             ),
-            child: TextFormField(
-              textAlign: TextAlign.center,
-              controller: maxRoundsOrPointsTextController,
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return ('Please enter a value!');
-                } else if (int.parse(value) <
-                        (isMaxRoundsMode
-                            ? MIN_ROUNDS_SCORE_TRAINING
-                            : MIN_POINTS_SCORE_TRAINING) ||
-                    int.parse(value) >
-                        (isMaxRoundsMode
-                            ? MAX_ROUNDS_SCORE_TRAINING
-                            : MAX_POINTS_SCORE_TRAINING)) {
-                  return (isMaxRoundsMode
-                      ? 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SCORE_TRAINING}'
-                      : 'Valid values: ${MIN_POINTS_SCORE_TRAINING}-${MAX_POINTS_SCORE_TRAINING}');
-                }
-                return null;
-              },
-              autofocus: true,
-              keyboardType: TextInputType.number,
-              inputFormatters: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(
-                  isMaxRoundsMode
-                      ? MAX_ROUNDS_SCORE_TRAINING_NUMBERS
-                      : MAX_POINTS_SCORE_TRAINING_NUMBERS,
-                ),
-              ],
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-              ),
-              decoration: InputDecoration(
-                errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
-                hintText:
-                    '${isMaxRoundsMode ? '${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SCORE_TRAINING}' : '${MIN_POINTS_SCORE_TRAINING}-${MAX_POINTS_SCORE_TRAINING}'}',
-                fillColor:
-                    Utils.darken(Theme.of(context).colorScheme.primary, 10),
-                filled: true,
-                hintStyle: TextStyle(
-                  fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-                  color: Utils.getPrimaryColorDarken(context),
-                ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15),
-                  borderSide: BorderSide(
-                    width: 0,
-                    style: BorderStyle.none,
-                  ),
-                ),
-              ),
-            ),
+            child: RoundsOrPointTextFormField(),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Utils.handleVibrationFeedback(context);
                 Navigator.of(context).pop();
-                Future.delayed(Duration(milliseconds: 300), () {
-                  maxRoundsOrPointsTextController.text = backupString;
-                });
               },
               child: Text(
                 'Cancel',
@@ -281,4 +209,90 @@ class SelectorModel {
     required this.maxRoundsOrPoints,
     required this.mode,
   });
+}
+
+class RoundsOrPointTextFormField extends StatefulWidget {
+  RoundsOrPointTextFormField({Key? key}) : super(key: key);
+
+  @override
+  State<RoundsOrPointTextFormField> createState() =>
+      _RoundsOrPointTextFormFieldState();
+}
+
+class _RoundsOrPointTextFormFieldState
+    extends State<RoundsOrPointTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    maxRoundsOrPointsTextController = new TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    maxRoundsOrPointsTextController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isMaxRoundsMode =
+        context.read<GameSettingsScoreTraining_P>().getMode ==
+                ScoreTrainingModeEnum.MaxRounds
+            ? true
+            : false;
+
+    return TextFormField(
+      textAlign: TextAlign.center,
+      controller: maxRoundsOrPointsTextController,
+      validator: (value) {
+        if (value!.isEmpty) {
+          return ('Please enter a value!');
+        } else if (int.parse(value) <
+                (isMaxRoundsMode
+                    ? MIN_ROUNDS_SCORE_TRAINING
+                    : MIN_POINTS_SCORE_TRAINING) ||
+            int.parse(value) >
+                (isMaxRoundsMode
+                    ? MAX_ROUNDS_SCORE_TRAINING
+                    : MAX_POINTS_SCORE_TRAINING)) {
+          return (isMaxRoundsMode
+              ? 'Valid values: ${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SCORE_TRAINING}'
+              : 'Valid values: ${MIN_POINTS_SCORE_TRAINING}-${MAX_POINTS_SCORE_TRAINING}');
+        }
+        return null;
+      },
+      autofocus: true,
+      keyboardType: TextInputType.number,
+      inputFormatters: [
+        FilteringTextInputFormatter.digitsOnly,
+        LengthLimitingTextInputFormatter(
+          isMaxRoundsMode
+              ? MAX_ROUNDS_SCORE_TRAINING_NUMBERS
+              : MAX_POINTS_SCORE_TRAINING_NUMBERS,
+        ),
+      ],
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+      ),
+      decoration: InputDecoration(
+        errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
+        hintText:
+            '${isMaxRoundsMode ? '${MIN_ROUNDS_SCORE_TRAINING}-${MAX_ROUNDS_SCORE_TRAINING}' : '${MIN_POINTS_SCORE_TRAINING}-${MAX_POINTS_SCORE_TRAINING}'}',
+        fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+        filled: true,
+        hintStyle: TextStyle(
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+          color: Utils.getPrimaryColorDarken(context),
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(15),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
+    );
+  }
 }

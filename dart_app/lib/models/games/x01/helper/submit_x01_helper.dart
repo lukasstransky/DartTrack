@@ -7,7 +7,9 @@ import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats.dart';
 import 'package:dart_app/models/player_statistics/player_or_team_game_stats_x01.dart';
 import 'package:dart_app/models/team.dart';
+import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/shared/game/point_btns_three_darts/utils_point_btns_three_darts.dart';
+import 'package:dart_app/utils/ad_management/banner_ads_manager_p.dart';
 import 'package:dart_app/utils/button_styles.dart';
 import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
@@ -139,8 +141,12 @@ class SubmitX01Helper {
 
       currentStats.getAllScores.add(totalPoints);
 
-      _setCheckoutCountAtThrownDarts(
-          currentStats, checkoutCount, gameX01, gameSettingsX01);
+      if (gameSettingsX01.getEnableCheckoutCounting &&
+          !gameSettingsX01.getCheckoutCountingFinallyDisabled) {
+        _setCheckoutCountAtThrownDarts(
+            currentStats, checkoutCount, gameX01, gameSettingsX01);
+      }
+
       _setScores(currentStats, totalPoints, gameX01, gameSettingsX01);
       final Tuple2<bool, bool> tuple = _legSetOrGameFinished(currentStats,
           context, totalPoints, thrownDarts, gameX01, shouldSubmitTeamStats);
@@ -472,6 +478,9 @@ class SubmitX01Helper {
     if ((isGameFinished || currentStats.getGameDraw)) {
       if (gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single ||
           shouldSubmitTeamStats) {
+        if (context.read<User_P>().getAdsEnabled) {
+          context.read<BannerAdManager_P>().getX01GameScreenBannerAd!.dispose();
+        }
         Navigator.of(context).pushReplacementNamed('/finishX01');
       }
     } else {

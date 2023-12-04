@@ -14,6 +14,9 @@ class AboutAndSupport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final String currentUsername =
+        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+
     return Container(
       padding: EdgeInsets.only(
         top: 2.0.h,
@@ -42,7 +45,7 @@ class AboutAndSupport extends StatelessWidget {
                 ),
               ),
             ),
-            if (context.read<User_P>().adsEnabled)
+            if (currentUsername != 'Guest' && context.read<User_P>().adsEnabled)
               Consumer<InAppPurchase_P>(
                 builder: (context, inAppPurchaseProvider, child) {
                   if (inAppPurchaseProvider.purchaseSuccessful) {

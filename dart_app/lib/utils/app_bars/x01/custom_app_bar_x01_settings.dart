@@ -241,11 +241,25 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         ),
         content: Container(
           width: DIALOG_NORMAL_WIDTH.w,
-          child: Text(
-            'Not able to save default settings because current logged in user (${username}) is not present within the players.',
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+          child: RichText(
+            text: TextSpan(
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              ),
+              children: [
+                TextSpan(
+                  text:
+                      'Not able to save default settings, because current logged in user "',
+                ),
+                TextSpan(
+                  text: username,
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                TextSpan(
+                  text: '" is not present within the players.',
+                ),
+              ],
             ),
           ),
         ),
@@ -300,7 +314,7 @@ class _CustomAppBarX01SettingsState extends State<CustomAppBarX01Settings> {
         content: Container(
           width: DIALOG_NORMAL_WIDTH.w,
           child: Text(
-            'Logged in as a guest it is not possible to set default settings.',
+            'Logged in as a guest, it is not possible to set default settings.',
             style: TextStyle(
               color: Colors.white,
               fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,

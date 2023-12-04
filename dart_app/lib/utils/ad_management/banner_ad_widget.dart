@@ -61,15 +61,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           bannerAdManager!.getScoreTrainingGameStatsScreenBannerAd!
               .load(() => setState(() {}));
           break;
-        case BannerAdEnum.StatsPerGameList:
-          bannerAdManager!.setStatsPerGameList = tempAd;
-          bannerAdManager!.getStatsPerGameList!.load(() => setState(() {}));
-          break;
-        case BannerAdEnum.StatsPerGameListFiltered:
-          bannerAdManager!.setStatsPerGameListFiltered = tempAd;
-          bannerAdManager!.getStatsPerGameListFiltered!
-              .load(() => setState(() {}));
-          break;
         case BannerAdEnum.X01FinishScreen:
           bannerAdManager!.setX01FinishScreenBannerAd = tempAd;
           bannerAdManager!.getX01FinishScreenBannerAd!

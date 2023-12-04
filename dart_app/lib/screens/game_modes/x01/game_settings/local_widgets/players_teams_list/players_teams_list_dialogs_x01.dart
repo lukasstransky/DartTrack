@@ -11,6 +11,7 @@ import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 
@@ -131,57 +132,7 @@ class PlayersTeamsListDialogs {
                     ],
                   );
                 } else {
-                  return TextFormField(
-                    autofocus: true,
-                    controller:
-                        newTextControllerForEditingPlayerInGameSettingsX01(
-                            playerToEdit.getName),
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (value!.trim().isEmpty) {
-                        return ('Please enter a name!');
-                      }
-                      if (gameSettings_P.checkIfPlayerNameExists(value)) {
-                        Utils.setCursorForTextControllerToEnd(
-                            editPlayerController);
-                        return 'Name already exists!';
-                      }
-
-                      return null;
-                    },
-                    keyboardType: TextInputType.text,
-                    inputFormatters: [
-                      LengthLimitingTextInputFormatter(
-                          MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                    ],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize:
-                          Theme.of(context).textTheme.bodyMedium!.fontSize,
-                    ),
-                    decoration: InputDecoration(
-                      errorStyle:
-                          TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
-                      prefixIcon: Icon(
-                        size: ICON_BUTTON_SIZE.h,
-                        Icons.person,
-                        color: Utils.getPrimaryColorDarken(context),
-                      ),
-                      hintText: 'Name',
-                      filled: true,
-                      fillColor: Utils.darken(
-                          Theme.of(context).colorScheme.primary, 10),
-                      hintStyle: TextStyle(
-                          color: Utils.getPrimaryColorDarken(context)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
-                      ),
-                    ),
-                  );
+                  return EditPlayerTextFormField(playerToEdit: playerToEdit);
                 }
               },
             ),
@@ -277,61 +228,7 @@ class PlayersTeamsListDialogs {
                     mainAxisAlignment: MainAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      TextFormField(
-                        controller:
-                            newTextControllerForEditingTeamInGameSettingsX01(
-                                teamToEdit.getName),
-                        textInputAction: TextInputAction.done,
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return ('Please enter a name!');
-                          }
-                          if (gameSettings.checkIfTeamNameExists(value)) {
-                            Utils.setCursorForTextControllerToEnd(
-                                editTeamController);
-                            return 'Team name already exists!';
-                          }
-
-                          return null;
-                        },
-                        keyboardType: TextInputType.text,
-                        inputFormatters: [
-                          LengthLimitingTextInputFormatter(
-                              MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
-                        ],
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize:
-                              Theme.of(context).textTheme.bodyMedium!.fontSize,
-                        ),
-                        decoration: InputDecoration(
-                          errorStyle:
-                              TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
-                          prefixIcon: Icon(
-                            size: ICON_BUTTON_SIZE.h,
-                            Icons.group,
-                            color: Utils.getPrimaryColorDarken(context),
-                          ),
-                          filled: true,
-                          fillColor: Utils.darken(
-                              Theme.of(context).colorScheme.primary, 10),
-                          hintStyle: TextStyle(
-                            fontSize: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .fontSize,
-                            color: Utils.getPrimaryColorDarken(context),
-                          ),
-                          hintText: 'Team',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            borderSide: BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
-                            ),
-                          ),
-                        ),
-                      ),
+                      EditTeamNameTextFormField(teamToEdit: teamToEdit),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -954,6 +851,158 @@ class PlayersTeamsListDialogs {
           ],
         );
       },
+    );
+  }
+}
+
+class EditPlayerTextFormField extends StatefulWidget {
+  const EditPlayerTextFormField({Key? key, required this.playerToEdit})
+      : super(key: key);
+
+  final Player playerToEdit;
+
+  @override
+  State<EditPlayerTextFormField> createState() =>
+      _EditPlayerNameTextFormFieldState();
+}
+
+class _EditPlayerNameTextFormFieldState extends State<EditPlayerTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    editPlayerController = new TextEditingController();
+    editPlayerController.text = widget.playerToEdit.getName;
+    editPlayerController.selection = TextSelection.fromPosition(
+        TextPosition(offset: editPlayerController.text.length));
+  }
+
+  @override
+  void dispose() {
+    editPlayerController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      autofocus: true,
+      controller: editPlayerController,
+      textInputAction: TextInputAction.done,
+      validator: (value) {
+        if (value!.trim().isEmpty) {
+          return ('Please enter a name!');
+        }
+        if (context.read<GameSettingsX01_P>().checkIfPlayerNameExists(value)) {
+          Utils.setCursorForTextControllerToEnd(editPlayerController);
+          return 'Name already exists!';
+        }
+
+        return null;
+      },
+      keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+      ],
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+      ),
+      decoration: InputDecoration(
+        errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
+        prefixIcon: Icon(
+          size: ICON_BUTTON_SIZE.h,
+          Icons.person,
+          color: Utils.getPrimaryColorDarken(context),
+        ),
+        hintText: 'Name',
+        filled: true,
+        fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+        hintStyle: TextStyle(color: Utils.getPrimaryColorDarken(context)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EditTeamNameTextFormField extends StatefulWidget {
+  EditTeamNameTextFormField({Key? key, required this.teamToEdit})
+      : super(key: key);
+
+  final Team teamToEdit;
+
+  @override
+  State<EditTeamNameTextFormField> createState() =>
+      _EditTeamNameTextFormFieldState();
+}
+
+class _EditTeamNameTextFormFieldState extends State<EditTeamNameTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    editTeamController = new TextEditingController();
+    editTeamController.text = widget.teamToEdit.getName;
+    editTeamController.selection = TextSelection.fromPosition(
+        TextPosition(offset: editTeamController.text.length));
+  }
+
+  @override
+  void dispose() {
+    editTeamController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: editTeamController,
+      textInputAction: TextInputAction.done,
+      validator: (value) {
+        if (value!.trim().isEmpty) {
+          return ('Please enter a name!');
+        }
+        if (context.read<GameSettingsX01_P>().checkIfTeamNameExists(value)) {
+          Utils.setCursorForTextControllerToEnd(editTeamController);
+          return 'Team name already exists!';
+        }
+
+        return null;
+      },
+      keyboardType: TextInputType.text,
+      inputFormatters: [
+        LengthLimitingTextInputFormatter(MAX_CHARACTERS_NEW_PLAYER_TEXTFIELD),
+      ],
+      style: TextStyle(
+        color: Colors.white,
+        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+      ),
+      decoration: InputDecoration(
+        errorStyle: TextStyle(fontSize: DIALOG_ERROR_MSG_FONTSIZE.sp),
+        prefixIcon: Icon(
+          size: ICON_BUTTON_SIZE.h,
+          Icons.group,
+          color: Utils.getPrimaryColorDarken(context),
+        ),
+        filled: true,
+        fillColor: Utils.darken(Theme.of(context).colorScheme.primary, 10),
+        hintStyle: TextStyle(
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+          color: Utils.getPrimaryColorDarken(context),
+        ),
+        hintText: 'Team',
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide(
+            width: 0,
+            style: BorderStyle.none,
+          ),
+        ),
+      ),
     );
   }
 }

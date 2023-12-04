@@ -1,5 +1,5 @@
 import 'package:dart_app/constants.dart';
-import 'package:dart_app/models/auth.dart';
+import 'package:dart_app/models/auth_p.dart';
 import 'package:dart_app/models/firestore/open_games_firestore.dart';
 import 'package:dart_app/models/firestore/stats_firestore_c.dart';
 import 'package:dart_app/models/firestore/stats_firestore_d_t.dart';
@@ -11,7 +11,6 @@ import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_wid
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/local_widgets/proceed_as_guest_link.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/button_styles.dart';
-import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,7 +34,7 @@ class LoginRegisterBtn extends StatelessWidget {
     }
 
     final AuthService authService = context.read<AuthService>();
-    final Auth_P auth = context.read<Auth_P>();
+    final Auth_P auth_p = context.read<Auth_P>();
     context.read<StatsFirestoreX01_P>().resetLoadingFields();
     context.read<DefaultSettingsX01_P>().loadSettings = true;
     context.read<OpenGamesFirestore>().setLoadOpenGames = true;
@@ -44,17 +43,27 @@ class LoginRegisterBtn extends StatelessWidget {
     context.read<StatsFirestoreSingleTraining_P>().loadGames = true;
     context.read<StatsFirestoreScoreTraining_P>().loadGames = true;
 
-    auth.setUsernameValid =
-        await authService.usernameValid(usernameTextController.text);
+    String email = '';
+    String password = '';
+    String username = '';
     if (isLogin) {
-      auth.setEmailAlreadyExists = true;
+      email = auth_p.getLoginEmail;
+      password = auth_p.getLoginPassword;
+
+      auth_p.setEmailAlreadyExists = true;
     } else {
       // register
-      auth.setEmailAlreadyExists =
-          await authService.emailAlreadyExists(emailTextController.text);
+      username = auth_p.getUsername;
+      email = auth_p.getRegisterEmail;
+      password = auth_p.getRegisterPassword;
+
+      auth_p.setUsernameValid = await authService.usernameValid(username);
+      auth_p.setEmailAlreadyExists =
+          await authService.emailAlreadyExists(email);
     }
 
-    emailTextController.text = emailTextController.text.trim();
+    email = email.trim();
+
     if (!loginRegisterPageFormKey.currentState!.validate()) {
       return;
     }
@@ -62,37 +71,31 @@ class LoginRegisterBtn extends StatelessWidget {
 
     // show loading spinner
     context.loaderOverlay.show();
-    auth.notify();
+    auth_p.notify();
 
     try {
-      if (auth.getAuthMode == AuthMode.Login) {
-        await authService.login(
-            emailTextController.text, passwordTextController.text);
+      if (auth_p.getAuthMode == AuthMode.Login) {
+        await authService.login(email, password);
       } else {
         // store the username in shared preferences
         final SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('username', usernameTextController.text);
-        await authService.register(
-            emailTextController.text, passwordTextController.text);
+        await prefs.setString('username', username);
+        await authService.register(email, password);
       }
 
       Navigator.of(context).pushNamed('/home', arguments: {
         'isLogin': isLogin,
-        'email': emailTextController.text,
-        'username': usernameTextController.text,
+        'email': email,
+        'username': username,
       });
 
-      auth.setAuthMode = AuthMode.Login;
-      auth.setPasswordVisible = false;
-      auth.setShowLoadingSpinner = false;
-
-      emailTextController.clear();
-      passwordTextController.clear();
-      usernameTextController.clear();
+      auth_p.setAuthMode = AuthMode.Login;
+      auth_p.setPasswordVisible = false;
+      auth_p.setShowLoadingSpinner = false;
 
       // hide loading spinner
       context.loaderOverlay.hide();
-      auth.notify();
+      auth_p.notify();
     } on FirebaseAuthException catch (error) {
       String errorMessage = 'Authentication failed';
 
@@ -102,12 +105,9 @@ class LoginRegisterBtn extends StatelessWidget {
         errorMessage = 'Could not find a user with that email!';
       } else if (error.toString().contains('wrong-password')) {
         errorMessage = 'Invalid password!';
-        passwordTextController.clear();
       } else if (error.toString().contains('too-many-requests')) {
         errorMessage =
             'To many failed login attempts! Try again later or reset the password.';
-        emailTextController.clear();
-        passwordTextController.clear();
       } else if (error.toString().contains('weak-password')) {
         errorMessage = 'The password is too weak!';
       }

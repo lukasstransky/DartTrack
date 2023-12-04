@@ -9,6 +9,7 @@ import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/l
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/six_to_ten_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/sixteen_to_twenty_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/local_widgets/thrown_darts_x01.dart';
+import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GameX01_P gameX01 = context.read<GameX01_P>();
+    final GameSettingsX01_P gameSettingsX01 = context.read<GameSettingsX01_P>();
     if (gameX01.getPlayerGameStatistics.isEmpty) {
       return SizedBox.shrink();
     }
@@ -29,29 +31,37 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
         currentThreeDarts: gameX01.getCurrentThreeDarts,
         currentPointType: gameX01.getCurrentPointType,
       ),
-      builder: (_, selectorModel, __) => Expanded(
-        child: Column(
-          children: [
-            Container(
-              height: 6.h,
-              child: ThrownDartsX01(),
-            ),
-            Selector<GameSettingsX01_P, bool>(
-              selector: (_, gameSettings) =>
-                  gameSettings.getShowInputMethodInGameScreen,
-              builder: (_, showInputMethodInGameScreen, __) =>
-                  showInputMethodInGameScreen
-                      ? SelectInputMethod(mode: GameMode.X01)
-                      : SizedBox.shrink(),
-            ),
-            OtherX01(),
-            OneToFiveX01(),
-            SixToTenX01(),
-            ElevenToFifteenX01(),
-            SixteenToTwentyX01(),
-            SingleDoubleOrTrippleX01(
-                stats: gameX01.getCurrentPlayerGameStats()),
-          ],
+      builder: (_, selectorModel, __) => Utils.wrapExpandedIfLandscape(
+        context,
+        Container(
+          height: Utils.isLandscape(context)
+              ? null
+              : gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+                  ? 43.h
+                  : 40.h,
+          child: Column(
+            children: [
+              Container(
+                height: 6.h,
+                child: ThrownDartsX01(),
+              ),
+              Selector<GameSettingsX01_P, bool>(
+                selector: (_, gameSettings) =>
+                    gameSettings.getShowInputMethodInGameScreen,
+                builder: (_, showInputMethodInGameScreen, __) =>
+                    showInputMethodInGameScreen
+                        ? SelectInputMethod(mode: GameMode.X01)
+                        : SizedBox.shrink(),
+              ),
+              OtherX01(),
+              OneToFiveX01(),
+              SixToTenX01(),
+              ElevenToFifteenX01(),
+              SixteenToTwentyX01(),
+              SingleDoubleOrTrippleX01(
+                  stats: gameX01.getCurrentPlayerGameStats()),
+            ],
+          ),
         ),
       ),
     );

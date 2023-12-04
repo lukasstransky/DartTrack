@@ -19,7 +19,6 @@ import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/star
 import 'package:dart_app/screens/game_modes/x01/game_settings/local_widgets/win_by_two_legs_diff_x01.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/app_bars/x01/custom_app_bar_x01_settings.dart';
-import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -35,15 +34,8 @@ class _GameSettingsX01State extends State<GameSettingsX01> {
   @override
   initState() {
     super.initState();
-    initControllersForGamesettingsX01();
     DefaultSettingsHelper.setSettingsFromDefault(context);
     _addCurrentUserToPlayers();
-  }
-
-  @override
-  dispose() {
-    disposeControllersForGamesettingsX01();
-    super.dispose();
   }
 
   @override

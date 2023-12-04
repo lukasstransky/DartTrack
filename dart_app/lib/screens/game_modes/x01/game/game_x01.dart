@@ -5,7 +5,6 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/multiple_player_team_stats/multiple_player_team_stats_x01.dart';
-import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_to_throw_from_team_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btns_round_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/two_player_team_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/point_btns_three_darts_x01.dart';
@@ -43,7 +42,11 @@ class GameX01State extends State<GameX01> {
         MediaQuery.of(context).padding;
 
     if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
-      context.read<BannerAdManager_P>().getX01GameScreenBannerAd!.dispose();
+      final BannerAdManager_P bannerAdManager =
+          context.read<BannerAdManager_P>();
+      if (bannerAdManager.getX01GameScreenBannerAd != null) {
+        bannerAdManager.getX01GameScreenBannerAd!.dispose();
+      }
     }
 
     return WillPopScope(
@@ -106,7 +109,6 @@ class GameX01State extends State<GameX01> {
             ),
           ),
         _getTwoOrMultiplePlayerTeamStatsView(context),
-        if (isTeamMode) PlayerToThrowFromTeam(),
         Selector<GameSettingsX01_P, InputMethod>(
           selector: (_, gameSettingsX01) => gameSettingsX01.getInputMethod,
           builder: (_, inputMethod, __) => inputMethod == InputMethod.Round
@@ -127,7 +129,6 @@ class GameX01State extends State<GameX01> {
             return Expanded(
               child: Column(
                 children: [
-                  if (isTeamMode) PlayerToThrowFromTeam(),
                   inputMethod == InputMethod.Round
                       ? PointBtnsRoundX01()
                       : PointsBtnsThreeDartsX01()
