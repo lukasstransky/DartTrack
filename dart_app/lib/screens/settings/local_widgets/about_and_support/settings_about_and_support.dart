@@ -69,11 +69,11 @@ class AboutAndSupport extends StatelessWidget {
             ),
             SettingsCardItem(
               name: 'Privacy policy',
-              route: '/privacyPolicy',
+              privacyPolicy: true,
             ),
             SettingsCardItem(
               name: 'Terms of use',
-              route: '/termsOfUse',
+              termsOfUse: true,
             ),
             AppVersion(),
           ],

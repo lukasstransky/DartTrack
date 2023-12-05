@@ -18,6 +18,8 @@ class SettingsCardItem extends StatelessWidget {
     bool this.rateApp = false,
     bool this.helpAndSupport = false,
     bool this.buyAdFreeVersion = false,
+    bool this.privacyPolicy = false,
+    bool this.termsOfUse = false,
   }) : super(key: key);
 
   final String name;
@@ -26,6 +28,8 @@ class SettingsCardItem extends StatelessWidget {
   final bool rateApp;
   final bool helpAndSupport;
   final bool buyAdFreeVersion;
+  final bool privacyPolicy;
+  final bool termsOfUse;
 
   static void _emptyFunction(BuildContext context) {}
 
@@ -96,6 +100,14 @@ class SettingsCardItem extends StatelessWidget {
       _launchEmail(context);
     } else if (buyAdFreeVersion) {
       context.read<InAppPurchase_P>().buyAdFreeVersion();
+    } else if (privacyPolicy) {
+      _launchURL(
+          'https://www.freeprivacypolicy.com/live/aac9d4c5-cdbf-445f-84ee-3c0ba30847b0',
+          context);
+    } else if (termsOfUse) {
+      _launchURL(
+          'https://www.app-privacy-policy.com/live.php?token=w2eZKVdamrh7N91z5mWGtQe9ycXDRYFx',
+          context);
     } else {
       onItemPressed(context);
     }

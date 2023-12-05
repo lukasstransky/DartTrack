@@ -60,8 +60,6 @@ import 'package:sizer/sizer.dart';
 import 'screens/game_modes/cricket/statistics/game_stats_c.dart';
 import 'screens/game_modes/single_double_training/finish/finish_sd_t.dart';
 import 'screens/game_modes/single_double_training/game/game_sd_t.dart';
-import 'screens/settings/local_widgets/about_and_support/local_widgets/privacy_policy.dart';
-import 'screens/settings/local_widgets/about_and_support/local_widgets/terms_of_use.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -257,8 +255,6 @@ class MyApp extends StatelessWidget {
             GameCricket.routeName: (ctx) => GameCricket(),
             FinishCricket.routeName: (ctx) => FinishCricket(),
             StatisticsCricket.routeName: (ctx) => StatisticsCricket(),
-            TermsOfUse.routeName: (ctx) => TermsOfUse(),
-            PrivacyPolicy.routeName: (ctx) => PrivacyPolicy(),
           },
           home: AuthWrapper(),
         );
