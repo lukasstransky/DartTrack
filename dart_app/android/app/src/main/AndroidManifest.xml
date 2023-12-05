@@ -1,11 +1,16 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.darttrack.app">
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
    <application
         android:label="dart_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         >
+        <meta-data
+              android:name="com.google.android.gms.ads.APPLICATION_ID"
+              android:value="ca-app-pub-8582367743573228~9924420076"
+              />
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -21,10 +26,6 @@
             <meta-data
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
-              />
-            <meta-data
-              android:name="com.google.android.gms.ads.APPLICATION_ID"
-              android:value="ca-app-pub-8582367743573228~9924420076"
               />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
