@@ -39,13 +39,6 @@ class GameFieldCricket extends StatelessWidget {
                     color: Utils.getPrimaryColorDarken(context),
                   )
                 : BorderSide.none,
-            bottom: _gameCricket.getSafeAreaPadding.bottom > 0 &&
-                    Utils.isLandscape(context)
-                ? BorderSide(
-                    width: GENERAL_BORDER_WIDTH.w,
-                    color: Utils.getPrimaryColorDarken(context),
-                  )
-                : BorderSide.none,
           ),
         ),
         child: Selector<GameCricket_P, SelectorModel>(

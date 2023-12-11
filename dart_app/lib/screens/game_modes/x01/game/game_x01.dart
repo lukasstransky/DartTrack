@@ -5,6 +5,7 @@ import 'package:dart_app/models/game_settings/x01/game_settings_x01_p.dart';
 import 'package:dart_app/models/games/x01/game_x01_p.dart';
 import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/multiple_player_team_stats/multiple_player_team_stats_x01.dart';
+import 'package:dart_app/screens/game_modes/x01/game/local_widgets/player_to_throw_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/round/point_btns_round_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/two_player_team_stats_x01.dart';
 import 'package:dart_app/screens/game_modes/x01/game/local_widgets/three_darts/point_btns_three_darts_x01.dart';
@@ -35,11 +36,14 @@ class GameX01State extends State<GameX01> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isTeamMode = context.read<GameSettingsX01_P>().getSingleOrTeam ==
-        SingleOrTeamEnum.Team;
+    final GameSettingsX01_P gameSettingsX01_P =
+        context.read<GameSettingsX01_P>();
+    final GameX01_P gameX01 = context.read<GameX01_P>();
+    final bool isTeamMode =
+        gameSettingsX01_P.getSingleOrTeam == SingleOrTeamEnum.Team;
+    final bool moreThanTwoTeams = gameSettingsX01_P.getTeams.length >= 3;
 
-    context.read<GameX01_P>().setSafeAreaPadding =
-        MediaQuery.of(context).padding;
+    gameX01.setSafeAreaPadding = MediaQuery.of(context).padding;
 
     if (context.read<User_P>().getAdsEnabled && Utils.isLandscape(context)) {
       final BannerAdManager_P bannerAdManager =
@@ -66,8 +70,10 @@ class GameX01State extends State<GameX01> {
                 );
               } else {
                 return Utils.isLandscape(context)
-                    ? _buildLandscapeLayout(isTeamMode)
-                    : _buildPortraitLayout(isTeamMode);
+                    ? _buildLandscapeLayout(
+                        isTeamMode, moreThanTwoTeams, gameX01)
+                    : _buildPortraitLayout(
+                        isTeamMode, moreThanTwoTeams, gameX01);
               }
             },
           ),
@@ -96,7 +102,8 @@ class GameX01State extends State<GameX01> {
     );
   }
 
-  Column _buildPortraitLayout(bool isTeamMode) {
+  Column _buildPortraitLayout(
+      bool isTeamMode, bool moreThanThreeTeams, GameX01_P gameX01) {
     return Column(
       children: [
         if (context.read<User_P>().getAdsEnabled)
@@ -109,6 +116,7 @@ class GameX01State extends State<GameX01> {
             ),
           ),
         _getTwoOrMultiplePlayerTeamStatsView(context),
+        if (isTeamMode && moreThanThreeTeams) PlayerToThrowX01(),
         Selector<GameSettingsX01_P, InputMethod>(
           selector: (_, gameSettingsX01) => gameSettingsX01.getInputMethod,
           builder: (_, inputMethod, __) => inputMethod == InputMethod.Round
@@ -119,7 +127,8 @@ class GameX01State extends State<GameX01> {
     );
   }
 
-  Row _buildLandscapeLayout(bool isTeamMode) {
+  Row _buildLandscapeLayout(
+      bool isTeamMode, bool moreThanThreeTeams, GameX01_P gameX01) {
     return Row(
       children: [
         _getTwoOrMultiplePlayerTeamStatsView(context),
@@ -129,6 +138,7 @@ class GameX01State extends State<GameX01> {
             return Expanded(
               child: Column(
                 children: [
+                  if (isTeamMode && moreThanThreeTeams) PlayerToThrowX01(),
                   inputMethod == InputMethod.Round
                       ? PointBtnsRoundX01()
                       : PointsBtnsThreeDartsX01()

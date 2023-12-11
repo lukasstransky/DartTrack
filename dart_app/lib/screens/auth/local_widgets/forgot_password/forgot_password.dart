@@ -112,10 +112,6 @@ class ResetPasswordBtn extends StatelessWidget {
 
     final Auth_P auth = context.read<Auth_P>();
 
-    auth.setEmailAlreadyExists = await context
-        .read<AuthService>()
-        .emailAlreadyExists(auth.getForgotPasswordEmail);
-
     if (!forgotPasswordFormKey.currentState!.validate()) {
       return;
     }

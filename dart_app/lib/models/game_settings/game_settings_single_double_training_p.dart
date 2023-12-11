@@ -7,8 +7,10 @@ import 'package:flutter/material.dart';
 class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
   ModesSingleDoubleTraining _mode = ModesSingleDoubleTraining.Ascending;
   int _targetNumber = DEFAULT_TARGET_NUMBER;
+  String _targetNumberControllerValue = '';
   bool _isTargetNumberEnabled = false;
   int _amountOfRounds = DEFUALT_ROUNDS_FOR_TARGET_NUMBER;
+  String _amountOfRoundsControllerValue = '';
 
   GlobalKey<FormState> _formKeyTargetNumber = GlobalKey<FormState>();
   GlobalKey<FormState> _formKeyAmountOfRounds = GlobalKey<FormState>();
@@ -45,12 +47,22 @@ class GameSettingsSingleDoubleTraining_P extends GameSettings_P {
   int get getTargetNumber => this._targetNumber;
   set setTargetNumber(int value) => this._targetNumber = value;
 
+  String get getTargetNumberControllerValue =>
+      this._targetNumberControllerValue;
+  set setTargetNumberControllerValue(String value) =>
+      this._targetNumberControllerValue = value;
+
   bool get getIsTargetNumberEnabled => this._isTargetNumberEnabled;
   set setIsTargetNumberEnabled(bool value) =>
       this._isTargetNumberEnabled = value;
 
   int get getAmountOfRounds => this._amountOfRounds;
   set setAmountOfRounds(int value) => this._amountOfRounds = value;
+
+  String get getAmountOfRoundsControllerValue =>
+      this._amountOfRoundsControllerValue;
+  set setAmountOfRoundsControllerValue(String value) =>
+      this._amountOfRoundsControllerValue = value;
 
   GlobalKey<FormState> get getFormKeyTargetNumber => this._formKeyTargetNumber;
   set setFormKeyTargetNumber(GlobalKey<FormState> value) =>

@@ -86,23 +86,6 @@ class AuthService {
     await _firebaseAuth.signOut();
   }
 
-  Future<bool> usernameValid(String usernameToVerify) async {
-    final bool isConnected = await Utils.hasInternetConnection();
-    if (!isConnected) {
-      return false;
-    }
-
-    final QuerySnapshot querySnapshot = await _firestore
-        .collection('users')
-        .where('username', isEqualTo: usernameToVerify)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      return false;
-    }
-    return true;
-  }
-
   Future<void> setAdsEnabledFlagToFalse(BuildContext context) async {
     final bool isConnected = await Utils.hasInternetConnection();
     final User_P user = context.read<User_P>();
@@ -154,23 +137,6 @@ class AuthService {
     } catch (e) {
       print('An error occurred while fetching "adsEnabled" flag: $e');
     }
-  }
-
-  Future<bool> emailAlreadyExists(String emailToVerify) async {
-    final bool isConnected = await Utils.hasInternetConnection();
-    if (!isConnected) {
-      return false;
-    }
-
-    final QuerySnapshot querySnapshot = await _firestore
-        .collection('users')
-        .where('email', isEqualTo: emailToVerify)
-        .get();
-
-    if (querySnapshot.docs.isNotEmpty) {
-      return true;
-    }
-    return false;
   }
 
   Future<void> resetPassword(String email) async {

@@ -10,14 +10,6 @@ TextEditingController editTeamController = new TextEditingController();
 TextEditingController customPointsController = new TextEditingController();
 TextEditingController mostScoredPointController = new TextEditingController();
 
-// GAMESETTINGS SCORE TRAINING
-TextEditingController maxRoundsOrPointsTextController =
-    new TextEditingController();
-
-// SINGLE DOUBLE TRAINING
-TextEditingController targetNumberTextController = new TextEditingController();
-TextEditingController amountOfRoundsController = new TextEditingController();
-
 // !!!maybe not best solution!!!
 // needed for input method three darts + don't auto submit points
 int g_thrownDarts = 0;

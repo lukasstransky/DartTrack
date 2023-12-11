@@ -1,7 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/utils/button_styles.dart';
-import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -170,14 +169,16 @@ class TargetNumberSingleDoubleTraining extends StatelessWidget {
   }
 
   _submitTargetNumber(BuildContext context) {
-    final settings = context.read<GameSettingsSingleDoubleTraining_P>();
+    final GameSettingsSingleDoubleTraining_P settings =
+        context.read<GameSettingsSingleDoubleTraining_P>();
 
     if (!settings.getFormKeyTargetNumber.currentState!.validate()) {
       return;
     }
     settings.getFormKeyTargetNumber.currentState!.save();
 
-    settings.setTargetNumber = int.parse(targetNumberTextController.text);
+    settings.setTargetNumber =
+        int.parse(settings.getTargetNumberControllerValue);
     settings.notify();
     settings.setIsTargetNumberEnabled = !settings.getIsTargetNumberEnabled;
 
@@ -315,6 +316,8 @@ class TargetNumberTextFormField extends StatefulWidget {
 }
 
 class _TargetNumberTextFormFieldState extends State<TargetNumberTextFormField> {
+  late TextEditingController targetNumberTextController;
+
   @override
   void initState() {
     super.initState();
@@ -329,6 +332,12 @@ class _TargetNumberTextFormFieldState extends State<TargetNumberTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    targetNumberTextController.addListener(() {
+      context
+          .read<GameSettingsSingleDoubleTraining_P>()
+          .setTargetNumberControllerValue = targetNumberTextController.text;
+    });
+
     return TextFormField(
       textAlign: TextAlign.center,
       controller: targetNumberTextController,

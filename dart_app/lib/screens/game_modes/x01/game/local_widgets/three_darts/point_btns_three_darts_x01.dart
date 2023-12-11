@@ -34,11 +34,7 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
       builder: (_, selectorModel, __) => Utils.wrapExpandedIfLandscape(
         context,
         Container(
-          height: Utils.isLandscape(context)
-              ? null
-              : gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
-                  ? 43.h
-                  : 40.h,
+          height: _getHeight(context, gameSettingsX01),
           child: Column(
             children: [
               Container(
@@ -65,6 +61,16 @@ class PointsBtnsThreeDartsX01 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double? _getHeight(BuildContext context, GameSettingsX01_P gameSettingsX01) {
+    if (Utils.isLandscape(context)) {
+      return null;
+    }
+
+    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+        ? 40.h
+        : 38.h;
   }
 }
 

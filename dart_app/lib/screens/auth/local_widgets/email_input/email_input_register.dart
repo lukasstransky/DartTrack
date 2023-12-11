@@ -56,10 +56,6 @@ class _EmailInputRegisterState extends State<EmailInputRegister> {
             Utils.setCursorForTextControllerToEnd(emailRegisterTextController);
             return ('Please enter a valid email!');
           }
-          if (auth_p.getEmailAlreadyExists) {
-            Utils.setCursorForTextControllerToEnd(emailRegisterTextController);
-            return 'Email already exists!';
-          }
           return null;
         },
         style: TextStyle(

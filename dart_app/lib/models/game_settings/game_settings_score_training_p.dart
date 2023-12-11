@@ -3,15 +3,16 @@ import 'package:dart_app/models/game_settings/game_settings_p.dart';
 import 'package:dart_app/models/games/game_score_training_p.dart';
 import 'package:dart_app/models/player.dart';
 import 'package:dart_app/models/player_statistics/player_game_stats_score_training.dart';
-import 'package:dart_app/utils/globals.dart';
 
 import 'package:flutter/material.dart';
 
 class GameSettingsScoreTraining_P extends GameSettings_P {
   ScoreTrainingModeEnum _mode = ScoreTrainingModeEnum.MaxRounds;
   int _maxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
+  String _maxRoundsOrPointsControllerValue = '';
   InputMethod _inputMethod = InputMethod.Round;
-  bool automaticallySubmitPoints = false;
+  bool _automaticallySubmitPoints = false;
+  int maxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
 
   GlobalKey<FormState> _formKeyMaxRoundsOrPoints = GlobalKey<FormState>();
   GlobalKey<FormState> _formKeyTargetNumber = GlobalKey<FormState>();
@@ -23,7 +24,7 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
       .._mode = this._mode
       .._maxRoundsOrPoints = this._maxRoundsOrPoints
       .._inputMethod = this._inputMethod
-      ..automaticallySubmitPoints = this.automaticallySubmitPoints;
+      .._automaticallySubmitPoints = this._automaticallySubmitPoints;
   }
 
   GameSettingsScoreTraining_P.firestoreScoreTraining({
@@ -46,12 +47,17 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
   int get getMaxRoundsOrPoints => this._maxRoundsOrPoints;
   set setMaxRoundsOrPoints(int value) => this._maxRoundsOrPoints = value;
 
+  String get getMaxRoundsOrPointsControllerValue =>
+      this._maxRoundsOrPointsControllerValue;
+  set seMaxRoundsOrPointsControllerValue(String value) =>
+      this._maxRoundsOrPointsControllerValue = value;
+
   InputMethod get getInputMethod => this._inputMethod;
   set setInputMethod(InputMethod value) => this._inputMethod = value;
-  bool get getAutomaticallySubmitPoints => this.automaticallySubmitPoints;
+  bool get getAutomaticallySubmitPoints => this._automaticallySubmitPoints;
 
   set setAutomaticallySubmitPoints(bool automaticallySubmitPoints) =>
-      this.automaticallySubmitPoints = automaticallySubmitPoints;
+      this._automaticallySubmitPoints = automaticallySubmitPoints;
 
   GlobalKey<FormState> get getFormKeyMaxRoundsOrPoints =>
       this._formKeyMaxRoundsOrPoints;
@@ -66,13 +72,9 @@ class GameSettingsScoreTraining_P extends GameSettings_P {
     if (getMode == ScoreTrainingModeEnum.MaxRounds) {
       setMode = ScoreTrainingModeEnum.MaxPoints;
       setMaxRoundsOrPoints = DEFAULT_POINTS_SCORE_TRAINING;
-      maxRoundsOrPointsTextController.text =
-          DEFAULT_POINTS_SCORE_TRAINING.toString();
     } else {
       setMode = ScoreTrainingModeEnum.MaxRounds;
       setMaxRoundsOrPoints = DEFAULT_ROUNDS_SCORE_TRAINING;
-      maxRoundsOrPointsTextController.text =
-          DEFAULT_ROUNDS_SCORE_TRAINING.toString();
     }
 
     notify();

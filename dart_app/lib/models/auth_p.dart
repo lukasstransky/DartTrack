@@ -3,8 +3,6 @@ import 'package:dart_app/constants.dart';
 import 'package:flutter/material.dart';
 
 class Auth_P with ChangeNotifier {
-  bool _usernameValid = false;
-  bool _emailAlreadyExists = false;
   bool _passwordVisible = false;
   bool _showLoadingSpinner = false;
   AuthMode _authMode = AuthMode.Login;
@@ -14,12 +12,6 @@ class Auth_P with ChangeNotifier {
   String _loginPassword = '';
   String _registerPassword = '';
   String _username = '';
-
-  bool get getUsernameValid => this._usernameValid;
-  set setUsernameValid(bool value) => this._usernameValid = value;
-
-  bool get getEmailAlreadyExists => this._emailAlreadyExists;
-  set setEmailAlreadyExists(bool value) => this._emailAlreadyExists = value;
 
   bool get getPasswordVisible => this._passwordVisible;
   set setPasswordVisible(bool value) => this._passwordVisible = value;

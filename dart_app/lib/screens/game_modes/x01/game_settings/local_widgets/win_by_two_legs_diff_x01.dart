@@ -261,7 +261,8 @@ _showDialogForSuddenDeath(
                                   });
                                 },
                           padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
+                          constraints:
+                              Utils.isMobile(context) ? BoxConstraints() : null,
                           icon: Icon(
                             Icons.remove,
                             size: ICON_BUTTON_SIZE.h,
@@ -272,7 +273,8 @@ _showDialogForSuddenDeath(
                         ),
                       ),
                       Container(
-                        width: 10.w,
+                        alignment: Alignment.center,
+                        width: 8.w,
                         child: Center(
                           child: Text(
                             gameSettingsX01.getMaxExtraLegs.toString(),
@@ -286,34 +288,37 @@ _showDialogForSuddenDeath(
                           ),
                         ),
                       ),
-                      IconButton(
-                        splashRadius: SPLASH_RADIUS,
-                        splashColor: Utils.darken(
-                            Theme.of(context).colorScheme.primary, 10),
-                        highlightColor: Utils.darken(
-                            Theme.of(context).colorScheme.primary, 10),
-                        onPressed:
-                            gameSettingsX01.getMaxExtraLegs == MAX_EXTRA_LEGS
-                                ? null
-                                : () {
-                                    Utils.handleVibrationFeedback(context);
-                                    if (gameSettingsX01.getMaxExtraLegs >=
-                                        MAX_EXTRA_LEGS) return;
-                                    setState(() {
-                                      gameSettingsX01.setMaxExtraLegs =
-                                          gameSettingsX01.getMaxExtraLegs + 1;
-                                      ;
-                                    });
-                                  },
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        icon: Icon(
-                          Icons.add,
-                          size: ICON_BUTTON_SIZE.h,
-                          color:
-                              gameSettingsX01.getMaxExtraLegs != MAX_EXTRA_LEGS
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : Theme.of(context).colorScheme.primary,
+                      Container(
+                        child: IconButton(
+                          splashRadius: SPLASH_RADIUS,
+                          splashColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          highlightColor: Utils.darken(
+                              Theme.of(context).colorScheme.primary, 10),
+                          onPressed:
+                              gameSettingsX01.getMaxExtraLegs == MAX_EXTRA_LEGS
+                                  ? null
+                                  : () {
+                                      Utils.handleVibrationFeedback(context);
+                                      if (gameSettingsX01.getMaxExtraLegs >=
+                                          MAX_EXTRA_LEGS) return;
+                                      setState(() {
+                                        gameSettingsX01.setMaxExtraLegs =
+                                            gameSettingsX01.getMaxExtraLegs + 1;
+                                        ;
+                                      });
+                                    },
+                          padding: EdgeInsets.zero,
+                          constraints:
+                              Utils.isMobile(context) ? BoxConstraints() : null,
+                          icon: Icon(
+                            Icons.add,
+                            size: ICON_BUTTON_SIZE.h,
+                            color: gameSettingsX01.getMaxExtraLegs !=
+                                    MAX_EXTRA_LEGS
+                                ? Theme.of(context).colorScheme.secondary
+                                : Theme.of(context).colorScheme.primary,
+                          ),
                         ),
                       ),
                     ],

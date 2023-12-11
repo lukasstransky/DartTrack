@@ -36,11 +36,7 @@ class PointBtnsRoundX01 extends StatelessWidget {
     return Utils.wrapExpandedIfLandscape(
       context,
       Container(
-        height: Utils.isLandscape(context)
-            ? null
-            : gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
-                ? 43.h
-                : 40.h,
+        height: _getHeight(context, gameSettingsX01),
         child: Selector<GameSettingsX01_P, SelectorModel>(
           selector: (_, gameSettingsX01) => SelectorModel(
             showInputMethodInGameScreen:
@@ -120,6 +116,16 @@ class PointBtnsRoundX01 extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  double? _getHeight(BuildContext context, GameSettingsX01_P gameSettingsX01) {
+    if (Utils.isLandscape(context)) {
+      return null;
+    }
+
+    return gameSettingsX01.getSingleOrTeam == SingleOrTeamEnum.Single
+        ? 40.h
+        : 38.h;
   }
 
   // deletes one char of the points

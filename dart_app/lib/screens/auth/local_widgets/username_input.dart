@@ -59,8 +59,8 @@ class _UsernameInputState extends State<UsernameInput> {
               usernameTextController.clear();
               return ('Username is required!');
             }
-            if (value == 'Guest' || !auth_p.getUsernameValid) {
-              return ('Username already exists!');
+            if (value == 'Guest') {
+              return ('Username not allowed!');
             }
             return null;
           },

@@ -21,7 +21,7 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
   Widget build(BuildContext context) {
     final GameSettingsCricket_P _gameSettingsCricket =
         context.read<GameSettingsCricket_P>();
-    final GameCricket_P gameCricket = context.read<GameCricket_P>();
+    final GameCricket_P _gameCricket = context.read<GameCricket_P>();
     final int _halfLength = playerOrTeamGameStatistics.length ~/ 2;
     final TextStyle _textStyle = TextStyle(
       color: Colors.white,
@@ -33,17 +33,6 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
         if (!evenPlayersOrTeams)
           Container(
             width: 20.w,
-            decoration: BoxDecoration(
-              border: Border(
-                left: Utils.isLandscape(context) &&
-                        gameCricket.getSafeAreaPadding.left > 0
-                    ? BorderSide(
-                        width: GENERAL_BORDER_WIDTH.w,
-                        color: Utils.getPrimaryColorDarken(context),
-                      )
-                    : BorderSide.none,
-              ),
-            ),
             child: Container(
               padding: EdgeInsets.only(top: 0.5.h, bottom: 0.5.h),
             ),
@@ -66,6 +55,13 @@ class PlayerOrTeamStatsCricket extends StatelessWidget {
                         )
                       : BorderSide.none,
                   right: Utils.showRightBorder(_gameSettingsCricket, i)
+                      ? BorderSide(
+                          width: GENERAL_BORDER_WIDTH.w,
+                          color: Utils.getPrimaryColorDarken(context),
+                        )
+                      : BorderSide.none,
+                  bottom: _gameCricket.getSafeAreaPadding.bottom > 0 &&
+                          Utils.isLandscape(context)
                       ? BorderSide(
                           width: GENERAL_BORDER_WIDTH.w,
                           color: Utils.getPrimaryColorDarken(context),

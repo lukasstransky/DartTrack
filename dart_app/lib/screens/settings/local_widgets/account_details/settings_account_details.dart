@@ -177,11 +177,6 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
     final AuthService authService = context.read<AuthService>();
     final String newEmail = context.read<Settings_P>().getEmail;
 
-    if (newEmail != '' && RegExp(EMAIL_REGEX).hasMatch(newEmail)) {
-      final bool emailExists = await authService.emailAlreadyExists(newEmail);
-      context.read<Settings_P>().setEmailValid = !emailExists;
-    }
-
     if (!_emailFormKey.currentState!.validate()) {
       return;
     }

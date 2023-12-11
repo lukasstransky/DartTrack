@@ -98,7 +98,8 @@ class _StatisticsState extends State<Statistics> {
                           games: statsFirestoreX01.games,
                           showLoadingSpinner:
                               statsFirestoreX01.getShowLoadingSpinner),
-                      builder: (_, model, __) => model.showLoadingSpinner
+                      builder: (_, model, __) => model.showLoadingSpinner &&
+                              _username != 'Guest'
                           ? SizedBox(
                               height: MediaQuery.of(context).size.height - 25.h,
                               child: Center(

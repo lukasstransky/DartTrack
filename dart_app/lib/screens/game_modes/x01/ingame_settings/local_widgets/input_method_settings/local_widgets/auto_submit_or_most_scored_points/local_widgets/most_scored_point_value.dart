@@ -58,6 +58,7 @@ class MostScoredPointValue extends StatelessWidget {
               _showDialogForMostScoredPointInput(context, gameSettingsX01, i);
             },
             style: ButtonStyle(
+              elevation: MaterialStateProperty.all(0),
               splashFactory: NoSplash.splashFactory,
               shadowColor: MaterialStateProperty.all(Colors.transparent),
               overlayColor: MaterialStateProperty.all(Colors.transparent),

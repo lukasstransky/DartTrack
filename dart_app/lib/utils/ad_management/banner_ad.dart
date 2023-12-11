@@ -23,7 +23,6 @@ class MyBannerAd {
       request: AdRequest(),
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
-          print('Banner ad loaded.');
           _isAdLoaded = true;
           _lastAdShownTime = DateTime.now();
           onAdLoadedCallback(); // to update ui
@@ -60,7 +59,6 @@ class MyBannerAd {
   }
 
   void dispose() {
-    print('Banner ad disposed.');
     _bannerAd?.dispose();
     _bannerAd = null;
     _isAdLoaded = false;

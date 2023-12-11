@@ -58,9 +58,6 @@ class _EmailInputForgotPasswordState extends State<EmailInputForgotPassword> {
                 emailForgotPasswordTextController);
             return ('Please enter a valid email!');
           }
-          if (!auth_p.getEmailAlreadyExists) {
-            return 'Email does not exist!';
-          }
           return null;
         },
         style: TextStyle(

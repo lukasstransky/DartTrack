@@ -1,7 +1,6 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/game_settings/game_settings_single_double_training_p.dart';
 import 'package:dart_app/utils/button_styles.dart';
-import 'package:dart_app/utils/globals.dart';
 import 'package:dart_app/utils/utils.dart';
 
 import 'package:flutter/material.dart';
@@ -104,7 +103,8 @@ class AmountOfRoundsForTargetNumberSingleDoubleTraining
     }
     settings.getFormKeyAmountOfRounds.currentState!.save();
 
-    settings.setAmountOfRounds = int.parse(amountOfRoundsController.text);
+    settings.setAmountOfRounds =
+        int.parse(settings.getAmountOfRoundsControllerValue);
     settings.notify();
 
     Navigator.of(context).pop();
@@ -204,6 +204,8 @@ class AmountOfRoundsTextFormField extends StatefulWidget {
 
 class _AmountOfRoundsTextFormFieldState
     extends State<AmountOfRoundsTextFormField> {
+  late TextEditingController amountOfRoundsController;
+
   @override
   void initState() {
     super.initState();
@@ -218,6 +220,12 @@ class _AmountOfRoundsTextFormFieldState
 
   @override
   Widget build(BuildContext context) {
+    amountOfRoundsController.addListener(() {
+      context
+          .read<GameSettingsSingleDoubleTraining_P>()
+          .setAmountOfRoundsControllerValue = amountOfRoundsController.text;
+    });
+
     return TextFormField(
       textAlign: TextAlign.center,
       controller: amountOfRoundsController,

@@ -49,17 +49,11 @@ class LoginRegisterBtn extends StatelessWidget {
     if (isLogin) {
       email = auth_p.getLoginEmail;
       password = auth_p.getLoginPassword;
-
-      auth_p.setEmailAlreadyExists = true;
     } else {
       // register
       username = auth_p.getUsername;
       email = auth_p.getRegisterEmail;
       password = auth_p.getRegisterPassword;
-
-      auth_p.setUsernameValid = await authService.usernameValid(username);
-      auth_p.setEmailAlreadyExists =
-          await authService.emailAlreadyExists(email);
     }
 
     email = email.trim();

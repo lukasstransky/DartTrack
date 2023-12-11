@@ -48,6 +48,11 @@ class FieldsToHit extends StatelessWidget {
                         : _darkenPrimaryColor20,
                     border: Border(
                       top: _borderSide,
+                      left: oddPlayersOrTeams &&
+                              gameCricket.getSafeAreaPadding.left > 0 &&
+                              Utils.isLandscape(context)
+                          ? _borderSide
+                          : BorderSide.none,
                     ),
                   ),
                   child: Center(
@@ -79,6 +84,11 @@ class FieldsToHit extends StatelessWidget {
                 border: Border(
                   top: _borderSide,
                   bottom: _borderSide,
+                  left: oddPlayersOrTeams &&
+                          gameCricket.getSafeAreaPadding.left > 0 &&
+                          Utils.isLandscape(context)
+                      ? _borderSide
+                      : BorderSide.none,
                 ),
               ),
               child: Center(
