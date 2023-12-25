@@ -41,7 +41,9 @@ class SetsLegsScoreX01 extends StatelessWidget {
                 : 'Sets: ${currPlayerOrTeamGameStatsX01!.getSetsWon.toString()}',
             style: TextStyle(
               color: Colors.white,
-              fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+              fontSize: Utils.isLandscape(context) && Utils.isMobile(context)
+                  ? Theme.of(context).textTheme.bodyMedium!.fontSize! * 0.8
+                  : Theme.of(context).textTheme.bodyMedium!.fontSize,
             ),
           ),
         ),

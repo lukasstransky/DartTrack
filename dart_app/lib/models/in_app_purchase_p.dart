@@ -21,7 +21,7 @@ class InAppPurchase_P with ChangeNotifier {
       return;
     }
 
-    const String _kAdFreeId = 'com.darttrack.app.removeads';
+    const String _kAdFreeId = 'com.darttrack.remove.ads';
 
     final Set<String> _kIds = <String>{_kAdFreeId};
     final bool isAvailable = await InAppPurchase.instance.isAvailable();
@@ -58,19 +58,35 @@ class InAppPurchase_P with ChangeNotifier {
   }
 
   void _handlePurchaseUpdates(List<PurchaseDetails> purchaseDetailsList) {
+    print('_handlePurchaseUpdates');
     for (var purchaseDetails in purchaseDetailsList) {
-      if (purchaseDetails.status == PurchaseStatus.purchased) {
-        print("Purchase successful: ${purchaseDetails.productID}");
-        _purchaseSuccessful = true;
-        notifyListeners();
-      } else if (purchaseDetails.status == PurchaseStatus.pending) {
-        print("Purchase pending: ${purchaseDetails.productID}");
-      } else if (purchaseDetails.status == PurchaseStatus.error) {
-        print("Purchase error: ${purchaseDetails.error}");
-      }
-
-      if (purchaseDetails.pendingCompletePurchase) {
-        InAppPurchase.instance.completePurchase(purchaseDetails);
+      switch (purchaseDetails.status) {
+        case PurchaseStatus.pending:
+          print("Purchase pending: ${purchaseDetails.productID}");
+          break;
+        case PurchaseStatus.purchased:
+          _purchaseSuccessful = true;
+          notifyListeners();
+          print("Purchase successful: ${purchaseDetails.productID}");
+          if (purchaseDetails.pendingCompletePurchase) {
+            InAppPurchase.instance.completePurchase(purchaseDetails);
+          }
+          break;
+        case PurchaseStatus.restored:
+          print("Purchase restored: ${purchaseDetails.productID}");
+          if (purchaseDetails.pendingCompletePurchase) {
+            InAppPurchase.instance.completePurchase(purchaseDetails);
+          }
+          break;
+        case PurchaseStatus.error:
+          print("Purchase error: ${purchaseDetails.error}");
+          if (purchaseDetails.pendingCompletePurchase) {
+            InAppPurchase.instance.completePurchase(purchaseDetails);
+          }
+          break;
+        case PurchaseStatus.canceled:
+          print("Purchase canceled: ${purchaseDetails.productID}");
+          break;
       }
     }
   }

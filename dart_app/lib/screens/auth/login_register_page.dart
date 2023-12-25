@@ -6,6 +6,7 @@ import 'package:dart_app/screens/auth/local_widgets/forgot_password/forgot_passw
 import 'package:dart_app/screens/auth/local_widgets/login_register_btn/login_register_btn.dart';
 import 'package:dart_app/screens/auth/local_widgets/password_input/password_input_login.dart';
 import 'package:dart_app/screens/auth/local_widgets/password_input/password_input_register.dart';
+import 'package:dart_app/screens/auth/local_widgets/password_input/password_input_register_repeat.dart';
 import 'package:dart_app/screens/auth/local_widgets/username_input.dart';
 
 import 'package:flutter/material.dart';
@@ -34,33 +35,40 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
           key: _loginRegisterPageFormKey,
           child: Selector<Auth_P, AuthMode>(
             selector: (_, auth) => auth.getAuthMode,
-            builder: (_, authMode, __) => Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Container(
-                  padding: EdgeInsets.only(bottom: 1.h),
-                  child: Text(
-                    authMode == AuthMode.Login ? 'Login' : 'Register',
-                    style: TextStyle(
-                      fontSize:
-                          Theme.of(context).textTheme.titleLarge!.fontSize,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+            builder: (_, authMode, __) => Center(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.only(bottom: 1.h),
+                      child: Text(
+                        authMode == AuthMode.Login ? 'Login' : 'Register',
+                        style: TextStyle(
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge!.fontSize,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                    if (authMode == AuthMode.Register) ...[
+                      UsernameInput(),
+                      EmailInputRegister(),
+                      PasswordInputRegister(),
+                      PasswordInputRegisterRepeat(),
+                    ] else if (authMode == AuthMode.Login) ...[
+                      EmailInputLogin(),
+                      PasswordInputLogin(),
+                      ForgotPasswordLink(),
+                    ],
+                    LoginRegisterBtn(
+                        loginRegisterPageFormKey: _loginRegisterPageFormKey),
+                  ],
                 ),
-                if (authMode == AuthMode.Register) ...[
-                  UsernameInput(),
-                  EmailInputRegister(),
-                  PasswordInputRegister(),
-                ] else if (authMode == AuthMode.Login) ...[
-                  EmailInputLogin(),
-                  PasswordInputLogin(),
-                  ForgotPasswordLink(),
-                ],
-                LoginRegisterBtn(
-                    loginRegisterPageFormKey: _loginRegisterPageFormKey),
-              ],
+              ),
             ),
           ),
         ),

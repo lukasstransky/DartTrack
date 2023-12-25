@@ -1,3 +1,4 @@
+import 'package:dart_app/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -9,8 +10,14 @@ class ForgotPasswordLink extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 1.h, bottom: 0.5.h, right: 5.w),
-      alignment: Alignment.centerRight,
+      padding: EdgeInsets.only(
+        top: 1.h,
+        bottom: 0.5.h,
+        right: 5.w,
+        left: Utils.isLandscape(context) ? 50.w : 0,
+      ),
+      alignment:
+          Utils.isLandscape(context) ? Alignment.center : Alignment.centerRight,
       child: GestureDetector(
         onTap: () {
           Navigator.of(context).pushNamed('/forgotPassword');

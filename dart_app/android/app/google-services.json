@@ -1,26 +1,19 @@
 {
   "project_info": {
     "project_number": "576943166736",
+    "firebase_url": "https://flutter-dartapp-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "flutter-dartapp",
     "storage_bucket": "flutter-dartapp.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:576943166736:android:462ba565fc6979196d0195",
+        "mobilesdk_app_id": "1:576943166736:android:12cde6fed90d4d916d0195",
         "android_client_info": {
-          "package_name": "com.darttrack.app"
+          "package_name": "com.darttrack"
         }
       },
       "oauth_client": [
-        {
-          "client_id": "576943166736-tvniocq83o5l4sei7pn316bgroc13cbn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.darttrack.app",
-            "certificate_hash": "f76c02bee45c2fed16d6b7357a3d8baa5bab7ef2"
-          }
-        },
         {
           "client_id": "576943166736-0uetm3suvrmolv9m5qdn70ao04hshf1v.apps.googleusercontent.com",
           "client_type": 3
@@ -37,6 +30,13 @@
             {
               "client_id": "576943166736-0uetm3suvrmolv9m5qdn70ao04hshf1v.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "576943166736-26qb5j9psb4l8nmqd34n3aac69guun7p.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.dartApp"
+              }
             }
           ]
         }

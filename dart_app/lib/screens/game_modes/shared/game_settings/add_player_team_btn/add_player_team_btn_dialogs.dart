@@ -350,7 +350,6 @@ class AddPlayerTeamBtnDialogs {
 
   static _submitNewPlayer(GameSettings_P gameSettings_P, BuildContext context,
       NewPlayer? newPlayer) async {
-    newPlayerController.text = newPlayerController.text.trim();
     if (!_formKeyNewPlayer.currentState!.validate()) {
       return;
     }

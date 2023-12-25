@@ -186,16 +186,19 @@ class _SettingsAccountDetailsState extends State<SettingsAccountDetails> {
         _emailFormKey,
         context.read<Settings_P>().getEmailPassword);
     if (reauthenticationSuccessful) {
-      authService.updateEmailInFirestore(newEmail);
-      authService.updateEmail(newEmail, context);
+      final bool successful = await authService.updateEmail(
+          newEmail, context, Theme.of(context).textTheme.bodyMedium!.fontSize!);
+      if (successful) {
+        await context.read<AuthService>().updateEmailInFirestore(newEmail);
 
+        Fluttertoast.showToast(
+          msg: 'Email updated successfully.',
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+        );
+      }
       context.read<Auth_P>().setPasswordVisible = false;
       Navigator.of(context).pop();
-      Fluttertoast.showToast(
-        msg: 'Email updated successfully.',
-        toastLength: Toast.LENGTH_LONG,
-        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
-      );
     }
   }
 

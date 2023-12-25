@@ -45,28 +45,28 @@ class AboutAndSupport extends StatelessWidget {
                 ),
               ),
             ),
-            if (currentUsername != 'Guest' && context.read<User_P>().adsEnabled)
-              Consumer<InAppPurchase_P>(
-                builder: (context, inAppPurchaseProvider, child) {
-                  if (inAppPurchaseProvider.purchaseSuccessful) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      _onPurchaseSuccess(context);
-                    });
-                  }
-                  return SettingsCardItem(
-                    name: 'Remove ads 2,99€',
-                    buyAdFreeVersion: true,
-                  );
-                },
-              ),
+            // if (currentUsername != 'Guest' && context.read<User_P>().adsEnabled)
+            //   Consumer<InAppPurchase_P>(
+            //     builder: (context, inAppPurchaseProvider, child) {
+            //       if (inAppPurchaseProvider.purchaseSuccessful) {
+            //         WidgetsBinding.instance.addPostFrameCallback((_) {
+            //           _onPurchaseSuccess(context);
+            //         });
+            //       }
+            //       return SettingsCardItem(
+            //         name: 'Remove ads 2,99€',
+            //         buyAdFreeVersion: true,
+            //       );
+            //     },
+            //   ),
             SettingsCardItem(
               name: 'Help & Support',
               helpAndSupport: true,
             ),
-            SettingsCardItem(
-              name: 'Rate app',
-              rateApp: true,
-            ),
+            // SettingsCardItem(
+            //   name: 'Rate app',
+            //   rateApp: true,
+            // ),
             SettingsCardItem(
               name: 'Privacy policy',
               privacyPolicy: true,
@@ -83,11 +83,8 @@ class AboutAndSupport extends StatelessWidget {
   }
 
   void _onPurchaseSuccess(BuildContext context) {
-    final AuthService authService = context.read<AuthService>();
-    authService.setAdsEnabledFlagToFalse(context);
-
-    final InAppPurchase_P inAppPurchaseProvider =
-        context.read<InAppPurchase_P>();
-    inAppPurchaseProvider.resetPurchaseSuccessfulFlag();
+    print('_onPurchaseSuccess');
+    context.read<AuthService>().setAdsEnabledFlagToFalse(context);
+    context.read<InAppPurchase_P>().resetPurchaseSuccessfulFlag();
   }
 }

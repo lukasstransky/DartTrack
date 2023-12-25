@@ -11,6 +11,7 @@ class Auth_P with ChangeNotifier {
   String _registerEmail = '';
   String _loginPassword = '';
   String _registerPassword = '';
+  String _registerPasswordRepeat = '';
   String _username = '';
 
   bool get getPasswordVisible => this._passwordVisible;
@@ -36,6 +37,10 @@ class Auth_P with ChangeNotifier {
 
   String get getRegisterPassword => this._registerPassword;
   set setRegisterPassword(String value) => this._registerPassword = value;
+
+  String get getRegisterPasswordRepeat => this._registerPasswordRepeat;
+  set setRegisterPasswordRepeat(String value) =>
+      this._registerPasswordRepeat = value;
 
   String get getUsername => this._username;
   set setUsername(String value) => this._username = value;

@@ -136,6 +136,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 ),
                               ),
                               style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
                                 splashFactory: NoSplash.splashFactory,
                                 shadowColor: MaterialStateProperty.all(
                                     Colors.transparent),
@@ -192,6 +193,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               ),
                             ),
                             style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
                               splashFactory: NoSplash.splashFactory,
                               shadowColor:
                                   MaterialStateProperty.all(Colors.transparent),
@@ -258,6 +260,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 ),
                               ),
                               style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
                                 splashFactory: NoSplash.splashFactory,
                                 shadowColor: MaterialStateProperty.all(
                                     Colors.transparent),
@@ -321,6 +324,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 ),
                               ),
                               style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
                                 splashFactory: NoSplash.splashFactory,
                                 shadowColor: MaterialStateProperty.all(
                                     Colors.transparent),
@@ -401,6 +405,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                 ),
                               ),
                               style: ButtonStyle(
+                                elevation: MaterialStateProperty.all(0),
                                 splashFactory: NoSplash.splashFactory,
                                 shadowColor: MaterialStateProperty.all(
                                     Colors.transparent),
@@ -466,6 +471,7 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                               ),
                             ),
                             style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
                               splashFactory: NoSplash.splashFactory,
                               shadowColor:
                                   MaterialStateProperty.all(Colors.transparent),
@@ -522,10 +528,14 @@ showDialogForCheckout(int checkoutPossibilities, String currentPointsSelected,
                                       .textTheme
                                       .bodyMedium!
                                       .fontSize,
+                                  color: selectedFinishCount == 3
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.white,
                                 ),
                               ),
                             ),
                             style: ButtonStyle(
+                              elevation: MaterialStateProperty.all(0),
                               splashFactory: NoSplash.splashFactory,
                               shadowColor:
                                   MaterialStateProperty.all(Colors.transparent),

@@ -99,47 +99,42 @@ class PlayerTeamCard extends StatelessWidget {
                     ? Utils.getTextColorDarken(context)
                     : Colors.transparent),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Text(
-                      stats.getCurrentPoints.toString(),
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: _fontSizePoints.sp,
-                        fontWeight: FontWeight.bold,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        stats.getCurrentPoints.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: _fontSizePoints.sp,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  Text(
-                    '(${stats.getCurrentThrownDartsInLeg.toString()})',
-                    style: TextStyle(
-                      color: Utils.getTextColorDarken(context),
-                      fontSize: 8.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                children: [
-                  Container(
-                    // width: 30.w,
-
-                    // color: Colors.red,
-                    alignment: Alignment.centerLeft,
-                    // padding: EdgeInsets.only(bottom: 0.5.w),
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
+                    Text(
+                      '(${stats.getCurrentThrownDartsInLeg.toString()})',
+                      style: TextStyle(
+                        color: Utils.getTextColorDarken(context),
+                        fontSize: 8.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
+                ),
+                Row(
+                  children: [
+                    Flexible(
                       child: Text(
                         gameSettingsX01_P.getSingleOrTeam ==
                                 SingleOrTeamEnum.Single
                             ? stats.getPlayer.getName
                             : stats.getTeam.getName,
+                        overflow: TextOverflow.clip,
                         style: TextStyle(
                           color: Utils.getTextColorDarken(context),
                           fontSize: _fontSizeName.sp,
@@ -147,27 +142,10 @@ class PlayerTeamCard extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                  // if (gameSettingsX01_P.getSingleOrTeam ==
-                  //     SingleOrTeamEnum.Team)
-                  //   Container(
-                  //     child: FittedBox(
-                  //       fit: BoxFit.scaleDown,
-                  //       child: Text(
-                  //         ' (' +
-                  //             stats.getTeam.getCurrentPlayerToThrow.getName +
-                  //             ')',
-                  //         style: TextStyle(
-                  //           color: Utils.getTextColorDarken(context),
-                  //           fontSize: (_fontSizeName * 0.8).sp,
-                  //           fontWeight: FontWeight.bold,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //   ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),

@@ -35,7 +35,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     compileSdkVersion 33
-    namespace 'com.darttrack.app'
+    namespace 'com.darttrack'
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -51,7 +51,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.darttrack.app"
+        applicationId "com.darttrack"
         minSdkVersion localProperties.getProperty('flutter.minSdkVersion').toInteger()
         targetSdkVersion localProperties.getProperty('flutter.targetSdkVersion').toInteger()
         versionCode flutterVersionCode.toInteger()

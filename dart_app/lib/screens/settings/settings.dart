@@ -23,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
-    context.read<InAppPurchase_P>().loadProducts(context);
+    // context.read<InAppPurchase_P>().loadProducts(context);
   }
 
   @override

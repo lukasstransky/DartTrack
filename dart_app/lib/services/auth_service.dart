@@ -214,31 +214,40 @@ class AuthService {
     });
   }
 
-  Future<void> updateEmail(String newEmail, BuildContext context) async {
+  Future<bool> updateEmail(
+      String newEmail, BuildContext context, double fontSize) async {
     final bool isConnected = await Utils.hasInternetConnection();
     if (!isConnected) {
-      return;
+      return false;
     }
 
     final User? user = _firebaseAuth.currentUser;
 
     try {
       await user?.updateEmail(newEmail);
+      return true;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'requires-recent-login') {
+      if (e.code == 'email-already-in-use') {
+        Fluttertoast.showToast(
+          msg: 'Error, email is already in use!',
+          toastLength: Toast.LENGTH_LONG,
+          fontSize: fontSize,
+        );
+      } else if (e.code == 'requires-recent-login') {
         Fluttertoast.showToast(
           msg: 'Please logout/login again to update the email!',
           toastLength: Toast.LENGTH_LONG,
-          fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+          fontSize: fontSize,
         );
       }
     } catch (e) {
       Fluttertoast.showToast(
         msg: 'An unexpected error occurred. Please try again later.',
         toastLength: Toast.LENGTH_LONG,
-        fontSize: Theme.of(context).textTheme.bodyMedium!.fontSize,
+        fontSize: fontSize,
       );
     }
+    return false;
   }
 
   Future<void> deleteAccount(BuildContext context) async {
