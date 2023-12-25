@@ -1,6 +1,5 @@
 import 'package:dart_app/constants.dart';
 import 'package:dart_app/models/in_app_purchase_p.dart';
-import 'package:dart_app/models/user_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/about_and_support/local_widgets/app.version.dart';
 import 'package:dart_app/screens/settings/local_widgets/settings_card_item.dart';
 import 'package:dart_app/services/auth_service.dart';
@@ -14,8 +13,8 @@ class AboutAndSupport extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String currentUsername =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+    // final String currentUsername =
+    //     context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
 
     return Container(
       padding: EdgeInsets.only(

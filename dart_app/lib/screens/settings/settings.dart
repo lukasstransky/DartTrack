@@ -1,4 +1,3 @@
-import 'package:dart_app/models/in_app_purchase_p.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/screens/settings/local_widgets/logout_btn.dart';
 import 'package:dart_app/screens/settings/local_widgets/about_and_support/settings_about_and_support.dart';
