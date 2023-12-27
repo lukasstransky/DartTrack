@@ -29,12 +29,9 @@ class Statistics extends StatefulWidget {
 class _StatisticsState extends State<Statistics> {
   bool _showMoreStats = false;
   String _username = '';
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/8518148683
-  // android -> ca-app-pub-8582367743573228/7166179194
   final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-8582367743573228/7166179194'
+      : 'ca-app-pub-8582367743573228/8518148683';
 
   @override
   void didChangeDependencies() {

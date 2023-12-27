@@ -30,12 +30,9 @@ class FinishX01 extends StatefulWidget {
 }
 
 class _FinishX01State extends State<FinishX01> {
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/7757168145
-  // android -> ca-app-pub-8582367743573228/1443041236
   final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-8582367743573228/1443041236'
+      : 'ca-app-pub-8582367743573228/7757168145';
 
   @override
   void initState() {

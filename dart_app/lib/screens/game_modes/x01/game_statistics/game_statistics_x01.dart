@@ -36,12 +36,9 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
   GameX01_P? _game;
   bool _roundedScoresOdd = false;
   bool _showSimpleAppBar = false;
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/5991578764
-  // android -> ca-app-pub-8582367743573228/8148088377
   final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-8582367743573228/8148088377'
+      : 'ca-app-pub-8582367743573228/5991578764';
 
   @override
   didChangeDependencies() {

@@ -32,12 +32,9 @@ class _GameStatsScoreTrainingState extends State<GameStatsScoreTraining> {
   GameScoreTraining_P? _game;
   bool _roundedScoresOdd = false;
   bool _showSimpleAppBar = false;
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/4678497098
-  // android -> ca-app-pub-8582367743573228/6298700521
   final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-8582367743573228/6298700521'
+      : 'ca-app-pub-8582367743573228/4678497098';
 
   @override
   didChangeDependencies() {

@@ -34,12 +34,9 @@ class FinishSingleDoubleTraining extends StatefulWidget {
 class _FinishSingleDoubleTrainingState
     extends State<FinishSingleDoubleTraining> {
   GameMode _mode = GameMode.SingleTraining;
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/7134389603
-  // android -> ca-app-pub-8582367743573228/1658663658
   final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-8582367743573228/1658663658'
+      : 'ca-app-pub-8582367743573228/7134389603';
 
   @override
   void didChangeDependencies() {

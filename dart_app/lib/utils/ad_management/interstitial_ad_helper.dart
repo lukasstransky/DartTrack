@@ -5,12 +5,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class InterstitialAdHelper {
   static InterstitialAd? _interstitialAd;
 
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/7685053941
-  // android -> ca-app-pub-8582367743573228/7876625634
   static final String _interstitialAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/1033173712'
-      : 'ca-app-pub-3940256099942544/4411468910';
+      ? 'ca-app-pub-8582367743573228/7876625634'
+      : 'ca-app-pub-8582367743573228/7685053941';
 
   static const int maxRetryAttempts = 3;
   static int retryAttemptsInterstitialAd = 0;

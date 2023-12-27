@@ -27,12 +27,9 @@ class GameScoreTraining extends StatefulWidget {
 }
 
 class _GameScoreTrainingState extends State<GameScoreTraining> {
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/6083912251
-  // android -> ca-app-pub-8582367743573228/6822278850
   final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-8582367743573228/6822278850'
+      : 'ca-app-pub-8582367743573228/6083912251';
 
   @override
   Widget build(BuildContext context) {

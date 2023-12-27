@@ -31,12 +31,9 @@ class FinishScoreTraining extends StatefulWidget {
 }
 
 class _FinishScoreTrainingState extends State<FinishScoreTraining> {
-  //TODO replace
-  // ios -> ca-app-pub-8582367743573228/5821307932
-  // android -> ca-app-pub-8582367743573228/3195144599
   final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-8582367743573228/3195144599'
+      : 'ca-app-pub-8582367743573228/5821307932';
 
   @override
   void initState() {
