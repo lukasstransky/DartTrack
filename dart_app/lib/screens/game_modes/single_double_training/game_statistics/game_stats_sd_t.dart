@@ -28,9 +28,14 @@ class _GameStatsSingleDoubleTrainingState
     extends State<GameStatsSingleDoubleTraining> {
   GameSingleDoubleTraining_P? _game;
   bool _showSimpleAppBar = false;
+  // testing ads
   final String _bannerAdUnitId = Platform.isAndroid
       ? 'ca-app-pub-8582367743573228/1888682225'
       : 'ca-app-pub-8582367743573228/6490272217';
+  // real ads
+  // final String _bannerAdUnitId = Platform.isAndroid
+  //     ? 'ca-app-pub-8582367743573228/1888682225'
+  //     : 'ca-app-pub-8582367743573228/6490272217';
 
   @override
   didChangeDependencies() {

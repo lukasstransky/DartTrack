@@ -30,9 +30,14 @@ class FinishX01 extends StatefulWidget {
 }
 
 class _FinishX01State extends State<FinishX01> {
+  // testing ads
   final String _bannerAdUnitId = Platform.isAndroid
       ? 'ca-app-pub-8582367743573228/1443041236'
       : 'ca-app-pub-8582367743573228/7757168145';
+  // real ads
+  // final String _bannerAdUnitId = Platform.isAndroid
+  //     ? 'ca-app-pub-8582367743573228/1443041236'
+  //     : 'ca-app-pub-8582367743573228/7757168145';
 
   @override
   void initState() {

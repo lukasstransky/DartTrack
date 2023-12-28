@@ -31,9 +31,14 @@ class FinishScoreTraining extends StatefulWidget {
 }
 
 class _FinishScoreTrainingState extends State<FinishScoreTraining> {
+  // testing ads
   final String _bannerAdUnitId = Platform.isAndroid
       ? 'ca-app-pub-8582367743573228/3195144599'
       : 'ca-app-pub-8582367743573228/5821307932';
+  // real ads
+  // final String _bannerAdUnitId = Platform.isAndroid
+  //     ? 'ca-app-pub-8582367743573228/3195144599'
+  //     : 'ca-app-pub-8582367743573228/5821307932';
 
   @override
   void initState() {

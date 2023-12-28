@@ -5,9 +5,14 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class InterstitialAdHelper {
   static InterstitialAd? _interstitialAd;
 
+  // testing ads
   static final String _interstitialAdUnitId = Platform.isAndroid
       ? 'ca-app-pub-8582367743573228/7876625634'
       : 'ca-app-pub-8582367743573228/7685053941';
+  // real ads
+  // static final String _interstitialAdUnitId = Platform.isAndroid
+  //     ? 'ca-app-pub-8582367743573228/7876625634'
+  //     : 'ca-app-pub-8582367743573228/7685053941';
 
   static const int maxRetryAttempts = 3;
   static int retryAttemptsInterstitialAd = 0;

@@ -27,9 +27,14 @@ class GameScoreTraining extends StatefulWidget {
 }
 
 class _GameScoreTrainingState extends State<GameScoreTraining> {
+  // testing ads
   final String _bannerAdUnitId = Platform.isAndroid
       ? 'ca-app-pub-8582367743573228/6822278850'
       : 'ca-app-pub-8582367743573228/6083912251';
+  // real ads
+  // final String _bannerAdUnitId = Platform.isAndroid
+  //     ? 'ca-app-pub-8582367743573228/6822278850'
+  //     : 'ca-app-pub-8582367743573228/6083912251';
 
   @override
   Widget build(BuildContext context) {
