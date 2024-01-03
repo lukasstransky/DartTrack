@@ -120,8 +120,10 @@ class _FinishX01State extends State<FinishX01> {
         context.read<OpenGamesFirestore>();
     final StatsFirestoreX01_P statsFirestoreX01 =
         context.read<StatsFirestoreX01_P>();
+    final bool isCurrentUserInPlayers =
+        context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context);
 
-    if (context.read<GameSettingsX01_P>().isCurrentUserInPlayers(context)) {
+    if (isCurrentUserInPlayers) {
       g_gameId =
           await firestoreServiceGames.postGame(gameX01, openGamesFirestore);
       gameX01.setIsGameFinished = true;
@@ -139,30 +141,32 @@ class _FinishX01State extends State<FinishX01> {
     gameX01.notify();
 
     // manually add game, stats to avoid fetching calls
-    final Game_P game = gameX01.clone();
-    game.setGameId = g_gameId;
-    statsFirestoreX01.games.add(game);
-    statsFirestoreX01.filteredGames.add(game);
+    if (isCurrentUserInPlayers) {
+      final Game_P game = gameX01.clone();
+      game.setGameId = g_gameId;
+      statsFirestoreX01.games.add(game);
+      statsFirestoreX01.filteredGames.add(game);
 
-    final String currentUsername =
-        context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
-    for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
-      stats.setGameId = g_gameId;
-      statsFirestoreX01.allPlayerGameStats.add(stats);
-      if (stats.getPlayer.getName == currentUsername) {
-        statsFirestoreX01.getUserPlayerGameStats.add(stats);
-        statsFirestoreX01.getUserFilteredPlayerGameStats.add(stats);
-      }
-    }
-
-    if (gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
-      for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
+      final String currentUsername =
+          context.read<AuthService>().getUsernameFromSharedPreferences() ?? '';
+      for (PlayerOrTeamGameStatsX01 stats in gameX01.getPlayerGameStatistics) {
         stats.setGameId = g_gameId;
-        statsFirestoreX01.allTeamGameStats.add(stats);
-        statsFirestoreX01.filteredTeamGameStats.add(stats);
+        statsFirestoreX01.allPlayerGameStats.add(stats);
+        if (stats.getPlayer.getName == currentUsername) {
+          statsFirestoreX01.getUserPlayerGameStats.add(stats);
+          statsFirestoreX01.getUserFilteredPlayerGameStats.add(stats);
+        }
       }
-    }
 
-    statsFirestoreX01.calculateX01Stats();
+      if (gameX01.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
+        for (PlayerOrTeamGameStatsX01 stats in gameX01.getTeamGameStatistics) {
+          stats.setGameId = g_gameId;
+          statsFirestoreX01.allTeamGameStats.add(stats);
+          statsFirestoreX01.filteredTeamGameStats.add(stats);
+        }
+      }
+
+      statsFirestoreX01.calculateX01Stats();
+    }
   }
 }

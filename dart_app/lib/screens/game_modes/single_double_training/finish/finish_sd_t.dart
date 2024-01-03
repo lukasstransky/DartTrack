@@ -143,10 +143,11 @@ class _FinishSingleDoubleTrainingState
         context.read<StatsFirestoreSingleTraining_P>();
     final StatsFirestoreDoubleTraining_P statsFirestoreDoubleTraining =
         context.read<StatsFirestoreDoubleTraining_P>();
-
-    if (context
+    final bool isCurrentUserInPlayers = context
         .read<GameSettingsSingleDoubleTraining_P>()
-        .isCurrentUserInPlayers(context)) {
+        .isCurrentUserInPlayers(context);
+
+    if (isCurrentUserInPlayers) {
       if (gameSingleDoubleTraining.getMode == GameMode.DoubleTraining) {
         gameSingleDoubleTraining.setName = GameMode.DoubleTraining.name;
       }
@@ -168,22 +169,24 @@ class _FinishSingleDoubleTrainingState
     gameSingleDoubleTraining.notify();
 
     // manually add game, stats to avoid fetching calls
-    final Game_P game = gameSingleDoubleTraining.clone();
-    game.setGameId = g_gameId;
+    if (isCurrentUserInPlayers) {
+      final Game_P game = gameSingleDoubleTraining.clone();
+      game.setGameId = g_gameId;
 
-    if (gameSingleDoubleTraining.getMode == GameMode.SingleTraining) {
-      statsFirestoreSingleTraining.games.add(game);
+      if (gameSingleDoubleTraining.getMode == GameMode.SingleTraining) {
+        statsFirestoreSingleTraining.games.add(game);
 
-      for (PlayerGameStatsSingleDoubleTraining stats
-          in gameSingleDoubleTraining.getPlayerGameStatistics) {
-        statsFirestoreSingleTraining.allPlayerGameStats.add(stats);
-      }
-    } else {
-      statsFirestoreDoubleTraining.games.add(game);
+        for (PlayerGameStatsSingleDoubleTraining stats
+            in gameSingleDoubleTraining.getPlayerGameStatistics) {
+          statsFirestoreSingleTraining.allPlayerGameStats.add(stats);
+        }
+      } else {
+        statsFirestoreDoubleTraining.games.add(game);
 
-      for (PlayerGameStatsSingleDoubleTraining stats
-          in gameSingleDoubleTraining.getPlayerGameStatistics) {
-        statsFirestoreDoubleTraining.allPlayerGameStats.add(stats);
+        for (PlayerGameStatsSingleDoubleTraining stats
+            in gameSingleDoubleTraining.getPlayerGameStatistics) {
+          statsFirestoreDoubleTraining.allPlayerGameStats.add(stats);
+        }
       }
     }
   }

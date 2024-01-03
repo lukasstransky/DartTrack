@@ -124,8 +124,10 @@ class _FinishCricketState extends State<FinishCricket> {
         context.read<OpenGamesFirestore>();
     final StatsFirestoreCricket_P statsFirestoreCricket =
         context.read<StatsFirestoreCricket_P>();
+    final bool isCurrentUserInPlayers =
+        context.read<GameSettingsCricket_P>().isCurrentUserInPlayers(context);
 
-    if (context.read<GameSettingsCricket_P>().isCurrentUserInPlayers(context)) {
+    if (isCurrentUserInPlayers) {
       g_gameId =
           await firestoreServiceGames.postGame(gameCricket, openGamesFirestore);
       gameCricket.setIsGameFinished = true;
@@ -143,19 +145,23 @@ class _FinishCricketState extends State<FinishCricket> {
     gameCricket.notify();
 
     // manually add game, stats to avoid fetching calls
-    final Game_P game = gameCricket.clone();
-    game.setGameId = g_gameId;
-    statsFirestoreCricket.games.add(game);
+    if (isCurrentUserInPlayers) {
+      final Game_P game = gameCricket.clone();
+      game.setGameId = g_gameId;
 
-    for (PlayerOrTeamGameStatsCricket stats
-        in gameCricket.getPlayerGameStatistics) {
-      statsFirestoreCricket.allPlayerGameStats.add(stats);
-    }
+      statsFirestoreCricket.games.add(game);
 
-    if (gameCricket.getGameSettings.getSingleOrTeam == SingleOrTeamEnum.Team) {
       for (PlayerOrTeamGameStatsCricket stats
-          in gameCricket.getTeamGameStatistics) {
-        statsFirestoreCricket.allTeamGameStats.add(stats);
+          in gameCricket.getPlayerGameStatistics) {
+        statsFirestoreCricket.allPlayerGameStats.add(stats);
+      }
+
+      if (gameCricket.getGameSettings.getSingleOrTeam ==
+          SingleOrTeamEnum.Team) {
+        for (PlayerOrTeamGameStatsCricket stats
+            in gameCricket.getTeamGameStatistics) {
+          statsFirestoreCricket.allTeamGameStats.add(stats);
+        }
       }
     }
   }

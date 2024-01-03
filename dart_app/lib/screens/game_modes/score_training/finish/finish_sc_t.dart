@@ -127,10 +127,11 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
         context.read<OpenGamesFirestore>();
     final StatsFirestoreScoreTraining_P statsFirestoreScoreTraining =
         context.read<StatsFirestoreScoreTraining_P>();
-
-    if (context
+    final bool isCurrentUserInPlayers = context
         .read<GameSettingsScoreTraining_P>()
-        .isCurrentUserInPlayers(context)) {
+        .isCurrentUserInPlayers(context);
+
+    if (isCurrentUserInPlayers) {
       g_gameId = await firestoreServiceGames.postGame(
           gameScoreTraining, openGamesFirestore);
       gameScoreTraining.setIsGameFinished = true;
@@ -148,13 +149,16 @@ class _FinishScoreTrainingState extends State<FinishScoreTraining> {
     gameScoreTraining.notify();
 
     // manually add game, stats to avoid fetching calls
-    final Game_P game = gameScoreTraining.clone();
-    game.setGameId = g_gameId;
-    statsFirestoreScoreTraining.games.add(game);
+    if (isCurrentUserInPlayers) {
+      final Game_P game = gameScoreTraining.clone();
+      game.setGameId = g_gameId;
 
-    for (PlayerGameStatsScoreTraining stats
-        in gameScoreTraining.getPlayerGameStatistics) {
-      statsFirestoreScoreTraining.allPlayerGameStats.add(stats);
+      statsFirestoreScoreTraining.games.add(game);
+
+      for (PlayerGameStatsScoreTraining stats
+          in gameScoreTraining.getPlayerGameStatistics) {
+        statsFirestoreScoreTraining.allPlayerGameStats.add(stats);
+      }
     }
   }
 }

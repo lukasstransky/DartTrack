@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
         <String, dynamic>{}) as Map;
     final AuthService authService = context.read<AuthService>();
 
-    authService.getAdsEnabledFlag(context);
+    // authService.getAdsEnabledFlag(context);
     // lead to some errors in the submit method (login_register_btn.dart)
     if (arguments.isNotEmpty) {
       final String email = arguments['email'];
