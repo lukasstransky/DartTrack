@@ -28,13 +28,13 @@ class GameCricket extends StatefulWidget {
 
 class _GameCricketState extends State<GameCricket> {
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/9640013886'
-      : 'ca-app-pub-8582367743573228/8901647282';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/9640013886'
   //     : 'ca-app-pub-8582367743573228/8901647282';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/9640013886'
+      : 'ca-app-pub-8582367743573228/8901647282';
 
   @override
   Widget build(BuildContext context) {

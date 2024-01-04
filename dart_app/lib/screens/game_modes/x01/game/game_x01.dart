@@ -28,13 +28,13 @@ class GameX01 extends StatefulWidget {
 
 class GameX01State extends State<GameX01> {
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/8518503902'
-      : 'ca-app-pub-8582367743573228/6467055638';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/8518503902'
   //     : 'ca-app-pub-8582367743573228/6467055638';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/9526485702'
+      : 'ca-app-pub-8582367743573228/4922431258';
 
   @override
   Widget build(BuildContext context) {

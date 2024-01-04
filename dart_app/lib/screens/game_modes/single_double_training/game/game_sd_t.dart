@@ -30,13 +30,13 @@ class GameSingleDoubleTraining extends StatefulWidget {
 class _GameSingleDoubleTrainingState extends State<GameSingleDoubleTraining> {
   GameMode _mode = GameMode.SingleTraining;
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/4387687203'
-      : 'ca-app-pub-8582367743573228/8710075598';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/4387687203'
   //     : 'ca-app-pub-8582367743573228/8710075598';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/4387687203'
+      : 'ca-app-pub-8582367743573228/8710075598';
 
   @override
   void didChangeDependencies() {

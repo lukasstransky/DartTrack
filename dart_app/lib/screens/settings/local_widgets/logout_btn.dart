@@ -1,4 +1,5 @@
 import 'package:dart_app/constants.dart';
+import 'package:dart_app/models/firestore/stats_firestore_x01_p.dart';
 import 'package:dart_app/models/settings_p.dart';
 import 'package:dart_app/services/auth_service.dart';
 import 'package:dart_app/utils/button_styles.dart';
@@ -42,6 +43,7 @@ class LogoutBtn extends StatelessWidget {
             context.read<Settings_P>().notify();
           }
 
+          await context.read<StatsFirestoreX01_P>().resetAll();
           await context.read<AuthService>().logout(context);
           Navigator.of(context).pushNamed('/loginRegister');
 

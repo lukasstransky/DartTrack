@@ -31,13 +31,13 @@ class FinishCricket extends StatefulWidget {
 
 class _FinishCricketState extends State<FinishCricket> {
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/9129959568'
-      : 'ca-app-pub-8582367743573228/2870591408';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/9129959568'
   //     : 'ca-app-pub-8582367743573228/2870591408';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/9129959568'
+      : 'ca-app-pub-8582367743573228/2870591408';
 
   @override
   void initState() {

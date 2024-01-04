@@ -37,13 +37,13 @@ class _GameStatisticsX01State extends State<GameStatisticsX01> {
   bool _roundedScoresOdd = false;
   bool _showSimpleAppBar = false;
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/8148088377'
-      : 'ca-app-pub-8582367743573228/5991578764';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/8148088377'
   //     : 'ca-app-pub-8582367743573228/5991578764';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/8148088377'
+      : 'ca-app-pub-8582367743573228/5991578764';
 
   @override
   didChangeDependencies() {

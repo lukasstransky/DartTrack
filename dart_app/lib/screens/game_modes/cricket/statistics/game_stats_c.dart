@@ -30,13 +30,13 @@ class _StatisticsCricketState extends State<StatisticsCricket> {
   GameCricket_P? _game;
   bool _showSimpleAppBar = false;
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/5521925033'
-      : 'ca-app-pub-8582367743573228/6208320749';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/5521925033'
   //     : 'ca-app-pub-8582367743573228/6208320749';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/5521925033'
+      : 'ca-app-pub-8582367743573228/6208320749';
 
   @override
   didChangeDependencies() {

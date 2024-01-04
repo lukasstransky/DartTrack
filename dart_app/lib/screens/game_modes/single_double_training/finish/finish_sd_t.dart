@@ -35,13 +35,13 @@ class _FinishSingleDoubleTrainingState
     extends State<FinishSingleDoubleTraining> {
   GameMode _mode = GameMode.SingleTraining;
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/1658663658'
-      : 'ca-app-pub-8582367743573228/7134389603';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/1658663658'
   //     : 'ca-app-pub-8582367743573228/7134389603';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/1658663658'
+      : 'ca-app-pub-8582367743573228/7134389603';
 
   @override
   void didChangeDependencies() {

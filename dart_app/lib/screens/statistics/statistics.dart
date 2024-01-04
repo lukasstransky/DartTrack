@@ -30,13 +30,13 @@ class _StatisticsState extends State<Statistics> {
   bool _showMoreStats = false;
   String _username = '';
   // testing ads
-  final String _bannerAdUnitId = Platform.isAndroid
-      ? 'ca-app-pub-8582367743573228/7166179194'
-      : 'ca-app-pub-8582367743573228/8518148683';
-  // real ads
   // final String _bannerAdUnitId = Platform.isAndroid
   //     ? 'ca-app-pub-8582367743573228/7166179194'
   //     : 'ca-app-pub-8582367743573228/8518148683';
+  // real ads
+  final String _bannerAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-8582367743573228/7166179194'
+      : 'ca-app-pub-8582367743573228/8518148683';
 
   @override
   initState() {

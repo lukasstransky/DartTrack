@@ -39,7 +39,6 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
           bannerAdManager!.getOverallStatsScreenBannerAd!
               .load(() => setState(() {}));
           break;
-
         case BannerAdEnum.X01StatsScreen:
           bannerAdManager!.setX01GameStatsScreenBannerAd = tempAd;
           bannerAdManager!.getX01GameStatsScreenBannerAd!
