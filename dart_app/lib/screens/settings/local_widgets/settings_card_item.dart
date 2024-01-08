@@ -116,11 +116,10 @@ class SettingsCardItem extends StatelessWidget {
   _openAppInStore(BuildContext context) {
     String url = '';
     if (Platform.isAndroid) {
-      //TODO adjust
-      url = 'https://play.google.com/store/apps/details?id=your_package_name';
+      url =
+          'https://play.google.com/store/apps/details?id=com.darttrack&hl=de_AT&gl=US';
     } else if (Platform.isIOS) {
-      //TODO adjust
-      url = 'https://apps.apple.com/app/apple-store/idyour_app_id';
+      url = 'https://apps.apple.com/at/app/darttrack/id6474967923';
     }
 
     _launchURL(url, context);

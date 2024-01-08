@@ -62,10 +62,10 @@ class AboutAndSupport extends StatelessWidget {
               name: 'Help & Support',
               helpAndSupport: true,
             ),
-            // SettingsCardItem(
-            //   name: 'Rate app',
-            //   rateApp: true,
-            // ),
+            SettingsCardItem(
+              name: 'Rate app',
+              rateApp: true,
+            ),
             SettingsCardItem(
               name: 'Privacy policy',
               privacyPolicy: true,
